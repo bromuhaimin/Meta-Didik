@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset="utf-8"><title>Operasi Tasawwur</title><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset="utf-8"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0b100b"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Gempur Tasawwur"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><title>Operasi Tasawwur</title><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Operasi Tasawwur</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -284,6 +284,21 @@ h2.sec { font-family: var(--font-display); font-weight: 400; font-size: 26px; co
   #bRun { left: 142px; bottom: calc(30px + env(safe-area-inset-bottom, 0px)); width: 52px; height: 52px; }
   #bUse { width: 64px; height: 64px; }
 }
+@media (orientation: portrait) and (max-width: 700px) {
+  .tl { width: 54vw; }
+  .tc { left: 12px; transform: none; top: calc(204px + env(safe-area-inset-top, 0px)); min-width: 0; width: 54vw; text-align: left; padding: 5px 10px; }
+  .tc b { font-size: 18px; }
+  #hudBtns { left: 12px; transform: none; top: calc(300px + env(safe-area-inset-top, 0px)); flex-direction: row; flex-wrap: wrap; max-width: 60vw; gap: 6px; }
+  #hudBtns > .btn { font-size: 13px; padding: 4px 9px; }
+  #mission-bar { top: calc(94px + env(safe-area-inset-top, 0px)); font-size: 13px; max-width: 54vw; }
+  #mini { width: 84px; height: 84px; }
+  .tr .stat { padding: 3px 9px; font-size: 13px; }
+  #sb { left: auto !important; right: 12px !important; top: calc(172px + env(safe-area-inset-top, 0px)) !important; max-width: 40vw; font-size: 12px; }
+  #sb div:nth-child(n+4) { display: none; }
+  #bRun { left: 22px !important; bottom: calc(190px + env(safe-area-inset-bottom, 0px)) !important; width: 56px !important; height: 56px !important; }
+  #bCrouch { left: 22px !important; bottom: calc(254px + env(safe-area-inset-bottom, 0px)) !important; width: 56px !important; height: 56px !important; }
+  .tbtn { font-size: 14px; }
+}
 #rankBody .seg { display: inline-flex; margin: 0 10px 10px 0; }
 
 /* gudang dan senjata */
@@ -321,7 +336,7 @@ h2.sec { font-family: var(--font-display); font-weight: 400; font-size: 26px; co
 <div id="rkBanner" role="status" hidden></div>
 <div id="app">
   <header class="top"><div class="top-in">
-    <div class="brand">Operasi Tasawwur<small>Latihan kendiri Tasawwur Islam SPM &middot; v10.4</small></div>
+    <div class="brand">Operasi Tasawwur<small>Latihan kendiri Tasawwur Islam SPM &middot; v10.5</small></div>
     <button class="meb" id="meBtn" type="button" aria-label="Profil anggota">
       <span id="meIns"></span>
       <span class="me-t"><span class="me-n" id="meName">Anggota</span><span class="me-r" id="meRank">Prebet</span><div class="xpbar"><i id="meXp"></i></div></span>
@@ -477,7 +492,6 @@ h2.sec { font-family: var(--font-display); font-weight: 400; font-size: 26px; co
   </div>
 </div>
 
-<script>window.TW_STANDALONE=true;window.TW_FB="https://gempur-tasawwur-default-rtdb.asia-southeast1.firebasedatabase.app";</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 "use strict";
@@ -2534,6 +2548,7 @@ function makeTex(w, h, draw, rep) {
   if (rep) t.repeat.set(rep, rep);
   return t;
 }
+function fovFit() { if (!camera) return; const a = window.innerWidth / window.innerHeight; camera.fov = a >= 1 ? 72 : Math.min(100, 72 + (1 - a) * 55); if (camera.updateProjectionMatrix) camera.updateProjectionMatrix(); }
 function initEngine() {
   if (renderer) return true;
   if (!T3) return false;
@@ -2550,16 +2565,26 @@ function initEngine() {
   scene.background = srgb(0xcfe6f2);
   scene.fog = new T3.Fog(srgb(0xcfe6f2), 90, 340);
   try {
-    skyM = new T3.Mesh(new T3.SphereGeometry(330, 24, 12), new T3.ShaderMaterial({
-      side: T3.BackSide, depthWrite: false, fog: false,
-      uniforms: { top: { value: srgb(0x3d86d8) }, hor: { value: srgb(0xcfe6f2) }, low: { value: srgb(0x9bb98a) } },
-      vertexShader: "varying float h; void main(){ h = normalize(position).y; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }",
-      fragmentShader: "uniform vec3 top; uniform vec3 hor; uniform vec3 low; varying float h; void main(){ vec3 c = h > 0.0 ? mix(hor, top, pow(clamp(h,0.0,1.0), 0.55)) : mix(hor, low, clamp(-h*4.0,0.0,1.0)); gl_FragColor = vec4(c,1.0); #include <tonemapping_fragment>\n #include <encodings_fragment>\n }"
-    }));
+    skyM = new T3.Mesh(new T3.SphereGeometry(330, 32, 24), new T3.MeshBasicMaterial({ side: T3.BackSide, depthWrite: false, fog: false, vertexColors: true }));
+    { const g = skyM.geometry, n = g.attributes.position.count, hs = new Float32Array(n), pa = g.attributes.position;
+      for (let i = 0; i < n; i++) hs[i] = pa.getY(i) / Math.hypot(pa.getX(i), pa.getY(i), pa.getZ(i));
+      g.setAttribute("color", new T3.BufferAttribute(new Float32Array(n * 3), 3));
+      skyM.userData.hs = hs;
+      skyM.userData.paint = (top, hor, low) => {
+        const col = g.attributes.color, arr = col.array, c = new T3.Color();
+        for (let i = 0; i < n; i++) {
+          const h = hs[i];
+          if (h > 0) c.copy(hor).lerp(top, Math.pow(Math.min(1, h), 0.55)); else c.copy(hor).lerp(low, Math.min(1, -h * 4));
+          arr[i * 3] = c.r; arr[i * 3 + 1] = c.g; arr[i * 3 + 2] = c.b;
+        }
+        col.needsUpdate = true;
+      };
+      skyM.userData.paint(srgb(0x3d86d8), srgb(0xcfe6f2), srgb(0x9bb98a)); }
     skyM.renderOrder = -10; skyM.frustumCulled = false;
     scene.add(skyM);
   } catch (e) { skyM = null; }
   camera = new T3.PerspectiveCamera(72, window.innerWidth / window.innerHeight, 0.1, 400);
+  fovFit();
   camera.rotation.order = "YXZ";
   scene.add(camera);
   hemiL = new T3.HemisphereLight(srgb(0xbfdcff), srgb(0x6d8a45), 0.75);
@@ -2627,7 +2652,7 @@ function initEngine() {
     if (!renderer) return;
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
+    fovFit();
   });
   return true;
 }
@@ -2871,7 +2896,7 @@ function applyTOD(k) {
   const D = TOD.day, E = TOD.eve;
   try {
     const hor = todCol(D.hor, E.hor, k), fog = todCol(D.fog, E.fog, k);
-    if (skyM && skyM.material.uniforms) { const u = skyM.material.uniforms; u.top.value.copy(todCol(D.top, E.top, k)); u.hor.value.copy(hor); u.low.value.copy(todCol(D.low, E.low, k)); }
+    if (skyM && skyM.userData.paint) skyM.userData.paint(todCol(D.top, E.top, k), hor, todCol(D.low, E.low, k));
     if (scene.fog) scene.fog.color.copy(fog);
     scene.background = fog;
     if (sunL) { sunL.color.copy(todCol(D.sun, E.sun, k)); sunL.intensity = todNum(D.si, E.si, k); }
@@ -4285,4 +4310,5 @@ function rankDropNotice() {
 
 </script>
 
+<script>if("serviceWorker"in navigator&&location.protocol.startsWith("http"))addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
 </body></html>
