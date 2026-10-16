@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Editor Bank Soalan | Gempur Tasawwur</title>
+<style>
+:root { --bg: #0e140d; --panel: #161e14; --line: #3a4a30; --ink: #ece6d2; --muted: #a5ad98; --amber: #f4ab3a; --khaki: #c8b273; --ok: #6fcf6f; --bad: #ef6a5b; --warn: #f0c24b; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+header { padding: 16px 16px 8px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--bg); z-index: 5; }
+h1 { margin: 0 0 4px; font-size: 22px; color: var(--khaki); }
+.muted { color: var(--muted); font-size: 14px; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px 80px; }
+.bar { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; align-items: center; }
+button, select, input, textarea { font: inherit; color: var(--ink); background: #1d2719; border: 1px solid var(--line); padding: 8px 10px; border-radius: 4px; }
+button { cursor: pointer; }
+button.pri { background: #3d5a2a; border-color: #6fcf6f; font-weight: 700; }
+button.dng { border-color: var(--bad); color: var(--bad); }
+button:disabled { opacity: .45; cursor: default; }
+input, textarea, select { width: 100%; }
+textarea { min-height: 70px; resize: vertical; }
+.bar input, .bar select { width: auto; }
+.card { border: 1px solid var(--line); background: var(--panel); margin: 8px 0; border-radius: 4px; }
+.head { display: grid; grid-template-columns: auto 1fr; gap: 6px 10px; padding: 10px 12px; cursor: pointer; align-items: start; }
+.id { font-weight: 700; color: var(--amber); min-width: 52px; }
+.snip { overflow-wrap: anywhere; }
+.badges { grid-column: 2; display: flex; flex-wrap: wrap; gap: 4px; }
+.b { font-size: 12px; padding: 1px 7px; border-radius: 10px; border: 1px solid var(--line); color: var(--muted); }
+.b.err { border-color: var(--bad); color: var(--bad); }
+.b.wrn { border-color: var(--warn); color: var(--warn); }
+.b.off { border-color: var(--muted); }
+.body { padding: 4px 12px 14px; border-top: 1px dashed var(--line); display: grid; gap: 10px; }
+.row2 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.opt { display: grid; grid-template-columns: auto auto 1fr; gap: 8px; align-items: center; }
+.opt input[type=radio] { width: 20px; height: 20px; }
+label.l { font-size: 13px; color: var(--muted); display: block; margin-bottom: 2px; }
+.sum { display: flex; flex-wrap: wrap; gap: 14px; padding: 8px 0; font-size: 15px; }
+.sum b { color: var(--amber); }
+.notice { border-left: 3px solid var(--khaki); background: rgba(200,178,115,.08); padding: 8px 12px; margin: 8px 0; }
+.notice.bad { border-color: var(--bad); }
+details.help { border: 1px solid var(--line); background: var(--panel); padding: 8px 12px; margin: 8px 0; }
+details.help summary { cursor: pointer; color: var(--khaki); font-weight: 700; }
+details.help ol { margin: 8px 0 0; padding-left: 22px; }
+.pg { display: flex; gap: 10px; align-items: center; justify-content: center; margin: 12px 0; }
+@media (max-width: 640px) { .row2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Editor Bank Soalan</h1>
+  <div class="muted">Gempur Tasawwur | tambah, ubah atau buang soalan tanpa mengubah kod permainan</div>
+</header>
+<div class="wrap">
+  <details class="help" open>
+    <summary>Cara guna (5 langkah)</summary>
+    <ol>
+      <li>Tekan <b>Muat soalan.json dari laman</b> (jika fail ini berada di folder yang sama dengan permainan) atau <b>Buka fail soalan.json</b> daripada komputer anda.</li>
+      <li>Cari soalan, klik untuk membukanya, ubah teks, pilihan atau jawapan betul. Gunakan <b>Gantung</b> jika mahu menyimpan soalan tetapi tidak digunakan dalam permainan. Gunakan <b>Padam</b> untuk membuangnya terus.</li>
+      <li>Tambah soalan baharu dengan <b>Soalan baharu</b>, atau tambah banyak sekali gus melalui <b>Import CSV</b> (Excel atau Google Sheets, simpan sebagai CSV UTF-8). Muat turun <b>Templat CSV</b> untuk melihat susunan lajur.</li>
+      <li>Semak lencana <span class="b err">merah</span> (soalan tidak sah, akan diabaikan oleh permainan) dan <span class="b wrn">kuning</span> (amaran: perlu disemak).</li>
+      <li>Tekan <b>Eksport soalan.json</b>, kemudian muat naik fail itu ke GitHub (gantikan soalan.json lama di sebelah index.html). Murid mendapat soalan baharu apabila membuka permainan semula. Tiada perlu ubah index.html.</li>
+    </ol>
+    <p class="muted">Setiap soalan ada ID tetap. Padam soalan tidak mengganggu rekod murid. ID baharu diberi secara automatik. Draf anda disimpan dalam pelayar ini sehingga dieksport.</p>
+  </details>
+  <div class="bar">
+    <button id="bServer" class="pri">Muat soalan.json dari laman</button>
+    <button id="bOpen">Buka fail soalan.json</button>
+    <button id="bCsv">Import CSV</button>
+    <button id="bNew">Soalan baharu</button>
+    <button id="bExp" class="pri" disabled>Eksport soalan.json</button>
+    <button id="bExpCsv" disabled>Eksport CSV</button>
+    <button id="bTpl">Templat CSV</button>
+    <input type="file" id="fJson" accept=".json,application/json" hidden>
+    <input type="file" id="fCsv" accept=".csv,text/csv,text/plain" hidden>
+  </div>
+  <div id="msg"></div>
+  <div id="draft"></div>
+  <div id="app" hidden>
+    <div class="sum" id="sum"></div>
+    <div class="bar">
+      <select id="fTopik" aria-label="Topik"></select>
+      <select id="fAras" aria-label="Aras"><option value="">Semua aras</option><option value="1">Aras 1 (mudah)</option><option value="2">Aras 2</option><option value="3">Aras 3 (sukar)</option></select>
+      <select id="fStat" aria-label="Status"><option value="">Semua status</option><option value="aktif">Aktif</option><option value="gantung">Digantung</option><option value="ralat">Ada ralat</option><option value="amaran">Ada amaran</option></select>
+      <input id="fCari" placeholder="Cari teks soalan, pilihan atau ID..." style="min-width:220px;flex:1">
+    </div>
+    <div id="list"></div>
+    <div class="pg" id="pg"></div>
+  </div>
+</div>
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  if (attrs) for (const k in attrs) { if (k === "class") e.className = attrs[k]; else if (k === "value") e.value = attrs[k]; else if (attrs[k] !== false && attrs[k] != null) e.setAttribute(k, attrs[k]); }
+  for (const c of kids) e.append(c instanceof Node ? c : document.createTextNode(String(c)));
+  return e;
+}
+const PER = 20, DRAFT = "tw-bank-draft";
+let B = null, dirty = false, page = 0, open = new Set(), dupMap = {}, saveT = 0;
+
+/* ---------- data ---------- */
+function normQ(x) {
+  const o = Array.isArray(x.o) ? x.o.slice(0, 4).map((v) => String(v == null ? "" : v)) : [];
+  while (o.length < 4) o.push("");
+  return { id: Number(x.id), t: String(x.t || ""), d: Number(x.d) || 1, q: String(x.q || ""), o: o, a: Number.isInteger(Number(x.a)) ? Number(x.a) : -1, e: String(x.e || ""), s: String(x.s || ""), status: x.status === "gantung" ? "gantung" : "aktif" };
+}
+function loadBank(j, label) {
+  if (!j || !Array.isArray(j.soalan)) { say("Fail tidak sah: tiada senarai 'soalan'.", "bad"); return; }
+  B = { topik: Array.isArray(j.topik) ? j.topik.map((t) => ({ id: String(t.id), nama: String(t.nama || ""), tingkatan: t.tingkatan })) : [], soalan: j.soalan.map(normQ) };
+  let mx = -1; B.soalan.forEach((q) => { if (Number.isInteger(q.id)) mx = Math.max(mx, q.id); });
+  B.soalan.forEach((q) => { if (!Number.isInteger(q.id)) q.id = ++mx; });
+  if (!B.topik.length) { const ids = [...new Set(B.soalan.map((q) => q.t))].sort(); B.topik = ids.map((id) => ({ id: id, nama: "", tingkatan: "" })); }
+  dirty = false; page = 0; open = new Set();
+  $("draft").textContent = "";
+  say(label + ": " + B.soalan.length + " soalan dimuatkan.", "");
+  $("app").hidden = false; $("bExp").disabled = false; $("bExpCsv").disabled = false;
+  fillFilters(); render();
+}
+function say(t, cls) { const m = $("msg"); m.textContent = ""; if (t) m.append(h("div", { class: "notice" + (cls ? " " + cls : "") }, t)); }
+function nextId() { let m = -1; B.soalan.forEach((q) => { if (q.id > m) m = q.id; }); return m + 1; }
+function topikNama(id) { const t = B.topik.find((x) => x.id === id); return t ? t.id + (t.nama ? "  " + t.nama : "") : id; }
+function norm(s) { return String(s).toLowerCase().replace(/\s+/g, " ").trim(); }
+function buildDup() { dupMap = {}; const seen = {}; B.soalan.forEach((q) => { const k = norm(q.q); if (!k) return; if (seen[k] != null) dupMap[q.id] = seen[k]; else seen[k] = q.id; }); }
+const REF = /\b(rajah|petikan|jadual|gambar|graf|carta)\b[^.?]{0,25}\b(di atas|di bawah|berikut|ini|itu)\b|\bberdasarkan (petikan|rajah|jadual|gambar|situasi|kes)\b/i;
+const ALL = /semua (di atas|jawapan|pilihan)|tiada (satu )?(di atas|jawapan)|a dan b|b dan c|a dan c/i;
+function issuesOf(q) {
+  const er = [], wn = [];
+  if (!Number.isInteger(q.id) || q.id < 0) er.push("ID tidak sah");
+  if (!B.topik.some((t) => t.id === q.t)) er.push("Topik tidak dikenali");
+  if (![1, 2, 3].includes(q.d)) er.push("Aras mesti 1 hingga 3");
+  if (q.q.trim().length < 4) er.push("Soalan kosong");
+  if (q.o.some((o) => !o.trim())) er.push("Mesti ada 4 pilihan terisi");
+  else if (new Set(q.o.map(norm)).size < 4) er.push("Ada pilihan yang sama");
+  if (!(q.a >= 0 && q.a <= 3)) er.push("Jawapan betul belum dipilih");
+  if (!q.e.trim()) wn.push("Penjelasan kosong");
+  if (!q.s.trim()) wn.push("Rujukan kosong (nyatakan buku dan halaman)");
+  if (REF.test(q.q)) wn.push("Merujuk rajah, petikan atau jadual yang murid tidak nampak");
+  if (q.o.some((o) => ALL.test(o))) wn.push("Pilihan 'semua di atas' bermasalah kerana susunan pilihan diacak");
+  if (q.q.length > 220) wn.push("Soalan terlalu panjang");
+  if (dupMap[q.id] != null) wn.push("Soalan sama dengan #" + dupMap[q.id]);
+  const L = q.o.map((o) => o.trim().length), ok = L[q.a];
+  if (ok != null && L.length === 4) { const s = L.slice().sort((a, b) => b - a); if (ok === s[0] && s[0] >= 40 && s[0] >= 1.6 * s[1]) wn.push("Jawapan betul jauh lebih panjang (mudah diteka)"); }
+  return { er: er, wn: wn };
+}
+/* ---------- paparan ---------- */
+function fillFilters() {
+  const s = $("fTopik"); s.textContent = "";
+  s.append(h("option", { value: "" }, "Semua topik"));
+  B.topik.forEach((t) => s.append(h("option", { value: t.id }, topikNama(t.id))));
+}
+function filtered() {
+  const t = $("fTopik").value, a = $("fAras").value, st = $("fStat").value, c = norm($("fCari").value);
+  return B.soalan.filter((q) => {
+    if (t && q.t !== t) return false;
+    if (a && String(q.d) !== a) return false;
+    if (st === "aktif" && q.status !== "aktif") return false;
+    if (st === "gantung" && q.status !== "gantung") return false;
+    if (st === "ralat" || st === "amaran") { const i = issuesOf(q); if (st === "ralat" ? !i.er.length : !i.wn.length) return false; }
+    if (c && !(String(q.id) === c || norm(q.q + " " + q.o.join(" ") + " " + q.s).includes(c))) return false;
+    return true;
+  });
+}
+function summary() {
+  buildDup();
+  let er = 0, wn = 0, off = 0;
+  B.soalan.forEach((q) => { const i = issuesOf(q); if (i.er.length) er++; if (i.wn.length) wn++; if (q.status === "gantung") off++; });
+  const per = {}; B.soalan.forEach((q) => { if (q.status === "aktif" && !issuesOf(q).er.length) per[q.t] = (per[q.t] || 0) + 1; });
+  const low = B.topik.filter((t) => (per[t.id] || 0) < 10).map((t) => t.id);
+  const s = $("sum"); s.textContent = "";
+  s.append(h("span", null, "Jumlah: ", h("b", null, B.soalan.length)), h("span", null, "Boleh digunakan: ", h("b", null, B.soalan.length - er - off)), h("span", null, "Ralat: ", h("b", { style: "color:var(--bad)" }, er)), h("span", null, "Amaran: ", h("b", { style: "color:var(--warn)" }, wn)), h("span", null, "Digantung: ", h("b", null, off)));
+  if (low.length) s.append(h("span", { class: "muted" }, "Topik kurang 10 soalan: " + low.join(", ")));
+  $("bExp").textContent = dirty ? "Eksport soalan.json (ada perubahan)" : "Eksport soalan.json";
+}
+function badgesFor(q) {
+  const i = issuesOf(q), w = h("div", { class: "badges" });
+  w.append(h("span", { class: "b" }, topikNama(q.t).split("  ")[0]), h("span", { class: "b" }, "Aras " + q.d));
+  if (q.status === "gantung") w.append(h("span", { class: "b off" }, "Digantung"));
+  i.er.forEach((t) => w.append(h("span", { class: "b err" }, t)));
+  i.wn.forEach((t) => w.append(h("span", { class: "b wrn" }, t)));
+  return w;
+}
+function render() {
+  summary();
+  const list = filtered(), pages = Math.max(1, Math.ceil(list.length / PER));
+  page = Math.min(page, pages - 1);
+  const box = $("list"); box.textContent = "";
+  list.slice(page * PER, page * PER + PER).forEach((q) => box.append(card(q)));
+  if (!list.length) box.append(h("p", { class: "muted" }, "Tiada soalan sepadan dengan tapisan."));
+  const pg = $("pg"); pg.textContent = "";
+  const pv = h("button", null, "Sebelum"), nx = h("button", null, "Seterusnya");
+  pv.disabled = page <= 0; nx.disabled = page >= pages - 1;
+  pv.onclick = () => { page--; render(); window.scrollTo(0, 0); }; nx.onclick = () => { page++; render(); window.scrollTo(0, 0); };
+  pg.append(pv, h("span", { class: "muted" }, "Halaman " + (page + 1) + " / " + pages + "  (" + list.length + " soalan)"), nx);
+}
+function touch() { dirty = true; clearTimeout(saveT); saveT = setTimeout(saveDraft, 700); }
+function saveDraft() { try { localStorage.setItem(DRAFT, JSON.stringify({ at: Date.now(), bank: out() })); } catch (e) { /* abaikan */ } }
+function card(q) {
+  const c = h("div", { class: "card" }), isOpen = open.has(q.id);
+  const head = h("div", { class: "head" }, h("div", { class: "id" }, "#" + q.id), h("div", { class: "snip" }, q.q || "(soalan kosong)"));
+  head.append(badgesFor(q));
+  head.onclick = () => { if (open.has(q.id)) open.delete(q.id); else open.add(q.id); render(); };
+  c.append(head);
+  if (!isOpen) return c;
+  const upd = () => { touch(); buildDup(); head.replaceChildren(h("div", { class: "id" }, "#" + q.id), h("div", { class: "snip" }, q.q || "(soalan kosong)"), badgesFor(q)); summary(); };
+  const body = h("div", { class: "body" });
+  const sel = (opts, val, fn) => { const s = h("select"); opts.forEach(([v, l]) => s.append(h("option", { value: v }, l))); s.value = String(val); s.onchange = () => fn(s.value); return s; };
+  const fld = (label, el) => { const d = h("div"); d.append(h("label", { class: "l" }, label), el); return d; };
+  const r2 = h("div", { class: "row2" });
+  r2.append(
+    fld("Topik", sel(B.topik.map((t) => [t.id, topikNama(t.id)]).concat(B.topik.some((t) => t.id === q.t) ? [] : [[q.t, q.t + " (tidak dikenali)"]]), q.t, (v) => { q.t = v; upd(); })),
+    fld("Aras", sel([["1", "1 Mudah"], ["2", "2 Sederhana"], ["3", "3 Sukar"]], q.d, (v) => { q.d = Number(v); upd(); })),
+    fld("Status", sel([["aktif", "Aktif"], ["gantung", "Gantung (tidak digunakan)"]], q.status, (v) => { q.status = v; upd(); })));
+  body.append(r2);
+  const ta = h("textarea"); ta.value = q.q; ta.oninput = () => { q.q = ta.value; upd(); };
+  body.append(fld("Soalan", ta));
+  const og = h("div", { style: "display:grid;gap:6px" });
+  og.append(h("label", { class: "l" }, "Pilihan jawapan (pilih butang bulat untuk jawapan yang betul)"));
+  ["A", "B", "C", "D"].forEach((L, k) => {
+    const r = h("input", { type: "radio", name: "a" + q.id, "aria-label": "Jawapan betul " + L }); r.checked = q.a === k; r.onchange = () => { q.a = k; upd(); };
+    const t = h("input", { type: "text", "aria-label": "Pilihan " + L }); t.value = q.o[k]; t.oninput = () => { q.o[k] = t.value; upd(); };
+    og.append(h("div", { class: "opt" }, r, h("b", null, L), t));
+  });
+  body.append(og);
+  const ex = h("textarea"); ex.value = q.e; ex.oninput = () => { q.e = ex.value; upd(); };
+  body.append(fld("Penjelasan (dipaparkan selepas murid menjawab)", ex));
+  const sr = h("input", { type: "text" }); sr.value = q.s; sr.oninput = () => { q.s = sr.value; upd(); };
+  body.append(fld("Rujukan (contoh: BT4 Pel.1 p13, Modul Abrar Set 1 A1, DSKP)", sr));
+  const bt = h("div", { class: "bar" });
+  const dup = h("button", null, "Gandakan"), del = h("button", { class: "dng" }, "Padam");
+  dup.onclick = () => { const n = JSON.parse(JSON.stringify(q)); n.id = nextId(); n.q = n.q + " (salinan)"; B.soalan.splice(B.soalan.indexOf(q) + 1, 0, n); open.add(n.id); touch(); render(); };
+  del.onclick = () => { if (confirm("Padam soalan #" + q.id + " terus daripada bank?\nJika ragu, gunakan Gantung supaya soalan boleh dipulihkan.")) { B.soalan.splice(B.soalan.indexOf(q), 1); open.delete(q.id); touch(); render(); } };
+  bt.append(dup, del);
+  body.append(bt);
+  c.append(body);
+  return c;
+}
+/* ---------- eksport ---------- */
+function out() {
+  return { versi: stamp(), dikemas: new Date().toISOString().slice(0, 19), nota: "Fail ini diurus melalui bank.html. Jangan ubah nama medan. a = indeks jawapan betul (0=A, 1=B, 2=C, 3=D). d = aras (1 mudah, 2 sederhana, 3 sukar). status: aktif atau gantung.", topik: B.topik, soalan: B.soalan };
+}
+function stamp() { const d = new Date(), p = (n) => String(n).padStart(2, "0"); return d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + p(d.getHours()) + p(d.getMinutes()); }
+function fmt(o) {
+  return "{\n \"versi\": " + JSON.stringify(o.versi) + ",\n \"dikemas\": " + JSON.stringify(o.dikemas) + ",\n \"nota\": " + JSON.stringify(o.nota) + ",\n \"topik\": [\n" + o.topik.map((t) => "  " + JSON.stringify(t)).join(",\n") + "\n ],\n \"soalan\": [\n" + o.soalan.map((q) => "  " + JSON.stringify(q)).join(",\n") + "\n ]\n}\n";
+}
+function download(name, text, type) {
+  const a = h("a", { href: URL.createObjectURL(new Blob([text], { type: type })), download: name });
+  document.body.append(a); a.click(); a.remove();
+}
+$("bExp").onclick = () => {
+  buildDup();
+  const bad = B.soalan.filter((q) => issuesOf(q).er.length).length;
+  if (bad && !confirm(bad + " soalan ada ralat dan akan DIABAIKAN oleh permainan. Teruskan eksport?")) return;
+  download("soalan.json", fmt(out()), "application/json"); dirty = false; summary();
+  try { localStorage.removeItem(DRAFT); } catch (e) { /* abaikan */ }
+  say("soalan.json dieksport. Muat naik ke GitHub dengan menggantikan fail lama di sebelah index.html.", "");
+};
+const CSVH = ["id", "topik", "aras", "soalan", "A", "B", "C", "D", "jawapan", "penjelasan", "rujukan", "status"];
+function csvCell(v) { return "\"" + String(v).replace(/"/g, "\"\"") + "\""; }
+function toCsv(rows) { return "﻿" + rows.map((r) => r.map(csvCell).join(",")).join("\r\n") + "\r\n"; }
+$("bExpCsv").onclick = () => download("bank-soalan.csv", toCsv([CSVH].concat(B.soalan.map((q) => [q.id, q.t, q.d, q.q, q.o[0], q.o[1], q.o[2], q.o[3], "ABCD"[q.a] || "", q.e, q.s, q.status]))), "text/csv");
+$("bTpl").onclick = () => download("templat-soalan.csv", toCsv([CSVH, ["", "T4-1.1", 1, "Contoh soalan: Rukun Islam yang pertama ialah ...", "Mengucap dua kalimah syahadah", "Menunaikan solat", "Berpuasa", "Membayar zakat", "A", "Rukun Islam yang pertama ialah mengucap dua kalimah syahadah.", "BT4 Pel.1 p10", "aktif"]]), "text/csv");
+/* ---------- CSV import ---------- */
+function parseCsv(text) {
+  text = text.replace(/^﻿/, "");
+  const first = text.split(/\r?\n/)[0] || "";
+  const cnt = (ch) => first.split(ch).length;
+  const dl = cnt(";") > cnt(",") ? ";" : cnt("\t") > cnt(",") ? "\t" : ",";
+  const rows = []; let row = [], cur = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === "\"") { if (text[i + 1] === "\"") { cur += "\""; i++; } else q = false; } else cur += c; }
+    else if (c === "\"") q = true;
+    else if (c === dl) { row.push(cur); cur = ""; }
+    else if (c === "\n") { row.push(cur); rows.push(row); row = []; cur = ""; }
+    else if (c !== "\r") cur += c;
+  }
+  if (cur !== "" || row.length) { row.push(cur); rows.push(row); }
+  return rows.filter((r) => r.some((x) => x.trim() !== ""));
+}
+function importCsv(text) {
+  if (!B) B = { topik: [], soalan: [] };
+  const rows = parseCsv(text);
+  if (rows.length < 2) { say("Fail CSV kosong atau tiada baris soalan.", "bad"); return; }
+  const hd = rows[0].map((x) => norm(x)), ix = (n) => hd.indexOf(n);
+  const need = ["topik", "soalan", "a", "b", "c", "d", "jawapan"], miss = need.filter((n) => ix(n) < 0);
+  if (miss.length) { say("Lajur tidak lengkap: " + miss.join(", ") + ". Muat turun Templat CSV untuk susunan yang betul.", "bad"); return; }
+  const replace = B.soalan.length && confirm("Tekan OK untuk GABUNG dengan bank sekarang (ID sedia ada dikemas kini, baris tanpa ID ditambah).\nTekan Cancel untuk batal import.") ? false : (B.soalan.length ? null : false);
+  if (replace === null) return;
+  let add = 0, upd = 0, mx = nextId();
+  rows.slice(1).forEach((r) => {
+    const g = (n) => (ix(n) >= 0 ? (r[ix(n)] || "").trim() : "");
+    let a = g("jawapan").toUpperCase(); a = "ABCD".indexOf(a) >= 0 && a.length === 1 ? "ABCD".indexOf(a) : (["1", "2", "3", "4"].includes(a) ? Number(a) - 1 : -1);
+    const q = normQ({ id: g("id") === "" ? NaN : Number(g("id")), t: g("topik"), d: Number(g("aras")) || 1, q: g("soalan"), o: [g("a"), g("b"), g("c"), g("d")], a: a, e: g("penjelasan"), s: g("rujukan"), status: norm(g("status")) === "gantung" ? "gantung" : "aktif" });
+    q.q = g("soalan");
+    const ex = Number.isInteger(q.id) ? B.soalan.findIndex((z) => z.id === q.id) : -1;
+    if (ex >= 0) { B.soalan[ex] = q; upd++; } else { if (!Number.isInteger(q.id)) q.id = mx++; else mx = Math.max(mx, q.id + 1); B.soalan.push(q); add++; }
+  });
+  if (!B.topik.length) { const ids = [...new Set(B.soalan.map((q) => q.t))].sort(); B.topik = ids.map((id) => ({ id: id, nama: "", tingkatan: "" })); }
+  touch(); $("app").hidden = false; $("bExp").disabled = false; $("bExpCsv").disabled = false; fillFilters(); page = 0; render();
+  say("Import CSV: " + add + " soalan ditambah, " + upd + " dikemas kini. Semak lencana merah dan kuning sebelum eksport.", "");
+}
+/* ---------- sumber fail ---------- */
+$("bOpen").onclick = () => $("fJson").click();
+$("fJson").onchange = (e) => { const f = e.target.files[0]; if (!f) return; f.text().then((t) => { try { loadBank(JSON.parse(t), f.name); } catch (er) { say("Fail JSON tidak sah: " + er.message, "bad"); } }); e.target.value = ""; };
+$("bCsv").onclick = () => $("fCsv").click();
+$("fCsv").onchange = (e) => { const f = e.target.files[0]; if (!f) return; f.text().then(importCsv); e.target.value = ""; };
+$("bServer").onclick = () => {
+  fetch("soalan.json", { cache: "no-cache" }).then((r) => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).then((j) => loadBank(j, "soalan.json (laman)")).catch((er) => say("Tidak dapat memuat soalan.json daripada laman (" + er.message + "). Gunakan Buka fail soalan.json.", "bad"));
+};
+["fTopik", "fAras", "fStat"].forEach((id) => { $(id).onchange = () => { page = 0; render(); }; });
+$("fCari").oninput = () => { page = 0; render(); };
+$("bNew").onclick = () => {
+  if (!B) { B = { topik: [], soalan: [] }; $("app").hidden = false; $("bExp").disabled = false; $("bExpCsv").disabled = false; }
+  const t = ($("fTopik").value || (B.topik[0] && B.topik[0].id) || "T4-1.1");
+  const q = { id: nextId(), t: t, d: 2, q: "", o: ["", "", "", ""], a: -1, e: "", s: "", status: "aktif" };
+  B.soalan.unshift(q); open.add(q.id);
+  $("fAras").value = ""; $("fStat").value = ""; $("fCari").value = ""; page = 0; fillFilters(); $("fTopik").value = ""; touch(); render(); window.scrollTo(0, 0);
+};
+window.addEventListener("beforeunload", (e) => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
+/* draf */
+(function () {
+  let d = null; try { d = JSON.parse(localStorage.getItem(DRAFT) || "null"); } catch (e) { d = null; }
+  if (!d || !d.bank || !Array.isArray(d.bank.soalan)) return;
+  const w = h("div", { class: "notice" }, "Ada draf yang belum dieksport (" + d.bank.soalan.length + " soalan, " + new Date(d.at).toLocaleString("ms-MY") + "). ");
+  const r = h("button", { class: "pri" }, "Pulihkan draf"), x = h("button", null, "Buang draf");
+  r.onclick = () => { loadBank(d.bank, "Draf"); dirty = true; w.remove(); };
+  x.onclick = () => { try { localStorage.removeItem(DRAFT); } catch (e) { /* abaikan */ } w.remove(); };
+  w.append(r, document.createTextNode(" "), x); $("draft").append(w);
+})();
+</script>
+</body>
+</html>

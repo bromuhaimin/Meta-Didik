@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset="utf-8"><title>Operasi Tasawwur</title><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset="utf-8"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0b100b"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Gempur Tasawwur"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><title>Operasi Tasawwur</title><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Operasi Tasawwur</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -409,7 +409,7 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
 <div id="rkBanner" role="status" hidden></div>
 <div id="app">
   <header class="top"><div class="top-in">
-    <div class="brand">Operasi Tasawwur<small id="verTap">Latihan kendiri Tasawwur Islam SPM &middot; v13.3</small></div>
+    <div class="brand">Operasi Tasawwur<small id="verTap">Latihan kendiri Tasawwur Islam SPM &middot; v13.4</small></div>
     <button class="meb" id="meBtn" type="button" aria-label="Profil anggota">
       <span id="meIns"></span>
       <span class="me-t"><span class="me-n" id="meName">Anggota</span><span class="me-r" id="meRank">Prebet</span><div class="xpbar"><i id="meXp"></i></div></span>
@@ -499,6 +499,7 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
     <div class="field" id="sekHint" hidden style="color:var(--muted);font-size:14px"></div>
     <div class="field" id="sekPick" hidden><label for="selSekolah">Sekolah anda (skrol dan pilih, atau taip untuk cari)</label><input id="cariSek" maxlength="90" autocomplete="off" placeholder="Cari nama sekolah..." aria-label="Cari nama sekolah"><select id="selSekolah" size="7" aria-label="Senarai sekolah"></select></div>
     <div class="field" id="sekText"><label for="inSekolah">Nama sekolah</label><input id="inSekolah" maxlength="60" autocomplete="off" list="dlSekolah" placeholder="Contoh: SMK Taman Universiti"><datalist id="dlSekolah"></datalist></div>
+    <p class="muted" id="qbInfo" style="font-size:13px;margin:4px 0"></p>
     <p class="muted" id="regHint" style="font-size:14px;margin:0">Sekolah anda akan bersaing dengan sekolah lain di seluruh Malaysia. Pilih nama daripada senarai jika ada supaya markah murid sekolah anda digabungkan.</p>
     <details id="linkBox" hidden>
       <summary class="tagline" style="cursor:pointer;color:var(--khaki)">Sudah ada akaun? Pindah atau sambung antara peranti</summary>
@@ -827,7 +828,45 @@ function rng(seed) {
 function hashStr(s) { let h = 2166136261 >>> 0; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return h >>> 0; }
 const TOPIK = {}; DATA.topik.forEach((t) => { TOPIK[t.id] = t; });
 const TEMA = {}; DATA.tema.forEach((t) => { TEMA[t.id] = t; });
-const BYTOPIK = {}; DATA.soalan.forEach((q) => { (BYTOPIK[q.t] || (BYTOPIK[q.t] = [])).push(q); });
+const BYTOPIK = {}, QBYID = {};
+let QLIST = [];
+const QB = { src: "terbenam", ver: "202610160123", n: 0, bad: 0, off: 0 };
+/* bank soalan: sumber utama ialah soalan.json (disunting melalui bank.html). Salinan terbenam hanya untuk kecemasan. */
+function qValid(q) {
+  return !!q && Number.isInteger(q.i) && q.i >= 0 && !!TOPIK[q.t] && q.d >= 1 && q.d <= 3 && typeof q.q === "string" && q.q.trim().length > 3
+    && Array.isArray(q.o) && q.o.length === 4 && q.o.every((o) => typeof o === "string" && o.trim()) && new Set(q.o.map((o) => o.trim().toLowerCase())).size === 4
+    && Number.isInteger(q.a) && q.a >= 0 && q.a <= 3;
+}
+function qbankBuild() {
+  for (const k in BYTOPIK) delete BYTOPIK[k];
+  for (const k in QBYID) delete QBYID[k];
+  QLIST = []; QB.bad = 0; QB.off = 0;
+  DATA.soalan.forEach((q) => {
+    if (q && q.x === 1) { QB.off++; return; }
+    if (!qValid(q) || QBYID[q.i]) { QB.bad++; return; }
+    QLIST.push(q); QBYID[q.i] = q; (BYTOPIK[q.t] || (BYTOPIK[q.t] = [])).push(q);
+  });
+  QB.n = QLIST.length;
+}
+qbankBuild();
+function qbankApply(j, src) {
+  if (!j || !Array.isArray(j.soalan)) return false;
+  const list = j.soalan.map((x) => ({ i: Number(x && x.id), t: String((x && x.t) || ""), d: Number(x && x.d) || 0, q: String((x && x.q) || "").trim(), o: Array.isArray(x && x.o) ? x.o.map((o) => String(o == null ? "" : o).trim()) : [], a: Number(x && x.a), e: String((x && x.e) || "").trim(), s: String((x && x.s) || "").trim(), x: x && x.status === "gantung" ? 1 : 0 }));
+  const saved = DATA.soalan;
+  DATA.soalan = list; qbankBuild();
+  if (QB.n < 50) { DATA.soalan = saved; qbankBuild(); return false; } /* fail rosak: kekalkan bank terdahulu */
+  QB.src = src; QB.ver = String(j.versi || "");
+  return true;
+}
+async function qbankLoad() {
+  let j = null, src = "";
+  try { const r = await fetch("soalan.json", { cache: "no-cache" }); if (r.ok) { j = await r.json(); src = "soalan.json"; } } catch (e) { j = null; }
+  if (j && !(Array.isArray(j.soalan) && j.soalan.length)) j = null;
+  if (j) { try { localStorage.setItem("tw-qbank", JSON.stringify(j)); } catch (e) { /* abaikan */ } }
+  else { try { const c = JSON.parse(localStorage.getItem("tw-qbank") || "null"); if (c && Array.isArray(c.soalan) && String(c.versi || "") >= QB.ver) { j = c; src = "simpanan"; } } catch (e) { j = null; } }
+  if (j && qbankApply(j, src)) { try { renderAll(); } catch (e) { /* abaikan */ } }
+}
+function qbankInfo() { return "Bank soalan: " + QB.n + " soalan aktif (" + (QB.src === "soalan.json" ? "soalan.json" : QB.src === "simpanan" ? "salinan tersimpan" : "salinan terbenam") + (QB.ver ? ", versi " + QB.ver : "") + ")" + (QB.off ? ", " + QB.off + " digantung" : "") + (QB.bad ? ", " + QB.bad + " tidak sah diabaikan" : "") + "."; }
 
 /* ---------- Pangkat Tentera Darat Malaysia ---------- */
 const RANKS = [
@@ -1787,11 +1826,11 @@ function renderChamp() {
 /* ---------- Latihan khas: ulang kaji kelemahan dan mod peperiksaan ---------- */
 function weakPool() {
   const out = [];
-  for (const t in P.lemah) (P.lemah[t] || []).forEach((i) => { const x = DATA.soalan[i]; if (x) out.push(x); });
+  for (const t in P.lemah) (P.lemah[t] || []).forEach((i) => { const x = QBYID[i]; if (x) out.push(x); });
   return out;
 }
 function examPool(tk) {
-  const all = DATA.soalan.filter((x) => { const t = TOPIK[x.t]; return t && (tk === "semua" || String(TEMA[t.tema].tingkatan) === tk); });
+  const all = QLIST.filter((x) => { const t = TOPIK[x.t]; return t && (tk === "semua" || String(TEMA[t.tema].tingkatan) === tk); });
   return shuffle(all.slice()).slice(0, 40);
 }
 function gradeOf(p) {
@@ -6474,7 +6513,8 @@ function finalizeResult(res, t) {
     box.appendChild(el("div", { class: "tagline util", style: "color:var(--khaki)" }, "Soalan untuk disemak semula (" + res.wrong.length + ")"));
     const rv = el("div", { class: "review" });
     res.wrong.forEach((w) => {
-      const q = DATA.soalan[w.i];
+      const q = QBYID[w.i] || DATA.soalan.find((z) => z.i === w.i);
+      if (!q) return;
       const d = el("details"), s = el("summary", null, q.q);
       const p = el("p");
       p.append(document.createTextNode("Jawapan anda: " + w.pick + ". "), el("b", null, "Jawapan betul: " + q.o[q.a] + ". "), document.createTextNode(q.e + (q.s ? " (" + q.s + ")" : "")));
@@ -6758,6 +6798,7 @@ function openReg(first) {
   pickedName = cleanSekolah(P.sekolah || ""); $("cariSek").value = P.sekolah ? pickedName : "";
   fillSchoolList();
   { const lb = $("linkBox"); lb.hidden = !fbConfigured(); lb.open = !!first && !P.nama; try { $("myCode").value = FB.getUid(); } catch (e) { $("myCode").value = ""; } $("linkMsg").textContent = ""; }
+  { const qi = $("qbInfo"); if (qi) qi.textContent = qbankInfo(); }
   $("regCancel").hidden = !!first;
   $("regReset").hidden = !!first;
   $("regReset").textContent = "Padam kemajuan";
@@ -6846,6 +6887,7 @@ function rankDropNotice() {
   if (!P.nama || !P.sekolah) openReg(true);
   Net.onRankUp = (r) => { const msg = (cleanName(r.n) || "Pemain") + " naik pangkat ke " + RANKS[clamp(r.p | 0, 0, RANKS.length - 1)].n; if (S.running) { toast(msg, "good"); return; } const b = $("rkBanner"); b.textContent = msg; b.hidden = false; clearTimeout(b._t); b._t = setTimeout(() => { b.hidden = true; }, 5000); };
   Net.boardCb = () => { if (!$("reg").hidden) fillSchoolList(); renderMe(); liveWatch(); if (UI.view === "rank") renderBoard(); if (UI.view === "pangkat") renderPangkat(); };
+  qbankLoad();
   Net.init().then(() => {
     if (!P.nama && Net.user) { /* nama dipilih oleh pemain sendiri */ }
     computeStand();
@@ -6860,4 +6902,5 @@ function rankDropNotice() {
 
 </script>
 
+<script>if("serviceWorker"in navigator&&location.protocol.startsWith("http"))addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
 </body></html>
