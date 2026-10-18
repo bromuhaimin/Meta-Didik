@@ -1,0 +1,6127 @@
+{
+ "versi": "202610181200",
+ "dikemas": "2026-10-18T12:00:00",
+ "nota": "Fail ini diurus melalui bank.html. Jangan ubah nama medan. a = indeks jawapan betul (0=A, 1=B, 2=C, 3=D). d = aras (1 mudah, 2 sederhana, 3 sukar). status: aktif atau gantung. Soalan Pendidikan Islam ini perlu disemak oleh guru mata pelajaran.",
+ "topik": [
+  {
+   "id": "P4-1.1",
+   "nama": "Surah al-An'am, ayat 162-163",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-1.2",
+   "nama": "Surah al-Kahfi, ayat 101-110",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-1.3",
+   "nama": "Hukum Tajwid",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-1.4",
+   "nama": "Larangan Rasuah: Surah al-Baqarah, ayat 188",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-1.5",
+   "nama": "Memahami Sunnatullah: Surah Ali Imran, ayat 137-139",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-1.6",
+   "nama": "Larangan Mempersendakan Agama: Surah al-An'am, ayat 70",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-1.7",
+   "nama": "Dakwah Pemacu Kemajuan: Surah Fussilat, ayat 33",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-2.1",
+   "nama": "Hindari Dosa-dosa Besar",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-2.2",
+   "nama": "Kemuliaan Berdikari",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-3.1",
+   "nama": "Allah Maha Pembalas dan Maha Perkasa",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-3.2",
+   "nama": "Perkara yang Membatalkan Iman",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-3.3",
+   "nama": "Hindari Ajaran Sesat",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-4.1",
+   "nama": "Haji dan Umrah",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-4.2",
+   "nama": "Sembelihan",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-4.3",
+   "nama": "Korban dan Akikah",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-4.4",
+   "nama": "Muamalat Islam",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-4.5",
+   "nama": "Solat Sunat Dhuha dan Solat Sunat Gerhana",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-5.1",
+   "nama": "Kerajaan Khulafa al-Rasyidin",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-5.2",
+   "nama": "Kerajaan Umayyah",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-5.3",
+   "nama": "Kerajaan Abbasiyah",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-5.4",
+   "nama": "Kegemilangan Tokoh Empat Mazhab",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-6.1",
+   "nama": "Bersikap Benar Menjauhkan Kemunafikan",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-6.2",
+   "nama": "Khauf dan Raja'",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-6.3",
+   "nama": "Adab terhadap Orang Sakit dan Kurang Upaya",
+   "tingkatan": 4
+  },
+  {
+   "id": "P4-6.4",
+   "nama": "Wasatiyyah Menjamin Kecemerlangan Ummah",
+   "tingkatan": 4
+  },
+  {
+   "id": "P5-1.1",
+   "nama": "Surah al-Taubah, ayat 128-129",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-1.2",
+   "nama": "Surah al-Hasyr, ayat 21-24",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-1.3",
+   "nama": "Hukum Tajwid: Bacaan Ra, Waqaf dan Ibtida'",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-1.4",
+   "nama": "Ciri-ciri Mukmin Berjaya: Surah al-Mu'minun, ayat 1-11",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-1.5",
+   "nama": "Memahami Keutamaan dalam Tindakan: Surah al-Taubah, ayat 19-20",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-1.6",
+   "nama": "Kepelbagaian Bangsa dalam Islam: Surah al-Hujurat, ayat 13",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-2.1",
+   "nama": "Setiap Orang ialah Pemimpin",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-2.2",
+   "nama": "Tujuh Golongan yang Mendapat Naungan Allah",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-3.1",
+   "nama": "Allah Maha Mengawasi dan Maha Menyaksikan",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-3.2",
+   "nama": "Akidah Ahli Sunnah Wal Jamaah",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-4.1",
+   "nama": "Solat Sunat Istikharah dan Solat Sunat Tasbih",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-4.2",
+   "nama": "Perkahwinan",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-4.3",
+   "nama": "Isu-isu dalam Perkahwinan",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-4.4",
+   "nama": "Pengurusan Harta Selepas Kematian",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-4.5",
+   "nama": "Jenayah dalam Islam",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-5.1",
+   "nama": "Kerajaan Uthmaniyyah",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-5.2",
+   "nama": "Kegemilangan Tokoh Islam",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-6.1",
+   "nama": "Tawaduk Menzahirkan Kesucian Jiwa",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-6.2",
+   "nama": "Istiqamah Jalan Menuju Mujahadah",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-6.3",
+   "nama": "Adab Menjaga Alam Sekitar",
+   "tingkatan": 5
+  },
+  {
+   "id": "P5-6.4",
+   "nama": "Sifat Mazmumah Meracuni Hati",
+   "tingkatan": 5
+  }
+ ],
+ "soalan": [
+  {
+   "id": 0,
+   "t": "P4-1.1",
+   "d": 1,
+   "q": "Menurut Surah al-An'am ayat 162, solat, ibadah, hidup dan mati seorang Muslim ialah untuk ...",
+   "o": [
+    "Allah SWT, Tuhan sekalian alam",
+    "Kemegahan dirinya",
+    "Keselesaan keluarganya",
+    "Kebanggaan masyarakat"
+   ],
+   "a": 0,
+   "e": "Ayat 162 menegaskan segala ibadah, hidup dan mati hanyalah untuk Allah, Tuhan sekalian alam.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 1: Surah al-An'am, ayat 162-163",
+   "status": "aktif"
+  },
+  {
+   "id": 1,
+   "t": "P4-1.1",
+   "d": 1,
+   "q": "Ayat 162-163 Surah al-An'am menekankan konsep ...",
+   "o": [
+    "Riak dan ujub",
+    "Syumul dan wasatiyyah",
+    "Toleransi antara agama",
+    "Ikhlas dan tauhid"
+   ],
+   "a": 3,
+   "e": "Menyerahkan seluruh kehidupan kepada Allah tanpa sekutu ialah tauhid dan keikhlasan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 1: Surah al-An'am, ayat 162-163",
+   "status": "aktif"
+  },
+  {
+   "id": 2,
+   "t": "P4-1.1",
+   "d": 1,
+   "q": "Ayat 163 Surah al-An'am menyatakan bahawa Allah ...",
+   "o": [
+    "Mempunyai anak",
+    "Mempunyai pembantu",
+    "Memerlukan sembahan makhluk",
+    "Tiada sekutu bagi-Nya"
+   ],
+   "a": 3,
+   "e": "'Tiada sekutu bagi-Nya' ialah penegasan tauhid.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 1: Surah al-An'am, ayat 162-163",
+   "status": "aktif"
+  },
+  {
+   "id": 3,
+   "t": "P4-1.1",
+   "d": 2,
+   "q": "Ayat 162-163 Surah al-An'am sering dibaca dalam solat pada bacaan ...",
+   "o": [
+    "Doa qunut",
+    "Doa iftitah",
+    "Tahiyat akhir",
+    "Doa selepas wuduk"
+   ],
+   "a": 1,
+   "e": "Potongan ayat ini terdapat dalam doa iftitah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 1: Surah al-An'am, ayat 162-163",
+   "status": "aktif"
+  },
+  {
+   "id": 4,
+   "t": "P4-1.1",
+   "d": 2,
+   "q": "Dalam ayat 163, Nabi Muhammad SAW menyatakan bahawa baginda ialah orang yang pertama ...",
+   "o": [
+    "Berhijrah ke Madinah",
+    "Berperang di jalan Allah",
+    "Menyerah diri kepada Allah",
+    "Menerima wahyu"
+   ],
+   "a": 2,
+   "e": "Maksud 'wa ana awwalul muslimin': aku orang yang pertama menyerah diri kepada Allah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 1: Surah al-An'am, ayat 162-163",
+   "status": "aktif"
+  },
+  {
+   "id": 5,
+   "t": "P4-1.1",
+   "d": 2,
+   "q": "Seorang pelajar belajar bersungguh-sungguh dengan niat mencari keredaan Allah. Sikap ini selaras dengan ...",
+   "o": [
+    "Ayat 188 Surah al-Baqarah",
+    "Ayat 162 Surah al-An'am",
+    "Ayat 33 Surah Fussilat",
+    "Ayat 70 Surah al-An'am"
+   ],
+   "a": 1,
+   "e": "Menjadikan seluruh kehidupan sebagai ibadah kerana Allah ialah mesej ayat 162.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 1: Surah al-An'am, ayat 162-163",
+   "status": "aktif"
+  },
+  {
+   "id": 6,
+   "t": "P4-1.1",
+   "d": 3,
+   "q": "Sikap yang bercanggah dengan mesej ayat 162-163 Surah al-An'am ialah ...",
+   "o": [
+    "Menunaikan solat di awal waktu",
+    "Beribadat kerana mahu dipuji orang",
+    "Bekerja dengan niat mencari rezeki halal",
+    "Menolong orang kerana Allah"
+   ],
+   "a": 1,
+   "e": "Beribadat kerana dipuji ialah riak, bertentangan dengan keikhlasan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 1: Surah al-An'am, ayat 162-163",
+   "status": "aktif"
+  },
+  {
+   "id": 7,
+   "t": "P4-1.1",
+   "d": 3,
+   "q": "Ayat 162 menggabungkan solat, nusuk (ibadah), hidup dan mati. Apakah pengajaran utamanya?",
+   "o": [
+    "Ibadah hanya terhad kepada solat",
+    "Mati bukan urusan ibadah",
+    "Seluruh aspek hidup boleh menjadi ibadah jika diniatkan kerana Allah",
+    "Hanya ibadah wajib diterima Allah"
+   ],
+   "a": 2,
+   "e": "Ayat ini meluaskan konsep ibadah kepada seluruh kehidupan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 1: Surah al-An'am, ayat 162-163",
+   "status": "aktif"
+  },
+  {
+   "id": 8,
+   "t": "P4-1.2",
+   "d": 1,
+   "q": "Menurut Surah al-Kahfi ayat 107-108, orang yang beriman dan beramal soleh mendapat ...",
+   "o": [
+    "Syurga Adn sahaja",
+    "Kebun di dunia",
+    "Kekayaan di dunia",
+    "Syurga Firdaus"
+   ],
+   "a": 3,
+   "e": "Mereka mendapat syurga Firdaus sebagai tempat tinggal.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 2: Surah al-Kahfi, ayat 101-110",
+   "status": "aktif"
+  },
+  {
+   "id": 9,
+   "t": "P4-1.2",
+   "d": 1,
+   "q": "Ayat 110 Surah al-Kahfi menyuruh orang yang mengharap bertemu Tuhannya supaya ...",
+   "o": [
+    "Berpuasa sepanjang tahun",
+    "Menyendiri daripada manusia",
+    "Menghafaz al-Quran sahaja",
+    "Beramal soleh dan tidak mensyirikkan Allah"
+   ],
+   "a": 3,
+   "e": "Beramal soleh dan tidak syirik dalam ibadah ialah syarat bertemu Allah dengan redha.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 2: Surah al-Kahfi, ayat 101-110",
+   "status": "aktif"
+  },
+  {
+   "id": 10,
+   "t": "P4-1.2",
+   "d": 2,
+   "q": "Menurut ayat 109, jika lautan dijadikan dakwat untuk menulis kalimat Tuhan, maka ...",
+   "o": [
+    "Kalimat Tuhan habis ditulis",
+    "Lautan tidak berkurang",
+    "Dakwat itu kekal selamanya",
+    "Lautan itu habis sebelum kalimat Tuhan habis ditulis"
+   ],
+   "a": 3,
+   "e": "Ayat ini menunjukkan luasnya ilmu dan kalimat Allah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 2: Surah al-Kahfi, ayat 101-110",
+   "status": "aktif"
+  },
+  {
+   "id": 11,
+   "t": "P4-1.2",
+   "d": 2,
+   "q": "Siapakah golongan yang paling rugi perbuatannya menurut ayat 103-104 Surah al-Kahfi?",
+   "o": [
+    "Orang yang malas beribadat",
+    "Orang yang miskin",
+    "Mereka yang sia-sia usahanya tetapi menyangka berbuat baik",
+    "Orang yang sakit"
+   ],
+   "a": 2,
+   "e": "Mereka menyangka amalan baik padahal sia-sia kerana kufur.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 2: Surah al-Kahfi, ayat 101-110",
+   "status": "aktif"
+  },
+  {
+   "id": 12,
+   "t": "P4-1.2",
+   "d": 2,
+   "q": "Menurut ayat 101, golongan yang matanya tertutup daripada peringatan Allah ialah mereka yang ...",
+   "o": [
+    "Sentiasa berzikir",
+    "Tidak sanggup mendengar",
+    "Sentiasa menuntut ilmu",
+    "Gemar bersedekah"
+   ],
+   "a": 1,
+   "e": "Ayat 101: mereka tidak sanggup mendengar (peringatan).",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 2: Surah al-Kahfi, ayat 101-110",
+   "status": "aktif"
+  },
+  {
+   "id": 13,
+   "t": "P4-1.2",
+   "d": 3,
+   "q": "Mengapakah amalan golongan kafir dalam ayat 105 tidak ditimbang pada hari kiamat?",
+   "o": [
+    "Kerana mereka kufur kepada ayat Tuhan dan pertemuan dengan-Nya",
+    "Kerana amalan mereka terlalu sedikit",
+    "Kerana mereka tidak mengenali manusia",
+    "Kerana mereka malas"
+   ],
+   "a": 0,
+   "e": "Ayat 105: amalan mereka gugur kerana kufur kepada ayat Allah dan pertemuan dengan-Nya.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 2: Surah al-Kahfi, ayat 101-110",
+   "status": "aktif"
+  },
+  {
+   "id": 14,
+   "t": "P4-1.2",
+   "d": 2,
+   "q": "Pengajaran utama ayat 110 Surah al-Kahfi ialah amal soleh mestilah disertai dengan ...",
+   "o": [
+    "Keikhlasan tanpa syirik",
+    "Kekayaan harta",
+    "Pangkat yang tinggi",
+    "Ramai pengikut"
+   ],
+   "a": 0,
+   "e": "Amalan diterima apabila ikhlas dan menepati syarak.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 2: Surah al-Kahfi, ayat 101-110",
+   "status": "aktif"
+  },
+  {
+   "id": 15,
+   "t": "P4-1.2",
+   "d": 1,
+   "q": "Surah al-Kahfi dibaca pada hari ...",
+   "o": [
+    "Isnin",
+    "Rabu",
+    "Ahad",
+    "Jumaat"
+   ],
+   "a": 3,
+   "e": "Disunatkan membaca Surah al-Kahfi pada hari Jumaat.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 2: Surah al-Kahfi, ayat 101-110",
+   "status": "aktif"
+  },
+  {
+   "id": 16,
+   "t": "P4-1.3",
+   "d": 1,
+   "q": "Mad Lazim ialah huruf mad yang bertemu dengan ...",
+   "o": [
+    "Hamzah",
+    "Huruf qalqalah",
+    "Tanwin",
+    "Sukun asli"
+   ],
+   "a": 3,
+   "e": "Mad Lazim berlaku apabila huruf mad bertemu sukun asli, dibaca 6 harakat.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 3: Hukum Tajwid",
+   "status": "aktif"
+  },
+  {
+   "id": 17,
+   "t": "P4-1.3",
+   "d": 1,
+   "q": "Bacaan Mad Lazim dipanjangkan sebanyak ...",
+   "o": [
+    "2 harakat",
+    "3 harakat",
+    "6 harakat",
+    "4 harakat"
+   ],
+   "a": 2,
+   "e": "Mad Lazim wajib dibaca panjang 6 harakat.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 3: Hukum Tajwid",
+   "status": "aktif"
+  },
+  {
+   "id": 18,
+   "t": "P4-1.3",
+   "d": 2,
+   "q": "Dua jenis Mad Lazim ialah ...",
+   "o": [
+    "Mad Wajib dan Mad Jaiz",
+    "Mad Asli dan Mad Arid",
+    "Mad Lazim Kalimi dan Mad Lazim Harfi",
+    "Mad Silah dan Mad Badal"
+   ],
+   "a": 2,
+   "e": "Mad Lazim terbahagi kepada Kalimi (kalimah) dan Harfi (huruf).",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 3: Hukum Tajwid",
+   "status": "aktif"
+  },
+  {
+   "id": 19,
+   "t": "P4-1.3",
+   "d": 2,
+   "q": "Mad Lazim Harfi biasanya terdapat pada ...",
+   "o": [
+    "Akhir ayat",
+    "Tanda waqaf",
+    "Huruf di awal surah",
+    "Kalimah pinjaman"
+   ],
+   "a": 2,
+   "e": "Contohnya huruf muqatta'ah di awal surah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 3: Hukum Tajwid",
+   "status": "aktif"
+  },
+  {
+   "id": 20,
+   "t": "P4-1.3",
+   "d": 2,
+   "q": "Wakaf Tam ialah berhenti pada ayat yang ...",
+   "o": [
+    "Belum sempurna maknanya",
+    "Sempurna maknanya",
+    "Mengubah maksud ayat",
+    "Terdapat tanda mad"
+   ],
+   "a": 1,
+   "e": "Wakaf Tam ialah berhenti pada ayat yang telah sempurna maknanya.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 3: Hukum Tajwid",
+   "status": "aktif"
+  },
+  {
+   "id": 21,
+   "t": "P4-1.3",
+   "d": 2,
+   "q": "Wakaf Qabih ialah berhenti yang ...",
+   "o": [
+    "Sempurna maknanya",
+    "Disunatkan oleh qari",
+    "Menambah pahala",
+    "Mengubah makna sebenar ayat"
+   ],
+   "a": 3,
+   "e": "Wakaf Qabih ialah berhenti yang merosakkan makna ayat; hendaklah dielakkan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 3: Hukum Tajwid",
+   "status": "aktif"
+  },
+  {
+   "id": 22,
+   "t": "P4-1.3",
+   "d": 3,
+   "q": "Mad Lazim Kalimi berlaku apabila huruf mad bertemu sukun asli dalam ...",
+   "o": [
+    "Dua kalimah",
+    "Awal surah",
+    "Satu kalimah",
+    "Akhir surah"
+   ],
+   "a": 2,
+   "e": "Kalimi bermakna dalam satu kalimah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 3: Hukum Tajwid",
+   "status": "aktif"
+  },
+  {
+   "id": 23,
+   "t": "P4-1.3",
+   "d": 1,
+   "q": "Wakaf bermaksud ...",
+   "o": [
+    "Menamatkan bacaan",
+    "Berhenti membaca seketika dengan niat menyambung semula",
+    "Menyambung bacaan tanpa nafas",
+    "Menukar surah"
+   ],
+   "a": 1,
+   "e": "Wakaf ialah berhenti seketika untuk bernafas dan menyambung bacaan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 3: Hukum Tajwid",
+   "status": "aktif"
+  },
+  {
+   "id": 24,
+   "t": "P4-1.4",
+   "d": 1,
+   "q": "Rasuah ialah ...",
+   "o": [
+    "Pemberian atau suapan untuk memalsukan kebenaran dan membenarkan kepalsuan",
+    "Hadiah kepada keluarga",
+    "Sedekah kepada fakir",
+    "Gaji pekerja"
+   ],
+   "a": 0,
+   "e": "Rasuah ialah suapan bertujuan memalsukan kebenaran dan membenarkan kepalsuan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 4: Larangan Rasuah: Surah al-Baqarah, ayat 188",
+   "status": "aktif"
+  },
+  {
+   "id": 25,
+   "t": "P4-1.4",
+   "d": 1,
+   "q": "Surah al-Baqarah ayat 188 melarang manusia ...",
+   "o": [
+    "Berniaga",
+    "Bersedekah",
+    "Memakan harta orang lain dengan jalan yang batil",
+    "Menyimpan harta"
+   ],
+   "a": 2,
+   "e": "Ayat ini melarang memakan harta secara batil termasuk rasuah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 4: Larangan Rasuah: Surah al-Baqarah, ayat 188",
+   "status": "aktif"
+  },
+  {
+   "id": 26,
+   "t": "P4-1.4",
+   "d": 2,
+   "q": "Contoh kesalahan rasuah ialah ...",
+   "o": [
+    "Membayar zakat",
+    "Membeli barang di kedai",
+    "Menyalahgunakan jawatan untuk kepentingan diri",
+    "Menerima gaji bulanan"
+   ],
+   "a": 2,
+   "e": "Menyalahgunakan jawatan ialah salah satu bentuk kesalahan rasuah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 4: Larangan Rasuah: Surah al-Baqarah, ayat 188",
+   "status": "aktif"
+  },
+  {
+   "id": 27,
+   "t": "P4-1.4",
+   "d": 2,
+   "q": "Menurut hadis, perbuatan rasuah menyebabkan pemberi dan penerimanya ...",
+   "o": [
+    "Mendapat pahala",
+    "Dilaknat Allah dan Rasul",
+    "Dimudahkan rezeki",
+    "Dihormati ramai"
+   ],
+   "a": 1,
+   "e": "Rasulullah SAW melaknat pemberi dan penerima rasuah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 4: Larangan Rasuah: Surah al-Baqarah, ayat 188",
+   "status": "aktif"
+  },
+  {
+   "id": 28,
+   "t": "P4-1.4",
+   "d": 2,
+   "q": "Antara kesan rasuah kepada individu ialah ...",
+   "o": [
+    "Bertambah rezeki berkat",
+    "Dihormati masyarakat",
+    "Hilang maruah dan harga diri",
+    "Dipercayai pemimpin"
+   ],
+   "a": 2,
+   "e": "Individu yang terlibat rasuah tercemar maruahnya.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 4: Larangan Rasuah: Surah al-Baqarah, ayat 188",
+   "status": "aktif"
+  },
+  {
+   "id": 29,
+   "t": "P4-1.4",
+   "d": 2,
+   "q": "Memberi rasuah dan menerima rasuah dikira ...",
+   "o": [
+    "Hanya penerima berdosa",
+    "Hanya pemberi berdosa",
+    "Kesalahan yang sama-sama berdosa",
+    "Tidak berdosa jika kecil"
+   ],
+   "a": 2,
+   "e": "Kedua-dua pihak sama-sama terlibat dan berdosa.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 4: Larangan Rasuah: Surah al-Baqarah, ayat 188",
+   "status": "aktif"
+  },
+  {
+   "id": 30,
+   "t": "P4-1.4",
+   "d": 3,
+   "q": "Seorang pegawai menerima wang daripada kontraktor supaya meluluskan tender. Perbuatan ini bercanggah dengan ...",
+   "o": [
+    "Larangan memakan harta secara batil",
+    "Keharusan hadiah",
+    "Konsep sedekah",
+    "Konsep wakaf"
+   ],
+   "a": 0,
+   "e": "Memakan harta dengan jalan batil termasuk rasuah dalam urusan tender.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 4: Larangan Rasuah: Surah al-Baqarah, ayat 188",
+   "status": "aktif"
+  },
+  {
+   "id": 31,
+   "t": "P4-1.4",
+   "d": 3,
+   "q": "Langkah terbaik mengelak rasuah dalam masyarakat ialah ...",
+   "o": [
+    "Menyembunyikan perbuatan itu",
+    "Menerima tetapi tidak menggunakannya",
+    "Mendiamkan diri",
+    "Menanam nilai amanah dan integriti serta melaporkan kepada pihak berkuasa"
+   ],
+   "a": 3,
+   "e": "Pendidikan nilai dan pelaporan membantu membanteras rasuah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 4: Larangan Rasuah: Surah al-Baqarah, ayat 188",
+   "status": "aktif"
+  },
+  {
+   "id": 32,
+   "t": "P4-1.5",
+   "d": 1,
+   "q": "Sunnatullah ialah ...",
+   "o": [
+    "Kitab sunnah Nabi",
+    "Sistem dan peraturan yang ditetapkan Allah terhadap semua makhluk",
+    "Hukum fikah",
+    "Doa untuk berjaya"
+   ],
+   "a": 1,
+   "e": "Sunnatullah ialah peraturan Allah yang tetap dan tidak berubah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 5: Memahami Sunnatullah: Surah Ali Imran, ayat 137-139",
+   "status": "aktif"
+  },
+  {
+   "id": 33,
+   "t": "P4-1.5",
+   "d": 2,
+   "q": "Antara konsep sunnatullah ialah ...",
+   "o": [
+    "Boleh diubah manusia",
+    "Bersifat kekal dan tetap",
+    "Terhad kepada manusia sahaja",
+    "Tidak berasaskan sebab"
+   ],
+   "a": 1,
+   "e": "Sunnatullah bersifat tetap dan merangkumi semua makhluk.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 5: Memahami Sunnatullah: Surah Ali Imran, ayat 137-139",
+   "status": "aktif"
+  },
+  {
+   "id": 34,
+   "t": "P4-1.5",
+   "d": 2,
+   "q": "Sunnatullah berasaskan konsep ...",
+   "o": [
+    "Kebetulan",
+    "Sebab dan akibat",
+    "Nasib",
+    "Tekaan"
+   ],
+   "a": 1,
+   "e": "Allah menetapkan sebab dan akibat dalam alam.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 5: Memahami Sunnatullah: Surah Ali Imran, ayat 137-139",
+   "status": "aktif"
+  },
+  {
+   "id": 35,
+   "t": "P4-1.5",
+   "d": 2,
+   "q": "Menurut Surah Ali Imran ayat 139, orang beriman tidak perlu ...",
+   "o": [
+    "Lemah dan bersedih hati",
+    "Berusaha",
+    "Berdoa",
+    "Beribadat"
+   ],
+   "a": 0,
+   "e": "Ayat 139: janganlah kamu lemah dan janganlah bersedih hati.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 5: Memahami Sunnatullah: Surah Ali Imran, ayat 137-139",
+   "status": "aktif"
+  },
+  {
+   "id": 36,
+   "t": "P4-1.5",
+   "d": 2,
+   "q": "Nabi Yusuf AS menyelamatkan rakyat Mesir daripada kemarau dengan ...",
+   "o": [
+    "Berhijrah ke negeri lain",
+    "Meminta bantuan jiran",
+    "Menyimpan bekalan semasa musim menuai",
+    "Mengurangkan penduduk"
+   ],
+   "a": 2,
+   "e": "Perancangan menyimpan hasil tuaian selaras dengan sunnatullah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 5: Memahami Sunnatullah: Surah Ali Imran, ayat 137-139",
+   "status": "aktif"
+  },
+  {
+   "id": 37,
+   "t": "P4-1.5",
+   "d": 2,
+   "q": "Menurut ayat 137 Surah Ali Imran, manusia disuruh melihat kesudahan golongan yang ...",
+   "o": [
+    "Membantu rasul",
+    "Mendustakan rasul",
+    "Mengikut rasul",
+    "Berdoa kepada rasul"
+   ],
+   "a": 1,
+   "e": "Umat terdahulu yang mendustakan rasul menerima kebinasaan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 5: Memahami Sunnatullah: Surah Ali Imran, ayat 137-139",
+   "status": "aktif"
+  },
+  {
+   "id": 38,
+   "t": "P4-1.5",
+   "d": 3,
+   "q": "Contoh menghayati sunnatullah dalam pelajaran ialah ...",
+   "o": [
+    "Hanya berdoa",
+    "Menunggu nasib",
+    "Belajar bersungguh-sungguh dan berdoa",
+    "Menyalahkan takdir"
+   ],
+   "a": 2,
+   "e": "Usaha dan doa selaras dengan hukum sebab akibat.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 5: Memahami Sunnatullah: Surah Ali Imran, ayat 137-139",
+   "status": "aktif"
+  },
+  {
+   "id": 39,
+   "t": "P4-1.5",
+   "d": 3,
+   "q": "Seorang petani mendapat hasil tuaian yang baik kerana menjaga tanaman. Ini menunjukkan ...",
+   "o": [
+    "Sunnatullah berubah-ubah",
+    "Hasil tidak berkait usaha",
+    "Kebetulan semata-mata",
+    "Sunnatullah berasaskan sebab dan akibat"
+   ],
+   "a": 3,
+   "e": "Usaha menjaga tanaman ialah sebab kepada hasil baik.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 5: Memahami Sunnatullah: Surah Ali Imran, ayat 137-139",
+   "status": "aktif"
+  },
+  {
+   "id": 40,
+   "t": "P4-1.6",
+   "d": 1,
+   "q": "Surah al-An'am ayat 70 memerintahkan supaya menjauhi orang yang ...",
+   "o": [
+    "Menjadikan agama sebagai permainan dan senda gurau",
+    "Berdakwah",
+    "Menuntut ilmu",
+    "Membantu orang miskin"
+   ],
+   "a": 0,
+   "e": "Ayat 70 melarang bergaul dalam majlis yang mempersendakan agama.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 6: Larangan Mempersendakan Agama: Surah al-An'am, ayat 70",
+   "status": "aktif"
+  },
+  {
+   "id": 41,
+   "t": "P4-1.6",
+   "d": 1,
+   "q": "Contoh mempersendakan agama ialah ...",
+   "o": [
+    "Membaca al-Quran",
+    "Mengejek dan menghina sunnah Rasulullah SAW",
+    "Bersolat jemaah",
+    "Berdoa selepas solat"
+   ],
+   "a": 1,
+   "e": "Mengejek sunnah ialah bentuk mempersendakan agama.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 6: Larangan Mempersendakan Agama: Surah al-An'am, ayat 70",
+   "status": "aktif"
+  },
+  {
+   "id": 42,
+   "t": "P4-1.6",
+   "d": 2,
+   "q": "Mempersendakan agama boleh membawa kepada ...",
+   "o": [
+    "Hilang iman",
+    "Bertambah ilmu",
+    "Dipuji masyarakat",
+    "Rezeki murah"
+   ],
+   "a": 0,
+   "e": "Perbuatan menghina agama boleh membatalkan iman.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 6: Larangan Mempersendakan Agama: Surah al-An'am, ayat 70",
+   "status": "aktif"
+  },
+  {
+   "id": 43,
+   "t": "P4-1.6",
+   "d": 2,
+   "q": "Perbuatan menghina ulama dan orang soleh dikategorikan sebagai ...",
+   "o": [
+    "Berdakwah",
+    "Muhasabah",
+    "Amar makruf",
+    "Mempersendakan agama"
+   ],
+   "a": 3,
+   "e": "Menghina ulama ialah salah satu bentuk mempersendakan agama.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 6: Larangan Mempersendakan Agama: Surah al-An'am, ayat 70",
+   "status": "aktif"
+  },
+  {
+   "id": 44,
+   "t": "P4-1.6",
+   "d": 2,
+   "q": "Cara menjaga kesucian agama Islam ialah ...",
+   "o": [
+    "Menyembunyikan ajaran Islam",
+    "Menerima semua fahaman",
+    "Mengelak majlis ilmu",
+    "Memperkasakan program keilmuan"
+   ],
+   "a": 3,
+   "e": "Ilmu yang kukuh melindungi agama daripada diperlekehkan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 6: Larangan Mempersendakan Agama: Surah al-An'am, ayat 70",
+   "status": "aktif"
+  },
+  {
+   "id": 45,
+   "t": "P4-1.6",
+   "d": 2,
+   "q": "Mentafsir al-Quran mengikut hawa nafsu ialah ...",
+   "o": [
+    "Salah satu bentuk mempersendakan agama",
+    "Kaedah tafsir yang betul",
+    "Cara menghafaz",
+    "Hukum tajwid"
+   ],
+   "a": 0,
+   "e": "Tafsir mengikut hawa nafsu tanpa ilmu adalah salah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 6: Larangan Mempersendakan Agama: Surah al-An'am, ayat 70",
+   "status": "aktif"
+  },
+  {
+   "id": 46,
+   "t": "P4-1.6",
+   "d": 3,
+   "q": "Apabila berada dalam majlis yang memperolok-olokkan ayat Allah, sikap yang betul ialah ...",
+   "o": [
+    "Turut ketawa",
+    "Meninggalkan majlis itu dan menegur dengan hikmah jika mampu",
+    "Mendiamkan diri sahaja",
+    "Merakam untuk hiburan"
+   ],
+   "a": 1,
+   "e": "Ayat 70 menyuruh menjauhi majlis sebegitu.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 6: Larangan Mempersendakan Agama: Surah al-An'am, ayat 70",
+   "status": "aktif"
+  },
+  {
+   "id": 47,
+   "t": "P4-1.6",
+   "d": 3,
+   "q": "Penguatkuasaan undang-undang terhadap penghinaan agama bertujuan ...",
+   "o": [
+    "Menyekat kebebasan beragama",
+    "Menyusahkan rakyat",
+    "Memelihara kesucian agama dan keharmonian masyarakat",
+    "Mempromosi agama tertentu sahaja"
+   ],
+   "a": 2,
+   "e": "Undang-undang menjaga maruah agama dan ketenteraman awam.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 6: Larangan Mempersendakan Agama: Surah al-An'am, ayat 70",
+   "status": "aktif"
+  },
+  {
+   "id": 48,
+   "t": "P4-1.7",
+   "d": 1,
+   "q": "Menurut Surah Fussilat ayat 33, perkataan yang paling baik ialah perkataan orang yang ...",
+   "o": [
+    "Banyak berbicara",
+    "Menyeru kepada Allah dan beramal soleh",
+    "Berhujah dengan lantang",
+    "Memuji diri sendiri"
+   ],
+   "a": 1,
+   "e": "Ayat 33: siapakah yang lebih baik perkataannya daripada orang yang menyeru kepada Allah dan beramal soleh.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 7: Dakwah Pemacu Kemajuan: Surah Fussilat, ayat 33",
+   "status": "aktif"
+  },
+  {
+   "id": 49,
+   "t": "P4-1.7",
+   "d": 1,
+   "q": "Dakwah ialah ...",
+   "o": [
+    "Berdebat untuk menang",
+    "Menghukum pesalah",
+    "Memaksa orang memeluk Islam",
+    "Menyeru manusia kepada kebaikan dan mencegah kemungkaran"
+   ],
+   "a": 3,
+   "e": "Dakwah ialah seruan kepada kebaikan dengan hikmah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 7: Dakwah Pemacu Kemajuan: Surah Fussilat, ayat 33",
+   "status": "aktif"
+  },
+  {
+   "id": 50,
+   "t": "P4-1.7",
+   "d": 2,
+   "q": "Dakwah hendaklah dilakukan dengan ...",
+   "o": [
+    "Kekerasan",
+    "Paksaan",
+    "Penghinaan",
+    "Hikmah dan akhlak mulia"
+   ],
+   "a": 3,
+   "e": "Dakwah berkesan apabila disampaikan dengan bijaksana dan beradab.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 7: Dakwah Pemacu Kemajuan: Surah Fussilat, ayat 33",
+   "status": "aktif"
+  },
+  {
+   "id": 51,
+   "t": "P4-1.7",
+   "d": 2,
+   "q": "Siapakah yang berperanan sebagai pendakwah?",
+   "o": [
+    "Ustaz sahaja",
+    "Ulama sahaja",
+    "Setiap Muslim mengikut kemampuan",
+    "Pemimpin sahaja"
+   ],
+   "a": 2,
+   "e": "Setiap Muslim wajib menyampaikan kebaikan mengikut kemampuan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 7: Dakwah Pemacu Kemajuan: Surah Fussilat, ayat 33",
+   "status": "aktif"
+  },
+  {
+   "id": 52,
+   "t": "P4-1.7",
+   "d": 2,
+   "q": "Gerakan dakwah yang tersusun menyumbang kepada ...",
+   "o": [
+    "Kemajuan umat dan masyarakat",
+    "Perpecahan",
+    "Kemunduran",
+    "Sikap pasif"
+   ],
+   "a": 0,
+   "e": "Dakwah tersusun mencapai objektif dan mengangkat masyarakat.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 7: Dakwah Pemacu Kemajuan: Surah Fussilat, ayat 33",
+   "status": "aktif"
+  },
+  {
+   "id": 53,
+   "t": "P4-1.7",
+   "d": 2,
+   "q": "Pendakwah yang berkesan hendaklah mempunyai ...",
+   "o": [
+    "Harta yang banyak",
+    "Pangkat tinggi",
+    "Ilmu, kesabaran dan keperibadian mulia",
+    "Suara yang kuat"
+   ],
+   "a": 2,
+   "e": "Ilmu dan akhlak menjadi daya tarikan dakwah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 7: Dakwah Pemacu Kemajuan: Surah Fussilat, ayat 33",
+   "status": "aktif"
+  },
+  {
+   "id": 54,
+   "t": "P4-1.7",
+   "d": 3,
+   "q": "Dakwah melalui media sosial yang betul ialah ...",
+   "o": [
+    "Menyebarkan berita tanpa semak",
+    "Mengutuk pihak lain",
+    "Menyampaikan maklumat sahih dengan bahasa yang baik",
+    "Menggunakan bahasa kesat"
+   ],
+   "a": 2,
+   "e": "Dakwah mesti berasaskan ilmu dan akhlak yang baik.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 7: Dakwah Pemacu Kemajuan: Surah Fussilat, ayat 33",
+   "status": "aktif"
+  },
+  {
+   "id": 55,
+   "t": "P4-1.7",
+   "d": 3,
+   "q": "Ayat 33 Surah Fussilat disudahi dengan pengakuan 'sesungguhnya aku termasuk orang yang ...'",
+   "o": [
+    "Berjaya",
+    "Berilmu",
+    "Berserah diri",
+    "Bersabar"
+   ],
+   "a": 2,
+   "e": "Pendakwah ialah orang yang berserah diri kepada Allah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 7: Dakwah Pemacu Kemajuan: Surah Fussilat, ayat 33",
+   "status": "aktif"
+  },
+  {
+   "id": 56,
+   "t": "P4-2.1",
+   "d": 1,
+   "q": "Dosa yang paling besar ialah ...",
+   "o": [
+    "Syirik",
+    "Mencuri",
+    "Berbohong",
+    "Mengumpat"
+   ],
+   "a": 0,
+   "e": "Syirik menyekutukan Allah ialah dosa terbesar.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 8: Hindari Dosa-dosa Besar",
+   "status": "aktif"
+  },
+  {
+   "id": 57,
+   "t": "P4-2.1",
+   "d": 1,
+   "q": "Berikut ialah dosa besar yang membinasakan, kecuali ...",
+   "o": [
+    "Memberi salam",
+    "Syirik",
+    "Sihir",
+    "Memakan riba"
+   ],
+   "a": 0,
+   "e": "Memberi salam ialah amalan baik.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 8: Hindari Dosa-dosa Besar",
+   "status": "aktif"
+  },
+  {
+   "id": 58,
+   "t": "P4-2.1",
+   "d": 2,
+   "q": "Menuduh wanita beriman yang suci berzina tanpa saksi dinamakan ...",
+   "o": [
+    "Ghibah",
+    "Takzir",
+    "Fasakh",
+    "Qazaf"
+   ],
+   "a": 3,
+   "e": "Qazaf ialah menuduh orang berzina tanpa bukti.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 8: Hindari Dosa-dosa Besar",
+   "status": "aktif"
+  },
+  {
+   "id": 59,
+   "t": "P4-2.1",
+   "d": 2,
+   "q": "Antara tujuh perkara yang membinasakan ialah ...",
+   "o": [
+    "Menderma harta",
+    "Memakan harta anak yatim",
+    "Menjaga anak yatim",
+    "Mendidik anak"
+   ],
+   "a": 1,
+   "e": "Memakan harta anak yatim termasuk dosa besar.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 8: Hindari Dosa-dosa Besar",
+   "status": "aktif"
+  },
+  {
+   "id": 60,
+   "t": "P4-2.1",
+   "d": 2,
+   "q": "Lari daripada medan perang termasuk dosa besar kerana ...",
+   "o": [
+    "Takut mati",
+    "Meninggalkan tanggungjawab mempertahankan agama dan umat",
+    "Tidak pandai berperang",
+    "Terlalu letih"
+   ],
+   "a": 1,
+   "e": "Lari daripada medan jihad menjejaskan pertahanan umat.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 8: Hindari Dosa-dosa Besar",
+   "status": "aktif"
+  },
+  {
+   "id": 61,
+   "t": "P4-2.1",
+   "d": 2,
+   "q": "Membunuh ialah ...",
+   "o": [
+    "Menolong orang",
+    "Mendidik orang",
+    "Perbuatan menghilangkan nyawa seseorang tanpa hak",
+    "Mengubati pesakit"
+   ],
+   "a": 2,
+   "e": "Membunuh menghilangkan nyawa tanpa hak.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 8: Hindari Dosa-dosa Besar",
+   "status": "aktif"
+  },
+  {
+   "id": 62,
+   "t": "P4-2.1",
+   "d": 3,
+   "q": "Kesan perbuatan membunuh kepada masyarakat ialah ...",
+   "o": [
+    "Meningkatkan keselamatan",
+    "Mengeratkan perpaduan",
+    "Meningkatkan ekonomi",
+    "Memporak-perandakan kehidupan masyarakat"
+   ],
+   "a": 3,
+   "e": "Pembunuhan menimbulkan ketakutan dan kekacauan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 8: Hindari Dosa-dosa Besar",
+   "status": "aktif"
+  },
+  {
+   "id": 63,
+   "t": "P4-2.1",
+   "d": 3,
+   "q": "Cara terbaik membersihkan diri daripada dosa besar ialah ...",
+   "o": [
+    "Bertaubat nasuha",
+    "Menyembunyikan dosa",
+    "Menambah dosa kecil",
+    "Menyalahkan orang lain"
+   ],
+   "a": 0,
+   "e": "Taubat nasuha dengan menyesal, berhenti dan berazam tidak mengulangi.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 8: Hindari Dosa-dosa Besar",
+   "status": "aktif"
+  },
+  {
+   "id": 64,
+   "t": "P4-2.2",
+   "d": 1,
+   "q": "Berdikari bermaksud ...",
+   "o": [
+    "Meminta bantuan",
+    "Berusaha sendiri dan tidak bergantung pada orang lain",
+    "Menunggu rezeki",
+    "Bergantung pada keluarga"
+   ],
+   "a": 1,
+   "e": "Berdikari ialah berusaha dengan kemampuan sendiri.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 9: Kemuliaan Berdikari",
+   "status": "aktif"
+  },
+  {
+   "id": 65,
+   "t": "P4-2.2",
+   "d": 1,
+   "q": "Menurut hadis, tangan yang di atas lebih baik daripada tangan yang ...",
+   "o": [
+    "Kiri",
+    "Kanan",
+    "Kosong",
+    "Di bawah (meminta)"
+   ],
+   "a": 3,
+   "e": "Memberi lebih mulia daripada meminta-minta.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 9: Kemuliaan Berdikari",
+   "status": "aktif"
+  },
+  {
+   "id": 66,
+   "t": "P4-2.2",
+   "d": 2,
+   "q": "Nabi yang makan daripada hasil usaha tangannya sendiri ialah ...",
+   "o": [
+    "Nabi Daud AS",
+    "Nabi Nuh AS",
+    "Nabi Yunus AS",
+    "Nabi Ayub AS"
+   ],
+   "a": 0,
+   "e": "Nabi Daud AS membuat baju besi dan makan hasil usahanya.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 9: Kemuliaan Berdikari",
+   "status": "aktif"
+  },
+  {
+   "id": 67,
+   "t": "P4-2.2",
+   "d": 2,
+   "q": "Salah satu konsep berdikari ialah ...",
+   "o": [
+    "Bergantung pada orang lain",
+    "Mengharap pemberian",
+    "Menggunakan potensi diri yang dikurniakan Allah",
+    "Menunggu bantuan"
+   ],
+   "a": 2,
+   "e": "Berdikari memerlukan penggunaan potensi diri.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 9: Kemuliaan Berdikari",
+   "status": "aktif"
+  },
+  {
+   "id": 68,
+   "t": "P4-2.2",
+   "d": 2,
+   "q": "Seorang murid tinggal di asrama dan menguruskan dirinya sendiri. Sikap ini menunjukkan ...",
+   "o": [
+    "Berdikari",
+    "Bergantung",
+    "Pemalas",
+    "Sombong"
+   ],
+   "a": 0,
+   "e": "Menguruskan diri sendiri ialah latihan berdikari.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 9: Kemuliaan Berdikari",
+   "status": "aktif"
+  },
+  {
+   "id": 69,
+   "t": "P4-2.2",
+   "d": 2,
+   "q": "Berdikari menjauhkan seseorang daripada sikap ...",
+   "o": [
+    "Rajin",
+    "Meminta-minta dan bergantung",
+    "Berani",
+    "Jujur"
+   ],
+   "a": 1,
+   "e": "Berdikari memelihara maruah diri.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 9: Kemuliaan Berdikari",
+   "status": "aktif"
+  },
+  {
+   "id": 70,
+   "t": "P4-2.2",
+   "d": 3,
+   "q": "Punca masalah kebergantungan remaja pada masa kini termasuk ...",
+   "o": [
+    "Anak terlalu rajin",
+    "Ibu bapa terlalu memanjakan anak",
+    "Ibu bapa mendidik berdikari",
+    "Sekolah mengajar kemahiran hidup"
+   ],
+   "a": 1,
+   "e": "Terlalu dimanjakan melemahkan kemahiran berdikari.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 9: Kemuliaan Berdikari",
+   "status": "aktif"
+  },
+  {
+   "id": 71,
+   "t": "P4-2.2",
+   "d": 3,
+   "q": "Berdikari tidak bermakna menolak kerjasama kerana ...",
+   "o": [
+    "Manusia tidak perlu orang lain",
+    "Kerjasama dilarang",
+    "Islam menuntut tolong-menolong dalam kebaikan",
+    "Berdikari lebih utama daripada ibadah"
+   ],
+   "a": 2,
+   "e": "Berdikari digabungkan dengan ta'awun dalam kebaikan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 9: Kemuliaan Berdikari",
+   "status": "aktif"
+  },
+  {
+   "id": 72,
+   "t": "P4-3.1",
+   "d": 1,
+   "q": "Al-Muntaqim bermaksud ...",
+   "o": [
+    "Maha Pembalas",
+    "Maha Penyayang",
+    "Maha Pengampun",
+    "Maha Pemurah"
+   ],
+   "a": 0,
+   "e": "Al-Muntaqim: Allah menimpakan azab terhadap yang melampaui batas.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 10: Allah Maha Pembalas dan Maha Perkasa",
+   "status": "aktif"
+  },
+  {
+   "id": 73,
+   "t": "P4-3.1",
+   "d": 1,
+   "q": "Al-Jabbar bermaksud ...",
+   "o": [
+    "Maha Pengasih",
+    "Maha Mengetahui",
+    "Maha Berkuasa secara mutlak",
+    "Maha Pemberi rezeki"
+   ],
+   "a": 2,
+   "e": "Al-Jabbar: Allah berkuasa mutlak melakukan segala kehendak-Nya.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 10: Allah Maha Pembalas dan Maha Perkasa",
+   "status": "aktif"
+  },
+  {
+   "id": 74,
+   "t": "P4-3.1",
+   "d": 2,
+   "q": "Orang yang menolak sifat al-Muntaqim boleh menyebabkan ...",
+   "o": [
+    "Bertambah imannya",
+    "Dimudahkan urusannya",
+    "Disayangi manusia",
+    "Terbatal imannya"
+   ],
+   "a": 3,
+   "e": "Menolak Asma' al-Husna boleh membatalkan iman.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 10: Allah Maha Pembalas dan Maha Perkasa",
+   "status": "aktif"
+  },
+  {
+   "id": 75,
+   "t": "P4-3.1",
+   "d": 2,
+   "q": "Bukti Allah bersifat al-Jabbar ialah ...",
+   "o": [
+    "Manusia mengatur alam",
+    "Alam bebas daripada kuasa Allah",
+    "Makhluk menentukan takdir sendiri",
+    "Allah menguasai seluruh alam"
+   ],
+   "a": 3,
+   "e": "Semua makhluk berada dalam kekuasaan Allah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 10: Allah Maha Pembalas dan Maha Perkasa",
+   "status": "aktif"
+  },
+  {
+   "id": 76,
+   "t": "P4-3.1",
+   "d": 2,
+   "q": "Menghayati nama al-Muntaqim menjadikan seseorang ...",
+   "o": [
+    "Berani berbuat dosa",
+    "Lalai",
+    "Takut melakukan maksiat",
+    "Berputus asa"
+   ],
+   "a": 2,
+   "e": "Mengetahui azab Allah mendorong menjauhi maksiat.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 10: Allah Maha Pembalas dan Maha Perkasa",
+   "status": "aktif"
+  },
+  {
+   "id": 77,
+   "t": "P4-3.1",
+   "d": 2,
+   "q": "Perbuatan Allah tidak boleh dipersoalkan kerana ...",
+   "o": [
+    "Setiap perbuatan-Nya mengandungi hikmah",
+    "Allah tidak adil",
+    "Manusia tidak berakal",
+    "Allah tidak peduli"
+   ],
+   "a": 0,
+   "e": "Perbuatan Allah mengandungi hikmah yang kadangkala tersembunyi.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 10: Allah Maha Pembalas dan Maha Perkasa",
+   "status": "aktif"
+  },
+  {
+   "id": 78,
+   "t": "P4-3.1",
+   "d": 3,
+   "q": "Sifat takbur (bongkak) bertentangan dengan penghayatan ...",
+   "o": [
+    "Al-Rahim",
+    "Al-Ghafur",
+    "Al-Jabbar",
+    "Al-Wahhab"
+   ],
+   "a": 2,
+   "e": "Allah menghina makhluk yang takbur; manusia wajib merendah diri.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 10: Allah Maha Pembalas dan Maha Perkasa",
+   "status": "aktif"
+  },
+  {
+   "id": 79,
+   "t": "P4-3.1",
+   "d": 3,
+   "q": "Penghayatan nama al-Jabbar dalam kehidupan ialah ...",
+   "o": [
+    "Menunjuk kekuasaan",
+    "Merendah diri dan tidak sombong",
+    "Menindas yang lemah",
+    "Bergantung kepada manusia"
+   ],
+   "a": 1,
+   "e": "Hanya Allah yang berkuasa mutlak; manusia lemah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 10: Allah Maha Pembalas dan Maha Perkasa",
+   "status": "aktif"
+  },
+  {
+   "id": 80,
+   "t": "P4-3.2",
+   "d": 1,
+   "q": "Iman ialah ...",
+   "o": [
+    "Kepercayaan hati, pengakuan lidah dan amalan anggota",
+    "Pengakuan lidah sahaja",
+    "Kepercayaan hati sahaja",
+    "Amalan sahaja"
+   ],
+   "a": 0,
+   "e": "Takrif iman mengikut Ahli Sunnah Wal Jamaah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 11: Perkara yang Membatalkan Iman",
+   "status": "aktif"
+  },
+  {
+   "id": 81,
+   "t": "P4-3.2",
+   "d": 2,
+   "q": "Perkara yang membatalkan iman boleh berlaku melalui ...",
+   "o": [
+    "Iktikad, perkataan dan perbuatan",
+    "Hanya iktikad",
+    "Hanya perkataan",
+    "Hanya perbuatan"
+   ],
+   "a": 0,
+   "e": "Ketiga-tiga aspek boleh membatalkan iman.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 11: Perkara yang Membatalkan Iman",
+   "status": "aktif"
+  },
+  {
+   "id": 82,
+   "t": "P4-3.2",
+   "d": 2,
+   "q": "Salah satu syarat terbatal iman ialah melakukan perkara itu dengan ...",
+   "o": [
+    "Terlupa",
+    "Terpaksa tanpa niat",
+    "Tidak sedar",
+    "Sengaja"
+   ],
+   "a": 3,
+   "e": "Syaratnya berlaku dengan sengaja dan mengetahui kesannya.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 11: Perkara yang Membatalkan Iman",
+   "status": "aktif"
+  },
+  {
+   "id": 83,
+   "t": "P4-3.2",
+   "d": 2,
+   "q": "Antara kesan melakukan perkara yang membatalkan iman ialah ...",
+   "o": [
+    "Bertambah pahala",
+    "Diampun terus",
+    "Dimuliakan",
+    "Rosak segala amalan soleh"
+   ],
+   "a": 3,
+   "e": "Amalan menjadi sia-sia.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 11: Perkara yang Membatalkan Iman",
+   "status": "aktif"
+  },
+  {
+   "id": 84,
+   "t": "P4-3.2",
+   "d": 2,
+   "q": "Mengingkari rukun iman dan rukun Islam ialah ...",
+   "o": [
+    "Dosa kecil",
+    "Perbuatan yang membatalkan iman",
+    "Perkara harus",
+    "Perkara sunat"
+   ],
+   "a": 1,
+   "e": "Menolak perkara asas agama membatalkan iman.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 11: Perkara yang Membatalkan Iman",
+   "status": "aktif"
+  },
+  {
+   "id": 85,
+   "t": "P4-3.2",
+   "d": 2,
+   "q": "Cara menjauhi perkara yang membatalkan iman ialah ...",
+   "o": [
+    "Menjauhi guru",
+    "Meninggalkan solat",
+    "Mengikut sahaja",
+    "Mendalami ilmu akidah"
+   ],
+   "a": 3,
+   "e": "Ilmu akidah memelihara iman.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 11: Perkara yang Membatalkan Iman",
+   "status": "aktif"
+  },
+  {
+   "id": 86,
+   "t": "P4-3.2",
+   "d": 3,
+   "q": "Berdoa memohon keteguhan iman sejajar dengan doa ...",
+   "o": [
+    "Ya muqallibal qulub, thabbit qalbi 'ala dinik",
+    "Allahumma sholli",
+    "Rabbana atina",
+    "Bismillah"
+   ],
+   "a": 0,
+   "e": "Doa meneguhkan hati di atas agama.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 11: Perkara yang Membatalkan Iman",
+   "status": "aktif"
+  },
+  {
+   "id": 87,
+   "t": "P4-3.2",
+   "d": 3,
+   "q": "Individu yang meninggal dunia dalam keadaan murtad ...",
+   "o": [
+    "Diampunkan terus",
+    "Mendapat syurga",
+    "Amalannya gugur dan kekal di neraka jika tidak bertaubat",
+    "Layak mendapat pusaka"
+   ],
+   "a": 2,
+   "e": "Murtad menggugurkan amalan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 11: Perkara yang Membatalkan Iman",
+   "status": "aktif"
+  },
+  {
+   "id": 88,
+   "t": "P4-3.3",
+   "d": 1,
+   "q": "Ajaran sesat ialah ajaran yang ...",
+   "o": [
+    "Didakwa Islam tetapi bercanggah dengan al-Quran dan sunnah",
+    "Selari dengan al-Quran",
+    "Datang dari Nabi",
+    "Diajar di sekolah agama"
+   ],
+   "a": 0,
+   "e": "Ajaran sesat bertentangan dengan al-Quran dan al-Sunnah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 12: Hindari Ajaran Sesat",
+   "status": "aktif"
+  },
+  {
+   "id": 89,
+   "t": "P4-3.3",
+   "d": 1,
+   "q": "Antara contoh ajaran sesat di Malaysia ialah ...",
+   "o": [
+    "Mazhab Syafie",
+    "Ahli Sunnah Wal Jamaah",
+    "Ajaran Ayah Pin",
+    "Tareqat Naqsyabandiah yang sah"
+   ],
+   "a": 2,
+   "e": "Ajaran Ayah Pin (Kerajaan Langit) difatwakan sesat.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 12: Hindari Ajaran Sesat",
+   "status": "aktif"
+  },
+  {
+   "id": 90,
+   "t": "P4-3.3",
+   "d": 2,
+   "q": "Antara ciri akidah ajaran sesat ialah ...",
+   "o": [
+    "Mengaku menjadi nabi atau rasul",
+    "Mengakui Nabi Muhammad SAW nabi terakhir",
+    "Beriman dengan rukun iman",
+    "Menghormati ulama"
+   ],
+   "a": 0,
+   "e": "Mendakwa nabi selepas Nabi Muhammad SAW ialah sesat.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 12: Hindari Ajaran Sesat",
+   "status": "aktif"
+  },
+  {
+   "id": 91,
+   "t": "P4-3.3",
+   "d": 2,
+   "q": "Ajaran Qadiani atau Ahmadiyah dianggap sesat kerana ...",
+   "o": [
+    "Mengakui nabi selepas Nabi Muhammad SAW",
+    "Mengamalkan zakat",
+    "Membaca al-Quran",
+    "Berpuasa"
+   ],
+   "a": 0,
+   "e": "Mendakwa kenabian selepas Nabi Muhammad SAW bercanggah dengan akidah Islam.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 12: Hindari Ajaran Sesat",
+   "status": "aktif"
+  },
+  {
+   "id": 92,
+   "t": "P4-3.3",
+   "d": 2,
+   "q": "Kesan ajaran sesat kepada masyarakat ialah ...",
+   "o": [
+    "Memutuskan silaturahim",
+    "Mengeratkan silaturahim",
+    "Meningkatkan perpaduan",
+    "Menambah ilmu"
+   ],
+   "a": 0,
+   "e": "Pengikutnya sering memutuskan hubungan dengan keluarga.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 12: Hindari Ajaran Sesat",
+   "status": "aktif"
+  },
+  {
+   "id": 93,
+   "t": "P4-3.3",
+   "d": 2,
+   "q": "Faktor seseorang terjebak ajaran sesat ialah ...",
+   "o": [
+    "Mendalami ilmu akidah",
+    "Jahil tentang ilmu akidah",
+    "Bergaul dengan ulama",
+    "Menghadiri kelas agama"
+   ],
+   "a": 1,
+   "e": "Kejahilan akidah memudahkan terpengaruh.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 12: Hindari Ajaran Sesat",
+   "status": "aktif"
+  },
+  {
+   "id": 94,
+   "t": "P4-3.3",
+   "d": 3,
+   "q": "Cara terbaik menghindari ajaran sesat ialah ...",
+   "o": [
+    "Mengikut kawan",
+    "Percaya semua video",
+    "Belajar daripada guru bertauliah dan sumber sahih",
+    "Mengikut tanpa soal"
+   ],
+   "a": 2,
+   "e": "Ilmu yang sahih memelihara akidah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 12: Hindari Ajaran Sesat",
+   "status": "aktif"
+  },
+  {
+   "id": 95,
+   "t": "P4-3.3",
+   "d": 3,
+   "q": "Menolak alam ghaib seperti roh dan malaikat ialah ciri ...",
+   "o": [
+    "Ajaran sesat",
+    "Ahli Sunnah Wal Jamaah",
+    "Akidah sahih",
+    "Mazhab Syafie"
+   ],
+   "a": 0,
+   "e": "Beriman kepada ghaib ialah asas iman.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 12: Hindari Ajaran Sesat",
+   "status": "aktif"
+  },
+  {
+   "id": 96,
+   "t": "P4-4.1",
+   "d": 1,
+   "q": "Haji ialah menziarahi Baitullah ...",
+   "o": [
+    "Pada bila-bila masa",
+    "Untuk berniaga",
+    "Untuk bersiar-siar",
+    "Pada masa tertentu untuk melakukan ibadat tertentu"
+   ],
+   "a": 3,
+   "e": "Haji ada waktu dan syarat tertentu; umrah boleh pada bila-bila masa.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 13: Haji dan Umrah",
+   "status": "aktif"
+  },
+  {
+   "id": 97,
+   "t": "P4-4.1",
+   "d": 1,
+   "q": "Berikut ialah rukun haji, kecuali ...",
+   "o": [
+    "Ihram",
+    "Melontar jamrah",
+    "Wukuf di Arafah",
+    "Tawaf"
+   ],
+   "a": 1,
+   "e": "Melontar jamrah ialah wajib haji, bukan rukun.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 13: Haji dan Umrah",
+   "status": "aktif"
+  },
+  {
+   "id": 98,
+   "t": "P4-4.1",
+   "d": 2,
+   "q": "Dua jenis miqat ialah ...",
+   "o": [
+    "Miqat fardu dan sunat",
+    "Miqat zamani dan miqat makani",
+    "Miqat awal dan akhir",
+    "Miqat darat dan laut"
+   ],
+   "a": 1,
+   "e": "Zamani ialah ketentuan masa; makani ketentuan tempat.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 13: Haji dan Umrah",
+   "status": "aktif"
+  },
+  {
+   "id": 99,
+   "t": "P4-4.1",
+   "d": 2,
+   "q": "Miqat makani ialah ...",
+   "o": [
+    "Sempadan tempat untuk berniat ihram",
+    "Sempadan masa berniat ihram",
+    "Tempat melontar jamrah",
+    "Tempat bermalam"
+   ],
+   "a": 0,
+   "e": "Makani berkaitan tempat.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 13: Haji dan Umrah",
+   "status": "aktif"
+  },
+  {
+   "id": 100,
+   "t": "P4-4.1",
+   "d": 2,
+   "q": "Berniat ihram di miqat bagi haji dan umrah ialah ...",
+   "o": [
+    "Rukun haji sahaja",
+    "Sunat",
+    "Wajib haji dan umrah",
+    "Harus"
+   ],
+   "a": 2,
+   "e": "Ihram dari miqat wajib dilakukan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 13: Haji dan Umrah",
+   "status": "aktif"
+  },
+  {
+   "id": 101,
+   "t": "P4-4.1",
+   "d": 2,
+   "q": "Berikut ialah rukun umrah, kecuali ...",
+   "o": [
+    "Ihram",
+    "Tawaf",
+    "Sa'i",
+    "Wukuf di Arafah"
+   ],
+   "a": 3,
+   "e": "Wukuf di Arafah hanya rukun haji.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 13: Haji dan Umrah",
+   "status": "aktif"
+  },
+  {
+   "id": 102,
+   "t": "P4-4.1",
+   "d": 3,
+   "q": "Tawaf wada' dilakukan ...",
+   "o": [
+    "Sebelum meninggalkan Makkah",
+    "Ketika tiba di Makkah",
+    "Di Arafah",
+    "Di Mina"
+   ],
+   "a": 0,
+   "e": "Tawaf wada' ialah tawaf perpisahan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 13: Haji dan Umrah",
+   "status": "aktif"
+  },
+  {
+   "id": 103,
+   "t": "P4-4.1",
+   "d": 3,
+   "q": "Langkah mengelak penipuan pakej umrah ialah ...",
+   "o": [
+    "Menyemak latar belakang syarikat yang berdaftar",
+    "Memilih yang paling murah",
+    "Membayar tanpa resit",
+    "Percaya iklan semata-mata"
+   ],
+   "a": 0,
+   "e": "Pastikan syarikat bertauliah dan berdaftar.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 13: Haji dan Umrah",
+   "status": "aktif"
+  },
+  {
+   "id": 104,
+   "t": "P4-4.2",
+   "d": 1,
+   "q": "Sembelihan ialah menyembelih binatang halal dengan memutuskan ...",
+   "o": [
+    "Kepala",
+    "Kaki",
+    "Tulang belakang",
+    "Urat halkum dan urat merik"
+   ],
+   "a": 3,
+   "e": "Halkum (saluran nafas) dan merik (saluran makanan) mesti terputus.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 14: Sembelihan",
+   "status": "aktif"
+  },
+  {
+   "id": 105,
+   "t": "P4-4.2",
+   "d": 2,
+   "q": "Syarat sah sembelihan ialah binatang masih ...",
+   "o": [
+    "Tidak bergerak",
+    "Sakit",
+    "Mati",
+    "Mempunyai hayat mustaqirah"
+   ],
+   "a": 3,
+   "e": "Binatang mesti hidup dan berhayat tetap ketika disembelih.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 14: Sembelihan",
+   "status": "aktif"
+  },
+  {
+   "id": 106,
+   "t": "P4-4.2",
+   "d": 2,
+   "q": "Antara perkara sunat dalam sembelihan ialah ...",
+   "o": [
+    "Menggunakan pisau tumpul",
+    "Menghadap utara",
+    "Menyembelih tanpa niat",
+    "Membaca basmalah"
+   ],
+   "a": 3,
+   "e": "Basmalah, menghadap kiblat dan pisau tajam disunatkan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 14: Sembelihan",
+   "status": "aktif"
+  },
+  {
+   "id": 107,
+   "t": "P4-4.2",
+   "d": 2,
+   "q": "Binatang disunatkan dibaringkan di atas rusuk ...",
+   "o": [
+    "Kanan",
+    "Kiri",
+    "Belakang",
+    "Perut"
+   ],
+   "a": 1,
+   "e": "Memudahkan penyembelih menggunakan tangan kanan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 14: Sembelihan",
+   "status": "aktif"
+  },
+  {
+   "id": 108,
+   "t": "P4-4.2",
+   "d": 2,
+   "q": "Menajamkan pisau sebelum menyembelih menunjukkan ...",
+   "o": [
+    "Ihsan terhadap binatang",
+    "Kejam",
+    "Kelalaian",
+    "Pembaziran"
+   ],
+   "a": 0,
+   "e": "Agar binatang tidak terseksa.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 14: Sembelihan",
+   "status": "aktif"
+  },
+  {
+   "id": 109,
+   "t": "P4-4.2",
+   "d": 2,
+   "q": "Penyembelih yang sah ialah ...",
+   "o": [
+    "Kanak-kanak yang tidak mumayyiz",
+    "Muslim yang berakal",
+    "Orang gila",
+    "Orang mabuk"
+   ],
+   "a": 1,
+   "e": "Penyembelih mestilah Muslim atau ahli kitab yang berakal.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 14: Sembelihan",
+   "status": "aktif"
+  },
+  {
+   "id": 110,
+   "t": "P4-4.2",
+   "d": 3,
+   "q": "Seekor ayam hampir mati dan tidak bergerak. Sembelihannya tidak sah jika ...",
+   "o": [
+    "Tiada hayat mustaqirah ketika disembelih",
+    "Dibaca basmalah",
+    "Pisau tajam",
+    "Dihadapkan kiblat"
+   ],
+   "a": 0,
+   "e": "Hayat mustaqirah ialah syarat sah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 14: Sembelihan",
+   "status": "aktif"
+  },
+  {
+   "id": 111,
+   "t": "P4-4.2",
+   "d": 3,
+   "q": "Menyembelih dengan ihsan bermaksud ...",
+   "o": [
+    "Menyembelih secepat mungkin tanpa adab",
+    "Tidak menyeksa binatang",
+    "Menyembelih di hadapan binatang lain",
+    "Menyembelih dengan pisau tumpul"
+   ],
+   "a": 1,
+   "e": "Rasulullah SAW menuntut ihsan dalam menyembelih.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 14: Sembelihan",
+   "status": "aktif"
+  },
+  {
+   "id": 112,
+   "t": "P4-4.3",
+   "d": 1,
+   "q": "Korban dilakukan pada ...",
+   "o": [
+    "Hari Raya Aidilfitri",
+    "Awal Ramadan",
+    "Maulidur Rasul",
+    "Hari Raya Aidiladha dan hari tasyriq"
+   ],
+   "a": 3,
+   "e": "Korban ialah ibadat sempena Aidiladha.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 15: Korban dan Akikah",
+   "status": "aktif"
+  },
+  {
+   "id": 113,
+   "t": "P4-4.3",
+   "d": 1,
+   "q": "Akikah ialah penyembelihan sempena ...",
+   "o": [
+    "Perkahwinan",
+    "Kematian",
+    "Kelahiran anak",
+    "Haji"
+   ],
+   "a": 2,
+   "e": "Akikah sempena kelahiran bayi.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 15: Korban dan Akikah",
+   "status": "aktif"
+  },
+  {
+   "id": 114,
+   "t": "P4-4.3",
+   "d": 2,
+   "q": "Akikah disunatkan dilakukan pada hari ...",
+   "o": [
+    "Ketujuh kelahiran",
+    "Pertama",
+    "Ketiga",
+    "Ke-40"
+   ],
+   "a": 0,
+   "e": "Hari ketujuh ialah masa yang paling afdal.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 15: Korban dan Akikah",
+   "status": "aktif"
+  },
+  {
+   "id": 115,
+   "t": "P4-4.3",
+   "d": 2,
+   "q": "Bagi bayi lelaki, bilangan kambing akikah yang disunatkan ialah ...",
+   "o": [
+    "Dua ekor",
+    "Seekor",
+    "Tiga ekor",
+    "Empat ekor"
+   ],
+   "a": 0,
+   "e": "Lelaki dua ekor, perempuan seekor.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 15: Korban dan Akikah",
+   "status": "aktif"
+  },
+  {
+   "id": 116,
+   "t": "P4-4.3",
+   "d": 2,
+   "q": "Berikut ialah binatang korban, kecuali ...",
+   "o": [
+    "Ayam",
+    "Kambing",
+    "Lembu",
+    "Unta"
+   ],
+   "a": 0,
+   "e": "Korban terdiri daripada unta, lembu, kerbau, kambing dan biri-biri.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 15: Korban dan Akikah",
+   "status": "aktif"
+  },
+  {
+   "id": 117,
+   "t": "P4-4.3",
+   "d": 2,
+   "q": "Binatang korban mestilah ...",
+   "o": [
+    "Cukup umur dan sempurna tanpa cacat yang ketara",
+    "Kurus",
+    "Sakit",
+    "Buta sebelah"
+   ],
+   "a": 0,
+   "e": "Binatang cacat nyata tidak sah dikorbankan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 15: Korban dan Akikah",
+   "status": "aktif"
+  },
+  {
+   "id": 118,
+   "t": "P4-4.3",
+   "d": 3,
+   "q": "Hikmah ibadat korban ialah ...",
+   "o": [
+    "Menunjuk kekayaan",
+    "Berbangga",
+    "Membazir",
+    "Bersyukur dan membantu golongan yang memerlukan"
+   ],
+   "a": 3,
+   "e": "Korban mengeratkan silaturahim dan menolong yang miskin.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 15: Korban dan Akikah",
+   "status": "aktif"
+  },
+  {
+   "id": 119,
+   "t": "P4-4.3",
+   "d": 3,
+   "q": "Seekor lembu boleh dikorbankan oleh ...",
+   "o": [
+    "Sehingga tujuh orang",
+    "Seorang sahaja",
+    "Dua orang",
+    "Sepuluh orang"
+   ],
+   "a": 0,
+   "e": "Satu bahagian lembu dan unta boleh dikongsi tujuh orang.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 15: Korban dan Akikah",
+   "status": "aktif"
+  },
+  {
+   "id": 120,
+   "t": "P4-4.4",
+   "d": 1,
+   "q": "Akad dalam muamalat ialah ...",
+   "o": [
+    "Doa",
+    "Ijab dan kabul",
+    "Tawaf",
+    "Syahadah"
+   ],
+   "a": 1,
+   "e": "Akad ialah ikatan ijab dan kabul.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 16: Muamalat Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 121,
+   "t": "P4-4.4",
+   "d": 1,
+   "q": "Muamalat ialah urusan ...",
+   "o": [
+    "Ibadat khusus",
+    "Hubungan dengan malaikat",
+    "Hubungan sesama manusia dalam perniagaan dan kewangan",
+    "Zikir"
+   ],
+   "a": 2,
+   "e": "Muamalat berkait urusan sesama manusia.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 16: Muamalat Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 122,
+   "t": "P4-4.4",
+   "d": 2,
+   "q": "Dua jenis akad dalam perkongsian ialah ...",
+   "o": [
+    "Musyarakah dan mudarabah",
+    "Murabahah dan ijarah",
+    "Wadiah dan wakalah",
+    "Hibah dan wasiat"
+   ],
+   "a": 0,
+   "e": "Musyarakah (kongsi modal) dan mudarabah (modal satu pihak, usaha pihak lain).",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 16: Muamalat Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 123,
+   "t": "P4-4.4",
+   "d": 2,
+   "q": "Syarat barang yang diakadkan ialah ...",
+   "o": [
+    "Haram",
+    "Tidak wujud",
+    "Tidak jelas",
+    "Wujud dan halal serta boleh diserahkan"
+   ],
+   "a": 3,
+   "e": "Barang mesti halal, wujud dan boleh diserahkan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 16: Muamalat Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 124,
+   "t": "P4-4.4",
+   "d": 2,
+   "q": "Unsur yang dilarang dalam muamalat ialah ...",
+   "o": [
+    "Jual beli",
+    "Sewa",
+    "Wakaf",
+    "Riba"
+   ],
+   "a": 3,
+   "e": "Riba, gharar dan maysir diharamkan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 16: Muamalat Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 125,
+   "t": "P4-4.4",
+   "d": 2,
+   "q": "Jual beli yang sah memerlukan ...",
+   "o": [
+    "Paksaan",
+    "Penipuan",
+    "Kerelaan kedua-dua pihak",
+    "Tipu muslihat"
+   ],
+   "a": 2,
+   "e": "Tiada unsur paksaan dalam akad.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 16: Muamalat Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 126,
+   "t": "P4-4.4",
+   "d": 3,
+   "q": "Ijarah dalam muamalat ialah akad ...",
+   "o": [
+    "Jual beli",
+    "Perkongsian",
+    "Sewaan",
+    "Pinjaman"
+   ],
+   "a": 2,
+   "e": "Ijarah bermaksud sewaan manfaat barang atau tenaga.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 16: Muamalat Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 127,
+   "t": "P4-4.4",
+   "d": 3,
+   "q": "Seorang penjual menyembunyikan kecacatan barang. Perbuatan ini bercanggah dengan prinsip muamalat kerana ...",
+   "o": [
+    "Dia untung",
+    "Pembeli berpuas hati",
+    "Barang murah",
+    "Mengandungi unsur penipuan (gharar)"
+   ],
+   "a": 3,
+   "e": "Menyembunyikan kecacatan menyalahi prinsip kejujuran.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 16: Muamalat Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 128,
+   "t": "P4-4.5",
+   "d": 1,
+   "q": "Solat sunat Dhuha dilakukan pada waktu ...",
+   "o": [
+    "Selepas Maghrib",
+    "Selepas Subuh sebelum syuruk",
+    "Selepas Asar",
+    "Selepas syuruk hingga sebelum gelincir matahari"
+   ],
+   "a": 3,
+   "e": "Waktu Dhuha ialah dari naik matahari hingga gelincir matahari.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 17: Solat Sunat Dhuha dan Solat Sunat Gerhana",
+   "status": "aktif"
+  },
+  {
+   "id": 129,
+   "t": "P4-4.5",
+   "d": 2,
+   "q": "Bilangan rakaat solat sunat Dhuha ialah ...",
+   "o": [
+    "2, 4, 6 atau 8",
+    "1 atau 3",
+    "3 sahaja",
+    "10 sahaja"
+   ],
+   "a": 0,
+   "e": "Dhuha minimum 2 rakaat dan paling banyak 8 rakaat menurut mazhab Syafie.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 17: Solat Sunat Dhuha dan Solat Sunat Gerhana",
+   "status": "aktif"
+  },
+  {
+   "id": 130,
+   "t": "P4-4.5",
+   "d": 2,
+   "q": "Solat sunat Dhuha dilakukan secara ...",
+   "o": [
+    "Berjemaah wajib",
+    "Berjemaah dengan khutbah",
+    "Hanya di masjid",
+    "Bersendirian"
+   ],
+   "a": 3,
+   "e": "Dhuha dilakukan bersendirian.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 17: Solat Sunat Dhuha dan Solat Sunat Gerhana",
+   "status": "aktif"
+  },
+  {
+   "id": 131,
+   "t": "P4-4.5",
+   "d": 2,
+   "q": "Solat sunat gerhana dilakukan ketika berlaku ...",
+   "o": [
+    "Hujan",
+    "Angin kencang",
+    "Gerhana matahari atau bulan",
+    "Pelangi"
+   ],
+   "a": 2,
+   "e": "Gerhana matahari dan bulan ialah tanda kekuasaan Allah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 17: Solat Sunat Dhuha dan Solat Sunat Gerhana",
+   "status": "aktif"
+  },
+  {
+   "id": 132,
+   "t": "P4-4.5",
+   "d": 2,
+   "q": "Solat sunat gerhana disunatkan dilakukan secara ...",
+   "o": [
+    "Bersendirian sahaja",
+    "Di rumah sahaja",
+    "Berjemaah",
+    "Tidak dibenarkan berjemaah"
+   ],
+   "a": 2,
+   "e": "Disunatkan berjemaah dan disusuli khutbah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 17: Solat Sunat Dhuha dan Solat Sunat Gerhana",
+   "status": "aktif"
+  },
+  {
+   "id": 133,
+   "t": "P4-4.5",
+   "d": 2,
+   "q": "Antara amalan dianjurkan ketika gerhana ialah ...",
+   "o": [
+    "Beristighfar dan berdoa",
+    "Menonton tanpa zikir",
+    "Tidur",
+    "Berhibur"
+   ],
+   "a": 0,
+   "e": "Memperbanyakkan istighfar, doa, takbir dan sedekah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 17: Solat Sunat Dhuha dan Solat Sunat Gerhana",
+   "status": "aktif"
+  },
+  {
+   "id": 134,
+   "t": "P4-4.5",
+   "d": 3,
+   "q": "Hikmah solat sunat gerhana ialah ...",
+   "o": [
+    "Menjadi popular",
+    "Menolak takdir",
+    "Menginsafi kekuasaan Allah",
+    "Menyembah matahari"
+   ],
+   "a": 2,
+   "e": "Gerhana ialah tanda kekuasaan Allah, bukan kerana kematian sesiapa.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 17: Solat Sunat Dhuha dan Solat Sunat Gerhana",
+   "status": "aktif"
+  },
+  {
+   "id": 135,
+   "t": "P4-4.5",
+   "d": 3,
+   "q": "Surah yang dianjurkan dalam rakaat pertama solat sunat Dhuha ialah ...",
+   "o": [
+    "Al-Kafirun",
+    "Al-Syams selepas al-Fatihah",
+    "Al-Ikhlas",
+    "Al-Nas"
+   ],
+   "a": 1,
+   "e": "Disunatkan al-Syams pada rakaat pertama dan al-Dhuha pada rakaat kedua.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 17: Solat Sunat Dhuha dan Solat Sunat Gerhana",
+   "status": "aktif"
+  },
+  {
+   "id": 136,
+   "t": "P4-5.1",
+   "d": 1,
+   "q": "Khalifah pertama ialah ...",
+   "o": [
+    "Umar al-Khattab",
+    "Uthman bin Affan",
+    "Abu Bakar al-Siddiq",
+    "Ali bin Abi Talib"
+   ],
+   "a": 2,
+   "e": "Abu Bakar ialah khalifah pertama selepas wafatnya Rasulullah SAW.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 18: Kerajaan Khulafa al-Rasyidin",
+   "status": "aktif"
+  },
+  {
+   "id": 137,
+   "t": "P4-5.1",
+   "d": 1,
+   "q": "Khalifah keempat Khulafa al-Rasyidin ialah ...",
+   "o": [
+    "Abu Bakar",
+    "Umar",
+    "Uthman",
+    "Ali bin Abi Talib"
+   ],
+   "a": 3,
+   "e": "Susunan: Abu Bakar, Umar, Uthman, Ali.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 18: Kerajaan Khulafa al-Rasyidin",
+   "status": "aktif"
+  },
+  {
+   "id": 138,
+   "t": "P4-5.1",
+   "d": 2,
+   "q": "Khalifah yang memerangi golongan murtad dan enggan membayar zakat ialah ...",
+   "o": [
+    "Umar al-Khattab",
+    "Abu Bakar al-Siddiq",
+    "Uthman bin Affan",
+    "Ali bin Abi Talib"
+   ],
+   "a": 1,
+   "e": "Kejayaan beliau memelihara agama Islam.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 18: Kerajaan Khulafa al-Rasyidin",
+   "status": "aktif"
+  },
+  {
+   "id": 139,
+   "t": "P4-5.1",
+   "d": 2,
+   "q": "Khalifah yang menubuhkan Majlis Syura, Jabatan Tentera dan Perbendaharaan ialah ...",
+   "o": [
+    "Umar al-Khattab",
+    "Abu Bakar",
+    "Uthman",
+    "Ali"
+   ],
+   "a": 0,
+   "e": "Umar membangunkan sistem pentadbiran negara Islam.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 18: Kerajaan Khulafa al-Rasyidin",
+   "status": "aktif"
+  },
+  {
+   "id": 140,
+   "t": "P4-5.1",
+   "d": 2,
+   "q": "Khalifah yang membukukan al-Quran dalam satu mushaf ialah ...",
+   "o": [
+    "Abu Bakar",
+    "Umar",
+    "Uthman bin Affan",
+    "Ali"
+   ],
+   "a": 2,
+   "e": "Mushaf Uthmani menjadi rujukan seluruh umat.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 18: Kerajaan Khulafa al-Rasyidin",
+   "status": "aktif"
+  },
+  {
+   "id": 141,
+   "t": "P4-5.1",
+   "d": 2,
+   "q": "Khalifah Uthman menunjukkan keprihatinan dengan ...",
+   "o": [
+    "Menutup masjid",
+    "Mengurangkan zakat",
+    "Membatalkan syura",
+    "Membesarkan Masjid Nabawi"
+   ],
+   "a": 3,
+   "e": "Beliau juga menyumbangkan harta untuk pertahanan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 18: Kerajaan Khulafa al-Rasyidin",
+   "status": "aktif"
+  },
+  {
+   "id": 142,
+   "t": "P4-5.1",
+   "d": 3,
+   "q": "Umar al-Khattab meluaskan dakwah Islam sehingga ...",
+   "o": [
+    "Eropah Barat sahaja",
+    "Mesir, Parsi dan Rom",
+    "India sahaja",
+    "China sahaja"
+   ],
+   "a": 1,
+   "e": "Wilayah Islam dibuka luas pada zaman Umar.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 18: Kerajaan Khulafa al-Rasyidin",
+   "status": "aktif"
+  },
+  {
+   "id": 143,
+   "t": "P4-5.1",
+   "d": 3,
+   "q": "Iktibar daripada pemerintahan Khulafa al-Rasyidin ialah ...",
+   "o": [
+    "Pemimpin boleh menindas",
+    "Rakyat tidak perlu taat",
+    "Pemimpin hendaklah adil dan amanah",
+    "Kuasa untuk keluarga sendiri"
+   ],
+   "a": 2,
+   "e": "Keadilan dan musyawarah ialah ciri pemerintahan Khulafa.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 18: Kerajaan Khulafa al-Rasyidin",
+   "status": "aktif"
+  },
+  {
+   "id": 144,
+   "t": "P4-5.2",
+   "d": 1,
+   "q": "Pengasas kerajaan Umayyah ialah ...",
+   "o": [
+    "Abdul Malik",
+    "Al-Walid",
+    "Umar bin Abdul Aziz",
+    "Muawiyah bin Abi Sufyan"
+   ],
+   "a": 3,
+   "e": "Beliau menubuhkan kerajaan Umayyah di Damsyik.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 19: Kerajaan Umayyah",
+   "status": "aktif"
+  },
+  {
+   "id": 145,
+   "t": "P4-5.2",
+   "d": 1,
+   "q": "Pusat pemerintahan Umayyah ialah ...",
+   "o": [
+    "Baghdad",
+    "Kufah",
+    "Damsyik",
+    "Kaherah"
+   ],
+   "a": 2,
+   "e": "Damsyik ialah ibu kota Umayyah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 19: Kerajaan Umayyah",
+   "status": "aktif"
+  },
+  {
+   "id": 146,
+   "t": "P4-5.2",
+   "d": 2,
+   "q": "Khalifah Umayyah yang terkenal dengan pembukuan hadis dan keilmuan ialah ...",
+   "o": [
+    "Umar bin Abdul Aziz",
+    "Muawiyah",
+    "Yazid",
+    "Hisyam"
+   ],
+   "a": 0,
+   "e": "Beliau digelar khalifah Rasyidah kelima.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 19: Kerajaan Umayyah",
+   "status": "aktif"
+  },
+  {
+   "id": 147,
+   "t": "P4-5.2",
+   "d": 2,
+   "q": "Antara sumber ekonomi kerajaan Umayyah ialah ...",
+   "o": [
+    "Pertanian dan perdagangan",
+    "Perlombongan sahaja",
+    "Perikanan sahaja",
+    "Perhutanan sahaja"
+   ],
+   "a": 0,
+   "e": "Pertanian dan perdagangan berkembang pesat.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 19: Kerajaan Umayyah",
+   "status": "aktif"
+  },
+  {
+   "id": 148,
+   "t": "P4-5.2",
+   "d": 2,
+   "q": "Khalifah al-Walid bin Abdul Malik merancakkan ...",
+   "o": [
+    "Penghapusan masjid",
+    "Aktiviti keagamaan di masjid",
+    "Pengurangan ilmu",
+    "Pembukaan kilang"
+   ],
+   "a": 1,
+   "e": "Beliau membina dan memakmurkan masjid.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 19: Kerajaan Umayyah",
+   "status": "aktif"
+  },
+  {
+   "id": 149,
+   "t": "P4-5.2",
+   "d": 2,
+   "q": "Faktor kemerosotan Umayyah dari aspek sosial ialah ...",
+   "o": [
+    "Taksub kabilah Arab Utara dan Selatan",
+    "Perpaduan kabilah",
+    "Banyak ulama",
+    "Pembangunan masjid"
+   ],
+   "a": 0,
+   "e": "Sikap taksub kabilah menyebabkan perpecahan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 19: Kerajaan Umayyah",
+   "status": "aktif"
+  },
+  {
+   "id": 150,
+   "t": "P4-5.2",
+   "d": 3,
+   "q": "Iktibar daripada kerajaan Umayyah ialah ...",
+   "o": [
+    "Kemewahan pemimpin",
+    "Perpecahan kabilah",
+    "Meninggalkan ilmu",
+    "Semangat jihad dan sifat zuhud pemimpin"
+   ],
+   "a": 3,
+   "e": "Umat hendaklah mencontohi sifat mulia khalifah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 19: Kerajaan Umayyah",
+   "status": "aktif"
+  },
+  {
+   "id": 151,
+   "t": "P4-5.2",
+   "d": 3,
+   "q": "Kerajaan Umayyah berakhir apabila ditumbangkan oleh ...",
+   "o": [
+    "Uthmaniyyah",
+    "Kerajaan Abbasiyah",
+    "Ayyubiyyah",
+    "Fatimiyyah"
+   ],
+   "a": 1,
+   "e": "Abbasiyah menumbangkan Umayyah pada tahun 750M.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 19: Kerajaan Umayyah",
+   "status": "aktif"
+  },
+  {
+   "id": 152,
+   "t": "P4-5.3",
+   "d": 1,
+   "q": "Pengasas kerajaan Abbasiyah ialah ...",
+   "o": [
+    "Harun al-Rasyid",
+    "Abu al-Abbas al-Saffah",
+    "Al-Makmun",
+    "Al-Mansur"
+   ],
+   "a": 1,
+   "e": "Al-Saffah ialah khalifah pertama Abbasiyah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 20: Kerajaan Abbasiyah",
+   "status": "aktif"
+  },
+  {
+   "id": 153,
+   "t": "P4-5.3",
+   "d": 1,
+   "q": "Antara khalifah Abbasiyah yang terkenal ialah ...",
+   "o": [
+    "Muawiyah",
+    "Abdul Malik",
+    "Harun al-Rasyid",
+    "Al-Walid"
+   ],
+   "a": 2,
+   "e": "Harun al-Rasyid dan al-Makmun terkenal dengan kemajuan ilmu.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 20: Kerajaan Abbasiyah",
+   "status": "aktif"
+  },
+  {
+   "id": 154,
+   "t": "P4-5.3",
+   "d": 2,
+   "q": "Pusat pentadbiran Abbasiyah ialah ...",
+   "o": [
+    "Baghdad",
+    "Damsyik",
+    "Madinah",
+    "Makkah"
+   ],
+   "a": 0,
+   "e": "Baghdad menjadi pusat pentadbiran dan keilmuan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 20: Kerajaan Abbasiyah",
+   "status": "aktif"
+  },
+  {
+   "id": 155,
+   "t": "P4-5.3",
+   "d": 2,
+   "q": "Baitul Hikmah di Baghdad ialah pusat ...",
+   "o": [
+    "Perniagaan hamba",
+    "Latihan tentera sahaja",
+    "Penyimpanan emas",
+    "Terjemahan dan penyelidikan ilmu"
+   ],
+   "a": 3,
+   "e": "Ilmu Yunani, Parsi dan India diterjemah di sini.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 20: Kerajaan Abbasiyah",
+   "status": "aktif"
+  },
+  {
+   "id": 156,
+   "t": "P4-5.3",
+   "d": 2,
+   "q": "Baitul Hikmah berkembang pesat sebagai pusat ilmu pada zaman khalifah ...",
+   "o": [
+    "Al-Saffah",
+    "Al-Makmun",
+    "Muawiyah",
+    "Umar"
+   ],
+   "a": 1,
+   "e": "Zaman al-Makmun ialah kemuncak keilmuan Abbasiyah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 20: Kerajaan Abbasiyah",
+   "status": "aktif"
+  },
+  {
+   "id": 157,
+   "t": "P4-5.3",
+   "d": 2,
+   "q": "Faktor kegemilangan politik Abbasiyah ialah ...",
+   "o": [
+    "Perebutan kuasa",
+    "Kestabilan politik dan kebijaksanaan khalifah",
+    "Kemunduran ilmu",
+    "Perpecahan ketenteraan"
+   ],
+   "a": 1,
+   "e": "Kestabilan memberi ruang memajukan negara.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 20: Kerajaan Abbasiyah",
+   "status": "aktif"
+  },
+  {
+   "id": 158,
+   "t": "P4-5.3",
+   "d": 3,
+   "q": "Iktibar yang boleh diambil daripada Abbasiyah ialah ...",
+   "o": [
+    "Memilih pemimpin kerana keturunan",
+    "Memencilkan ilmuwan",
+    "Menolak pembaharuan",
+    "Memilih pemimpin berwibawa dan mengeratkan perpaduan"
+   ],
+   "a": 3,
+   "e": "Pemimpin berwibawa dan perpaduan melahirkan kemajuan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 20: Kerajaan Abbasiyah",
+   "status": "aktif"
+  },
+  {
+   "id": 159,
+   "t": "P4-5.3",
+   "d": 3,
+   "q": "Salah satu sumbangan Abbasiyah kepada tamadun dunia ialah ...",
+   "o": [
+    "Pengharaman ilmu",
+    "Pengembangan sains, perubatan dan matematik",
+    "Penutupan perpustakaan",
+    "Penghapusan terjemahan"
+   ],
+   "a": 1,
+   "e": "Tokoh seperti al-Khawarizmi dan Ibn Sina lahir di zaman ini.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 20: Kerajaan Abbasiyah",
+   "status": "aktif"
+  },
+  {
+   "id": 160,
+   "t": "P4-5.4",
+   "d": 1,
+   "q": "Pengasas mazhab Syafie ialah ...",
+   "o": [
+    "Imam Muhammad bin Idris al-Syafie",
+    "Imam Malik",
+    "Imam Abu Hanifah",
+    "Imam Ahmad"
+   ],
+   "a": 0,
+   "e": "Beliau berkuniah Abu Abdullah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 21: Kegemilangan Tokoh Empat Mazhab",
+   "status": "aktif"
+  },
+  {
+   "id": 161,
+   "t": "P4-5.4",
+   "d": 1,
+   "q": "Kitab terkenal Imam Malik ialah ...",
+   "o": [
+    "Al-Umm",
+    "Al-Muwatta'",
+    "Al-Musnad",
+    "Ar-Risalah"
+   ],
+   "a": 1,
+   "e": "Al-Muwatta' ialah kitab hadis dan fikah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 21: Kegemilangan Tokoh Empat Mazhab",
+   "status": "aktif"
+  },
+  {
+   "id": 162,
+   "t": "P4-5.4",
+   "d": 1,
+   "q": "Kitab al-Umm dan ar-Risalah dikarang oleh ...",
+   "o": [
+    "Imam Malik",
+    "Imam Ahmad",
+    "Imam Syafie",
+    "Imam Abu Hanifah"
+   ],
+   "a": 2,
+   "e": "Ar-Risalah ialah kitab usul fiqh pertama.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 21: Kegemilangan Tokoh Empat Mazhab",
+   "status": "aktif"
+  },
+  {
+   "id": 163,
+   "t": "P4-5.4",
+   "d": 2,
+   "q": "Pengasas mazhab Hanafi ialah ...",
+   "o": [
+    "Imam Abu Hanifah",
+    "Imam Malik",
+    "Imam Syafie",
+    "Imam Ahmad"
+   ],
+   "a": 0,
+   "e": "Beliau digelar Imam al-A'zam.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 21: Kegemilangan Tokoh Empat Mazhab",
+   "status": "aktif"
+  },
+  {
+   "id": 164,
+   "t": "P4-5.4",
+   "d": 2,
+   "q": "Pengasas mazhab Hanbali ialah ...",
+   "o": [
+    "Imam Ahmad bin Hanbal",
+    "Imam Syafie",
+    "Imam Malik",
+    "Imam Abu Hanifah"
+   ],
+   "a": 0,
+   "e": "Beliau berasal dari Baghdad dan menghasilkan al-Musnad.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 21: Kegemilangan Tokoh Empat Mazhab",
+   "status": "aktif"
+  },
+  {
+   "id": 165,
+   "t": "P4-5.4",
+   "d": 2,
+   "q": "Imam Syafie berguru dengan Imam ...",
+   "o": [
+    "Malik",
+    "Ahmad bin Hanbal",
+    "Abu Hanifah (secara langsung)",
+    "Bukhari"
+   ],
+   "a": 0,
+   "e": "Imam Syafie berguru dengan Imam Malik di Madinah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 21: Kegemilangan Tokoh Empat Mazhab",
+   "status": "aktif"
+  },
+  {
+   "id": 166,
+   "t": "P4-5.4",
+   "d": 3,
+   "q": "Sikap Imam Syafie dalam menuntut ilmu ialah ...",
+   "o": [
+    "Cukup dengan seorang guru",
+    "Sanggup bermusafir jauh dan berguru dengan ramai ulama",
+    "Tidak mahu berhijrah",
+    "Menulis tanpa belajar"
+   ],
+   "a": 1,
+   "e": "Beliau mengembara ke Madinah, Baghdad dan Mesir.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 21: Kegemilangan Tokoh Empat Mazhab",
+   "status": "aktif"
+  },
+  {
+   "id": 167,
+   "t": "P4-5.4",
+   "d": 3,
+   "q": "Prinsip Imam Malik: 'ilmu itu perlu dicari, bukan datang sendiri' mendorong murid ...",
+   "o": [
+    "Menunggu guru",
+    "Berusaha dan berdisiplin menuntut ilmu",
+    "Bergantung kawan",
+    "Berhenti belajar"
+   ],
+   "a": 1,
+   "e": "Menuntut ilmu memerlukan usaha berterusan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 21: Kegemilangan Tokoh Empat Mazhab",
+   "status": "aktif"
+  },
+  {
+   "id": 168,
+   "t": "P4-6.1",
+   "d": 1,
+   "q": "Bersikap benar bermaksud ...",
+   "o": [
+    "Tidak berdusta pada perkataan, perkhabaran dan perbuatan",
+    "Berdiam diri",
+    "Berpura-pura",
+    "Menyembunyikan kesalahan"
+   ],
+   "a": 0,
+   "e": "Benar ialah jujur dalam kata dan perbuatan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 22: Bersikap Benar Menjauhkan Kemunafikan",
+   "status": "aktif"
+  },
+  {
+   "id": 169,
+   "t": "P4-6.1",
+   "d": 2,
+   "q": "Antara tuntutan bersikap benar ialah ...",
+   "o": [
+    "Menepati janji",
+    "Memungkiri janji",
+    "Menipu",
+    "Berpura-pura"
+   ],
+   "a": 0,
+   "e": "Benar dalam menepati janji.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 22: Bersikap Benar Menjauhkan Kemunafikan",
+   "status": "aktif"
+  },
+  {
+   "id": 170,
+   "t": "P4-6.1",
+   "d": 2,
+   "q": "Tanda munafik ialah apabila bercakap ...",
+   "o": [
+    "Jujur",
+    "Berhati-hati",
+    "Berdusta",
+    "Menepati"
+   ],
+   "a": 2,
+   "e": "Hadis: apabila bercakap berdusta, berjanji mungkir, diberi amanah khianat.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 22: Bersikap Benar Menjauhkan Kemunafikan",
+   "status": "aktif"
+  },
+  {
+   "id": 171,
+   "t": "P4-6.1",
+   "d": 2,
+   "q": "Munafik ialah ...",
+   "o": [
+    "Menzahirkan sesuatu yang berbeza daripada apa yang disembunyikan dalam hati",
+    "Menzahirkan apa yang dipercayai",
+    "Jujur",
+    "Tawaduk"
+   ],
+   "a": 0,
+   "e": "Munafik zahirnya Islam tetapi batinnya kufur.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 22: Bersikap Benar Menjauhkan Kemunafikan",
+   "status": "aktif"
+  },
+  {
+   "id": 172,
+   "t": "P4-6.1",
+   "d": 2,
+   "q": "Sikap benar di media sosial ialah ...",
+   "o": [
+    "Menyebar tanpa semak",
+    "Menokok tambah",
+    "Mengejek",
+    "Menyemak kesahihan berita sebelum berkongsi"
+   ],
+   "a": 3,
+   "e": "Tabayyun dituntut sebelum menyebarkan berita.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 22: Bersikap Benar Menjauhkan Kemunafikan",
+   "status": "aktif"
+  },
+  {
+   "id": 173,
+   "t": "P4-6.1",
+   "d": 2,
+   "q": "Benar dalam tugas ialah ...",
+   "o": [
+    "Melaksanakan amanah dengan jujur dan sempurna",
+    "Culas",
+    "Lari",
+    "Menyalahkan orang"
+   ],
+   "a": 0,
+   "e": "Benar termasuk dalam pelaksanaan tugas.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 22: Bersikap Benar Menjauhkan Kemunafikan",
+   "status": "aktif"
+  },
+  {
+   "id": 174,
+   "t": "P4-6.1",
+   "d": 3,
+   "q": "Seorang pelajar mengaku salah kerana lewat walaupun dimarahi. Sikap ini menunjukkan ...",
+   "o": [
+    "Benar",
+    "Pengecut",
+    "Munafik",
+    "Takbur"
+   ],
+   "a": 0,
+   "e": "Berani mengaku kesalahan ialah sikap benar.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 22: Bersikap Benar Menjauhkan Kemunafikan",
+   "status": "aktif"
+  },
+  {
+   "id": 175,
+   "t": "P4-6.1",
+   "d": 3,
+   "q": "Bersikap benar menjauhkan kemunafikan kerana ...",
+   "o": [
+    "Lidah berbeza hati",
+    "Hanya zahir",
+    "Selari antara hati, lidah dan perbuatan",
+    "Hanya niat"
+   ],
+   "a": 2,
+   "e": "Kemunafikan ialah percanggahan zahir dan batin.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 22: Bersikap Benar Menjauhkan Kemunafikan",
+   "status": "aktif"
+  },
+  {
+   "id": 176,
+   "t": "P4-6.2",
+   "d": 1,
+   "q": "Khauf ialah ...",
+   "o": [
+    "Takut pada manusia",
+    "Takut kepada kemurkaan dan azab Allah",
+    "Takut pada binatang",
+    "Takut gelap"
+   ],
+   "a": 1,
+   "e": "Khauf mendorong menjauhi larangan-Nya.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 23: Khauf dan Raja'",
+   "status": "aktif"
+  },
+  {
+   "id": 177,
+   "t": "P4-6.2",
+   "d": 1,
+   "q": "Raja' ialah ...",
+   "o": [
+    "Putus asa",
+    "Takut kepada manusia",
+    "Mengharap rahmat dan keampunan Allah",
+    "Menangguh taubat"
+   ],
+   "a": 2,
+   "e": "Raja' disertai usaha dan amal soleh.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 23: Khauf dan Raja'",
+   "status": "aktif"
+  },
+  {
+   "id": 178,
+   "t": "P4-6.2",
+   "d": 2,
+   "q": "Cara memupuk khauf ialah ...",
+   "o": [
+    "Menjauhi ulama",
+    "Melupakan mati",
+    "Mengingati mati dan mengambil iktibar kisah terdahulu",
+    "Berhibur berlebihan"
+   ],
+   "a": 2,
+   "e": "Mengingati mati melembutkan hati.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 23: Khauf dan Raja'",
+   "status": "aktif"
+  },
+  {
+   "id": 179,
+   "t": "P4-6.2",
+   "d": 2,
+   "q": "Hikmah khauf ialah ...",
+   "o": [
+    "Bersikap lalai",
+    "Berputus asa",
+    "Malas beribadat",
+    "Sentiasa mengingati Allah dan menjauhi maksiat"
+   ],
+   "a": 3,
+   "e": "Khauf menjaga hati dan perbuatan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 23: Khauf dan Raja'",
+   "status": "aktif"
+  },
+  {
+   "id": 180,
+   "t": "P4-6.2",
+   "d": 2,
+   "q": "Khauf dan raja' hendaklah ...",
+   "o": [
+    "Khauf sahaja",
+    "Raja' sahaja",
+    "Ditinggalkan",
+    "Seimbang"
+   ],
+   "a": 3,
+   "e": "Keseimbangan mengelak putus asa dan lalai.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 23: Khauf dan Raja'",
+   "status": "aktif"
+  },
+  {
+   "id": 181,
+   "t": "P4-6.2",
+   "d": 2,
+   "q": "Orang yang hanya mengharap rahmat tanpa takut azab akan menjadi ...",
+   "o": [
+    "Lalai dan berani berbuat dosa",
+    "Rajin",
+    "Takut berlebihan",
+    "Berilmu"
+   ],
+   "a": 0,
+   "e": "Raja' tanpa khauf membawa lalai.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 23: Khauf dan Raja'",
+   "status": "aktif"
+  },
+  {
+   "id": 182,
+   "t": "P4-6.2",
+   "d": 3,
+   "q": "Orang yang hanya takut azab tanpa mengharap rahmat akan menjadi ...",
+   "o": [
+    "Gembira",
+    "Berani",
+    "Berjaya",
+    "Putus asa daripada rahmat Allah"
+   ],
+   "a": 3,
+   "e": "Putus asa daripada rahmat Allah ialah dosa besar.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 23: Khauf dan Raja'",
+   "status": "aktif"
+  },
+  {
+   "id": 183,
+   "t": "P4-6.2",
+   "d": 3,
+   "q": "Selepas berbuat dosa, sikap khauf dan raja' yang betul ialah ...",
+   "o": [
+    "Berputus asa",
+    "Mengulangi dosa",
+    "Bertaubat sambil mengharap keampunan",
+    "Menyembunyikan"
+   ],
+   "a": 2,
+   "e": "Taubat dengan harapan keampunan Allah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 23: Khauf dan Raja'",
+   "status": "aktif"
+  },
+  {
+   "id": 184,
+   "t": "P4-6.3",
+   "d": 1,
+   "q": "Menziarahi orang sakit ialah ...",
+   "o": [
+    "Dilarang",
+    "Sunnah Rasulullah SAW",
+    "Makruh",
+    "Haram"
+   ],
+   "a": 1,
+   "e": "Menziarahi pesakit digalakkan dan berpahala.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 24: Adab terhadap Orang Sakit dan Kurang Upaya",
+   "status": "aktif"
+  },
+  {
+   "id": 185,
+   "t": "P4-6.3",
+   "d": 2,
+   "q": "Adab menziarahi orang sakit ialah ...",
+   "o": [
+    "Berlama-lamaan",
+    "Menyebut aib",
+    "Mendoakan kesihatan dan memberi semangat",
+    "Membuat bising"
+   ],
+   "a": 2,
+   "e": "Adab: doa, semangat, tidak mengganggu.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 24: Adab terhadap Orang Sakit dan Kurang Upaya",
+   "status": "aktif"
+  },
+  {
+   "id": 186,
+   "t": "P4-6.3",
+   "d": 2,
+   "q": "Berikut ialah adab terhadap orang kurang upaya, kecuali ...",
+   "o": [
+    "Mengejek kekurangan mereka",
+    "Menghormati",
+    "Memberi kemudahan",
+    "Membantu dengan sopan"
+   ],
+   "a": 0,
+   "e": "Mengejek OKU dilarang.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 24: Adab terhadap Orang Sakit dan Kurang Upaya",
+   "status": "aktif"
+  },
+  {
+   "id": 187,
+   "t": "P4-6.3",
+   "d": 2,
+   "q": "Hikmah beradab dengan orang sakit ialah ...",
+   "o": [
+    "Mengeratkan ukhuwah",
+    "Memutuskan silaturahim",
+    "Menyebabkan benci",
+    "Menjauhkan masyarakat"
+   ],
+   "a": 0,
+   "e": "Mengeratkan hubungan sesama anggota masyarakat.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 24: Adab terhadap Orang Sakit dan Kurang Upaya",
+   "status": "aktif"
+  },
+  {
+   "id": 188,
+   "t": "P4-6.3",
+   "d": 2,
+   "q": "Ketika menziarahi pesakit, kita sepatutnya ...",
+   "o": [
+    "Menyalahkan pesakit",
+    "Menakutkan pesakit",
+    "Menyebut dosa mereka",
+    "Mengingatkan reda dan sabar menghadapi ujian"
+   ],
+   "a": 3,
+   "e": "Menenangkan jiwa pesakit.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 24: Adab terhadap Orang Sakit dan Kurang Upaya",
+   "status": "aktif"
+  },
+  {
+   "id": 189,
+   "t": "P4-6.3",
+   "d": 2,
+   "q": "Melahirkan keinsafan kerana nikmat kesihatan ialah hikmah ...",
+   "o": [
+    "Menjauhi pesakit",
+    "Beradab terhadap orang sakit",
+    "Menolak takdir",
+    "Berbangga"
+   ],
+   "a": 1,
+   "e": "Melihat penderitaan pesakit menginsafkan kita.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 24: Adab terhadap Orang Sakit dan Kurang Upaya",
+   "status": "aktif"
+  },
+  {
+   "id": 190,
+   "t": "P4-6.3",
+   "d": 3,
+   "q": "Seorang murid OKU memerlukan tempat duduk yang sesuai. Tindakan terbaik rakan sekelas ialah ...",
+   "o": [
+    "Mentertawakan",
+    "Mengabaikan",
+    "Membantu dan menghormatinya",
+    "Menyisihkan"
+   ],
+   "a": 2,
+   "e": "Islam menuntut belas kasihan dan keadilan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 24: Adab terhadap Orang Sakit dan Kurang Upaya",
+   "status": "aktif"
+  },
+  {
+   "id": 191,
+   "t": "P4-6.3",
+   "d": 3,
+   "q": "Memastikan tubuh dan tempat pesakit bersih ialah contoh ...",
+   "o": [
+    "Adab menyantuni orang sakit",
+    "Ibadat khusus",
+    "Larangan syarak",
+    "Keharusan sahaja"
+   ],
+   "a": 0,
+   "e": "Kebersihan dan keselesaan ialah adab terhadap pesakit.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 24: Adab terhadap Orang Sakit dan Kurang Upaya",
+   "status": "aktif"
+  },
+  {
+   "id": 192,
+   "t": "P4-6.4",
+   "d": 1,
+   "q": "Wasatiyyah ialah pendekatan yang ...",
+   "o": [
+    "Melampau",
+    "Longgar",
+    "Sederhana, seimbang, adil dan cemerlang",
+    "Fanatik"
+   ],
+   "a": 2,
+   "e": "Wasatiyyah ialah jalan tengah yang adil.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 25: Wasatiyyah Menjamin Kecemerlangan Ummah",
+   "status": "aktif"
+  },
+  {
+   "id": 193,
+   "t": "P4-6.4",
+   "d": 1,
+   "q": "Antara prinsip wasatiyyah ialah ...",
+   "o": [
+    "Keadilan",
+    "Kezaliman",
+    "Ketaksuban",
+    "Kebencian"
+   ],
+   "a": 0,
+   "e": "Prinsip: kesederhanaan, keseimbangan, keadilan, kecemerlangan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 25: Wasatiyyah Menjamin Kecemerlangan Ummah",
+   "status": "aktif"
+  },
+  {
+   "id": 194,
+   "t": "P4-6.4",
+   "d": 2,
+   "q": "Contoh keseimbangan dalam ibadat ialah ...",
+   "o": [
+    "Beribadat tanpa rehat sehingga sakit",
+    "Meninggalkan ibadat",
+    "Beribadat sambil lalai",
+    "Melaksanakan ibadat fardu dan sunat dengan istiqamah"
+   ],
+   "a": 3,
+   "e": "Keseimbangan ialah tidak melampau dan tidak lalai.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 25: Wasatiyyah Menjamin Kecemerlangan Ummah",
+   "status": "aktif"
+  },
+  {
+   "id": 195,
+   "t": "P4-6.4",
+   "d": 2,
+   "q": "Sikap melampau dalam agama dinamakan ...",
+   "o": [
+    "Ghuluw",
+    "Wasatiyyah",
+    "Ihsan",
+    "Istiqamah"
+   ],
+   "a": 0,
+   "e": "Ghuluw ialah berlebih-lebihan melebihi batas syarak.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 25: Wasatiyyah Menjamin Kecemerlangan Ummah",
+   "status": "aktif"
+  },
+  {
+   "id": 196,
+   "t": "P4-6.4",
+   "d": 2,
+   "q": "Berehat setelah penat bekerja sejajar dengan prinsip ...",
+   "o": [
+    "Melampau",
+    "Pembaziran",
+    "Keseimbangan jasmani",
+    "Kemalasan"
+   ],
+   "a": 2,
+   "e": "Wasatiyyah mengambil kira keperluan fitrah.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 25: Wasatiyyah Menjamin Kecemerlangan Ummah",
+   "status": "aktif"
+  },
+  {
+   "id": 197,
+   "t": "P4-6.4",
+   "d": 2,
+   "q": "Hikmah mengamalkan wasatiyyah ialah ...",
+   "o": [
+    "Perpecahan",
+    "Kekacauan",
+    "Ketaksuban",
+    "Masyarakat aman dan bersatu"
+   ],
+   "a": 3,
+   "e": "Keadilan dan kesederhanaan melahirkan keharmonian.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 25: Wasatiyyah Menjamin Kecemerlangan Ummah",
+   "status": "aktif"
+  },
+  {
+   "id": 198,
+   "t": "P4-6.4",
+   "d": 3,
+   "q": "Menghabiskan seluruh gaji untuk pembaziran bercanggah dengan wasatiyyah kerana ...",
+   "o": [
+    "Menjimatkan wang",
+    "Menolong fakir",
+    "Merancang kewangan",
+    "Tidak sederhana dan membazir"
+   ],
+   "a": 3,
+   "e": "Pembaziran ialah kelakuan syaitan.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 25: Wasatiyyah Menjamin Kecemerlangan Ummah",
+   "status": "aktif"
+  },
+  {
+   "id": 199,
+   "t": "P4-6.4",
+   "d": 3,
+   "q": "Mengabaikan keluarga demi beribadat sepanjang masa ialah ...",
+   "o": [
+    "Sempurna",
+    "Disyorkan",
+    "Tidak seimbang dan bertentangan dengan wasatiyyah",
+    "Wajib"
+   ],
+   "a": 2,
+   "e": "Islam menuntut keseimbangan hak Allah, diri dan keluarga.",
+   "s": "Buku Teks PI Tingkatan 4, Pelajaran 25: Wasatiyyah Menjamin Kecemerlangan Ummah",
+   "status": "aktif"
+  },
+  {
+   "id": 200,
+   "t": "P5-1.1",
+   "d": 1,
+   "q": "Surah al-Taubah ayat 128 menerangkan sifat Rasulullah SAW yang ...",
+   "o": [
+    "Berat hatinya terhadap kesusahan umat dan penyayang",
+    "Keras hati",
+    "Tidak peduli umat",
+    "Kasar terhadap mukmin"
+   ],
+   "a": 0,
+   "e": "Ayat 128: berat baginya kesusahan kamu, sangat mengharapkan keimanan kamu, penyantun dan penyayang terhadap mukmin.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 1: Surah al-Taubah, ayat 128-129",
+   "status": "aktif"
+  },
+  {
+   "id": 201,
+   "t": "P5-1.1",
+   "d": 1,
+   "q": "Dalam ayat 129, Rasulullah SAW diperintah berkata jika mereka berpaling: 'Cukuplah ... bagiku'",
+   "o": [
+    "Harta",
+    "Sahabat",
+    "Allah",
+    "Kaumku"
+   ],
+   "a": 2,
+   "e": "Hasbiyallah: cukuplah Allah bagiku.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 1: Surah al-Taubah, ayat 128-129",
+   "status": "aktif"
+  },
+  {
+   "id": 202,
+   "t": "P5-1.1",
+   "d": 2,
+   "q": "Bertawakal bermaksud ...",
+   "o": [
+    "Menunggu tanpa usaha",
+    "Berputus asa",
+    "Berserah kepada Allah selepas berusaha",
+    "Bergantung kepada manusia"
+   ],
+   "a": 2,
+   "e": "Tawakal selepas ikhtiar.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 1: Surah al-Taubah, ayat 128-129",
+   "status": "aktif"
+  },
+  {
+   "id": 203,
+   "t": "P5-1.1",
+   "d": 2,
+   "q": "Allah disifatkan dalam ayat 129 sebagai Tuhan yang memiliki ...",
+   "o": [
+    "Kerajaan dunia sahaja",
+    "Kebun syurga",
+    "Lautan",
+    "Arasy yang agung"
+   ],
+   "a": 3,
+   "e": "Rabbul 'arsyil 'azim.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 1: Surah al-Taubah, ayat 128-129",
+   "status": "aktif"
+  },
+  {
+   "id": 204,
+   "t": "P5-1.1",
+   "d": 2,
+   "q": "Pengajaran ayat 128 ialah kita hendaklah ...",
+   "o": [
+    "Mencintai Rasulullah SAW dan mencontohi akhlaknya",
+    "Menjauhi sunnah",
+    "Mengabaikan umat",
+    "Bersikap keras"
+   ],
+   "a": 0,
+   "e": "Baginda prihatin dan penyayang terhadap umat.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 1: Surah al-Taubah, ayat 128-129",
+   "status": "aktif"
+  },
+  {
+   "id": 205,
+   "t": "P5-1.1",
+   "d": 2,
+   "q": "Ayat 128 Surah al-Taubah menunjukkan Rasulullah SAW sangat ...",
+   "o": [
+    "Mengharap harta umat",
+    "Takut kepada umat",
+    "Marah kepada umat",
+    "Mengharapkan keimanan umat"
+   ],
+   "a": 3,
+   "e": "Baginda sangat berharap umat beriman dan selamat.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 1: Surah al-Taubah, ayat 128-129",
+   "status": "aktif"
+  },
+  {
+   "id": 206,
+   "t": "P5-1.1",
+   "d": 3,
+   "q": "Mengapakah orang beriman perlu membaca 'Hasbiyallahu la ilaha illa hu' ketika menghadapi cabaran?",
+   "o": [
+    "Menolak usaha",
+    "Menyerahkan urusan kepada Allah selepas berusaha",
+    "Berputus asa",
+    "Mengharap manusia"
+   ],
+   "a": 1,
+   "e": "Kalimah ini ungkapan tawakal.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 1: Surah al-Taubah, ayat 128-129",
+   "status": "aktif"
+  },
+  {
+   "id": 207,
+   "t": "P5-1.1",
+   "d": 3,
+   "q": "Contoh sikap prihatin yang selari dengan ayat 128 ialah ...",
+   "o": [
+    "Mengabaikan rakan",
+    "Mengejek rakan",
+    "Menjauhi rakan",
+    "Membantu rakan yang menghadapi kesusahan"
+   ],
+   "a": 3,
+   "e": "Teladan prihatin dan penyayang.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 1: Surah al-Taubah, ayat 128-129",
+   "status": "aktif"
+  },
+  {
+   "id": 208,
+   "t": "P5-1.2",
+   "d": 1,
+   "q": "Menurut ayat 21 Surah al-Hasyr, jika al-Quran diturunkan ke atas gunung maka gunung itu ...",
+   "o": [
+    "Menjadi emas",
+    "Tunduk dan pecah kerana takut kepada Allah",
+    "Bergerak",
+    "Menjadi sungai"
+   ],
+   "a": 1,
+   "e": "Menunjukkan keagungan al-Quran.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 2: Surah al-Hasyr, ayat 21-24",
+   "status": "aktif"
+  },
+  {
+   "id": 209,
+   "t": "P5-1.2",
+   "d": 1,
+   "q": "Ayat 22-24 Surah al-Hasyr menyebut tentang ...",
+   "o": [
+    "Kisah Nabi Musa",
+    "Hukum faraid",
+    "Asma' al-Husna (nama-nama Allah)",
+    "Kisah Ashabul Kahfi"
+   ],
+   "a": 2,
+   "e": "Ayat ini terkenal dengan nama-nama Allah.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 2: Surah al-Hasyr, ayat 21-24",
+   "status": "aktif"
+  },
+  {
+   "id": 210,
+   "t": "P5-1.2",
+   "d": 2,
+   "q": "Allah mengetahui perkara ...",
+   "o": [
+    "Nyata sahaja",
+    "Ghaib sahaja",
+    "Ghaib dan nyata",
+    "Yang lepas sahaja"
+   ],
+   "a": 2,
+   "e": "'Alimul ghaibi wasy syahadah.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 2: Surah al-Hasyr, ayat 21-24",
+   "status": "aktif"
+  },
+  {
+   "id": 211,
+   "t": "P5-1.2",
+   "d": 2,
+   "q": "Antara nama Allah dalam ayat 23 ialah ...",
+   "o": [
+    "Al-Muntaqim sahaja",
+    "Al-Raqib sahaja",
+    "Al-Syahid sahaja",
+    "Al-Quddus dan al-Salam"
+   ],
+   "a": 3,
+   "e": "Al-Malik, al-Quddus, al-Salam, al-Mu'min, al-Muhaimin...",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 2: Surah al-Hasyr, ayat 21-24",
+   "status": "aktif"
+  },
+  {
+   "id": 212,
+   "t": "P5-1.2",
+   "d": 2,
+   "q": "Siapa yang bertasbih kepada Allah menurut ayat 24?",
+   "o": [
+    "Manusia sahaja",
+    "Malaikat sahaja",
+    "Semua yang di langit dan di bumi",
+    "Haiwan sahaja"
+   ],
+   "a": 2,
+   "e": "Yusabbihu lahu ma fis samawati wal ardh.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 2: Surah al-Hasyr, ayat 21-24",
+   "status": "aktif"
+  },
+  {
+   "id": 213,
+   "t": "P5-1.2",
+   "d": 2,
+   "q": "Al-Khaliq, al-Bari' dan al-Musawwir menunjukkan Allah ...",
+   "o": [
+    "Pemberi rezeki",
+    "Pencipta, pembentuk dan pembuat rupa",
+    "Pengampun",
+    "Pembalas"
+   ],
+   "a": 1,
+   "e": "Allah mencipta, mengadakan dan membentuk rupa makhluk.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 2: Surah al-Hasyr, ayat 21-24",
+   "status": "aktif"
+  },
+  {
+   "id": 214,
+   "t": "P5-1.2",
+   "d": 3,
+   "q": "Menghayati ayat 21 mendorong seseorang untuk ...",
+   "o": [
+    "Membaca laju tanpa makna",
+    "Tidak membaca",
+    "Menghafaz tanpa faham",
+    "Membaca al-Quran dengan khusyuk dan menghayati maknanya"
+   ],
+   "a": 3,
+   "e": "Gunung pun tunduk; manusia lebih patut khusyuk.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 2: Surah al-Hasyr, ayat 21-24",
+   "status": "aktif"
+  },
+  {
+   "id": 215,
+   "t": "P5-1.2",
+   "d": 3,
+   "q": "Mengenali nama-nama Allah memberikan kesan ...",
+   "o": [
+    "Mengurangkan iman",
+    "Menjauhi ibadat",
+    "Meningkatkan keimanan dan rasa taat",
+    "Melemahkan jiwa"
+   ],
+   "a": 2,
+   "e": "Mengenali Allah menguatkan iman.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 2: Surah al-Hasyr, ayat 21-24",
+   "status": "aktif"
+  },
+  {
+   "id": 216,
+   "t": "P5-1.3",
+   "d": 1,
+   "q": "Huruf ra' (ر) dibaca tebal (tafkhim) apabila berbaris ...",
+   "o": [
+    "Kasrah",
+    "Sukun selepas kasrah",
+    "Tanwin kasrah",
+    "Fathah atau dammah"
+   ],
+   "a": 3,
+   "e": "Fathah dan dammah dibaca tebal.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 3: Hukum Tajwid: Bacaan Ra, Waqaf dan Ibtida'",
+   "status": "aktif"
+  },
+  {
+   "id": 217,
+   "t": "P5-1.3",
+   "d": 1,
+   "q": "Huruf ra' berbaris kasrah dibaca ...",
+   "o": [
+    "Tebal",
+    "Panjang",
+    "Dengung",
+    "Nipis (tarqiq)"
+   ],
+   "a": 3,
+   "e": "Kasrah dibaca nipis.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 3: Hukum Tajwid: Bacaan Ra, Waqaf dan Ibtida'",
+   "status": "aktif"
+  },
+  {
+   "id": 218,
+   "t": "P5-1.3",
+   "d": 2,
+   "q": "Waqaf ialah ...",
+   "o": [
+    "Memulakan bacaan",
+    "Berhenti membaca seketika",
+    "Menamatkan al-Quran",
+    "Membaca laju"
+   ],
+   "a": 1,
+   "e": "Berhenti sambil bernafas dan berniat menyambung.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 3: Hukum Tajwid: Bacaan Ra, Waqaf dan Ibtida'",
+   "status": "aktif"
+  },
+  {
+   "id": 219,
+   "t": "P5-1.3",
+   "d": 2,
+   "q": "Ibtida' ialah ...",
+   "o": [
+    "Memulakan bacaan",
+    "Berhenti membaca",
+    "Memanjangkan bacaan",
+    "Menyambung dengan mad"
+   ],
+   "a": 0,
+   "e": "Ibtida' ialah memulakan bacaan selepas berhenti.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 3: Hukum Tajwid: Bacaan Ra, Waqaf dan Ibtida'",
+   "status": "aktif"
+  },
+  {
+   "id": 220,
+   "t": "P5-1.3",
+   "d": 2,
+   "q": "Ibtida' Hasan ialah memulakan bacaan pada kalimah yang ...",
+   "o": [
+    "Mengubah maksud ayat",
+    "Tidak jelas maknanya",
+    "Difahami maknanya dan tidak menyalahi maksud Allah",
+    "Tidak sempurna"
+   ],
+   "a": 2,
+   "e": "Ibtida' hasan memberi makna baik.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 3: Hukum Tajwid: Bacaan Ra, Waqaf dan Ibtida'",
+   "status": "aktif"
+  },
+  {
+   "id": 221,
+   "t": "P5-1.3",
+   "d": 2,
+   "q": "Pembahagian waqaf yang betul ialah ...",
+   "o": [
+    "Tam, Mad dan Ghunnah",
+    "Tam, Kafi, Hasan dan Qabih",
+    "Idgham dan Ikhfa'",
+    "Qalqalah dan Tafkhim"
+   ],
+   "a": 1,
+   "e": "Empat jenis waqaf menurut ulama qiraat.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 3: Hukum Tajwid: Bacaan Ra, Waqaf dan Ibtida'",
+   "status": "aktif"
+  },
+  {
+   "id": 222,
+   "t": "P5-1.3",
+   "d": 3,
+   "q": "Waqaf yang perlu dielakkan ialah ...",
+   "o": [
+    "Waqaf Qabih",
+    "Waqaf Tam",
+    "Waqaf Kafi",
+    "Waqaf Hasan"
+   ],
+   "a": 0,
+   "e": "Waqaf Qabih merosakkan makna.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 3: Hukum Tajwid: Bacaan Ra, Waqaf dan Ibtida'",
+   "status": "aktif"
+  },
+  {
+   "id": 223,
+   "t": "P5-1.3",
+   "d": 3,
+   "q": "Ra' sukun selepas huruf berbaris kasrah dibaca ...",
+   "o": [
+    "Nipis",
+    "Tebal",
+    "Dengung",
+    "Tertahan"
+   ],
+   "a": 0,
+   "e": "Selepas kasrah, ra' sukun nipis (kecuali sebab huruf isti'la tertentu).",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 3: Hukum Tajwid: Bacaan Ra, Waqaf dan Ibtida'",
+   "status": "aktif"
+  },
+  {
+   "id": 224,
+   "t": "P5-1.4",
+   "d": 1,
+   "q": "Menurut Surah al-Mu'minun ayat 1-2, orang beriman yang berjaya ialah mereka yang ...",
+   "o": [
+    "Banyak harta",
+    "Khusyuk dalam solat",
+    "Pandai berhujah",
+    "Terkenal"
+   ],
+   "a": 1,
+   "e": "Alladhina hum fi salatihim khashi'un.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 4: Ciri-ciri Mukmin Berjaya: Surah al-Mu'minun, ayat 1-11",
+   "status": "aktif"
+  },
+  {
+   "id": 225,
+   "t": "P5-1.4",
+   "d": 1,
+   "q": "Ciri mukmin yang berjaya ialah menjauhi perkara ...",
+   "o": [
+    "Bermanfaat",
+    "Yang sia-sia",
+    "Wajib",
+    "Sunat"
+   ],
+   "a": 1,
+   "e": "Wallazina hum 'anil laghwi mu'ridun.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 4: Ciri-ciri Mukmin Berjaya: Surah al-Mu'minun, ayat 1-11",
+   "status": "aktif"
+  },
+  {
+   "id": 226,
+   "t": "P5-1.4",
+   "d": 2,
+   "q": "Mukmin berjaya memelihara ...",
+   "o": [
+    "Kemewahan",
+    "Pangkat",
+    "Amanah dan janji",
+    "Nama"
+   ],
+   "a": 2,
+   "e": "Wallazina hum li amanatihim wa 'ahdihim ra'un.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 4: Ciri-ciri Mukmin Berjaya: Surah al-Mu'minun, ayat 1-11",
+   "status": "aktif"
+  },
+  {
+   "id": 227,
+   "t": "P5-1.4",
+   "d": 2,
+   "q": "Mukmin yang berjaya menunaikan ...",
+   "o": [
+    "Hanya sedekah sunat",
+    "Zakat",
+    "Cukai sahaja",
+    "Derma sahaja"
+   ],
+   "a": 1,
+   "e": "Wallazina hum liz zakati fa'ilun.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 4: Ciri-ciri Mukmin Berjaya: Surah al-Mu'minun, ayat 1-11",
+   "status": "aktif"
+  },
+  {
+   "id": 228,
+   "t": "P5-1.4",
+   "d": 2,
+   "q": "Balasan mukmin berjaya ialah mewarisi ...",
+   "o": [
+    "Dunia",
+    "Kebun dunia",
+    "Syurga Firdaus",
+    "Harta"
+   ],
+   "a": 2,
+   "e": "Hum yarithunal firdaus.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 4: Ciri-ciri Mukmin Berjaya: Surah al-Mu'minun, ayat 1-11",
+   "status": "aktif"
+  },
+  {
+   "id": 229,
+   "t": "P5-1.4",
+   "d": 2,
+   "q": "Memelihara kehormatan diri (kemaluan) kecuali kepada ...",
+   "o": [
+    "Sesiapa sahaja",
+    "Isteri atau hamba yang dimiliki",
+    "Sahabat",
+    "Jiran"
+   ],
+   "a": 1,
+   "e": "Ayat 5-6 mengecualikan isteri dan hamba yang dimiliki.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 4: Ciri-ciri Mukmin Berjaya: Surah al-Mu'minun, ayat 1-11",
+   "status": "aktif"
+  },
+  {
+   "id": 230,
+   "t": "P5-1.4",
+   "d": 3,
+   "q": "Seorang pelajar menjaga solat di awal waktu dan khusyuk. Sikap ini menepati ciri ...",
+   "o": [
+    "Golongan lalai",
+    "Mukmin yang berjaya",
+    "Golongan fasiq",
+    "Golongan munafik"
+   ],
+   "a": 1,
+   "e": "Menjaga solat ialah ciri mukmin berjaya.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 4: Ciri-ciri Mukmin Berjaya: Surah al-Mu'minun, ayat 1-11",
+   "status": "aktif"
+  },
+  {
+   "id": 231,
+   "t": "P5-1.4",
+   "d": 3,
+   "q": "Akibat meninggalkan ibadat solat ialah ...",
+   "o": [
+    "Rezeki bertambah",
+    "Jiwa tenang",
+    "Dimuliakan",
+    "Jiwa tidak tenang dan rezeki tidak berkat"
+   ],
+   "a": 3,
+   "e": "Meninggalkan solat membawa kesan buruk di dunia dan akhirat.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 4: Ciri-ciri Mukmin Berjaya: Surah al-Mu'minun, ayat 1-11",
+   "status": "aktif"
+  },
+  {
+   "id": 232,
+   "t": "P5-1.5",
+   "d": 1,
+   "q": "Fiqh al-Awlawiyyat bermaksud ...",
+   "o": [
+    "Mengutamakan perkara yang sepatutnya didahulukan berdasarkan syarak",
+    "Melambatkan yang wajib",
+    "Mengutamakan sunat",
+    "Mengabaikan hukum"
+   ],
+   "a": 0,
+   "e": "Memahami keutamaan dalam tindakan.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 5: Memahami Keutamaan dalam Tindakan: Surah al-Taubah, ayat 19-20",
+   "status": "aktif"
+  },
+  {
+   "id": 233,
+   "t": "P5-1.5",
+   "d": 2,
+   "q": "Ayat 19 menegaskan pemberian minuman kepada jemaah haji tidak sama dengan ...",
+   "o": [
+    "Berdagang",
+    "Bersedekah",
+    "Beriman kepada Allah, hari akhirat dan berjihad",
+    "Berpuasa"
+   ],
+   "a": 2,
+   "e": "Iman dan jihad lebih utama.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 5: Memahami Keutamaan dalam Tindakan: Surah al-Taubah, ayat 19-20",
+   "status": "aktif"
+  },
+  {
+   "id": 234,
+   "t": "P5-1.5",
+   "d": 2,
+   "q": "Contoh mengutamakan yang wajib berbanding sunat ialah ...",
+   "o": [
+    "Solat sunat sebelum fardu",
+    "Berhenti solat",
+    "Menunaikan solat fardu sebelum solat sunat",
+    "Tidak berpuasa"
+   ],
+   "a": 2,
+   "e": "Wajib didahulukan.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 5: Memahami Keutamaan dalam Tindakan: Surah al-Taubah, ayat 19-20",
+   "status": "aktif"
+  },
+  {
+   "id": 235,
+   "t": "P5-1.5",
+   "d": 2,
+   "q": "Mengutamakan kebajikan masyarakat berbanding ibadat sunat peribadi ialah contoh ...",
+   "o": [
+    "Pembaziran",
+    "Kemalasan",
+    "Ketaksuban",
+    "Aplikasi Fiqh al-Awlawiyyat"
+   ],
+   "a": 3,
+   "e": "Mengutamakan kemaslahatan umum.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 5: Memahami Keutamaan dalam Tindakan: Surah al-Taubah, ayat 19-20",
+   "status": "aktif"
+  },
+  {
+   "id": 236,
+   "t": "P5-1.5",
+   "d": 2,
+   "q": "Menurut ayat 20, orang beriman yang berhijrah dan berjihad dengan harta dan jiwa ...",
+   "o": [
+    "Sama dengan orang lain",
+    "Lebih rendah",
+    "Tidak dikira",
+    "Lebih tinggi darjatnya di sisi Allah"
+   ],
+   "a": 3,
+   "e": "Mereka lebih besar darjatnya.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 5: Memahami Keutamaan dalam Tindakan: Surah al-Taubah, ayat 19-20",
+   "status": "aktif"
+  },
+  {
+   "id": 237,
+   "t": "P5-1.5",
+   "d": 3,
+   "q": "Seorang murid menyertai gotong-royong sekolah dan meninggalkan ibadat sunat peribadi pada hari itu. Tindakan ini sesuai dengan ...",
+   "o": [
+    "Mengabaikan ibadat",
+    "Mengutamakan kemaslahatan masyarakat",
+    "Melanggar syarak",
+    "Menjejaskan iman"
+   ],
+   "a": 1,
+   "e": "Kebajikan masyarakat diutamakan atas sunat peribadi.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 5: Memahami Keutamaan dalam Tindakan: Surah al-Taubah, ayat 19-20",
+   "status": "aktif"
+  },
+  {
+   "id": 238,
+   "t": "P5-1.5",
+   "d": 3,
+   "q": "Mengabaikan solat fardu kerana sibuk menyiapkan kerja kursus ialah ...",
+   "o": [
+    "Betul",
+    "Dibenarkan",
+    "Digalakkan",
+    "Salah kerana yang wajib mesti didahulukan"
+   ],
+   "a": 3,
+   "e": "Wajib tidak boleh ditinggalkan.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 5: Memahami Keutamaan dalam Tindakan: Surah al-Taubah, ayat 19-20",
+   "status": "aktif"
+  },
+  {
+   "id": 239,
+   "t": "P5-1.5",
+   "d": 3,
+   "q": "Memakmurkan masjid dan memberi minuman jemaah haji merupakan amalan baik tetapi ...",
+   "o": [
+    "Lebih utama daripada iman",
+    "Sama dengan iman",
+    "Tidak sama darjatnya dengan iman dan jihad",
+    "Tidak berpahala"
+   ],
+   "a": 2,
+   "e": "Ayat 19 menyatakan keutamaan iman.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 5: Memahami Keutamaan dalam Tindakan: Surah al-Taubah, ayat 19-20",
+   "status": "aktif"
+  },
+  {
+   "id": 240,
+   "t": "P5-1.6",
+   "d": 1,
+   "q": "Allah menjadikan manusia berbangsa-bangsa dan bersuku-suku supaya ...",
+   "o": [
+    "Bermusuhan",
+    "Berbangga",
+    "Saling mengenali",
+    "Berpecah"
+   ],
+   "a": 2,
+   "e": "Lita'arafu.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 6: Kepelbagaian Bangsa dalam Islam: Surah al-Hujurat, ayat 13",
+   "status": "aktif"
+  },
+  {
+   "id": 241,
+   "t": "P5-1.6",
+   "d": 1,
+   "q": "Orang yang paling mulia di sisi Allah ialah yang paling ...",
+   "o": [
+    "Kaya",
+    "Pandai",
+    "Bertakwa",
+    "Tampan"
+   ],
+   "a": 2,
+   "e": "Inna akramakum 'indallahi atqakum.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 6: Kepelbagaian Bangsa dalam Islam: Surah al-Hujurat, ayat 13",
+   "status": "aktif"
+  },
+  {
+   "id": 242,
+   "t": "P5-1.6",
+   "d": 2,
+   "q": "Menurut ayat 13, manusia dijadikan daripada ...",
+   "o": [
+    "Lelaki dan perempuan",
+    "Tanah sahaja",
+    "Api",
+    "Cahaya"
+   ],
+   "a": 0,
+   "e": "Ya ayyuhan nasu inna khalaqnakum min zakarin wa untha.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 6: Kepelbagaian Bangsa dalam Islam: Surah al-Hujurat, ayat 13",
+   "status": "aktif"
+  },
+  {
+   "id": 243,
+   "t": "P5-1.6",
+   "d": 2,
+   "q": "Sikap yang selaras dengan ayat 13 ialah ...",
+   "o": [
+    "Memandang rendah kaum lain",
+    "Mengutamakan kaum sendiri",
+    "Menyisihkan kaum lain",
+    "Menghormati kepelbagaian kaum"
+   ],
+   "a": 3,
+   "e": "Perpaduan dan toleransi.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 6: Kepelbagaian Bangsa dalam Islam: Surah al-Hujurat, ayat 13",
+   "status": "aktif"
+  },
+  {
+   "id": 244,
+   "t": "P5-1.6",
+   "d": 2,
+   "q": "Ukuran kemuliaan manusia di sisi Allah ialah ...",
+   "o": [
+    "Keturunan",
+    "Warna kulit",
+    "Harta",
+    "Takwa"
+   ],
+   "a": 3,
+   "e": "Bukan bangsa atau warna kulit.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 6: Kepelbagaian Bangsa dalam Islam: Surah al-Hujurat, ayat 13",
+   "status": "aktif"
+  },
+  {
+   "id": 245,
+   "t": "P5-1.6",
+   "d": 2,
+   "q": "Allah disebut dalam hujung ayat 13 sebagai ...",
+   "o": [
+    "Maha Mengetahui dan Maha Mendalam pengetahuan-Nya",
+    "Maha Pemarah",
+    "Maha Penyayang sahaja",
+    "Maha Pembalas sahaja"
+   ],
+   "a": 0,
+   "e": "Innallaha 'alimun khabir.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 6: Kepelbagaian Bangsa dalam Islam: Surah al-Hujurat, ayat 13",
+   "status": "aktif"
+  },
+  {
+   "id": 246,
+   "t": "P5-1.6",
+   "d": 3,
+   "q": "Mengejek rakan kerana kaumnya bercanggah dengan ...",
+   "o": [
+    "Doa iftitah",
+    "Adab makan",
+    "Mesej ayat 13 Surah al-Hujurat",
+    "Hukum tajwid"
+   ],
+   "a": 2,
+   "e": "Islam tidak membezakan manusia kerana bangsa.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 6: Kepelbagaian Bangsa dalam Islam: Surah al-Hujurat, ayat 13",
+   "status": "aktif"
+  },
+  {
+   "id": 247,
+   "t": "P5-1.6",
+   "d": 3,
+   "q": "Pengajaran ayat 13 untuk masyarakat Malaysia ialah ...",
+   "o": [
+    "Memisahkan kaum",
+    "Mengutamakan satu kaum",
+    "Memupuk perpaduan dalam kepelbagaian kaum",
+    "Memencilkan bangsa lain"
+   ],
+   "a": 2,
+   "e": "Kepelbagaian ialah peluang saling mengenali.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 6: Kepelbagaian Bangsa dalam Islam: Surah al-Hujurat, ayat 13",
+   "status": "aktif"
+  },
+  {
+   "id": 248,
+   "t": "P5-2.1",
+   "d": 1,
+   "q": "Hadis menyatakan setiap orang ialah pemimpin dan akan ditanya tentang ...",
+   "o": [
+    "Hartanya",
+    "Kepimpinannya",
+    "Rumahnya",
+    "Pakaian"
+   ],
+   "a": 1,
+   "e": "Kullukum ra'in wa kullukum mas'ulun 'an ra'iyyatihi.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 7: Setiap Orang ialah Pemimpin",
+   "status": "aktif"
+  },
+  {
+   "id": 249,
+   "t": "P5-2.1",
+   "d": 1,
+   "q": "Lelaki ialah pemimpin dalam ...",
+   "o": [
+    "Negaranya sahaja",
+    "Keluarganya",
+    "Pasarnya",
+    "Sekolah sahaja"
+   ],
+   "a": 1,
+   "e": "Ar-rajulu ra'in fi ahlihi.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 7: Setiap Orang ialah Pemimpin",
+   "status": "aktif"
+  },
+  {
+   "id": 250,
+   "t": "P5-2.1",
+   "d": 2,
+   "q": "Pekerja bertanggungjawab terhadap ...",
+   "o": [
+    "Rumah majikan sahaja",
+    "Harta dan tugas majikannya",
+    "Gaji majikan",
+    "Kenderaan majikan sahaja"
+   ],
+   "a": 1,
+   "e": "Al-khadim ra'in fi mali sayyidihi.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 7: Setiap Orang ialah Pemimpin",
+   "status": "aktif"
+  },
+  {
+   "id": 251,
+   "t": "P5-2.1",
+   "d": 2,
+   "q": "Isteri ialah pemimpin dalam ...",
+   "o": [
+    "Pasar",
+    "Sekolah",
+    "Masjid",
+    "Rumah suaminya"
+   ],
+   "a": 3,
+   "e": "Wal mar'atu ra'iyatun fi bayti zawjiha.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 7: Setiap Orang ialah Pemimpin",
+   "status": "aktif"
+  },
+  {
+   "id": 252,
+   "t": "P5-2.1",
+   "d": 2,
+   "q": "Dua tanggungjawab pekerja terhadap majikan ialah ...",
+   "o": [
+    "Mengikut arahan dan bekerja dengan integriti",
+    "Melambatkan kerja",
+    "Menyalahgunakan harta",
+    "Mengabaikan arahan"
+   ],
+   "a": 0,
+   "e": "Pekerja mesti amanah.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 7: Setiap Orang ialah Pemimpin",
+   "status": "aktif"
+  },
+  {
+   "id": 253,
+   "t": "P5-2.1",
+   "d": 2,
+   "q": "Pengajaran hadis ini ialah setiap individu ...",
+   "o": [
+    "Bebas tanpa soal",
+    "Tidak dihitung",
+    "Hanya pemimpin negara disoal",
+    "Dipertanggungjawabkan di akhirat"
+   ],
+   "a": 3,
+   "e": "Semua orang akan disoal.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 7: Setiap Orang ialah Pemimpin",
+   "status": "aktif"
+  },
+  {
+   "id": 254,
+   "t": "P5-2.1",
+   "d": 3,
+   "q": "Seorang ketua kelas menjalankan tugas dengan adil. Ini menunjukkan ...",
+   "o": [
+    "Sombong",
+    "Mementingkan diri",
+    "Melaksanakan amanah kepimpinan",
+    "Berat sebelah"
+   ],
+   "a": 2,
+   "e": "Menjalankan amanah dengan adil.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 7: Setiap Orang ialah Pemimpin",
+   "status": "aktif"
+  },
+  {
+   "id": 255,
+   "t": "P5-2.1",
+   "d": 3,
+   "q": "Perbuatan melepaskan tanggungjawab kepimpinan dalam keluarga akan menyebabkan ...",
+   "o": [
+    "Keluarga harmoni",
+    "Rezeki bertambah",
+    "Kerosakan dan ketidakharmonian keluarga",
+    "Anak taat"
+   ],
+   "a": 2,
+   "e": "Pemimpin keluarga mesti bertanggungjawab.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 7: Setiap Orang ialah Pemimpin",
+   "status": "aktif"
+  },
+  {
+   "id": 256,
+   "t": "P5-2.2",
+   "d": 1,
+   "q": "Pada hari kiamat tiada naungan melainkan naungan ...",
+   "o": [
+    "Pokok",
+    "Gunung",
+    "Allah",
+    "Awan"
+   ],
+   "a": 2,
+   "e": "Hadis: tujuh golongan di bawah naungan Allah.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 8: Tujuh Golongan yang Mendapat Naungan Allah",
+   "status": "aktif"
+  },
+  {
+   "id": 257,
+   "t": "P5-2.2",
+   "d": 2,
+   "q": "Antara tujuh golongan yang dinaungi Allah ialah ...",
+   "o": [
+    "Pemimpin zalim",
+    "Orang kaya",
+    "Orang berilmu yang bakhil",
+    "Pemimpin yang adil"
+   ],
+   "a": 3,
+   "e": "Imam yang adil termasuk dalam tujuh golongan.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 8: Tujuh Golongan yang Mendapat Naungan Allah",
+   "status": "aktif"
+  },
+  {
+   "id": 258,
+   "t": "P5-2.2",
+   "d": 2,
+   "q": "Pemuda yang membesar dalam ... mendapat naungan Allah",
+   "o": [
+    "Ibadat kepada Allah",
+    "Hiburan",
+    "Pergaulan bebas",
+    "Pelanggaran"
+   ],
+   "a": 0,
+   "e": "Syabbun nasya'a fi 'ibadatillah.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 8: Tujuh Golongan yang Mendapat Naungan Allah",
+   "status": "aktif"
+  },
+  {
+   "id": 259,
+   "t": "P5-2.2",
+   "d": 2,
+   "q": "Dua orang yang berkasih sayang kerana Allah ialah contoh ...",
+   "o": [
+    "Persahabatan kerana Allah",
+    "Persaingan",
+    "Perselisihan",
+    "Persaudaraan duniawi"
+   ],
+   "a": 0,
+   "e": "Berkumpul dan berpisah kerana Allah.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 8: Tujuh Golongan yang Mendapat Naungan Allah",
+   "status": "aktif"
+  },
+  {
+   "id": 260,
+   "t": "P5-2.2",
+   "d": 2,
+   "q": "Hati yang terpaut kepada masjid bermakna ...",
+   "o": [
+    "Membenci masjid",
+    "Jarang ke masjid",
+    "Sentiasa merindui masjid dan solat jemaah",
+    "Hanya ke masjid pada Jumaat"
+   ],
+   "a": 2,
+   "e": "Qalbuhu mu'allaqun fil masajid.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 8: Tujuh Golongan yang Mendapat Naungan Allah",
+   "status": "aktif"
+  },
+  {
+   "id": 261,
+   "t": "P5-2.2",
+   "d": 3,
+   "q": "Persaudaraan Muhajirin dan Ansar menjadi contoh ...",
+   "o": [
+    "Persaingan harta",
+    "Perpecahan kaum",
+    "Pergaduhan",
+    "Kasih sayang kerana Allah"
+   ],
+   "a": 3,
+   "e": "Mereka berkongsi harta dan tempat tinggal.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 8: Tujuh Golongan yang Mendapat Naungan Allah",
+   "status": "aktif"
+  },
+  {
+   "id": 262,
+   "t": "P5-2.2",
+   "d": 3,
+   "q": "Lelaki yang menolak ajakan wanita berkedudukan dan cantik kerana takut Allah termasuk dalam golongan ...",
+   "o": [
+    "Orang lalai",
+    "Orang fasiq",
+    "Orang munafik",
+    "Tujuh golongan yang dinaungi Allah"
+   ],
+   "a": 3,
+   "e": "Berkata inni akhafullah.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 8: Tujuh Golongan yang Mendapat Naungan Allah",
+   "status": "aktif"
+  },
+  {
+   "id": 263,
+   "t": "P5-2.2",
+   "d": 3,
+   "q": "Cara menjauhi maksiat ialah ...",
+   "o": [
+    "Bergaul bebas",
+    "Menghadiri majlis ilmu dan berkawan dengan orang soleh",
+    "Menjauhi masjid",
+    "Melalaikan solat"
+   ],
+   "a": 1,
+   "e": "Persekitaran soleh membantu menjauhi maksiat.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 8: Tujuh Golongan yang Mendapat Naungan Allah",
+   "status": "aktif"
+  },
+  {
+   "id": 264,
+   "t": "P5-3.1",
+   "d": 1,
+   "q": "Al-Raqib bermaksud ...",
+   "o": [
+    "Maha Menyaksikan",
+    "Maha Mengawasi",
+    "Maha Pembalas",
+    "Maha Perkasa"
+   ],
+   "a": 1,
+   "e": "Al-Raqib mengawasi semua perbuatan dan keadaan makhluk.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 9: Allah Maha Mengawasi dan Maha Menyaksikan",
+   "status": "aktif"
+  },
+  {
+   "id": 265,
+   "t": "P5-3.1",
+   "d": 1,
+   "q": "Al-Syahid bermaksud ...",
+   "o": [
+    "Maha Menyaksikan",
+    "Maha Mengawasi",
+    "Maha Penyayang",
+    "Maha Pengampun"
+   ],
+   "a": 0,
+   "e": "Al-Syahid menyaksikan segala perbuatan dan mendengar ucapan.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 9: Allah Maha Mengawasi dan Maha Menyaksikan",
+   "status": "aktif"
+  },
+  {
+   "id": 266,
+   "t": "P5-3.1",
+   "d": 2,
+   "q": "Menghayati al-Raqib menjadikan seseorang ...",
+   "o": [
+    "Berani berdosa",
+    "Lalai",
+    "Takut melakukan kemungkaran",
+    "Malas"
+   ],
+   "a": 2,
+   "e": "Yakin Allah mengawasi mencegah maksiat.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 9: Allah Maha Mengawasi dan Maha Menyaksikan",
+   "status": "aktif"
+  },
+  {
+   "id": 267,
+   "t": "P5-3.1",
+   "d": 2,
+   "q": "Bukti Allah bersifat al-Syahid ialah ...",
+   "o": [
+    "Allah tidak melihat",
+    "Allah menjadi saksi perutusan Rasul-Nya",
+    "Allah tidak mendengar",
+    "Allah tidak tahu"
+   ],
+   "a": 1,
+   "e": "Allah menyaksikan dan menjadi saksi.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 9: Allah Maha Mengawasi dan Maha Menyaksikan",
+   "status": "aktif"
+  },
+  {
+   "id": 268,
+   "t": "P5-3.1",
+   "d": 2,
+   "q": "Allah mengawasi manusia dalam aspek ...",
+   "o": [
+    "Hartanya sahaja",
+    "Pakaiannya sahaja",
+    "Kepatuhan kepada perintah dan larangan-Nya",
+    "Rupanya sahaja"
+   ],
+   "a": 2,
+   "e": "Allah mengawasi semua perbuatan.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 9: Allah Maha Mengawasi dan Maha Menyaksikan",
+   "status": "aktif"
+  },
+  {
+   "id": 269,
+   "t": "P5-3.1",
+   "d": 2,
+   "q": "Menghayati al-Syahid menjadikan seseorang ...",
+   "o": [
+    "Berputus asa",
+    "Berani berbohong",
+    "Lalai",
+    "Sentiasa bersemangat berbuat baik"
+   ],
+   "a": 3,
+   "e": "Yakin Allah menyaksikan kebaikan kita.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 9: Allah Maha Mengawasi dan Maha Menyaksikan",
+   "status": "aktif"
+  },
+  {
+   "id": 270,
+   "t": "P5-3.1",
+   "d": 3,
+   "q": "Seorang murid tetap jujur ketika menjawab ujian walaupun tiada guru mengawasi. Ini menunjukkan penghayatan ...",
+   "o": [
+    "Al-Raqib",
+    "Al-Muntaqim",
+    "Al-Jabbar",
+    "Al-Razzaq"
+   ],
+   "a": 0,
+   "e": "Yakin Allah mengawasi.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 9: Allah Maha Mengawasi dan Maha Menyaksikan",
+   "status": "aktif"
+  },
+  {
+   "id": 271,
+   "t": "P5-3.1",
+   "d": 3,
+   "q": "Memilih tontonan baik dan memuat naik hantaran daripada sumber sahih ialah penghayatan ...",
+   "o": [
+    "Al-Ghaffar",
+    "Al-Syahid",
+    "Al-Wahhab",
+    "Al-Fattah"
+   ],
+   "a": 1,
+   "e": "Setiap hantaran disaksikan Allah.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 9: Allah Maha Mengawasi dan Maha Menyaksikan",
+   "status": "aktif"
+  },
+  {
+   "id": 272,
+   "t": "P5-3.2",
+   "d": 1,
+   "q": "Akidah yang wajib dipegang umat Islam ialah akidah ...",
+   "o": [
+    "Ahli Sunnah Wal Jamaah",
+    "Syiah",
+    "Muktazilah",
+    "Khawarij"
+   ],
+   "a": 0,
+   "e": "Pegangan arus perdana umat Islam.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 10: Akidah Ahli Sunnah Wal Jamaah",
+   "status": "aktif"
+  },
+  {
+   "id": 273,
+   "t": "P5-3.2",
+   "d": 2,
+   "q": "Antara aliran yang bertentangan dengan Ahli Sunnah Wal Jamaah ialah ...",
+   "o": [
+    "Mazhab Syafie",
+    "Mazhab Maliki",
+    "Mazhab Hanbali",
+    "Syiah, Khawarij dan Muktazilah"
+   ],
+   "a": 3,
+   "e": "Tiga aliran ini bercanggah dalam beberapa prinsip akidah.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 10: Akidah Ahli Sunnah Wal Jamaah",
+   "status": "aktif"
+  },
+  {
+   "id": 274,
+   "t": "P5-3.2",
+   "d": 2,
+   "q": "Menurut Ahli Sunnah, iman ialah ...",
+   "o": [
+    "Pengakuan lidah sahaja",
+    "Keyakinan hati, pengakuan lidah dan amalan anggota",
+    "Amalan sahaja",
+    "Keyakinan hati sahaja"
+   ],
+   "a": 1,
+   "e": "Iman bertambah dengan taat dan berkurang dengan maksiat.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 10: Akidah Ahli Sunnah Wal Jamaah",
+   "status": "aktif"
+  },
+  {
+   "id": 275,
+   "t": "P5-3.2",
+   "d": 2,
+   "q": "Muktazilah diasaskan oleh ...",
+   "o": [
+    "Hasan al-Basri",
+    "Imam Syafie",
+    "Wasil bin Ata'",
+    "Imam Malik"
+   ],
+   "a": 2,
+   "e": "Selepas berselisih dengan gurunya Hasan al-Basri.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 10: Akidah Ahli Sunnah Wal Jamaah",
+   "status": "aktif"
+  },
+  {
+   "id": 276,
+   "t": "P5-3.2",
+   "d": 2,
+   "q": "Menurut Ahli Sunnah, orang mukmin ...",
+   "o": [
+    "Tidak dapat melihat Allah",
+    "Melihat Allah di dunia",
+    "Dapat melihat Allah di syurga",
+    "Tidak masuk syurga"
+   ],
+   "a": 2,
+   "e": "Berbeza dengan Muktazilah.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 10: Akidah Ahli Sunnah Wal Jamaah",
+   "status": "aktif"
+  },
+  {
+   "id": 277,
+   "t": "P5-3.2",
+   "d": 2,
+   "q": "Menurut Ahli Sunnah, segala perbuatan manusia ...",
+   "o": [
+    "Dicipta Allah dan manusia diberi pilihan",
+    "Dicipta manusia sahaja",
+    "Tidak ada kaitan dengan Allah",
+    "Tiada pilihan"
+   ],
+   "a": 0,
+   "e": "Prinsip kasb dan ikhtiar.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 10: Akidah Ahli Sunnah Wal Jamaah",
+   "status": "aktif"
+  },
+  {
+   "id": 278,
+   "t": "P5-3.2",
+   "d": 3,
+   "q": "Fahaman Syiah dianggap sesat di Malaysia kerana ...",
+   "o": [
+    "Bercanggah dengan akidah Ahli Sunnah Wal Jamaah menurut keputusan fatwa",
+    "Hanya kerana bangsa",
+    "Kerana politik semata",
+    "Tiada sebab"
+   ],
+   "a": 0,
+   "e": "Keputusan Majlis Fatwa Kebangsaan 1984.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 10: Akidah Ahli Sunnah Wal Jamaah",
+   "status": "aktif"
+  },
+  {
+   "id": 279,
+   "t": "P5-3.2",
+   "d": 3,
+   "q": "Implikasi jika fahaman bertentangan akidah berkembang ialah ...",
+   "o": [
+    "Negara aman",
+    "Akidah masyarakat terpesong dan negara huru-hara",
+    "Ekonomi maju",
+    "Masyarakat bersatu"
+   ],
+   "a": 1,
+   "e": "Perpecahan akidah menjejaskan keharmonian.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 10: Akidah Ahli Sunnah Wal Jamaah",
+   "status": "aktif"
+  },
+  {
+   "id": 280,
+   "t": "P5-4.1",
+   "d": 1,
+   "q": "Solat sunat Istikharah dilakukan untuk ...",
+   "o": [
+    "Meminta harta",
+    "Memohon petunjuk Allah dalam menentukan pilihan",
+    "Menolak takdir",
+    "Mengubah hukum"
+   ],
+   "a": 1,
+   "e": "Istikharah ialah memohon petunjuk memilih yang terbaik.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 11: Solat Sunat Istikharah dan Solat Sunat Tasbih",
+   "status": "aktif"
+  },
+  {
+   "id": 281,
+   "t": "P5-4.1",
+   "d": 1,
+   "q": "Bilangan rakaat solat sunat Istikharah ialah ...",
+   "o": [
+    "Empat rakaat",
+    "Dua rakaat",
+    "Enam rakaat",
+    "Lapan rakaat"
+   ],
+   "a": 1,
+   "e": "Dua rakaat dan dilakukan bersendirian.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 11: Solat Sunat Istikharah dan Solat Sunat Tasbih",
+   "status": "aktif"
+  },
+  {
+   "id": 282,
+   "t": "P5-4.1",
+   "d": 2,
+   "q": "Rakaat pertama solat Istikharah biasanya dibaca selepas al-Fatihah surah ...",
+   "o": [
+    "Al-Ikhlas",
+    "Al-Syams",
+    "Al-Dhuha",
+    "Al-Kafirun"
+   ],
+   "a": 3,
+   "e": "Rakaat kedua pula surah al-Ikhlas.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 11: Solat Sunat Istikharah dan Solat Sunat Tasbih",
+   "status": "aktif"
+  },
+  {
+   "id": 283,
+   "t": "P5-4.1",
+   "d": 2,
+   "q": "Hikmah solat Istikharah ialah ...",
+   "o": [
+    "Meningkatkan iman dan bergantung kepada Allah",
+    "Meminta daripada makhluk",
+    "Menolak usaha",
+    "Menjadikan orang lemah"
+   ],
+   "a": 0,
+   "e": "Mendidik agar memohon kepada Allah dalam membuat keputusan.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 11: Solat Sunat Istikharah dan Solat Sunat Tasbih",
+   "status": "aktif"
+  },
+  {
+   "id": 284,
+   "t": "P5-4.1",
+   "d": 2,
+   "q": "Solat sunat Tasbih dilakukan sebanyak ...",
+   "o": [
+    "Dua rakaat",
+    "Enam rakaat",
+    "Empat rakaat",
+    "Lapan rakaat"
+   ],
+   "a": 2,
+   "e": "Solat tasbih empat rakaat.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 11: Solat Sunat Istikharah dan Solat Sunat Tasbih",
+   "status": "aktif"
+  },
+  {
+   "id": 285,
+   "t": "P5-4.1",
+   "d": 2,
+   "q": "Jumlah tasbih dalam satu rakaat solat Tasbih ialah ...",
+   "o": [
+    "75 kali",
+    "33 kali",
+    "100 kali",
+    "300 kali"
+   ],
+   "a": 0,
+   "e": "75 kali setiap rakaat, jumlah 300 kali.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 11: Solat Sunat Istikharah dan Solat Sunat Tasbih",
+   "status": "aktif"
+  },
+  {
+   "id": 286,
+   "t": "P5-4.1",
+   "d": 3,
+   "q": "Selepas solat Istikharah, seseorang patut ...",
+   "o": [
+    "Menunggu mimpi sahaja",
+    "Tidak membuat keputusan",
+    "Membuat keputusan yang paling hatinya tenang dan berusaha",
+    "Bertanya semua orang"
+   ],
+   "a": 2,
+   "e": "Istikharah disertai ikhtiar dan musyawarah.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 11: Solat Sunat Istikharah dan Solat Sunat Tasbih",
+   "status": "aktif"
+  },
+  {
+   "id": 287,
+   "t": "P5-4.1",
+   "d": 3,
+   "q": "Istikharah paling sesuai dilakukan apabila ...",
+   "o": [
+    "Hendak meninggalkan solat",
+    "Mahu berbuat maksiat",
+    "Hendak melarikan diri",
+    "Berhadapan dua pilihan yang harus"
+   ],
+   "a": 3,
+   "e": "Istikharah bagi perkara yang harus.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 11: Solat Sunat Istikharah dan Solat Sunat Tasbih",
+   "status": "aktif"
+  },
+  {
+   "id": 288,
+   "t": "P5-4.2",
+   "d": 1,
+   "q": "Antara rukun nikah ialah ...",
+   "o": [
+    "Wali",
+    "Hantaran sahaja",
+    "Kenduri",
+    "Pelamin"
+   ],
+   "a": 0,
+   "e": "Rukun nikah: pengantin lelaki, perempuan, wali, dua saksi, ijab dan kabul.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 12: Perkahwinan",
+   "status": "aktif"
+  },
+  {
+   "id": 289,
+   "t": "P5-4.2",
+   "d": 1,
+   "q": "Bilangan saksi dalam akad nikah ialah ...",
+   "o": [
+    "Dua orang",
+    "Seorang",
+    "Tiga orang",
+    "Empat orang"
+   ],
+   "a": 0,
+   "e": "Dua saksi lelaki yang adil.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 12: Perkahwinan",
+   "status": "aktif"
+  },
+  {
+   "id": 290,
+   "t": "P5-4.2",
+   "d": 2,
+   "q": "Mahar ialah ...",
+   "o": [
+    "Pemberian wajib suami kepada isteri",
+    "Hadiah kepada wali",
+    "Hantaran untuk keluarga",
+    "Kenduri"
+   ],
+   "a": 0,
+   "e": "Mahar hak isteri.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 12: Perkahwinan",
+   "status": "aktif"
+  },
+  {
+   "id": 291,
+   "t": "P5-4.2",
+   "d": 2,
+   "q": "Walimatulurus hendaklah dirancang ...",
+   "o": [
+    "Secara sederhana dan tidak membazir",
+    "Bermewah-mewah",
+    "Berhutang banyak",
+    "Menunjuk-nunjuk"
+   ],
+   "a": 0,
+   "e": "Islam melarang pembaziran.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 12: Perkahwinan",
+   "status": "aktif"
+  },
+  {
+   "id": 292,
+   "t": "P5-4.2",
+   "d": 2,
+   "q": "Tanggungjawab suami isteri dalam aspek ibadah ialah ...",
+   "o": [
+    "Membiarkan keluarga",
+    "Melarang solat",
+    "Mendidik keluarga tentang ibadah",
+    "Mengabaikan ilmu"
+   ],
+   "a": 2,
+   "e": "Memelihara keluarga daripada api neraka.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 12: Perkahwinan",
+   "status": "aktif"
+  },
+  {
+   "id": 293,
+   "t": "P5-4.2",
+   "d": 2,
+   "q": "Perkahwinan tanpa mengikut saluran betul boleh ...",
+   "o": [
+    "Dihormati",
+    "Dipermudah",
+    "Diberi insentif",
+    "Didenda dan menyukarkan pendaftaran kelahiran anak"
+   ],
+   "a": 3,
+   "e": "Isteri tiada dokumen sah untuk membuat tuntutan.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 12: Perkahwinan",
+   "status": "aktif"
+  },
+  {
+   "id": 294,
+   "t": "P5-4.2",
+   "d": 3,
+   "q": "Penjagaan anak dengan ilmu agama dan kemahiran keibubapaan bertujuan ...",
+   "o": [
+    "Memanjakan anak",
+    "Mengabaikan anak",
+    "Menyerahkan kepada orang lain",
+    "Melahirkan anak yang soleh dan berakhlak"
+   ],
+   "a": 3,
+   "e": "Keibubapaan berkesan membentuk generasi soleh.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 12: Perkahwinan",
+   "status": "aktif"
+  },
+  {
+   "id": 295,
+   "t": "P5-4.2",
+   "d": 3,
+   "q": "Memilih pasangan yang baik agamanya bertujuan ...",
+   "o": [
+    "Menunjuk kekayaan",
+    "Mencari kemasyhuran",
+    "Membina rumah tangga bahagia",
+    "Menambah harta"
+   ],
+   "a": 2,
+   "e": "Hadis menggalakkan memilih pasangan beragama.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 12: Perkahwinan",
+   "status": "aktif"
+  },
+  {
+   "id": 296,
+   "t": "P5-4.3",
+   "d": 1,
+   "q": "Iddah ialah ...",
+   "o": [
+    "Mahar",
+    "Tempoh yang perlu dilalui isteri selepas bercerai atau kematian suami",
+    "Walimah",
+    "Nafkah"
+   ],
+   "a": 1,
+   "e": "Tempoh menunggu bagi isteri.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 13: Isu-isu dalam Perkahwinan",
+   "status": "aktif"
+  },
+  {
+   "id": 297,
+   "t": "P5-4.3",
+   "d": 2,
+   "q": "Iddah bagi wanita yang kematian suami (bukan hamil) ialah ...",
+   "o": [
+    "Tiga bulan",
+    "Sebulan",
+    "Setahun",
+    "Empat bulan sepuluh hari"
+   ],
+   "a": 3,
+   "e": "Menurut al-Quran: arba'ata asyhurin wa 'asyra.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 13: Isu-isu dalam Perkahwinan",
+   "status": "aktif"
+  },
+  {
+   "id": 298,
+   "t": "P5-4.3",
+   "d": 2,
+   "q": "Iddah wanita hamil yang diceraikan berakhir apabila ...",
+   "o": [
+    "Melahirkan anak",
+    "Tiga bulan",
+    "Sebulan",
+    "Setahun"
+   ],
+   "a": 0,
+   "e": "Sehingga bersalin.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 13: Isu-isu dalam Perkahwinan",
+   "status": "aktif"
+  },
+  {
+   "id": 299,
+   "t": "P5-4.3",
+   "d": 2,
+   "q": "Rujuk ialah ...",
+   "o": [
+    "Perceraian muktamad",
+    "Hak suami menyambung semula ikatan perkahwinan dalam tempoh iddah",
+    "Mahar baru",
+    "Wasiat"
+   ],
+   "a": 1,
+   "e": "Rujuk bagi talak raj'i.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 13: Isu-isu dalam Perkahwinan",
+   "status": "aktif"
+  },
+  {
+   "id": 300,
+   "t": "P5-4.3",
+   "d": 2,
+   "q": "Larangan semasa iddah ialah ...",
+   "o": [
+    "Memasak",
+    "Beribadat",
+    "Berbual dengan keluarga",
+    "Keluar dari rumah yang disediakan suami"
+   ],
+   "a": 3,
+   "e": "Wanita dalam iddah tidak keluar rumah tanpa keperluan.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 13: Isu-isu dalam Perkahwinan",
+   "status": "aktif"
+  },
+  {
+   "id": 301,
+   "t": "P5-4.3",
+   "d": 2,
+   "q": "Syarat rujuk ialah ...",
+   "o": [
+    "Selepas iddah tamat",
+    "Tanpa lafaz",
+    "Isteri masih dalam tempoh iddah dan ada lafaz rujuk",
+    "Setelah talak tiga"
+   ],
+   "a": 2,
+   "e": "Rujuk mesti dalam tempoh iddah.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 13: Isu-isu dalam Perkahwinan",
+   "status": "aktif"
+  },
+  {
+   "id": 302,
+   "t": "P5-4.3",
+   "d": 3,
+   "q": "Perceraian yang tidak boleh dirujuk ialah ...",
+   "o": [
+    "Talak raj'i",
+    "Talak satu",
+    "Talak dua",
+    "Talak tiga atau khuluk"
+   ],
+   "a": 3,
+   "e": "Perceraian khuluk dan fasakh tidak boleh dirujuk.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 13: Isu-isu dalam Perkahwinan",
+   "status": "aktif"
+  },
+  {
+   "id": 303,
+   "t": "P5-4.3",
+   "d": 3,
+   "q": "Kesan perceraian yang tidak diurus dengan baik terhadap anak ialah ...",
+   "o": [
+    "Perhatian lebih",
+    "Pengabaian dan tekanan emosi",
+    "Kasih sayang bertambah",
+    "Keluarga harmoni"
+   ],
+   "a": 1,
+   "e": "Anak mudah terabai jika konflik tidak diurus.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 13: Isu-isu dalam Perkahwinan",
+   "status": "aktif"
+  },
+  {
+   "id": 304,
+   "t": "P5-4.4",
+   "d": 1,
+   "q": "Wasiat ialah ...",
+   "o": [
+    "Pembahagian harta ketika hidup",
+    "Hibah",
+    "Hutang",
+    "Ikrar semasa hidup untuk mengagihkan harta selepas mati"
+   ],
+   "a": 3,
+   "e": "Wasiat berkuat kuasa selepas kematian.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 14: Pengurusan Harta Selepas Kematian",
+   "status": "aktif"
+  },
+  {
+   "id": 305,
+   "t": "P5-4.4",
+   "d": 2,
+   "q": "Wasiat tidak boleh melebihi ...",
+   "o": [
+    "Separuh harta",
+    "Dua pertiga",
+    "Semua harta",
+    "Satu pertiga harta"
+   ],
+   "a": 3,
+   "e": "Wasiat maksimum 1/3 kecuali dipersetujui waris.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 14: Pengurusan Harta Selepas Kematian",
+   "status": "aktif"
+  },
+  {
+   "id": 306,
+   "t": "P5-4.4",
+   "d": 2,
+   "q": "Faraid ialah ...",
+   "o": [
+    "Pembahagian harta pusaka kepada waris mengikut kadar syarak",
+    "Pemberian semasa hidup",
+    "Wakaf",
+    "Zakat"
+   ],
+   "a": 0,
+   "e": "Faraid ialah ilmu pembahagian pusaka.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 14: Pengurusan Harta Selepas Kematian",
+   "status": "aktif"
+  },
+  {
+   "id": 307,
+   "t": "P5-4.4",
+   "d": 2,
+   "q": "Sebelum harta dibahagikan secara faraid, perlu diselesaikan dahulu ...",
+   "o": [
+    "Perayaan",
+    "Urusan jenazah, hutang dan wasiat",
+    "Hantaran",
+    "Cukai tanah sahaja"
+   ],
+   "a": 1,
+   "e": "Hak yang berkaitan harta si mati.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 14: Pengurusan Harta Selepas Kematian",
+   "status": "aktif"
+  },
+  {
+   "id": 308,
+   "t": "P5-4.4",
+   "d": 2,
+   "q": "Hikmah wasiat ialah ...",
+   "o": [
+    "Memutuskan waris",
+    "Pahala berpanjangan selepas kematian",
+    "Menghalang faraid",
+    "Menimbulkan perpecahan"
+   ],
+   "a": 1,
+   "e": "Wasiat untuk kebajikan menjadi pahala berterusan.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 14: Pengurusan Harta Selepas Kematian",
+   "status": "aktif"
+  },
+  {
+   "id": 309,
+   "t": "P5-4.4",
+   "d": 3,
+   "q": "Wasiat kepada waris faraid memerlukan ...",
+   "o": [
+    "Tiada syarat",
+    "Kebenaran jiran",
+    "Persetujuan waris lain",
+    "Izin mahkamah sahaja"
+   ],
+   "a": 2,
+   "e": "Hadis: tiada wasiat bagi waris kecuali dipersetujui.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 14: Pengurusan Harta Selepas Kematian",
+   "status": "aktif"
+  },
+  {
+   "id": 310,
+   "t": "P5-4.4",
+   "d": 3,
+   "q": "Kesedaran pengurusan harta boleh dipertingkatkan melalui ...",
+   "o": [
+    "Menyembunyikan maklumat",
+    "Mengabaikan",
+    "Kempen, seminar dan khidmat nasihat",
+    "Menunggu masalah"
+   ],
+   "a": 2,
+   "e": "Pendidikan dan nasihat.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 14: Pengurusan Harta Selepas Kematian",
+   "status": "aktif"
+  },
+  {
+   "id": 311,
+   "t": "P5-4.4",
+   "d": 3,
+   "q": "Seseorang meninggalkan wasiat melebihi satu pertiga tanpa persetujuan waris. Kedudukannya ialah ...",
+   "o": [
+    "Sah semua",
+    "Batal sepenuhnya",
+    "Tidak perlu dilaksanakan",
+    "Hanya sah setakat satu pertiga"
+   ],
+   "a": 3,
+   "e": "Lebihan memerlukan persetujuan waris.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 14: Pengurusan Harta Selepas Kematian",
+   "status": "aktif"
+  },
+  {
+   "id": 312,
+   "t": "P5-4.5",
+   "d": 1,
+   "q": "Jenayah dalam Islam terbahagi kepada ...",
+   "o": [
+    "Hudud, takzir dan fasakh",
+    "Zakat, fitrah dan wakaf",
+    "Hudud, qisas dan takzir",
+    "Nikah, talak dan rujuk"
+   ],
+   "a": 2,
+   "e": "Tiga kategori utama.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 15: Jenayah dalam Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 313,
+   "t": "P5-4.5",
+   "d": 2,
+   "q": "Takzir ialah hukuman yang ...",
+   "o": [
+    "Ditetapkan jenisnya",
+    "Hanya hukuman mati",
+    "Tidak ditetapkan jenis dan bentuknya dalam al-Quran dan sunnah",
+    "Hanya denda"
+   ],
+   "a": 2,
+   "e": "Diputuskan oleh mahkamah.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 15: Jenayah dalam Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 314,
+   "t": "P5-4.5",
+   "d": 2,
+   "q": "Contoh hukuman takzir ialah ...",
+   "o": [
+    "Potong tangan",
+    "Rejam",
+    "Sebat 80 kali bagi qazaf",
+    "Denda dan penjara"
+   ],
+   "a": 3,
+   "e": "Takzir termasuk teguran, denda, penjara dan sebatan.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 15: Jenayah dalam Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 315,
+   "t": "P5-4.5",
+   "d": 2,
+   "q": "Hikmah hukuman jenayah dalam Islam ialah ...",
+   "o": [
+    "Menegakkan keadilan dan menjamin keselamatan",
+    "Menyeksa",
+    "Menakut-nakutkan",
+    "Memecahbelahkan"
+   ],
+   "a": 0,
+   "e": "Memelihara keamanan masyarakat.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 15: Jenayah dalam Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 316,
+   "t": "P5-4.5",
+   "d": 2,
+   "q": "Qisas ialah hukuman ...",
+   "o": [
+    "Denda sahaja",
+    "Teguran",
+    "Pengasingan",
+    "Setimpal terhadap kesalahan terhadap nyawa atau anggota"
+   ],
+   "a": 3,
+   "e": "Qisas ialah balasan setimpal.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 15: Jenayah dalam Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 317,
+   "t": "P5-4.5",
+   "d": 2,
+   "q": "Hukuman hudud ialah hukuman yang ...",
+   "o": [
+    "Ditetapkan dalam al-Quran dan sunnah",
+    "Ditentukan hakim",
+    "Tidak ditetapkan",
+    "Ditentukan pemimpin"
+   ],
+   "a": 0,
+   "e": "Hudud ialah hukuman tetap.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 15: Jenayah dalam Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 318,
+   "t": "P5-4.5",
+   "d": 3,
+   "q": "Cara mencegah jenayah dalam masyarakat ialah ...",
+   "o": [
+    "Membiarkan anak",
+    "Menyembunyikan jenayah",
+    "Pendidikan agama sejak kecil dan pengawasan keluarga",
+    "Tidak mengambil tindakan"
+   ],
+   "a": 2,
+   "e": "Pencegahan lebih baik daripada hukuman.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 15: Jenayah dalam Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 319,
+   "t": "P5-4.5",
+   "d": 3,
+   "q": "Kepentingan sokongan komuniti dan masjid dalam pencegahan jenayah ialah ...",
+   "o": [
+    "Menggalakkan jenayah",
+    "Melemahkan perpaduan",
+    "Menyisihkan remaja",
+    "Memperkukuh nilai dan pemantauan sosial"
+   ],
+   "a": 3,
+   "e": "Masyarakat berperanan dalam pembentukan akhlak.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 15: Jenayah dalam Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 320,
+   "t": "P5-5.1",
+   "d": 1,
+   "q": "Pengasas kerajaan Uthmaniyyah ialah ...",
+   "o": [
+    "Sultan Muhammad al-Fateh",
+    "Sultan Murad I",
+    "Sultan Abdul Majid II",
+    "Sultan Uthman bin Ertughrul"
+   ],
+   "a": 3,
+   "e": "Uthman bin Ertughrul mengisytiharkan kemerdekaan Anatolia daripada Saljuk.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 16: Kerajaan Uthmaniyyah",
+   "status": "aktif"
+  },
+  {
+   "id": 321,
+   "t": "P5-5.1",
+   "d": 1,
+   "q": "Pemerintah terakhir kerajaan Uthmaniyyah ialah ...",
+   "o": [
+    "Sultan Uthman",
+    "Sultan Murad I",
+    "Sultan al-Fateh",
+    "Sultan Abdul Majid II"
+   ],
+   "a": 3,
+   "e": "Abdul Majid II ialah khalifah terakhir.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 16: Kerajaan Uthmaniyyah",
+   "status": "aktif"
+  },
+  {
+   "id": 322,
+   "t": "P5-5.1",
+   "d": 2,
+   "q": "Pasukan Janissary dibentuk oleh ...",
+   "o": [
+    "Sultan Uthman",
+    "Sultan Murad I",
+    "Sultan Salim",
+    "Sultan Sulaiman"
+   ],
+   "a": 1,
+   "e": "Murad I (Aurakhan) membentuk Janissary.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 16: Kerajaan Uthmaniyyah",
+   "status": "aktif"
+  },
+  {
+   "id": 323,
+   "t": "P5-5.1",
+   "d": 2,
+   "q": "Konstantinopel dibuka pada tahun ...",
+   "o": [
+    "1258M",
+    "1453M",
+    "1492M",
+    "1924M"
+   ],
+   "a": 1,
+   "e": "Dibuka oleh Sultan Muhammad al-Fateh pada 1453M.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 16: Kerajaan Uthmaniyyah",
+   "status": "aktif"
+  },
+  {
+   "id": 324,
+   "t": "P5-5.1",
+   "d": 2,
+   "q": "Sultan Muhammad al-Fateh membuka ...",
+   "o": [
+    "Baghdad",
+    "Konstantinopel",
+    "Damsyik",
+    "Makkah"
+   ],
+   "a": 1,
+   "e": "Pembukaan Konstantinopel mengotakan bisyarah Rasulullah SAW.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 16: Kerajaan Uthmaniyyah",
+   "status": "aktif"
+  },
+  {
+   "id": 325,
+   "t": "P5-5.1",
+   "d": 2,
+   "q": "Aya Sofia diwakafkan oleh Sultan al-Fateh sebagai ...",
+   "o": [
+    "Masjid",
+    "Hospital",
+    "Istana",
+    "Pasar"
+   ],
+   "a": 0,
+   "e": "Aya Sofia dijadikan masjid.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 16: Kerajaan Uthmaniyyah",
+   "status": "aktif"
+  },
+  {
+   "id": 326,
+   "t": "P5-5.1",
+   "d": 3,
+   "q": "Iktibar daripada keunggulan Sultan al-Fateh ialah ...",
+   "o": [
+    "Memilih pemimpin berwibawa dan menuntut ilmu",
+    "Mengabaikan ilmu",
+    "Bersikap sombong",
+    "Tidak peduli"
+   ],
+   "a": 0,
+   "e": "Pemimpin yang berilmu memajukan negara.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 16: Kerajaan Uthmaniyyah",
+   "status": "aktif"
+  },
+  {
+   "id": 327,
+   "t": "P5-5.1",
+   "d": 3,
+   "q": "Pengasas Uthmaniyyah mengisytiharkan kemerdekaan Anatolia daripada kerajaan ...",
+   "o": [
+    "Saljuk",
+    "Abbasiyah",
+    "Umayyah",
+    "Ayyubiyyah"
+   ],
+   "a": 0,
+   "e": "Anatolia daripada Saljuk.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 16: Kerajaan Uthmaniyyah",
+   "status": "aktif"
+  },
+  {
+   "id": 328,
+   "t": "P5-5.2",
+   "d": 1,
+   "q": "Nama penuh Salahuddin al-Ayyubi ialah ...",
+   "o": [
+    "Ahmad bin Hanbal",
+    "Muhammad bin Idris",
+    "Yusuf bin Ayub bin Syazi",
+    "Uthman bin Ertughrul"
+   ],
+   "a": 2,
+   "e": "Beliau Sultan Kerajaan Ayyubiyyah.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 17: Kegemilangan Tokoh Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 329,
+   "t": "P5-5.2",
+   "d": 2,
+   "q": "Salahuddin al-Ayyubi terkenal kerana ...",
+   "o": [
+    "Membuka Konstantinopel",
+    "Menubuhkan Abbasiyah",
+    "Menyusun faraid",
+    "Membebaskan Baitulmaqdis"
+   ],
+   "a": 3,
+   "e": "Pembebasan Baitulmaqdis pada 1187M.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 17: Kegemilangan Tokoh Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 330,
+   "t": "P5-5.2",
+   "d": 2,
+   "q": "Sumbangan Salahuddin dalam pentadbiran termasuk ...",
+   "o": [
+    "Menutup hospital",
+    "Membuka kasino",
+    "Menghapuskan sekolah",
+    "Menjadikan dewan istana sebagai hospital"
+   ],
+   "a": 3,
+   "e": "Bismaristan al-Atiq.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 17: Kegemilangan Tokoh Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 331,
+   "t": "P5-5.2",
+   "d": 2,
+   "q": "Hassan al-Banna ialah pengasas ...",
+   "o": [
+    "Ikhwan al-Muslimin",
+    "Tabligh",
+    "Muktazilah",
+    "Janissary"
+   ],
+   "a": 0,
+   "e": "Gerakan dakwah dan pendidikan di Mesir.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 17: Kegemilangan Tokoh Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 332,
+   "t": "P5-5.2",
+   "d": 2,
+   "q": "Akhlak tinggi Salahuddin ialah ...",
+   "o": [
+    "Bongkak",
+    "Menghormati ulama dan berani mempertahankan agama",
+    "Bakhil",
+    "Dengki"
+   ],
+   "a": 1,
+   "e": "Beliau prihatin terhadap rakyat.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 17: Kegemilangan Tokoh Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 333,
+   "t": "P5-5.2",
+   "d": 2,
+   "q": "Tokoh Malaysia yang menulis karya undang-undang Islam dan keluarga ialah ...",
+   "o": [
+    "Za'ba",
+    "Ahmad Ibrahim",
+    "Tun Razak",
+    "Hamka"
+   ],
+   "a": 1,
+   "e": "Karyanya termasuk Family Law in Malaysia.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 17: Kegemilangan Tokoh Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 334,
+   "t": "P5-5.2",
+   "d": 3,
+   "q": "Meneladani semangat jihad tokoh Islam pada masa kini ialah ...",
+   "o": [
+    "Mengabaikan negara",
+    "Belajar bersungguh-sungguh dan berkorban demi negara",
+    "Menjauhi ilmu",
+    "Mementingkan diri"
+   ],
+   "a": 1,
+   "e": "Jihad meliputi perjuangan ilmu dan pembangunan.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 17: Kegemilangan Tokoh Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 335,
+   "t": "P5-5.2",
+   "d": 3,
+   "q": "Akhlak terpuji tokoh dakwah menjadi contoh kepada ...",
+   "o": [
+    "Tiada siapa",
+    "Pemimpin sahaja",
+    "Ulama sahaja",
+    "Remaja dan masyarakat"
+   ],
+   "a": 3,
+   "e": "Memudahkan penerimaan dakwah.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 17: Kegemilangan Tokoh Islam",
+   "status": "aktif"
+  },
+  {
+   "id": 336,
+   "t": "P5-6.1",
+   "d": 1,
+   "q": "Tawaduk ialah ...",
+   "o": [
+    "Sombong",
+    "Sikap rendah hati kepada Allah dan sesama manusia",
+    "Riak",
+    "Bangga diri"
+   ],
+   "a": 1,
+   "e": "Lawan tawaduk ialah takbur.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 18: Tawaduk Menzahirkan Kesucian Jiwa",
+   "status": "aktif"
+  },
+  {
+   "id": 337,
+   "t": "P5-6.1",
+   "d": 1,
+   "q": "Lawan tawaduk ialah ...",
+   "o": [
+    "Sabar",
+    "Takbur",
+    "Syukur",
+    "Qanaah"
+   ],
+   "a": 1,
+   "e": "Takbur ialah sombong.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 18: Tawaduk Menzahirkan Kesucian Jiwa",
+   "status": "aktif"
+  },
+  {
+   "id": 338,
+   "t": "P5-6.1",
+   "d": 2,
+   "q": "Rasulullah SAW tawaduk dalam kehidupan rumah tangga dengan ...",
+   "o": [
+    "Menyuruh isteri bekerja semua",
+    "Mengabaikan keluarga",
+    "Tidak membantu",
+    "Membantu isteri menguruskan rumah tangga"
+   ],
+   "a": 3,
+   "e": "Baginda membantu urusan rumah.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 18: Tawaduk Menzahirkan Kesucian Jiwa",
+   "status": "aktif"
+  },
+  {
+   "id": 339,
+   "t": "P5-6.1",
+   "d": 2,
+   "q": "Rasulullah SAW tawaduk ketika makan dengan ...",
+   "o": [
+    "Tidak pernah mencela makanan yang disediakan",
+    "Memilih makanan",
+    "Memarahi pembantu",
+    "Menolak makanan"
+   ],
+   "a": 0,
+   "e": "Jika suka dimakan, jika tidak baginda diam.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 18: Tawaduk Menzahirkan Kesucian Jiwa",
+   "status": "aktif"
+  },
+  {
+   "id": 340,
+   "t": "P5-6.1",
+   "d": 2,
+   "q": "Contoh tawaduk dalam pergaulan ialah ...",
+   "o": [
+    "Bersikap sombong",
+    "Menjauhi orang miskin",
+    "Mengejek orang",
+    "Menyayangi dan bergaul dengan kanak-kanak"
+   ],
+   "a": 3,
+   "e": "Rasulullah bergaul mesra dengan kanak-kanak.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 18: Tawaduk Menzahirkan Kesucian Jiwa",
+   "status": "aktif"
+  },
+  {
+   "id": 341,
+   "t": "P5-6.1",
+   "d": 2,
+   "q": "Orang yang tawaduk akan ...",
+   "o": [
+    "Dihormati dan diberkati hidupnya",
+    "Dibenci",
+    "Dijauhi",
+    "Dihina"
+   ],
+   "a": 0,
+   "e": "Tawaduk mengangkat darjat.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 18: Tawaduk Menzahirkan Kesucian Jiwa",
+   "status": "aktif"
+  },
+  {
+   "id": 342,
+   "t": "P5-6.1",
+   "d": 3,
+   "q": "Pelajar cemerlang yang tetap menghormati rakan menunjukkan ...",
+   "o": [
+    "Ujub",
+    "Tawaduk",
+    "Riak",
+    "Takbur"
+   ],
+   "a": 1,
+   "e": "Tidak bermegah dengan kejayaan.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 18: Tawaduk Menzahirkan Kesucian Jiwa",
+   "status": "aktif"
+  },
+  {
+   "id": 343,
+   "t": "P5-6.1",
+   "d": 3,
+   "q": "Takbur menyebabkan seseorang ...",
+   "o": [
+    "Disayangi",
+    "Dijauhi dan dimurkai Allah",
+    "Dimuliakan",
+    "Diberi pahala"
+   ],
+   "a": 1,
+   "e": "Allah tidak menyukai orang takbur.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 18: Tawaduk Menzahirkan Kesucian Jiwa",
+   "status": "aktif"
+  },
+  {
+   "id": 344,
+   "t": "P5-6.2",
+   "d": 1,
+   "q": "Istiqamah ialah ...",
+   "o": [
+    "Kadang-kadang taat",
+    "Taat apabila senang",
+    "Ketaatan berterusan melaksanakan suruhan Allah dan menjauhi larangan-Nya",
+    "Taat apabila dilihat"
+   ],
+   "a": 2,
+   "e": "Konsisten dalam ketaatan.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 19: Istiqamah Jalan Menuju Mujahadah",
+   "status": "aktif"
+  },
+  {
+   "id": 345,
+   "t": "P5-6.2",
+   "d": 1,
+   "q": "Mujahadah ialah ...",
+   "o": [
+    "Bersantai",
+    "Bersungguh-sungguh melawan hawa nafsu",
+    "Menuruti nafsu",
+    "Menjauhi ibadat"
+   ],
+   "a": 1,
+   "e": "Mujahadah an-nafs.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 19: Istiqamah Jalan Menuju Mujahadah",
+   "status": "aktif"
+  },
+  {
+   "id": 346,
+   "t": "P5-6.2",
+   "d": 2,
+   "q": "Rasulullah SAW istiqamah berdakwah walaupun ...",
+   "o": [
+    "Ramai menyokong",
+    "Ditawarkan sahabat",
+    "Tiada halangan",
+    "Diancam dan ditawarkan kesenangan dunia"
+   ],
+   "a": 3,
+   "e": "Baginda tidak meninggalkan dakwah.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 19: Istiqamah Jalan Menuju Mujahadah",
+   "status": "aktif"
+  },
+  {
+   "id": 347,
+   "t": "P5-6.2",
+   "d": 2,
+   "q": "Benteng iman menurut Imam Syafie ialah ...",
+   "o": [
+    "Kemalasan",
+    "Kesombongan",
+    "Kebakhilan",
+    "Keikhlasan dan melazimi ibadat sunat"
+   ],
+   "a": 3,
+   "e": "Keikhlasan, ibadat sunat, istiqamah, disiplin.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 19: Istiqamah Jalan Menuju Mujahadah",
+   "status": "aktif"
+  },
+  {
+   "id": 348,
+   "t": "P5-6.2",
+   "d": 2,
+   "q": "Cara mengekalkan istiqamah ialah ...",
+   "o": [
+    "Menuntut ilmu dan berdoa",
+    "Menangguh ibadat",
+    "Meninggalkan majlis ilmu",
+    "Menjauhi orang soleh"
+   ],
+   "a": 0,
+   "e": "Ilmu dan doa menguatkan istiqamah.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 19: Istiqamah Jalan Menuju Mujahadah",
+   "status": "aktif"
+  },
+  {
+   "id": 349,
+   "t": "P5-6.2",
+   "d": 2,
+   "q": "Muhasabah diri bermaksud ...",
+   "o": [
+    "Menghitung dan menilai amalan sendiri",
+    "Menghitung harta",
+    "Menilai orang lain",
+    "Menghukum diri"
+   ],
+   "a": 0,
+   "e": "Muhasabah ialah menilai diri.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 19: Istiqamah Jalan Menuju Mujahadah",
+   "status": "aktif"
+  },
+  {
+   "id": 350,
+   "t": "P5-6.2",
+   "d": 3,
+   "q": "Seorang pelajar tetap membaca al-Quran setiap hari walaupun penat. Sikap ini ialah ...",
+   "o": [
+    "Istiqamah",
+    "Riak",
+    "Ujub",
+    "Takbur"
+   ],
+   "a": 0,
+   "e": "Konsisten dalam amalan.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 19: Istiqamah Jalan Menuju Mujahadah",
+   "status": "aktif"
+  },
+  {
+   "id": 351,
+   "t": "P5-6.2",
+   "d": 3,
+   "q": "Mujahadah melawan nafsu malas sebelum Subuh ialah ...",
+   "o": [
+    "Menyambung tidur",
+    "Menangguh solat",
+    "Bangun solat Subuh walaupun mengantuk",
+    "Meninggalkan solat"
+   ],
+   "a": 2,
+   "e": "Melawan hawa nafsu.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 19: Istiqamah Jalan Menuju Mujahadah",
+   "status": "aktif"
+  },
+  {
+   "id": 352,
+   "t": "P5-6.3",
+   "d": 1,
+   "q": "Alam sekitar ialah ...",
+   "o": [
+    "Rumah sahaja",
+    "Binatang sahaja",
+    "Segala benda hidup dan bukan hidup di sekeliling manusia",
+    "Tumbuhan sahaja"
+   ],
+   "a": 2,
+   "e": "Takrif alam sekitar.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 20: Adab Menjaga Alam Sekitar",
+   "status": "aktif"
+  },
+  {
+   "id": 353,
+   "t": "P5-6.3",
+   "d": 1,
+   "q": "Manusia berperanan sebagai ... yang menjaga bumi",
+   "o": [
+    "Khalifah",
+    "Penguasa mutlak",
+    "Perosak",
+    "Penonton"
+   ],
+   "a": 0,
+   "e": "Manusia amanah memakmurkan bumi.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 20: Adab Menjaga Alam Sekitar",
+   "status": "aktif"
+  },
+  {
+   "id": 354,
+   "t": "P5-6.3",
+   "d": 2,
+   "q": "Hikmah adab menjaga alam sekitar ialah ...",
+   "o": [
+    "Alam rosak",
+    "Persekitaran bersih dan jiwa tenang",
+    "Penyakit bertambah",
+    "Banjir"
+   ],
+   "a": 1,
+   "e": "Alam bersih menenangkan jiwa.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 20: Adab Menjaga Alam Sekitar",
+   "status": "aktif"
+  },
+  {
+   "id": 355,
+   "t": "P5-6.3",
+   "d": 2,
+   "q": "Eko-pelancongan menyumbang kepada ...",
+   "o": [
+    "Pencemaran",
+    "Kemusnahan",
+    "Kemiskinan",
+    "Pendapatan dan pemeliharaan alam"
+   ],
+   "a": 3,
+   "e": "Pelancongan mesra alam.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 20: Adab Menjaga Alam Sekitar",
+   "status": "aktif"
+  },
+  {
+   "id": 356,
+   "t": "P5-6.3",
+   "d": 2,
+   "q": "Perbuatan membuang sampah merata-rata bercanggah dengan ...",
+   "o": [
+    "Hukum tajwid",
+    "Zakat",
+    "Adab menjaga alam sekitar",
+    "Haji"
+   ],
+   "a": 2,
+   "e": "Mencemarkan alam dilarang.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 20: Adab Menjaga Alam Sekitar",
+   "status": "aktif"
+  },
+  {
+   "id": 357,
+   "t": "P5-6.3",
+   "d": 2,
+   "q": "Punca kerosakan alam ialah ...",
+   "o": [
+    "Sikap prihatin",
+    "Undang-undang yang kuat",
+    "Kurang kesedaran sivik",
+    "Pendidikan alam"
+   ],
+   "a": 2,
+   "e": "Kesedaran sivik rendah menyebabkan kerosakan.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 20: Adab Menjaga Alam Sekitar",
+   "status": "aktif"
+  },
+  {
+   "id": 358,
+   "t": "P5-6.3",
+   "d": 3,
+   "q": "Tindakan menanam pokok sebagai amal jariah sesuai dengan ...",
+   "o": [
+    "Perbuatan sia-sia",
+    "Pembaziran",
+    "Tanggungjawab khalifah",
+    "Syirik"
+   ],
+   "a": 2,
+   "e": "Menanam pokok berpahala.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 20: Adab Menjaga Alam Sekitar",
+   "status": "aktif"
+  },
+  {
+   "id": 359,
+   "t": "P5-6.3",
+   "d": 3,
+   "q": "Membazir air ketika berwuduk ialah ...",
+   "o": [
+    "Dilarang dalam Islam",
+    "Dibenarkan",
+    "Digalakkan",
+    "Sunat"
+   ],
+   "a": 0,
+   "e": "Islam melarang pembaziran walaupun di sungai.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 20: Adab Menjaga Alam Sekitar",
+   "status": "aktif"
+  },
+  {
+   "id": 360,
+   "t": "P5-6.4",
+   "d": 1,
+   "q": "Sifat mazmumah ialah ...",
+   "o": [
+    "Sifat terpuji",
+    "Sifat baik",
+    "Sifat mulia",
+    "Sifat keji yang berlawanan dengan syarak"
+   ],
+   "a": 3,
+   "e": "Lawan sifat mahmudah.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 21: Sifat Mazmumah Meracuni Hati",
+   "status": "aktif"
+  },
+  {
+   "id": 361,
+   "t": "P5-6.4",
+   "d": 1,
+   "q": "Antara contoh sifat mazmumah ialah ...",
+   "o": [
+    "Sabar",
+    "Syukur",
+    "Riak dan ujub",
+    "Tawaduk"
+   ],
+   "a": 2,
+   "e": "Riak, ujub, hasad, takbur.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 21: Sifat Mazmumah Meracuni Hati",
+   "status": "aktif"
+  },
+  {
+   "id": 362,
+   "t": "P5-6.4",
+   "d": 2,
+   "q": "Hasad ialah ...",
+   "o": [
+    "Gembira dengan kejayaan orang",
+    "Dengki melihat kelebihan orang lain dan mengharap ia hilang",
+    "Bersyukur",
+    "Berdoa untuk orang"
+   ],
+   "a": 1,
+   "e": "Hasad meracuni hati.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 21: Sifat Mazmumah Meracuni Hati",
+   "status": "aktif"
+  },
+  {
+   "id": 363,
+   "t": "P5-6.4",
+   "d": 2,
+   "q": "Riak ialah ...",
+   "o": [
+    "Beramal ikhlas",
+    "Beramal untuk dilihat dan dipuji manusia",
+    "Beramal diam-diam",
+    "Beramal kerana Allah"
+   ],
+   "a": 1,
+   "e": "Riak lawan ikhlas.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 21: Sifat Mazmumah Meracuni Hati",
+   "status": "aktif"
+  },
+  {
+   "id": 364,
+   "t": "P5-6.4",
+   "d": 2,
+   "q": "Ujub ialah ...",
+   "o": [
+    "Berbangga dengan diri sendiri",
+    "Merendah diri",
+    "Bersyukur",
+    "Bersabar"
+   ],
+   "a": 0,
+   "e": "Ujub ialah kagum pada diri.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 21: Sifat Mazmumah Meracuni Hati",
+   "status": "aktif"
+  },
+  {
+   "id": 365,
+   "t": "P5-6.4",
+   "d": 2,
+   "q": "Cara meninggalkan sifat mazmumah ialah ...",
+   "o": [
+    "Menuruti nafsu",
+    "Bergaul dengan orang jahat",
+    "Berputus asa",
+    "Muhasabah dan bersahabat dengan orang berakhlak mulia"
+   ],
+   "a": 3,
+   "e": "Memperbaiki diri.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 21: Sifat Mazmumah Meracuni Hati",
+   "status": "aktif"
+  },
+  {
+   "id": 366,
+   "t": "P5-6.4",
+   "d": 3,
+   "q": "Hasad yang dibenarkan (ghibtah) ialah ...",
+   "o": [
+    "Mengharap orang jatuh miskin",
+    "Mencemburui kecantikan",
+    "Ingin memiliki nikmat seperti orang lain tanpa mengharap ia hilang",
+    "Mencela kejayaan"
+   ],
+   "a": 2,
+   "e": "Ghibtah seperti menginginkan ilmu dan harta untuk kebaikan.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 21: Sifat Mazmumah Meracuni Hati",
+   "status": "aktif"
+  },
+  {
+   "id": 367,
+   "t": "P5-6.4",
+   "d": 3,
+   "q": "Hikmah meninggalkan sifat mazmumah ialah ...",
+   "o": [
+    "Mendapat ketenangan hidup",
+    "Hati gelisah",
+    "Hidup kacau",
+    "Dijauhi manusia"
+   ],
+   "a": 0,
+   "e": "Hati bersih memberi ketenangan.",
+   "s": "Buku Teks PI Tingkatan 5, Pelajaran 21: Sifat Mazmumah Meracuni Hati",
+   "status": "aktif"
+  }
+ ]
+}
