@@ -1,0 +1,5063 @@
+{
+ "versi": "202610182000",
+ "dikemas": "2026-10-18T20:00:00",
+ "nota": "Fail ini diurus melalui bank.html. Jangan ubah nama medan. a = indeks jawapan betul (0=A, 1=B, 2=C, 3=D). d = aras (1 mudah, 2 sederhana, 3 sukar). status: aktif atau gantung. Soalan Bahasa Arab ialah soalan asal yang perlu disemak guru sebelum digunakan secara meluas.",
+ "topik": [
+  {
+   "id": "B4-1.1",
+   "nama": "المذكر والمؤنث (المفرد والمثنى والجمع)",
+   "tingkatan": 4
+  },
+  {
+   "id": "B4-1.2",
+   "nama": "التركيب الإضافي",
+   "tingkatan": 4
+  },
+  {
+   "id": "B4-1.3",
+   "nama": "التركيب النعتي",
+   "tingkatan": 4
+  },
+  {
+   "id": "B4-1.4",
+   "nama": "الفعل التعبيري",
+   "tingkatan": 4
+  },
+  {
+   "id": "B4-1.5",
+   "nama": "المبتدأ والخبر",
+   "tingkatan": 4
+  },
+  {
+   "id": "B4-1.6",
+   "nama": "الفاعل والمفعول به",
+   "tingkatan": 4
+  },
+  {
+   "id": "B4-1.7",
+   "nama": "كان وأخواتها",
+   "tingkatan": 4
+  },
+  {
+   "id": "B4-1.8",
+   "nama": "إنّ وأخواتها",
+   "tingkatan": 4
+  },
+  {
+   "id": "B4-1.9",
+   "nama": "لم والمضارع المجزوم",
+   "tingkatan": 4
+  },
+  {
+   "id": "B4-1.10",
+   "nama": "المضارع المنصوب (أن، لن، كي، لام التعليل، حتى)",
+   "tingkatan": 4
+  },
+  {
+   "id": "B4-1.11",
+   "nama": "الظرف (حيث، عند، منذ، بينما)",
+   "tingkatan": 4
+  },
+  {
+   "id": "B4-2.1",
+   "nama": "اسم الفاعل (الفعل الثلاثي)",
+   "tingkatan": 4
+  },
+  {
+   "id": "B4-2.2",
+   "nama": "اسم المفعول (الفعل الثلاثي)",
+   "tingkatan": 4
+  },
+  {
+   "id": "B4-2.3",
+   "nama": "اسم الآلة",
+   "tingkatan": 4
+  },
+  {
+   "id": "B4-2.4",
+   "nama": "المصدر للفعل الثلاثي المجرد",
+   "tingkatan": 4
+  },
+  {
+   "id": "B4-2.5",
+   "nama": "الفعل المزيد (أفعل، فاعل، فعّل، استفعل) والأمر",
+   "tingkatan": 4
+  },
+  {
+   "id": "B4-3.1",
+   "nama": "المجال الاجتماعي: الأيتام والعمل التطوعي",
+   "tingkatan": 4
+  },
+  {
+   "id": "B4-3.2",
+   "nama": "المجال التعليمي: الصحة والغذاء المتوازن",
+   "tingkatan": 4
+  },
+  {
+   "id": "B4-3.3",
+   "nama": "المجال المهني: المدرسة والتعليم",
+   "tingkatan": 4
+  },
+  {
+   "id": "B4-3.4",
+   "nama": "المجال التقني: الإنترنت والحاسوب",
+   "tingkatan": 4
+  },
+  {
+   "id": "B5-1.1",
+   "nama": "المبني للمعلوم والمبني للمجهول (نائب الفاعل)",
+   "tingkatan": 5
+  },
+  {
+   "id": "B5-1.2",
+   "nama": "لا النافية للجنس",
+   "tingkatan": 5
+  },
+  {
+   "id": "B5-1.3",
+   "nama": "الاستثناء بـ إلا",
+   "tingkatan": 5
+  },
+  {
+   "id": "B5-1.4",
+   "nama": "الأسماء الخمسة",
+   "tingkatan": 5
+  },
+  {
+   "id": "B5-1.5",
+   "nama": "البدل المطابق",
+   "tingkatan": 5
+  },
+  {
+   "id": "B5-1.6",
+   "nama": "الحال المفرد",
+   "tingkatan": 5
+  },
+  {
+   "id": "B5-1.7",
+   "nama": "أسلوب التعجب",
+   "tingkatan": 5
+  },
+  {
+   "id": "B5-1.8",
+   "nama": "إعراب الاسم",
+   "tingkatan": 5
+  },
+  {
+   "id": "B5-1.9",
+   "nama": "الفعل المضارع المعرب والمبني",
+   "tingkatan": 5
+  },
+  {
+   "id": "B5-1.10",
+   "nama": "العدد والمعدود",
+   "tingkatan": 5
+  },
+  {
+   "id": "B5-1.11",
+   "nama": "الظرف والضمير المتصل في التركيب الإضافي",
+   "tingkatan": 5
+  },
+  {
+   "id": "B5-2.1",
+   "nama": "اسم الفاعل للفعل المزيد (مفتعل، متفعل، متفاعل)",
+   "tingkatan": 5
+  },
+  {
+   "id": "B5-2.2",
+   "nama": "اسم المفعول للفعل المزيد (مفتعل، مستفعل)",
+   "tingkatan": 5
+  },
+  {
+   "id": "B5-2.3",
+   "nama": "المصدر للفعل المزيد",
+   "tingkatan": 5
+  },
+  {
+   "id": "B5-2.4",
+   "nama": "الفعل المزيد (افتعل، تفاعل، تفعّل) والأمر",
+   "tingkatan": 5
+  },
+  {
+   "id": "B5-3.1",
+   "nama": "المجال الاجتماعي: الكوارث والإغاثة",
+   "tingkatan": 5
+  },
+  {
+   "id": "B5-3.2",
+   "nama": "المجال الاجتماعي: الإسعافات الأولية",
+   "tingkatan": 5
+  },
+  {
+   "id": "B5-3.3",
+   "nama": "المجال التجاري: التسوق عبر الإنترنت",
+   "tingkatan": 5
+  }
+ ],
+ "soalan": [
+  {
+   "id": 0,
+   "t": "B4-1.1",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالطالباتُ ______ في المكتبةِ.",
+   "o": [
+    "جالساتٌ",
+    "جالسون",
+    "جالسٌ",
+    "جالسان"
+   ],
+   "a": 0,
+   "e": "Jamak muannath salim ialah ـات, maka khabar juga جالساتٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 1,
+   "t": "B4-1.1",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nهذان ______ مجتهدان.",
+   "o": [
+    "طالبان",
+    "طالبٌ",
+    "طالبون",
+    "طالباتٌ"
+   ],
+   "a": 0,
+   "e": "هذان ialah isyarah muthanna mudhakkar, maka khabar muthanna mudhakkar: طالبان.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 2,
+   "t": "B4-1.1",
+   "d": 1,
+   "q": "Apakah jamak mudhakkar salim (rafa') bagi «مُعلِّمٌ»?",
+   "o": [
+    "معلمات",
+    "معلمان",
+    "معلمة",
+    "معلمون"
+   ],
+   "a": 3,
+   "e": "Jamak mudhakkar salim rafa' menambah ـون: معلمون.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 3,
+   "t": "B4-1.1",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالطالبتان ______ في الصفِّ.",
+   "o": [
+    "جالسان",
+    "جالسات",
+    "جالستان",
+    "جالسةٌ"
+   ],
+   "a": 2,
+   "e": "Muthanna muannath: ـتان. Khabar mesti sepadan: جالستان.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 4,
+   "t": "B4-1.1",
+   "d": 2,
+   "q": "Apakah muthanna rafa' bagi «المعلمةُ»?",
+   "o": [
+    "المعلمان",
+    "المعلمتان",
+    "المعلمتين",
+    "المعلمات"
+   ],
+   "a": 1,
+   "e": "Muthanna muannath rafa' ialah ـتان: المعلمتان. ـتين untuk nasab dan jar.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 5,
+   "t": "B4-1.1",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nقابلتُ ______ في المدرسةِ.",
+   "o": [
+    "المعلمانِ",
+    "المعلمَيْنِ",
+    "المعلمونَ",
+    "المعلمتانِ"
+   ],
+   "a": 1,
+   "e": "Maf'ul bih mansub. Muthanna mudhakkar mansub: ـَيْنِ, maka المعلمَيْنِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 6,
+   "t": "B4-1.1",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالكتبُ ______ على الطاولةِ.",
+   "o": [
+    "موضوعون",
+    "موضوعةٌ",
+    "موضوعٌ",
+    "موضوعان"
+   ],
+   "a": 1,
+   "e": "Jamak benda tidak berakal dianggap muannath mufrad, maka khabar موضوعةٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 7,
+   "t": "B4-1.1",
+   "d": 3,
+   "q": "Perkataan dalam kurungan [ ] mengandungi kesalahan. Pilih pembetulan yang betul.\nسمعتُ [المعلمونَ] يتكلمونَ في الاجتماعِ.",
+   "o": [
+    "المعلماتُ",
+    "المعلمَيْنِ",
+    "المعلمانِ",
+    "المعلمينَ"
+   ],
+   "a": 3,
+   "e": "Maf'ul bih mansub. Jamak mudhakkar salim nasab: ـين, maka المعلمينَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 8,
+   "t": "B4-1.2",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nهذا ______ المعلمِ.",
+   "o": [
+    "الكتابُ",
+    "كتابٌ",
+    "كتابُ",
+    "كتابِ"
+   ],
+   "a": 2,
+   "e": "Mudhaf tidak boleh ada ال atau tanwin dan di sini marfu' sebagai khabar: كتابُ المعلمِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 9,
+   "t": "B4-1.2",
+   "d": 1,
+   "q": "Dalam «كتابُ المعلمِ», perkataan «المعلمِ» ialah ...",
+   "o": [
+    "mudhaf",
+    "mudhaf ilaih",
+    "na't",
+    "fa'il"
+   ],
+   "a": 1,
+   "e": "Perkataan kedua dalam tarkib idhafi ialah mudhaf ilaih dan sentiasa majrur.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 10,
+   "t": "B4-1.2",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nذهبتُ إلى ______ المدرسةِ.",
+   "o": [
+    "المديرِ",
+    "مديرٌ",
+    "مديرِ",
+    "مديراً"
+   ],
+   "a": 2,
+   "e": "Selepas إلى isim majrur. Mudhaf tiada ال dan tanwin: مديرِ المدرسةِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 11,
+   "t": "B4-1.2",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nهذان ______ المدرسةِ.",
+   "o": [
+    "معلمان",
+    "المعلمان",
+    "معلما",
+    "معلمين"
+   ],
+   "a": 2,
+   "e": "Mudhaf muthanna rafa' membuang nun: معلما المدرسةِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 12,
+   "t": "B4-1.2",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nجاءَ ______ المدرسةِ.",
+   "o": [
+    "معلمون",
+    "المعلمو",
+    "معلمين",
+    "معلمو"
+   ],
+   "a": 3,
+   "e": "Mudhaf jamak mudhakkar salim membuang nun: معلمو المدرسةِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 13,
+   "t": "B4-1.2",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nرأيتُ ______ الطالبِ في المكتبةِ.",
+   "o": [
+    "والدا",
+    "والدَيْ",
+    "والدانِ",
+    "والدَينِ"
+   ],
+   "a": 1,
+   "e": "Muthanna nasab ـَيْنِ dan nun dibuang kerana menjadi mudhaf: والدَيْ الطالبِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 14,
+   "t": "B4-1.2",
+   "d": 3,
+   "q": "Perkataan dalam kurungan [ ] mengandungi kesalahan. Pilih pembetulan yang betul.\nهذا [المديرُ] المدرسةِ.",
+   "o": [
+    "مديرُ",
+    "مديرٌ",
+    "المديرِ",
+    "مديراً"
+   ],
+   "a": 0,
+   "e": "Mudhaf tidak boleh ada ال. Pembetulan: مديرُ المدرسةِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 15,
+   "t": "B4-1.2",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nاشتريتُ ______ الطالبِ.",
+   "o": [
+    "قلمَ",
+    "قلمٌ",
+    "القلمَ",
+    "قلمِ"
+   ],
+   "a": 0,
+   "e": "Maf'ul bih mansub, mudhaf tiada ال dan tanwin: قلمَ الطالبِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 16,
+   "t": "B4-1.3",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nهذه طالبةٌ ______.",
+   "o": [
+    "مجتهدٌ",
+    "مجتهدةٌ",
+    "مجتهدةُ",
+    "المجتهدةُ"
+   ],
+   "a": 1,
+   "e": "Na't sepadan dengan man'ut: nakirah, muannath, marfu': مجتهدةٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 17,
+   "t": "B4-1.3",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nقرأتُ كتاباً ______.",
+   "o": [
+    "مفيدٌ",
+    "مفيداً",
+    "المفيدَ",
+    "مفيدةً"
+   ],
+   "a": 1,
+   "e": "Man'ut nakirah mansub mudhakkar, na't sama: مفيداً.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 18,
+   "t": "B4-1.3",
+   "d": 1,
+   "q": "Dalam «الطالبُ المجتهدُ», perkataan «المجتهدُ» ialah ...",
+   "o": [
+    "na't",
+    "man'ut",
+    "mudhaf",
+    "fa'il"
+   ],
+   "a": 0,
+   "e": "Perkataan yang menerangkan sifat dipanggil na't.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 19,
+   "t": "B4-1.3",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nجاءَ المعلمونَ ______.",
+   "o": [
+    "المخلصُ",
+    "المخلصةُ",
+    "المخلصانِ",
+    "المخلصونَ"
+   ],
+   "a": 3,
+   "e": "Man'ut jamak mudhakkar berakal marfu', na't juga jamak marfu': المخلصونَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 20,
+   "t": "B4-1.3",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nاشتريتُ كتباً ______.",
+   "o": [
+    "جديداً",
+    "جديدينَ",
+    "جديدةً",
+    "جديدونَ"
+   ],
+   "a": 2,
+   "e": "Jamak benda tidak berakal: na't mufrad muannath nakirah mansub: جديدةً.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 21,
+   "t": "B4-1.3",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nذهبتُ إلى المدرسةِ ______.",
+   "o": [
+    "الكبيرةِ",
+    "الكبيرِ",
+    "الكبيرةُ",
+    "كبيرةٍ"
+   ],
+   "a": 0,
+   "e": "Man'ut ma'rifah, muannath, majrur: الكبيرةِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 22,
+   "t": "B4-1.3",
+   "d": 3,
+   "q": "Perkataan dalam kurungan [ ] mengandungi kesalahan. Pilih pembetulan yang betul.\nرأيتُ الطالبةَ [المجتهدُ] في المكتبةِ.",
+   "o": [
+    "المجتهدةُ",
+    "المجتهدِ",
+    "المجتهدةَ",
+    "مجتهدةً"
+   ],
+   "a": 2,
+   "e": "Na't mesti mengikut man'ut: muannath, ma'rifah, mansub: المجتهدةَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 23,
+   "t": "B4-1.3",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nهاتانِ طالبتانِ ______.",
+   "o": [
+    "مجتهدانِ",
+    "مجتهداتٌ",
+    "المجتهدتانِ",
+    "مجتهدتانِ"
+   ],
+   "a": 3,
+   "e": "Man'ut nakirah muthanna muannath, na't sama: مجتهدتانِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 24,
+   "t": "B4-1.4",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nيبحثُ الطالبُ ______ كتابِه.",
+   "o": [
+    "في",
+    "على",
+    "عن",
+    "من"
+   ],
+   "a": 2,
+   "e": "يبحثُ عن bermaksud mencari.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 25,
+   "t": "B4-1.4",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nيعتمدُ الولدُ ______ والدِه.",
+   "o": [
+    "عن",
+    "على",
+    "في",
+    "مع"
+   ],
+   "a": 1,
+   "e": "يعتمدُ على bermaksud bergantung kepada.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 26,
+   "t": "B4-1.4",
+   "d": 1,
+   "q": "Apakah maksud «ينظرُ إلى»?",
+   "o": [
+    "mencari",
+    "bergantung kepada",
+    "memandang",
+    "menyertai"
+   ],
+   "a": 2,
+   "e": "ينظرُ إلى bermaksud memandang.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 27,
+   "t": "B4-1.4",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nيشاركُ الطلابُ ______ المسابقةِ.",
+   "o": [
+    "عن",
+    "على",
+    "في",
+    "إلى"
+   ],
+   "a": 2,
+   "e": "يشاركُ في bermaksud menyertai.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 28,
+   "t": "B4-1.4",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nيهتمُّ المعلمُ ______ طلابِه.",
+   "o": [
+    "على",
+    "عن",
+    "في",
+    "بـ"
+   ],
+   "a": 3,
+   "e": "يهتمُّ بـ bermaksud mengambil berat tentang.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 29,
+   "t": "B4-1.4",
+   "d": 2,
+   "q": "Apakah maksud «يرغبُ عن»?",
+   "o": [
+    "menyukai",
+    "mencari",
+    "menyertai",
+    "membenci atau menjauhi"
+   ],
+   "a": 3,
+   "e": "يرغبُ في bermaksud suka, tetapi يرغبُ عن bermaksud membenci atau menjauhi.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 30,
+   "t": "B4-1.4",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالمدربُ النشيطُ يرغبُ ______ ممارسةِ الرياضةِ.",
+   "o": [
+    "في",
+    "عن",
+    "على",
+    "إلى"
+   ],
+   "a": 0,
+   "e": "Orang yang cergas suka bersukan: يرغبُ في.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 31,
+   "t": "B4-1.4",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالرجلُ الكسولُ يرغبُ ______ ممارسةِ الرياضةِ.",
+   "o": [
+    "في",
+    "إلى",
+    "عن",
+    "على"
+   ],
+   "a": 2,
+   "e": "Orang yang malas menjauhi sukan: يرغبُ عن.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 32,
+   "t": "B4-1.5",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالطالبُ ______.",
+   "o": [
+    "مجتهدٌ",
+    "مجتهداً",
+    "مجتهدِ",
+    "مجتهدةٌ"
+   ],
+   "a": 0,
+   "e": "Khabar marfu' dan sepadan dengan mubtada': مجتهدٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 33,
+   "t": "B4-1.5",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالمعلمةُ ______.",
+   "o": [
+    "مخلصٌ",
+    "مخلصةً",
+    "مخلصةٌ",
+    "مخلصونَ"
+   ],
+   "a": 2,
+   "e": "Mubtada' muannath, khabar muannath marfu': مخلصةٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 34,
+   "t": "B4-1.5",
+   "d": 1,
+   "q": "Mubtada' dan khabar kedua-duanya ...",
+   "o": [
+    "marfu'",
+    "mansub",
+    "majrur",
+    "majzum"
+   ],
+   "a": 0,
+   "e": "Mubtada' dan khabar sentiasa marfu'.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 35,
+   "t": "B4-1.5",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالطالباتُ ______.",
+   "o": [
+    "مجتهدةٌ",
+    "مجتهدونَ",
+    "مجتهداتٌ",
+    "مجتهدانِ"
+   ],
+   "a": 2,
+   "e": "Jamak muannath salim: مجتهداتٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 36,
+   "t": "B4-1.5",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالكتبُ ______.",
+   "o": [
+    "جديدٌ",
+    "جديدونَ",
+    "جديدةٌ",
+    "جديدانِ"
+   ],
+   "a": 2,
+   "e": "Jamak benda tidak berakal, khabar muannath mufrad: جديدةٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 37,
+   "t": "B4-1.5",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالطالبانِ ______ في الفصلِ.",
+   "o": [
+    "جالسانِ",
+    "جالسٌ",
+    "جالسونَ",
+    "جالستانِ"
+   ],
+   "a": 0,
+   "e": "Mubtada' muthanna mudhakkar, khabar muthanna mudhakkar: جالسانِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 38,
+   "t": "B4-1.5",
+   "d": 3,
+   "q": "Apakah jenis khabar dalam «الولدُ في الحديقةِ»?",
+   "o": [
+    "jumlah fi'liyyah",
+    "shibh jumlah",
+    "mufrad",
+    "isim isyarah"
+   ],
+   "a": 1,
+   "e": "في الحديقةِ ialah jar dan majrur, iaitu shibh jumlah.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 39,
+   "t": "B4-1.5",
+   "d": 3,
+   "q": "Apakah jenis khabar dalam «الطلابُ يدرسونَ في المكتبةِ»?",
+   "o": [
+    "jumlah fi'liyyah",
+    "mufrad",
+    "jumlah ismiyyah",
+    "isim isyarah"
+   ],
+   "a": 0,
+   "e": "يدرسونَ في المكتبةِ ialah jumlah fi'liyyah sebagai khabar.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 40,
+   "t": "B4-1.6",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nكتبَ ______ الدرسَ.",
+   "o": [
+    "الطالبُ",
+    "الطالبَ",
+    "الطالبِ",
+    "الطالبانِ"
+   ],
+   "a": 0,
+   "e": "Fa'il marfu': الطالبُ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 41,
+   "t": "B4-1.6",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nقرأَ الولدُ ______.",
+   "o": [
+    "الكتابَ",
+    "الكتابُ",
+    "الكتابِ",
+    "كتابٌ"
+   ],
+   "a": 0,
+   "e": "Maf'ul bih mansub: الكتابَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 42,
+   "t": "B4-1.6",
+   "d": 1,
+   "q": "Apakah i'rab bagi fa'il?",
+   "o": [
+    "mansub",
+    "majrur",
+    "marfu'",
+    "majzum"
+   ],
+   "a": 2,
+   "e": "Fa'il sentiasa marfu'.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 43,
+   "t": "B4-1.6",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nشاهدَ ______ الفلمَ.",
+   "o": [
+    "الطلابَ",
+    "الطلابِ",
+    "الطلابُ",
+    "الطلابانِ"
+   ],
+   "a": 2,
+   "e": "Fa'il marfu': الطلابُ. الفلمَ ialah maf'ul bih mansub.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 44,
+   "t": "B4-1.6",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nيفتحُ المعلمُ ______.",
+   "o": [
+    "البابُ",
+    "البابِ",
+    "بابٌ",
+    "البابَ"
+   ],
+   "a": 3,
+   "e": "Maf'ul bih mansub: البابَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 45,
+   "t": "B4-1.6",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nكتبتِ الطالبةُ ______.",
+   "o": [
+    "الرسالةُ",
+    "الرسالةِ",
+    "رسالةٌ",
+    "الرسالةَ"
+   ],
+   "a": 3,
+   "e": "Maf'ul bih mansub: الرسالةَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 46,
+   "t": "B4-1.6",
+   "d": 3,
+   "q": "Dalam «أكلَ الولدُ التفاحةَ», maf'ul bih ialah ...",
+   "o": [
+    "الولدُ",
+    "التفاحةَ",
+    "أكلَ",
+    "tiada"
+   ],
+   "a": 1,
+   "e": "التفاحةَ ialah yang dimakan, iaitu maf'ul bih.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 47,
+   "t": "B4-1.6",
+   "d": 3,
+   "q": "Perkataan dalam kurungan [ ] mengandungi kesalahan. Pilih pembetulan yang betul.\nقرأَ الطالبُ [الكتابُ].",
+   "o": [
+    "الكتابِ",
+    "الكتابانِ",
+    "الكتابَ",
+    "كتابٌ"
+   ],
+   "a": 2,
+   "e": "Maf'ul bih mansub: الكتابَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 48,
+   "t": "B4-1.7",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nكانَ الجوُّ ______.",
+   "o": [
+    "جميلٌ",
+    "جميلِ",
+    "جميلاً",
+    "جميلةً"
+   ],
+   "a": 2,
+   "e": "Khabar kana mansub: جميلاً.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 49,
+   "t": "B4-1.7",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nكانتِ الطالبةُ ______.",
+   "o": [
+    "مجتهدةً",
+    "مجتهدةٌ",
+    "مجتهداً",
+    "مجتهدِ"
+   ],
+   "a": 0,
+   "e": "Khabar kana mansub dan muannath: مجتهدةً.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 50,
+   "t": "B4-1.7",
+   "d": 1,
+   "q": "Apakah i'rab bagi khabar kana?",
+   "o": [
+    "mansub",
+    "marfu'",
+    "majrur",
+    "majzum"
+   ],
+   "a": 0,
+   "e": "Kana merafa'kan ism dan menasabkan khabar.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 51,
+   "t": "B4-1.7",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nأصبحَ الطقسُ ______.",
+   "o": [
+    "باردٌ",
+    "باردِ",
+    "بارداً",
+    "باردةً"
+   ],
+   "a": 2,
+   "e": "Khabar أصبحَ mansub: بارداً.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 52,
+   "t": "B4-1.7",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nكانَ ______ مجتهداً.",
+   "o": [
+    "الطالبَ",
+    "الطالبِ",
+    "الطالباتُ",
+    "الطالبُ"
+   ],
+   "a": 3,
+   "e": "Ism kana marfu' dan sepadan dengan khabar: الطالبُ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 53,
+   "t": "B4-1.7",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nليسَ الكسلُ ______.",
+   "o": [
+    "مفيدٌ",
+    "مفيدِ",
+    "مفيداً",
+    "مفيدونَ"
+   ],
+   "a": 2,
+   "e": "Khabar ليسَ mansub: مفيداً.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 54,
+   "t": "B4-1.7",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nكانَ الطلابُ ______ في الفصلِ.",
+   "o": [
+    "مجتهدونَ",
+    "مجتهداً",
+    "مجتهدٌ",
+    "مجتهدينَ"
+   ],
+   "a": 3,
+   "e": "Khabar kana jamak mudhakkar salim mansub dengan ya': مجتهدينَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 55,
+   "t": "B4-1.7",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nظلَّتِ المدرسةُ ______.",
+   "o": [
+    "نظيفةً",
+    "نظيفةٌ",
+    "نظيفاً",
+    "نظيفةِ"
+   ],
+   "a": 0,
+   "e": "Khabar ظلَّ mansub dan muannath: نظيفةً.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 56,
+   "t": "B4-1.8",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nإنَّ ______ مجتهدٌ.",
+   "o": [
+    "الطالبُ",
+    "الطالبَ",
+    "الطالبِ",
+    "الطالبانِ"
+   ],
+   "a": 1,
+   "e": "Ism inna mansub: الطالبَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 57,
+   "t": "B4-1.8",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nإنَّ الطالبَ ______.",
+   "o": [
+    "مجتهدٌ",
+    "مجتهداً",
+    "مجتهدِ",
+    "مجتهدةٌ"
+   ],
+   "a": 0,
+   "e": "Khabar inna marfu': مجتهدٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 58,
+   "t": "B4-1.8",
+   "d": 1,
+   "q": "Apakah i'rab bagi ism inna?",
+   "o": [
+    "marfu'",
+    "majrur",
+    "majzum",
+    "mansub"
+   ],
+   "a": 3,
+   "e": "Inna menasabkan ism dan merafa'kan khabar.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 59,
+   "t": "B4-1.8",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nإنَّ الطالبةَ ______.",
+   "o": [
+    "ذكيةً",
+    "ذكياً",
+    "ذكيةٌ",
+    "ذكيةِ"
+   ],
+   "a": 2,
+   "e": "Khabar inna marfu' dan muannath: ذكيةٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 60,
+   "t": "B4-1.8",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nلعلَّ ______ ينجحُ في الامتحانِ.",
+   "o": [
+    "الطالبُ",
+    "الطالبِ",
+    "الطالبَ",
+    "طالبٌ"
+   ],
+   "a": 2,
+   "e": "Ism لعلَّ mansub: الطالبَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 61,
+   "t": "B4-1.8",
+   "d": 2,
+   "q": "Apakah maksud «لكنَّ»?",
+   "o": [
+    "seolah-olah",
+    "sesungguhnya",
+    "mudah-mudahan",
+    "tetapi"
+   ],
+   "a": 3,
+   "e": "لكنَّ bermaksud tetapi.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 62,
+   "t": "B4-1.8",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nإنَّ الطالبَيْنِ ______.",
+   "o": [
+    "مجتهدينِ",
+    "مجتهدانِ",
+    "مجتهدٌ",
+    "مجتهدتانِ"
+   ],
+   "a": 1,
+   "e": "Ism inna muthanna mansub dengan ya'; khabar marfu' dengan alif: مجتهدانِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 63,
+   "t": "B4-1.8",
+   "d": 3,
+   "q": "Perkataan dalam kurungan [ ] mengandungi kesalahan. Pilih pembetulan yang betul.\nإنَّ [المعلمونَ] مخلصونَ.",
+   "o": [
+    "المعلمينَ",
+    "المعلمانِ",
+    "المعلماتُ",
+    "المعلمَيْنِ"
+   ],
+   "a": 0,
+   "e": "Ism inna mansub: jamak mudhakkar salim nasab dengan ya': المعلمينَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 64,
+   "t": "B4-1.9",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nلم ______ الولدُ الدرسَ.",
+   "o": [
+    "يكتبُ",
+    "يكتبَ",
+    "يكتبْ",
+    "كتبَ"
+   ],
+   "a": 2,
+   "e": "Lam menjazamkan mudhari': يكتبْ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 65,
+   "t": "B4-1.9",
+   "d": 1,
+   "q": "Pilih bentuk yang betul untuk larangan.\nيا ولدُ، لا ______ في الفصلِ!",
+   "o": [
+    "تتكلمْ",
+    "تتكلمُ",
+    "تتكلمَ",
+    "تكلمتَ"
+   ],
+   "a": 0,
+   "e": "La nahiyah menjazamkan mudhari': لا تتكلمْ (jangan bercakap).",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 66,
+   "t": "B4-1.9",
+   "d": 1,
+   "q": "«لم» digunakan untuk menafikan ...",
+   "o": [
+    "peristiwa lampau",
+    "peristiwa akan datang",
+    "perintah",
+    "larangan"
+   ],
+   "a": 0,
+   "e": "Lam + mudhari' majzum menafikan peristiwa lampau.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 67,
+   "t": "B4-1.9",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nلم ______ الطلابُ الواجبَ.",
+   "o": [
+    "يكتبونَ",
+    "يكتبْ",
+    "كتبَ",
+    "يكتبوا"
+   ],
+   "a": 3,
+   "e": "Af'al khamsah dijazamkan dengan membuang nun: يكتبوا.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 68,
+   "t": "B4-1.9",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nلم ______ الطالبتانِ في المسابقةِ.",
+   "o": [
+    "تشتركانِ",
+    "تشتركْ",
+    "تشتركنَ",
+    "تشتركا"
+   ],
+   "a": 3,
+   "e": "Muthanna dijazamkan dengan membuang nun: تشتركا.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 69,
+   "t": "B4-1.9",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nأنتِ لم ______ الدرسَ.",
+   "o": [
+    "تكتبينَ",
+    "تكتبْ",
+    "تكتبي",
+    "تكتبا"
+   ],
+   "a": 2,
+   "e": "Mukhatabah muannath mufrad: nun dibuang: تكتبي.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 70,
+   "t": "B4-1.9",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nلم ______ الولدُ إلى المدرسةِ.",
+   "o": [
+    "يمشي",
+    "يمشَ",
+    "يمشِ",
+    "يمشُ"
+   ],
+   "a": 2,
+   "e": "Fi'il mu'tal akhir ya' dijazamkan dengan membuang ya': يمشِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 71,
+   "t": "B4-1.9",
+   "d": 3,
+   "q": "Pilih ayat nafi lampau yang betul.",
+   "o": [
+    "لم يذهبُ محمدٌ إلى المدرسةِ",
+    "لم يذهبْ محمدٌ إلى المدرسةِ",
+    "لم يذهبَ محمدٌ إلى المدرسةِ",
+    "لم ذهبَ محمدٌ إلى المدرسةِ"
+   ],
+   "a": 1,
+   "e": "Lam diikuti mudhari' majzum: لم يذهبْ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 72,
+   "t": "B4-1.10",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nلن ______ إلى الحفلةِ.",
+   "o": [
+    "أذهبُ",
+    "أذهبْ",
+    "أذهبَ",
+    "ذهبتُ"
+   ],
+   "a": 2,
+   "e": "Lan menasabkan mudhari': أذهبَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 73,
+   "t": "B4-1.10",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nذهبتُ إلى المدرسةِ لـ______.",
+   "o": [
+    "أتعلمُ",
+    "أتعلمَ",
+    "أتعلمْ",
+    "تعلمتُ"
+   ],
+   "a": 1,
+   "e": "Lam ta'lil menasabkan mudhari' dengan an terselindung: لأتعلمَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 74,
+   "t": "B4-1.10",
+   "d": 1,
+   "q": "«حتى» sebelum mudhari' bermaksud ...",
+   "o": [
+    "sehingga atau supaya",
+    "tetapi",
+    "seolah-olah",
+    "kerana"
+   ],
+   "a": 0,
+   "e": "Hatta + mudhari' mansub bermaksud sehingga atau supaya.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 75,
+   "t": "B4-1.10",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nاجتهدْ حتى ______.",
+   "o": [
+    "تنجحُ",
+    "تنجحْ",
+    "نجحتَ",
+    "تنجحَ"
+   ],
+   "a": 3,
+   "e": "Selepas hatta mudhari' mansub: تنجحَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 76,
+   "t": "B4-1.10",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nيجبُ أنْ ______ الطلابُ الواجبَ.",
+   "o": [
+    "يكتبوا",
+    "يكتبونَ",
+    "كتبوا",
+    "يكتبُ"
+   ],
+   "a": 0,
+   "e": "Selepas أنْ mudhari' mansub; af'al khamsah dinasabkan dengan membuang nun: يكتبوا.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 77,
+   "t": "B4-1.10",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nلن ______ الطالبتانِ الدرسَ.",
+   "o": [
+    "تنسيانِ",
+    "تنسى",
+    "تنسيا",
+    "تنسَيْنَ"
+   ],
+   "a": 2,
+   "e": "Muthanna dinasabkan dengan membuang nun: تنسيا.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 78,
+   "t": "B4-1.10",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nادرسْ ______ تنجحَ في الامتحانِ.",
+   "o": [
+    "لم",
+    "لا",
+    "كي",
+    "قد"
+   ],
+   "a": 2,
+   "e": "Kay bermaksud supaya dan menasabkan mudhari'.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 79,
+   "t": "B4-1.10",
+   "d": 3,
+   "q": "Apakah tanda nasab bagi mudhari' af'al khamsah?",
+   "o": [
+    "fathah",
+    "membuang nun",
+    "sukun",
+    "dhammah"
+   ],
+   "a": 1,
+   "e": "Af'al khamsah dinasabkan dan dijazamkan dengan membuang nun.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 80,
+   "t": "B4-1.11",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nاذهبْ من ______ أتيتَ.",
+   "o": [
+    "حيثُ",
+    "عندَ",
+    "منذُ",
+    "بينما"
+   ],
+   "a": 0,
+   "e": "حيثُ bermaksud di tempat atau dari mana.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 81,
+   "t": "B4-1.11",
+   "d": 1,
+   "q": "Apakah maksud «منذ»?",
+   "o": [
+    "sejak",
+    "di sisi",
+    "ketika",
+    "tempat"
+   ],
+   "a": 0,
+   "e": "منذ bermaksud sejak.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 82,
+   "t": "B4-1.11",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالكتابُ ______ المعلمِ.",
+   "o": [
+    "عندَ",
+    "حيثُ",
+    "منذُ",
+    "حتى"
+   ],
+   "a": 0,
+   "e": "عندَ bermaksud di sisi.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 83,
+   "t": "B4-1.11",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nأسكنُ في هذه المدينةِ ______ سنتينِ.",
+   "o": [
+    "منذُ",
+    "عندَ",
+    "حيثُ",
+    "بينما"
+   ],
+   "a": 0,
+   "e": "منذُ + masa bermaksud sejak.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 84,
+   "t": "B4-1.11",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\n______ كنتُ أدرسُ سمعتُ الجرسَ.",
+   "o": [
+    "منذُ",
+    "بينما",
+    "حيثُ",
+    "عندَ"
+   ],
+   "a": 1,
+   "e": "بينما bermaksud ketika.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 85,
+   "t": "B4-1.11",
+   "d": 2,
+   "q": "Isim selepas «عند» dalam «عندَ المعلمِ» adalah ...",
+   "o": [
+    "majrur",
+    "marfu'",
+    "mansub",
+    "majzum"
+   ],
+   "a": 0,
+   "e": "Isim selepas zarf ialah mudhaf ilaih dan majrur.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 86,
+   "t": "B4-1.11",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nجلستُ ______ جلسَ الطالبُ.",
+   "o": [
+    "منذُ",
+    "بينما",
+    "عندَ",
+    "حيثُ"
+   ],
+   "a": 3,
+   "e": "حيثُ ialah zarf tempat: di tempat pelajar itu duduk.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 87,
+   "t": "B4-1.11",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nمضتْ ثلاثةُ أيامٍ ______ غابَ زيدٌ.",
+   "o": [
+    "منذُ",
+    "حيثُ",
+    "عندَ",
+    "بينما"
+   ],
+   "a": 0,
+   "e": "منذُ bermaksud sejak.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 88,
+   "t": "B4-2.1",
+   "d": 1,
+   "q": "Apakah isim fa'il bagi «كتبَ»?",
+   "o": [
+    "مكتوبٌ",
+    "كتابةٌ",
+    "مكتبٌ",
+    "كاتبٌ"
+   ],
+   "a": 3,
+   "e": "Wazan فاعل: كاتبٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 89,
+   "t": "B4-2.1",
+   "d": 1,
+   "q": "Apakah isim fa'il bagi «ذهبَ»?",
+   "o": [
+    "مذهوبٌ",
+    "ذاهبٌ",
+    "ذهابٌ",
+    "مذهبٌ"
+   ],
+   "a": 1,
+   "e": "Wazan فاعل: ذاهبٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 90,
+   "t": "B4-2.1",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالولدُ ______ الدرسَ.",
+   "o": [
+    "مدروسٌ",
+    "دراسةٌ",
+    "دارسٌ",
+    "مدرسةٌ"
+   ],
+   "a": 2,
+   "e": "Pelaku perbuatan: isim fa'il دارسٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 91,
+   "t": "B4-2.1",
+   "d": 2,
+   "q": "Apakah isim fa'il bagi «أكرمَ»?",
+   "o": [
+    "مُكرَمٌ",
+    "مُكرِمٌ",
+    "إكرامٌ",
+    "كريمٌ"
+   ],
+   "a": 1,
+   "e": "Fi'il mazid: mim dhammah dan kasrah sebelum akhir: مُكرِمٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 92,
+   "t": "B4-2.1",
+   "d": 2,
+   "q": "Apakah isim fa'il bagi «ساعدَ»?",
+   "o": [
+    "مُساعَدٌ",
+    "مساعدةٌ",
+    "مُساعِدٌ",
+    "ساعدٌ"
+   ],
+   "a": 2,
+   "e": "مُساعِدٌ ialah pelaku yang menolong.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 93,
+   "t": "B4-2.1",
+   "d": 2,
+   "q": "Apakah muannath bagi «كاتبٌ»?",
+   "o": [
+    "كاتبةٌ",
+    "كاتبانِ",
+    "كتابةٌ",
+    "مكتوبةٌ"
+   ],
+   "a": 0,
+   "e": "Muannath ditandai ة: كاتبةٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 94,
+   "t": "B4-2.1",
+   "d": 3,
+   "q": "Apakah isim fa'il bagi «استخرجَ»?",
+   "o": [
+    "مُستخرَجٌ",
+    "مُستخرِجٌ",
+    "استخراجٌ",
+    "خارجٌ"
+   ],
+   "a": 1,
+   "e": "Wazan مُستفعِلٌ: مُستخرِجٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 95,
+   "t": "B4-2.1",
+   "d": 3,
+   "q": "Apakah wazan isim fa'il thulathi mujarrad?",
+   "o": [
+    "مفعولٌ",
+    "مِفعالٌ",
+    "فاعلٌ",
+    "فعيلٌ"
+   ],
+   "a": 2,
+   "e": "Isim fa'il thulathi mujarrad berwazan فاعلٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 96,
+   "t": "B4-2.2",
+   "d": 1,
+   "q": "Apakah isim maf'ul bagi «فتحَ»?",
+   "o": [
+    "فاتحٌ",
+    "فتحٌ",
+    "مفتوحٌ",
+    "مفتاحٌ"
+   ],
+   "a": 2,
+   "e": "Wazan مفعول: مفتوحٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 97,
+   "t": "B4-2.2",
+   "d": 1,
+   "q": "Apakah isim maf'ul bagi «كتبَ»?",
+   "o": [
+    "مكتوبٌ",
+    "كاتبٌ",
+    "كتابةٌ",
+    "مكتبةٌ"
+   ],
+   "a": 0,
+   "e": "Wazan مفعول: مكتوبٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 98,
+   "t": "B4-2.2",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالبابُ ______.",
+   "o": [
+    "فاتحٌ",
+    "مفتاحٌ",
+    "فتحٌ",
+    "مفتوحٌ"
+   ],
+   "a": 3,
+   "e": "Pintu itu yang dibuka: isim maf'ul مفتوحٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 99,
+   "t": "B4-2.2",
+   "d": 2,
+   "q": "Apakah isim maf'ul bagi «درسَ»?",
+   "o": [
+    "دارسٌ",
+    "مدروسٌ",
+    "دراسةٌ",
+    "مدرسةٌ"
+   ],
+   "a": 1,
+   "e": "Wazan مفعول: مدروسٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 100,
+   "t": "B4-2.2",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالرسالةُ ______.",
+   "o": [
+    "مكتوبٌ",
+    "مكتوبةٌ",
+    "كاتبةٌ",
+    "مكتوبانِ"
+   ],
+   "a": 1,
+   "e": "Mubtada' muannath: khabar مكتوبةٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 101,
+   "t": "B4-2.2",
+   "d": 2,
+   "q": "Apakah wazan isim maf'ul thulathi mujarrad?",
+   "o": [
+    "فاعلٌ",
+    "مِفعالٌ",
+    "فعيلٌ",
+    "مفعولٌ"
+   ],
+   "a": 3,
+   "e": "Wazan isim maf'ul thulathi mujarrad ialah مفعولٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 102,
+   "t": "B4-2.2",
+   "d": 3,
+   "q": "Apakah isim maf'ul bagi «شربَ»?",
+   "o": [
+    "شاربٌ",
+    "شربٌ",
+    "مشروبٌ",
+    "مشربٌ"
+   ],
+   "a": 2,
+   "e": "Wazan مفعول: مشروبٌ (yang diminum).",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 103,
+   "t": "B4-2.2",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nهذه الكتبُ ______ عن تاريخِ الإسلامِ.",
+   "o": [
+    "مكتوبٌ",
+    "كاتباتٌ",
+    "مكتوبةٌ",
+    "مكتوبونَ"
+   ],
+   "a": 2,
+   "e": "Jamak benda tidak berakal: khabar muannath mufrad مكتوبةٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 104,
+   "t": "B4-2.3",
+   "d": 1,
+   "q": "Apakah isim alat bagi perbuatan «فتحَ» (membuka)?",
+   "o": [
+    "فاتحٌ",
+    "مفتوحٌ",
+    "مِفتاحٌ",
+    "فتحٌ"
+   ],
+   "a": 2,
+   "e": "Wazan مِفعال: مِفتاحٌ (kunci).",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 105,
+   "t": "B4-2.3",
+   "d": 1,
+   "q": "Apakah isim alat bagi perbuatan «كنسَ» (menyapu)?",
+   "o": [
+    "كانسٌ",
+    "مكنوسٌ",
+    "مِكنسةٌ",
+    "كنسٌ"
+   ],
+   "a": 2,
+   "e": "Wazan مِفعَلة: مِكنسةٌ (penyapu).",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 106,
+   "t": "B4-2.3",
+   "d": 1,
+   "q": "Apakah maksud «مِفتاحٌ»?",
+   "o": [
+    "pembaris",
+    "penyapu",
+    "lampu",
+    "kunci"
+   ],
+   "a": 3,
+   "e": "مِفتاحٌ bermaksud kunci.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 107,
+   "t": "B4-2.3",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nكنسَ الولدُ الأرضَ بـ______.",
+   "o": [
+    "الكانسِ",
+    "المكنسةِ",
+    "المكنوسِ",
+    "الكنسِ"
+   ],
+   "a": 1,
+   "e": "Alat menyapu: المكنسةِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 108,
+   "t": "B4-2.3",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nنُضيءُ الغرفةَ بـ______.",
+   "o": [
+    "المصباحِ",
+    "المضيءِ",
+    "الإضاءةِ",
+    "الضوءِ"
+   ],
+   "a": 0,
+   "e": "Alat menerangi bilik: المصباحِ (lampu).",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 109,
+   "t": "B4-2.3",
+   "d": 2,
+   "q": "Huruf pertama isim alat ialah ...",
+   "o": [
+    "mim berbaris dhammah",
+    "alif",
+    "ta'",
+    "mim berbaris kasrah"
+   ],
+   "a": 3,
+   "e": "Isim alat bermula dengan mim berbaris kasrah.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 110,
+   "t": "B4-2.3",
+   "d": 3,
+   "q": "Apakah isim alat bagi perbuatan «نشرَ» (menggergaji)?",
+   "o": [
+    "مِنشارٌ",
+    "ناشرٌ",
+    "منشورٌ",
+    "نشرٌ"
+   ],
+   "a": 0,
+   "e": "Wazan مِفعال: مِنشارٌ (gergaji).",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 111,
+   "t": "B4-2.3",
+   "d": 3,
+   "q": "Apakah isim alat bagi perbuatan «سطرَ» (membuat garisan)?",
+   "o": [
+    "مِسطرةٌ",
+    "ساطرٌ",
+    "مسطورٌ",
+    "سطرٌ"
+   ],
+   "a": 0,
+   "e": "Wazan مِفعَلة: مِسطرةٌ (pembaris).",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 112,
+   "t": "B4-2.4",
+   "d": 1,
+   "q": "Apakah masdar bagi «كتبَ»?",
+   "o": [
+    "كاتبٌ",
+    "مكتوبٌ",
+    "مكتبٌ",
+    "كتابةٌ"
+   ],
+   "a": 3,
+   "e": "Masdar كتبَ ialah كتابةٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 113,
+   "t": "B4-2.4",
+   "d": 1,
+   "q": "Apakah masdar bagi «ذهبَ»?",
+   "o": [
+    "ذهابٌ",
+    "ذاهبٌ",
+    "مذهوبٌ",
+    "ذهبَ"
+   ],
+   "a": 0,
+   "e": "Masdar ذهبَ ialah ذهابٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 114,
+   "t": "B4-2.4",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\n______ أساسُ النجاحِ.",
+   "o": [
+    "القراءةُ",
+    "القارئُ",
+    "المقروءُ",
+    "قرأَ"
+   ],
+   "a": 0,
+   "e": "Masdar boleh menjadi mubtada': القراءةُ أساسُ النجاحِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 115,
+   "t": "B4-2.4",
+   "d": 2,
+   "q": "Apakah masdar bagi «دخلَ»?",
+   "o": [
+    "داخلٌ",
+    "دخولٌ",
+    "مدخولٌ",
+    "مدخلٌ"
+   ],
+   "a": 1,
+   "e": "Masdar دخلَ ialah دخولٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 116,
+   "t": "B4-2.4",
+   "d": 2,
+   "q": "Apakah masdar bagi «خرجَ»?",
+   "o": [
+    "خارجٌ",
+    "مخروجٌ",
+    "مخرجٌ",
+    "خروجٌ"
+   ],
+   "a": 3,
+   "e": "Masdar خرجَ ialah خروجٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 117,
+   "t": "B4-2.4",
+   "d": 2,
+   "q": "Apakah masdar bagi «جلسَ»?",
+   "o": [
+    "جالسٌ",
+    "مجلوسٌ",
+    "جلوسٌ",
+    "مجلسٌ"
+   ],
+   "a": 2,
+   "e": "Masdar جلسَ ialah جلوسٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 118,
+   "t": "B4-2.4",
+   "d": 3,
+   "q": "Apakah masdar bagi «سألَ»?",
+   "o": [
+    "سائلٌ",
+    "مسؤولٌ",
+    "سؤالٌ",
+    "سألَ"
+   ],
+   "a": 2,
+   "e": "Masdar سألَ ialah سؤالٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 119,
+   "t": "B4-2.4",
+   "d": 3,
+   "q": "Masdar fi'il thulathi mujarrad bersifat ...",
+   "o": [
+    "sima'i (tiada satu wazan tetap)",
+    "qiyasi (satu wazan tetap)",
+    "sentiasa berwazan فاعل",
+    "sentiasa berwazan مفعول"
+   ],
+   "a": 0,
+   "e": "Wazan masdar thulathi mujarrad berbeza-beza dan perlu dihafal.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 120,
+   "t": "B4-2.5",
+   "d": 1,
+   "q": "Apakah fi'il amr bagi «يكتبُ»?",
+   "o": [
+    "يكتبُ",
+    "كاتبٌ",
+    "اكتبْ",
+    "مكتوبٌ"
+   ],
+   "a": 2,
+   "e": "Fi'il amr: اكتبْ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 121,
+   "t": "B4-2.5",
+   "d": 1,
+   "q": "Apakah wazan fi'il «أكرمَ»?",
+   "o": [
+    "فاعلَ",
+    "أفعلَ",
+    "فعّلَ",
+    "استفعلَ"
+   ],
+   "a": 1,
+   "e": "أكرمَ berwazan أفعلَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 122,
+   "t": "B4-2.5",
+   "d": 1,
+   "q": "Apakah wazan fi'il «ساعدَ»?",
+   "o": [
+    "أفعلَ",
+    "فعّلَ",
+    "استفعلَ",
+    "فاعلَ"
+   ],
+   "a": 3,
+   "e": "ساعدَ berwazan فاعلَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 123,
+   "t": "B4-2.5",
+   "d": 2,
+   "q": "Apakah wazan fi'il «علّمَ»?",
+   "o": [
+    "أفعلَ",
+    "فاعلَ",
+    "فعّلَ",
+    "استفعلَ"
+   ],
+   "a": 2,
+   "e": "علّمَ berwazan فعّلَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 124,
+   "t": "B4-2.5",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nيا ولدُ، ______ الدرسَ!",
+   "o": [
+    "يكتبُ",
+    "اكتبْ",
+    "كتبَ",
+    "تكتبُ"
+   ],
+   "a": 1,
+   "e": "Perintah kepada seorang lelaki: اكتبْ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 125,
+   "t": "B4-2.5",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nيا طلابُ، ______ الواجبَ!",
+   "o": [
+    "اكتبوا",
+    "اكتبْ",
+    "اكتبي",
+    "يكتبونَ"
+   ],
+   "a": 0,
+   "e": "Perintah kepada ramai lelaki: اكتبوا.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 126,
+   "t": "B4-2.5",
+   "d": 3,
+   "q": "Apakah wazan fi'il «استخرجَ»?",
+   "o": [
+    "استفعلَ",
+    "أفعلَ",
+    "فاعلَ",
+    "فعّلَ"
+   ],
+   "a": 0,
+   "e": "استخرجَ berwazan استفعلَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 127,
+   "t": "B4-2.5",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nيا فاطمةُ، ______ الدرسَ.",
+   "o": [
+    "اكتبي",
+    "اكتبْ",
+    "اكتبوا",
+    "اكتبا"
+   ],
+   "a": 0,
+   "e": "Perintah kepada seorang perempuan: اكتبي.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 128,
+   "t": "B4-3.1",
+   "d": 1,
+   "q": "Apakah maksud «يتيمٌ»?",
+   "o": [
+    "sukarelawan",
+    "anak yatim",
+    "pesakit",
+    "pelajar"
+   ],
+   "a": 1,
+   "e": "يتيمٌ bermaksud anak yatim.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 129,
+   "t": "B4-3.1",
+   "d": 1,
+   "q": "Apakah maksud «دارُ الأيتامِ»?",
+   "o": [
+    "rumah sakit",
+    "sekolah",
+    "masjid",
+    "rumah anak yatim"
+   ],
+   "a": 3,
+   "e": "دارُ الأيتامِ ialah rumah anak yatim.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 130,
+   "t": "B4-3.1",
+   "d": 1,
+   "q": "Apakah maksud «متطوعٌ»?",
+   "o": [
+    "anak yatim",
+    "guru",
+    "sukarelawan",
+    "doktor"
+   ],
+   "a": 2,
+   "e": "متطوعٌ ialah sukarelawan.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 131,
+   "t": "B4-3.1",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nيوزّعُ المتطوعونَ الطعامَ على ______.",
+   "o": [
+    "المحتاجونَ",
+    "المحتاجُ",
+    "المحتاجانِ",
+    "المحتاجينَ"
+   ],
+   "a": 3,
+   "e": "Selepas على isim majrur; jamak mudhakkar salim majrur dengan ya': المحتاجينَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 132,
+   "t": "B4-3.1",
+   "d": 2,
+   "q": "Apakah maksud «ينفقُ»?",
+   "o": [
+    "membelanjakan",
+    "mengagihkan",
+    "menolong",
+    "membaca"
+   ],
+   "a": 0,
+   "e": "ينفقُ المالَ bermaksud membelanjakan wang.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 133,
+   "t": "B4-3.1",
+   "d": 2,
+   "q": "Apakah maksud «الجمعيةُ الخيريةُ»?",
+   "o": [
+    "persatuan kebajikan",
+    "persatuan sukan",
+    "kelab komputer",
+    "jawatankuasa sekolah"
+   ],
+   "a": 0,
+   "e": "الجمعيةُ الخيريةُ ialah persatuan kebajikan.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 134,
+   "t": "B4-3.1",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nساعدتِ ______ الخيريةُ الأسرَ الفقيرةَ.",
+   "o": [
+    "الجمعيةُ",
+    "الجمعيةَ",
+    "الجمعيةِ",
+    "جمعيةٌ"
+   ],
+   "a": 0,
+   "e": "Fa'il marfu' dan na't الخيريةُ mengikutnya: الجمعيةُ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 135,
+   "t": "B4-3.1",
+   "d": 3,
+   "q": "Apakah maksud «الرحمةُ»?",
+   "o": [
+    "kebencian",
+    "kemiskinan",
+    "kerja sukarela",
+    "belas kasihan"
+   ],
+   "a": 3,
+   "e": "الرحمةُ bermaksud belas kasihan.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 136,
+   "t": "B4-3.2",
+   "d": 1,
+   "q": "Apakah maksud «الخضرواتُ»?",
+   "o": [
+    "buah-buahan",
+    "daging",
+    "susu",
+    "sayur-sayuran"
+   ],
+   "a": 3,
+   "e": "الخضرواتُ ialah sayur-sayuran.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 137,
+   "t": "B4-3.2",
+   "d": 1,
+   "q": "Apakah maksud «الفواكهُ»?",
+   "o": [
+    "sayur-sayuran",
+    "buah-buahan",
+    "ikan",
+    "telur"
+   ],
+   "a": 1,
+   "e": "الفواكهُ ialah buah-buahan.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 138,
+   "t": "B4-3.2",
+   "d": 1,
+   "q": "Apakah maksud «الحليبُ»?",
+   "o": [
+    "telur",
+    "susu",
+    "ikan",
+    "roti"
+   ],
+   "a": 1,
+   "e": "الحليبُ ialah susu.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 139,
+   "t": "B4-3.2",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nنأكلُ ______ لأنها غنيةٌ بالفيتاميناتِ.",
+   "o": [
+    "الخضرواتِ",
+    "الأحذيةَ",
+    "الكتبَ",
+    "السياراتِ"
+   ],
+   "a": 0,
+   "e": "Sayur-sayuran kaya dengan vitamin.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 140,
+   "t": "B4-3.2",
+   "d": 2,
+   "q": "Apakah maksud «السمنةُ»?",
+   "o": [
+    "kelaparan",
+    "kecergasan",
+    "obesiti",
+    "penyakit"
+   ],
+   "a": 2,
+   "e": "السمنةُ ialah obesiti.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 141,
+   "t": "B4-3.2",
+   "d": 2,
+   "q": "Apakah maksud «الوقايةُ خيرٌ من العلاجِ»?",
+   "o": [
+    "mengubati lebih baik daripada mencegah",
+    "doktor lebih baik daripada ubat",
+    "mencegah lebih baik daripada mengubati",
+    "makan lebih baik daripada tidur"
+   ],
+   "a": 2,
+   "e": "Peribahasa kesihatan: pencegahan lebih baik daripada rawatan.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 142,
+   "t": "B4-3.2",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nممارسةُ ______ مفيدةٌ للصحةِ.",
+   "o": [
+    "الكسلِ",
+    "السمنةِ",
+    "الجوعِ",
+    "الرياضةِ"
+   ],
+   "a": 3,
+   "e": "Bersukan bermanfaat untuk kesihatan.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 143,
+   "t": "B4-3.2",
+   "d": 3,
+   "q": "Apakah maksud «اللياقةُ البدنيةُ»?",
+   "o": [
+    "pemakanan seimbang",
+    "penyakit kronik",
+    "rawatan hospital",
+    "kecergasan fizikal"
+   ],
+   "a": 3,
+   "e": "اللياقةُ البدنيةُ ialah kecergasan fizikal.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 144,
+   "t": "B4-3.3",
+   "d": 1,
+   "q": "Apakah maksud «المديرُ»?",
+   "o": [
+    "guru",
+    "pelajar",
+    "pengetua",
+    "pengawas"
+   ],
+   "a": 2,
+   "e": "المديرُ ialah pengetua atau pengarah.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 145,
+   "t": "B4-3.3",
+   "d": 1,
+   "q": "Apakah maksud «القاعةُ»?",
+   "o": [
+    "kantin",
+    "makmal",
+    "dewan",
+    "padang"
+   ],
+   "a": 2,
+   "e": "القاعةُ ialah dewan atau dewan besar.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 146,
+   "t": "B4-3.3",
+   "d": 1,
+   "q": "Apakah maksud «الفصلُ» dalam konteks sekolah?",
+   "o": [
+    "perpustakaan",
+    "pejabat",
+    "kelas",
+    "asrama"
+   ],
+   "a": 2,
+   "e": "الفصلُ ialah bilik darjah atau kelas.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 147,
+   "t": "B4-3.3",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nيشرحُ ______ الدرسَ للطلابِ.",
+   "o": [
+    "المعلمُ",
+    "المعلمَ",
+    "المعلمِ",
+    "معلمٌ"
+   ],
+   "a": 0,
+   "e": "Fa'il marfu': المعلمُ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 148,
+   "t": "B4-3.3",
+   "d": 2,
+   "q": "Apakah maksud «المسابقةُ»?",
+   "o": [
+    "peperiksaan",
+    "pertandingan",
+    "hadiah",
+    "kelab"
+   ],
+   "a": 1,
+   "e": "المسابقةُ ialah pertandingan.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 149,
+   "t": "B4-3.3",
+   "d": 2,
+   "q": "Apakah maksud «الأنشطةُ اللاصفيةُ»?",
+   "o": [
+    "mata pelajaran teras",
+    "peperiksaan akhir",
+    "kerja rumah",
+    "aktiviti kokurikulum"
+   ],
+   "a": 3,
+   "e": "الأنشطةُ اللاصفيةُ ialah aktiviti kokurikulum.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 150,
+   "t": "B4-3.3",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nيشتركُ الطلابُ في ______ اللاصفيةِ.",
+   "o": [
+    "الأنشطةُ",
+    "الأنشطةِ",
+    "نشاطٌ",
+    "الناشطِ"
+   ],
+   "a": 1,
+   "e": "Selepas في isim majrur; jamak benda tidak berakal, na't mufrad muannath: الأنشطةِ اللاصفيةِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 151,
+   "t": "B4-3.3",
+   "d": 3,
+   "q": "Apakah maksud «الجائزةُ»?",
+   "o": [
+    "pertandingan",
+    "peperiksaan",
+    "hadiah",
+    "pengetua"
+   ],
+   "a": 2,
+   "e": "الجائزةُ ialah hadiah.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 152,
+   "t": "B4-3.4",
+   "d": 1,
+   "q": "Apakah maksud «الحاسوبُ»?",
+   "o": [
+    "komputer",
+    "telefon",
+    "televisyen",
+    "kamera"
+   ],
+   "a": 0,
+   "e": "الحاسوبُ ialah komputer.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 153,
+   "t": "B4-3.4",
+   "d": 1,
+   "q": "Apakah maksud «الهاتفُ الذكيُّ»?",
+   "o": [
+    "televisyen pintar",
+    "jam tangan",
+    "telefon pintar",
+    "komputer riba"
+   ],
+   "a": 2,
+   "e": "الهاتفُ الذكيُّ ialah telefon pintar.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 154,
+   "t": "B4-3.4",
+   "d": 1,
+   "q": "Apakah maksud «التطبيقُ»?",
+   "o": [
+    "rangkaian",
+    "laman web",
+    "aplikasi",
+    "mesej"
+   ],
+   "a": 2,
+   "e": "التطبيقُ ialah aplikasi.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 155,
+   "t": "B4-3.4",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nنبحثُ عن المعلوماتِ في ______ الإلكترونيِّ.",
+   "o": [
+    "الموقعُ",
+    "الموقعِ",
+    "موقعٌ",
+    "المواقعُ"
+   ],
+   "a": 1,
+   "e": "Selepas في isim majrur, na't mengikut: الموقعِ الإلكترونيِّ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 156,
+   "t": "B4-3.4",
+   "d": 2,
+   "q": "Apakah maksud «تحميلٌ»?",
+   "o": [
+    "muat naik",
+    "muat turun",
+    "padam",
+    "simpan"
+   ],
+   "a": 1,
+   "e": "تحميلٌ bermaksud memuat turun.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 157,
+   "t": "B4-3.4",
+   "d": 2,
+   "q": "Apakah maksud «الجرائمُ الإلكترونيةُ»?",
+   "o": [
+    "permainan dalam talian",
+    "iklan",
+    "jenayah siber",
+    "pembelajaran maya"
+   ],
+   "a": 2,
+   "e": "الجرائمُ الإلكترونيةُ ialah jenayah siber.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 158,
+   "t": "B4-3.4",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nتتواصلُ الأسرُ عبرَ ______ التواصلِ الاجتماعيِّ.",
+   "o": [
+    "وسائلُ",
+    "وسيلةٌ",
+    "وسائلِ",
+    "الوسائلُ"
+   ],
+   "a": 2,
+   "e": "Selepas عبرَ isim majrur; mudhaf tiada ال: وسائلِ التواصلِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 159,
+   "t": "B4-3.4",
+   "d": 3,
+   "q": "Apakah maksud «الشبكةُ»?",
+   "o": [
+    "rangkaian",
+    "aplikasi",
+    "komputer",
+    "mesej"
+   ],
+   "a": 0,
+   "e": "الشبكةُ ialah rangkaian.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 160,
+   "t": "B5-1.1",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\n______ الدرسُ على السبورةِ.",
+   "o": [
+    "كَتَبَ",
+    "كاتبٌ",
+    "كتابةٌ",
+    "كُتِبَ"
+   ],
+   "a": 3,
+   "e": "Fi'il mabni lil-majhul: كُتِبَ. الدرسُ ialah naib fa'il marfu'.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 161,
+   "t": "B5-1.1",
+   "d": 1,
+   "q": "Dalam «فُتِحَ البابُ», naib fa'il ialah ...",
+   "o": [
+    "فُتِحَ",
+    "tiada",
+    "البابُ",
+    "الفاتحُ"
+   ],
+   "a": 2,
+   "e": "Maf'ul bih naik menjadi naib fa'il apabila fa'il dibuang: البابُ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 162,
+   "t": "B5-1.1",
+   "d": 1,
+   "q": "Fi'il mabni lil-majhul tidak menyebut ...",
+   "o": [
+    "maf'ul bih",
+    "pelaku (fa'il)",
+    "zarf",
+    "hal"
+   ],
+   "a": 1,
+   "e": "Pelaku dibuang, maka maf'ul bih menjadi naib fa'il.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 163,
+   "t": "B5-1.1",
+   "d": 2,
+   "q": "Apakah mudhari' mabni lil-majhul bagi «يكتبُ»?",
+   "o": [
+    "يَكتُبُ",
+    "كُتِبَ",
+    "يُكتِبُ",
+    "يُكتَبُ"
+   ],
+   "a": 3,
+   "e": "Mudhari' majhul: dhammah pada huruf mudhara'ah dan fathah sebelum akhir: يُكتَبُ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 164,
+   "t": "B5-1.1",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\n______ الطلابُ إلى الاجتماعِ.",
+   "o": [
+    "دُعُوا",
+    "دُعِيَ",
+    "دُعِيَتْ",
+    "دَعا"
+   ],
+   "a": 1,
+   "e": "Fi'il majhul mufrad kerana naib fa'il isim zahir: دُعِيَ الطلابُ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 165,
+   "t": "B5-1.1",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\n______ الطالبةُ إلى المكتبةِ.",
+   "o": [
+    "دُعِيَ",
+    "دَعا",
+    "دُعِيَتِ",
+    "دُعُوا"
+   ],
+   "a": 2,
+   "e": "Naib fa'il muannath hakiki: fi'il perlu ta' ta'nith: دُعِيَتِ الطالبةُ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 166,
+   "t": "B5-1.1",
+   "d": 3,
+   "q": "Dalam «فُتِحَ», huruf sebelum akhir berbaris ...",
+   "o": [
+    "kasrah",
+    "fathah",
+    "dhammah",
+    "sukun"
+   ],
+   "a": 0,
+   "e": "Majhul lampau: dhammah pada huruf pertama dan kasrah sebelum akhir: فُتِحَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 167,
+   "t": "B5-1.1",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nيُفتَحُ ______ في الصباحِ.",
+   "o": [
+    "البابُ",
+    "البابَ",
+    "البابِ",
+    "فاتحٌ"
+   ],
+   "a": 0,
+   "e": "Naib fa'il marfu': البابُ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 168,
+   "t": "B5-1.2",
+   "d": 1,
+   "q": "Pilih isim yang betul selepas «لا النافية للجنس».\nلا ______ في الفصلِ.",
+   "o": [
+    "طالبٌ",
+    "طالبِ",
+    "طالبَ",
+    "طالباً"
+   ],
+   "a": 2,
+   "e": "Isim la nafiyah lil-jins mansub tanpa tanwin: لا طالبَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 169,
+   "t": "B5-1.2",
+   "d": 1,
+   "q": "Isim «لا النافية للجنس» ialah ...",
+   "o": [
+    "marfu'",
+    "majrur",
+    "majzum",
+    "mansub tanpa tanwin"
+   ],
+   "a": 3,
+   "e": "Contoh: لا شكَّ، لا طالبَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 170,
+   "t": "B5-1.2",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nلا إلهَ ______ اللهُ.",
+   "o": [
+    "إلى",
+    "على",
+    "عن",
+    "إلا"
+   ],
+   "a": 3,
+   "e": "Kalimah tauhid menggunakan إلا untuk pengecualian.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 171,
+   "t": "B5-1.2",
+   "d": 2,
+   "q": "Pilih isim yang betul selepas «لا النافية للجنس».\nلا ______ في ذلك.",
+   "o": [
+    "شكٌّ",
+    "شكَّ",
+    "شكٍّ",
+    "شكاً"
+   ],
+   "a": 1,
+   "e": "Isim la nafiyah lil-jins mansub tanpa tanwin: لا شكَّ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 172,
+   "t": "B5-1.2",
+   "d": 2,
+   "q": "Dalam «لا طالبَ في الفصلِ», khabar ialah ...",
+   "o": [
+    "في الفصلِ",
+    "طالبَ",
+    "لا",
+    "الفصلِ sahaja"
+   ],
+   "a": 0,
+   "e": "Khabar la ialah shibh jumlah في الفصلِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 173,
+   "t": "B5-1.2",
+   "d": 2,
+   "q": "Apakah maksud «لا شكَّ»?",
+   "o": [
+    "ada keraguan",
+    "tiada keraguan",
+    "mungkin",
+    "jangan ragu"
+   ],
+   "a": 1,
+   "e": "Menafikan jenis keraguan sepenuhnya.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 174,
+   "t": "B5-1.2",
+   "d": 3,
+   "q": "Pilih isim muthanna yang betul selepas «لا النافية للجنس».\nلا ______ في الفصلِ.",
+   "o": [
+    "طالبانِ",
+    "طالبَيْنِ",
+    "طالبٌ",
+    "طالبتانِ"
+   ],
+   "a": 1,
+   "e": "Muthanna selepas la nafiyah lil-jins dibaca dengan ya': لا طالبَيْنِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 175,
+   "t": "B5-1.2",
+   "d": 3,
+   "q": "Pilih isim yang betul untuk mudhaf selepas «لا النافية للجنس».\nلا ______ علمٍ في الفصلِ.",
+   "o": [
+    "طالبُ",
+    "طالبَ",
+    "طالبِ",
+    "الطالبَ"
+   ],
+   "a": 1,
+   "e": "Mudhaf selepas la mansub dan tiada ال: لا طالبَ علمٍ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 176,
+   "t": "B5-1.3",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nحضرَ الطلابُ إلا ______.",
+   "o": [
+    "زيدٌ",
+    "زيدٍ",
+    "زيداً",
+    "زيدانِ"
+   ],
+   "a": 2,
+   "e": "Ayat positif lengkap: mustathna mansub: زيداً.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 177,
+   "t": "B5-1.3",
+   "d": 1,
+   "q": "Dalam ayat positif lengkap, mustathna selepas «إلا» ialah ...",
+   "o": [
+    "marfu'",
+    "mansub",
+    "majrur",
+    "majzum"
+   ],
+   "a": 1,
+   "e": "Mustathna dalam ayat positif lengkap sentiasa mansub.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 178,
+   "t": "B5-1.3",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nنجحَ الطالباتُ إلا ______.",
+   "o": [
+    "فاطمةُ",
+    "فاطمةِ",
+    "فاطمةَ",
+    "فاطمتانِ"
+   ],
+   "a": 2,
+   "e": "Mustathna mansub: فاطمةَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 179,
+   "t": "B5-1.3",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nقرأتُ الكتبَ إلا ______.",
+   "o": [
+    "كتابٌ",
+    "كتابٍ",
+    "كتاباً",
+    "الكتابُ"
+   ],
+   "a": 2,
+   "e": "Ayat positif lengkap: mustathna mansub: كتاباً.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 180,
+   "t": "B5-1.3",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nما حضرَ إلا ______.",
+   "o": [
+    "زيدٌ",
+    "زيداً",
+    "زيدٍ",
+    "زيدانِ"
+   ],
+   "a": 0,
+   "e": "Ayat nafi tidak lengkap: mustathna mengikut kedudukan dalam ayat; di sini fa'il marfu': زيدٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 181,
+   "t": "B5-1.3",
+   "d": 2,
+   "q": "Dalam «ما جاءَ إلا زيدٌ», زيدٌ marfu' kerana ...",
+   "o": [
+    "maf'ul bih",
+    "khabar",
+    "fa'il",
+    "mudhaf ilaih"
+   ],
+   "a": 2,
+   "e": "Ayat nafi tidak lengkap tanpa mustathna minhu: زيدٌ ialah fa'il.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 182,
+   "t": "B5-1.3",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nما رأيتُ إلا ______.",
+   "o": [
+    "زيدٌ",
+    "زيدٍ",
+    "زيدانِ",
+    "زيداً"
+   ],
+   "a": 3,
+   "e": "Ayat nafi tidak lengkap: زيداً ialah maf'ul bih mansub.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 183,
+   "t": "B5-1.3",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nما مررتُ إلا ______.",
+   "o": [
+    "بزيدٌ",
+    "بزيدٍ",
+    "بزيداً",
+    "بزيدانِ"
+   ],
+   "a": 1,
+   "e": "Ayat nafi tidak lengkap: perlu jar dengan harf jar: بزيدٍ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 184,
+   "t": "B5-1.4",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nجاءَ ______ إلى البيتِ.",
+   "o": [
+    "أبوكَ",
+    "أباكَ",
+    "أبيكَ",
+    "أبكَ"
+   ],
+   "a": 0,
+   "e": "Asma' khamsah dirafa'kan dengan wau: أبوكَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 185,
+   "t": "B5-1.4",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nرأيتُ ______ في المسجدِ.",
+   "o": [
+    "أبوكَ",
+    "أباكَ",
+    "أبيكَ",
+    "أبكَ"
+   ],
+   "a": 1,
+   "e": "Asma' khamsah dinasabkan dengan alif: أباكَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 186,
+   "t": "B5-1.4",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nسلّمتُ على ______.",
+   "o": [
+    "أبوكَ",
+    "أباكَ",
+    "أبكَ",
+    "أبيكَ"
+   ],
+   "a": 3,
+   "e": "Asma' khamsah dijarkan dengan ya': أبيكَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 187,
+   "t": "B5-1.4",
+   "d": 2,
+   "q": "Asma' khamsah dirafa'kan dengan ...",
+   "o": [
+    "alif",
+    "wau",
+    "ya'",
+    "dhammah"
+   ],
+   "a": 1,
+   "e": "Rafa' dengan wau, nasab dengan alif, jar dengan ya'.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 188,
+   "t": "B5-1.4",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nهذا ______ علمٍ.",
+   "o": [
+    "ذا",
+    "ذو",
+    "ذي",
+    "ذاتُ"
+   ],
+   "a": 1,
+   "e": "Khabar marfu' dengan wau: ذو علمٍ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 189,
+   "t": "B5-1.4",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nرأيتُ ______ علمٍ في المكتبةِ.",
+   "o": [
+    "ذو",
+    "ذي",
+    "ذا",
+    "ذاتُ"
+   ],
+   "a": 2,
+   "e": "Maf'ul bih mansub dengan alif: ذا علمٍ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 190,
+   "t": "B5-1.4",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nمررتُ بـ______ الطالبِ.",
+   "o": [
+    "أخو",
+    "أخي",
+    "أخا",
+    "أخٌ"
+   ],
+   "a": 1,
+   "e": "Majrur dengan ya' dan mudhaf: أخي الطالبِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 191,
+   "t": "B5-1.4",
+   "d": 3,
+   "q": "Antara berikut, yang bukan daripada asma' khamsah ialah ...",
+   "o": [
+    "أخٌ",
+    "أبٌ",
+    "ذو",
+    "كتابٌ"
+   ],
+   "a": 3,
+   "e": "Asma' khamsah: أبٌ، أخٌ، حمٌ، فو، ذو.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 192,
+   "t": "B5-1.5",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nجاءَ الأستاذُ ______.",
+   "o": [
+    "محمداً",
+    "محمدٌ",
+    "محمدٍ",
+    "محمدانِ"
+   ],
+   "a": 1,
+   "e": "Badal mengikut mubdal minhu: marfu': محمدٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 193,
+   "t": "B5-1.5",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nرأيتُ الأستاذَ ______.",
+   "o": [
+    "محمداً",
+    "محمدٌ",
+    "محمدٍ",
+    "محمدانِ"
+   ],
+   "a": 0,
+   "e": "Badal mengikut mubdal minhu: mansub: محمداً.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 194,
+   "t": "B5-1.5",
+   "d": 1,
+   "q": "Badal mengikut mubdal minhu dalam ...",
+   "o": [
+    "i'rab",
+    "jantina sahaja",
+    "bilangan sahaja",
+    "tiada apa-apa"
+   ],
+   "a": 0,
+   "e": "Badal sentiasa mengikut mubdal minhu dalam i'rab.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 195,
+   "t": "B5-1.5",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nسلّمتُ على أخي ______.",
+   "o": [
+    "خالدٌ",
+    "خالداً",
+    "خالدانِ",
+    "خالدٍ"
+   ],
+   "a": 3,
+   "e": "Mubdal minhu majrur oleh على, badal juga majrur: خالدٍ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 196,
+   "t": "B5-1.5",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nقابلتُ المديرَ ______ في المكتبِ.",
+   "o": [
+    "أحمدَ",
+    "أحمدُ",
+    "أحمدِ",
+    "أحمدانِ"
+   ],
+   "a": 0,
+   "e": "Mubdal minhu mansub, badal mansub: أحمدَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 197,
+   "t": "B5-1.5",
+   "d": 2,
+   "q": "Badal ialah ...",
+   "o": [
+    "isim",
+    "sifat",
+    "harf",
+    "fi'il"
+   ],
+   "a": 0,
+   "e": "Badal ialah isim, manakala sifat dipanggil na't.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 198,
+   "t": "B5-1.5",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nجاءتِ الطالبةُ ______.",
+   "o": [
+    "فاطمةَ",
+    "فاطمةُ",
+    "فاطمةِ",
+    "فاطمتانِ"
+   ],
+   "a": 1,
+   "e": "Badal marfu' mengikut mubdal minhu: فاطمةُ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 199,
+   "t": "B5-1.5",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nأحبُّ الأستاذَ ______.",
+   "o": [
+    "حسناً",
+    "حسنٌ",
+    "حسنٍ",
+    "حسنانِ"
+   ],
+   "a": 0,
+   "e": "Maf'ul bih mansub, badal mansub: حسناً.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 200,
+   "t": "B5-1.6",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nجاءَ الطالبُ ______.",
+   "o": [
+    "مسرعٌ",
+    "مسرعِ",
+    "مسرعونَ",
+    "مسرعاً"
+   ],
+   "a": 3,
+   "e": "Hal mufrad nakirah mansub: مسرعاً.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 201,
+   "t": "B5-1.6",
+   "d": 1,
+   "q": "Hal ialah isim yang ...",
+   "o": [
+    "mengecualikan",
+    "menafikan jenis",
+    "menerangkan keadaan semasa perbuatan",
+    "memanggil"
+   ],
+   "a": 2,
+   "e": "Hal menerangkan keadaan fa'il atau maf'ul semasa perbuatan berlaku.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 202,
+   "t": "B5-1.6",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nدخلَ المعلمُ الفصلَ ______.",
+   "o": [
+    "ضاحكاً",
+    "ضاحكٌ",
+    "ضاحكِ",
+    "ضاحكونَ"
+   ],
+   "a": 0,
+   "e": "Hal mansub: ضاحكاً.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 203,
+   "t": "B5-1.6",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nوصلتِ الطالبةُ ______.",
+   "o": [
+    "مسرعاً",
+    "مسرعةٌ",
+    "مسرعةً",
+    "مسرعاتٌ"
+   ],
+   "a": 2,
+   "e": "Hal sepadan dengan sahibul hal: muannath mansub: مسرعةً.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 204,
+   "t": "B5-1.6",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nرجعَ الطلابُ ______.",
+   "o": [
+    "فرحينَ",
+    "فرحونَ",
+    "فرحٌ",
+    "فرحةُ"
+   ],
+   "a": 0,
+   "e": "Hal sepadan jamak mudhakkar mansub dengan ya': فرحينَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 205,
+   "t": "B5-1.6",
+   "d": 2,
+   "q": "Apakah i'rab hal mufrad?",
+   "o": [
+    "mansub",
+    "marfu'",
+    "majrur",
+    "majzum"
+   ],
+   "a": 0,
+   "e": "Hal sentiasa mansub.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 206,
+   "t": "B5-1.6",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nرأيتُ الأولادَ ______.",
+   "o": [
+    "لاعبينَ",
+    "لاعبونَ",
+    "لاعباً",
+    "لاعبٌ"
+   ],
+   "a": 0,
+   "e": "Hal jamak mudhakkar mansub: لاعبينَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 207,
+   "t": "B5-1.6",
+   "d": 3,
+   "q": "Pilih ayat yang mengandungi hal mufrad.",
+   "o": [
+    "جاءَ المعلمُ المبتسمُ",
+    "جاءَ المعلمُ مبتسماً",
+    "جاءَ المعلمُ إلى الفصلِ",
+    "المعلمُ مبتسمٌ"
+   ],
+   "a": 1,
+   "e": "مبتسماً ialah hal mansub nakirah. Pilihan lain ialah na't, jar dan majrur, dan khabar.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 208,
+   "t": "B5-1.7",
+   "d": 1,
+   "q": "Apakah maksud «ما أجملَ السماءَ!»?",
+   "o": [
+    "Adakah langit itu indah?",
+    "Alangkah indahnya langit!",
+    "Langit tidak indah.",
+    "Pergilah ke langit."
+   ],
+   "a": 1,
+   "e": "Ini ialah ungkapan ta'ajjub: alangkah indahnya.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 209,
+   "t": "B5-1.7",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nما ______ الطقسَ!",
+   "o": [
+    "جميلٌ",
+    "أجملَ",
+    "أجملُ",
+    "الأجملُ"
+   ],
+   "a": 1,
+   "e": "Sighah ta'ajjub ما أفعلَ: ما أجملَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 210,
+   "t": "B5-1.7",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nأجمِلْ ______ الحديقةِ!",
+   "o": [
+    "في",
+    "بـ",
+    "على",
+    "من"
+   ],
+   "a": 1,
+   "e": "Sighah kedua: أفعِلْ بـ: أجمِلْ بالحديقةِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 211,
+   "t": "B5-1.7",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nما أحسنَ ______!",
+   "o": [
+    "الأخلاقُ",
+    "الأخلاقِ",
+    "الأخلاقَ",
+    "أخلاقٌ"
+   ],
+   "a": 2,
+   "e": "Selepas ما أفعلَ isim yang dikagumi mansub: الأخلاقَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 212,
+   "t": "B5-1.7",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nما أكرمَ ______!",
+   "o": [
+    "المعلمَ",
+    "المعلمُ",
+    "المعلمِ",
+    "معلمٌ"
+   ],
+   "a": 0,
+   "e": "Isim selepas ما أفعلَ mansub: المعلمَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 213,
+   "t": "B5-1.7",
+   "d": 2,
+   "q": "Selepas «ما أفعلَ», isim yang dikagumi ialah ...",
+   "o": [
+    "marfu'",
+    "mansub",
+    "majrur",
+    "majzum"
+   ],
+   "a": 1,
+   "e": "Isim yang dikagumi mansub sebagai maf'ul bih.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 214,
+   "t": "B5-1.7",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nما أجملَ ______ في الربيعِ!",
+   "o": [
+    "الزهورُ",
+    "الزهورِ",
+    "زهورٌ",
+    "الزهورَ"
+   ],
+   "a": 3,
+   "e": "Isim yang dikagumi mansub: الزهورَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 215,
+   "t": "B5-1.7",
+   "d": 3,
+   "q": "Ta'ajjub qiyasi dibina daripada fi'il yang ...",
+   "o": [
+    "mazid sahaja",
+    "jamid",
+    "thulathi, mutasarrif, muthbat dan boleh dibandingkan",
+    "manfi"
+   ],
+   "a": 2,
+   "e": "Syarat fi'il ta'ajjub qiyasi ialah thulathi, mutasarrif, muthbat dan boleh dibandingkan.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 216,
+   "t": "B5-1.8",
+   "d": 1,
+   "q": "Apakah tanda asal rafa' bagi isim mufrad?",
+   "o": [
+    "fathah",
+    "kasrah",
+    "sukun",
+    "dhammah"
+   ],
+   "a": 3,
+   "e": "Rafa' dengan dhammah, nasab dengan fathah, jar dengan kasrah.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 217,
+   "t": "B5-1.8",
+   "d": 1,
+   "q": "Apakah tanda jar bagi isim mufrad?",
+   "o": [
+    "dhammah",
+    "fathah",
+    "sukun",
+    "kasrah"
+   ],
+   "a": 3,
+   "e": "Jar dengan kasrah.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 218,
+   "t": "B5-1.8",
+   "d": 1,
+   "q": "«المعلمُ» dalam «جاءَ المعلمُ» marfu' dengan ...",
+   "o": [
+    "fathah",
+    "dhammah",
+    "kasrah",
+    "alif"
+   ],
+   "a": 1,
+   "e": "Fa'il marfu' dengan dhammah.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 219,
+   "t": "B5-1.8",
+   "d": 2,
+   "q": "«الطالبانِ» marfu' dengan ...",
+   "o": [
+    "wau",
+    "ya'",
+    "dhammah",
+    "alif"
+   ],
+   "a": 3,
+   "e": "Muthanna rafa' dengan alif.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 220,
+   "t": "B5-1.8",
+   "d": 2,
+   "q": "«المعلمينَ» menjadi nasab atau jar dengan ...",
+   "o": [
+    "ya'",
+    "alif",
+    "wau",
+    "dhammah"
+   ],
+   "a": 0,
+   "e": "Jamak mudhakkar salim nasab dan jar dengan ya'.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 221,
+   "t": "B5-1.8",
+   "d": 2,
+   "q": "«الطالباتُ» marfu' dengan ...",
+   "o": [
+    "wau",
+    "alif",
+    "fathah",
+    "dhammah"
+   ],
+   "a": 3,
+   "e": "Jamak muannath salim rafa' dengan dhammah.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 222,
+   "t": "B5-1.8",
+   "d": 3,
+   "q": "Apakah tanda nasab bagi «الطالباتِ» dalam «رأيتُ الطالباتِ»?",
+   "o": [
+    "fathah",
+    "ya'",
+    "alif",
+    "kasrah"
+   ],
+   "a": 3,
+   "e": "Jamak muannath salim nasab dengan kasrah.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 223,
+   "t": "B5-1.8",
+   "d": 3,
+   "q": "Apakah i'rab «المعلمونَ» dalam «جاءَ المعلمونَ»?",
+   "o": [
+    "mansub dengan alif",
+    "marfu' dengan wau",
+    "majrur dengan ya'",
+    "marfu' dengan dhammah"
+   ],
+   "a": 1,
+   "e": "Jamak mudhakkar salim rafa' dengan wau.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 224,
+   "t": "B5-1.9",
+   "d": 1,
+   "q": "Fi'il mudhari' pada asalnya ...",
+   "o": [
+    "mabni",
+    "mu'rab",
+    "jamid",
+    "majhul"
+   ],
+   "a": 1,
+   "e": "Mudhari' mu'rab kecuali bersambung dengan nun niswah atau nun taukid.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 225,
+   "t": "B5-1.9",
+   "d": 1,
+   "q": "Dalam «النساءُ يكتبْنَ», «يكتبْنَ» ialah mudhari' ...",
+   "o": [
+    "mu'rab marfu'",
+    "mansub",
+    "majzum",
+    "mabni"
+   ],
+   "a": 3,
+   "e": "Bersambung dengan nun niswah, maka mabni atas sukun.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 226,
+   "t": "B5-1.9",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالطلابُ ______ الدرسَ.",
+   "o": [
+    "يكتبونَ",
+    "يكتبوا",
+    "يكتبْ",
+    "يكتبَ"
+   ],
+   "a": 0,
+   "e": "Af'al khamsah rafa' dengan thubut nun: يكتبونَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 227,
+   "t": "B5-1.9",
+   "d": 2,
+   "q": "Af'al khamsah dirafa'kan dengan ...",
+   "o": [
+    "buang nun",
+    "fathah",
+    "thubut nun",
+    "sukun"
+   ],
+   "a": 2,
+   "e": "Rafa' dengan thubut nun; nasab dan jazam dengan buang nun.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 228,
+   "t": "B5-1.9",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالنساءُ ______ في الحديقةِ.",
+   "o": [
+    "يمشونَ",
+    "يمشي",
+    "يمشينَ",
+    "تمشي"
+   ],
+   "a": 2,
+   "e": "Dhamir هنَّ: يمشينَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 229,
+   "t": "B5-1.9",
+   "d": 2,
+   "q": "Mudhari' yang bersambung dengan nun niswah menjadi ...",
+   "o": [
+    "mabni atas fathah",
+    "mu'rab",
+    "mabni atas sukun",
+    "majzum dengan buang nun"
+   ],
+   "a": 2,
+   "e": "Mabni atas sukun.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 230,
+   "t": "B5-1.9",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nلم ______ الطالباتُ.",
+   "o": [
+    "يكتبْنَ",
+    "يكتبوا",
+    "يكتبا",
+    "يكتبْ"
+   ],
+   "a": 0,
+   "e": "Mudhari' dengan nun niswah kekal mabni: لم يكتبْنَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 231,
+   "t": "B5-1.9",
+   "d": 3,
+   "q": "Dalam «لَيَكتُبَنَّ», mudhari' mabni kerana bersambung dengan ...",
+   "o": [
+    "nun niswah",
+    "nun taukid",
+    "alif",
+    "wau"
+   ],
+   "a": 1,
+   "e": "Mudhari' mabni atas fathah apabila bersambung dengan nun taukid.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 232,
+   "t": "B5-1.10",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nعندي ثلاثةُ ______.",
+   "o": [
+    "كتابٌ",
+    "كتباً",
+    "كتابِ",
+    "كتبٍ"
+   ],
+   "a": 3,
+   "e": "Bilangan 3-10: ma'dud jamak majrur: ثلاثةُ كتبٍ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 233,
+   "t": "B5-1.10",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nفي الفصلِ عشرونَ ______.",
+   "o": [
+    "طالباً",
+    "طالبٌ",
+    "طالبٍ",
+    "طلابٍ"
+   ],
+   "a": 0,
+   "e": "Puluhan: ma'dud mufrad mansub: عشرونَ طالباً.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 234,
+   "t": "B5-1.10",
+   "d": 1,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nفي المدرسةِ مئةُ ______.",
+   "o": [
+    "طالباً",
+    "طلابٍ",
+    "طالبٍ",
+    "طالبٌ"
+   ],
+   "a": 2,
+   "e": "Ratus: ma'dud mufrad majrur: مئةُ طالبٍ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 235,
+   "t": "B5-1.10",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nفي الفصلِ ثلاثُ ______.",
+   "o": [
+    "طالباً",
+    "طلابٍ",
+    "طالباتٍ",
+    "طالبةٍ"
+   ],
+   "a": 2,
+   "e": "Ma'dud muannath: bilangan tanpa ta' marbutah dan ma'dud jamak majrur: ثلاثُ طالباتٍ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 236,
+   "t": "B5-1.10",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nاشتريتُ خمسَ ______.",
+   "o": [
+    "مجلةً",
+    "مجلاتٌ",
+    "مجلاتٍ",
+    "مجلاتاً"
+   ],
+   "a": 2,
+   "e": "Bilangan 3-10: ma'dud jamak majrur: خمسَ مجلاتٍ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 237,
+   "t": "B5-1.10",
+   "d": 2,
+   "q": "Pilih ungkapan yang betul untuk 11 pelajar lelaki.\n______ طالباً",
+   "o": [
+    "إحدى عشرةَ",
+    "أحدُ عشرٍ",
+    "أحدَ عشرةَ",
+    "أحدَ عشرَ"
+   ],
+   "a": 3,
+   "e": "11 dengan mudhakkar: أحدَ عشرَ طالباً.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 238,
+   "t": "B5-1.10",
+   "d": 3,
+   "q": "Pilih ungkapan yang betul untuk 12 pelajar perempuan (rafa').\nجاءَتْ ______ طالبةً.",
+   "o": [
+    "اثنا عشرَ",
+    "اثنتا عشرةَ",
+    "اثنتانِ عشرةَ",
+    "ثلاثةَ عشرَ"
+   ],
+   "a": 1,
+   "e": "12 dengan muannath: اثنتا عشرةَ طالبةً.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 239,
+   "t": "B5-1.10",
+   "d": 3,
+   "q": "Bilangan 3 hingga 10 dengan ma'dud ...",
+   "o": [
+    "bertentangan jantina",
+    "sama jantina",
+    "sentiasa muannath",
+    "sentiasa mudhakkar"
+   ],
+   "a": 0,
+   "e": "Contoh: ثلاثةُ طلابٍ (mudhakkar), ثلاثُ طالباتٍ (muannath).",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 240,
+   "t": "B5-1.11",
+   "d": 1,
+   "q": "Apakah maksud «لدى»?",
+   "o": [
+    "di sisi",
+    "sejak",
+    "ketika",
+    "tanpa"
+   ],
+   "a": 0,
+   "e": "لدى bermaksud di sisi atau di sebelah.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 241,
+   "t": "B5-1.11",
+   "d": 1,
+   "q": "Apakah maksud «دون»?",
+   "o": [
+    "ketika",
+    "di sisi",
+    "tanpa",
+    "sejak"
+   ],
+   "a": 2,
+   "e": "دون bermaksud tanpa atau di bawah.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 242,
+   "t": "B5-1.11",
+   "d": 1,
+   "q": "Pilih bentuk yang betul untuk «bukunya» (lelaki), sebagai mubtada'.\nهذا ______.",
+   "o": [
+    "كتابَه",
+    "كتابِه",
+    "كتابانِه",
+    "كتابُه"
+   ],
+   "a": 3,
+   "e": "Mudhaf marfu' dan dhamir muttasil sebagai mudhaf ilaih: هذا كتابُه.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 243,
+   "t": "B5-1.11",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nرأيتُ ______ في المكتبةِ.",
+   "o": [
+    "معلمَها",
+    "معلمُها",
+    "معلمِها",
+    "معلمونَها"
+   ],
+   "a": 0,
+   "e": "Maf'ul bih mansub, mudhaf: معلمَها (guru perempuan itu).",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 244,
+   "t": "B5-1.11",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nذهبتُ إلى ______.",
+   "o": [
+    "مدرستُنا",
+    "مدرستَنا",
+    "مدرستِنا",
+    "المدرسةِنا"
+   ],
+   "a": 2,
+   "e": "Selepas إلى isim majrur dan tiada ال: مدرستِنا.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 245,
+   "t": "B5-1.11",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nلا أخرجُ من البيتِ ______ إذنِ أمي.",
+   "o": [
+    "منذُ",
+    "حيثُ",
+    "دونَ",
+    "عندَ"
+   ],
+   "a": 2,
+   "e": "دونَ bermaksud tanpa.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 246,
+   "t": "B5-1.11",
+   "d": 3,
+   "q": "Pilih zarf yang bermaksud «ketika».\nكتبتُ الرسالةَ ______ سافرتُ إلى الجامعةِ.",
+   "o": [
+    "دونَ",
+    "لدى",
+    "حينَ",
+    "عندَ"
+   ],
+   "a": 2,
+   "e": "حينَ bermaksud ketika.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 247,
+   "t": "B5-1.11",
+   "d": 3,
+   "q": "Dalam «لدى المعلمِ», «المعلمِ» majrur kerana ia ialah ...",
+   "o": [
+    "fa'il",
+    "mudhaf ilaih",
+    "maf'ul bih",
+    "khabar"
+   ],
+   "a": 1,
+   "e": "Isim selepas zarf ialah mudhaf ilaih dan majrur.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 248,
+   "t": "B5-2.1",
+   "d": 1,
+   "q": "Apakah isim fa'il bagi «اجتهدَ»?",
+   "o": [
+    "مُجتهَدٌ",
+    "اجتهادٌ",
+    "مُجتهِدٌ",
+    "جاهدٌ"
+   ],
+   "a": 2,
+   "e": "افتعلَ ← مُفتعِلٌ: مُجتهِدٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 249,
+   "t": "B5-2.1",
+   "d": 1,
+   "q": "Apakah isim fa'il bagi «تعلّمَ»?",
+   "o": [
+    "مُتعلَّمٌ",
+    "تعلُّمٌ",
+    "مُتعلِّمٌ",
+    "عالمٌ"
+   ],
+   "a": 2,
+   "e": "تفعّلَ ← مُتفعِّلٌ: مُتعلِّمٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 250,
+   "t": "B5-2.1",
+   "d": 1,
+   "q": "Apakah isim fa'il bagi «تعاونَ»?",
+   "o": [
+    "مُتعاوَنٌ",
+    "تعاونٌ",
+    "مُتعاوِنٌ",
+    "عاونٌ"
+   ],
+   "a": 2,
+   "e": "تفاعلَ ← مُتفاعِلٌ: مُتعاوِنٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 251,
+   "t": "B5-2.1",
+   "d": 2,
+   "q": "Apakah isim fa'il bagi «استعملَ»?",
+   "o": [
+    "مُستعمَلٌ",
+    "استعمالٌ",
+    "عاملٌ",
+    "مُستعمِلٌ"
+   ],
+   "a": 3,
+   "e": "استفعلَ ← مُستفعِلٌ: مُستعمِلٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 252,
+   "t": "B5-2.1",
+   "d": 2,
+   "q": "Apakah isim fa'il bagi «اشتركَ»?",
+   "o": [
+    "مُشتَرَكٌ",
+    "اشتراكٌ",
+    "مُشتَرِكٌ",
+    "شاركٌ"
+   ],
+   "a": 2,
+   "e": "افتعلَ ← مُفتعِلٌ: مُشتَرِكٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 253,
+   "t": "B5-2.1",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالطالبةُ ______.",
+   "o": [
+    "مجتهدٌ",
+    "مجتهدونَ",
+    "مجتهدةٌ",
+    "مجتهَدةٌ"
+   ],
+   "a": 2,
+   "e": "Mubtada' muannath: khabar muannath مجتهدةٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 254,
+   "t": "B5-2.1",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالمعلمونَ ______ في العملِ.",
+   "o": [
+    "متعاونٌ",
+    "متعاونةٌ",
+    "متعاونونَ",
+    "متعاونانِ"
+   ],
+   "a": 2,
+   "e": "Mubtada' jamak mudhakkar: khabar jamak mudhakkar marfu' dengan wau.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 255,
+   "t": "B5-2.1",
+   "d": 3,
+   "q": "Huruf sebelum akhir isim fa'il fi'il mazid berbaris ...",
+   "o": [
+    "kasrah",
+    "fathah",
+    "dhammah",
+    "sukun"
+   ],
+   "a": 0,
+   "e": "Isim fa'il mazid: kasrah sebelum akhir. Isim maf'ul: fathah.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 256,
+   "t": "B5-2.2",
+   "d": 1,
+   "q": "Apakah isim maf'ul bagi «احترمَ»?",
+   "o": [
+    "مُحترَمٌ",
+    "مُحترِمٌ",
+    "احترامٌ",
+    "محترمةٌ"
+   ],
+   "a": 0,
+   "e": "افتعلَ ← مُفتعَلٌ: مُحترَمٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 257,
+   "t": "B5-2.2",
+   "d": 1,
+   "q": "Apakah isim maf'ul bagi «استخرجَ»?",
+   "o": [
+    "مُستخرِجٌ",
+    "استخراجٌ",
+    "مُستخرَجٌ",
+    "خارجٌ"
+   ],
+   "a": 2,
+   "e": "استفعلَ ← مُستفعَلٌ: مُستخرَجٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 258,
+   "t": "B5-2.2",
+   "d": 1,
+   "q": "Apakah isim maf'ul bagi «أكرمَ»?",
+   "o": [
+    "مُكرِمٌ",
+    "مُكرَمٌ",
+    "إكرامٌ",
+    "كريمٌ"
+   ],
+   "a": 1,
+   "e": "أفعلَ ← مُفعَلٌ: مُكرَمٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 259,
+   "t": "B5-2.2",
+   "d": 2,
+   "q": "Apakah isim maf'ul bagi «علّمَ»?",
+   "o": [
+    "مُعلِّمٌ",
+    "تعليمٌ",
+    "مُعلَّمٌ",
+    "عالمٌ"
+   ],
+   "a": 2,
+   "e": "فعّلَ ← مُفعَّلٌ: مُعلَّمٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 260,
+   "t": "B5-2.2",
+   "d": 2,
+   "q": "Apakah beza «مُحترِمٌ» dan «مُحترَمٌ»?",
+   "o": [
+    "yang pertama yang dikenakan perbuatan, yang kedua pelaku",
+    "yang pertama pelaku, yang kedua yang dikenakan perbuatan",
+    "kedua-duanya masdar",
+    "kedua-duanya sama"
+   ],
+   "a": 1,
+   "e": "Kasrah sebelum akhir untuk isim fa'il, fathah untuk isim maf'ul.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 261,
+   "t": "B5-2.2",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالمعلمُ ______ عندَ الطلابِ.",
+   "o": [
+    "مُحترِمٌ",
+    "احترامٌ",
+    "مُحترَمٌ",
+    "يحترمُ"
+   ],
+   "a": 2,
+   "e": "Guru dihormati: isim maf'ul مُحترَمٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 262,
+   "t": "B5-2.2",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nالذهبُ ______ من المناجمِ.",
+   "o": [
+    "مُستخرِجٌ",
+    "استخراجٌ",
+    "يستخرجُ",
+    "مُستخرَجٌ"
+   ],
+   "a": 3,
+   "e": "Emas yang dikeluarkan: isim maf'ul مُستخرَجٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 263,
+   "t": "B5-2.2",
+   "d": 3,
+   "q": "Apakah muannath «مُحترَمٌ»?",
+   "o": [
+    "مُحترَمةٌ",
+    "مُحترِمةٌ",
+    "محترمونَ",
+    "محترمانِ"
+   ],
+   "a": 0,
+   "e": "Tambah ة: مُحترَمةٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 264,
+   "t": "B5-2.3",
+   "d": 1,
+   "q": "Apakah masdar bagi «أكرمَ»?",
+   "o": [
+    "تكريمٌ",
+    "إكرامٌ",
+    "مكرمٌ",
+    "كرمٌ"
+   ],
+   "a": 1,
+   "e": "أفعلَ ← إفعالٌ: إكرامٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 265,
+   "t": "B5-2.3",
+   "d": 1,
+   "q": "Apakah masdar bagi «علّمَ»?",
+   "o": [
+    "تعليمٌ",
+    "إعلامٌ",
+    "علمٌ",
+    "معلمٌ"
+   ],
+   "a": 0,
+   "e": "فعّلَ ← تفعيلٌ: تعليمٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 266,
+   "t": "B5-2.3",
+   "d": 1,
+   "q": "Apakah masdar bagi «اجتهدَ»?",
+   "o": [
+    "مجتهدٌ",
+    "اجتهادٌ",
+    "جهدٌ",
+    "مجاهدةٌ"
+   ],
+   "a": 1,
+   "e": "افتعلَ ← افتعالٌ: اجتهادٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 267,
+   "t": "B5-2.3",
+   "d": 2,
+   "q": "Apakah masdar bagi «ساعدَ»?",
+   "o": [
+    "إساعادٌ",
+    "تساعدٌ",
+    "ساعدٌ",
+    "مساعدةٌ"
+   ],
+   "a": 3,
+   "e": "فاعلَ ← مفاعلةٌ: مساعدةٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 268,
+   "t": "B5-2.3",
+   "d": 2,
+   "q": "Apakah masdar bagi «تعاونَ»?",
+   "o": [
+    "تعاونٌ",
+    "تعوينٌ",
+    "إعانةٌ",
+    "معاونةٌ"
+   ],
+   "a": 0,
+   "e": "تفاعلَ ← تفاعلٌ: تعاونٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 269,
+   "t": "B5-2.3",
+   "d": 2,
+   "q": "Apakah masdar bagi «استخرجَ»?",
+   "o": [
+    "إخراجٌ",
+    "تخريجٌ",
+    "استخراجٌ",
+    "مخرجٌ"
+   ],
+   "a": 2,
+   "e": "استفعلَ ← استفعالٌ: استخراجٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 270,
+   "t": "B5-2.3",
+   "d": 3,
+   "q": "Apakah masdar bagi «تعلّمَ»?",
+   "o": [
+    "تعليمٌ",
+    "علمٌ",
+    "إعلامٌ",
+    "تعلُّمٌ"
+   ],
+   "a": 3,
+   "e": "تفعّلَ ← تفعُّلٌ: تعلُّمٌ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 271,
+   "t": "B5-2.3",
+   "d": 3,
+   "q": "Masdar fi'il mazid mengikut wazan ...",
+   "o": [
+    "sima'i (tidak tetap)",
+    "qiyasi (tetap)",
+    "sentiasa فاعل",
+    "sentiasa مفعول"
+   ],
+   "a": 1,
+   "e": "Fi'il mazid mempunyai wazan masdar yang tetap.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 272,
+   "t": "B5-2.4",
+   "d": 1,
+   "q": "Apakah wazan fi'il «اجتهدَ»?",
+   "o": [
+    "تفاعلَ",
+    "تفعّلَ",
+    "أفعلَ",
+    "افتعلَ"
+   ],
+   "a": 3,
+   "e": "اجتهدَ berwazan افتعلَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 273,
+   "t": "B5-2.4",
+   "d": 1,
+   "q": "Apakah wazan fi'il «تعاونَ»?",
+   "o": [
+    "افتعلَ",
+    "تفعّلَ",
+    "تفاعلَ",
+    "أفعلَ"
+   ],
+   "a": 2,
+   "e": "تعاونَ berwazan تفاعلَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 274,
+   "t": "B5-2.4",
+   "d": 1,
+   "q": "Apakah wazan fi'il «تعلّمَ»?",
+   "o": [
+    "افتعلَ",
+    "تفاعلَ",
+    "أفعلَ",
+    "تفعّلَ"
+   ],
+   "a": 3,
+   "e": "تعلّمَ berwazan تفعّلَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 275,
+   "t": "B5-2.4",
+   "d": 2,
+   "q": "Apakah mudhari' bagi «تعاونَ»?",
+   "o": [
+    "يعاونُ",
+    "يتعاونُ",
+    "يتعلمُ",
+    "يجتهدُ"
+   ],
+   "a": 1,
+   "e": "Mudhari' تفاعلَ: يتفاعلُ: يتعاونُ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 276,
+   "t": "B5-2.4",
+   "d": 2,
+   "q": "Apakah fi'il amr bagi «اجتهدَ»?",
+   "o": [
+    "يجتهدُ",
+    "اجتهدْ",
+    "مجتهدٌ",
+    "اجتهادٌ"
+   ],
+   "a": 1,
+   "e": "Amr: اجتهدْ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 277,
+   "t": "B5-2.4",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nيا طلابُ، ______ في الدراسةِ!",
+   "o": [
+    "اجتهدْ",
+    "اجتهدوا",
+    "اجتهدي",
+    "يجتهدونَ"
+   ],
+   "a": 1,
+   "e": "Perintah kepada ramai lelaki: اجتهدوا.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 278,
+   "t": "B5-2.4",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nيا فاطمةُ، ______ مع صديقاتِكِ!",
+   "o": [
+    "تعاونْ",
+    "تعاوني",
+    "تعاونوا",
+    "تتعاونُ"
+   ],
+   "a": 1,
+   "e": "Perintah kepada seorang perempuan: تعاوني.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 279,
+   "t": "B5-2.4",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nيا ولدُ، ______ اللغةَ العربيةَ!",
+   "o": [
+    "تعلَّمْ",
+    "تتعلمُ",
+    "تعلموا",
+    "متعلمٌ"
+   ],
+   "a": 0,
+   "e": "Perintah kepada seorang lelaki: تعلَّمْ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 280,
+   "t": "B5-3.1",
+   "d": 1,
+   "q": "Apakah maksud «الفيضانُ»?",
+   "o": [
+    "gempa bumi",
+    "banjir",
+    "kebakaran",
+    "ribut"
+   ],
+   "a": 1,
+   "e": "الفيضانُ ialah banjir.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 281,
+   "t": "B5-3.1",
+   "d": 1,
+   "q": "Apakah maksud «الزلزالُ»?",
+   "o": [
+    "banjir",
+    "tanah runtuh",
+    "tsunami",
+    "gempa bumi"
+   ],
+   "a": 3,
+   "e": "الزلزالُ ialah gempa bumi.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 282,
+   "t": "B5-3.1",
+   "d": 1,
+   "q": "Apakah maksud «الإنقاذُ»?",
+   "o": [
+    "penyelamatan",
+    "bantuan wang",
+    "pendidikan",
+    "penghantaran"
+   ],
+   "a": 0,
+   "e": "الإنقاذُ ialah penyelamatan.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 283,
+   "t": "B5-3.1",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nيساعدُ المتطوعونَ ______.",
+   "o": [
+    "المنكوبونَ",
+    "المنكوبُ",
+    "المنكوبانِ",
+    "المنكوبينَ"
+   ],
+   "a": 3,
+   "e": "Maf'ul bih mansub; jamak mudhakkar salim nasab dengan ya': المنكوبينَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 284,
+   "t": "B5-3.1",
+   "d": 2,
+   "q": "Apakah maksud «الخيامُ»?",
+   "o": [
+    "ubat-ubatan",
+    "makanan",
+    "pakaian",
+    "khemah-khemah"
+   ],
+   "a": 3,
+   "e": "الخيامُ ialah khemah-khemah.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 285,
+   "t": "B5-3.1",
+   "d": 2,
+   "q": "Apakah maksud «الملجأُ»?",
+   "o": [
+    "hospital",
+    "sekolah",
+    "pasar",
+    "pusat perlindungan"
+   ],
+   "a": 3,
+   "e": "الملجأُ ialah tempat berlindung.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 286,
+   "t": "B5-3.1",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nتُوزَّعُ ______ على المنكوبينَ.",
+   "o": [
+    "المساعداتَ",
+    "المساعداتِ",
+    "مساعدةٌ",
+    "المساعداتُ"
+   ],
+   "a": 3,
+   "e": "Naib fa'il marfu': المساعداتُ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 287,
+   "t": "B5-3.1",
+   "d": 3,
+   "q": "Apakah maksud «التبرعاتُ»?",
+   "o": [
+    "pinjaman",
+    "gaji",
+    "cukai",
+    "sumbangan"
+   ],
+   "a": 3,
+   "e": "التبرعاتُ ialah sumbangan.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 288,
+   "t": "B5-3.2",
+   "d": 1,
+   "q": "Apakah maksud «الجرحُ»?",
+   "o": [
+    "demam",
+    "patah",
+    "batuk",
+    "luka"
+   ],
+   "a": 3,
+   "e": "الجرحُ ialah luka.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 289,
+   "t": "B5-3.2",
+   "d": 1,
+   "q": "Apakah maksud «النزيفُ»?",
+   "o": [
+    "demam",
+    "luka bakar",
+    "pendarahan",
+    "cirit-birit"
+   ],
+   "a": 2,
+   "e": "النزيفُ ialah pendarahan.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 290,
+   "t": "B5-3.2",
+   "d": 1,
+   "q": "Apakah maksud «الضمادةُ»?",
+   "o": [
+    "ubat",
+    "kerusi roda",
+    "termometer",
+    "pembalut luka"
+   ],
+   "a": 3,
+   "e": "الضمادةُ ialah pembalut luka.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 291,
+   "t": "B5-3.2",
+   "d": 2,
+   "q": "Apakah maksud «الكسرُ»?",
+   "o": [
+    "patah",
+    "luka",
+    "demam",
+    "bengkak"
+   ],
+   "a": 0,
+   "e": "الكسرُ ialah patah (tulang).",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 292,
+   "t": "B5-3.2",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nتنقلُ ______ المريضَ إلى المستشفى.",
+   "o": [
+    "سيارةَ الإسعافِ",
+    "سيارةُ الإسعافِ",
+    "سيارةِ الإسعافِ",
+    "السيارةُ الإسعافِ"
+   ],
+   "a": 1,
+   "e": "Fa'il marfu' dan mudhaf tiada ال: سيارةُ الإسعافِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 293,
+   "t": "B5-3.2",
+   "d": 2,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nيوقفُ الطبيبُ ______.",
+   "o": [
+    "النزيفَ",
+    "النزيفُ",
+    "النزيفِ",
+    "نزيفٌ"
+   ],
+   "a": 0,
+   "e": "Maf'ul bih mansub: النزيفَ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 294,
+   "t": "B5-3.2",
+   "d": 3,
+   "q": "Apakah maksud «الإنعاشُ القلبيُّ»?",
+   "o": [
+    "pembedahan jantung",
+    "senaman",
+    "CPR (resusitasi kardiopulmonari)",
+    "pemeriksaan darah"
+   ],
+   "a": 2,
+   "e": "الإنعاشُ القلبيُّ ialah CPR.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 295,
+   "t": "B5-3.2",
+   "d": 3,
+   "q": "Apakah maksud «سيارةُ الإسعافِ»?",
+   "o": [
+    "bas sekolah",
+    "ambulans",
+    "teksi",
+    "kereta polis"
+   ],
+   "a": 1,
+   "e": "سيارةُ الإسعافِ ialah ambulans.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 296,
+   "t": "B5-3.3",
+   "d": 1,
+   "q": "Apakah maksud «التسوقُ عبرَ الإنترنتِ»?",
+   "o": [
+    "membeli-belah dalam talian",
+    "membeli-belah di pasar",
+    "menjual di kedai",
+    "membaca buku"
+   ],
+   "a": 0,
+   "e": "التسوقُ عبرَ الإنترنتِ ialah membeli-belah dalam talian.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 297,
+   "t": "B5-3.3",
+   "d": 1,
+   "q": "Apakah maksud «الدفعُ»?",
+   "o": [
+    "penghantaran",
+    "harga",
+    "diskaun",
+    "pembayaran"
+   ],
+   "a": 3,
+   "e": "الدفعُ ialah pembayaran.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 298,
+   "t": "B5-3.3",
+   "d": 1,
+   "q": "Apakah maksud «التوصيلُ»?",
+   "o": [
+    "pembayaran",
+    "pemulangan",
+    "diskaun",
+    "penghantaran"
+   ],
+   "a": 3,
+   "e": "التوصيلُ ialah penghantaran.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 299,
+   "t": "B5-3.3",
+   "d": 2,
+   "q": "Apakah maksud «السعرُ»?",
+   "o": [
+    "diskaun",
+    "harga",
+    "produk",
+    "pelanggan"
+   ],
+   "a": 1,
+   "e": "السعرُ ialah harga.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 300,
+   "t": "B5-3.3",
+   "d": 2,
+   "q": "Apakah maksud «الخصمُ»?",
+   "o": [
+    "diskaun",
+    "harga",
+    "pelanggan",
+    "akaun"
+   ],
+   "a": 0,
+   "e": "الخصمُ ialah diskaun.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 301,
+   "t": "B5-3.3",
+   "d": 2,
+   "q": "Apakah maksud «البطاقةُ المصرفيةُ»?",
+   "o": [
+    "kad pelajar",
+    "kad pengenalan",
+    "kad jemputan",
+    "kad bank"
+   ],
+   "a": 3,
+   "e": "البطاقةُ المصرفيةُ ialah kad bank.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 302,
+   "t": "B5-3.3",
+   "d": 3,
+   "q": "Lengkapkan ayat dengan jawapan yang betul.\nيدفعُ الزبونُ ثمنَ ______ بالبطاقةِ.",
+   "o": [
+    "المنتجِ",
+    "المنتجُ",
+    "المنتجَ",
+    "منتجٌ"
+   ],
+   "a": 0,
+   "e": "Selepas ثمنَ isim majrur sebagai mudhaf ilaih: المنتجِ.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "id": 303,
+   "t": "B5-3.3",
+   "d": 3,
+   "q": "Apakah maksud «رضاءُ الزبائنِ»?",
+   "o": [
+    "harga pelanggan",
+    "pelanggan baharu",
+    "diskaun pelanggan",
+    "kepuasan pelanggan"
+   ],
+   "a": 3,
+   "e": "رضاءُ الزبائنِ ialah kepuasan pelanggan.",
+   "s": "DSKP dan Nota Ringkas KSSM Bahasa Arab Tingkatan 5",
+   "status": "aktif"
+  }
+ ]
+}
