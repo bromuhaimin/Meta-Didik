@@ -6,7 +6,7 @@ self.addEventListener("fetch",e=>{
   const r=e.request; if(r.method!=="GET")return;
   const u=new URL(r.url);
   if(u.hostname.includes("firebaseio.com")||u.hostname.includes("googleapis.com")&&u.pathname.includes("identitytoolkit"))return;
-  const same=u.origin===location.origin, cdn=/cdnjs\.cloudflare\.com|fonts\.(googleapis|gstatic)\.com/.test(u.hostname);
+  const same=u.origin===location.origin, cdn=/cdnjs\.cloudflare\.com|cdn\.jsdelivr\.net|fonts\.(googleapis|gstatic)\.com/.test(u.hostname);
   if(!same&&!cdn)return;
   if(same){ // rangkaian dahulu supaya versi baharu sentiasa dimuatkan, cache jika luar talian
     e.respondWith(fetch(r).then(res=>{const c=res.clone();caches.open(V).then(x=>x.put(r,c));return res;}).catch(()=>caches.match(r).then(m=>m||caches.match("./index.html"))));
