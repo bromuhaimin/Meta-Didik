@@ -1,4 +1,59 @@
-<!doctype html><html><head><meta charset="utf-8"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0b100b"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Gempur Tasawwur"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><title>Gempur</title><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset="utf-8"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0b100b"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Gempur Tasawwur"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><title>Gempur</title><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}.lrn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:6px}
+.lrn-card{padding:16px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.lrn-card h3{margin:0;font-family:var(--font-display);font-size:24px}
+.lrn-card p{margin:0}
+.lrn-pr{display:flex;gap:6px;margin:6px 0}
+.lrn-pr i{width:26px;height:8px;background:var(--bg2);border:1px solid var(--line);display:block}
+.lrn-pr i.on{background:var(--ok);border-color:var(--ok)}
+.lrn-pr i.off{background:var(--danger);border-color:var(--danger)}
+.lrn-pr i.cur{background:var(--amber);border-color:var(--amber)}
+.lrn-tl{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:100%}
+.lrn-tl div{background:var(--bg2);border:1px solid var(--line);padding:6px;text-align:center}
+.lrn-tl b{display:block;font-family:var(--font-display);font-size:24px;color:var(--amber)}
+.lrn-tl span{font-size:11px;color:var(--muted)}
+.lrn-weak{display:flex;flex-direction:column;gap:8px}
+.lrn-wr{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--line);padding:10px 12px}
+.lrn-wn b{display:block}.lrn-wn span{font-size:13px}
+.lrn-wp{white-space:nowrap;font-family:var(--font-util);font-weight:700}
+.gbar.low i{background:var(--danger)}
+@media(max-width:620px){.lrn-wr{grid-template-columns:1fr}}
+.lrn-badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
+.lrn-b{display:flex;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);padding:8px 10px;opacity:.55}
+.lrn-b.on{opacity:1;border-color:var(--amber)}
+.lrn-b i{font-style:normal;font-family:var(--font-display);width:42px;height:42px;display:grid;place-items:center;background:var(--bg2);border:2px solid var(--line);color:var(--muted);flex:none}
+.lrn-b.on i{background:var(--amber);color:#1b1b12;border-color:var(--amber)}
+.lrn-b b{display:block;font-size:15px}.lrn-b span{font-size:12px;color:var(--muted)}
+#lrnOv{z-index:90;overflow:auto;align-items:flex-start}
+.lrn-box{background:var(--panel);border:1px solid var(--line);max-width:680px;width:calc(100% - 24px);margin:20px auto;padding:18px}
+.lrn-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.lrn-top h2,.lrn-box h2{margin:0;font-family:var(--font-display);font-size:26px}
+.lrn-tag{font-family:var(--font-util);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber)}
+.lrn-n{font-size:13px;color:var(--muted);margin-bottom:6px}
+.lrn-q{font-size:19px;line-height:1.45;margin:8px 0 12px}
+.lrn-opts{display:flex;flex-direction:column;gap:8px}
+.lrn-opt{display:flex;gap:10px;text-align:left;align-items:flex-start;background:var(--bg2);color:var(--ink);border:2px solid var(--line);padding:10px 12px;font:inherit;cursor:pointer;min-height:48px}
+.lrn-opt b{font-family:var(--font-display);color:var(--amber)}
+.lrn-opt:hover:not(:disabled),.lrn-opt:focus-visible{border-color:var(--amber)}
+.lrn-opt.ok{border-color:var(--ok);background:rgba(80,160,80,.18)}
+.lrn-opt.bad{border-color:var(--danger);background:rgba(190,60,50,.18)}
+.lrn-fb{margin-top:12px;padding:12px;border-left:4px solid var(--line);background:var(--bg2)}
+.lrn-fb.ok{border-color:var(--ok)}.lrn-fb.bad{border-color:var(--danger)}
+.lrn-fb .btn{margin-top:10px}
+.lrn-e{margin-top:6px;font-size:15px;color:var(--ink)}.lrn-s{font-size:12px;color:var(--muted);margin-top:4px}
+.lrn-score{font-family:var(--font-display);font-size:56px;color:var(--amber)}
+.lrn-rev{border-top:1px solid var(--line);padding:8px 0}.lrn-ra{color:var(--ok);font-weight:700;margin-top:4px}
+/* tema subjek v17.52 */
+html[data-sj="tw"]{--bg:#0b100b;--bg2:#121a11;--bg3:#1a2418;--sjc:#2f9e8f;--line:color-mix(in srgb,#2f9e8f 38%,transparent);--line2:color-mix(in srgb,#2f9e8f 65%,transparent)}
+html[data-sj="pi"]{--bg:#0a0f1a;--bg2:#101826;--bg3:#172335;--sjc:#3a7bd5;--line:color-mix(in srgb,#3a7bd5 38%,transparent);--line2:color-mix(in srgb,#3a7bd5 65%,transparent)}
+html[data-sj="p3"]{--bg:#100b1a;--bg2:#171225;--bg3:#211a35;--sjc:#8a5cd6;--line:color-mix(in srgb,#8a5cd6 38%,transparent);--line2:color-mix(in srgb,#8a5cd6 65%,transparent)}
+html[data-sj="sj"]{--bg:#150f08;--bg2:#1e160c;--bg3:#2a1f12;--sjc:#c2793a;--line:color-mix(in srgb,#c2793a 38%,transparent);--line2:color-mix(in srgb,#c2793a 65%,transparent)}
+html[data-sj="sc"]{--bg:#08140d;--bg2:#0e1d14;--bg3:#15291c;--sjc:#2f9e5f;--line:color-mix(in srgb,#2f9e5f 38%,transparent);--line2:color-mix(in srgb,#2f9e5f 65%,transparent)}
+html[data-sj="mt"]{--bg:#170a11;--bg2:#21111a;--bg3:#2f1826;--sjc:#c94a82;--line:color-mix(in srgb,#c94a82 38%,transparent);--line2:color-mix(in srgb,#c94a82 65%,transparent)}
+html[data-sj="ba"]{--bg:#170a0d;--bg2:#220f14;--bg3:#30161d;--sjc:#c0455f;--line:color-mix(in srgb,#c0455f 38%,transparent);--line2:color-mix(in srgb,#c0455f 65%,transparent)}
+body{background:radial-gradient(1100px 520px at 85% -8%,color-mix(in srgb,var(--sjc,transparent) 26%,transparent),transparent 70%),var(--bg);background-attachment:fixed}
+html[data-sj] header{border-bottom:3px solid var(--sjc)}
+html[data-sj] .tab[aria-selected="true"]{border-color:var(--sjc);color:var(--sjc)}
+</style></head><body>
 <title>Gempur</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -692,7 +747,7 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
 <div id="rkBanner" role="status" hidden></div>
 <div id="app">
   <header class="top"><div class="top-in">
-    <div class="brand">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.50</small></div>
+    <div class="brand">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.52</small></div>
     <button class="meb" id="meBtn" type="button" aria-label="Profil anggota">
       <span id="meIns"></span>
       <span class="me-t"><span class="me-n" id="meName">Anggota</span><span class="me-r" id="meRank">Prebet</span><div class="xpbar"><i id="meXp"></i></div></span>
@@ -700,6 +755,7 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
     <button class="wallet" id="walletBtn" type="button" aria-label="Syiling. Buka Gudang"><span class="wc"></span><b class="walnum">0</b><span class="walpop" aria-hidden="true"></span></button>
     <nav class="tabs" role="tablist" aria-label="Menu utama">
       <button class="tab" role="tab" id="tab-map" data-v="map" aria-selected="true">Peta operasi</button>
+      <button class="tab" role="tab" id="tab-latihan" data-v="latihan" aria-selected="false">Latihan</button>
       <button class="tab" role="tab" id="tab-skuad" data-v="skuad" aria-selected="false">Pasukan</button>
       <button class="tab" role="tab" id="tab-team" data-v="team" aria-selected="false">Battle</button>
       <button class="tab" role="tab" id="tab-rank" data-v="rank" aria-selected="false">Kedudukan</button>
@@ -757,6 +813,11 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
       <div id="gudangBody"></div>
     </section>
 
+    <section id="v-latihan" hidden>
+      <h2 class="sec">Latihan pintar</h2>
+      <p class="lead">Cabaran harian, ulang kaji berjarak dan misi pemulihan untuk topik yang lemah.</p>
+      <div id="latihanBody"></div>
+    </section>
     <section id="v-guru" hidden>
       <h2 class="sec">Papan pemuka guru</h2>
       <p class="lead">Pantau kemajuan murid sekolah anda: aktiviti, misi selesai dan topik yang paling lemah.</p>
@@ -1149,6 +1210,8 @@ if (SUBJ === "p3") { DATA.tema = DATA_P3.tema; DATA.topik = DATA_P3.topik; DATA.
 if (SUBJ === "sj") { DATA.tema = DATA_SJ.tema; DATA.topik = DATA_SJ.topik; DATA.soalan = DATA_SJ.soalan; }
 if (SUBJ === "sc") { DATA.tema = DATA_SC.tema; DATA.topik = DATA_SC.topik; DATA.soalan = DATA_SC.soalan; }
 if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.soalan = DATA_MT.soalan; }
+document.documentElement.setAttribute("data-sj", SUBJ);
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v17.52"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -1877,6 +1940,7 @@ const BADGES = [
   { id: "perisai", c: "PS", n: "Pemecah Perisai", d: "Pecahkan 50 perisai ilmu dengan menjawab kuiz." }
 ].concat(DATA.tema.map((t) => ({ id: "pakar_" + t.id, c: "P" + t.id.replace(/^[A-Z]+/, "").replace("-", "."), n: "Pakar " + t.nama, d: "Capai sekurang-kurangnya 2 bintang pada semua misi dalam tema ini." }))).concat(SEASON_BADGES);
 const badgeById = (id) => BADGES.find((b) => b.id === id) || null;
+function lrnEvalLate() { if (typeof lrnEval === "function") lrnEval(); }
 
 /* dipanggil sekali selepas setiap misi; res: keputusan misi, stars: bintang misi ini, gain: mata pangkat */
 function applyProgress(res, stars, gain) {
@@ -1922,6 +1986,7 @@ function applyProgress(res, stars, gain) {
     const ms = DATA.topik.filter((x) => x.tema === tm.id);
     if (ms.length && ms.every((x) => P.prog[x.id] && (P.prog[x.id].b | 0) >= 2)) got("pakar_" + tm.id);
   }
+  lrnEvalLate();
   return out;
 }
 
@@ -3745,7 +3810,7 @@ function dgOpenQuiz(g, gate) {
   box.append(opts); ui.appendChild(box); g.quiz.box = box;
 }
 function dgAnswer(i) {
-  const g = DG.g, z = g.quiz; if (!z || z.fb) return; const ok = i === z.ans; g.tot++;
+  const g = DG.g, z = g.quiz; if (!z || z.fb) return; const ok = i === z.ans; g.tot++; lrnRec(z.q, ok);
   const opts = z.box.querySelectorAll(".dg-opt"); opts.forEach((b, k) => { b.disabled = true; if (k === z.ans) b.classList.add("ok"); else if (k === i) b.classList.add("bad"); });
   const fb = el("div", { class: "dg-fb " + (ok ? "ok" : "bad") });
   if (ok) { g.ok++; z.gate.open = true; fb.append(el("b", null, "BETUL! Pintu terbuka.")); dgSnd("good"); setTimeout(() => dgSnd("gate"), 250); dgDebris(g, z.gate.x + 17, z.gate.y + 80, DG_TH[0].side, 18); dgDebris(g, z.gate.x + 17, z.gate.y + 40, "#e8c860", 10); g.shake = 0.35; g.coins += 5; }
@@ -4213,7 +4278,7 @@ function dwOpenQuiz(g, gate) {
   box.append(opts); ui.appendChild(box); g.quiz.box = box;
 }
 function dwAnswer(i) {
-  const g = DW.g, z = g && g.quiz; if (!z || z.fb) return; const ok = i === z.ans; g.tot++;
+  const g = DW.g, z = g && g.quiz; if (!z || z.fb) return; const ok = i === z.ans; g.tot++; lrnRec(z.q, ok);
   z.box.querySelectorAll(".dg-opt").forEach((b, k) => { b.disabled = true; if (k === z.ans) b.classList.add("ok"); else if (k === i) b.classList.add("bad"); });
   const fb = el("div", { class: "dg-fb " + (ok ? "ok" : "bad") });
   if (ok) {
@@ -4814,7 +4879,7 @@ function blPop(g, b) {
   blResolve(g, b);
 }
 function blResolve(g, b) {
-  const q = g.qs[g.i], ok = !!b && b.i === q.ans; g.phase = "fb"; g.tot++; const S = g.cls ? g.cls.sq[g.team] : g; if (g.cls) { S.tot++; S.time += g.sec - Math.max(0, g.t); }
+  const q = g.qs[g.i], ok = !!b && b.i === q.ans; g.phase = "fb"; g.tot++; if (!g.cls) lrnRec(q.q, ok); const S = g.cls ? g.cls.sq[g.team] : g; if (g.cls) { S.tot++; S.time += g.sec - Math.max(0, g.t); }
   const pick = b ? q.texts[b.i] : "", ansT = q.f === "abcd" ? q.texts[q.ans] : (q.truth ? "BETUL" : "SALAH"), ui = BL.ui;
   let gain = 0;
   if (ok) {
@@ -5639,7 +5704,7 @@ function bzQuiz() {
   const t0 = performance.now(), tmax = g.tl * 1000; BZ.tm = setInterval(() => { if (g.answered) return; const left = tmax - (performance.now() - t0); bar.style.width = clamp(left / tmax, 0, 1) * 100 + "%"; if (left <= 0) bzAnswer(-1, opts, fb); }, 100);
 }
 function bzAnswer(i, opts, fb) {
-  const g = BZ.g; if (!g || g.answered) return; g.answered = true; clearInterval(BZ.tm); const Q = g.cur, ok = i === Q.ans; g.tot++;
+  const g = BZ.g; if (!g || g.answered) return; g.answered = true; clearInterval(BZ.tm); const Q = g.cur, ok = i === Q.ans; g.tot++; lrnRec(Q.q, ok);
   [...opts.children].forEach((b, k) => { b.disabled = true; if (k === Q.ans) b.classList.add("ok"); else if (k === i) b.classList.add("bad"); });
   if (ok) { g.ok++; g.rok++; g.budget += 25; g.dressT += 10; bzSnd("ok"); } else { g.wrong.push(Q); bzSnd("bad"); }
   const last = g.qi + 1 >= g.qpr; let bonus = 0; if (last && g.rok === g.qpr) { bonus = 15; g.budget += 15; }
@@ -7436,7 +7501,7 @@ function lgAnswer(i) {
   const Q = LG.quiz, g = LG.g; if (!Q || Q.done) return; Q.done = true;
   const ok = i === Q.cur.ans; Q.ok = ok; g.tot++; if (ok) g.ok++;
   const who = lgWho(), st = g.stu[who] || (g.stu[who] = { ok: 0, tot: 0 }); st.tot++; if (ok) st.ok++;
-  lgLogAns(Q.cur.q, ok, who);
+  lgLogAns(Q.cur.q, ok, who); lrnRec(Q.cur.q, ok);
   const wm = LG.wrongM || (LG.wrongM = {});
   if (ok) { delete wm[Q.cur.q.i]; (g.okIds || (g.okIds = [])).indexOf(Q.cur.q.i) < 0 && g.okIds.push(Q.cur.q.i); } else { wm[Q.cur.q.i] = (wm[Q.cur.q.i] | 0) + 1; g.wrong.push({ q: Q.cur.q, ans: Q.cur.texts[Q.cur.ans], pick: i >= 0 ? Q.cur.texts[i] : "", who: who }); }
   lgWrongSave(wm);
@@ -8730,7 +8795,7 @@ function jtAnswer(pos, how) {
   const g = JT.g; if (!g || g.phase !== "ask") return;
   clearInterval(JT.timer); g.phase = "fb";
   const it = g.cur, sq = g.sq[it.sq], took = Math.min(g.sec, (performance.now() - g.t0) / 1000), good = pos === it.ans;
-  sq.tot++; sq.time += took;
+  sq.tot++; sq.time += took; if (!g.grp) lrnRec(it.q, good);
   let gain = 0;
   if (good) { sq.ok++; sq.streak++; sq.best = Math.max(sq.best, sq.streak); gain = 100 + Math.round(30 * clamp(1 - took / g.sec, 0, 1)) + Math.min(50, (sq.streak - 1) * 10); sq.score += gain; }
   else { sq.streak = 0; g.wrong.push({ q: it.q, who: g.grp ? sq.name : "", ans: it.texts[it.ans], pick: pos >= 0 ? it.texts[pos] : null }); }
@@ -12168,6 +12233,7 @@ function openQuiz(crate) {
 }
 const D_PTS = [0, 100, 150, 220];
 function markWeak(q, good) {
+  lrnRec(q, good);
   if (good && S.right) S.right[q.i] = 1;
   const w = P.lemah[q.t] || (P.lemah[q.t] = []), k = w.indexOf(q.i);
   if (good) { if (k >= 0) w.splice(k, 1); } else if (k < 0) w.push(q.i);
@@ -12884,7 +12950,7 @@ function kbRender() {
     KBS.busy = true; send.disabled = true; send.textContent = "AI sedang menyemak..."; resBox.hidden = true;
     try {
       const r = await kbAsk(c, kbPrompt(q, ans));
-      KBS.res = r; KBS.ans = ans; kbShow(resBox, r, q);
+      KBS.res = r; KBS.ans = ans; lrnKbat(r.m); kbShow(resBox, r, q);
     } catch (e) { msg.textContent = (e && e.message) || "Gagal menyemak. Cuba lagi."; }
     KBS.busy = false; send.disabled = false; send.textContent = "Hantar untuk disemak semula";
   });
@@ -14750,10 +14816,303 @@ requestAnimationFrame(loop);
 const RESULT = { shown: false };
 const BRIEF = { timer: 0 };
 
+/* ---------- Latihan Pintar (v17.51): titik lemah, ulang kaji berjarak, cabaran harian, lencana, kad laporan guru ---------- */
+const LRN_GAP = [1, 3, 7];
+const LRN = { tm: 0, all: false };
+function lrnDay(t) { return Math.floor(((t == null ? Date.now() : t) - new Date().getTimezoneOffset() * 6e4) / 864e5); }
+function llMap() { P.ll = P.ll || {}; return P.ll[SUBJ] || (P.ll[SUBJ] = {}); }
+function lrnC() { return P.lc || (P.lc = { t: 0, o: 0, r: 0, b: 0, ms: 0, sj: {}, kb: 0 }); }
+function lrnSaveSoon() {
+  clearTimeout(LRN.tm);
+  LRN.tm = setTimeout(() => { try { P.t = Date.now(); localStorage.setItem(LS_KEY, JSON.stringify(P)); } catch (e) { /* abaikan */ } }, 1500);
+}
+function lrnBadge(id) {
+  if (!P.bd) P.bd = {};
+  if (P.bd[id]) return false;
+  const b = badgeById(id); if (!b) return false;
+  P.bd[id] = Date.now(); toast("Lencana baharu: " + b.n, "good"); lrnSaveSoon();
+  return true;
+}
+/* rekod satu jawapan daripada mana-mana mod: [salah, betul, masa akhir, peringkat ulang kaji (-1 tiada, -2 dikuasai), hari ulang kaji] */
+function lrnRec(q, ok) {
+  try {
+    if (!q || q.i == null || !QBYID[q.i]) return;
+    const m = llMap(), c = lrnC(), td = lrnDay();
+    const e = m[q.i] || (m[q.i] = [0, 0, 0, -1, 0]);
+    e[2] = Date.now();
+    c.t++; c.sj[SUBJ] = (c.sj[SUBJ] | 0) + 1;
+    if (ok) { c.o++; c.r++; if (c.r > c.b) c.b = c.r; } else c.r = 0;
+    if (ok) {
+      e[1]++;
+      if (e[3] >= 0 && e[4] <= td) { e[3]++; if (e[3] >= LRN_GAP.length) { e[3] = -2; c.ms++; } else e[4] = td + LRN_GAP[e[3]]; }
+    } else { e[0]++; e[3] = 0; e[4] = td + LRN_GAP[0]; }
+    if (c.r >= 10) lrnBadge("run10");
+    if (c.r >= 25) lrnBadge("run25");
+    if (c.ms >= 10) lrnBadge("lemah10");
+    if (Object.keys(c.sj).filter((k) => c.sj[k] >= 20).length >= 3) lrnBadge("jelajah");
+    lrnSaveSoon();
+  } catch (e) { /* abaikan */ }
+}
+function lrnKbat(m) { try { const c = lrnC(); if ((m | 0) >= 3) { c.kb = (c.kb | 0) + 1; if (c.kb >= 5) lrnBadge("kbat"); } lrnSaveSoon(); } catch (e) { /* abaikan */ } }
+function lrnEval() {
+  try {
+    for (const tm of DATA.tema) {
+      const ms = DATA.topik.filter((x) => x.tema === tm.id);
+      if (ms.length && ms.every((x) => P.prog[x.id] && (P.prog[x.id].b | 0) >= 1)) lrnBadge("tak_" + tm.id);
+    }
+    [4, 5].forEach((n) => {
+      const ms = DATA.topik.filter((x) => TEMA[x.tema] && TEMA[x.tema].tingkatan === n);
+      if (ms.length && ms.every((x) => P.prog[x.id] && (P.prog[x.id].b | 0) >= 1)) lrnBadge("tkt_" + n);
+    });
+  } catch (e) { /* abaikan */ }
+}
+function lrnDue() {
+  const m = llMap(), td = lrnDay(), out = [];
+  for (const id in m) { const e = m[id]; if (e[3] >= 0 && e[4] <= td && QBYID[id]) out.push(QBYID[id]); }
+  return out;
+}
+function lrnTopicStats() {
+  const m = llMap(), by = {};
+  for (const id in m) {
+    const q = QBYID[id]; if (!q || !TOPIK[q.t]) continue;
+    const e = m[id], t = by[q.t] || (by[q.t] = { id: q.t, w: 0, c: 0, weak: [], n: 0 });
+    t.w += e[0]; t.c += e[1]; t.n++;
+    if (e[0] > 0 && e[3] !== -2) t.weak.push(q);
+  }
+  return Object.keys(by).map((k) => { const t = by[k]; t.tot = t.w + t.c; t.acc = t.tot ? t.c / t.tot : 1; return t; });
+}
+function lrnSchedule() {
+  const m = llMap(), td = lrnDay(), b = { now: 0, d1: 0, d3: 0, d7: 0, ms: 0 };
+  for (const id in m) {
+    const e = m[id]; if (!QBYID[id]) continue;
+    if (e[3] === -2) { b.ms++; continue; }
+    if (e[3] < 0) continue;
+    const d = e[4] - td;
+    if (d <= 0) b.now++; else if (d === 1) b.d1++; else if (d <= 3) b.d3++; else b.d7++;
+  }
+  return b;
+}
+function lrnSeeded(list, seed) {
+  return list.map((q) => [hashStr(seed + "|" + q.i), q]).sort((a, b) => a[0] - b[0]).map((x) => x[1]);
+}
+function lrnChal() {
+  const k = dayKey(); P.lcd = P.lcd || {};
+  let c = P.lcd[SUBJ];
+  if (!c || c.d !== k || !Array.isArray(c.q)) {
+    const due = lrnSeeded(lrnDue(), k + SUBJ).slice(0, 2), ids = due.map((q) => q.i);
+    for (const q of lrnSeeded(QLIST, "ch" + k + SUBJ)) { if (ids.length >= 5) break; if (ids.indexOf(q.i) < 0) ids.push(q.i); }
+    c = P.lcd[SUBJ] = { d: k, q: ids, o: 0, done: 0 };
+  }
+  return c;
+}
+function lrnCsNow() { const s = P.cs || {}; return (s.l === dayKey() || s.l === dayKey(Date.now() - 864e5)) ? (s.n | 0) : 0; }
+function lrnGivePts(n, xp) { P.coin = (P.coin | 0) + n; P.xp = (P.xp || 0) + (xp | 0); saveP(); try { renderMe(); } catch (e) { /* abaikan */ } }
+function lrnChalDone(ok) {
+  const c = lrnChal(); if (c.done) return null;
+  c.done = 1; c.o = ok;
+  const cs = P.cs || (P.cs = { n: 0, l: "", b: 0 }), t = dayKey(), y = dayKey(Date.now() - 864e5);
+  let bonus = 0;
+  if (cs.l !== t) { cs.n = cs.l === y ? (cs.n | 0) + 1 : 1; cs.l = t; cs.b = Math.max(cs.b | 0, cs.n); bonus = 10 * Math.min(cs.n, 7); }
+  const coins = 15 + ok * 5 + bonus;
+  lrnGivePts(coins, ok * 4);
+  if (cs.n >= 3) lrnBadge("cab3"); if (cs.n >= 7) lrnBadge("cab7"); if (cs.n >= 30) lrnBadge("cab30");
+  return { coins: coins, bonus: bonus, streak: cs.n };
+}
+
+/* ----- pelari kuiz ringkas yang dikongsi: cabaran, ulang kaji, misi pemulihan ----- */
+const LP = { qs: [], i: 0, ok: 0, wrong: [], cfg: null, done: false };
+function lrnClose() {
+  const o = document.getElementById("lrnOv"); if (o) o.remove();
+  document.body.style.overflow = ""; window.removeEventListener("keydown", lrnKey, true);
+  LP.cfg = null; try { renderLatihan(); } catch (e) { /* abaikan */ }
+}
+function lrnKey(e) { if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); lrnClose(); } }
+function lrnPlay(cfg) {
+  const qs = cfg.qs.filter(Boolean);
+  if (!qs.length) { toast("Tiada soalan untuk dimainkan sekarang.", "warn"); return; }
+  if (typeof S !== "undefined" && S && S.running) { toast("Selesaikan atau keluar daripada misi dahulu.", "warn"); return; }
+  const old = document.getElementById("lrnOv"); if (old) old.remove();
+  const ov = el("div", { id: "lrnOv", class: "overlay", role: "dialog", "aria-modal": "true", "aria-label": cfg.title });
+  document.body.appendChild(ov); document.body.style.overflow = "hidden";
+  window.addEventListener("keydown", lrnKey, true);
+  LP.qs = qs; LP.i = 0; LP.ok = 0; LP.wrong = []; LP.cfg = cfg; LP.done = false;
+  lrnAsk();
+}
+function lrnAsk() {
+  const ov = document.getElementById("lrnOv"); if (!ov) return;
+  const cfg = LP.cfg, q = LP.qs[LP.i], n = LP.qs.length;
+  ov.textContent = "";
+  const w = el("div", { class: "lrn-box" });
+  const top = el("div", { class: "lrn-top" });
+  const cl = el("button", { type: "button", class: "btn alt sm", "aria-label": "Tutup" }, "Tutup"); cl.addEventListener("click", lrnClose);
+  top.append(el("div", null, null, el("div", { class: "lrn-tag" }, cfg.tag || "Latihan"), el("h2", null, cfg.title)), cl);
+  const pr = el("div", { class: "lrn-pr", "aria-label": "Soalan " + (LP.i + 1) + " daripada " + n });
+  for (let k = 0; k < n; k++) pr.appendChild(el("i", { class: k < LP.i ? "on" : k === LP.i ? "cur" : "" }));
+  w.append(top, pr, el("div", { class: "lrn-n" }, "Soalan " + (LP.i + 1) + " / " + n + (q.d ? " | aras " + ["", "mudah", "sederhana", "sukar"][q.d] : "")));
+  const qt = qSet(el("div", { class: "lrn-q" }), q.q);
+  const ord = shuffle([0, 1, 2, 3]);
+  const box = el("div", { class: "lrn-opts" }), fb = el("div", { class: "lrn-fb", hidden: "" });
+  ord.forEach((oi, pos) => {
+    const b = el("button", { type: "button", class: "lrn-opt" }); b.append(el("b", null, "ABCD"[pos]), qSet(el("span"), q.o[oi]));
+    b.addEventListener("click", () => {
+      if (LP.done) return; LP.done = true;
+      const ok = oi === q.a; lrnRec(q, ok);
+      if (ok) LP.ok++; else LP.wrong.push(q);
+      box.querySelectorAll("button").forEach((x, k) => { x.disabled = true; if (ord[k] === q.a) x.classList.add("ok"); else if (k === pos) x.classList.add("bad"); });
+      fb.hidden = false; fb.className = "lrn-fb " + (ok ? "ok" : "bad"); fb.textContent = "";
+      fb.append(el("b", null, ok ? "Betul!" : "Belum tepat."), el("div", null, ok ? "" : "Jawapan betul: " + q.o[q.a] + ". "));
+      fb.append(qSet(el("div", { class: "lrn-e" }, null), q.e || ""));
+      if (q.s) fb.append(el("div", { class: "lrn-s" }, "Rujukan: " + q.s));
+      const nx = el("button", { type: "button", class: "btn" }, LP.i + 1 >= n ? "Lihat keputusan" : "Soalan seterusnya");
+      nx.addEventListener("click", () => { LP.i++; LP.done = false; if (LP.i >= n) lrnFinish(); else lrnAsk(); });
+      fb.appendChild(nx); nx.focus();
+    });
+    box.appendChild(b);
+  });
+  w.append(qt, box, fb); ov.appendChild(w);
+}
+function lrnFinish() {
+  const ov = document.getElementById("lrnOv"); if (!ov) return;
+  const cfg = LP.cfg, n = LP.qs.length, ok = LP.ok;
+  let extra = null;
+  if (cfg.kind === "chal") extra = lrnChalDone(ok);
+  lrnEval();
+  ov.textContent = "";
+  const w = el("div", { class: "lrn-box" });
+  w.append(el("div", { class: "lrn-tag" }, cfg.tag || "Latihan"), el("h2", null, "Keputusan"), el("div", { class: "lrn-score" }, ok + " / " + n), el("div", { class: "muted" }, ok === n ? "Cemerlang! Semua betul." : ok >= n * 0.6 ? "Baik. Ulang soalan yang salah untuk menguasainya." : "Teruskan berlatih. Soalan yang salah akan muncul semula dalam ulang kaji berjarak."));
+  if (extra) w.append(el("div", { class: "notice" }, "Cabaran harian selesai. +" + extra.coins + " syiling" + (extra.bonus ? " (termasuk bonus streak " + extra.bonus + ")" : "") + ". Streak cabaran: " + extra.streak + " hari."));
+  if (cfg.kind === "ulang") { const m = lrnSchedule(); w.append(el("div", { class: "notice" }, "Soalan dikuasai setakat ini: " + m.ms + ". Soalan yang betul diulang selepas 1, 3 dan 7 hari sehingga dikuasai.")); }
+  if (LP.wrong.length) {
+    w.append(el("h3", { class: "sec", style: "font-size:20px;margin-top:12px" }, "Semak yang salah"));
+    LP.wrong.forEach((q) => { const d = el("div", { class: "lrn-rev" }); d.append(qSet(el("div", { class: "lrn-rq" }), q.q), el("div", { class: "lrn-ra" }, "Jawapan: " + q.o[q.a])); if (q.e) d.append(qSet(el("div", { class: "lrn-e" }), q.e)); w.appendChild(d); });
+  }
+  const row = el("div", { class: "row", style: "margin-top:14px;gap:8px" });
+  if (LP.wrong.length && cfg.kind !== "chal") { const rt = el("button", { type: "button", class: "btn" }, "Ulang yang salah (" + LP.wrong.length + ")"); const wr = LP.wrong.slice(); rt.addEventListener("click", () => lrnPlay(Object.assign({}, cfg, { qs: wr }))); row.appendChild(rt); }
+  const cl = el("button", { type: "button", class: "btn alt" }, "Tutup"); cl.addEventListener("click", lrnClose); row.appendChild(cl);
+  w.appendChild(row); ov.appendChild(w); cl.focus();
+}
+function lrnStartDue() { const d = lrnSeeded(lrnDue(), String(Date.now())).slice(0, 10); lrnPlay({ title: "Ulang kaji berjarak", tag: "Ulang kaji | 1, 3 dan 7 hari", kind: "ulang", qs: d }); }
+function lrnStartChal() { const c = lrnChal(); if (c.done) return; lrnPlay({ title: "Cabaran harian: 5 soalan", tag: "Cabaran harian", kind: "chal", qs: c.q.map((i) => QBYID[i]) }); }
+function lrnStartFix(t) { const s = lrnTopicStats().find((x) => x.id === t); if (!s) return; const ws = shuffle(s.weak.slice()).slice(0, 10); const rest = shuffle((BYTOPIK[t] || []).filter((q) => ws.indexOf(q) < 0)); lrnPlay({ title: "Misi pemulihan: " + TOPIK[t].nama, tag: "Misi pemulihan", kind: "pulih", qs: ws.concat(rest).slice(0, Math.max(5, Math.min(10, ws.length + 2))) }); }
+
+/* ----- tab Latihan ----- */
+const NEWBADGES = [
+  { id: "run10", c: "10", n: "10 Betul Berturut-turut", d: "Jawab 10 soalan berturut-turut dengan betul dalam mana-mana mod." },
+  { id: "run25", c: "25", n: "25 Betul Berturut-turut", d: "Jawab 25 soalan berturut-turut dengan betul." },
+  { id: "kbat", c: "KB", n: "Jaguh KBAT", d: "Dapat 3 markah atau lebih pada 5 soalan KBAT." },
+  { id: "cab3", c: "C3", n: "Cabaran 3 Hari", d: "Selesaikan cabaran harian 3 hari berturut-turut." },
+  { id: "cab7", c: "C7", n: "Cabaran 7 Hari", d: "Selesaikan cabaran harian 7 hari berturut-turut." },
+  { id: "cab30", c: "C30", n: "Cabaran 30 Hari", d: "Selesaikan cabaran harian 30 hari berturut-turut." },
+  { id: "lemah10", c: "TL", n: "Pemburu Titik Lemah", d: "Kuasai 10 soalan yang pernah salah melalui ulang kaji berjarak." },
+  { id: "jelajah", c: "PJ", n: "Penjelajah Subjek", d: "Jawab sekurang-kurangnya 20 soalan dalam 3 subjek berbeza." }
+].concat(DATA.tema.map((t) => ({ id: "tak_" + t.id, c: "TP", n: "Penakluk " + t.nama, d: "Dapat sekurang-kurangnya 1 bintang pada semua misi dalam peta ini." })), [4, 5].filter((n) => DATA.tema.some((t) => t.tingkatan === n)).map((n) => ({ id: "tkt_" + n, c: "T" + n, n: n === 4 ? "Penakluk Peta Semenanjung" : "Penakluk Peta Borneo", d: "Dapat sekurang-kurangnya 1 bintang pada setiap misi Tingkatan " + n + "." })));
+NEWBADGES.forEach((b) => { if (!BADGES.some((x) => x.id === b.id)) BADGES.push(b); });
+function lrnStat(v, l) { return el("div", { class: "gstat" }, null, el("b", null, String(v)), el("span", null, l)); }
+function renderLatihan() {
+  const box = $("latihanBody"); if (!box) return;
+  box.textContent = "";
+  lrnEval();
+  const c = lrnC(), sch = lrnSchedule(), ch = lrnChal(), due = lrnDue().length;
+  const m = llMap(); let tot = 0, ok = 0; for (const id in m) { tot += m[id][0] + m[id][1]; ok += m[id][1]; }
+  const st = el("div", { class: "gstats" });
+  st.append(lrnStat(tot ? Math.round(ok * 100 / tot) + "%" : "-", "Ketepatan (" + tot + " jawapan)"), lrnStat(lrnCsNow() + " hari", "Streak cabaran"), lrnStat(due, "Ulang kaji hari ini"), lrnStat(sch.ms, "Soalan dikuasai"), lrnStat(c.b | 0, "Rekod betul berturut-turut"));
+  box.appendChild(st);
+  // cabaran harian
+  const cd = el("div", { class: "hcard lrn-card" });
+  cd.append(el("div", { class: "tagline" }, "Cabaran harian"), el("h3", null, ch.done ? "Selesai hari ini: " + ch.o + " / 5 betul" : "Lima soalan untuk hari ini"));
+  const dots = el("div", { class: "lrn-pr" }); for (let k = 0; k < 5; k++) dots.appendChild(el("i", { class: ch.done ? (k < ch.o ? "on" : "off") : "" })); cd.appendChild(dots);
+  cd.appendChild(el("p", { class: "muted" }, ch.done ? "Datang semula esok untuk mengekalkan streak. Streak semasa: " + lrnCsNow() + " hari." : "Ganjaran: 15 syiling + 5 setiap jawapan betul, serta bonus streak sehingga 70 syiling. Ada soalan ulang kaji yang sudah tiba masanya."));
+  const b1 = el("button", { type: "button", class: "btn" }, ch.done ? "Sudah selesai" : "Mula cabaran"); if (ch.done) b1.disabled = true; b1.addEventListener("click", lrnStartChal); cd.appendChild(b1);
+  // ulang kaji
+  const rv = el("div", { class: "hcard lrn-card" });
+  rv.append(el("div", { class: "tagline" }, "Ulang kaji berjarak"), el("h3", null, due ? due + " soalan sedia diulang kaji" : "Tiada ulang kaji hari ini"));
+  const tl = el("div", { class: "lrn-tl" });
+  [["Hari ini", sch.now], ["Esok", sch.d1], ["2 hingga 3 hari", sch.d3], ["4 hingga 7 hari", sch.d7]].forEach(([l, v]) => tl.appendChild(el("div", null, null, el("b", null, String(v)), el("span", null, l))));
+  rv.append(tl, el("p", { class: "muted" }, "Soalan yang pernah salah muncul semula selepas 1, 3 dan 7 hari. Jawab betul pada ketiga-tiganya untuk menguasainya."));
+  const b2 = el("button", { type: "button", class: "btn" }, "Mula ulang kaji" + (due ? " (" + Math.min(10, due) + ")" : "")); if (!due) b2.disabled = true; b2.addEventListener("click", lrnStartDue); rv.appendChild(b2);
+  const g2 = el("div", { class: "lrn-grid" }); g2.append(cd, rv); box.appendChild(g2);
+  // titik lemah
+  box.appendChild(el("h3", { class: "sec", style: "font-size:22px;margin-top:18px" }, "Titik lemah mengikut topik"));
+  const ts = lrnTopicStats().filter((x) => x.tot >= 3).sort((a, b) => a.acc - b.acc || b.w - a.w);
+  if (!ts.length) box.appendChild(el("p", { class: "muted" }, "Jawab sekurang-kurangnya 3 soalan dalam sesuatu topik (mana-mana mod) dan analisis titik lemah anda akan muncul di sini."));
+  else {
+    const list = el("div", { class: "lrn-weak" });
+    (LRN.all ? ts : ts.slice(0, 6)).forEach((x) => {
+      const t = TOPIK[x.id], pc = Math.round(x.acc * 100), row = el("div", { class: "lrn-wr" });
+      const bar = el("span", { class: "gbar" + (pc < 50 ? " low" : "") }, null, el("i", { style: "width:" + pc + "%" }));
+      const bt = el("button", { type: "button", class: "btn sm" + (x.weak.length ? "" : " alt") }, "Misi pemulihan"); bt.addEventListener("click", () => lrnStartFix(x.id));
+      row.append(el("div", { class: "lrn-wn" }, null, el("b", null, t.nama), el("span", { class: "muted" }, x.w + " salah daripada " + x.tot + " jawapan | " + x.weak.length + " soalan belum dikuasai")), el("div", { class: "lrn-wp" }, null, bar, document.createTextNode(pc + "%")), bt);
+      list.appendChild(row);
+    });
+    box.appendChild(list);
+    if (ts.length > 6) { const mb = el("button", { type: "button", class: "btn alt sm", style: "margin-top:8px" }, LRN.all ? "Papar 6 teratas sahaja" : "Papar semua topik (" + ts.length + ")"); mb.addEventListener("click", () => { LRN.all = !LRN.all; renderLatihan(); }); box.appendChild(mb); }
+  }
+  // lencana
+  box.appendChild(el("h3", { class: "sec", style: "font-size:22px;margin-top:18px" }, "Lencana cabaran"));
+  const bg = el("div", { class: "lrn-badges" });
+  NEWBADGES.forEach((b) => { const has = !!(P.bd && P.bd[b.id]); bg.appendChild(el("div", { class: "lrn-b" + (has ? " on" : "") }, null, el("i", null, b.c), el("div", null, null, el("b", null, b.n), el("span", null, has ? "Diperoleh" : b.d)))); });
+  box.appendChild(bg);
+  box.appendChild(el("p", { class: "muted", style: "font-size:13px;margin-top:10px" }, "Data latihan disimpan dalam peranti ini dan dikira daripada semua mod permainan individu (Tempur, Lagenda, Dunia Gempur, Belon, Busana, Jentik solo) serta latihan di sini."));
+}
+
+/* ----- kad laporan guru (PDF) ----- */
+function rptPdf(jpg, w, h) {
+  const enc = new TextEncoder(), parts = [], offs = []; let off = 0;
+  const push = (u) => { parts.push(u); off += u.length; }, str = (s) => push(enc.encode(s));
+  const content = "q 595 0 0 842 0 0 cm /Im0 Do Q";
+  str("%PDF-1.4\n");
+  offs[1] = off; str("1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n");
+  offs[2] = off; str("2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n");
+  offs[3] = off; str("3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /XObject << /Im0 5 0 R >> >> /Contents 4 0 R >>\nendobj\n");
+  offs[4] = off; str("4 0 obj\n<< /Length " + content.length + " >>\nstream\n" + content + "\nendstream\nendobj\n");
+  offs[5] = off; str("5 0 obj\n<< /Type /XObject /Subtype /Image /Width " + w + " /Height " + h + " /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length " + jpg.length + " >>\nstream\n");
+  push(jpg); str("\nendstream\nendobj\n");
+  offs[6] = off; str("6 0 obj\n<< /Title (Kad Laporan Gempur) /Producer (Gempur) >>\nendobj\n");
+  const xr = off; let x = "xref\n0 7\n0000000000 65535 f \n";
+  for (let i = 1; i <= 6; i++) x += String(offs[i]).padStart(10, "0") + " 00000 n \n";
+  str(x + "trailer\n<< /Size 7 /Root 1 0 R /Info 6 0 R >>\nstartxref\n" + xr + "\n%%EOF\n");
+  return new Blob(parts, { type: "application/pdf" });
+}
+function guruReportData(rows) {
+  const now = Date.now(), n = rows.length;
+  const act = rows.filter((x) => x.t && now - x.t < 7 * 864e5);
+  let ans = 0, ok = 0; rows.forEach((x) => { for (const k in x.mis) { const a = x.mis[k]; if (Array.isArray(a)) { ok += a[3] | 0; ans += a[4] | 0; } } });
+  const top = rows.filter((x) => x.t && now - x.t < 14 * 864e5).sort((a, b) => b.fl - a.fl || b.xp - a.xp).slice(0, 5);
+  const tp = guruTopics(rows), withAcc = tp.filter((x) => x.acc != null).sort((a, b) => a.acc - b.acc);
+  const weak = (withAcc.length ? withAcc : tp.slice().sort((a, b) => a.pct - b.pct)).slice(0, 5);
+  return { n: n, act: act.length, ans: ans, ok: ok, top: top, weak: weak, avgM: n ? rows.reduce((s, x) => s + x.m, 0) / n : 0, tp: tp };
+}
+async function guruReportPdf(rows) {
+  const d = guruReportData(rows), W = 1240, H = 1754, c = document.createElement("canvas"); c.width = W; c.height = H;
+  const g = c.getContext("2d"), SANS = "'Barlow','Segoe UI',Arial,sans-serif", INK = "#1f2a1a", MUT = "#55633f", ACC = "#c98a1c";
+  g.fillStyle = "#fbf8ee"; g.fillRect(0, 0, W, H);
+  g.fillStyle = INK; g.fillRect(0, 0, W, 210);
+  certText(g, "KAD LAPORAN GEMPUR", 70, 100, "700 64px " + SANS, "#f1ead6", "left", 4);
+  certText(g, SUBJS[SUBJ].nama + " | " + cleanSekolah(P.sekolah || "Sekolah") + (GURU.kelas ? " | Kelas " + GURU.kelas : " | Semua kelas"), 70, 160, "600 28px " + SANS, "#e0a63a", "left", 1, W - 140);
+  certText(g, new Date().toLocaleDateString("ms-MY", { day: "numeric", month: "long", year: "numeric" }), W - 70, 100, "600 26px " + SANS, "#f1ead6", "right", 1);
+  const box = [[d.n, "Murid"], [d.act + " (" + (d.n ? Math.round(d.act * 100 / d.n) : 0) + "%)", "Aktif 7 hari"], [d.ans, "Soalan dijawab dalam misi"], [d.ans ? Math.round(d.ok * 100 / d.ans) + "%" : "-", "Ketepatan keseluruhan"]];
+  box.forEach((b, i) => { const x = 70 + i * 280; g.fillStyle = "#fff"; g.fillRect(x, 250, 260, 170); g.strokeStyle = "#d8cfae"; g.lineWidth = 3; g.strokeRect(x, 250, 260, 170); certText(g, String(b[0]), x + 130, 345, "700 54px " + SANS, ACC, "center", 0, 230); certText(g, b[1], x + 130, 395, "600 22px " + SANS, MUT, "center", 0, 236); });
+  let y = 500;
+  certText(g, "MURID PALING AKTIF", 70, y, "700 30px " + SANS, INK, "left", 4); y += 20;
+  g.fillStyle = ACC; g.fillRect(70, y, 120, 6); y += 50;
+  if (!d.top.length) { certText(g, "Belum ada murid aktif dalam 14 hari lepas.", 70, y, "500 26px " + SANS, MUT, "left", 0); y += 50; }
+  d.top.forEach((x, i) => { certText(g, (i + 1) + ".", 70, y, "700 28px " + SANS, ACC, "left", 0); certText(g, x.nama + (x.kelas ? " (" + x.kelas + ")" : ""), 120, y, "600 28px " + SANS, INK, "left", 0, 520); certText(g, x.pangkat + " | " + x.xp + " XP | " + x.m + " misi | streak " + x.fl + " hari", W - 70, y, "500 24px " + SANS, MUT, "right", 0, 540); y += 50; });
+  y += 40; certText(g, "TOPIK PERLU PERHATIAN", 70, y, "700 30px " + SANS, INK, "left", 4); y += 20; g.fillStyle = ACC; g.fillRect(70, y, 120, 6); y += 50;
+  d.weak.forEach((x) => { const pc = x.acc != null ? Math.round(x.acc * 100) : Math.round(x.pct * 100); certText(g, guruLab(x.t) + "  " + x.t.nama, 70, y, "600 26px " + SANS, INK, "left", 0, 760); g.fillStyle = "#e6dfc3"; g.fillRect(860, y - 24, 220, 20); g.fillStyle = pc < 50 ? "#c0453a" : ACC; g.fillRect(860, y - 24, 220 * pc / 100, 20); certText(g, pc + "%" + (x.acc != null ? "" : " selesai"), W - 70, y, "700 24px " + SANS, INK, "right", 0); y += 50; });
+  y += 40; certText(g, "KEMAJUAN MENGIKUT TOPIK", 70, y, "700 30px " + SANS, INK, "left", 4); y += 20; g.fillStyle = ACC; g.fillRect(70, y, 120, 6); y += 44;
+  const rowH = Math.max(28, Math.min(40, Math.floor((H - 150 - y) / Math.max(1, d.tp.length))));
+  d.tp.forEach((x, i) => { if (y > H - 130) return; if (i % 2 === 0) { g.fillStyle = "#f2ecd6"; g.fillRect(60, y - rowH + 10, W - 120, rowH); } certText(g, guruLab(x.t) + "  " + x.t.nama, 74, y, "500 " + Math.round(rowH * 0.62) + "px " + SANS, INK, "left", 0, 760); certText(g, x.done + "/" + d.n + " murid", 980, y, "500 " + Math.round(rowH * 0.58) + "px " + SANS, MUT, "right", 0); certText(g, x.acc != null ? Math.round(x.acc * 100) + "%" : "-", W - 74, y, "700 " + Math.round(rowH * 0.62) + "px " + SANS, INK, "right", 0); y += rowH; });
+  certText(g, "Dijana oleh Gempur. Ketepatan dikira daripada jawapan misi Tempur. Bukan dokumen rasmi KPM.", W / 2, H - 50, "500 18px " + SANS, MUT, "center", 0, W - 120);
+  const blob = await new Promise((r) => c.toBlob(r, "image/jpeg", 0.92));
+  if (!blob) return "gagal";
+  const jpg = new Uint8Array(await blob.arrayBuffer());
+  return saveFile(rptPdf(jpg, W, H), "Kad-Laporan-Gempur-" + (GURU.kelas || "semua-kelas").replace(/[^A-Za-z0-9]+/g, "-") + "-" + dayKey() + ".pdf");
+}
+
 function setView(v) {
   UI.view = v;
   document.body.classList.toggle("vmap", v === "map");
-  ["map", "skuad", "team", "rank", "gudang", "pangkat", "guru"].forEach((n) => {
+  ["map", "skuad", "team", "rank", "gudang", "pangkat", "guru", "latihan"].forEach((n) => {
     $("v-" + n).hidden = n !== v;
     $("tab-" + n).setAttribute("aria-selected", n === v ? "true" : "false");
   });
@@ -14766,6 +15125,7 @@ function setView(v) {
   if (v === "pangkat") renderPangkat();
   if (v === "guru") { if (GURU.rows && Date.now() - GURU.at > 60000) GURU.rows = null; renderGuru(); }
   if (v === "gudang") renderGudang();
+  if (v === "latihan") renderLatihan();
   if (v === "map") { renderChamp(); renderMaps(); renderList(); renderPanel(); }
   window.scrollTo(0, 0);
 }
@@ -15132,6 +15492,9 @@ function renderGuru() {
   const ex = el("button", { type: "button", class: "btn sm" }, "Muat turun CSV");
   ex.addEventListener("click", () => guruExport(rows));
   ctl.appendChild(ex);
+  const kp = el("button", { type: "button", class: "btn sm" }, "Muat turun Kad Laporan (PDF)");
+  kp.addEventListener("click", async () => { kp.disabled = true; try { await guruReportPdf(rows); } catch (e) { toast("Gagal menjana PDF.", "bad"); } kp.disabled = false; });
+  ctl.appendChild(kp);
   box.appendChild(ctl);
   const sw = el("div", { class: "gwrap" }), st = el("table", { class: "gtable" });
   st.appendChild(el("thead", null, null, (() => { const r = el("tr"); ["Nama", "Kelas", "Pangkat", "XP", "Misi", "Aktif", "Streak"].forEach((h, i) => r.appendChild(el("th", i > 2 && h !== "Aktif" ? { class: "num" } : null, h))); return r; })()));
@@ -15328,7 +15691,7 @@ $("regReset").addEventListener("click", () => {
   Net.noMerge = true;
   P.dq = null; P.dqm = {}; P.lg = { n: 0, l: "" }; P.ss = null; P.sg = 0; P.sr = 0; P.stk = { n: 0, l: "", b: 0 }; P.st = { hs: 0, kl: 0, ok: 0, mis: 0, wp: 0 }; P.bd = {}; P.wk = ""; P.wp = 0; P.mk = ""; P.mp = 0;
   P.coin = 0; P.av = "inf"; P.avOwn = ["inf"]; P.avl = {}; P.acc = ""; P.accOwn = []; P.wo = []; P.pa = 0; P.ar = 0; P.hm = 0; P.lgs = { w: 0, n: 0, dr: 0, sh: 0 }; P.lz = 0;
-  P.xp = 0; P.la = 0; P.ad = 0; P.ld = ""; P.prog = {}; P.lemah = {}; P.seen = {}; P.sq = null;
+  P.xp = 0; P.la = 0; P.ad = 0; P.ld = ""; P.prog = {}; P.lemah = {}; P.seen = {}; P.sq = null; P.ll = {}; P.lc = null; P.lcd = {}; P.cs = null;
   saveP(); $("reg").hidden = true; renderAll();
 });
 ["inName", "inKelas", "inSekolah"].forEach((id) => $(id).addEventListener("keydown", (e) => { if (e.key === "Enter") confirmReg(); }));
