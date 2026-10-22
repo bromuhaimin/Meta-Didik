@@ -625,11 +625,53 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
 #jtOv .jt-pause { margin-left: 8px; background: transparent; color: #ffd23d; border: 1px solid #ffd23d; border-radius: 8px; padding: 10px 14px; font: 700 13px var(--font-body); cursor: pointer; }
 #jtOv .jt-tb { width: 100%; border-collapse: collapse; margin: 12px 0; } #jtOv .jt-tb th { text-align: left; font-size: 12px; opacity: .7; padding: 6px; } #jtOv .jt-tb td { padding: 10px 6px; border-top: 1px solid rgba(255,255,255,.1); } #jtOv .jt-tb tr td:first-child { border-left: 4px solid var(--c, #7cf5c4); font-weight: 800; } #jtOv .jt-tb .nm { font-weight: 700; color: var(--c); }
 /* /jt-css */
+/* sl-css */
+#slOv { position: fixed; inset: 0; z-index: 130; overflow: hidden; color: #f2f7fb; font-family: var(--font-body); background: #09141d; display: flex; flex-direction: column; --sl: #2f9e8f; }
+#slOv[hidden] { display: none; }
+#slOv .sl-bg { position: fixed; inset: 0; background: radial-gradient(ellipse at 15% 0%, color-mix(in srgb, var(--sl) 45%, transparent), transparent 55%), radial-gradient(ellipse at 100% 100%, rgba(255,200,80,.14), transparent 50%); pointer-events: none; }
+#slOv .sl-hd { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 18px; flex-wrap: wrap; }
+#slOv .sl-kick { font: 800 12px var(--font-body); letter-spacing: .16em; color: var(--sl); filter: brightness(1.5); }
+#slOv .sl-tools { display: flex; gap: 8px; flex-wrap: wrap; }
+#slOv .sl-x { background: rgba(8,20,32,.8); color: #ffd23d; border: 1px solid rgba(255,210,61,.55); padding: 7px 14px; font: 600 13px var(--font-body); cursor: pointer; border-radius: 6px; }
+#slOv .sl-bar { position: relative; height: 4px; background: rgba(255,255,255,.1); } #slOv .sl-bar i { display: block; height: 100%; background: var(--sl); filter: brightness(1.4); transition: width .3s; }
+#slOv .sl-main { position: relative; flex: 1; display: flex; align-items: center; min-height: 0; padding: 0 8px; }
+#slOv .sl-nav { flex: none; width: 44px; height: 80px; background: rgba(255,255,255,.06); color: #fff; border: 0; border-radius: 10px; font-size: 34px; cursor: pointer; } #slOv .sl-nav:hover { background: rgba(255,255,255,.16); }
+#slOv .sl-stage { flex: 1; min-width: 0; max-height: 100%; overflow-y: auto; padding: 18px 28px; animation: slIn .35s ease; margin: 0 auto; max-width: 1150px; }
+@keyframes slIn { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+#slOv .sl-h { font: 800 clamp(26px,4vw,46px)/1.15 var(--font-display, var(--font-body)); margin: 0 0 18px; } #slOv .sl-h2 { font: 700 18px var(--font-body); margin: 18px 0 6px; color: #ffd23d; }
+#slOv .cover { text-align: center; padding-top: 5vh; } #slOv .cover h1 { font: 800 clamp(34px,6vw,72px)/1.1 var(--font-display, var(--font-body)); margin: 14px 0; } #slOv .sl-code { display: inline-block; background: var(--sl); color: #fff; padding: 6px 16px; border-radius: 20px; font: 800 14px var(--font-body); letter-spacing: .1em; filter: brightness(1.2); }
+#slOv .sl-sub { opacity: .75; font-size: 16px; } #slOv .sl-hint { margin-top: 20px; font-size: 13px; opacity: .6; } #slOv .sl-dskp { margin-top: 18px; font-size: 14px; opacity: .65; } #slOv .sl-p { font-size: 20px; opacity: .9; max-width: 760px; }
+#slOv .sl-ul, #slOv .sl-ol { font-size: clamp(18px,2.6vw,28px); line-height: 1.45; padding-left: 28px; margin: 0; } #slOv .sl-ul.sm { font-size: clamp(15px,2vw,20px); } #slOv .sl-ul li, #slOv .sl-ol li { margin: 0 0 14px; } #slOv .sl-ul li::marker { color: var(--sl); filter: brightness(1.6); }
+#slOv .rv { opacity: 0; transform: translateY(14px); transition: opacity .4s, transform .4s; pointer-events: none; } #slOv .rv.show { opacity: 1; transform: none; pointer-events: auto; }
+#slOv .sl-q { font: 700 clamp(20px,3vw,32px)/1.35 var(--font-body); margin: 0 0 18px; } #slOv .sl-q.big { font-size: clamp(20px,2.8vw,30px); }
+#slOv .sl-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; } @media (max-width: 700px) { #slOv .sl-opts { grid-template-columns: 1fr; } }
+#slOv .sl-opt { display: flex; gap: 12px; align-items: center; text-align: left; padding: 14px; min-height: 70px; color: #f2f7fb; background: #0f2a3d; border: 2px solid rgba(255,255,255,.2); border-radius: 12px; font: 600 clamp(15px,1.9vw,20px)/1.35 var(--font-body); cursor: pointer; } #slOv .sl-opt:hover:not(:disabled) { border-color: var(--sl); filter: brightness(1.2); }
+#slOv .sl-opt b { flex: none; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: rgba(255,255,255,.14); } #slOv .sl-opt.ok { border-color: #3dffa0; background: rgba(61,255,160,.18); } #slOv .sl-opt.bad { border-color: #ff4d7d; background: rgba(255,77,125,.2); } #slOv .sl-opt.dim { opacity: .4; }
+#slOv .sl-fb { margin-top: 14px; padding: 12px 14px; border-radius: 10px; border: 1px solid; font-size: 16px; } #slOv .sl-fb[hidden] { display: none; } #slOv .sl-fb.ok { border-color: #3dffa0; background: rgba(61,255,160,.1); } #slOv .sl-fb.bad { border-color: #ff4d7d; background: rgba(255,77,125,.1); }
+#slOv .sl-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); gap: 14px; }
+#slOv .sl-card { position: relative; height: 150px; perspective: 800px; cursor: pointer; } #slOv .sl-face { position: absolute; inset: 0; display: grid; place-items: center; padding: 12px; text-align: center; border-radius: 14px; backface-visibility: hidden; transition: transform .5s; font-size: 17px; line-height: 1.35; overflow: auto; }
+#slOv .sl-face.f { background: linear-gradient(135deg, var(--sl), #0f2a3d); font-weight: 800; font-size: 20px; } #slOv .sl-face.b { background: #123a52; border: 2px solid #ffd23d; transform: rotateY(180deg); } #slOv .sl-card.flip .f { transform: rotateY(180deg); } #slOv .sl-card.flip .b { transform: rotateY(0); }
+#slOv .sl-mm { display: grid; grid-template-columns: 1.2fr 1fr; gap: 18px; align-items: center; } @media (max-width: 800px) { #slOv .sl-mm { grid-template-columns: 1fr; } }
+#slOv .sl-ring { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 70px 0 10px; } #slOv .sl-core { position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: var(--sl); color: #fff; padding: 12px 22px; border-radius: 40px; font-weight: 800; font-size: 18px; text-align: center; max-width: 90%; filter: brightness(1.25); }
+#slOv .sl-node { padding: 12px; color: #f2f7fb; background: #0f2a3d; border: 2px solid rgba(255,255,255,.2); border-radius: 12px; font: 600 15px/1.3 var(--font-body); cursor: pointer; text-align: left; } #slOv .sl-node.on { border-color: #ffd23d; background: #173f58; }
+#slOv .sl-mmd { background: rgba(15,42,61,.85); border-left: 4px solid #ffd23d; border-radius: 10px; padding: 18px; font-size: 19px; line-height: 1.5; min-height: 120px; }
+#slOv .sl-timer { display: flex; align-items: center; gap: 10px; margin: 16px 0; flex-wrap: wrap; } #slOv .sl-td { font: 800 30px var(--font-body); min-width: 90px; color: #ffd23d; } #slOv .sl-td.low { color: #ff4d7d; }
+#slOv .sl-btn { background: var(--sl); color: #fff; border: 0; border-radius: 8px; padding: 9px 18px; font: 700 14px var(--font-body); cursor: pointer; filter: brightness(1.25); } #slOv .sl-btn.alt { background: transparent; border: 1px solid #ffd23d; color: #ffd23d; filter: none; } #slOv .sl-btn.big { padding: 16px 26px; font-size: 17px; }
+#slOv .sl-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+#slOv .sl-lv { display: inline-block; background: #ffd23d; color: #2a1d00; padding: 5px 14px; border-radius: 20px; font: 800 13px var(--font-body); margin-bottom: 12px; }
+#slOv .sl-notes { position: relative; margin: 0 18px 6px; padding: 10px 14px; background: rgba(255,210,61,.12); border: 1px dashed #ffd23d; border-radius: 8px; font-size: 14px; }
+#slOv .sl-ft { position: relative; display: flex; justify-content: space-between; align-items: center; padding: 8px 18px 12px; font-size: 12px; opacity: .85; gap: 10px; flex-wrap: wrap; } #slOv .sl-dots { display: flex; gap: 6px; flex-wrap: wrap; } #slOv .sl-dot { width: 10px; height: 10px; border-radius: 50%; border: 0; background: rgba(255,255,255,.25); cursor: pointer; padding: 0; } #slOv .sl-dot.on { background: var(--sl); filter: brightness(1.6); transform: scale(1.3); }
+#slOv .sl-idx { position: fixed; right: 12px; top: 56px; width: 340px; max-width: 92vw; max-height: 75vh; overflow-y: auto; background: #0c2132; border: 1px solid rgba(255,255,255,.2); border-radius: 12px; padding: 12px; z-index: 6; } #slOv .sl-idx h3 { margin: 0 0 8px; font-size: 15px; } #slOv .sl-ix { display: block; width: 100%; text-align: left; background: transparent; color: #f2f7fb; border: 0; padding: 8px; border-radius: 6px; font: 13px var(--font-body); cursor: pointer; } #slOv .sl-ix:hover, #slOv .sl-ix.on { background: rgba(255,255,255,.12); }
+#slOv .sl-pk { position: relative; max-width: 900px; margin: 0 auto; padding: 56px 18px 30px; overflow-y: auto; height: 100%; width: 100%; box-sizing: border-box; } #slOv .sl-pk h1 { font: 800 clamp(26px,4vw,44px)/1.15 var(--font-display, var(--font-body)); margin: 6px 0 8px; }
+#slOv .sl-search { width: 100%; box-sizing: border-box; padding: 12px; margin: 10px 0; background: #0b2233; color: #fff; border: 1px solid rgba(255,255,255,.3); border-radius: 8px; font: 15px var(--font-body); } #slOv .sl-pl h4 { margin: 18px 0 8px; display: flex; align-items: center; gap: 8px; font-size: 14px; } #slOv .sl-pl h4 i { width: 12px; height: 12px; border-radius: 50%; }
+#slOv .sl-pi { display: flex; gap: 12px; align-items: center; width: 100%; text-align: left; padding: 12px; margin-bottom: 6px; background: #0f2a3d; color: #f2f7fb; border: 1px solid rgba(255,255,255,.15); border-radius: 10px; font: 600 15px var(--font-body); cursor: pointer; } #slOv .sl-pi:hover { border-color: #ffd23d; } #slOv .sl-pi .c { flex: none; min-width: 42px; text-align: center; padding: 4px 8px; border-radius: 6px; color: #fff; font-weight: 800; font-size: 13px; }
+#slOv .sl-notes[hidden] { display: none; }
+/* /sl-css */
 </style>
 <div id="rkBanner" role="status" hidden></div>
 <div id="app">
   <header class="top"><div class="top-in">
-    <div class="brand">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.46</small></div>
+    <div class="brand">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.47</small></div>
     <button class="meb" id="meBtn" type="button" aria-label="Profil anggota">
       <span id="meIns"></span>
       <span class="me-t"><span class="me-n" id="meName">Anggota</span><span class="me-r" id="meRank">Prebet</span><div class="xpbar"><i id="meXp"></i></div></span>
@@ -2651,6 +2693,7 @@ function renderList() {
   });
   box.appendChild(khasListSection());
   box.appendChild(kbatListSection());
+  box.appendChild(slListSection());
 }
 function selectMission(id) {
   UI.sel = id;
@@ -7925,6 +7968,9 @@ function renderPanel() {
   const jtb = el("button", { type: "button", class: "btn alt", id: "btnJT" }, "Misi Jentik");
   jtb.title = "Kamera: buat isyarat OK untuk menggerak, tunjuk tapak tangan untuk menjentik jawapan";
   jtb.addEventListener("click", () => jtOpen(t.id));
+  const slb = el("button", { type: "button", class: "btn alt", id: "btnSL" }, "Slaid PdPc");
+  slb.title = "Slaid pembentangan interaktif dengan aktiviti PAK21 dan soalan KBAT";
+  slb.addEventListener("click", () => slOpen(t.id));
   const lgb = el("button", { type: "button", class: "btn alt", id: "btnLG" }, "Misi Lagenda");
   lgb.title = "Arena tiga lorong gaya MOBA: pecahkan perisai ilmu dengan menjawab kuiz";
   lgb.addEventListener("click", () => lgOpen(t.id));
@@ -7943,7 +7989,7 @@ function renderPanel() {
     el("div", { class: "muted" }, n.nama),
     themeLine(t),
     sr,
-    el("div", { class: "row" }, go, arb, jtb, lgb, blb, dwb, bzb));
+    el("div", { class: "row" }, go, arb, jtb, lgb, blb, dwb, bzb), el("div", { class: "row", style: "margin-top:6px" }, slb));
   // pilihan misi lain dalam negeri yang sama
   const sibs = DATA.topik.filter((x) => x.negeri === t.negeri);
   if (sibs.length > 1) {
@@ -8730,6 +8776,228 @@ function jtPodium(g) {
   return el("div", null, null, el("h1", null, rows[0].s.name, el("em", null, "juara dengan " + rows[0].s.score + " mata")), tb);
 }
 /* ---------- /Misi Jentik */
+/* ---------- Slaid PdPc (v17.47): slaid pembentangan interaktif untuk setiap tajuk, dengan aktiviti PAK21 dan soalan KBAT ---------- */
+const SL = { open: false, tid: "", slides: [], i: 0, root: null, notes: false, tmr: 0, mode: "view" };
+const SL_ACT = [
+  { n: "Fikir-Pasang-Kongsi", k: "Kolaboratif dan Komunikasi", m: 6, steps: (c) => ["Fikir: setiap murid berfikir seorang diri selama 1 minit tentang soalan “" + c.q + "”.", "Pasang: berbincang berpasangan dan padankan jawapan.", "Kongsi: dua pasangan bergabung, kemudian wakil melapor kepada kelas.", "Guru memberi maklum balas dan merumuskan isi utama."] },
+  { n: "Kepala Bernombor", k: "Kolaboratif", m: 8, steps: (c) => ["Murid dalam kumpulan 4 orang diberi nombor 1 hingga 4.", "Guru mengemukakan soalan: “" + c.q + "”.", "Kumpulan berbincang supaya SEMUA ahli faham jawapan.", "Guru memanggil satu nombor secara rawak; murid itu menjawab bagi pihak kumpulan."] },
+  { n: "Pusingan Galeri (Gallery Walk)", k: "Komunikasi dan Berfikir secara kritis", m: 12, steps: (c) => ["Setiap kumpulan menulis jawapan bagi “" + c.q + "” pada kertas mahjong.", "Tampal hasil di dinding kelas.", "Kumpulan bergerak ikut arah jam, membaca dan menambah komen atau tanda bintang pada hasil kumpulan lain.", "Kembali ke hasil asal, baca komen dan bentang penambahbaikan."] },
+  { n: "Jigsaw (Kumpulan Pakar)", k: "Kolaboratif dan Komunikasi", m: 15, steps: (c) => ["Bahagikan isi kepada 4 bahagian: (1) " + c.A + " (2) " + c.B + " (3) " + c.C + " (4) kaitan dengan kehidupan.", "Kumpulan pakar: murid yang sama bahagian berbincang dan menjadi pakar.", "Kembali ke kumpulan asal dan ajar rakan tentang bahagian masing-masing.", "Kuiz ringkas: guru menguji kefahaman melalui Misi Jentik atau Latihan AR."] },
+  { n: "Peta Pemikiran i-Think", k: "Kreativiti dan Berfikir secara kritis", m: 12, steps: (c) => ["Pilih peta i-Think yang sesuai (Peta Buih, Peta Pokok atau Peta Alir).", "Tulis “" + c.T + "” di tengah dan kembangkan isi utama daripada nota.", "Hiasi dengan warna, simbol dan contoh daripada kehidupan.", "Setiap kumpulan membentangkan peta; kelas menilai dengan 2 bintang dan 1 cadangan."] },
+  { n: "Kerusi Panas (Hot Seat)", k: "Komunikasi dan Berfikir secara kritis", m: 10, steps: (c) => ["Seorang wakil kumpulan duduk di “kerusi panas” sebagai pakar topik “" + c.T + "”.", "Ahli kelas mengemukakan soalan berdasarkan isi: “" + c.A + "”.", "Pakar menjawab dengan hujah dan contoh.", "Guru dan kelas memberi penilaian serta membetulkan salah faham."] },
+  { n: "Placemat (Papan Alas)", k: "Kolaboratif dan Berfikir secara kritis", m: 10, steps: (c) => ["Satu kertas dibahagikan kepada ruang setiap ahli dan satu ruang tengah.", "Setiap murid menulis pandangan sendiri tentang “" + c.q + "” dalam ruangnya.", "Putar kertas dan baca pandangan rakan.", "Bincang dan tulis jawapan sepakat kumpulan pada ruang tengah."] },
+  { n: "Main Peranan dan Simulasi", k: "Kreativiti dan Komunikasi", m: 15, steps: (c) => ["Kumpulan memilih situasi yang berkait dengan “" + c.T + "” (contoh: " + c.A + ").", "Sediakan skrip ringkas 2 minit dan bahagikan peranan.", "Lakonkan di hadapan kelas.", "Kelas menilai: ketepatan isi, kebolehpercayaan dan nilai murni yang dipaparkan."] },
+  { n: "Susun Kad (Card Sort)", k: "Berfikir secara kritis", m: 8, steps: (c) => ["Guru menyediakan kad isi penting, contohnya: “" + c.A + "”, “" + c.B + "”, “" + c.C + "”.", "Kumpulan menyusun dan mengelaskan kad mengikut kategori yang mereka tetapkan.", "Terangkan sebab susunan kepada kumpulan lain.", "Bandingkan dan betulkan bersama guru."] }
+];
+const SL_COL = { tw: "#2f9e8f", pi: "#3a7bd5", p3: "#8a5cd6", sj: "#c2793a", ba: "#c0455f" };
+function slShort(s, n) {
+  s = String(s || "").replace(/\s+/g, " ").trim(); n = n || 90;
+  const m = s.match(/^(.+?[.;:!?])(\s|$)/); let o = m ? m[1] : s;
+  if (o.length > n) { o = o.slice(0, n); o = o.replace(/\s+\S*$/, "") + "..."; } else o = o.replace(/[.;:]$/, "");
+  return o;
+}
+function slHash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; }
+function slKbat(t) {
+  const out = [], T = t.nama, n = t.nota || [], A = slShort(n[0], 110), B = slShort(n[1] || n[0], 110), C = slShort(n[2] || n[1] || n[0], 110);
+  try { kbPool().forEach((x) => { if (String(x.t).trim() === String(T).trim()) out.push({ aras: "Aras KBAT (soalan peperiksaan)", q: x.q, isi: x.isi || [] }); }); } catch (e) { /* abaikan */ }
+  const gen = [
+    { aras: "Menganalisis", q: "Bandingkan dan kaitkan dua isi penting dalam topik “" + T + "”: (i) " + A + " (ii) " + B + ". Huraikan bagaimana kedua-duanya saling berkait.", isi: [A, B, "Hubungan: salah satu menjadi sebab, asas atau kesan kepada yang lain", "Contoh daripada kehidupan atau peristiwa sebenar"] },
+    { aras: "Menilai", q: "Seorang rakan berkata isi ini tidak lagi relevan pada masa kini: “" + A + "”. Adakah anda bersetuju? Wajarkan pendapat anda dengan sekurang-kurangnya dua hujah dan satu contoh.", isi: [A, "Hujah 1: kepentingan isi ini kepada diri, masyarakat atau negara", "Hujah 2: akibat jika isi ini diabaikan", "Contoh sebenar yang menyokong pendapat"] },
+    { aras: "Mencipta", q: "Anda dilantik menjadi duta kempen sekolah bertajuk “" + T + "”. Cipta satu slogan dan satu pelan tindakan ringkas yang menerapkan isi: “" + C + "”. Jelaskan mengapa pelan anda berkesan.", isi: ["Slogan ringkas, mudah diingat dan berkait dengan topik", C, "Langkah tindakan yang praktikal (siapa, apa, bila)", "Kesan positif yang dijangka kepada murid dan masyarakat"] }
+  ];
+  return out.concat(gen).slice(0, 4);
+}
+function slTerms(n) {
+  const out = [];
+  (n || []).forEach((s) => { const m = String(s).match(/^(.{3,48}?)\s+(ialah|bermaksud|merujuk kepada)\s+(.+)$/i); if (m && !/[:;]/.test(m[1])) out.push({ t: m[1].replace(/^[A-Z]/, (c) => c), d: m[3].replace(/\.$/, "") }); });
+  return out.slice(0, 6);
+}
+function slTimer(mins) {
+  const w = el("div", { class: "sl-timer" }); let left = mins * 60, run = false;
+  const d = el("b", { class: "sl-td" }, ""), btn = el("button", { type: "button", class: "sl-btn" }, "Mula"), rs = el("button", { type: "button", class: "sl-btn alt" }, "Set semula");
+  const fmt = () => { d.textContent = Math.floor(left / 60) + ":" + String(left % 60).padStart(2, "0"); d.classList.toggle("low", left <= 10 && left > 0); };
+  const stop = () => { run = false; clearInterval(SL.tmr); btn.textContent = left > 0 && left < mins * 60 ? "Sambung" : "Mula"; };
+  btn.addEventListener("click", () => {
+    if (run) { stop(); return; }
+    if (left <= 0) left = mins * 60;
+    run = true; btn.textContent = "Jeda"; clearInterval(SL.tmr);
+    SL.tmr = setInterval(() => { left--; fmt(); if (left <= 5 && left > 0) arSnd("tick"); if (left <= 0) { stop(); arSnd("ok"); d.textContent = "Masa tamat!"; } }, 1000);
+  });
+  rs.addEventListener("click", () => { stop(); left = mins * 60; fmt(); btn.textContent = "Mula"; });
+  w.append(el("span", null, "Pemasa"), d, btn, rs); fmt(); return w;
+}
+function slBuild(tid) {
+  const t = TOPIK[tid]; if (!t) return [];
+  const T = t.nama, sj = SUBJS[SUBJ], nota = (t.nota || []).filter(Boolean), qs = (BYTOPIK[tid] || []).slice().sort((a, b) => a.d - b.d);
+  const A = slShort(nota[0], 70), B = slShort(nota[1] || nota[0], 70), C = slShort(nota[2] || nota[1] || nota[0], 70);
+  const S = [], H = (cls, txt, ...kids) => el("div", { class: cls }, txt, ...kids);
+  const bul = (host, items) => { const ul = el("ul", { class: "sl-ul" }); items.forEach((x) => { const li = el("li", { class: "rv" }); qSet(li, x); ul.appendChild(li); }); host.appendChild(ul); };
+  const mcq = (host, q) => {
+    const ord = shuffle([0, 1, 2, 3]), box = H("sl-opts"); let done = false;
+    const fb = H("sl-fb"); fb.hidden = true;
+    ord.forEach((oi, k) => {
+      const b = el("button", { type: "button", class: "sl-opt" }, null, el("b", null, "ABCD"[k]), qSet(el("span"), q.o[oi]));
+      b.addEventListener("click", () => {
+        if (done) return; done = true; const good = oi === q.a;
+        box.querySelectorAll(".sl-opt").forEach((x, j) => { x.disabled = true; x.classList.add(ord[j] === q.a ? "ok" : x === b ? "bad" : "dim"); });
+        arSnd(good ? "ok" : "bad"); fb.hidden = false; fb.className = "sl-fb " + (good ? "ok" : "bad");
+        fb.textContent = ""; fb.append(el("b", null, good ? "Betul! " : "Belum tepat. "), qSet(el("span"), q.e || ""));
+      });
+      box.appendChild(b);
+    });
+    host.append(qSet(H("sl-q"), q.q), box, fb);
+  };
+  // 1 Tajuk
+  S.push({ kick: "SLAID PdPc • " + sj.subjek.toUpperCase(), tip: "Mulakan dengan menyatakan tajuk dan hasil pembelajaran. Masa cadangan: 2 minit.", build: (h) => { h.classList.add("cover"); h.append(H("sl-code", "Misi " + t.kod), qSet(el("h1"), T), H("sl-sub", t.buku || ""), H("sl-hint", "Tekan → atau Space untuk mula. Tekan N untuk nota guru, F untuk skrin penuh.")); } });
+  // 2 Objektif
+  S.push({ kick: "OBJEKTIF PEMBELAJARAN", tip: "Bacakan objektif dan semak di akhir sesi. Masa: 2 minit.", build: (h) => { h.append(H("sl-h", "Pada akhir sesi, murid dapat:")); bul(h, ["Menyatakan konsep dan isi penting bagi “" + T + "”.", "Menjelaskan: " + A, "Mengaitkan " + T + " dengan situasi dalam kehidupan sebenar.", "Menilai dan memberi hujah berdasarkan isi pembelajaran (KBAT)."]); h.append(H("sl-dskp", "Standard kandungan: " + (t.dskp || ""))); } });
+  // 3 Set induksi
+  if (qs.length) S.push({ kick: "SET INDUKSI • TEKA DAHULU", tip: "Murid meneka sebelum belajar. Tidak perlu betul; tujuannya menarik minat. Masa: 3 minit.", build: (h) => { h.append(H("sl-h", "Teka dahulu sebelum kita belajar!")); mcq(h, qs[0]); } });
+  // 4 Isi penting
+  for (let k = 0; k < nota.length; k += 3) {
+    const part = nota.slice(k, k + 3), no = Math.floor(k / 3) + 1, tot = Math.ceil(nota.length / 3);
+    S.push({ kick: "ISI PENTING " + no + " / " + tot, tip: "Klik atau tekan → untuk mendedahkan setiap isi, dan minta murid menerangkan semula dengan bahasa sendiri. Masa: 4 minit.", build: (h) => { h.append(H("sl-h", T)); bul(h, part); } });
+  }
+  // 5 Kad istilah
+  const terms = slTerms(nota);
+  if (terms.length >= 3) S.push({ kick: "KAD ISTILAH • KLIK UNTUK MEMBALIK", tip: "Murid cuba menerangkan istilah sebelum kad dibalik. Masa: 3 minit.", build: (h) => { h.append(H("sl-h", "Apakah maksudnya?")); const g = H("sl-cards"); terms.forEach((x) => { const c = H("sl-card"); const f = H("sl-face f"), b = H("sl-face b"); qSet(f, x.t); qSet(b, x.d); c.append(f, b); c.addEventListener("click", () => { c.classList.toggle("flip"); arSnd("hov"); }); g.appendChild(c); }); h.appendChild(g); } });
+  // 6 Peta minda
+  if (nota.length >= 3) S.push({ kick: "PETA MINDA INTERAKTIF", tip: "Klik setiap cabang untuk membuka penerangan. Boleh digunakan sebagai rumusan. Masa: 3 minit.", build: (h) => {
+    const wrap = H("sl-mm"), det = H("sl-mmd", "Klik satu cabang untuk melihat isinya."), ring = H("sl-ring");
+    ring.appendChild(qSet(H("sl-core"), T));
+    nota.slice(0, 6).forEach((x, k) => { const b = el("button", { type: "button", class: "sl-node", style: "--n:" + k }); qSet(b, slShort(x, 38)); b.addEventListener("click", () => { wrap.querySelectorAll(".sl-node").forEach((y) => y.classList.toggle("on", y === b)); qSet(det, x); arSnd("hov"); }); ring.appendChild(b); });
+    wrap.append(ring, det); h.append(H("sl-h", "Rumusan tajuk"), wrap); } });
+  // 7 Semak kefahaman
+  qs.slice(1, 4).forEach((q, k, a) => S.push({ kick: "SEMAK KEFAHAMAN " + (k + 1) + " / " + a.length, tip: "Klik jawapan atau gunakan Misi Jentik untuk kumpulan. Masa: 2 minit setiap soalan.", build: (h) => { mcq(h, q); } }));
+  // 8 PAK21
+  const base = slHash(tid + SUBJ), acts = [SL_ACT[base % SL_ACT.length], SL_ACT[(base + 3) % SL_ACT.length]];
+  const Qs = ["Apakah kepentingan " + T + " dalam kehidupan kita?", "Bagaimanakah isi “" + A + "” dapat diamalkan atau difahami dalam situasi sebenar?"];
+  acts.forEach((a, k) => S.push({ kick: "AKTIVITI PAK21 " + (k + 1) + " • " + a.k.toUpperCase(), tip: "Bahagikan murid kepada kumpulan 4 orang. Gunakan pemasa. Masa cadangan: " + a.m + " minit.", build: (h) => {
+    h.append(H("sl-h", a.n)); const steps = a.steps({ T: T, A: A, B: B, C: C, q: Qs[k] });
+    const ol = el("ol", { class: "sl-ol" }); steps.forEach((s) => { const li = el("li", { class: "rv" }); qSet(li, s); ol.appendChild(li); }); h.append(ol, slTimer(Math.max(2, Math.round(a.m / 2))), H("sl-hint", "Kemahiran abad ke-21: " + a.k + ". Masa cadangan: " + a.m + " minit.")); } }));
+  // 9 Aktiviti permainan
+  S.push({ kick: "AKTIVITI PAK21 • PEMBELAJARAN BERASASKAN PERMAINAN", tip: "Mulakan Misi Jentik mod berkumpulan atau Latihan AR dengan projektor. Masa: 10 minit.", build: (h) => {
+    h.append(H("sl-h", "Cabaran kumpulan: jentik jawapan!"), H("sl-p", "Skuad bergilir menjawab soalan tajuk ini. Wakil skuad membuat isyarat OK untuk memilih dan menunjukkan tapak tangan untuk menjentik jawapan."));
+    const row = H("sl-row"); const go = (txt, fn) => { const b = el("button", { type: "button", class: "sl-btn big" }, txt); b.addEventListener("click", fn); row.appendChild(b); };
+    go("Mulakan Misi Jentik", () => { const id = tid; slClose(); jtOpen(id); }); go("Latihan AR berkumpulan", () => { const id = tid; slClose(); arOpen(id); }); h.append(row); } });
+  // 10 KBAT
+  slKbat(t).forEach((x, k, a) => S.push({ kick: "SOALAN KBAT " + (k + 1) + " / " + a.length + " • " + x.aras.toUpperCase(), tip: "Beri masa berfikir 3 minit, bincang dalam kumpulan, kemudian dedahkan cadangan isi. Jawapan murid yang berhujah baik wajar dihargai walaupun berbeza.", build: (h) => {
+    h.append(H("sl-lv", x.aras), qSet(H("sl-q big"), x.q), slTimer(3), H("sl-h2", "Cadangan isi jawapan"));
+    const ul = el("ul", { class: "sl-ul sm" }); (x.isi.length ? x.isi : ["Berikan hujah, contoh dan kesimpulan."]).forEach((s) => { const li = el("li", { class: "rv" }); qSet(li, s); ul.appendChild(li); }); h.appendChild(ul); } }));
+  // 11 Refleksi
+  S.push({ kick: "REFLEKSI • TIKET KELUAR 3-2-1", tip: "Murid menulis pada kertas kecil atau buku nota dan menyerahkannya sebelum keluar. Masa: 4 minit.", build: (h) => {
+    h.append(H("sl-h", "Tiket keluar"));
+    const ul = el("ul", { class: "sl-ul" }); ["3 perkara baharu yang saya pelajari tentang " + T, "2 perkara yang saya ingin tahu lebih lanjut", "1 soalan yang masih membingungkan saya"].forEach((s) => { const li = el("li", { class: "rv" }, s); ul.appendChild(li); }); h.appendChild(ul); } });
+  // 12 Penutup
+  S.push({ kick: "PENUTUP", tip: "Ulangkaji dengan permainan di rumah. Murid boleh berlatih lagi dalam Misi Tempur.", build: (h) => {
+    h.append(H("sl-h", "Terima kasih! Teruskan berlatih."), H("sl-p", "Mainkan misi ini untuk mengukuhkan kefahaman."));
+    const row = H("sl-row"); const go = (txt, fn) => { const b = el("button", { type: "button", class: "sl-btn big" }, txt); b.addEventListener("click", fn); row.appendChild(b); };
+    go("Misi Tempur", () => { const id = tid; slClose(); try { openBrief(id, "solo"); } catch (e) { selectMission(id); } }); go("Misi Jentik", () => { const id = tid; slClose(); jtOpen(id); }); go("Tutup slaid", slClose); h.append(row); } });
+  return S;
+}
+function slRoot() {
+  if (SL.root) return SL.root;
+  const r = el("div", { id: "slOv", role: "dialog", "aria-modal": "true", "aria-label": "Slaid PdPc" });
+  document.body.appendChild(r); SL.root = r; return r;
+}
+function slOpen(tid) {
+  SL.tid = tid; SL.slides = slBuild(tid); SL.i = 0; SL.open = true; SL.mode = "view";
+  document.body.classList.add("ar-lock");
+  const r = slRoot(); r.hidden = false; r.style.setProperty("--sl", SL_COL[SUBJ] || "#2f9e8f"); arFsBtn(false);
+  try { if (document.activeElement && document.activeElement.blur) document.activeElement.blur(); } catch (e) { /* abaikan */ }
+  slRender(); window.addEventListener("keydown", slKey, true);
+}
+function slClose() {
+  clearInterval(SL.tmr); SL.open = false;
+  if (SL.root) { SL.root.hidden = true; SL.root.textContent = ""; }
+  document.body.classList.remove("ar-lock");
+  try { if (arFsOn()) (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (e) { /* abaikan */ }
+  window.removeEventListener("keydown", slKey, true);
+}
+function slRender() {
+  clearInterval(SL.tmr);
+  const r = slRoot(), S = SL.slides, s = S[SL.i]; r.textContent = "";
+  if (!s) return;
+  const t = TOPIK[SL.tid];
+  const x = el("button", { type: "button", class: "sl-x", "aria-label": "Tutup slaid" }, "Tutup"); x.addEventListener("click", slClose);
+  const fs = el("button", { type: "button", class: "sl-x fs" }, arFsOn() ? "Keluar skrin penuh" : "Skrin penuh"); fs.addEventListener("click", () => { arFsToggle(); setTimeout(() => { fs.textContent = arFsOn() ? "Keluar skrin penuh" : "Skrin penuh"; }, 300); });
+  const nt = el("button", { type: "button", class: "sl-x nt" }, SL.notes ? "Sembunyi nota guru" : "Nota guru"); nt.addEventListener("click", () => { SL.notes = !SL.notes; slRender(); });
+  const stage = el("div", { class: "sl-stage" }); s.build(stage);
+  const rv = stage.querySelectorAll(".rv"); stage.dataset.shown = "0";
+  rv.forEach((e) => e.classList.remove("show"));
+  const prev = el("button", { type: "button", class: "sl-nav", "aria-label": "Sebelum" }, "‹"), next = el("button", { type: "button", class: "sl-nav r", "aria-label": "Seterusnya" }, "›");
+  prev.addEventListener("click", slPrev); next.addEventListener("click", slNext);
+  const bar = el("div", { class: "sl-bar" }, null, el("i", { style: "width:" + Math.round((SL.i + 1) / S.length * 100) + "%" }));
+  const dots = el("div", { class: "sl-dots" }); S.forEach((q, k) => { const d = el("button", { type: "button", class: "sl-dot" + (k === SL.i ? " on" : ""), "aria-label": "Slaid " + (k + 1) }); d.addEventListener("click", () => { SL.i = k; slRender(); }); dots.appendChild(d); });
+  const jump = el("button", { type: "button", class: "sl-x idx" }, "Senarai slaid"); jump.addEventListener("click", slIndex);
+  r.append(el("div", { class: "sl-bg" }), el("div", { class: "sl-hd" }, null, el("div", { class: "sl-kick" }, s.kick), el("div", { class: "sl-tools" }, null, jump, nt, fs, x)), bar,
+    el("div", { class: "sl-main" }, null, prev, stage, next),
+    slNotes(s),
+    el("div", { class: "sl-ft" }, null, el("span", null, (SL.i + 1) + " / " + S.length + " • " + (t ? t.nama : "")), dots));
+  SL.stage = stage;
+  if (rv.length && SL.i === 0) { /* tiada */ }
+}
+function slNotes(s) { const d = el("div", { class: "sl-notes" }, "Nota guru: " + (s.tip || "")); d.hidden = !SL.notes; return d; }
+function slNext() {
+  const st = SL.stage; if (!st) return;
+  const rv = st.querySelectorAll(".rv"), shown = st.querySelectorAll(".rv.show").length;
+  if (shown < rv.length) { rv[shown].classList.add("show"); arSnd("hov"); return; }
+  if (SL.i < SL.slides.length - 1) { SL.i++; slRender(); }
+}
+function slPrev() {
+  const st = SL.stage; if (!st) return;
+  const shown = st.querySelectorAll(".rv.show"); if (shown.length) { shown[shown.length - 1].classList.remove("show"); return; }
+  if (SL.i > 0) { SL.i--; slRender(); st && SL.stage.querySelectorAll(".rv").forEach((e) => e.classList.add("show")); }
+}
+function slIndex() {
+  const r = SL.root, old = r.querySelector(".sl-idx"); if (old) { old.remove(); return; }
+  const w = el("div", { class: "sl-idx" }, null, el("h3", null, "Senarai slaid"));
+  SL.slides.forEach((s, k) => { const b = el("button", { type: "button", class: "sl-ix" + (k === SL.i ? " on" : "") }, (k + 1) + ". " + s.kick); b.addEventListener("click", () => { SL.i = k; slRender(); }); w.appendChild(b); });
+  r.appendChild(w);
+}
+function slKey(e) {
+  if (!SL.open) return;
+  const k = e.key;
+  if (k === "Escape") { slClose(); e.preventDefault(); e.stopPropagation(); return; }
+  if (e.target && /^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)) return;
+  if (k === "ArrowRight" || k === "PageDown" || k === " " || k === "Enter") { if (e.target && e.target.tagName === "BUTTON" && (k === " " || k === "Enter")) return; slNext(); e.preventDefault(); }
+  else if (k === "ArrowLeft" || k === "PageUp" || k === "Backspace") { slPrev(); e.preventDefault(); }
+  else if (k === "n" || k === "N") { SL.notes = !SL.notes; slRender(); }
+  else if (k === "f" || k === "F") { arFsToggle(); }
+  else if (k === "Home") { SL.i = 0; slRender(); } else if (k === "End") { SL.i = SL.slides.length - 1; slRender(); }
+}
+(function () { /* leret (swipe) pada skrin sentuh */
+  let x0 = null;
+  document.addEventListener("touchstart", (e) => { if (SL.open && e.touches.length === 1 && !(e.target.closest && e.target.closest("button,.sl-card,.sl-node"))) x0 = e.touches[0].clientX; else x0 = null; }, { passive: true });
+  document.addEventListener("touchend", (e) => { if (x0 == null || !SL.open) return; const dx = e.changedTouches[0].clientX - x0; x0 = null; if (Math.abs(dx) > 60) { if (dx < 0) slNext(); else slPrev(); } }, { passive: true });
+})();
+/* pemilih tajuk: butang khusus untuk guru atau murid memilih slaid mana-mana tajuk pada peta */
+function slPick() {
+  const r = slRoot(); r.hidden = false; r.textContent = ""; SL.open = true; SL.mode = "pick";
+  document.body.classList.add("ar-lock"); r.style.setProperty("--sl", SL_COL[SUBJ] || "#2f9e8f");
+  const x = el("button", { type: "button", class: "sl-x", style: "position:fixed;top:12px;right:12px;z-index:5" }, "Tutup"); x.addEventListener("click", slClose);
+  const wrap = el("div", { class: "sl-pk" }, null, el("div", { class: "sl-kick" }, "SLAID PdPc"), el("h1", null, "Pilih tajuk untuk dibentangkan"), el("p", { class: "sl-sub" }, SUBJS[SUBJ].subjek + ". Setiap slaid ada isi penting, aktiviti PAK21 dan soalan KBAT. Gunakan projektor atau kongsi skrin."));
+  const q = el("input", { type: "search", placeholder: "Cari tajuk...", "aria-label": "Cari tajuk", class: "sl-search" }); wrap.appendChild(q);
+  const list = el("div", { class: "sl-pl" });
+  const draw = () => {
+    list.textContent = ""; const f = q.value.trim().toLowerCase();
+    DATA.tema.forEach((tm) => {
+      const ts = DATA.topik.filter((t) => t.tema === tm.id && (!f || t.nama.toLowerCase().indexOf(f) >= 0 || String(t.kod).indexOf(f) >= 0)); if (!ts.length) return;
+      const h = el("h4"); const i = el("i"); i.style.background = tm.warna; h.append(i, document.createTextNode(SUBJ !== "tw" ? "Tingkatan " + tm.tingkatan + " " + tm.nama : "Tingkatan " + tm.tingkatan + " Tema " + tm.id.split("-")[1] + ": " + tm.nama)); list.appendChild(h);
+      ts.forEach((t) => { const b = el("button", { type: "button", class: "sl-pi" }); const c = el("span", { class: "c" }, t.kod); c.style.background = tm.warna; const n = el("span", { class: "n" }); qSet(n, t.nama); b.append(c, n); b.addEventListener("click", () => { r.textContent = ""; r.hidden = false; window.removeEventListener("keydown", slKey, true); slOpen(t.id); }); list.appendChild(b); });
+    });
+  };
+  q.addEventListener("input", draw); draw(); wrap.appendChild(list);
+  r.append(el("div", { class: "sl-bg" }), x, wrap);
+  window.addEventListener("keydown", slKey, true);
+}
+function slListSection() {
+  const wrap = el("div"), h = el("h4"), i = el("i"); i.style.background = "#ffd23d"; h.append(i, document.createTextNode("Slaid PdPc: pembentangan interaktif")); wrap.appendChild(h);
+  const rows = el("div", { class: "mrows" }), b = el("button", { type: "button", class: "mrow khas", id: "btnSLP" }), code = el("span", { class: "code" }, "SLAID"); code.style.background = "#ffd23d"; code.style.color = "#2a1d00"; code.style.fontSize = "10px";
+  const mid = el("span"); mid.append(el("div", { class: "nm" }, "Slaid untuk setiap tajuk"), el("div", { class: "sub" }, DATA.topik.length + " tajuk | aktiviti PAK21 | soalan KBAT | kuiz interaktif"));
+  b.append(code, mid); b.addEventListener("click", slPick); rows.appendChild(b); wrap.appendChild(rows); return wrap;
+}
+/* ---------- /Slaid PdPc */
 
 /* ---------- Profil, pangkat ---------- */
 function renderMe() {
