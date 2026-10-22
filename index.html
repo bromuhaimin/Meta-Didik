@@ -42,7 +42,7 @@
 .lrn-e{margin-top:6px;font-size:15px;color:var(--ink)}.lrn-s{font-size:12px;color:var(--muted);margin-top:4px}
 .lrn-score{font-family:var(--font-display);font-size:56px;color:var(--amber)}
 .lrn-rev{border-top:1px solid var(--line);padding:8px 0}.lrn-ra{color:var(--ok);font-weight:700;margin-top:4px}
-/* tema subjek v17.54 */
+/* tema subjek v17.55 */
 html[data-sj="tw"]{--bg:#0b100b;--bg2:#121a11;--bg3:#1a2418;--sjc:#2f9e8f;--line:color-mix(in srgb,#2f9e8f 38%,transparent);--line2:color-mix(in srgb,#2f9e8f 65%,transparent)}
 html[data-sj="pi"]{--bg:#0a0f1a;--bg2:#101826;--bg3:#172335;--sjc:#3a7bd5;--line:color-mix(in srgb,#3a7bd5 38%,transparent);--line2:color-mix(in srgb,#3a7bd5 65%,transparent)}
 html[data-sj="p3"]{--bg:#100b1a;--bg2:#171225;--bg3:#211a35;--sjc:#8a5cd6;--line:color-mix(in srgb,#8a5cd6 38%,transparent);--line2:color-mix(in srgb,#8a5cd6 65%,transparent)}
@@ -71,7 +71,7 @@ textarea.km-in{resize:vertical}
 .km-mod{margin-top:18px;padding-top:10px;border-top:1px solid var(--line)}
 .km-mod details>*{margin-top:8px}
 @media(max-width:560px){.km-r{grid-template-columns:1fr}}
-/* butang komen terapung v17.54 */
+/* butang komen terapung v17.55 */
 #kmFab{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));z-index:60;display:flex;align-items:center;gap:10px;padding:12px 18px 12px 14px;min-height:52px;border:2px solid var(--sjc,var(--amber));border-radius:999px;background:linear-gradient(135deg,var(--sjc,var(--amber)),color-mix(in srgb,var(--sjc,var(--amber)) 70%,#000));color:#fff;font-family:var(--font-util);font-weight:800;font-size:15px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.55),0 0 0 0 var(--sjc,var(--amber));text-shadow:0 1px 2px rgba(0,0,0,.5)}
 #kmFab svg{width:24px;height:24px;flex:none}
 #kmFab.pop{animation:kmpop .7s cubic-bezier(.2,1.4,.4,1) both,kmring 2.4s .9s ease-out 3}
@@ -775,7 +775,7 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
 <div id="rkBanner" role="status" hidden></div>
 <div id="app">
   <header class="top"><div class="top-in">
-    <div class="brand">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.54</small></div>
+    <div class="brand">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.55</small></div>
     <button class="meb" id="meBtn" type="button" aria-label="Profil anggota">
       <span id="meIns"></span>
       <span class="me-t"><span class="me-n" id="meName">Anggota</span><span class="me-r" id="meRank">Prebet</span><div class="xpbar"><i id="meXp"></i></div></span>
@@ -880,6 +880,8 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
   <div class="mcard">
     <h1>Daftar anggota</h1>
     <p>Pilih nama panggilan. Nama panggilan dan sekolah dipaparkan kepada pemain lain dalam papan kedudukan dan bilik multiplayer. Nama penuh hanya diminta apabila anda memuat turun sijil.</p>
+    <div class="field" id="roleField"><label>Anda ialah</label><div class="row" style="gap:18px"><label style="display:flex;gap:6px;align-items:center"><input type="radio" name="inRole" value="murid" checked> Murid</label><label style="display:flex;gap:6px;align-items:center"><input type="radio" name="inRole" value="guru"> Guru / pentadbir</label></div></div>
+    <div class="field" id="inSubjField" hidden><label for="inSubj">Subjek yang diajar (pilihan)</label><input id="inSubj" maxlength="40" autocomplete="off" placeholder="Contoh: Tasawwur Islam"><p class="muted" style="font-size:13px;margin:4px 0 0">Nama panggilan, sekolah, negeri dan subjek guru dicatat untuk statistik penggunaan Gempur dan tidak dipaparkan kepada murid.</p></div>
     <div class="field"><label for="inName">Nama panggilan (dipaparkan dalam permainan, maksimum 16 huruf)</label><input id="inName" maxlength="16" autocomplete="off" placeholder="Contoh: Harimau5"></div>
     <div class="two">
       <div class="field"><label for="inNegeri">Negeri sekolah</label><select id="inNegeri"></select></div>
@@ -1246,7 +1248,7 @@ if (SUBJ === "sj") { DATA.tema = DATA_SJ.tema; DATA.topik = DATA_SJ.topik; DATA.
 if (SUBJ === "sc") { DATA.tema = DATA_SC.tema; DATA.topik = DATA_SC.topik; DATA.soalan = DATA_SC.soalan; }
 if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.soalan = DATA_MT.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v17.54"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v17.55"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -15144,7 +15146,7 @@ async function guruReportPdf(rows) {
   return saveFile(rptPdf(jpg, W, H), "Kad-Laporan-Gempur-" + (GURU.kelas || "semua-kelas").replace(/[^A-Za-z0-9]+/g, "-") + "-" + dayKey() + ".pdf");
 }
 
-/* ---------- Ruangan Komen (v17.54): dibaca semua, moderator boleh padam ---------- */
+/* ---------- Ruangan Komen (v17.55): dibaca semua, moderator boleh padam ---------- */
 const KM = { list: [], rep: {}, loading: false, err: "", at: 0, msg: "", armed: "", role: "Murid", last: 0 };
 const KM_BAD = ["bodoh", "babi", "sial", "pukimak", "puki", "pantat", "kontol", "bangsat", "celaka", "anjing", "keparat", "lancau", "cibai", "fuck", "shit", "bitch", "asshole", "tolol", "sundal", "jalang", "haram jadah"];
 function kmAdm() { try { return localStorage.getItem("gt-km-adm") || ""; } catch (e) { return ""; } }
@@ -15255,7 +15257,9 @@ function renderKomen() {
   const mod = el("div", { class: "km-mod" });
   if (adm) {
     const lo = el("button", { type: "button", class: "btn alt sm" }, "Log keluar moderator"); lo.addEventListener("click", () => { try { localStorage.removeItem("gt-km-adm"); } catch (e) { /* abaikan */ } KM.rep = {}; renderKomen(); });
-    mod.append(el("span", { class: "muted" }, "Mod moderator aktif pada peranti ini. "), lo);
+    const gs = el("button", { type: "button", class: "btn sm" }, "Statistik guru"); gs.addEventListener("click", kmGuruStat);
+    mod.append(el("span", { class: "muted" }, "Mod moderator aktif pada peranti ini. "), gs, document.createTextNode(" "), lo);
+    if (KM.gs) mod.appendChild(kmGuruBox());
   } else {
     const d = el("details"); d.appendChild(el("summary", { class: "muted" }, "Moderator"));
     const k = el("input", { type: "password", placeholder: "Kunci moderator Firebase", "aria-label": "Kunci moderator", class: "km-in", autocomplete: "off" });
@@ -15265,6 +15269,73 @@ function renderKomen() {
     mod.appendChild(d);
   }
   box.appendChild(mod);
+}
+
+/* ---------- Pendaftaran guru (v17.55): rekod berasingan di nod guru_daftar ---------- */
+function gtRole() { try { return localStorage.getItem("gt-role") === "guru" ? "guru" : "murid"; } catch (e) { return "murid"; } }
+function gtRoleUi() {
+  const g = (document.querySelector('input[name="inRole"]:checked') || {}).value === "guru";
+  const f = $("inSubjField"); if (f) f.hidden = !g;
+  const l = document.querySelector('label[for="inKelas"]'); if (l) l.textContent = g ? "Kelas yang diajar (pilihan)" : "Kelas (pilihan)";
+}
+function gtRoleInit() {
+  const r = gtRole(); document.querySelectorAll('input[name="inRole"]').forEach((x) => { x.checked = x.value === r; x.onchange = gtRoleUi; });
+  try { $("inSubj").value = localStorage.getItem("gt-subj") || ""; } catch (e) { /* abaikan */ }
+  gtRoleUi();
+}
+async function gtGuruSync(force) {
+  try {
+    if (gtRole() !== "guru" || !P.nama || !P.sekolah || !(Net.fb && FB.url)) return;
+    const uid = FB.getUid(), t0 = (() => { try { return +localStorage.getItem("gt-guru-t") || 0; } catch (e) { return 0; } })() || Date.now();
+    let subj = ""; try { subj = localStorage.getItem("gt-subj") || ""; } catch (e) { /* abaikan */ }
+    const doc = { n: cleanName(P.nama), sk: cleanSekolah(P.sekolah).slice(0, 60), sid: mySid() || "", ng: P.negeri || "", k: String(P.kelas || "").slice(0, 12), s: subj.slice(0, 40), t: t0, u: Date.now() };
+    const sig = [doc.n, doc.sk, doc.ng, doc.k, doc.s].join("|");
+    let last = ""; try { last = localStorage.getItem("gt-guru-sig") || ""; } catch (e) { /* abaikan */ }
+    if (!force && last === uid + sig) return;
+    await FB.req("PUT", "guru_daftar/" + uid, doc);
+    try { localStorage.setItem("gt-guru-sig", uid + sig); localStorage.setItem("gt-guru-t", String(t0)); } catch (e) { /* abaikan */ }
+  } catch (e) { /* cuba lagi pada sesi seterusnya */ }
+}
+function gtRoleSave() {
+  const r = (document.querySelector('input[name="inRole"]:checked') || {}).value === "guru" ? "guru" : "murid";
+  const was = gtRole();
+  try { localStorage.setItem("gt-role", r); localStorage.setItem("gt-subj", String($("inSubj").value || "").replace(/[\u0000-\u001f<>]/g, "").trim().slice(0, 40)); } catch (e) { /* abaikan */ }
+  if (r === "guru") gtGuruSync(true);
+  else if (was === "guru" && Net.fb && FB.url) { FB.req("DELETE", "guru_daftar/" + FB.getUid()).catch(() => {}); try { localStorage.removeItem("gt-guru-sig"); } catch (e) { /* abaikan */ } }
+}
+setTimeout(() => gtGuruSync(false), 7000);
+async function kmGuruStat() {
+  KM.gs = { loading: true }; renderKomen();
+  try {
+    const v = (await kmAdmReq("GET", "guru_daftar")) || {}, rows = Object.keys(v).map((id) => v[id]).filter((x) => x && x.sk);
+    const sch = {}, ng = {};
+    rows.forEach((x) => { const k = (x.ng || "") + "|" + x.sk; (sch[k] || (sch[k] = { sk: x.sk, ng: x.ng, n: 0, names: [] })).n++; sch[k].names.push(x.n); ng[x.ng || "?"] = (ng[x.ng || "?"] | 0) + 1; });
+    KM.gs = { rows: rows, sch: Object.values(sch).sort((a, b) => b.n - a.n || a.sk.localeCompare(b.sk)), ng: ng };
+  } catch (e) { KM.gs = { err: e.code === 401 || e.code === 403 ? "Kunci moderator tidak sah atau peraturan guru_daftar belum dipasang." : "Gagal memuatkan statistik guru." }; }
+  renderKomen();
+}
+function kmGuruCsv() {
+  const g = KM.gs; if (!g || !g.rows) return;
+  const nn = (c) => { const x = (typeof NEGERI !== "undefined" ? NEGERI : []).find((a) => a[0] === c); return x ? x[1] : c || ""; };
+  const L = [["Nama", "Sekolah", "Negeri", "Kelas diajar", "Subjek", "Daftar", "Aktif terakhir"].map(guruCsvCell).join(",")];
+  g.rows.slice().sort((a, b) => a.sk.localeCompare(b.sk)).forEach((x) => L.push([x.n, x.sk, nn(x.ng), x.k || "", x.s || "", x.t ? new Date(x.t).toISOString().slice(0, 10) : "", x.u ? new Date(x.u).toISOString().slice(0, 10) : ""].map(guruCsvCell).join(",")));
+  const a = el("a", { href: URL.createObjectURL(new Blob(["﻿" + L.join("\n")], { type: "text/csv;charset=utf-8" })), download: "guru-gempur-" + dayKey() + ".csv" });
+  document.body.appendChild(a); a.click(); a.remove();
+}
+function kmGuruBox() {
+  const g = KM.gs, box = el("div", { class: "hcard", style: "padding:14px;margin-top:12px" });
+  box.appendChild(el("div", { class: "tagline" }, "Statistik guru berdaftar"));
+  if (g.loading) { box.appendChild(el("p", { class: "muted" }, "Memuatkan...")); return box; }
+  if (g.err) { box.appendChild(el("div", { class: "notice warn" }, g.err)); return box; }
+  const nn = (c) => { const x = (typeof NEGERI !== "undefined" ? NEGERI : []).find((a) => a[0] === c); return x ? x[1] : c || "-"; };
+  const st = el("div", { class: "gstats" }); st.append(lrnStat(g.rows.length, "Guru berdaftar"), lrnStat(g.sch.length, "Sekolah"), lrnStat(Object.keys(g.ng).length, "Negeri"));
+  box.appendChild(st);
+  const t = el("table", { class: "gtable" }), tb = el("tbody");
+  t.appendChild(el("thead", null, null, (() => { const r = el("tr"); ["Sekolah", "Negeri", "Bil. guru", "Nama"].forEach((h) => r.appendChild(el("th", null, h))); return r; })()));
+  g.sch.forEach((s) => { const r = el("tr"); r.append(el("td", null, s.sk), el("td", null, nn(s.ng)), el("td", { class: "num" }, String(s.n)), el("td", null, s.names.slice(0, 6).join(", ") + (s.names.length > 6 ? "..." : ""))); tb.appendChild(r); });
+  t.appendChild(tb); box.appendChild(el("div", { class: "gwrap", style: "margin-top:10px" }, null, t));
+  const cb = el("button", { type: "button", class: "btn sm", style: "margin-top:10px" }, "Muat turun CSV guru"); cb.addEventListener("click", kmGuruCsv); box.appendChild(cb);
+  return box;
 }
 
 function setView(v) {
@@ -15786,6 +15857,7 @@ function openReg(first) {
     sel.addEventListener("change", () => { $("inSekolah").value = ""; $("cariSek").value = ""; pickedName = ""; fillSchoolList(); });
   }
   $("inName").value = P.nama || "";
+  gtRoleInit();
   $("inKelas").value = P.kelas || "";
   sel.value = P.negeri || "";
   $("inSekolah").value = P.sekolah || "";
@@ -15812,7 +15884,7 @@ function confirmReg() {
   P.nama = n; P.negeri = ng; P.sekolah = sk;
   P.kelas = String($("inKelas").value || "").replace(/[\u0000-\u001f<>]/g, "").trim().slice(0, 12);
   if (changed) Net.lastSek = "";
-  saveP();
+  saveP(); gtRoleSave();
   $("reg").hidden = true;
   if (Net.nroom) Net.setPres({ n: P.nama, k: P.kelas, sk: P.sekolah, sid: mySid() });
   computeStand();
