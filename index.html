@@ -619,6 +619,11 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
 #jtOv .jt-stars { font-size: 42px; color: #ffd23d; letter-spacing: 6px; } #jtOv .jt-sum { opacity: .85; margin-bottom: 14px; }
 #jtOv .jt-rev { margin: 12px 0; background: rgba(12,30,46,.8); border-radius: 10px; padding: 10px 14px; } #jtOv .jt-rev summary { cursor: pointer; font-weight: 700; } #jtOv .jt-wq { margin: 10px 0; font-size: 14px; } #jtOv .jt-wq .a { color: #3dffa0; } #jtOv .jt-wq .who { opacity: .7; font-size: 12px; }
 #jtOv .jt-camtop { margin: 0; }
+#jtOv .jt-names { display: grid; gap: 6px; margin-top: 8px; } #jtOv .jt-nm { display: flex; gap: 8px; align-items: center; } #jtOv .jt-nm i { width: 12px; height: 12px; border-radius: 50%; flex: none; } #jtOv .jt-nm input { flex: 1; padding: 8px; background: #0b2233; color: #eaf6ff; border: 1px solid rgba(124,245,196,.4); border-radius: 8px; font: 14px var(--font-body); }
+#jtOv .jt-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; } #jtOv .jt-chip { display: flex; gap: 8px; align-items: center; padding: 6px 12px; border-radius: 20px; border: 2px solid var(--c); background: rgba(12,30,46,.8); opacity: .55; transition: transform .2s; } #jtOv .jt-chip.on { opacity: 1; box-shadow: 0 0 14px var(--c); transform: scale(1.05); } #jtOv .jt-chip .n { font-size: 13px; } #jtOv .jt-chip .s { color: #ffd23d; } #jtOv .jt-chip.up { animation: jtPop .6s; background: rgba(61,255,160,.25); } #jtOv .jt-chip.dn { background: rgba(255,77,125,.2); }
+#jtOv .jt-who { font: 800 20px var(--font-body); }
+#jtOv .jt-pause { margin-left: 8px; background: transparent; color: #ffd23d; border: 1px solid #ffd23d; border-radius: 8px; padding: 10px 14px; font: 700 13px var(--font-body); cursor: pointer; }
+#jtOv .jt-tb { width: 100%; border-collapse: collapse; margin: 12px 0; } #jtOv .jt-tb th { text-align: left; font-size: 12px; opacity: .7; padding: 6px; } #jtOv .jt-tb td { padding: 10px 6px; border-top: 1px solid rgba(255,255,255,.1); } #jtOv .jt-tb tr td:first-child { border-left: 4px solid var(--c, #7cf5c4); font-weight: 800; } #jtOv .jt-tb .nm { font-weight: 700; color: var(--c); }
 /* /jt-css */
 </style>
 <div id="rkBanner" role="status" hidden></div>
@@ -8388,8 +8393,8 @@ function renderRk(box) {
 }
 /* ---------- /Sesi Bersama dan Ranking */
 /* ---------- Misi Jentik (v17.46): gerak dengan isyarat OK, tunjuk tapak tangan untuk menjentik jawapan ---------- */
-const JT_KEY = "gt-jt-cfg", JT_XP_KEY = "gt-jt-xp", JT_XP_CAP = 40, JT_HOLD = 380, JT_PER = [5, 10, 15, 20], JT_SEC = [15, 20, 30, 45];
-const JT = { open: false, tid: "", scope: "misi", cfg: { per: 10, sec: 30 }, g: null, gest: null, root: null, timer: 0, nextT: 0, mode: "setup" };
+const JT_KEY = "gt-jt-cfg", JT_XP_KEY = "gt-jt-xp", JT_XP_CAP = 40, JT_HOLD = 380, JT_PER = [3, 5, 8, 10, 15, 20], JT_SEC = [15, 20, 30, 45];
+const JT = { open: false, tid: "", scope: "misi", cfg: { mode: "solo", n: 3, per: 10, sec: 30, pause: 0, names: AR_NAMES.slice() }, g: null, gest: null, root: null, timer: 0, nextT: 0, mode: "setup" };
 
 /* isyarat tangan (fungsi tulen pada 21 titik): OK = ibu jari dan telunjuk bertemu, tiga jari lain lurus; tapak = semua jari terbuka */
 function jtHand(lm) {
@@ -8448,7 +8453,7 @@ function jtGesture(o) {
 }
 
 function jtCfgLoad() {
-  try { const c = JSON.parse(localStorage.getItem(JT_KEY) || "null"); if (c) { JT.cfg.per = JT_PER.indexOf(c.per) >= 0 ? c.per : 10; JT.cfg.sec = JT_SEC.indexOf(c.sec) >= 0 ? c.sec : 30; } } catch (e) { /* abaikan */ }
+  try { const c = JSON.parse(localStorage.getItem(JT_KEY) || "null"); if (c) { JT.cfg.mode = c.mode === "kumpulan" ? "kumpulan" : "solo"; JT.cfg.n = clamp(c.n | 0 || 3, 2, 6); JT.cfg.per = JT_PER.indexOf(c.per) >= 0 ? c.per : 10; JT.cfg.sec = JT_SEC.indexOf(c.sec) >= 0 ? c.sec : 30; JT.cfg.pause = c.pause ? 1 : 0; if (Array.isArray(c.names)) AR_NAMES.forEach((d, i) => { JT.cfg.names[i] = String(c.names[i] || d).slice(0, 24); }); } } catch (e) { /* abaikan */ }
 }
 function jtCfgSave() { try { localStorage.setItem(JT_KEY, JSON.stringify(JT.cfg)); } catch (e) { /* abaikan */ } }
 function jtRoot() {
@@ -8490,19 +8495,35 @@ function jtSetup() {
   const kh = KHAS_BY[JT.tid];
   const sel = (opts, cur, fn, aria) => { const s = el("select", { "aria-label": aria }); opts.forEach((o) => { const e = el("option", { value: o[0] }, o[1]); if (String(o[0]) === String(cur)) e.selected = true; s.appendChild(e); }); s.addEventListener("change", () => fn(s.value)); return s; };
   const info = el("div", { class: "jt-note" }), startBtn = el("button", { type: "button", class: "jt-go", id: "jtGo" }, "MULA MISI JENTIK");
+  const grp = () => c.mode === "kumpulan", tot = () => (grp() ? c.n : 1) * c.per;
   const refresh = () => {
-    const w = arWidePool(JT.tid, JT.scope, c.per), pool = w.pool;
-    info.textContent = pool.length >= c.per ? c.per + " soalan dipilih daripada " + pool.length + " soalan" + (w.scope !== JT.scope ? " (skop dilebarkan kepada " + arScopeName(w.scope) + ")." : ".") : "Soalan tidak cukup (" + pool.length + "). Kurangkan bilangan soalan.";
-    info.classList.toggle("warn", pool.length < c.per);
-    startBtn.disabled = pool.length < 1;
+    const w = arWidePool(JT.tid, JT.scope, tot()), pool = w.pool;
+    info.textContent = pool.length >= tot() ? tot() + " soalan dipilih daripada " + pool.length + " soalan" + (w.scope !== JT.scope ? " (skop dilebarkan kepada " + arScopeName(w.scope) + ")." : ".") : "Soalan agak kurang (" + pool.length + "). Bilangan soalan akan dikurangkan automatik.";
+    info.classList.toggle("warn", pool.length < tot());
+    startBtn.disabled = pool.length < (grp() ? c.n : 1);
   };
   const scopes = kh ? [["khas", kh.rahsia ? "Soalan Operasi Rahsia" : "Semua soalan latihan khas ini"]] : [["misi", "Misi ini sahaja"], ["negeri", "Semua misi negeri ini"], ["tema", "Semua misi tema ini"], ["semua", "Semua misi subjek ini"]];
-  const left = el("section", { class: "jt-card" }, null,
-    el("h3", null, "Tetapan"),
-    el("label", { class: "jt-lb" }, "Bilangan soalan"), sel(JT_PER.map((n) => [n, String(n)]), c.per, (v) => { c.per = +v; jtCfgSave(); refresh(); }, "Bilangan soalan"),
-    el("label", { class: "jt-lb" }, "Masa satu soalan"), sel(JT_SEC.map((n) => [n, n + " saat"]), c.sec, (v) => { c.sec = +v; jtCfgSave(); }, "Masa satu soalan"),
-    el("label", { class: "jt-lb" }, "Skop soalan"), sel(scopes, JT.scope, (v) => { JT.scope = v; refresh(); }, "Skop soalan"),
-    info);
+  const left = el("section", { class: "jt-card" });
+  const buildLeft = () => {
+    left.textContent = "";
+    const names = el("div", { class: "jt-names" });
+    if (grp()) for (let i = 0; i < c.n; i++) {
+      const inp = el("input", { type: "text", maxlength: "24", value: c.names[i], "aria-label": "Nama skuad " + (i + 1) });
+      inp.addEventListener("input", () => { c.names[i] = inp.value.trim() || AR_NAMES[i]; }); inp.addEventListener("change", jtCfgSave);
+      names.appendChild(el("label", { class: "jt-nm" }, null, el("i", { style: "background:" + AR_COL[i] }), inp));
+    }
+    left.append(el("h3", null, "Tetapan"),
+      el("label", { class: "jt-lb" }, "Mod bermain"), sel([["solo", "Seorang (individu)"], ["kumpulan", "Berkumpulan (PdPR, skuad bergilir)"]], c.mode, (v) => { c.mode = v; jtCfgSave(); buildLeft(); }, "Mod bermain"),
+      grp() ? el("label", { class: "jt-lb" }, "Bilangan skuad") : null, grp() ? sel([2, 3, 4, 5, 6].map((n) => [n, String(n)]), c.n, (v) => { c.n = +v; jtCfgSave(); buildLeft(); }, "Bilangan skuad") : null,
+      names,
+      el("label", { class: "jt-lb" }, grp() ? "Soalan setiap skuad" : "Bilangan soalan"), sel(JT_PER.map((n) => [n, String(n)]), c.per, (v) => { c.per = +v; jtCfgSave(); refresh(); }, "Bilangan soalan"),
+      el("label", { class: "jt-lb" }, "Masa satu soalan"), sel(JT_SEC.map((n) => [n, n + " saat"]), c.sec, (v) => { c.sec = +v; jtCfgSave(); }, "Masa satu soalan"),
+      grp() ? el("label", { class: "jt-lb" }, "Selepas setiap jawapan") : null, grp() ? sel([[0, "Teruskan automatik (12 saat)"], [1, "Jeda dahulu untuk berbincang"]], c.pause, (v) => { c.pause = +v; jtCfgSave(); }, "Selepas setiap jawapan") : null,
+      el("label", { class: "jt-lb" }, "Skop soalan"), sel(scopes, JT.scope, (v) => { JT.scope = v; refresh(); }, "Skop soalan"),
+      info);
+    refresh();
+  };
+  buildLeft();
   const tiles = el("div", { class: "jt-tiles" });
   ["A", "B", "C", "D"].forEach((l, i) => tiles.appendChild(el("div", { class: "jt-tile", "data-i": i }, l)));
   const camOn = el("button", { type: "button", class: "ar-camon jt-camon" }, "AKTIFKAN KAMERA");
@@ -8545,12 +8566,13 @@ function jtSetup() {
 
 function jtStart() {
   const c = JT.cfg; jtCfgSave();
-  const wp = arWidePool(JT.tid, JT.scope, c.per), pool = wp.pool;
-  if (!pool.length) { toast("Soalan tidak cukup untuk skop ini.", "bad"); return; }
-  const per = Math.min(c.per, pool.length);
-  const qs = arBuild(pool, 1, per);
+  const n = c.mode === "kumpulan" ? c.n : 1, wp = arWidePool(JT.tid, JT.scope, n * c.per), pool = wp.pool;
+  if (pool.length < n) { toast("Soalan tidak cukup untuk skop ini. Pilih skop lebih luas.", "bad"); return; }
+  let per = c.per; while (per > 1 && pool.length < n * per) per--;
+  const qs = arBuild(pool, n, per);
   { const seen = arSeenLoad(); qs.forEach((x) => { seen[x.q.i] = (seen[x.q.i] | 0) + 1; }); arSeenSave(seen); }
-  JT.g = { qs: qs, i: -1, sec: c.sec, score: 0, ok: 0, tot: 0, streak: 0, best: 0, wrong: [], phase: "idle", t0: 0, hover: -1, cur: null, time: 0 };
+  const sq = []; for (let i = 0; i < n; i++) sq.push({ name: n > 1 ? c.names[i] : "Anda", col: AR_COL[i], score: 0, ok: 0, tot: 0, time: 0, streak: 0, best: 0 });
+  JT.g = { qs: qs, i: -1, sec: c.sec, sq: sq, grp: n > 1, pause: n > 1 && c.pause ? 1 : 0, paused: false, wrong: [], phase: "idle", t0: 0, hover: -1, cur: null };
   JT.mode = "play"; jtBuildPlay(); jtNextQ();
 }
 function jtBuildPlay() {
@@ -8567,10 +8589,13 @@ function jtBuildPlay() {
   const camBtn = el("button", { type: "button", class: "ar-camon jt-camtop" }, "AKTIFKAN KAMERA");
   camBtn.addEventListener("click", () => { if (ARCAM.on) arCamStop(); else arCamStart(); });
   const fb = el("div", { class: "jt-fb", hidden: "" });
+  const chips = el("div", { class: "jt-chips" });
+  g.sq.forEach((s, i) => chips.appendChild(el("div", { class: "jt-chip", style: "--c:" + s.col, "data-i": i }, null, el("span", { class: "n" }, s.name), el("b", { class: "s" }, "0"))));
   r.append(el("div", { class: "jt-bg" }), x,
     el("div", { class: "jt-play" }, null,
       el("div", { class: "jt-top" }, null, el("div", { class: "jt-kick" }, "MISI JENTIK • " + arT(JT.tid).kod), camBtn, el("div", { class: "jt-hand", "data-m": "none" }, "Tiada tangan dikesan"),
-        el("div", { class: "jt-sc" }, null, el("span", null, "Markah"), el("b", { class: "jt-score" }, "0"), el("span", { class: "jt-stk" }))),
+        g.grp ? el("div", { class: "jt-who" }) : el("div", { class: "jt-sc" }, null, el("span", null, "Markah"), el("b", { class: "jt-score" }, "0"), el("span", { class: "jt-stk" }))),
+      g.grp ? chips : null,
       el("div", { class: "jt-tm" }, null, el("span", { class: "jt-qn" }), el("div", { class: "jt-bar" }, null, el("i")), el("b", { class: "jt-sec" })),
       el("div", { class: "jt-q" }), opts, fb),
     arCamBox(true), el("div", { class: "jt-cur", hidden: "" }));
@@ -8586,7 +8611,7 @@ function jtBuildPlay() {
     onPick: (i) => { if (g.phase === "ask") jtPick(i, "jentik"); },
     onCursor: (u, v, m) => jtCursorUi(u, v, m, g.phase === "fb" ? fb : opts),
     onMode: jtModeUi,
-    freePalm: (now) => { if (g.phase === "fb") { if (!g.palmAt) g.palmAt = now; if (now - g.palmAt > 700 && performance.now() - g.fbAt > 600) { g.palmAt = 0; jtNextQ(); } } }
+    freePalm: (now) => { if (g.phase === "fb") { if (!g.palmAt) g.palmAt = now; if (!g.paused && now - g.palmAt > 700 && performance.now() - g.fbAt > 600) { g.palmAt = 0; jtNextQ(); } } }
   });
   ARCAM.cb = (lm, now) => { if (!lm || g.phase !== "fb") g.palmAt = 0; JT.gest.feed(lm, now); };
   arCamUi();
@@ -8598,7 +8623,8 @@ function jtNextQ() {
   g.i++; if (g.i >= g.qs.length) { jtEnd(); return; }
   const it = g.qs[g.i]; g.phase = "ask"; g.t0 = performance.now(); g.hover = -1; g.cur = it; g.palmAt = 0;
   const root = JT.root, fb = root.querySelector(".jt-fb"); fb.hidden = true; fb.textContent = "";
-  root.querySelector(".jt-qn").textContent = (g.i + 1) + " / " + g.qs.length;
+  g.paused = false; root.querySelector(".jt-qn").textContent = (g.i + 1) + " / " + g.qs.length;
+  if (g.grp) { const sq = g.sq[it.sq], w = root.querySelector(".jt-who"); w.textContent = "Giliran: " + sq.name; w.style.color = sq.col; root.querySelectorAll(".jt-chip").forEach((c, k) => c.classList.toggle("on", k === it.sq)); }
   qSet(root.querySelector(".jt-q"), it.q.q);
   root.querySelectorAll(".jt-opt").forEach((b, k) => { b.className = "jt-opt"; b.disabled = false; b.style.setProperty("--p", "0deg"); qSet(b.querySelector(".t"), it.texts[k]); });
   if (JT.gest) JT.gest.reset();
@@ -8620,11 +8646,11 @@ function jtPick(i, how) {
 function jtAnswer(pos, how) {
   const g = JT.g; if (!g || g.phase !== "ask") return;
   clearInterval(JT.timer); g.phase = "fb";
-  const it = g.cur, took = Math.min(g.sec, (performance.now() - g.t0) / 1000), good = pos === it.ans;
-  g.tot++; g.time += took;
+  const it = g.cur, sq = g.sq[it.sq], took = Math.min(g.sec, (performance.now() - g.t0) / 1000), good = pos === it.ans;
+  sq.tot++; sq.time += took;
   let gain = 0;
-  if (good) { g.ok++; g.streak++; g.best = Math.max(g.best, g.streak); gain = 100 + Math.round(30 * clamp(1 - took / g.sec, 0, 1)) + Math.min(50, (g.streak - 1) * 10); g.score += gain; }
-  else { g.streak = 0; g.wrong.push({ q: it.q, ans: it.texts[it.ans], pick: pos >= 0 ? it.texts[pos] : null }); }
+  if (good) { sq.ok++; sq.streak++; sq.best = Math.max(sq.best, sq.streak); gain = 100 + Math.round(30 * clamp(1 - took / g.sec, 0, 1)) + Math.min(50, (sq.streak - 1) * 10); sq.score += gain; }
+  else { sq.streak = 0; g.wrong.push({ q: it.q, who: g.grp ? sq.name : "", ans: it.texts[it.ans], pick: pos >= 0 ? it.texts[pos] : null }); }
   const root = JT.root, ob = root.querySelectorAll(".jt-opt");
   if (pos >= 0 && how !== "masa") { // gerakan jentik: kad terpelanting mengikut kedudukannya
     const b = ob[pos], dx = (pos % 2 ? 1 : -1) * 120, dy = -150;
@@ -8635,16 +8661,27 @@ function jtAnswer(pos, how) {
     arSnd(good ? "ok" : "bad");
     ob.forEach((b, k) => { b.disabled = true; b.classList.remove("hov", "hold", "flick"); b.classList.add(k === it.ans ? "ok" : k === pos ? "bad" : "dim"); });
   }, pos >= 0 && how !== "masa" ? 520 : 0);
-  root.querySelector(".jt-score").textContent = String(g.score);
-  root.querySelector(".jt-stk").textContent = g.streak >= 2 ? "siri " + g.streak : "";
+  if (g.grp) { const ch = root.querySelector('.jt-chip[data-i="' + it.sq + '"]'); ch.querySelector(".s").textContent = String(sq.score); ch.classList.add(good ? "up" : "dn"); setTimeout(() => ch.classList.remove("up", "dn"), 900); }
+  else { root.querySelector(".jt-score").textContent = String(sq.score); root.querySelector(".jt-stk").textContent = sq.streak >= 2 ? "siri " + sq.streak : ""; }
   const fb = root.querySelector(".jt-fb"); fb.textContent = ""; fb.className = "jt-fb " + (good ? "ok" : "bad"); fb.hidden = false;
   const last = g.i >= g.qs.length - 1;
   const nx = el("button", { type: "button", class: "jt-next" }, last ? "Lihat keputusan" : "Soalan seterusnya"); nx.addEventListener("click", jtNextQ);
-  fb.append(el("div", { class: "jt-fh" }, pos < 0 ? "Masa tamat." : good ? "Betul! +" + gain + (g.streak >= 3 ? " (siri " + g.streak + ")" : "") : "Kurang tepat. Jawapan betul: " + "ABCD"[it.ans] + "."),
+  fb.append(el("div", { class: "jt-fh" }, pos < 0 ? "Masa tamat." + (g.grp ? " " + sq.name + " tidak mendapat mata." : "") : good ? "Betul! " + (g.grp ? sq.name + " " : "") + "+" + gain + (sq.streak >= 3 ? " (siri " + sq.streak + ")" : "") : "Kurang tepat. Jawapan betul: " + "ABCD"[it.ans] + "."),
     qSet(el("div", { class: "jt-fe" }), it.q.e || ""),
-    el("div", { class: "jt-fhint" }, "Tunjuk tapak tangan ✋ selama 1 saat, atau tekan Enter / Space untuk teruskan."), nx);
+    el("div", { class: "jt-fhint" }, "Tunjuk tapak tangan ✋ selama 1 saat, atau tekan Enter / Space untuk teruskan."), nx, g.grp ? jtPauseBtn() : null);
   g.fbAt = performance.now();
-  clearTimeout(JT.nextT); JT.nextT = setTimeout(() => { if (JT.g === g && g.phase === "fb") jtNextQ(); }, 12000);
+  clearTimeout(JT.nextT); if (!g.pause) JT.nextT = setTimeout(() => { if (JT.g === g && g.phase === "fb" && !g.paused) jtNextQ(); }, 12000);
+  if (g.pause) jtPauseToggle(true);
+}
+/* jeda perbincangan: guru menahan soalan seterusnya sehingga kumpulan sedia */
+function jtPauseBtn() { const b = el("button", { type: "button", class: "jt-pause" }, "Jeda untuk berbincang"); b.addEventListener("click", () => jtPauseToggle()); return b; }
+function jtPauseToggle(force) {
+  const g = JT.g; if (!g || g.phase !== "fb" || !JT.root) return;
+  g.paused = force === undefined ? !g.paused : !!force; clearTimeout(JT.nextT);
+  const pz = JT.root.querySelector(".jt-pause"), ht = JT.root.querySelector(".jt-fhint");
+  if (pz) pz.textContent = g.paused ? "Teruskan" : "Jeda untuk berbincang";
+  if (ht) ht.textContent = g.paused ? "Dijeda. Bincangkan jawapan dahulu, kemudian tekan Teruskan (atau P)." : "Tunjuk tapak tangan ✋ selama 1 saat, atau tekan Enter / Space untuk teruskan.";
+  if (!g.paused) JT.nextT = setTimeout(() => { if (JT.g === g && g.phase === "fb" && !g.paused) jtNextQ(); }, 9000);
 }
 function jtKey(e) {
   if (!JT.open) return;
@@ -8654,19 +8691,21 @@ function jtKey(e) {
   const g = JT.g, m = /^[1-4]$/.test(k) ? +k - 1 : "abcd".indexOf(String(k).toLowerCase());
   if (JT.mode === "play" && g) {
     if (g.phase === "ask" && k.length === 1 && m >= 0) { jtPick(m, "kekunci"); e.preventDefault(); }
-    else if (g.phase === "fb" && (k === "Enter" || k === " ") && performance.now() - g.fbAt > 400) { jtNextQ(); e.preventDefault(); }
+    else if (g.phase === "fb" && g.grp && (k === "p" || k === "P")) { jtPauseToggle(); e.preventDefault(); }
+    else if (g.phase === "fb" && !g.paused && (k === "Enter" || k === " ") && performance.now() - g.fbAt > 400) { jtNextQ(); e.preventDefault(); }
   }
 }
 function jtEnd() {
   const g = JT.g; clearInterval(JT.timer); clearTimeout(JT.nextT); g.phase = "end"; JT.mode = "end";
-  const acc = g.tot ? g.ok / g.tot : 0, stars = acc >= 0.9 ? 3 : acc >= 0.7 ? 2 : acc >= 0.5 ? 1 : 0;
+  const T = g.sq.reduce((a, q) => ({ ok: a.ok + q.ok, tot: a.tot + q.tot, time: a.time + q.time, best: Math.max(a.best, q.best), score: a.score + q.score }), { ok: 0, tot: 0, time: 0, best: 0, score: 0 });
+  const acc = T.tot ? T.ok / T.tot : 0, stars = acc >= 0.9 ? 3 : acc >= 0.7 ? 2 : acc >= 0.5 ? 1 : 0;
   let xp = 0;
   try {
     const d = dayKey(), rec = JSON.parse(localStorage.getItem(JT_XP_KEY) || "null") || {}, used = rec.d === d ? rec.n | 0 : 0;
-    xp = Math.max(0, Math.min(g.ok * 2, JT_XP_CAP - used));
+    xp = Math.max(0, Math.min(T.ok * 2, JT_XP_CAP - used));
     if (xp > 0) { P.xp += xp; localStorage.setItem(JT_XP_KEY, JSON.stringify({ d: d, n: used + xp })); noteActive(); saveP(); computeStand(); renderMe(); }
   } catch (e) { /* abaikan */ }
-  try { if (!g._rk) { g._rk = 1; rkAdd("jt", g.score, JT.tid); } } catch (e) { /* abaikan */ }
+  try { if (!g._rk) { g._rk = 1; if (!g.grp) rkAdd("jt", T.score, JT.tid); } } catch (e) { /* abaikan */ }
   arSnd("ok");
   const r = JT.root; r.textContent = "";
   const x = el("button", { type: "button", class: "jt-x" }, "Tutup"); x.addEventListener("click", jtClose);
@@ -8674,13 +8713,21 @@ function jtEnd() {
   const back = el("button", { type: "button", class: "jt-go alt" }, "TETAPAN"); back.addEventListener("click", jtSetup);
   const rev = el("details", { class: "jt-rev" }); rev.append(el("summary", null, "Soalan untuk dibincang (" + g.wrong.length + ")"));
   if (!g.wrong.length) rev.append(el("p", null, "Tiada soalan salah. Tahniah!"));
-  g.wrong.forEach((w, k) => { const d = el("div", { class: "jt-wq" }); d.append(qSet(el("b"), (k + 1) + ". " + w.q.q), el("div", { class: "a" }, null, "Jawapan: ", qSet(el("span"), w.ans)), el("div", { class: "who" }, w.pick ? "Anda memilih: " + w.pick : "Masa tamat")); rev.append(d); });
+  g.wrong.forEach((w, k) => { const d = el("div", { class: "jt-wq" }); d.append(qSet(el("b"), (k + 1) + ". " + w.q.q), el("div", { class: "a" }, null, "Jawapan: ", qSet(el("span"), w.ans)), el("div", { class: "who" }, (w.who ? w.who + (w.pick ? " memilih: " : ": ") : w.pick ? "Anda memilih: " : "") + (w.pick || "Masa tamat"))); rev.append(d); });
   r.append(el("div", { class: "jt-bg" }), x, el("div", { class: "jt-wrap" }, null,
     el("div", { class: "jt-kick" }, "KEPUTUSAN MISI JENTIK"),
     el("div", { class: "jt-stars" }, "★".repeat(stars) + "☆".repeat(3 - stars)),
-    el("h1", null, String(g.score) + " mata"),
-    el("div", { class: "jt-sum" }, g.ok + " / " + g.tot + " betul • siri terbaik " + g.best + " • purata " + (g.tot ? (g.time / g.tot).toFixed(1) : "0") + " saat" + (xp ? " • +" + xp + " XP" : "")),
+    g.grp ? jtPodium(g) : el("h1", null, String(T.score) + " mata"),
+    g.grp ? null : el("div", { class: "jt-sum" }, T.ok + " / " + T.tot + " betul • siri terbaik " + T.best + " • purata " + (T.tot ? (T.time / T.tot).toFixed(1) : "0") + " saat" + (xp ? " • +" + xp + " XP" : "")),
     rev, el("div", { class: "jt-act" }, null, again, back)));
+}
+function jtPodium(g) {
+  const rows = g.sq.map((s, i) => ({ s: s, i: i })).sort((a, b) => b.s.score - a.s.score || b.s.ok - a.s.ok || a.s.time - b.s.time);
+  rows.forEach((r, k) => { r.rank = (k > 0 && rows[k - 1].s.score === r.s.score && rows[k - 1].s.ok === r.s.ok) ? rows[k - 1].rank : k + 1; });
+  const tb = el("table", { class: "jt-tb" });
+  tb.appendChild(el("tr", null, null, el("th", null, "#"), el("th", null, "Skuad"), el("th", null, "Markah"), el("th", null, "Betul"), el("th", null, "Purata masa"), el("th", null, "Siri terbaik")));
+  rows.forEach((p) => tb.appendChild(el("tr", { style: "--c:" + p.s.col }, null, el("td", null, String(p.rank)), el("td", { class: "nm" }, p.s.name), el("td", null, String(p.s.score)), el("td", null, p.s.ok + " / " + p.s.tot), el("td", null, (p.s.tot ? (p.s.time / p.s.tot).toFixed(1) : "0") + " s"), el("td", null, String(p.s.best)))));
+  return el("div", null, null, el("h1", null, rows[0].s.name, el("em", null, "juara dengan " + rows[0].s.score + " mata")), tb);
 }
 /* ---------- /Misi Jentik */
 
