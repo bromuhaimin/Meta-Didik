@@ -42,7 +42,7 @@
 .lrn-e{margin-top:6px;font-size:15px;color:var(--ink)}.lrn-s{font-size:12px;color:var(--muted);margin-top:4px}
 .lrn-score{font-family:var(--font-display);font-size:56px;color:var(--amber)}
 .lrn-rev{border-top:1px solid var(--line);padding:8px 0}.lrn-ra{color:var(--ok);font-weight:700;margin-top:4px}
-/* tema subjek v17.52 */
+/* tema subjek v17.54 */
 html[data-sj="tw"]{--bg:#0b100b;--bg2:#121a11;--bg3:#1a2418;--sjc:#2f9e8f;--line:color-mix(in srgb,#2f9e8f 38%,transparent);--line2:color-mix(in srgb,#2f9e8f 65%,transparent)}
 html[data-sj="pi"]{--bg:#0a0f1a;--bg2:#101826;--bg3:#172335;--sjc:#3a7bd5;--line:color-mix(in srgb,#3a7bd5 38%,transparent);--line2:color-mix(in srgb,#3a7bd5 65%,transparent)}
 html[data-sj="p3"]{--bg:#100b1a;--bg2:#171225;--bg3:#211a35;--sjc:#8a5cd6;--line:color-mix(in srgb,#8a5cd6 38%,transparent);--line2:color-mix(in srgb,#8a5cd6 65%,transparent)}
@@ -53,6 +53,34 @@ html[data-sj="ba"]{--bg:#170a0d;--bg2:#220f14;--bg3:#30161d;--sjc:#c0455f;--line
 body{background:radial-gradient(1100px 520px at 85% -8%,color-mix(in srgb,var(--sjc,transparent) 26%,transparent),transparent 70%),var(--bg);background-attachment:fixed}
 html[data-sj] header{border-bottom:3px solid var(--sjc)}
 html[data-sj] .tab[aria-selected="true"]{border-color:var(--sjc);color:var(--sjc)}
+.km-form{padding:14px;display:flex;flex-direction:column;gap:8px}
+.km-r{display:grid;grid-template-columns:1fr 150px;gap:8px}
+.km-in{width:100%;box-sizing:border-box;background:var(--bg2);color:var(--ink);border:1px solid var(--line2);padding:9px 10px;font:inherit;min-height:44px}
+textarea.km-in{resize:vertical}
+.km-err{color:var(--danger);font-size:14px;min-height:0}
+.km-list{display:flex;flex-direction:column;gap:8px}
+.km-c{background:var(--panel);border:1px solid var(--line);padding:10px 12px}
+.km-c.flag{border-color:var(--danger)}
+.km-t{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.km-t .muted{font-size:12px}
+.km-role{font-size:11px;font-family:var(--font-util);letter-spacing:.06em;text-transform:uppercase;padding:1px 7px;border:1px solid var(--line2)}
+.km-g{color:var(--amber);border-color:var(--amber)}.km-i{color:var(--ok);border-color:var(--ok)}
+.km-m{margin:6px 0;white-space:pre-wrap;word-break:break-word;line-height:1.5}
+.km-a{display:flex;gap:8px;align-items:center;justify-content:flex-end}
+.km-fl{color:var(--danger);font-size:13px;font-weight:700}
+.km-mod{margin-top:18px;padding-top:10px;border-top:1px solid var(--line)}
+.km-mod details>*{margin-top:8px}
+@media(max-width:560px){.km-r{grid-template-columns:1fr}}
+/* butang komen terapung v17.54 */
+#kmFab{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));z-index:60;display:flex;align-items:center;gap:10px;padding:12px 18px 12px 14px;min-height:52px;border:2px solid var(--sjc,var(--amber));border-radius:999px;background:linear-gradient(135deg,var(--sjc,var(--amber)),color-mix(in srgb,var(--sjc,var(--amber)) 70%,#000));color:#fff;font-family:var(--font-util);font-weight:800;font-size:15px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.55),0 0 0 0 var(--sjc,var(--amber));text-shadow:0 1px 2px rgba(0,0,0,.5)}
+#kmFab svg{width:24px;height:24px;flex:none}
+#kmFab.pop{animation:kmpop .7s cubic-bezier(.2,1.4,.4,1) both,kmring 2.4s .9s ease-out 3}
+#kmFab:hover{filter:brightness(1.1)}
+@keyframes kmpop{0%{transform:translateY(120px) scale(.6);opacity:0}100%{transform:none;opacity:1}}
+@keyframes kmring{0%{box-shadow:0 8px 24px rgba(0,0,0,.55),0 0 0 0 color-mix(in srgb,var(--sjc,#f4ab3a) 70%,transparent)}100%{box-shadow:0 8px 24px rgba(0,0,0,.55),0 0 0 22px transparent}}
+body.ingame #kmFab{display:none}
+@media(prefers-reduced-motion:reduce){#kmFab.pop{animation:none}}
+@media(max-width:560px){#kmFab{padding:12px 14px;font-size:14px}}
 </style></head><body>
 <title>Gempur</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -747,7 +775,7 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
 <div id="rkBanner" role="status" hidden></div>
 <div id="app">
   <header class="top"><div class="top-in">
-    <div class="brand">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.52</small></div>
+    <div class="brand">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.54</small></div>
     <button class="meb" id="meBtn" type="button" aria-label="Profil anggota">
       <span id="meIns"></span>
       <span class="me-t"><span class="me-n" id="meName">Anggota</span><span class="me-r" id="meRank">Prebet</span><div class="xpbar"><i id="meXp"></i></div></span>
@@ -756,6 +784,7 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
     <nav class="tabs" role="tablist" aria-label="Menu utama">
       <button class="tab" role="tab" id="tab-map" data-v="map" aria-selected="true">Peta operasi</button>
       <button class="tab" role="tab" id="tab-latihan" data-v="latihan" aria-selected="false">Latihan</button>
+      <button class="tab" role="tab" id="tab-komen" data-v="komen" aria-selected="false">Komen</button>
       <button class="tab" role="tab" id="tab-skuad" data-v="skuad" aria-selected="false">Pasukan</button>
       <button class="tab" role="tab" id="tab-team" data-v="team" aria-selected="false">Battle</button>
       <button class="tab" role="tab" id="tab-rank" data-v="rank" aria-selected="false">Kedudukan</button>
@@ -765,6 +794,7 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
     </nav>
   </div></header>
 
+  <button type="button" id="kmFab" aria-label="Beri komen atau maklum balas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5" stroke-linecap="round"/></svg>Beri komen</button>
   <main class="wrap">
     <section id="v-map">
       <div class="subjbar" id="subjBar" role="group" aria-label="Pilih subjek"></div>
@@ -817,6 +847,11 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
       <h2 class="sec">Latihan pintar</h2>
       <p class="lead">Cabaran harian, ulang kaji berjarak dan misi pemulihan untuk topik yang lemah.</p>
       <div id="latihanBody"></div>
+    </section>
+    <section id="v-komen" hidden>
+      <h2 class="sec">Ruangan komen</h2>
+      <p class="lead">Kongsi cadangan dan pendapat tentang Gempur. Komen boleh dibaca oleh murid, guru dan ibu bapa.</p>
+      <div id="komenBody"></div>
     </section>
     <section id="v-guru" hidden>
       <h2 class="sec">Papan pemuka guru</h2>
@@ -1211,7 +1246,7 @@ if (SUBJ === "sj") { DATA.tema = DATA_SJ.tema; DATA.topik = DATA_SJ.topik; DATA.
 if (SUBJ === "sc") { DATA.tema = DATA_SC.tema; DATA.topik = DATA_SC.topik; DATA.soalan = DATA_SC.soalan; }
 if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.soalan = DATA_MT.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v17.52"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v17.54"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -15109,10 +15144,134 @@ async function guruReportPdf(rows) {
   return saveFile(rptPdf(jpg, W, H), "Kad-Laporan-Gempur-" + (GURU.kelas || "semua-kelas").replace(/[^A-Za-z0-9]+/g, "-") + "-" + dayKey() + ".pdf");
 }
 
+/* ---------- Ruangan Komen (v17.54): dibaca semua, moderator boleh padam ---------- */
+const KM = { list: [], rep: {}, loading: false, err: "", at: 0, msg: "", armed: "", role: "Murid", last: 0 };
+const KM_BAD = ["bodoh", "babi", "sial", "pukimak", "puki", "pantat", "kontol", "bangsat", "celaka", "anjing", "keparat", "lancau", "cibai", "fuck", "shit", "bitch", "asshole", "tolol", "sundal", "jalang", "haram jadah"];
+function kmAdm() { try { return localStorage.getItem("gt-km-adm") || ""; } catch (e) { return ""; } }
+function kmNorm(s) { return String(s).toLowerCase().replace(/[01345@$]/g, (c) => ({ "0": "o", "1": "i", "3": "e", "4": "a", "5": "s", "@": "a", "$": "s" })[c]).replace(/[^a-z ]/g, ""); }
+function kmBad(s) {
+  const n = kmNorm(s), t = n.replace(/\s+/g, "");
+  return KM_BAD.some((w) => { const x = w.replace(/\s+/g, ""); return n.indexOf(w) >= 0 || t.indexOf(x) >= 0; }) || /(https?:|www\.|\.com|\.my\b|\.net)/i.test(s) || /\d[\d\s-]{8,}\d/.test(s);
+}
+function kmAgo(t) {
+  const m = Math.floor((Date.now() - t) / 6e4);
+  if (m < 1) return "baru sebentar tadi";
+  if (m < 60) return m + " minit lalu";
+  const h = Math.floor(m / 60); if (h < 24) return h + " jam lalu";
+  const d = Math.floor(h / 24); return d < 31 ? d + " hari lalu" : new Date(t).toLocaleDateString("ms-MY");
+}
+async function kmAdmReq(method, path) {
+  const r = await fetch(FB.url + "/" + path + ".json?auth=" + encodeURIComponent(kmAdm()) + (method === "GET" ? "" : "&print=silent"), { method });
+  if (!r.ok) { const e = new Error("fb " + r.status); e.code = r.status; throw e; }
+  return method === "GET" ? r.json() : null;
+}
+async function kmLoad() {
+  if (!(Net.fb && FB.url)) { KM.err = "off"; renderKomen(); return; }
+  KM.loading = true; KM.err = ""; renderKomen();
+  try {
+    let v;
+    try { v = (await FB.req("GET", "komen", undefined, "orderBy=%22t%22&limitToLast=100")) || {}; }
+    catch (e) { if (e.code === 400) v = (await FB.req("GET", "komen")) || {}; else throw e; }
+    KM.list = Object.keys(v).map((id) => Object.assign({ id: id }, v[id])).filter((x) => x && typeof x.m === "string" && x.t).sort((a, b) => b.t - a.t).slice(0, 100);
+    KM.rep = {};
+    if (kmAdm()) { try { const r = (await kmAdmReq("GET", "komen_lapor")) || {}; for (const id in r) KM.rep[id] = Object.keys(r[id] || {}).length; } catch (e) { /* abaikan */ } }
+    KM.at = Date.now();
+  } catch (e) { KM.err = e.code === 401 || e.code === 403 ? "Peraturan Firebase belum membenarkan bacaan komen. Lihat arahan pemasangan." : "Gagal memuatkan komen. Cuba lagi sebentar."; }
+  KM.loading = false; renderKomen();
+}
+async function kmPost(name, role, text) {
+  text = String(text).replace(/\s+/g, " ").trim(); name = cleanName(name).slice(0, 16);
+  if (name.length < 2) return "Sila isi nama (sekurang-kurangnya 2 huruf).";
+  if (text.length < 3) return "Komen terlalu pendek.";
+  if (text.length > 280) return "Komen melebihi 280 aksara.";
+  if (kmBad(name) || kmBad(text)) return "Komen tidak dihantar: mengandungi kata kesat, pautan atau nombor telefon. Gunakan bahasa yang sopan.";
+  if (Date.now() - KM.last < 60000) return "Sila tunggu seminit sebelum menghantar komen seterusnya.";
+  const id = "k" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  try { await FB.req("PUT", "komen/" + id, { n: name, r: role, m: text, t: Date.now(), u: FB.getUid() }); }
+  catch (e) { return "Gagal menghantar komen" + (e.code === 401 || e.code === 403 ? " (peraturan Firebase belum dipasang)." : "."); }
+  KM.last = Date.now(); return "";
+}
+async function kmReport(id) {
+  try { await FB.req("PUT", "komen_lapor/" + id + "/" + FB.getUid(), 1); KM.msg = "Terima kasih. Komen itu telah dilaporkan kepada moderator."; } catch (e) { KM.msg = "Laporan gagal dihantar."; }
+  try { localStorage.setItem("gt-km-rep-" + id, "1"); } catch (e) { /* abaikan */ }
+  renderKomen();
+}
+async function kmDel(id) {
+  if (KM.armed !== id) { KM.armed = id; renderKomen(); setTimeout(() => { if (KM.armed === id) { KM.armed = ""; renderKomen(); } }, 4000); return; }
+  KM.armed = "";
+  try { await kmAdmReq("DELETE", "komen/" + id); await kmAdmReq("DELETE", "komen_lapor/" + id).catch(() => {}); KM.list = KM.list.filter((x) => x.id !== id); KM.msg = "Komen dipadam."; }
+  catch (e) { KM.msg = e.code === 401 || e.code === 403 ? "Kunci moderator tidak sah. Log keluar moderator dan cuba lagi." : "Gagal memadam komen."; }
+  renderKomen();
+}
+function renderKomen() {
+  const box = $("komenBody"); if (!box) return;
+  box.textContent = "";
+  if (KM.err === "off") { box.appendChild(el("div", { class: "notice warn" }, "Ruangan komen memerlukan sambungan Firebase (versi GitHub Pages). Ia tidak tersedia pada sesi ini.")); return; }
+  const adm = !!kmAdm();
+  const form = el("div", { class: "hcard km-form" });
+  form.appendChild(el("div", { class: "tagline" }, "Tulis komen"));
+  const nm = el("input", { type: "text", maxlength: "16", placeholder: "Nama (cth: Aisyah, Cikgu Ali)", "aria-label": "Nama", class: "km-in" }); nm.value = (P.nama || "").slice(0, 16);
+  const rl = el("select", { "aria-label": "Peranan", class: "km-in" }); ["Murid", "Guru", "Ibu bapa", "Lain-lain"].forEach((r) => { const o = el("option", { value: r }, r); if (r === KM.role) o.selected = true; rl.appendChild(o); });
+  rl.addEventListener("change", () => { KM.role = rl.value; });
+  const tx = el("textarea", { maxlength: "280", rows: "3", placeholder: "Kongsi cadangan, pengalaman atau pendapat anda tentang Gempur. Gunakan bahasa yang sopan.", "aria-label": "Komen", class: "km-in" });
+  const cnt = el("span", { class: "muted", style: "font-size:12px" }, "0 / 280"); tx.addEventListener("input", () => { cnt.textContent = tx.value.length + " / 280"; });
+  const bt = el("button", { type: "button", class: "btn" }, "Hantar komen"), er = el("div", { class: "km-err", role: "alert" });
+  bt.addEventListener("click", async () => {
+    bt.disabled = true; er.textContent = "";
+    const m = await kmPost(nm.value, rl.value, tx.value);
+    bt.disabled = false;
+    if (m) { er.textContent = m; return; }
+    KM.msg = "Komen anda telah dihantar."; await kmLoad();
+  });
+  const r1 = el("div", { class: "km-r" }); r1.append(nm, rl);
+  form.append(r1, tx, el("div", { class: "row", style: "justify-content:space-between;align-items:center;gap:10px" }, null, cnt, bt), er,
+    el("p", { class: "muted", style: "font-size:12px;margin:4px 0 0" }, "Komen boleh dibaca oleh semua pengguna. Jangan kongsi nombor telefon, alamat atau maklumat peribadi. Komen tidak sesuai akan dipadam oleh moderator."));
+  box.appendChild(form);
+  if (KM.msg) { box.appendChild(el("div", { class: "notice" }, KM.msg)); KM.msg = ""; }
+  const bar = el("div", { class: "row", style: "justify-content:space-between;align-items:center;margin:14px 0 8px;gap:8px" });
+  bar.appendChild(el("h3", { class: "sec", style: "font-size:22px;margin:0" }, "Komen terkini" + (KM.list.length ? " (" + KM.list.length + ")" : "")));
+  const rf = el("button", { type: "button", class: "btn alt sm" }, KM.loading ? "Memuatkan..." : "Muat semula"); rf.disabled = KM.loading; rf.addEventListener("click", kmLoad); bar.appendChild(rf);
+  box.appendChild(bar);
+  if (KM.err) box.appendChild(el("div", { class: "notice warn" }, KM.err));
+  else if (!KM.list.length && !KM.loading) box.appendChild(el("p", { class: "muted" }, KM.at ? "Belum ada komen. Jadilah yang pertama!" : "Memuatkan komen..."));
+  const ls = el("div", { class: "km-list" });
+  KM.list.forEach((x) => {
+    const c = el("div", { class: "km-c" + (adm && KM.rep[x.id] ? " flag" : "") }), top = el("div", { class: "km-t" });
+    const role = String(x.r || "").slice(0, 12);
+    top.append(el("b", null, String(x.n || "Pengguna").slice(0, 30)), el("span", { class: "km-role km-" + (role === "Guru" ? "g" : role === "Ibu bapa" ? "i" : "m") }, role || "Murid"), el("span", { class: "muted" }, kmAgo(x.t)));
+    c.append(top, el("div", { class: "km-m" }, String(x.m).slice(0, 300)));
+    const act = el("div", { class: "km-a" });
+    let did = false; try { did = localStorage.getItem("gt-km-rep-" + x.id) === "1"; } catch (e) { /* abaikan */ }
+    if (adm) {
+      if (KM.rep[x.id]) act.appendChild(el("span", { class: "km-fl" }, KM.rep[x.id] + " laporan"));
+      const d = el("button", { type: "button", class: "btn sm", style: KM.armed === x.id ? "background:var(--danger)" : "" }, KM.armed === x.id ? "Klik lagi untuk padam" : "Padam"); d.addEventListener("click", () => kmDel(x.id)); act.appendChild(d);
+    } else if (x.u !== FB.getUid()) {
+      const l = el("button", { type: "button", class: "btn alt sm" }, did ? "Dilaporkan" : "Laporkan"); l.disabled = did; l.addEventListener("click", () => kmReport(x.id)); act.appendChild(l);
+    }
+    c.appendChild(act); ls.appendChild(c);
+  });
+  box.appendChild(ls);
+  // moderator
+  const mod = el("div", { class: "km-mod" });
+  if (adm) {
+    const lo = el("button", { type: "button", class: "btn alt sm" }, "Log keluar moderator"); lo.addEventListener("click", () => { try { localStorage.removeItem("gt-km-adm"); } catch (e) { /* abaikan */ } KM.rep = {}; renderKomen(); });
+    mod.append(el("span", { class: "muted" }, "Mod moderator aktif pada peranti ini. "), lo);
+  } else {
+    const d = el("details"); d.appendChild(el("summary", { class: "muted" }, "Moderator"));
+    const k = el("input", { type: "password", placeholder: "Kunci moderator Firebase", "aria-label": "Kunci moderator", class: "km-in", autocomplete: "off" });
+    const ok = el("button", { type: "button", class: "btn sm" }, "Aktifkan");
+    ok.addEventListener("click", async () => { const v = k.value.trim(); if (!v) return; try { localStorage.setItem("gt-km-adm", v); } catch (e) { /* abaikan */ } try { await kmAdmReq("GET", "komen_lapor"); kmLoad(); } catch (e) { try { localStorage.removeItem("gt-km-adm"); } catch (e2) { /* abaikan */ } KM.msg = "Kunci moderator tidak sah."; renderKomen(); } });
+    d.append(k, ok, el("p", { class: "muted", style: "font-size:12px" }, "Kunci hanya disimpan pada peranti ini dan tidak pernah dimasukkan ke dalam kod aplikasi."));
+    mod.appendChild(d);
+  }
+  box.appendChild(mod);
+}
+
 function setView(v) {
   UI.view = v;
+  { const f = document.getElementById("kmFab"); if (f) { f.hidden = v !== "map"; if (v === "map") { f.classList.remove("pop"); void f.offsetWidth; f.classList.add("pop"); } } }
   document.body.classList.toggle("vmap", v === "map");
-  ["map", "skuad", "team", "rank", "gudang", "pangkat", "guru", "latihan"].forEach((n) => {
+  ["map", "skuad", "team", "rank", "gudang", "pangkat", "guru", "latihan", "komen"].forEach((n) => {
     $("v-" + n).hidden = n !== v;
     $("tab-" + n).setAttribute("aria-selected", n === v ? "true" : "false");
   });
@@ -15126,6 +15285,7 @@ function setView(v) {
   if (v === "guru") { if (GURU.rows && Date.now() - GURU.at > 60000) GURU.rows = null; renderGuru(); }
   if (v === "gudang") renderGudang();
   if (v === "latihan") renderLatihan();
+  if (v === "komen") { renderKomen(); if (Date.now() - KM.at > 20000) kmLoad(); }
   if (v === "map") { renderChamp(); renderMaps(); renderList(); renderPanel(); }
   window.scrollTo(0, 0);
 }
@@ -15697,6 +15857,7 @@ $("regReset").addEventListener("click", () => {
 ["inName", "inKelas", "inSekolah"].forEach((id) => $(id).addEventListener("keydown", (e) => { if (e.key === "Enter") confirmReg(); }));
 $("meBtn").addEventListener("click", () => openReg(false));
 document.querySelectorAll(".tab").forEach((b) => b.addEventListener("click", () => setView(b.dataset.v)));
+{ const kf = document.getElementById("kmFab"); if (kf) { kf.addEventListener("click", () => setView("komen")); kf.classList.add("pop"); } }
 
 /* ---------- Pangkat turun ---------- */
 function rankDropNotice() {
