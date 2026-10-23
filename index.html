@@ -120,7 +120,70 @@ html,body{touch-action:manipulation}body.ar-lock,body.ar-lock *{-webkit-user-sel
 #dgOv #rbLb .rb-n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 112px; }
 #dgOv #rbLb .rb-f { font-size: 9px; color: #8ea6c8; margin-top: 3px; text-align: right; }
 @media (max-width: 760px) { #dgOv #rbLb { display: none; } }
-</style></head><body>
+#cnFab{position:fixed;left:max(14px,env(safe-area-inset-left));bottom:max(18px,env(safe-area-inset-bottom));z-index:59;display:flex;align-items:center;gap:8px;padding:11px 16px;min-height:46px;border:0;border-radius:999px;background:linear-gradient(180deg,#3b7cff,#1f4fd0);color:#fff;font:800 14px var(--font-body,system-ui);cursor:pointer;box-shadow:0 5px 0 #14339a,0 8px 18px rgba(0,0,0,.3)}
+#cnFab:hover{filter:brightness(1.1)} #cnFab:active{transform:translateY(2px);box-shadow:0 3px 0 #14339a} body.ingame #cnFab,body.ar-lock #cnFab{display:none}
+@media(max-width:560px){#cnFab b{display:none} #cnFab{padding:12px 14px;font-size:20px}}
+#cnOv{position:fixed;inset:0;z-index:400;overflow-y:auto;background:radial-gradient(ellipse at 50% 0%,#2a64e8 0%,#1239a8 55%,#0a1f66 100%);color:#fff;font-family:var(--font-body,system-ui)}
+#cnOv .cn-top{position:fixed;top:12px;right:12px;display:flex;gap:8px;z-index:2} #cnOv .cn-tb{background:rgba(6,16,50,.6);color:#fff;border:1px solid rgba(160,200,255,.5);padding:9px 14px;font:700 13px var(--font-body,system-ui);cursor:pointer;border-radius:8px}
+#cnOv .cn-wrap{max-width:900px;margin:0 auto;padding:54px 18px 60px;text-align:center}
+#cnOv .cn-kick{letter-spacing:.3em;font-size:11px;font-weight:800;color:#a9c8ff}
+#cnOv .cn-title{display:block;width:100%;margin:8px 0 18px;background:transparent;border:0;border-bottom:2px dashed rgba(255,255,255,.2);color:#fff;text-align:center;font:900 clamp(26px,5.5vw,50px)/1.1 var(--font-body,system-ui);text-transform:uppercase;text-shadow:0 3px 0 rgba(0,0,0,.25);padding:4px 0}
+#cnOv .cn-title:focus{outline:none;border-bottom-color:#ffd23d}
+#cnOv .cn-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:640px;margin:0 auto 18px}
+#cnOv .cn-stat{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:12px 6px} #cnOv .cn-stat b{display:block;font-size:30px} #cnOv .cn-stat small{font-size:12px;color:#c9dcff}
+#cnOv .cn-stage{position:relative;overflow:hidden;max-width:700px;margin:0 auto;min-height:150px;display:grid;place-items:center;padding:18px 16px;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.28);border-radius:20px;box-shadow:inset 0 0 40px rgba(60,120,255,.3)}
+#cnOv .cn-name{font:900 clamp(24px,5vw,44px)/1.15 var(--font-body,system-ui);text-transform:uppercase;text-shadow:0 3px 0 rgba(0,0,0,.3);overflow-wrap:anywhere}
+#cnOv .cn-stage.won{border-color:#ffd23d;box-shadow:0 0 0 3px rgba(255,210,61,.4),inset 0 0 50px rgba(255,210,61,.25)} #cnOv .cn-stage.won .cn-name{color:#ffe27a;animation:cnpop .5s cubic-bezier(.2,1.5,.4,1)}
+@keyframes cnpop{from{transform:scale(.6);opacity:.3}to{transform:scale(1);opacity:1}}
+#cnOv .cn-sub{margin:10px 0 14px;font-size:13px;color:#c9dcff}
+#cnOv .cn-go{display:block;width:min(700px,100%);margin:0 auto;padding:16px;border:0;border-radius:12px;background:#fff;color:#12265c;font:900 18px var(--font-body,system-ui);letter-spacing:.06em;cursor:pointer;box-shadow:0 5px 0 #aab9dd}
+#cnOv .cn-go:disabled{opacity:.55;cursor:default} #cnOv .cn-go:not(:disabled):hover{filter:brightness(.95)} #cnOv .cn-go:not(:disabled):active{transform:translateY(3px);box-shadow:0 2px 0 #aab9dd}
+#cnOv .cn-q{max-width:700px;margin:16px auto 0;text-align:left;background:rgba(6,16,50,.45);border:1px solid rgba(160,200,255,.35);border-radius:14px;padding:14px 16px} #cnOv .cn-q[hidden]{display:none}
+#cnOv .cn-k{font-size:11px;letter-spacing:.18em;font-weight:800;color:#ffd98a} #cnOv .cn-qt{margin:8px 0;font-size:19px;font-weight:700;line-height:1.4} #cnOv .cn-qo{margin:0 0 8px;padding:0;list-style:none;display:grid;gap:6px} #cnOv .cn-qo li{background:rgba(255,255,255,.08);border-radius:8px;padding:8px 12px;font-size:16px}
+#cnOv .cn-qa{margin:8px 0;padding:10px 12px;border-radius:8px;background:rgba(60,200,120,.22);border:1px solid rgba(110,255,170,.5);font-weight:700}
+#cnOv .cn-cols{display:grid;grid-template-columns:1.1fr 1fr;gap:14px;margin-top:22px;text-align:left} @media(max-width:760px){#cnOv .cn-cols{grid-template-columns:1fr}}
+#cnOv .cn-pan{background:rgba(6,16,50,.4);border:1px solid rgba(160,200,255,.25);border-radius:14px;padding:14px} #cnOv .cn-pan h2{margin:0 0 8px;font-size:15px} #cnOv .cn-cnt{font-weight:600;font-size:12px;color:#a9c8ff}
+#cnOv .cn-ta{width:100%;box-sizing:border-box;resize:vertical;background:rgba(0,10,40,.55);color:#fff;border:1px solid rgba(160,200,255,.4);border-radius:8px;padding:10px;font:15px/1.5 var(--font-body,system-ui)} #cnOv .cn-ta:focus{outline:2px solid #ffd23d}
+#cnOv .cn-chk{display:flex;gap:8px;align-items:flex-start;margin:8px 0;font-size:14px;color:#dbe8ff} #cnOv .cn-chk input{margin-top:3px}
+#cnOv .cn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px} #cnOv .cn-sm{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:8px 12px;font:700 13px var(--font-body,system-ui);cursor:pointer}
+#cnOv .cn-hist{margin:0;padding:0 0 0 22px;max-height:300px;overflow-y:auto;font-size:15px} #cnOv .cn-hist li{padding:4px 0;display:list-item} #cnOv .cn-hist li span{display:inline-block;max-width:calc(100% - 34px);vertical-align:middle} #cnOv .cn-empty{list-style:none;margin-left:-22px;color:#a9c8ff}
+#cnOv .cn-x{float:right;background:transparent;border:0;color:#ffb0b8;font-size:18px;line-height:1;cursor:pointer}
+#cnOv .cn-cf{position:absolute;top:-10px;width:8px;height:12px;opacity:0;animation:cnfall 2s ease-in forwards} @keyframes cnfall{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--dx),220px) rotate(540deg)}}
+@media(prefers-reduced-motion:reduce){#cnOv .cn-stage.won .cn-name{animation:none}}
+#v-prak .pr-hero{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:18px;border:1px solid var(--line,#3a4a2a);background:linear-gradient(135deg,#1c2c1a,#2a3a1c);margin:10px 0 18px;border-radius:14px}
+#v-prak .pr-hico{font-size:54px;line-height:1} #v-prak .pr-htx{flex:1;min-width:220px} #v-prak .pr-htx b{font-size:20px} #v-prak .pr-htx p{margin:4px 0;font-size:14px} #v-prak .pr-htx small{color:#e8c872}
+#v-prak .pr-mod{margin:18px 0} #v-prak .pr-mod h3{margin:0 0 4px}
+#v-prak .pr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:8px}
+#v-prak .pr-card{display:grid;gap:4px;text-align:left;padding:12px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.2);border-radius:10px;color:inherit;cursor:pointer;font-family:inherit}
+#v-prak .pr-card:hover{border-color:#ffd23d;background:rgba(255,210,61,.08)} #v-prak .pr-card b{font-size:16px} #v-prak .pr-card span{font-size:13px;opacity:.8} #v-prak .pr-card em{font-style:normal;font-size:12px;color:#e8c872}
+#prOv{position:fixed;inset:0;z-index:410;overflow-y:auto;background:radial-gradient(ellipse at 50% 0%,#1f5a4a 0%,#0e3128 60%,#071c17 100%);color:#fff;font-family:var(--font-body,system-ui)}
+#prOv .pr-x{position:fixed;top:12px;right:12px;z-index:2;background:rgba(0,20,15,.6);color:#fff;border:1px solid rgba(160,255,220,.4);padding:9px 14px;border-radius:8px;font:700 13px var(--font-body,system-ui);cursor:pointer}
+#prOv .pr-wrap{max-width:760px;margin:0 auto;padding:56px 18px 60px} #prOv .pr-k{letter-spacing:.25em;font-size:11px;font-weight:800;color:#9fe8c8} #prOv h2{margin:6px 0 10px;font-size:clamp(24px,4.5vw,36px)} #prOv h3{margin:18px 0 6px}
+#prOv .pr-lead{color:#d8f2e8;margin:4px 0} #prOv .pr-hint{font-size:13px;color:#e8c872;margin:2px 0 12px}
+#prOv .pr-done{margin:0 0 14px;padding:0;list-style:none;counter-reset:s;display:grid;gap:6px} #prOv .pr-done li{counter-increment:s;background:rgba(60,200,120,.18);border:1px solid rgba(110,255,170,.4);border-radius:8px;padding:9px 12px 9px 40px;position:relative} #prOv .pr-done li::before{content:counter(s);position:absolute;left:10px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;background:#3fd48a;color:#04281a;font-weight:800;font-size:13px;display:grid;place-items:center} #prOv .pr-done small{display:block;font-size:12px;color:#bfe8d4}
+#prOv .pr-pool{display:grid;gap:8px} #prOv .pr-step,#prOv .pr-opt{text-align:left;background:rgba(255,255,255,.09);color:#fff;border:1px solid rgba(255,255,255,.28);border-radius:10px;padding:12px 14px;font:600 16px var(--font-body,system-ui);cursor:pointer;line-height:1.35} #prOv .pr-step:hover,#prOv .pr-opt:not(:disabled):hover{border-color:#ffd23d;background:rgba(255,210,61,.12)}
+#prOv .pr-step.bad{animation:prsh .4s;border-color:#ff6b7a;background:rgba(255,80,100,.25)} @keyframes prsh{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+#prOv .pr-q{font-size:20px;font-weight:700;line-height:1.4;margin:6px 0 14px} #prOv .pr-opts{display:grid;gap:8px} #prOv .pr-opt:disabled{cursor:default;opacity:.85} #prOv .pr-opt.ok{background:rgba(60,200,120,.3);border-color:#6fffaa} #prOv .pr-opt.bad{background:rgba(255,80,100,.28);border-color:#ff6b7a}
+#prOv .pr-fb{margin:14px 0;padding:12px 14px;border-radius:10px;line-height:1.5} #prOv .pr-fb.ok{background:rgba(60,200,120,.22);border:1px solid #6fffaa} #prOv .pr-fb.bad{background:rgba(255,160,60,.2);border:1px solid #ffb35c}
+#prOv .pr-go{padding:13px 22px;border:0;border-radius:10px;background:linear-gradient(180deg,#ffd96a,#f0a43a);color:#2a1a02;font:900 15px var(--font-body,system-ui);cursor:pointer;box-shadow:0 4px 0 #a8681a} #prOv .pr-go.alt{background:rgba(255,255,255,.14);color:#fff;box-shadow:none;border:1px solid rgba(255,255,255,.35)} #prOv .pr-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+#prOv .pr-score{display:flex;align-items:center;gap:16px;margin:10px 0} #prOv .pr-score b{font-size:56px;color:#ffe27a} #prOv .pr-score span{font-size:20px;font-weight:700} #prOv .pr-xp{color:#ffe27a;font-weight:800}
+#hjOv{position:fixed;inset:0;z-index:420;background:#0b1a24;color:#fff;font-family:var(--font-body,system-ui);overflow:hidden}
+#hjOv .hj-cv{position:absolute;inset:0;display:block;touch-action:none}
+#hjOv .hj-x{position:absolute;top:12px;right:12px;z-index:5;background:rgba(6,16,30,.65);color:#fff;border:1px solid rgba(160,200,255,.45);padding:9px 14px;border-radius:8px;font:700 13px var(--font-body,system-ui);cursor:pointer}
+#hjOv .hj-hud{position:absolute;top:12px;left:12px;z-index:4;display:flex;gap:16px;padding:8px 14px;background:rgba(6,16,30,.65);border:1px solid rgba(160,200,255,.3);border-radius:10px} #hjOv .hj-hud small{display:block;font-size:10px;letter-spacing:.1em;color:#a9c8ff;text-transform:uppercase} #hjOv .hj-hud b{font-size:17px}
+#hjOv .hj-obj{position:absolute;top:70px;left:50%;transform:translateX(-50%);z-index:4;max-width:min(92vw,640px);padding:9px 16px;background:rgba(255,246,214,.94);color:#2a2010;border-radius:12px;font:700 14px var(--font-body,system-ui);text-align:center;box-shadow:0 3px 12px rgba(0,0,0,.3)} #hjOv .hj-obj:empty{display:none}
+#hjOv .hj-toast{position:absolute;top:128px;left:50%;transform:translateX(-50%);z-index:4;padding:8px 16px;border-radius:999px;background:rgba(30,150,90,.92);font:700 14px var(--font-body,system-ui);opacity:0;pointer-events:none} #hjOv .hj-toast.show{animation:hjt 2.6s ease both} @keyframes hjt{0%{opacity:0;transform:translate(-50%,-8px)}12%,80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+#hjOv .hj-act{position:absolute;left:50%;bottom:90px;transform:translateX(-50%);z-index:4;background:linear-gradient(180deg,#ffd96a,#f0a43a);color:#2a1a02;border:0;padding:13px 26px;border-radius:12px;font:900 16px var(--font-body,system-ui);cursor:pointer;box-shadow:0 5px 0 #a8681a} #hjOv .hj-act[hidden]{display:none}
+#hjOv .hj-pan{position:absolute;inset:0;z-index:6;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:20px;background:rgba(4,12,24,.78);overflow-y:auto;text-align:center} #hjOv .hj-pan[hidden]{display:none} #hjOv .hj-pan>*{max-width:640px;width:100%}
+#hjOv .hj-pan h2{margin:0;font-size:clamp(26px,5vw,40px)} #hjOv .hj-pan h3{margin:4px 0 6px;font-size:clamp(18px,3.6vw,24px);line-height:1.35} #hjOv .hj-pan p{margin:4px 0;font-size:16px;line-height:1.5;color:#e4eefc} #hjOv .hj-sub{color:#ffd98a!important;font-weight:700}
+#hjOv .hj-k{letter-spacing:.25em;font-size:11px;font-weight:800;color:#9fe8c8} #hjOv .hj-go{padding:14px 26px;border:0;border-radius:12px;background:linear-gradient(180deg,#ffd96a,#f0a43a);color:#2a1a02;font:900 16px var(--font-body,system-ui);cursor:pointer;box-shadow:0 4px 0 #a8681a;margin-top:10px;width:auto!important;align-self:center} #hjOv .hj-go.alt{background:rgba(255,255,255,.15);color:#fff;box-shadow:none;border:1px solid rgba(255,255,255,.4)}
+#hjOv .hj-opts{display:grid;gap:8px;margin-top:6px} #hjOv .hj-opt{text-align:left;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:10px;padding:12px 14px;font:600 16px var(--font-body,system-ui);cursor:pointer;line-height:1.35} #hjOv .hj-opt:not(:disabled):hover{border-color:#ffd23d;background:rgba(255,210,61,.14)} #hjOv .hj-opt.ok{background:rgba(60,200,120,.32);border-color:#6fffaa} #hjOv .hj-opt.bad{background:rgba(255,80,100,.3);border-color:#ff6b7a}
+#hjOv .hj-fb{padding:11px 14px;border-radius:10px;text-align:left;line-height:1.5;margin-top:6px} #hjOv .hj-fb.ok{background:rgba(60,200,120,.22);border:1px solid #6fffaa} #hjOv .hj-fb.bad{background:rgba(255,160,60,.2);border:1px solid #ffb35c}
+#hjOv .hj-score{font-size:30px!important;font-weight:900;color:#ffe27a!important} #hjOv .hj-xp{color:#ffe27a!important;font-weight:800} #hjOv .hj-res{margin:6px 0;padding:0;list-style:none;display:grid;gap:4px;text-align:left} #hjOv .hj-res li{display:flex;justify-content:space-between;padding:7px 12px;background:rgba(255,255,255,.08);border-radius:8px} #hjOv .hj-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+#hjOv .hj-menu{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:20px;text-align:center;overflow-y:auto;background:radial-gradient(ellipse at 50% 0,#1d6a64 0,#0e3a46 55%,#08202c 100%)} #hjOv .hj-menu>*{max-width:620px} #hjOv .hj-menu h1{margin:0;font-size:clamp(34px,7vw,60px);text-shadow:0 3px 0 rgba(0,0,0,.3)} #hjOv .hj-menu p{margin:4px 0;line-height:1.55;color:#dcefff} #hjOv .hj-menu small{color:#a9c8ff;margin-top:8px}
+#hjOv .hj-lst{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:6px 0} #hjOv .hj-lst span{background:rgba(255,255,255,.12);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:700} #hjOv .hj-lb{font-size:12px;letter-spacing:.12em;color:#9fe8c8;text-transform:uppercase;margin-top:8px}
+</style><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
+</head><body>
 <title>Gempur</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -810,11 +873,51 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
 #slOv .sl-pi { display: flex; gap: 12px; align-items: center; width: 100%; text-align: left; padding: 12px; margin-bottom: 6px; background: #0f2a3d; color: #f2f7fb; border: 1px solid rgba(255,255,255,.15); border-radius: 10px; font: 600 15px var(--font-body); cursor: pointer; } #slOv .sl-pi:hover { border-color: #ffd23d; } #slOv .sl-pi .c { flex: none; min-width: 42px; text-align: center; padding: 4px 8px; border-radius: 6px; color: #fff; font-weight: 800; font-size: 13px; }
 #slOv .sl-notes[hidden] { display: none; }
 /* /sl-css */
+/* Slaid PdPc v17.64: gaya 3D Clay Anime */
+#slOv { --clay: inset 0 -8px 0 rgba(59,42,90,.10), inset 0 6px 0 rgba(255,255,255,.8), 0 14px 22px rgba(59,42,90,.16); background: #FFF4E4; color: #3B2A5A; font-family: "Nunito", var(--font-body), system-ui, sans-serif; }
+#slOv .sl-bg { background: radial-gradient(circle at 6% 8%, rgba(255,201,77,.38), transparent 36%), radial-gradient(circle at 96% 92%, rgba(255,122,138,.30), transparent 42%), radial-gradient(circle at 94% 6%, rgba(91,184,245,.30), transparent 34%), radial-gradient(circle at 4% 96%, rgba(111,214,176,.30), transparent 34%); }
+#slOv .sl-kick { color: #B02F4C; filter: none; font: 800 13px "Nunito", var(--font-body); letter-spacing: .14em; }
+#slOv .sl-x { background: #fff; color: #3B2A5A; border: 0; border-radius: 999px; padding: 8px 16px; font: 800 13px "Nunito", var(--font-body); box-shadow: var(--clay); }
+#slOv .sl-bar { height: 8px; background: rgba(59,42,90,.12); margin: 0 18px; border-radius: 8px; overflow: hidden; } #slOv .sl-bar i { background: linear-gradient(90deg, #FF7A8A, #FFC94D); filter: none; border-radius: 8px; }
+#slOv .sl-nav { background: #fff; color: #3B2A5A; box-shadow: var(--clay); border-radius: 28px; } #slOv .sl-nav:hover { background: #FFF0C2; }
+#slOv .sl-stage { max-width: 1240px; }
+#slOv .sl-h { font: 600 clamp(28px,4.2vw,50px)/1.12 "Fredoka", var(--font-display, var(--font-body)); color: #3B2A5A; } #slOv .sl-h2 { font: 600 22px "Fredoka", var(--font-body); color: #B02F4C; }
+#slOv .cover { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; text-align: left; padding-top: 2vh; } #slOv .sl-cv { flex: 1 1 420px; min-width: 0; } #slOv .sl-mas { flex: 0 1 380px; text-align: center; }
+#slOv .cover h1 { font: 600 clamp(34px,5.6vw,68px)/1.08 "Fredoka", var(--font-display, var(--font-body)); color: #3B2A5A; margin: 14px 0; }
+#slOv .sl-code { background: #FFC94D; color: #3B2A5A; filter: none; box-shadow: var(--clay); font: 800 14px "Nunito", var(--font-body); }
+#slOv .sl-sub { color: #5A4A78; opacity: 1; } #slOv .sl-hint { color: #6B5A8A; opacity: 1; } #slOv .sl-dskp { color: #6B5A8A; opacity: 1; } #slOv .sl-p { color: #3B2A5A; opacity: 1; }
+#slOv .sl-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; } #slOv .sl-chip { background: var(--bg); color: #3B2A5A; padding: 7px 16px; border-radius: 999px; font: 800 14px "Nunito", var(--font-body); box-shadow: var(--clay); }
+/* kad tanah liat */
+#slOv .sl-stack { display: grid; gap: 14px; } #slOv .sl-stack.sm .sl-ct { font-size: clamp(15px,1.9vw,19px); }
+#slOv .sl-cl { display: flex; gap: 16px; align-items: center; background: var(--bg); border-radius: 32px; padding: 16px 22px; box-shadow: var(--clay); } #slOv .sl-cl.rv { transition: opacity .4s, transform .4s; }
+#slOv .sl-bd { flex: none; width: 54px; height: 54px; display: grid; place-items: center; border-radius: 50%; background: radial-gradient(circle at 30% 25%, var(--c1), var(--c2)); color: #3B2A5A; font: 700 26px "Fredoka", var(--font-body); box-shadow: inset 0 -6px 0 rgba(59,42,90,.14), 0 8px 12px rgba(59,42,90,.18); }
+#slOv .sl-ct { font-size: clamp(17px,2.2vw,26px); line-height: 1.4; font-weight: 600; } #slOv .sl-ct.big { font-size: clamp(18px,2.5vw,29px); font-weight: 700; }
+#slOv .sl-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 16px; } #slOv .sl-info .sl-cl { align-items: flex-start; } #slOv .sl-tx b { display: block; font: 600 clamp(17px,1.9vw,22px)/1.25 "Fredoka", var(--font-body); margin-bottom: 4px; } #slOv .sl-tx p { margin: 0; font-size: clamp(14px,1.4vw,16px); line-height: 1.45; color: #4A3A68; }
+#slOv .sl-hub { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: #3B2A5A; color: #FFF4E4; border-radius: 40px; padding: 14px 26px; margin: 0 0 16px; box-shadow: inset 0 -8px 0 rgba(0,0,0,.2), inset 0 6px 0 rgba(255,255,255,.16), 0 14px 22px rgba(59,42,90,.25); } #slOv .sl-hub b { font: 600 clamp(18px,2.4vw,28px) "Fredoka", var(--font-body); flex: 1 1 200px; } #slOv .sl-hub .sl-hk { background: #FFC94D; color: #3B2A5A; border-radius: 999px; padding: 4px 14px; font: 800 12px "Nunito", var(--font-body); letter-spacing: .12em; } #slOv .sl-hub small { color: #C9BEE0; font-size: 14px; }
+#slOv .sl-flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 10px; } #slOv .sl-fs { flex: 1 1 190px; display: flex; flex-direction: column; gap: 10px; background: var(--bg); border-radius: 30px; padding: 18px; box-shadow: var(--clay); font-size: clamp(14px,1.6vw,18px); line-height: 1.4; font-weight: 600; } #slOv .sl-ar { align-self: center; font: 700 44px "Fredoka", var(--font-body); color: #B02F4C; }
+@media (max-width: 700px) { #slOv .sl-ar { display: none; } #slOv .sl-cl { padding: 12px 14px; border-radius: 26px; } #slOv .sl-bd { width: 42px; height: 42px; font-size: 20px; } }
+/* kuiz */
+#slOv .sl-opt { background: #fff; color: #3B2A5A; border: 3px solid transparent; border-radius: 28px; box-shadow: var(--clay); font-family: "Nunito", var(--font-body); font-weight: 700; } #slOv .sl-opt:hover:not(:disabled) { border-color: #FFC94D; filter: none; } #slOv .sl-opt b { background: #FFE9CF; color: #3B2A5A; } #slOv .sl-opt.ok { border-color: #2FAE7A; background: #DFF7EC; } #slOv .sl-opt.bad { border-color: #E25570; background: #FFE3E6; } #slOv .sl-opt.dim { opacity: .5; }
+#slOv .sl-fb { background: #fff; border: 0; border-radius: 26px; box-shadow: var(--clay); color: #3B2A5A; } #slOv .sl-fb.ok { background: #DFF7EC; } #slOv .sl-fb.bad { background: #FFE3E6; }
+#slOv .sl-q { font-family: "Fredoka", var(--font-body); font-weight: 500; color: #3B2A5A; }
+/* kad istilah */
+#slOv .sl-card { height: 170px; } #slOv .sl-face { border-radius: 32px; box-shadow: var(--clay); color: #3B2A5A; font-weight: 700; } #slOv .sl-face.f { background: radial-gradient(circle at 30% 25%, var(--c1), var(--c2)); font: 600 22px "Fredoka", var(--font-body); } #slOv .sl-face.b { background: #fff; border: 4px solid var(--c2); }
+/* peta minda */
+#slOv .sl-core { background: #FF7A8A; color: #3B2A5A; filter: none; box-shadow: var(--clay); font-family: "Fredoka", var(--font-body); font-weight: 600; } #slOv .sl-node { background: var(--bg); color: #3B2A5A; border: 3px solid transparent; border-radius: 26px; box-shadow: var(--clay); font-family: "Nunito", var(--font-body); font-weight: 700; } #slOv .sl-node.on { border-color: #3B2A5A; background: #fff; } #slOv .sl-mmd { background: #fff; color: #3B2A5A; border: 0; border-left: 10px solid #FFC94D; border-radius: 28px; box-shadow: var(--clay); }
+/* alat */
+#slOv .sl-td { color: #B02F4C; } #slOv .sl-td.low { color: #D6204A; } #slOv .sl-timer span { font-weight: 700; color: #6B5A8A; }
+#slOv .sl-btn { background: #FF7A8A; color: #3B2A5A; filter: none; border-radius: 999px; box-shadow: var(--clay); font-family: "Nunito", var(--font-body); font-weight: 800; } #slOv .sl-btn:hover { background: #FF93A0; } #slOv .sl-btn.alt { background: #fff; border: 0; color: #3B2A5A; }
+#slOv .sl-lv { background: #6FD6B0; color: #3B2A5A; box-shadow: var(--clay); }
+#slOv .sl-notes { background: #FFF0C2; color: #3B2A5A; border: 2px dashed #F5A81C; border-radius: 20px; }
+#slOv .sl-ft { color: #5A4A78; opacity: 1; } #slOv .sl-dot { background: rgba(59,42,90,.22); } #slOv .sl-dot.on { background: #FF7A8A; }
+#slOv .sl-idx { background: #fff; color: #3B2A5A; border: 0; border-radius: 28px; box-shadow: var(--clay); } #slOv .sl-ix { color: #3B2A5A; } #slOv .sl-ix.on { background: #FFF0C2; }
+#slOv .sl-search { background: #fff; color: #3B2A5A; border: 0; border-radius: 999px; box-shadow: var(--clay); padding: 12px 20px; } #slOv .sl-pi { background: #fff; color: #3B2A5A; border: 0; border-radius: 24px; box-shadow: var(--clay); } #slOv .sl-pi:hover { background: #FFF0C2; }
+#slOv .sl-pk h1 { font: 600 clamp(28px,4vw,46px)/1.12 "Fredoka", var(--font-body); color: #3B2A5A; } #slOv .sl-pl h4 { color: #3B2A5A; }
 </style>
 <div id="rkBanner" role="status" hidden></div>
 <div id="app">
   <header class="top"><div class="top-in">
-    <div class="brand">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.60</small></div>
+    <div class="brand">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.64</small></div>
     <button class="meb" id="meBtn" type="button" aria-label="Profil anggota">
       <span id="meIns"></span>
       <span class="me-t"><span class="me-n" id="meName">Anggota</span><span class="me-r" id="meRank">Prebet</span><div class="xpbar"><i id="meXp"></i></div></span>
@@ -824,7 +927,8 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
       <button class="tab" role="tab" id="tab-map" data-v="map" aria-selected="true">Peta operasi</button>
       <button class="tab" role="tab" id="tab-latihan" data-v="latihan" aria-selected="false">Latihan</button>
       <button class="tab" role="tab" id="tab-kelas" data-v="kelas" aria-selected="false">Kelas</button>
-      <button class="tab" role="tab" id="tab-komen" data-v="komen" aria-selected="false">Komen</button>
+      <button class="tab" role="tab" id="tab-prak" data-v="prak" aria-selected="false">Praktikal</button>
+    <button class="tab" role="tab" id="tab-komen" data-v="komen" aria-selected="false">Komen</button>
       <button class="tab" role="tab" id="tab-skuad" data-v="skuad" aria-selected="false">Pasukan</button>
       <button class="tab" role="tab" id="tab-team" data-v="team" aria-selected="false">Battle</button>
       <button class="tab" role="tab" id="tab-rank" data-v="rank" aria-selected="false">Kedudukan</button>
@@ -893,7 +997,12 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
       <p class="lead">Tugasan, ujian bermasa dan perlawanan kelas daripada guru anda.</p>
       <div id="kelasBody"></div>
     </section>
-    <section id="v-komen" hidden>
+    <section id="v-prak" hidden>
+    <h2 class="sec">Praktikal</h2>
+    <p class="lead">Latihan amali: simulasi, urutan langkah dan situasi sebenar.</p>
+    <div id="prakBody"></div>
+  </section>
+  <section id="v-komen" hidden>
       <h2 class="sec">Ruangan komen</h2>
       <p class="lead">Kongsi cadangan dan pendapat tentang Gempur. Komen boleh dibaca oleh murid, guru dan ibu bapa.</p>
       <div id="komenBody"></div>
@@ -5592,10 +5701,10 @@ function bzBuild0(o, g, skin) {
   const front = 0;
   if (fem && K) {
     const c = hex("kepala"), id = K.id, tbl = {
-      f_bawal: [[1.765, 0.02, 0.02], [1.75, 0.098, 0.108], [1.705, 0.138, 0.15], [1.62, 0.15, 0.158], [1.54, 0.152, 0.158], [1.47, 0.2, 0.175], [1.38, 0.255, 0.18], [1.28, 0.27, 0.17], [1.19, 0.262, 0.15]],
-      f_shawl: [[1.765, 0.02, 0.02], [1.75, 0.1, 0.11], [1.705, 0.14, 0.152], [1.62, 0.152, 0.16], [1.54, 0.155, 0.16], [1.47, 0.21, 0.178], [1.36, 0.27, 0.185], [1.24, 0.29, 0.18], [1.1, 0.285, 0.16]],
-      f_sarung: [[1.76, 0.02, 0.02], [1.745, 0.096, 0.106], [1.7, 0.134, 0.146], [1.62, 0.144, 0.154], [1.54, 0.146, 0.154], [1.47, 0.188, 0.166], [1.39, 0.225, 0.17], [1.3, 0.235, 0.16]],
-      f_satin: [[1.765, 0.02, 0.02], [1.75, 0.1, 0.11], [1.705, 0.14, 0.152], [1.62, 0.154, 0.162], [1.54, 0.158, 0.162], [1.46, 0.22, 0.18], [1.32, 0.29, 0.19], [1.12, 0.32, 0.19], [0.92, 0.34, 0.19]],
+      f_bawal: [[1.765, 0.02, 0.02], [1.75, 0.098, 0.108], [1.705, 0.138, 0.15], [1.62, 0.15, 0.158], [1.54, 0.152, 0.158], [1.47, 0.172, 0.162], [1.38, 0.215, 0.168], [1.28, 0.232, 0.162], [1.19, 0.226, 0.146]],
+      f_shawl: [[1.765, 0.02, 0.02], [1.75, 0.1, 0.11], [1.705, 0.14, 0.152], [1.62, 0.152, 0.16], [1.54, 0.155, 0.16], [1.47, 0.178, 0.168], [1.36, 0.23, 0.172], [1.24, 0.255, 0.166], [1.1, 0.25, 0.15]],
+      f_sarung: [[1.76, 0.02, 0.02], [1.745, 0.096, 0.106], [1.7, 0.134, 0.146], [1.62, 0.144, 0.154], [1.54, 0.146, 0.154], [1.47, 0.168, 0.158], [1.39, 0.2, 0.162], [1.3, 0.214, 0.155]],
+      f_satin: [[1.765, 0.02, 0.02], [1.75, 0.1, 0.11], [1.705, 0.14, 0.152], [1.62, 0.154, 0.162], [1.54, 0.158, 0.162], [1.46, 0.185, 0.17], [1.32, 0.24, 0.178], [1.12, 0.27, 0.18], [0.92, 0.29, 0.18]],
       f_tsukan: [[1.76, 0.02, 0.02], [1.745, 0.094, 0.104], [1.7, 0.126, 0.14], [1.62, 0.134, 0.146], [1.54, 0.136, 0.146], [1.47, 0.092, 0.092], [1.4, 0.1, 0.09]],
       f_pendekt: [[1.76, 0.02, 0.02], [1.745, 0.096, 0.106], [1.7, 0.13, 0.144], [1.62, 0.14, 0.15], [1.54, 0.142, 0.15], [1.49, 0.108, 0.11]]
     }[id] || [], gap = id === "f_pendekt" || id === "f_tsukan" ? [[1.5, 1.7, 0.78]] : [[1.5, 1.7, 0.8]];
@@ -5603,7 +5712,7 @@ function bzBuild0(o, g, skin) {
     bzLathe(F, I, [[1.705, 0.13, 0.145], [1.66, 0.134, 0.15]], bzSh(c, 0.85), { seg: 44, gaps: [[1.5, 1.72, 0.0]] });
   } else if (fem) {
     const hc = BZ_HAIR, hair = [[1.72, 0.02, 0.02], [1.708, 0.1, 0.11], [1.66, 0.126, 0.138], [1.6, 0.132, 0.145], [1.5, 0.13, 0.14], [1.38, 0.122, 0.12], [1.26, 0.11, 0.1]];
-    bzLathe(F, I, hair, hc, { seg: 44, gaps: [[1.45, 1.668, 1.15]], br: 1.05 });
+    bzLathe(F, I, hair, hc, { seg: 44, gaps: [[1.45, 1.668, 1.15], [1.15, 1.45, 2.05]], br: 1.05 });
   } else {
     bzLathe(F, I, [[1.72, 0.02, 0.02], [1.708, 0.098, 0.11], [1.665, 0.114, 0.126], [1.6, 0.118, 0.13]], BZ_HAIR, { seg: 40, gaps: [[1.55, 1.664, 1.1]] });
   }
@@ -5654,12 +5763,12 @@ function bzRender3(c, W, H, mesh, yaw) {
   const sh = []; dwFlat(cam, sh, 0, 0.004, 0, 0.5, 0.5, "#3a2418", 0.22);
   c.clearRect(0, 0, W, H); dwPaint(c, sh, true); dwPaint(c, q, false);
 }
-function bzSnap(o, g, skin, w, h, yaw) {
+function bzSnapSW(o, g, skin, w, h, yaw) {
   const cv = document.createElement("canvas"), d = Math.min(2, window.devicePixelRatio || 1); cv.width = Math.round(w * d); cv.height = Math.round(h * d); const c = cv.getContext("2d"); c.setTransform(d, 0, 0, d, 0, 0);
   bzRender3(c, w, h, bzBuild(o, g, skin), yaw == null ? 0.35 : yaw); return cv.toDataURL("image/png");
 }
 /* pentas langsung: boleh diseret untuk memusing, berputar perlahan */
-function bzStage3(host, g, skin, o) {
+function bzStage3SW(host, g, skin, o) {
   const cv = el("canvas", { class: "bz-cv3" }); host.textContent = ""; host.appendChild(cv); const c = cv.getContext("2d");
   const S = { yaw: 0.4, o: o, g: g, skin: skin, mesh: null, drag: false, lastX: 0, idle: 0, raf: 0, dead: false, last: 0 };
   const fit = () => { const w = host.clientWidth || 300, h = host.clientHeight || 420, d = Math.min(2, window.devicePixelRatio || 1); if (cv.width !== Math.round(w * d) || cv.height !== Math.round(h * d)) { cv.width = Math.round(w * d); cv.height = Math.round(h * d); } S.W = w; S.H = h; S.d = d; };
@@ -17380,7 +17489,7 @@ function bzBuild(o, g, skin) {
   m.D.forEach((t) => { const p = bzHp(t.p[0], t.p[1], t.p[2]); t.p = p; t.r *= bzHs(t.p[1]); });
   const fm = m.fem ? BZ_FACE.f : BZ_FACE.m, cy = BZ_HY + (1.605 - BZ_HY) * bzHs(1.605), Rx = 0.092 * 1.3, Ry = 0.153, Rz = 0.106 * 1.3;
   const zS = (x, y) => Rz * Math.sqrt(Math.max(0.02, 1 - (x / Rx) * (x / Rx) - ((y - cy) / Ry) * ((y - cy) / Ry))) + 0.003;
-  const add = (x, y, r, col, a, flag, nx) => { const d = { p: [x, y, zS(x, y)], n: [nx || 0, 0, 1], r: r, col: col }; if (a != null) d.a = a; if (flag) d[flag] = 1; m.D.push(d); };
+  const add = (x, y, r, col, a, flag, nx) => { const zz = zS(x, y), gx = x / (Rx * Rx), gy = (y - cy) / (Ry * Ry), gz = zz / (Rz * Rz), gl = Math.hypot(gx, gy, gz) || 1, d = { p: [x, y, zz], n: [gx / gl, gy / gl, gz / gl], r: r, col: col }; if (a != null) d.a = a; if (flag) d[flag] = 1; m.D.push(d); };
   const dark = bzSh(skin, 0.74);
   [-1, 1].forEach((s) => {
     const ex = s * 0.054, ey = cy + 0.006;
@@ -17388,10 +17497,10 @@ function bzBuild(o, g, skin) {
     // kelopak tertutup ketika berkedip
     for (let k = -1; k <= 1; k++) add(ex + k * 0.013, ey - 0.004 - (k === 0 ? 0 : 0.0015), 0.0072, "#2a1812", null, "lid");
     // garisan bulu mata atas
-    for (let k = -2; k <= 2; k++) add(ex + k * 0.0125, ey + 0.021 - Math.abs(k) * 0.0035, 0.0058, "#1e120e");
+    for (let k = -6; k <= 6; k++) add(ex + k * 0.0042, ey + 0.0215 - Math.abs(k) * 0.0011 - (k * s > 3 ? 0.002 : 0), 0.0038, "#1e120e");
     if (fm.lash) { add(ex + s * 0.03, ey + 0.012, 0.0045, "#1e120e"); add(ex + s * 0.034, ey + 0.019, 0.004, "#1e120e"); }
     // kening
-    for (let k = -2; k <= 2; k++) add(ex + k * 0.0125, ey + 0.046 - Math.abs(k) * 0.0013 - (k * s) * 0.0012, m.fem ? 0.0058 : 0.0078, m.fem ? "#3a261c" : "#241610");
+    for (let k = -6; k <= 6; k++) add(ex + k * 0.0042, ey + 0.046 - Math.abs(k) * 0.0005 - (k * s) * 0.0006, m.fem ? 0.0034 : 0.0052, m.fem ? "#3a261c" : "#241610");
     // pipi
     add(s * 0.082, cy - 0.036, 0.03, "#ff8a8a", 0.2, null, s * 0.5);
   });
@@ -17399,7 +17508,7 @@ function bzBuild(o, g, skin) {
   add(0, cy - 0.022, 0.011, bzSh(skin, 0.86), 0.55); add(0.0, cy - 0.016, 0.006, bzSh(skin, 1.12), 0.6);
   add(-0.011, cy - 0.034, 0.0045, bzSh(skin, 0.62), 0.9); add(0.011, cy - 0.034, 0.0045, bzSh(skin, 0.62), 0.9);
   // mulut tersenyum
-  for (let k = -4; k <= 4; k++) { const u = k / 4; add(u * 0.036, cy - 0.066 - (1 - u * u) * 0.011 + (Math.abs(u) > 0.9 ? 0.004 : 0), Math.abs(u) < 0.6 ? 0.0066 : 0.0052, fm.lip, null); }
+  for (let k = -10; k <= 10; k++) { const u = k / 10; add(u * 0.036, cy - 0.064 - (1 - u * u) * 0.012 + (Math.abs(u) > 0.9 ? 0.004 : 0), 0.0048 * (1.3 - Math.abs(u) * 0.6), fm.lip, null); }
   add(0, cy - 0.0715, 0.0045, bzSh(fm.lip, 1.2), 0.9);
   // telinga
   [-1, 1].forEach((s) => bzEll(m.F, s * (Rx - 0.002), cy - 0.01, -0.005, 0.011, 0.03, 0.02, skin, { seg: 10 }));
@@ -17594,11 +17703,740 @@ function rbLbTick() {
 }
 setInterval(rbLbTick, 450);
 
+/* ---------- Busana: pemaparan WebGL berlorek licin (v17.60) ---------- */
+const BZ_VS = "attribute vec3 aP; attribute vec3 aN; attribute vec4 aC; uniform mat3 uRot; uniform vec3 uOff; uniform vec3 uCam; uniform vec3 uRt; uniform vec3 uUp; uniform vec3 uFw; uniform vec4 uPr; varying vec3 vN; varying vec4 vC; varying vec3 vP;\n" +
+  "void main() { vec3 wp = uRot * aP + uOff; vN = uRot * aN; vC = aC; vP = wp; vec3 d = wp - uCam; float Z = dot(d, uFw); gl_Position = vec4(dot(d, uRt) * uPr.x, dot(d, uUp) * uPr.y, uPr.z * Z + uPr.w, Z); }";
+const BZ_FS = "precision mediump float; varying vec3 vN; varying vec4 vC; varying highp vec3 vP; uniform highp vec3 uCam; uniform float uUnlit;\n" +
+  "void main() {\n" +
+  "  if (uUnlit > 0.5) { gl_FragColor = vC; return; }\n" +
+  "  vec3 n = normalize(vN); vec3 v = normalize(uCam - vP); if (dot(n, v) < 0.0) n = -n;\n" +
+  "  vec3 L1 = normalize(vec3(0.55, 0.7, -0.45)); vec3 L2 = normalize(vec3(-0.7, 0.25, -0.35)); vec3 L3 = normalize(vec3(0.1, 0.45, 0.9));\n" +
+  "  float h = n.y * 0.5 + 0.5; vec3 amb = mix(vec3(0.34, 0.30, 0.30), vec3(0.62, 0.62, 0.68), h);\n" +
+  "  float d1 = clamp((dot(n, L1) + 0.3) / 1.3, 0.0, 1.0); float d2 = clamp((dot(n, L2) + 0.2) / 1.2, 0.0, 1.0);\n" +
+  "  vec3 lit = amb * 0.8 + vec3(1.0, 0.96, 0.9) * d1 * 0.62 + vec3(0.7, 0.8, 1.0) * d2 * 0.22;\n" +
+  "  float fr = pow(1.0 - clamp(dot(n, v), 0.0, 1.0), 3.0); lit += vec3(1.0, 0.92, 0.85) * (fr * 0.22 * (0.4 + clamp(dot(n, L3), 0.0, 1.0)));\n" +
+  "  vec3 hh = normalize(L1 + v); float sp = pow(max(dot(n, hh), 0.0), 36.0) * 0.16;\n" +
+  "  float ao = mix(0.78, 1.0, clamp(vP.y * 1.6 + 0.35, 0.0, 1.0));\n" +
+  "  vec3 col = vC.rgb * lit * ao + vec3(sp);\n" +
+  "  gl_FragColor = vec4(col, 1.0); }";
+function bzHexRgb(h) { const n = parseInt(h.slice(1), 16); return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255]; }
+/* geometri: pasang titik yang sama, purata normal jika sudut kecil (licin), kekal tajam pada tepi kotak */
+function bzGeom(mesh) {
+  if (mesh.G) return mesh.G;
+  const F = mesh.F; for (let i = 0; i < F.length; i++) { const f = F[i]; if (Math.hypot(f.n[0], f.n[1], f.n[2]) > 0.5) continue; const v = f.v, ax = v[6] - v[0], ay = v[7] - v[1], az = v[8] - v[2], bx = v[9] - v[3], by = v[10] - v[4], bz = v[11] - v[5]; let nx = ay * bz - az * by, ny = az * bx - ax * bz, nz = ax * by - ay * bx; const l = Math.hypot(nx, ny, nz); if (l < 1e-12) { f.n = [0, 1, 0]; continue; } nx /= l; ny /= l; nz /= l; if (Math.abs(ny) > 0.7 && ny < 0) { nx = -nx; ny = -ny; nz = -nz; } f.n = [nx, ny, nz]; }
+  const K = (x, y, z) => Math.round(x * 1500) + "," + Math.round(y * 1500) + "," + Math.round(z * 1500), acc = new Map();
+  for (let i = 0; i < F.length; i++) { const f = F[i], v = f.v; for (let k = 0; k < 4; k++) { const key = K(v[k * 3], v[k * 3 + 1], v[k * 3 + 2]); let a = acc.get(key); if (!a) { a = []; acc.set(key, a); } a.push(i); } }
+  const pos = [], nor = [], col = [];
+  const pushV = (f, i, k) => {
+    const v = f.v, key = K(v[k * 3], v[k * 3 + 1], v[k * 3 + 2]), a = acc.get(key); let nx = 0, ny = 0, nz = 0;
+    for (let j = 0; j < a.length; j++) { const g = F[a[j]].n; if (g[0] * f.n[0] + g[1] * f.n[1] + g[2] * f.n[2] > 0.55) { nx += g[0]; ny += g[1]; nz += g[2]; } }
+    const L = Math.hypot(nx, ny, nz) || 1; pos.push(v[k * 3], v[k * 3 + 1], v[k * 3 + 2]); nor.push(nx / L, ny / L, nz / L);
+  };
+  for (let i = 0; i < F.length; i++) {
+    const f = F[i], c = bzHexRgb(f.col), b = f.br || 1; const cc = [Math.min(1.4, c[0] * b), Math.min(1.4, c[1] * b), Math.min(1.4, c[2] * b), 1];
+    [[0, 1, 2], [0, 2, 3]].forEach((t) => { t.forEach((k) => { pushV(f, i, k); col.push(cc[0], cc[1], cc[2], 1); }); });
+  }
+  // pelekat muka
+  const mk = () => ({ pos: [], nor: [], col: [] }), D = { s: mk(), bl: mk(), lid: mk() };
+  const disc = (t, tag) => {
+    if (t.a === 0) return; const T = D[tag], n = t.n, L = Math.hypot(n[0], n[1], n[2]) || 1, nx = n[0] / L, ny = n[1] / L, nz = n[2] / L;
+    let ax = 0, ay = 1, az = 0; if (Math.abs(ny) > 0.9) { ax = 1; ay = 0; }
+    let t1x = ay * nz - az * ny, t1y = az * nx - ax * nz, t1z = ax * ny - ay * nx; const l1 = Math.hypot(t1x, t1y, t1z) || 1; t1x /= l1; t1y /= l1; t1z /= l1;
+    const t2x = ny * t1z - nz * t1y, t2y = nz * t1x - nx * t1z, t2z = nx * t1y - ny * t1x, c = bzHexRgb(t.col), al = t.a == null ? 1 : t.a, px = t.p[0] + nx * 0.0022, py = t.p[1] + ny * 0.0022, pz = t.p[2] + nz * 0.0022, N = 12;
+    for (let k = 0; k < N; k++) {
+      const a0 = k / N * 6.2832, a1 = (k + 1) / N * 6.2832;
+      [[0, 0], [Math.cos(a0), Math.sin(a0)], [Math.cos(a1), Math.sin(a1)]].forEach((u) => { T.pos.push(px + (t1x * u[0] + t2x * u[1]) * t.r, py + (t1y * u[0] + t2y * u[1]) * t.r, pz + (t1z * u[0] + t2z * u[1]) * t.r); T.nor.push(nx, ny, nz); T.col.push(c[0], c[1], c[2], al); });
+    }
+  };
+  mesh.D.forEach((t) => disc(t, t.bl ? "bl" : t.lid ? "lid" : "s"));
+  // bayang lembut di lantai
+  for (let k = 0; k < 20; k++) { const a0 = k / 20 * 6.2832, a1 = (k + 1) / 20 * 6.2832; [[0, 0], [Math.cos(a0) * 0.4, Math.sin(a0) * 0.4], [Math.cos(a1) * 0.4, Math.sin(a1) * 0.4]].forEach((u, j) => { D.s.pos.push(u[0], 0.0045, u[1]); D.s.nor.push(0, 1, 0); D.s.col.push(0.2, 0.1, 0.08, j === 0 ? 0.28 : 0.0); }); }
+  mesh.G = { pos: new Float32Array(pos), nor: new Float32Array(nor), col: new Float32Array(col), n: pos.length / 3, D: D };
+  return mesh.G;
+}
+function bzGLR(cv) {
+  const gl = cv.getContext("webgl", { antialias: true, alpha: true, premultipliedAlpha: false, preserveDrawingBuffer: false }) || cv.getContext("experimental-webgl"); if (!gl) throw new Error("tiada WebGL");
+  const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o)); return o; };
+  const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, BZ_VS)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, BZ_FS)); gl.linkProgram(pr); if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(pr));
+  gl.useProgram(pr); const U = {}; ["uRot", "uOff", "uCam", "uRt", "uUp", "uFw", "uPr", "uUnlit"].forEach((n) => { U[n] = gl.getUniformLocation(pr, n); });
+  const A = { p: gl.getAttribLocation(pr, "aP"), n: gl.getAttribLocation(pr, "aN"), c: gl.getAttribLocation(pr, "aC") };
+  const buf = (arr) => { const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, arr, gl.STATIC_DRAW); return b; };
+  const R = { gl: gl, cache: new WeakMap() };
+  const up = (mesh) => {
+    let u = R.cache.get(mesh); if (u) return u; const G = bzGeom(mesh);
+    const mkb = (o, n) => ({ p: buf(new Float32Array(o.pos)), n: buf(new Float32Array(o.nor)), c: buf(new Float32Array(o.col)), n3: n });
+    u = { m: { p: buf(G.pos), n: buf(G.nor), c: buf(G.col), n3: G.n }, s: mkb(G.D.s, G.D.s.pos.length / 3), bl: mkb(G.D.bl, G.D.bl.pos.length / 3), lid: mkb(G.D.lid, G.D.lid.pos.length / 3) }; R.cache.set(mesh, u); return u;
+  };
+  const draw = (b) => { if (!b.n3) return; gl.bindBuffer(gl.ARRAY_BUFFER, b.p); gl.enableVertexAttribArray(A.p); gl.vertexAttribPointer(A.p, 3, gl.FLOAT, false, 0, 0); gl.bindBuffer(gl.ARRAY_BUFFER, b.n); gl.enableVertexAttribArray(A.n); gl.vertexAttribPointer(A.n, 3, gl.FLOAT, false, 0, 0); gl.bindBuffer(gl.ARRAY_BUFFER, b.c); gl.enableVertexAttribArray(A.c); gl.vertexAttribPointer(A.c, 4, gl.FLOAT, false, 0, 0); gl.drawArrays(gl.TRIANGLES, 0, b.n3); };
+  R.render = (mesh, yaw, W, H) => {
+    const u = up(mesh), tt = performance.now() / 1000, bob = Math.sin(tt * 1.7) * 0.004, blink = BZ_BL(), pit = 0.1, fov = BZ3.fov * (H > W * 1.9 ? 0.8 : 1), dist = BZ3.dist, ty = 0.86;
+    gl.viewport(0, 0, cv.width, cv.height); gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LEQUAL); gl.disable(gl.CULL_FACE);
+    const sp = Math.sin(pit), cp = Math.cos(pit), cy = Math.cos(yaw + Math.PI), sy = Math.sin(yaw + Math.PI), n = 0.3, f = 40;
+    gl.uniformMatrix3fv(U.uRot, false, [cy, 0, -sy, 0, 1, 0, sy, 0, cy]); gl.uniform3f(U.uOff, 0, bob, 0);
+    gl.uniform3f(U.uCam, 0, ty + sp * dist, -cp * dist); gl.uniform3f(U.uRt, 1, 0, 0); gl.uniform3f(U.uUp, 0, cp, sp); gl.uniform3f(U.uFw, 0, -sp, cp);
+    gl.uniform4f(U.uPr, 2 * H * fov / W, 2 * fov, (f + n) / (f - n), -2 * f * n / (f - n));
+    gl.uniform1f(U.uUnlit, 0); draw(u.m);
+    gl.uniform1f(U.uUnlit, 1); gl.enable(gl.BLEND); gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ZERO, gl.ONE); gl.depthMask(false); gl.enable(gl.POLYGON_OFFSET_FILL); gl.polygonOffset(-2, -2);
+    draw(u.s); draw(blink ? u.lid : u.bl); gl.disable(gl.POLYGON_OFFSET_FILL); gl.depthMask(true); gl.disable(gl.BLEND);
+  };
+  R.destroy = () => { try { const e = gl.getExtension("WEBGL_lose_context"); if (e) e.loseContext(); } catch (er) { /* abaikan */ } };
+  return R;
+}
+let BZ_SNAPR = null;
+function bzSnap(o, g, skin, w, h, yaw) {
+  if (!BZ.glBad) {
+    try {
+      const d = Math.min(2, window.devicePixelRatio || 1);
+      if (!BZ_SNAPR) { BZ_SNAPR = { cv: document.createElement("canvas") }; BZ_SNAPR.r = bzGLR(BZ_SNAPR.cv); }
+      const cv = BZ_SNAPR.cv; cv.width = Math.round(w * d); cv.height = Math.round(h * d);
+      BZ_SNAPR.r.render(bzBuild(o, g, skin), yaw == null ? 0.35 : yaw, w, h); return cv.toDataURL("image/png");
+    } catch (e) { BZ.glBad = true; }
+  }
+  return bzSnapSW(o, g, skin, w, h, yaw);
+}
+function bzStage3(host, g, skin, o) {
+  if (!BZ.glBad) {
+    try {
+      const cv = el("canvas", { class: "bz-cv3" }); host.textContent = ""; host.appendChild(cv); const r = bzGLR(cv);
+      const S = { yaw: 0.4, o: o, g: g, skin: skin, mesh: null, drag: false, lastX: 0, idle: 0, raf: 0, dead: false, last: 0 };
+      const fit = () => { const w = host.clientWidth || 300, h = host.clientHeight || 420, d = Math.min(2, window.devicePixelRatio || 1); if (cv.width !== Math.round(w * d) || cv.height !== Math.round(h * d)) { cv.width = Math.round(w * d); cv.height = Math.round(h * d); } S.W = w; S.H = h; };
+      S.set = (oo, gg, sk) => { S.o = oo; if (gg) S.g = gg; if (sk) S.skin = sk; S.mesh = bzBuild(S.o, S.g, S.skin); };
+      const loop = (ts) => {
+        if (S.dead || !cv.isConnected) { if (S.dead || !cv.isConnected) r.destroy(); return; } S.raf = requestAnimationFrame(loop); if (ts - S.last < 16) return; const dt = Math.min(0.1, (ts - (S.last || ts)) / 1000); S.last = ts; fit();
+        if (!S.drag) { S.idle += dt; if (S.idle > 1.2) S.yaw += dt * 0.5; } if (!S.mesh) S.mesh = bzBuild(S.o, S.g, S.skin); r.render(S.mesh, S.yaw, S.W, S.H);
+      };
+      cv.addEventListener("pointerdown", (e) => { S.drag = true; S.lastX = e.clientX; try { cv.setPointerCapture(e.pointerId); } catch (er) { /* abaikan */ } });
+      cv.addEventListener("pointermove", (e) => { if (!S.drag) return; S.yaw += (e.clientX - S.lastX) * 0.012; S.lastX = e.clientX; S.idle = 0; });
+      ["pointerup", "pointercancel"].forEach((t) => cv.addEventListener(t, () => { S.drag = false; S.idle = 0; }));
+      cv.addEventListener("webglcontextlost", (e) => { e.preventDefault(); });
+      S.destroy = () => { S.dead = true; cancelAnimationFrame(S.raf); r.destroy(); }; S.raf = requestAnimationFrame(loop); return S;
+    } catch (e) { BZ.glBad = true; }
+  }
+  return bzStage3SW(host, g, skin, o);
+}
+
+/* ---------- Cabut Nama (v17.62): pilih murid secara rawak ---------- */
+const CN_KEY = "gt-cn";
+const CN = { open: false, root: null, st: null, busy: false, tm: 0, ui: {}, q: null, shown: false };
+function cnLoad() {
+  const d = { t: "Cabutan Nama Murid", names: [], done: [], nr: true, qq: true };
+  try { const c = JSON.parse(localStorage.getItem(CN_KEY) || "null") || {}; const L = (a) => (Array.isArray(a) ? a.map((x) => String(x).slice(0, 40)).slice(0, 300) : []); return { t: String(c.t || d.t).slice(0, 60), names: L(c.names), done: L(c.done), nr: c.nr !== false, qq: c.qq !== false }; } catch (e) { return d; }
+}
+function cnSave() { try { localStorage.setItem(CN_KEY, JSON.stringify(CN.st)); } catch (e) { /* abaikan */ } }
+function cnParse(txt) { const seen = {}, out = []; String(txt).split(/[\n,;]+/).forEach((x) => { const n = x.replace(/[\u0000-\u001f<>]/g, "").replace(/\s+/g, " ").trim().slice(0, 40); if (!n) return; const k = n.toLowerCase(); if (seen[k]) return; seen[k] = 1; out.push(n); }); return out.slice(0, 300); }
+function cnPool() { const s = CN.st; return s.nr ? s.names.filter((n) => s.done.indexOf(n) < 0) : s.names.slice(); }
+function cnTick(f, d, t, v) { try { if (typeof beep === "function") beep(f, d, t, v); } catch (e) { /* abaikan */ } }
+function cnStats() {
+  const u = CN.ui, s = CN.st, left = cnPool().length;
+  u.n1.textContent = String(s.names.length); u.n2.textContent = String(s.nr ? left : s.names.length); u.n3.textContent = String(s.done.length);
+  u.go.textContent = s.done.length ? "✦ CABUT SEORANG LAGI ✦" : "✦ MULAKAN CABUTAN ✦"; u.go.disabled = CN.busy || !cnPool().length;
+  u.cnt.textContent = s.names.length + " nama";
+  u.hist.textContent = ""; s.done.slice().reverse().forEach((n, i) => { u.hist.appendChild(el("li", null, null, el("span", null, n), el("button", { type: "button", class: "cn-x", "aria-label": "Buang " + n, title: "Letak semula dalam undian" }, "×"))); u.hist.lastChild.querySelector("button").addEventListener("click", () => { s.done = s.done.filter((x) => x !== n); cnSave(); cnStats(); }); });
+  if (!s.done.length) u.hist.appendChild(el("li", { class: "cn-empty" }, "Belum ada nama dipilih."));
+  if (!s.names.length) u.name.textContent = "Masukkan senarai nama di bawah"; else if (!cnPool().length && !CN.busy) u.name.textContent = "Semua nama sudah dipilih";
+  u.sub.textContent = s.done.length ? "Dipilih ke-" + s.done.length + " · Baki " + left : "Tekan butang untuk memilih seorang murid";
+}
+function cnConfetti() {
+  const box = CN.ui.stage; if (!box || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  for (let i = 0; i < 46; i++) { const p = el("i", { class: "cn-cf", "aria-hidden": "true" }); p.style.left = (Math.random() * 100) + "%"; p.style.background = ["#ffd23d", "#ff4d6d", "#3dd6ff", "#7cff6b", "#c77dff", "#fff"][i % 6]; p.style.animationDelay = (Math.random() * 0.4) + "s"; p.style.setProperty("--dx", (Math.random() * 160 - 80) + "px"); box.appendChild(p); setTimeout(() => p.remove(), 2400); }
+}
+function cnPick() {
+  if (CN.busy) return; const pool = cnPool(), s = CN.st, u = CN.ui; if (!pool.length) return;
+  CN.busy = true; u.go.disabled = true; u.stage.classList.remove("won"); u.qbox.hidden = true;
+  const win = pool[Math.floor(Math.random() * pool.length)]; let step = 0; const N = 26 + Math.floor(Math.random() * 6);
+  const run = () => {
+    if (!CN.open) { CN.busy = false; return; }
+    step++; if (step >= N) { u.name.textContent = win; u.stage.classList.add("won"); s.done.push(win); cnSave(); CN.busy = false; cnTick(660, 0.12, "triangle", 0.07); setTimeout(() => cnTick(880, 0.14, "triangle", 0.07), 120); setTimeout(() => cnTick(1175, 0.2, "triangle", 0.07), 250); cnConfetti(); cnStats(); if (s.qq) cnQuestion(); return; }
+    const w = pool.length > 1 ? pool[Math.floor(Math.random() * pool.length)] : win; u.name.textContent = w; cnTick(420 + Math.random() * 260, 0.03, "square", 0.025);
+    CN.tm = setTimeout(run, 45 + Math.pow(step / N, 3) * 380);
+  };
+  run();
+}
+function cnQuestion() {
+  const u = CN.ui; if (typeof QLIST === "undefined" || !QLIST.length) { u.qbox.hidden = true; return; }
+  const q = QLIST[Math.floor(Math.random() * QLIST.length)]; CN.q = q; u.qbox.hidden = false; u.qtxt.textContent = q.q; u.qopts.textContent = ""; u.qans.hidden = true; u.qshow.textContent = "Tunjuk jawapan";
+  q.o.forEach((o, i) => u.qopts.appendChild(el("li", null, "ABCD"[i] + ". " + o)));
+  u.qans.textContent = "Jawapan: " + "ABCD"[q.a] + ". " + q.o[q.a] + (q.e ? " — " + q.e : "");
+}
+function cnCsv() {
+  const s = CN.st, rows = ["Bil,Nama,Status"]; s.names.forEach((n, i) => rows.push((i + 1) + ',"' + n.replace(/"/g, '""') + '",' + (s.done.indexOf(n) >= 0 ? "Sudah dipilih" : "Belum")));
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["﻿" + rows.join("\n")], { type: "text/csv;charset=utf-8" })); a.download = "cabutan-nama.csv"; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+function cnOpen() {
+  if (CN.open) return; CN.st = cnLoad(); CN.open = true; CN.busy = false;
+  const r = CN.root = el("div", { id: "cnOv", role: "dialog", "aria-modal": "true", "aria-label": "Cabut nama murid" }), u = CN.ui = {}, s = CN.st;
+  const fs = el("button", { type: "button", class: "cn-tb" }, "Skrin penuh"), cl = el("button", { type: "button", class: "cn-tb" }, "Tutup");
+  fs.addEventListener("click", () => { try { if (document.fullscreenElement) document.exitFullscreen(); else r.requestFullscreen(); } catch (e) { /* abaikan */ } }); cl.addEventListener("click", cnClose);
+  const ttl = el("input", { class: "cn-title", type: "text", maxlength: "60", "aria-label": "Tajuk cabutan", value: s.t }); ttl.addEventListener("input", () => { s.t = ttl.value.slice(0, 60); cnSave(); });
+  const card = (k) => { const v = el("b", null, "0"); u[k] = v; return v; };
+  const stat = (k, lab) => el("div", { class: "cn-stat" }, null, card(k), el("small", null, lab));
+  u.name = el("div", { class: "cn-name", "aria-live": "polite" }, ""); u.sub = el("div", { class: "cn-sub" }, ""); u.stage = el("div", { class: "cn-stage" }, null, u.name);
+  u.go = el("button", { type: "button", class: "cn-go" }, ""); u.go.addEventListener("click", cnPick);
+  u.qtxt = el("p", { class: "cn-qt" }); u.qopts = el("ul", { class: "cn-qo" }); u.qans = el("p", { class: "cn-qa", hidden: "" }); u.qshow = el("button", { type: "button", class: "cn-sm" }, "Tunjuk jawapan"); const qn = el("button", { type: "button", class: "cn-sm" }, "Soalan lain");
+  u.qshow.addEventListener("click", () => { u.qans.hidden = !u.qans.hidden; u.qshow.textContent = u.qans.hidden ? "Tunjuk jawapan" : "Sembunyi jawapan"; }); qn.addEventListener("click", cnQuestion);
+  u.qbox = el("div", { class: "cn-q", hidden: "" }, null, el("div", { class: "cn-k" }, "SOALAN UNTUK MURID INI"), u.qtxt, u.qopts, u.qans, el("div", { class: "cn-row" }, null, u.qshow, qn));
+  const ta = el("textarea", { class: "cn-ta", rows: "9", "aria-label": "Senarai nama murid", placeholder: "Taip satu nama setiap baris,\natau asingkan dengan koma.\n\nAli bin Abu\nSiti Aminah\n..." }); ta.value = s.names.join("\n");
+  ta.addEventListener("input", () => { s.names = cnParse(ta.value); s.done = s.done.filter((n) => s.names.indexOf(n) >= 0); cnSave(); cnStats(); });
+  u.cnt = el("span", { class: "cn-cnt" }, "");
+  const mkChk = (lab, key) => { const c = el("input", { type: "checkbox" }); c.checked = !!s[key]; c.addEventListener("change", () => { s[key] = c.checked; cnSave(); cnStats(); }); return el("label", { class: "cn-chk" }, null, c, el("span", null, lab)); };
+  const bReset = el("button", { type: "button", class: "cn-sm" }, "Set semula giliran"), bClear = el("button", { type: "button", class: "cn-sm" }, "Kosongkan senarai"), bCsv = el("button", { type: "button", class: "cn-sm" }, "Muat turun CSV");
+  bReset.addEventListener("click", () => { s.done = []; cnSave(); u.stage.classList.remove("won"); u.name.textContent = "Tekan butang untuk bermula"; u.qbox.hidden = true; cnStats(); });
+  bClear.addEventListener("click", () => { if (!confirm("Padam semua nama dalam senarai?")) return; s.names = []; s.done = []; ta.value = ""; cnSave(); u.qbox.hidden = true; cnStats(); }); bCsv.addEventListener("click", cnCsv);
+  u.hist = el("ol", { class: "cn-hist" });
+  const wrap = el("div", { class: "cn-wrap" }, null,
+    el("div", { class: "cn-kick" }, "CABUTAN RAWAK"), ttl, el("div", { class: "cn-stats" }, null, stat("n1", "Jumlah murid"), stat("n2", "Belum dipilih"), stat("n3", "Sudah dipilih")),
+    u.stage, u.sub, u.go, u.qbox,
+    el("div", { class: "cn-cols" }, null,
+      el("section", { class: "cn-pan" }, null, el("h2", null, "Senarai nama ", u.cnt), ta, mkChk("Jangan ulang nama yang sudah dipilih", "nr"), mkChk("Beri soalan rawak daripada bank soalan subjek ini", "qq"), el("div", { class: "cn-row" }, null, bCsv, bClear)),
+      el("section", { class: "cn-pan" }, null, el("h2", null, "Giliran dipilih"), u.hist, el("div", { class: "cn-row" }, null, bReset))));
+  r.append(el("div", { class: "cn-top" }, null, fs, cl), wrap); document.body.appendChild(r); document.body.classList.add("ar-lock");
+  u.name.textContent = s.done.length ? s.done[s.done.length - 1] : "Tekan butang untuk bermula"; cnStats();
+  window.addEventListener("keydown", cnKey, true);
+}
+function cnKey(e) { if (!CN.open) return; if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); cnClose(); } }
+function cnClose() {
+  clearTimeout(CN.tm); CN.open = false; CN.busy = false; window.removeEventListener("keydown", cnKey, true);
+  try { if (document.fullscreenElement) document.exitFullscreen(); } catch (e) { /* abaikan */ }
+  if (CN.root) { CN.root.remove(); CN.root = null; } document.body.classList.remove("ar-lock");
+}
+{ const b = el("button", { type: "button", id: "cnFab", "aria-label": "Cabut nama murid secara rawak" }, null, el("span", { "aria-hidden": "true" }, "🎲"), el("b", null, "Cabut Nama")); b.addEventListener("click", cnOpen); document.body.appendChild(b); }
+
+/* ---------- Praktikal (v17.63): simulasi dan latihan amali ---------- */
+const PR_KEY = "gt-pr", PR_XPK = "gt-pr-xp", PR_XP_CAP = 40;
+const PR_MODS = [
+  { id: "wuduk", n: "Wuduk dan Solat", ico: "💧", d: "Susun tertib wuduk, tayammum dan rukun solat, kemudian jawab situasi sebenar.", lessons: [
+    { id: "wu1", n: "Tertib wuduk", kind: "seq", hint: "Mulakan dengan niat dan akhiri dengan doa. Rukun wuduk ada enam; selebihnya sunat.", steps: [
+      { t: "Berniat wuduk", n: "Rukun" }, { t: "Membasuh dua tapak tangan", n: "Sunat" }, { t: "Berkumur-kumur", n: "Sunat" }, { t: "Menyedut air ke dalam hidung", n: "Sunat" }, { t: "Membasuh muka", n: "Rukun" }, { t: "Membasuh kedua-dua tangan hingga siku", n: "Rukun" }, { t: "Menyapu sebahagian kepala", n: "Rukun" }, { t: "Membasuh kedua-dua telinga", n: "Sunat" }, { t: "Membasuh kedua-dua kaki hingga buku lali", n: "Rukun" }, { t: "Membaca doa selepas wuduk", n: "Sunat" }] },
+    { id: "wu2", n: "Tayammum", kind: "seq", hint: "Tayammum dilakukan apabila tiada air atau tidak boleh menggunakan air. Gunakan debu yang suci.", steps: [
+      { t: "Berniat tayammum", n: "Rukun" }, { t: "Menepuk kedua-dua tapak tangan pada debu yang suci", n: "Rukun: memindahkan debu" }, { t: "Menyapu muka", n: "Rukun" }, { t: "Menepuk kedua-dua tapak tangan pada debu sekali lagi", n: "Memindahkan debu untuk tangan" }, { t: "Menyapu kedua-dua tangan hingga siku", n: "Rukun" }] },
+    { id: "wu3", n: "Rukun solat", kind: "seq", hint: "Ingat tertib rukun solat dari niat hingga salam.", steps: [
+      { t: "Berniat solat", n: "Rukun qalbi" }, { t: "Takbiratulihram", n: "Rukun fi'li" }, { t: "Membaca Surah Al-Fatihah", n: "Rukun qauli" }, { t: "Rukuk", n: "Rukun fi'li" }, { t: "Iktidal", n: "Rukun fi'li" }, { t: "Sujud pertama", n: "Rukun fi'li" }, { t: "Duduk antara dua sujud", n: "Rukun fi'li" }, { t: "Sujud kedua", n: "Rukun fi'li" }, { t: "Duduk tahiyat akhir dan membaca tahiyat", n: "Rukun" }, { t: "Berselawat ke atas Nabi Muhammad SAW", n: "Rukun qauli" }, { t: "Memberi salam yang pertama", n: "Rukun qauli" }] },
+    { id: "wu4", n: "Situasi wuduk dan solat", kind: "mcq", hint: "Ingat syarat dan pembatal wuduk menurut mazhab Syafie.", qs: [
+      { q: "Hakim tertidur di dalam masjid sambil bersandar pada tiang dan punggungnya melekat tetap pada lantai. Adakah wuduknya batal?", o: ["Batal kerana tidur", "Tidak batal kerana punggungnya tetap pada lantai", "Batal kerana bersandar", "Tidak batal kerana tidur sekejap sahaja"], a: 1, e: "Tidur dalam keadaan punggung tetap tidak membatalkan wuduk menurut mazhab Syafie." },
+      { q: "Siti berwuduk kemudian bersalam dengan ayahnya. Apakah hukum wuduknya?", o: ["Batal", "Tidak batal kerana ayah ialah mahramnya", "Batal jika bersalam lama", "Perlu berwuduk semula untuk solat"], a: 1, e: "Bersentuhan kulit dengan mahram tidak membatalkan wuduk." },
+      { q: "Antara berikut, yang manakah BUKAN rukun wuduk?", o: ["Berniat", "Membasuh muka", "Berkumur-kumur", "Tertib"], a: 2, e: "Berkumur-kumur ialah perbuatan sunat. Rukun wuduk: niat, basuh muka, basuh tangan hingga siku, sapu sebahagian kepala, basuh kaki hingga buku lali dan tertib." },
+      { q: "Berapakah bahagian kepala yang wajib disapu semasa berwuduk?", o: ["Seluruh kepala", "Separuh kepala", "Sebahagian kepala walaupun sedikit", "Hanya bahagian dahi"], a: 2, e: "Menyapu sebahagian kepala walaupun beberapa helai rambut sudah memadai." },
+      { q: "Ahmad bermusafir, kehabisan air dan telah mencari tetapi tidak menjumpainya. Apakah yang perlu dilakukannya sebelum solat?", o: ["Menangguhkan solat hingga jumpa air", "Bertayammum", "Terus solat tanpa bersuci", "Mengqada solat pada hari lain"], a: 1, e: "Apabila tiada air selepas berusaha mencarinya, seseorang hendaklah bertayammum." },
+      { q: "Antara berikut, yang manakah membatalkan wuduk?", o: ["Keluar angin dari dubur", "Makan makanan panas", "Bercakap dengan kuat", "Memegang Al-Quran"], a: 0, e: "Keluar sesuatu daripada qubul atau dubur membatalkan wuduk." },
+      { q: "Menurut mazhab Syafie, berapakah bilangan rukun solat?", o: ["5", "10", "13", "20"], a: 2, e: "Rukun solat menurut mazhab Syafie ada 13: niat, takbiratulihram, berdiri, membaca Fatihah, rukuk, iktidal, sujud, duduk antara dua sujud, duduk tahiyat akhir, tahiyat akhir, selawat, salam dan tertib." },
+      { q: "Wuduk sah apabila seseorang membasuh anggota wuduk sekurang-kurangnya sebanyak...", o: ["Sekali", "Dua kali", "Tiga kali", "Tujuh kali"], a: 0, e: "Yang wajib ialah sekali. Membasuh tiga kali ialah sunat." }] }
+  ] },
+  { id: "jenazah", n: "Pengurusan Jenazah", ico: "🕌", d: "Susun langkah memandikan, mengkafankan dan menyolatkan jenazah dengan betul.", lessons: [
+    { id: "jz1", n: "Urutan pengurusan jenazah", kind: "seq", hint: "Empat perkara fardu kifayah: mandi, kafan, solat, kebumi. Ada persiapan sebelum itu.", steps: [
+      { t: "Memejamkan mata dan menutup aurat jenazah", n: "Persediaan" }, { t: "Memandikan jenazah", n: "Fardu kifayah" }, { t: "Mengkafankan jenazah", n: "Fardu kifayah" }, { t: "Menyolatkan jenazah", n: "Fardu kifayah" }, { t: "Mengebumikan jenazah", n: "Fardu kifayah" }] },
+    { id: "jz2", n: "Cara memandikan jenazah", kind: "seq", hint: "Tutup aurat dahulu, bersihkan najis, wuduk, kemudian siram bermula dari sebelah kanan.", steps: [
+      { t: "Meletakkan jenazah di tempat tertutup dan menutup auratnya", n: "Mulakan dengan menjaga kehormatan jenazah" }, { t: "Membersihkan najis dan kotoran daripada jenazah", n: "Sebelum memandikan" }, { t: "Mewuduk kan jenazah", n: "Sunat, bermula anggota wuduk" }, { t: "Menyiram air ke seluruh badan bermula bahagian kanan", n: "Wajib: meratakan air" }, { t: "Membasuh tiga kali dan basuhan akhir bersama kapur barus", n: "Sunat" }, { t: "Mengeringkan badan jenazah", n: "Sebelum dikafankan" }] },
+    { id: "jz3", n: "Tertib solat jenazah", kind: "seq", hint: "Solat jenazah dilakukan berdiri, dengan empat takbir dan tanpa rukuk atau sujud.", steps: [
+      { t: "Berniat solat jenazah", n: "Rukun" }, { t: "Takbir pertama dan membaca Al-Fatihah", n: "Takbir 1" }, { t: "Takbir kedua dan membaca selawat ke atas Nabi", n: "Takbir 2" }, { t: "Takbir ketiga dan berdoa untuk jenazah", n: "Takbir 3" }, { t: "Takbir keempat dan berdoa untuk jenazah serta orang Islam", n: "Takbir 4" }, { t: "Memberi salam", n: "Rukun" }] },
+    { id: "jz4", n: "Situasi jenazah", kind: "mcq", hint: "Fikirkan hukum, bilangan dan cara yang betul.", qs: [
+      { q: "Apakah hukum menguruskan jenazah orang Islam?", o: ["Sunat muakkad", "Fardu kifayah", "Fardu ain", "Harus"], a: 1, e: "Memandikan, mengkafankan, menyolatkan dan mengebumikan jenazah ialah fardu kifayah." },
+      { q: "Berapakah bilangan takbir dalam solat jenazah?", o: ["2", "3", "4", "5"], a: 2, e: "Solat jenazah mempunyai empat takbir." },
+      { q: "Berapakah helai kain kafan yang sunat bagi jenazah lelaki?", o: ["1 helai", "3 helai", "5 helai", "7 helai"], a: 1, e: "Jenazah lelaki sunat dikafankan dengan tiga helai kain, manakala perempuan lima helai." },
+      { q: "Perkara yang TIDAK terdapat dalam solat jenazah ialah...", o: ["Berdiri", "Takbir", "Rukuk dan sujud", "Salam"], a: 2, e: "Solat jenazah dilakukan berdiri tanpa rukuk dan sujud." },
+      { q: "Bagaimanakah jenazah diletakkan di dalam liang lahad?", o: ["Telentang menghadap ke atas", "Di atas rusuk kanan menghadap kiblat", "Di atas rusuk kiri menghadap kiblat", "Meniarap"], a: 1, e: "Jenazah diletakkan di atas rusuk kanan dengan mukanya menghadap kiblat." },
+      { q: "Siapakah yang sepatutnya memandikan jenazah perempuan?", o: ["Mana-mana lelaki", "Perempuan atau mahramnya", "Imam masjid sahaja", "Doktor lelaki"], a: 1, e: "Jenazah perempuan dimandikan oleh perempuan atau mahramnya, begitu juga sebaliknya." }] }
+  ] }
+];
+const PR = { open: false, root: null, L: null, m: null, i: 0, mist: 0, ok: 0, order: [], done: false, fb: null };
+function prLoad() { try { return JSON.parse(localStorage.getItem(PR_KEY) || "{}") || {}; } catch (e) { return {}; } }
+function prSaveBest(id, sc) { try { const d = prLoad(); d[id] = Math.max(d[id] | 0, sc | 0); localStorage.setItem(PR_KEY, JSON.stringify(d)); } catch (e) { /* abaikan */ } }
+function prXp(id, n) {
+  try {
+    const d = new Date().toISOString().slice(0, 10); let o = {}; try { o = JSON.parse(localStorage.getItem(PR_XPK) || "{}") || {}; } catch (e) { o = {}; }
+    if (o.d !== d) o = { d: d, n: 0, ids: [] }; if (o.ids.indexOf(id) >= 0 || n <= 0) return 0; const g = Math.min(n, PR_XP_CAP - (o.n | 0)); if (g <= 0) return 0;
+    o.n += g; o.ids.push(id); localStorage.setItem(PR_XPK, JSON.stringify(o)); P.xp += g; noteActive(); saveP(); computeStand(); renderMe(); return g;
+  } catch (e) { return 0; }
+}
+function renderPrak() {
+  const box = $("prakBody"); if (!box) return; box.textContent = ""; const best = prLoad();
+  const hj = el("div", { class: "pr-hero" }, null, el("div", { class: "pr-hico", "aria-hidden": "true" }, "🕋"), el("div", { class: "pr-htx" }, null, el("b", null, "Simulasi Haji 3D"), el("p", null, "Berjalan dari Miqat hingga ke Mina: ihram, tawaf, saie, tahallul, wuquf, mabit dan lontar jamrah. Jawab soalan di setiap manasik."), el("small", null, best.hj != null ? "Markah terbaik: " + best.hj + "%" : "Belum dimainkan")));
+  const hb = el("button", { type: "button", class: "btn" }, "Mula simulasi"); hb.addEventListener("click", () => { if (typeof hjOpen === "function") hjOpen(); }); hj.appendChild(hb); box.appendChild(hj);
+  PR_MODS.forEach((m) => {
+    const sec = el("section", { class: "pr-mod" }, null, el("h3", null, m.ico + " " + m.n), el("p", { class: "muted" }, m.d)), g = el("div", { class: "pr-grid" });
+    m.lessons.forEach((L) => { const b = el("button", { type: "button", class: "pr-card" }, null, el("b", null, L.n), el("span", null, L.kind === "seq" ? "Susun langkah · " + L.steps.length + " langkah" : "Situasi · " + L.qs.length + " soalan"), el("em", null, best[L.id] != null ? "★ Terbaik " + best[L.id] + "%" : "Belum cuba")); b.addEventListener("click", () => prStart(m, L)); g.appendChild(b); });
+    sec.appendChild(g); box.appendChild(sec);
+  });
+}
+function prStart(m, L) {
+  PR.m = m; PR.L = L; PR.fbIdx = null; PR.i = 0; PR.mist = 0; PR.ok = 0; PR.done = false; PR.fb = null; PR.open = true;
+  if (L.kind === "seq") PR.order = shuffle(L.steps.map((_, i) => i)); else PR.order = shuffle(L.qs.map((_, i) => i));
+  const r = PR.root = el("div", { id: "prOv", role: "dialog", "aria-modal": "true", "aria-label": L.n }); document.body.appendChild(r); document.body.classList.add("ar-lock"); window.addEventListener("keydown", prKey, true); prRender();
+}
+function prKey(e) { if (PR.open && e.key === "Escape") { e.preventDefault(); e.stopPropagation(); prClose(); } }
+function prClose() { PR.open = false; window.removeEventListener("keydown", prKey, true); if (PR.root) { PR.root.remove(); PR.root = null; } document.body.classList.remove("ar-lock"); renderPrak(); }
+function prRender() {
+  const r = PR.root, L = PR.L; if (!r) return; r.textContent = "";
+  const cl = el("button", { type: "button", class: "pr-x" }, "Tutup"); cl.addEventListener("click", prClose);
+  const w = el("div", { class: "pr-wrap" }); r.append(cl, w);
+  w.append(el("div", { class: "pr-k" }, PR.m.n.toUpperCase()), el("h2", null, L.n));
+  if (PR.done) return prResult(w);
+  if (L.kind === "seq") prSeq(w); else prMcq(w);
+}
+function prSeq(w) {
+  const L = PR.L, total = L.steps.length, tip = el("p", { class: "pr-hint" }, "Petunjuk: " + L.hint);
+  w.append(el("p", { class: "pr-lead" }, "Ketuk langkah mengikut urutan yang betul. " + PR.i + " / " + total + " · Silap: " + PR.mist), tip);
+  const done = el("ol", { class: "pr-done" });
+  for (let k = 0; k < PR.i; k++) done.appendChild(el("li", null, null, L.steps[k].t, el("small", null, L.steps[k].n || "")));
+  const pool = el("div", { class: "pr-pool" });
+  PR.order.filter((idx) => idx >= PR.i).forEach((idx) => {
+    const b = el("button", { type: "button", class: "pr-step" }, L.steps[idx].t);
+    b.addEventListener("click", () => {
+      if (idx === PR.i) { PR.i++; try { beep(660 + PR.i * 40, 0.08, "triangle", 0.06); } catch (e) { /* abaikan */ } if (PR.i >= total) { PR.done = true; PR.ok = total; } prRender(); }
+      else { PR.mist++; b.classList.add("bad"); try { beep(180, 0.15, "sawtooth", 0.05); } catch (e) { /* abaikan */ } setTimeout(() => prRender(), 420); }
+    });
+    pool.appendChild(b);
+  });
+  w.append(done, pool);
+}
+function prMcq(w) {
+  const L = PR.L, total = L.qs.length, q = L.qs[PR.order[PR.i]];
+  w.append(el("p", { class: "pr-lead" }, "Soalan " + (PR.i + 1) + " / " + total + " · Betul: " + PR.ok), el("p", { class: "pr-hint" }, "Petunjuk: " + L.hint), el("div", { class: "pr-q" }, q.q));
+  const idx = PR.fbIdx || (PR.fbIdx = {}); const key = PR.i, ord = idx[key] || (idx[key] = shuffle([0, 1, 2, 3])), list = el("div", { class: "pr-opts" });
+  ord.forEach((oi, pos) => {
+    const b = el("button", { type: "button", class: "pr-opt" }, "ABCD"[pos] + ". " + q.o[oi]);
+    if (PR.fb) { b.disabled = true; if (oi === q.a) b.classList.add("ok"); else if (oi === PR.fb.pick) b.classList.add("bad"); }
+    b.addEventListener("click", () => { if (PR.fb) return; const good = oi === q.a; if (good) PR.ok++; else PR.mist++; PR.fb = { pick: oi, good: good }; prRender(); });
+    list.appendChild(b);
+  });
+  w.appendChild(list);
+  if (PR.fb) {
+    w.appendChild(el("div", { class: "pr-fb " + (PR.fb.good ? "ok" : "bad") }, (PR.fb.good ? "Betul. " : "Kurang tepat. ") + q.e));
+    const nx = el("button", { type: "button", class: "pr-go" }, PR.i + 1 >= total ? "Lihat keputusan" : "Soalan seterusnya"); nx.addEventListener("click", () => { PR.fb = null; PR.i++; if (PR.i >= total) PR.done = true; prRender(); }); w.appendChild(nx);
+  }
+}
+function prResult(w) {
+  const L = PR.L, total = L.kind === "seq" ? L.steps.length : L.qs.length; let sc = L.kind === "seq" ? Math.max(20, 100 - PR.mist * 12) : Math.round(PR.ok / total * 100); prSaveBest(L.id, sc);
+  const xp = prXp(L.id, L.kind === "seq" ? (sc >= 70 ? 8 : 4) : PR.ok * 2);
+  w.append(el("div", { class: "pr-score" }, null, el("b", null, sc + "%"), el("span", null, sc >= 90 ? "Cemerlang!" : sc >= 70 ? "Bagus!" : "Cuba lagi untuk memperbaiki")), el("p", { class: "pr-lead" }, L.kind === "seq" ? "Silap: " + PR.mist + " kali." : "Betul " + PR.ok + " daripada " + total + " soalan."));
+  if (xp) w.appendChild(el("p", { class: "pr-xp" }, "+" + xp + " XP"));
+  if (L.kind === "seq") { const ol = el("ol", { class: "pr-done" }); L.steps.forEach((s) => ol.appendChild(el("li", null, null, s.t, el("small", null, s.n || "")))); w.append(el("h3", null, "Urutan yang betul"), ol); }
+  const again = el("button", { type: "button", class: "pr-go" }, "Cuba lagi"), back = el("button", { type: "button", class: "pr-go alt" }, "Kembali ke Praktikal"); again.addEventListener("click", () => prStart(PR.m, L)); back.addEventListener("click", prClose); w.append(el("div", { class: "pr-row" }, null, again, back));
+}
+
+/* ---------- Simulasi Haji 3D (v17.63): pengembaraan manasik dengan kuiz ---------- */
+const HJ_Q = {
+  miqat: [
+    { q: "Tempat atau waktu yang ditetapkan untuk berniat ihram dinamakan...", o: ["Miqat", "Multazam", "Tarwiyah", "Jamrah"], a: 0, e: "Miqat ialah sempadan tempat atau waktu bermulanya ihram. Ihram bermula dengan niat." },
+    { q: "Apakah yang dilarang kepada lelaki yang sedang berihram?", o: ["Berwuduk", "Mandi sunat", "Memakai pakaian berjahit", "Membaca talbiah"], a: 2, e: "Lelaki berihram dilarang memakai pakaian berjahit dan menutup kepala. Mereka memakai dua helai kain putih yang tidak berjahit." },
+    { q: "Lafaz \"Labbaikallahumma labbaik...\" yang dibaca berulang kali semasa ihram dinamakan...", o: ["Talbiah", "Takbir", "Tahlil", "Istighfar"], a: 0, e: "Talbiah ialah seruan penyahutan kepada panggilan Allah, dibaca sejak berniat ihram." },
+    { q: "Apakah larangan khusus kepada perempuan yang berihram?", o: ["Memakai kasut", "Menutup muka dan memakai sarung tangan", "Memakai tudung", "Berjalan di Mataf"], a: 1, e: "Perempuan berihram tidak boleh menutup muka dan memakai sarung tangan, tetapi wajib menutup aurat lain." }],
+  tawaf: [
+    { q: "Berapakah pusingan yang perlu dilakukan dalam satu tawaf?", o: ["3", "5", "7", "9"], a: 2, e: "Tawaf dilakukan tujuh pusingan mengelilingi Kaabah." },
+    { q: "Dari manakah tawaf bermula dan Kaabah berada di sebelah mana?", o: ["Hajarul Aswad, Kaabah di sebelah kanan", "Hajarul Aswad, Kaabah di sebelah kiri", "Multazam, Kaabah di belakang", "Maqam Ibrahim, Kaabah di sebelah kanan"], a: 1, e: "Tawaf bermula di garis sejajar Hajarul Aswad dengan Kaabah di sebelah kiri, bergerak melawan arah jam." },
+    { q: "Di manakah tawaf mesti dilakukan?", o: ["Di dalam Hijr Ismail", "Di luar Hijr Ismail", "Di atas bumbung masjid", "Di dalam Kaabah"], a: 1, e: "Tawaf dilakukan di luar Hijr Ismail kerana Hijr termasuk sebahagian Kaabah." },
+    { q: "Solat sunat dua rakaat selepas tawaf sebaik-baiknya dilakukan di belakang...", o: ["Safa", "Maqam Ibrahim", "Jamrah Aqabah", "Jabal Rahmah"], a: 1, e: "Solat sunat tawaf dilakukan di belakang Maqam Ibrahim jika mudah, atau di mana-mana tempat dalam Masjidil Haram." }],
+  saie: [
+    { q: "Di manakah saie bermula dan berakhir?", o: ["Bermula di Marwah, berakhir di Safa", "Bermula di Safa, berakhir di Marwah", "Bermula di Mina, berakhir di Arafah", "Bermula dan berakhir di Safa"], a: 1, e: "Saie bermula di Safa dan berakhir di Marwah." },
+    { q: "Berapakah kali perjalanan dalam saie?", o: ["4 kali", "5 kali", "7 kali", "10 kali"], a: 2, e: "Satu perjalanan dari Safa ke Marwah dikira sekali. Tujuh perjalanan berakhir di Marwah." },
+    { q: "Saie mengingati kisah siapakah yang berulang-alik mencari air?", o: ["Siti Hajar", "Siti Sarah", "Siti Khadijah", "Siti Aisyah"], a: 0, e: "Siti Hajar berulang-alik antara Safa dan Marwah mencari air untuk anaknya Nabi Ismail AS." },
+    { q: "Menurut mazhab Syafie, bilangan minimum rambut yang mesti dicukur atau digunting untuk sah tahallul ialah...", o: ["Satu helai", "Tiga helai", "Sepuluh helai", "Seluruh kepala"], a: 1, e: "Minimum tiga helai rambut. Lelaki afdal bercukur, perempuan bergunting sekadar hujung rambut." }],
+  arafah: [
+    { q: "Pada tarikh manakah wuquf di Arafah dilakukan?", o: ["1 Zulhijjah", "8 Zulhijjah", "9 Zulhijjah", "10 Zulhijjah"], a: 2, e: "Wuquf dilakukan pada 9 Zulhijjah." },
+    { q: "Apakah hukum wuquf di Arafah?", o: ["Sunat haji", "Wajib haji", "Rukun haji", "Harus"], a: 2, e: "Wuquf ialah rukun haji. Haji tidak sah tanpanya. Sabda Nabi SAW: Haji itu ialah Arafah." },
+    { q: "Menurut mazhab Syafie, waktu wuquf bermula dan berakhir bila?", o: ["Subuh 9 hingga Zohor 9 Zulhijjah", "Tergelincir matahari 9 Zulhijjah hingga terbit fajar 10 Zulhijjah", "Maghrib 8 hingga Maghrib 9 Zulhijjah", "Sepanjang bulan Zulhijjah"], a: 1, e: "Waktu wuquf bermula tergelincir matahari 9 Zulhijjah hingga terbit fajar 10 Zulhijjah." }],
+  muzdalifah: [
+    { q: "Apakah hukum bermalam (mabit) di Muzdalifah?", o: ["Rukun haji", "Wajib haji", "Sunat haji", "Larangan ihram"], a: 1, e: "Mabit di Muzdalifah ialah wajib haji. Meninggalkannya dikenakan dam." },
+    { q: "Batu yang dikutip di Muzdalifah digunakan untuk...", o: ["Melontar jamrah", "Membina khemah", "Tawaf", "Menanda sempadan Arafah"], a: 0, e: "Batu kecil dikutip untuk melontar jamrah di Mina." },
+    { q: "Selepas wuquf, jemaah bergerak dari Arafah ke Muzdalifah pada waktu...", o: ["Subuh", "Selepas terbenam matahari", "Tengah hari", "Dhuha"], a: 1, e: "Jemaah bertolak ke Muzdalifah selepas terbenam matahari pada 9 Zulhijjah." }],
+  mina: [
+    { q: "Jamrah yang dilontar pada 10 Zulhijjah ialah...", o: ["Jamrah Ula", "Jamrah Wusta", "Jamrah Aqabah", "Ketiga-tiga jamrah"], a: 2, e: "Pada 10 Zulhijjah hanya Jamrah Aqabah dilontar dengan tujuh biji batu." },
+    { q: "Pada hari tasyrik (11–13 Zulhijjah), jemaah melontar...", o: ["Jamrah Aqabah sahaja", "Tiga jamrah, tujuh biji batu setiap satu", "Satu jamrah dengan tiga biji batu", "Tidak melontar"], a: 1, e: "Pada hari tasyrik, Jamrah Ula, Wusta dan Aqabah dilontar masing-masing dengan tujuh biji batu." },
+    { q: "Jenis haji yang melakukan umrah terlebih dahulu kemudian haji dalam musim yang sama dan wajib membayar dam ialah...", o: ["Ifrad", "Tamattu'", "Qiran", "Wada'"], a: 1, e: "Haji Tamattu' ialah umrah dahulu, kemudian haji dalam musim haji yang sama. Ia dikenakan dam." },
+    { q: "Apakah hikmah melontar jamrah?", o: ["Menunjukkan kekuatan fizikal", "Menolak godaan syaitan dan mentaati perintah Allah seperti Nabi Ibrahim AS", "Mengumpul pahala sahaja", "Menandakan tamatnya cuti"], a: 1, e: "Melontar jamrah melambangkan penolakan godaan syaitan, dan ketaatan penuh kepada Allah seperti Nabi Ibrahim AS." }]
+};
+const HJ_ST = [
+  { id: "miqat", n: "Miqat", sub: "Berniat ihram", th: { sky: ["#5fb4f2", "#eaf6ff"], hill: "#c4a878", cloud: "#ffffff", accent: "#ffd66b" }, ground: "#e8d8b4", intro: ["Miqat ialah sempadan tempat atau waktu untuk bermula ihram. Jemaah mandi sunat, memakai ihram dan berniat.", "Lelaki memakai dua helai kain putih tidak berjahit. Perempuan memakai pakaian menutup aurat, muka dan tapak tangan tidak ditutup.", "Tugas anda: pakai ihram di Bilik Ihram, kemudian berniat di Tanda Niat."] },
+  { id: "tawaf", n: "Tawaf", sub: "Tujuh pusingan mengelilingi Kaabah", th: { sky: ["#69b9f5", "#eef7ff"], hill: "#cdbd9a", cloud: "#ffffff", accent: "#fff0b0" }, ground: "#efe7d6", intro: ["Tawaf dimulakan dari garis sejajar Hajarul Aswad (garis hijau). Kaabah berada di sebelah kiri anda dan anda bergerak melawan arah jam.", "Tawaf dilakukan tujuh pusingan di luar Hijr Ismail. Selepas itu solat sunat di Maqam Ibrahim dan minum air zamzam.", "Tugas anda: mulakan di garis hijau dan lengkapkan tujuh pusingan."] },
+  { id: "saie", n: "Saie", sub: "Safa ke Marwah, kemudian tahallul", th: { sky: ["#7cc2f4", "#f1f8ff"], hill: "#cdbd9a", cloud: "#ffffff", accent: "#fff0b0" }, ground: "#f2ecde", intro: ["Saie dilakukan berulang-alik antara bukit Safa dan Marwah sebanyak tujuh perjalanan. Ia bermula di Safa dan berakhir di Marwah.", "Di kawasan lampu hijau, jemaah lelaki disunatkan berlari anak. Saie mengingati usaha Siti Hajar mencari air untuk Nabi Ismail AS.", "Selepas saie, jemaah bertahallul dengan bercukur atau bergunting rambut."] },
+  { id: "arafah", n: "Arafah", sub: "Wuquf pada 9 Zulhijjah", th: { sky: ["#f6a15a", "#ffe6b8"], hill: "#b8895c", cloud: "#ffe9d0", accent: "#ffcf5a" }, ground: "#d9bf8f", intro: ["Wuquf di Arafah ialah rukun haji. Jemaah berada di Arafah dari tergelincir matahari 9 Zulhijjah hingga terbit fajar 10 Zulhijjah.", "Ia waktu untuk berdoa, berzikir dan beristighfar. Sabda Nabi SAW: Haji itu ialah Arafah.", "Tugas anda: masuk ke Zon Wuquf dan berada di dalamnya sehingga selesai."] },
+  { id: "muzdalifah", n: "Muzdalifah", sub: "Mabit dan kutip batu", th: { sky: ["#070c2a", "#2a2f6e"], hill: "#1a1c46", cloud: "#4a4f9a", accent: "#fff2b0" }, ground: "#6a6866", intro: ["Selepas matahari terbenam, jemaah bergerak ke Muzdalifah. Mabit di Muzdalifah ialah wajib haji.", "Di sini jemaah mengutip batu kecil untuk melontar jamrah di Mina, sebesar biji kacang tanah.", "Tugas anda: kutip sekurang-kurangnya tujuh biji batu, kemudian pergi ke Zon Mabit."] },
+  { id: "mina", n: "Mina", sub: "Melontar Jamrah Aqabah", th: { sky: ["#63b6f2", "#e8f5ff"], hill: "#c8aa7c", cloud: "#ffffff", accent: "#ffe08a" }, ground: "#e3d3ae", intro: ["Pada 10 Zulhijjah, jemaah melontar Jamrah Aqabah dengan tujuh biji batu sambil bertakbir. Ia melambangkan penolakan godaan syaitan.", "Pada hari tasyrik (11–13 Zulhijjah) jemaah melontar tiga jamrah: Ula, Wusta dan Aqabah.", "Tugas anda: berdiri dalam Zon Lontar dan lontar tujuh biji batu ke arah jamrah."] }
+];
+const HJ = { open: false, root: null, cv: null, cx: null, g: null, raf: 0, last: 0, W: 0, H: 0, dpr: 1, keys: {}, ui: {}, sex: "m", skin: 1, js: { on: false, id: -1, cx: 0, cy: 0, x: 0, y: 0 }, cd: { id: -1, x: 0, y: 0 }, camIn: null };
+/* --- pembina dunia --- */
+function hjCyl(W, x, y0, z, r, h, col, seg, solid) {
+  seg = seg || 10; const top = dwHexMix(col, 1.1);
+  for (let k = 0; k < seg; k++) {
+    const a0 = k / seg * 6.2832, a1 = (k + 1) / seg * 6.2832, am = (a0 + a1) / 2, x0 = x + Math.sin(a0) * r, z0 = z + Math.cos(a0) * r, x1 = x + Math.sin(a1) * r, z1 = z + Math.cos(a1) * r;
+    W.stat.push({ v: [x0, y0, z0, x1, y0, z1, x1, y0 + h, z1, x0, y0 + h, z0], n: [Math.sin(am), 0, Math.cos(am)], col: col, cx: x, cz: z });
+    W.stat.push({ v: [x, y0 + h, z, x0, y0 + h, z0, x1, y0 + h, z1, x1, y0 + h, z1], n: [0, 1, 0], col: top, cx: x, cz: z });
+  }
+  if (solid) W.solids.push({ x0: x - r, x1: x + r, z0: z - r, z1: z + r });
+}
+function hjBox(W, cx, cy, cz, sx, sy, sz, col, solid) { dwSBox(W, cx, cy, cz, sx, sy, sz, col); if (solid) W.solids.push({ x0: cx - sx / 2, x1: cx + sx / 2, z0: cz - sz / 2, z1: cz + sz / 2 }); }
+function hjFloor(W, x0, z0, w, d, top, side, y) { dwSlab(W, x0, y || 0, z0, w, d, 0.4, top, side || dwHexMix(top, 0.8), false); }
+function hjPalm(W, x, z, h) { h = h || 5; hjCyl(W, x, 0, z, 0.22, h, "#8a6238", 6); [0, 1, 2, 3, 4, 5].forEach((i) => { const a = i / 6 * 6.2832; hjBox(W, x + Math.sin(a) * 1.1, h + 0.1, z + Math.cos(a) * 1.1, i % 3 ? 1.8 : 0.5, 0.2, i % 3 ? 0.5 : 1.8, "#3f9a4c"); }); hjBox(W, x, h + 0.2, z, 0.8, 0.5, 0.8, "#4aa858"); }
+function hjMosque(W, cx, cz, w) {
+  hjBox(W, cx, 5, cz, w, 10, 10, "#f4efe6", true); hjBox(W, cx, 10.4, cz, w, 0.8, 10.4, "#d8b24a");
+  [[5, 5], [4.2, 5], [3.2, 5], [2.0, 5]].forEach((s, i) => hjCyl(W, cx, 10.8 + i * 1.3, cz, s[0], 1.3, i === 3 ? "#d8b24a" : "#f4efe6", 12));
+  for (let i = -1; i <= 1; i += 2) { hjCyl(W, cx + i * (w / 2 + 2.5), 0, cz, 1.2, 20, "#f4efe6", 8, true); hjCyl(W, cx + i * (w / 2 + 2.5), 20, cz, 1.5, 0.8, "#d8b24a", 8); hjCyl(W, cx + i * (w / 2 + 2.5), 20.8, cz, 0.7, 3, "#f4efe6", 8); }
+  for (let i = -4; i <= 4; i++) hjBox(W, cx + i * (w / 9), 3, cz - 5.1, 1.3, 4.4, 0.2, "#2a3a5a");
+}
+function hjTent(W, x, z, s, col) { s = s || 3; hjBox(W, x, s * 0.35, z, s, s * 0.7, s, col || "#f6f2ea"); hjBox(W, x, s * 0.78, z, s * 0.7, s * 0.2, s * 0.7, dwHexMix(col || "#f6f2ea", 0.9)); }
+function hjNpcs(W, n, fn) { for (let i = 0; i < n; i++) { const o = fn(i); o.ph = Math.random() * 6; o.sk = Math.floor(Math.random() * 5); o.sex = o.sex || (Math.random() < 0.45 ? "f" : "m"); W.npcs.push(o); } }
+function hjNew(th, ground) { return { stat: [], solids: [], npcs: [], th: th, ground: ground, bounds: [-30, 30, -10, 80], signs: [], rocks: [] }; }
+/* --- peringkat --- */
+function hjBuild(id) {
+  const W = hjNew(HJ_ST.filter((s) => s.id === id)[0].th, HJ_ST.filter((s) => s.id === id)[0].ground), R = (a, b) => a + Math.random() * (b - a);
+  if (id === "miqat") {
+    W.bounds = [-34, 34, -10, 34]; hjFloor(W, -30, -12, 60, 46, "#efe6d4"); hjMosque(W, 0, 40, 28);
+    hjBox(W, -20, 2, 10, 9, 4, 7, "#dcd2bd", true); hjBox(W, -20, 4.2, 10, 10, 0.5, 8, "#b89a52"); hjBox(W, -20, 1.4, 6.4, 2, 2.8, 0.2, "#4a3a2a"); W.signs.push({ x: -20, y: 6.2, z: 10, t: "BILIK IHRAM" });
+    W.signs.push({ x: 0, y: 17, z: 36, t: "MIQAT ZULHULAIFAH (BIR ALI)" }); for (let i = 0; i < 10; i++) hjPalm(W, R(-30, 30), R(-8, 28), R(4, 6.5));
+    hjNpcs(W, 16, () => ({ k: "idle", x: R(-26, 26), z: R(-6, 28), yaw: R(0, 6) }));
+  } else if (id === "tawaf") {
+    W.bounds = [-25, 25, -25, 25]; hjFloor(W, -36, -36, 72, 72, "#f2ecdf"); const ring = (r, c, th) => { for (let k = 0; k < 40; k++) { const a = k / 40 * 6.2832; hjBox(W, Math.cos(a) * r, 0.03, Math.sin(a) * r, 2.6, 0.06, 2.6, k % 2 ? c : dwHexMix(c, 1.08)); } }; ring(10, "#e4d9c2"); ring(21, "#e4d9c2");
+    hjBox(W, 0, 4, 0, 6.4, 8, 7.2, "#16161a", true); hjBox(W, 0, 6.4, 0, 6.5, 0.55, 7.3, "#d8b24a"); hjBox(W, 0, 2.4, 3.66, 2.2, 3.4, 0.1, "#d8b24a"); hjBox(W, 3.3, 1.5, 0, 0.3, 0.5, 0.5, "#7a7a82"); hjBox(W, 3.28, 1.5, 0, 0.12, 0.7, 0.7, "#c8c8d0");
+    for (let k = 0; k < 9; k++) { const a = Math.PI * (0.62 + k * 0.095); hjBox(W, Math.cos(a) * 6.4, 0.7, Math.sin(a) * 6.4, 1.1, 1.4, 1.1, "#f4efe6", true); }
+    hjBox(W, 11, 1.2, 11, 1.8, 2.4, 1.8, "#d8b24a", true); hjBox(W, 11, 2.7, 11, 2, 0.3, 2, "#f4efe6");
+    hjBox(W, -22, 0.6, 18, 3, 1.2, 1.2, "#8a8a92", true); hjBox(W, -22, 1.4, 18, 2.6, 0.2, 0.8, "#58c8ff");
+    hjBox(W, 14, 0.02, 0, 22, 0.05, 1.0, "#3dc27a"); W.signs.push({ x: 15, y: 2.2, z: 0, t: "GARIS MULA TAWAF" }, { x: 0, y: 9.4, z: 0, t: "KAABAH" }, { x: 11, y: 4.2, z: 11, t: "MAQAM IBRAHIM" }, { x: -22, y: 3, z: 18, t: "AIR ZAMZAM" });
+    for (let k = 0; k < 30; k++) { const a = k / 30 * 6.2832; hjCyl(W, Math.cos(a) * 25.5, 0, Math.sin(a) * 25.5, 0.7, 9, "#f4efe6", 8, true); hjBox(W, Math.cos(a) * 28.5, 8, Math.sin(a) * 28.5, 4.2, 16, 4.2, "#eee6d4", true); }
+    hjNpcs(W, 46, (i) => ({ k: "orbit", r: R(9, 19), a: R(0, 6.28), w: R(1.4, 2.2) }));
+    W.npcs.forEach((n) => { n.w = n.w / n.r; });
+  } else if (id === "saie") {
+    W.bounds = [-7.5, 7.5, -4, 76]; hjFloor(W, -9, -8, 18, 92, "#f6f0e2"); for (let z = -6; z < 74; z += 6) hjBox(W, 0, 0.03, z, 0.5, 0.05, 2.4, "#9ec0e8");
+    hjBox(W, 0, 0.03, 35, 15, 0.06, 14, "#46b57c"); for (let z = -4; z < 78; z += 7) [-1, 1].forEach((s) => { hjBox(W, s * 8.6, 4, z, 1.6, 8, 5.6, "#f1e9d8", true); hjCyl(W, s * 7.8, 0, z + 3.2, 0.5, 6.4, "#f4efe6", 8); hjBox(W, s * 8.6, 6.5, z + 3.2, 1.2, 0.4, 1.2, "#d8b24a"); hjBox(W, s * 7.7, 3.2, z, 0.2, 3, 3, "#2a3a5a"); });
+    [-1, 1].forEach((s) => { hjBox(W, s * 7.4, 1.6, 28, 0.4, 3.2, 0.4, "#3dd68a"); hjBox(W, s * 7.4, 1.6, 42, 0.4, 3.2, 0.4, "#3dd68a"); });
+    for (let i = 0; i < 6; i++) { hjBox(W, R(-4, 4), 0.6 + i * 0.2, -5 - i * 0.4, R(2, 4), 1.2 + i * 0.4, 2.4, "#8a7f72", true); hjBox(W, R(-4, 4), 0.6 + i * 0.2, 75 + i * 0.4, R(2, 4), 1.2 + i * 0.4, 2.4, "#8a7f72", true); }
+    hjBox(W, 0, 6, -8, 18, 12, 2, "#f1e9d8", true); hjBox(W, 0, 6, 78, 18, 12, 2, "#f1e9d8", true);
+    W.signs.push({ x: 0, y: 5, z: -2, t: "SAFA الصفا" }, { x: 0, y: 5, z: 72, t: "MARWAH المروة" }, { x: 0, y: 4.6, z: 35, t: "KAWASAN LAMPU HIJAU" });
+    hjBox(W, -5, 1, 66, 3, 2, 2.4, "#e8e0cc", true); hjBox(W, -5, 2.2, 66, 3.4, 0.3, 2.8, "#3a8a5a"); W.signs.push({ x: -5, y: 3.6, z: 66, t: "TUKANG GUNTING" });
+    hjNpcs(W, 26, (i) => ({ k: "lane", x: R(-6, 6), z: R(0, 70), dir: i % 2 ? 1 : -1, sp: R(1.4, 2.6) }));
+  } else if (id === "arafah") {
+    W.bounds = [-46, 46, -12, 56]; hjFloor(W, -50, -14, 100, 74, "#dcc79a");
+    for (let i = 0; i < 6; i++) hjBox(W, 0, i * 2 + 1.5, 70, 36 - i * 5.5, 3, 24 - i * 3.8, ["#b8956a", "#a9865c", "#9a7852", "#8d6c48", "#7f6040", "#725538"][i]); hjBox(W, 0, 14, 70, 1.6, 6, 1.6, "#f4efe6");
+    for (let i = -6; i <= 6; i++) for (let j = 0; j < 8; j++) { const x = i * 7, z = -2 + j * 7; if (Math.hypot(x, z - 22) < 14 || (j === 0 && Math.abs(x) < 8)) continue; hjTent(W, x, z, 3.2); }
+    for (let k = 0; k < 16; k++) { const a = k / 16 * 6.2832; hjBox(W, Math.sin(a) * 11.5, 0.9, 22 + Math.cos(a) * 11.5, 0.6, 1.8, 0.6, "#f4efe6"); hjBox(W, Math.sin(a) * 11.5, 1.9, 22 + Math.cos(a) * 11.5, 0.7, 0.3, 0.7, "#3a9a5a"); }
+    W.signs.push({ x: 0, y: 18, z: 70, t: "JABAL RAHMAH" }, { x: 0, y: 5, z: 6, t: "ARAFAH عرفة" });
+    hjNpcs(W, 30, () => ({ k: "doa", x: R(-8, 8), z: 22 + R(-8, 8), yaw: R(0, 6) }));
+  } else if (id === "muzdalifah") {
+    W.bounds = [-38, 38, -12, 52]; hjFloor(W, -42, -14, 84, 70, "#77736f");
+    for (let i = 0; i < 44; i++) { const x = R(-34, 34), z = R(-8, 44); if (Math.hypot(x, z - 40) < 7) continue; W.rocks.push({ x: x, z: z, got: false }); }
+    for (let i = 0; i < 16; i++) { const x = R(-36, 36), z = R(-10, 46); hjBox(W, x, 0.06, z, 1.1, 0.1, 2.2, "#e8e4da"); }
+    [[-30, 0], [30, 0], [-30, 30], [30, 30], [0, 15], [0, 45]].forEach((p) => { hjCyl(W, p[0], 0, p[1], 0.2, 8, "#8a8a92", 6); hjBox(W, p[0], 8.2, p[1], 1.2, 0.5, 1.2, "#fff2b0"); });
+    hjNpcs(W, 22, () => ({ k: "idle", x: R(-34, 34), z: R(-8, 44), yaw: R(0, 6) }));
+  } else if (id === "mina") {
+    W.bounds = [-34, 34, -12, 56]; hjFloor(W, -38, -14, 76, 76, "#e8dcc0"); hjFloor(W, -6, -14, 12, 76, "#c9c2b4");
+    for (let i = 0; i < 8; i++) for (let j = 0; j < 6; j++) [-1, 1].forEach((s) => hjTent(W, s * (14 + i * 3.6), j * 8 - 4, 3.2));
+    hjBox(W, 0, 4, 52, 1.6, 8, 16, "#d9d2c3", true); hjBox(W, 0, 8.3, 52, 2, 0.6, 17, "#b8aa88"); hjCyl(W, 0, 0, 48.6, 2.2, 0.8, "#c9c2b4", 10); W.signs.push({ x: 0, y: 10.4, z: 52, t: "JAMRAH AQABAH" }, { x: 0, y: 4, z: 34, t: "ZON LONTAR" });
+    hjNpcs(W, 20, () => ({ k: "idle", x: R(-30, 30), z: R(-8, 30), yaw: R(0, 6) }));
+  }
+  return W;
+}
+/* --- avatar jemaah --- */
+function hjFace(cam, q, Rb, hy, yaw) {
+  const P = (a, b, c) => [Rb[0] * a + Rb[1] * b + Rb[2] * c + Rb[3], Rb[4] * a + Rb[5] * b + Rb[6] * c + Rb[7], Rb[8] * a + Rb[9] * b + Rb[10] * c + Rb[11]], hc = P(0, hy, 0), fw = [Math.sin(yaw), Math.cos(yaw)], vx = cam.x - hc[0], vy = cam.y - hc[1], vz = cam.z - hc[2], vl = Math.hypot(vx, vy, vz) || 1;
+  if ((fw[0] * vx + fw[1] * vz) / vl <= 0.12 || vl > 16) return;
+  const D = (a, b, c, r, col, al) => { const p = P(a, b, c), m = q.length; dwSprite(cam, q, p[0], p[1], p[2], r, "circle", col, al); if (q.length > m) q[m].d -= 0.45; };
+  [-1, 1].forEach((s) => { D(s * 0.07, hy + 0.03, 0.202, 0.03, "#14161c", 1); D(s * 0.07 - 0.008, hy + 0.043, 0.204, 0.01, "#fff", 0.95); });
+  for (let i = 0; i <= 6; i++) { const u = i / 6 * 2 - 1; D(u * 0.085, hy - 0.07 - (1 - u * u) * 0.04, 0.202, 0.011, "#2a1410", 1); }
+}
+function hjAvatar(cam, q, x, y, z, yaw, an, lk) {
+  const R = dwRY(yaw, x, y, z), t = an.t || 0, mv = an.mv || 0, sw = Math.sin(t * 9) * 0.55 * mv, bob = Math.abs(Math.sin(t * 9)) * 0.03 * mv, skin = DW_SKIN[lk.skin | 0], white = "#f3f0e8", B = (M, sx, sy, sz, ox, oy, oz, c, b) => dwBox(cam, q, M, sx, sy, sz, ox, oy, oz, c, b), Rb = dwMul(R, dwTr(0, bob, 0));
+  const doa = an.pose === "doa", armA = doa ? -1.35 : -sw, armB = doa ? -1.35 : sw;
+  if (lk.sex === "f") {
+    const c = lk.ihram ? white : (lk.col || "#2f9a66"), hc = lk.ihram ? white : "#f0d8e8";
+    B(Rb, 0.68, 1.0, 0.44, 0, 0.58, 0, c); B(Rb, 0.6, 0.5, 0.36, 0, 1.3, 0, c, 1.06);
+    [[armA, 0.4], [armB, -0.4]].forEach((A) => { const M = dwMul(Rb, dwRX(A[0], A[1], 1.5, 0)); B(M, 0.2, 0.62, 0.22, 0, -0.3, 0, c, 0.94); B(M, 0.2, 0.14, 0.22, 0, -0.62, 0, skin); });
+    B(Rb, 0.48, 0.1, 0.5, 0, 2.06, 0, hc); B(Rb, 0.08, 0.5, 0.5, 0.26, 1.82, -0.02, hc, 0.93); B(Rb, 0.08, 0.5, 0.5, -0.26, 1.82, -0.02, hc, 0.93); B(Rb, 0.56, 0.54, 0.08, 0, 1.82, -0.26, hc, 0.9); B(Rb, 0.56, 0.1, 0.08, 0, 1.97, 0.25, hc, 1.04); B(Rb, 0.7, 0.34, 0.46, 0, 1.52, 0, hc, 1.02);
+    dwCyl(cam, q, Rb, 0.2, 0.38, 0, 1.78, 0, skin, 1, 12); hjFace(cam, q, Rb, 1.78, yaw);
+  } else {
+    const bot = lk.ihram ? white : "#2a3042", top = lk.ihram ? white : "#3a74d0";
+    B(dwMul(R, dwRX(sw * 0.6, 0.14, 0.9 + bob, 0)), 0.3, 0.9, 0.34, 0, -0.45, 0, bot); B(dwMul(R, dwRX(-sw * 0.6, -0.14, 0.9 + bob, 0)), 0.3, 0.9, 0.34, 0, -0.45, 0, bot);
+    if (lk.ihram) B(Rb, 0.7, 0.35, 0.42, 0, 0.9, 0, white);
+    B(Rb, 0.62, 0.6, 0.36, 0, 1.28, 0, top, 1.05);
+    if (lk.ihram) B(Rb, 0.24, 0.6, 0.38, 0.22, 1.3, 0, skin);
+    [[armA, 0.45], [armB, -0.45]].forEach((A) => { const M = dwMul(Rb, dwRX(A[0], A[1], 1.52, 0)); B(M, 0.2, 0.6, 0.22, 0, -0.3, 0, lk.ihram ? skin : top, 0.95); B(M, 0.2, 0.14, 0.22, 0, -0.6, 0, skin); });
+    B(Rb, 0.5, 0.12, 0.48, 0, 1.78, 0, "#1a1410"); dwCyl(cam, q, Rb, 0.2, 0.4, 0, 1.78, 0, skin, 1, 12); dwCyl(cam, q, Rb, 0.215, 0.1, 0, 1.97, 0, "#1a1410", 1, 12); hjFace(cam, q, Rb, 1.78, yaw);
+  }
+}
+function hjActor(g, cam, q, x, z, yaw, an, lk) { const i0 = q.length; dwFlat(cam, q, x, 0.03, z, 0.5, 0.5, "#000000", 0.28); dwBias(q, i0, 2.4); const i1 = q.length; hjAvatar(cam, q, x, 0, z, yaw, an, lk); dwBias(q, i1, 3.0); }
+/* --- UI --- */
+function hjRoot() {
+  if (HJ.root) return HJ.root; const r = el("div", { id: "hjOv", role: "dialog", "aria-modal": "true", "aria-label": "Simulasi Haji 3D" }); document.body.appendChild(r); HJ.root = r; return r;
+}
+function hjPanel(build) {
+  const u = HJ.ui; if (!u.pan) return; u.pan.textContent = ""; u.pan.hidden = false; build(u.pan); if (HJ.g) HJ.g.modal = true;
+}
+function hjPanelClose() { const u = HJ.ui; if (u.pan) { u.pan.hidden = true; u.pan.textContent = ""; } if (HJ.g) HJ.g.modal = false; }
+function hjToast(t) { const e = HJ.ui.toast; if (!e) return; e.textContent = t; e.classList.remove("show"); void e.offsetWidth; e.classList.add("show"); }
+function hjOpen() {
+  if (HJ.open) return; HJ.open = true; document.body.classList.add("ar-lock"); const r = hjRoot(); r.hidden = false; r.textContent = "";
+  window.addEventListener("keydown", hjKey, true); window.addEventListener("keyup", hjKey, true); hjMenu();
+}
+function hjClose() {
+  HJ.open = false; cancelAnimationFrame(HJ.raf); HJ.raf = 0; HJ.g = null; window.removeEventListener("keydown", hjKey, true); window.removeEventListener("keyup", hjKey, true);
+  try { if (document.fullscreenElement) document.exitFullscreen(); } catch (e) { /* abaikan */ }
+  if (HJ.root) { HJ.root.remove(); HJ.root = null; } HJ.cv = null; HJ.ui = {}; document.body.classList.remove("ar-lock"); if (typeof renderPrak === "function") renderPrak();
+}
+function hjMenu() {
+  cancelAnimationFrame(HJ.raf); HJ.raf = 0; HJ.g = null; const r = hjRoot(); r.textContent = ""; const cl = el("button", { type: "button", class: "hj-x" }, "Tutup"); cl.addEventListener("click", hjClose);
+  const sexB = segBtns([["m", "Lelaki"], ["f", "Perempuan"]], HJ.sex, (v) => { HJ.sex = v; }, "Jantina jemaah"), skB = segBtns([[0, "Cerah"], [1, "Sawo matang"], [2, "Sederhana"], [3, "Gelap"]], HJ.skin, (v) => { HJ.skin = +v; }, "Warna kulit");
+  const go = el("button", { type: "button", class: "hj-go" }, "MULA PERJALANAN HAJI"); go.addEventListener("click", () => hjStart());
+  r.append(cl, el("div", { class: "hj-menu" }, null, el("div", { class: "hj-k" }, "PRAKTIKAL · SIMULASI 3D"), el("h1", null, "Simulasi Haji"), el("p", null, "Lalui manasik haji dari Miqat hingga Mina. Berjalan, laksanakan setiap rukun dan wajib, dan jawab soalan di setiap peringkat. Simulasi ini untuk pembelajaran dan tidak menggantikan bimbingan ustaz atau pembimbing haji."),
+    el("div", { class: "hj-lst" }, null, ...HJ_ST.map((s, i) => el("span", null, (i + 1) + ". " + s.n))), el("label", { class: "hj-lb" }, "Jemaah"), sexB, el("label", { class: "hj-lb" }, "Warna kulit"), skB, go, el("small", null, "Kawalan: W A S D atau anak panah untuk berjalan, seret tetikus untuk kamera, E untuk bertindak. Telefon: kayu bedik kiri dan butang Tindakan.")));
+}
+function hjKey(e) {
+  if (!HJ.open) return; const k = e.key.toLowerCase(), dn = e.type === "keydown", g = HJ.g;
+  if (dn && k === "escape") { e.preventDefault(); e.stopPropagation(); if (g && !g.modal) hjMenu(); else if (!g) hjClose(); return; }
+  if (!g || g.modal) return; const map = { arrowleft: "l", a: "l", arrowright: "r", d: "r", arrowup: "f", w: "f", arrowdown: "b", s: "b", q: "cl", e2: "cr" };
+  if (map[k]) { HJ.keys[map[k]] = dn; e.preventDefault(); e.stopPropagation(); return; }
+  if (dn && !e.repeat && (k === "e" || k === "enter" || k === " ")) { e.preventDefault(); e.stopPropagation(); hjAct(); }
+}
+function hjStart() {
+  const r = hjRoot(); r.textContent = ""; const cv = el("canvas", { class: "hj-cv" }); HJ.cv = cv; HJ.cx = cv.getContext("2d"); HJ.ui = {};
+  const u = HJ.ui; u.hud = el("div", { class: "hj-hud" }); u.obj = el("div", { class: "hj-obj" }); u.toast = el("div", { class: "hj-toast", "aria-live": "polite" }); u.pan = el("div", { class: "hj-pan", hidden: "" });
+  u.act = el("button", { type: "button", class: "hj-act", hidden: "" }); u.act.addEventListener("click", hjAct); const ex = el("button", { type: "button", class: "hj-x" }, "Keluar"); ex.addEventListener("click", () => hjMenu());
+  r.append(cv, u.hud, u.obj, u.toast, u.act, ex, u.pan); hjPtr(cv);
+  HJ.g = { st: 0, sc: [], T: 0, modal: false, p: null, cam: null, W: null, mk: [], near: null, pts: [], tot: 0, ok: 0 }; hjLoadStage(0); hjFit(); window.addEventListener("resize", hjFit);
+  HJ.last = performance.now(); HJ.raf = requestAnimationFrame(hjLoop);
+}
+function hjFit() { const cv = HJ.cv; if (!cv) return; const d = Math.min(2, window.devicePixelRatio || 1), W = Math.max(320, window.innerWidth), H = Math.max(280, window.innerHeight); HJ.dpr = d; HJ.W = W; HJ.H = H; cv.width = Math.round(W * d); cv.height = Math.round(H * d); cv.style.width = W + "px"; cv.style.height = H + "px"; }
+function hjPtr(cv) {
+  HJ.js = { on: false, id: -1, cx: 0, cy: 0, x: 0, y: 0 }; HJ.cd = { id: -1, x: 0, y: 0 };
+  cv.addEventListener("pointerdown", (e) => { const g = HJ.g; if (!g || g.modal) return; try { cv.setPointerCapture(e.pointerId); } catch (x) { /* abaikan */ } if (e.pointerType !== "mouse" && e.clientX < HJ.W * 0.42 && e.clientY > HJ.H * 0.3 && !HJ.js.on) { HJ.js.on = true; HJ.js.id = e.pointerId; HJ.js.cx = e.clientX; HJ.js.cy = e.clientY; HJ.js.x = HJ.js.y = 0; } else if (HJ.cd.id < 0) { HJ.cd.id = e.pointerId; HJ.cd.x = e.clientX; HJ.cd.y = e.clientY; } });
+  cv.addEventListener("pointermove", (e) => { if (e.pointerId === HJ.js.id) { let dx = (e.clientX - HJ.js.cx) / 56, dy = (HJ.js.cy - e.clientY) / 56; const l = Math.hypot(dx, dy); if (l > 1) { dx /= l; dy /= l; } HJ.js.x = dx; HJ.js.y = dy; } else if (e.pointerId === HJ.cd.id) { const dx = e.clientX - HJ.cd.x, dy = e.clientY - HJ.cd.y; HJ.cd.x = e.clientX; HJ.cd.y = e.clientY; HJ.camIn = [(HJ.camIn ? HJ.camIn[0] : 0) + dx * 0.0065, (HJ.camIn ? HJ.camIn[1] : 0) + dy * 0.0055]; } });
+  const up = (e) => { if (e.pointerId === HJ.js.id) { HJ.js.on = false; HJ.js.id = -1; HJ.js.x = HJ.js.y = 0; } if (e.pointerId === HJ.cd.id) HJ.cd.id = -1; }; cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up); cv.addEventListener("contextmenu", (e) => e.preventDefault());
+  cv.addEventListener("wheel", (e) => { if (HJ.g) { HJ.g.cam.dist = clamp(HJ.g.cam.dist + Math.sign(e.deltaY) * 0.8, 4, 14); e.preventDefault(); } }, { passive: false });
+}
+function hjLoadStage(i) {
+  const g = HJ.g, S = HJ_ST[i]; g.st = i; g.W = hjBuild(S.id); g.mk = []; g.pts = []; g.look = { sex: HJ.sex, skin: HJ.skin, ihram: i > 0 }; g.o = {}; g.bonus = null;
+  dwApplyTheme(S.th); const sp = hjSpawn(S.id); g.p = { x: sp[0], z: sp[1], yaw: sp[2], vx: 0, vz: 0, mv: 0 }; g.cam = { yaw: sp[2], pitch: 0.34, dist: 8, tx: sp[0], ty: 1.3, tz: sp[1] };
+  g.W.npcs.forEach((n) => { if (n.k === "orbit") { n.x = Math.cos(n.a) * n.r; n.z = Math.sin(n.a) * n.r; } });
+  hjSetup(S.id); hjHud(); hjIntro(S);
+}
+function hjSpawn(id) { return { miqat: [0, -4, 0], tawaf: [16, -5, 0], saie: [0, 2, 0], arafah: [0, -8, 0], muzdalifah: [0, -6, 0], mina: [0, -6, 0] }[id]; }
+function hjIntro(S) {
+  const g = HJ.g, last = g.st === 0; hjPanel((p) => {
+    const b = el("button", { type: "button", class: "hj-go" }, "Mula peringkat"); b.addEventListener("click", hjPanelClose);
+    p.append(el("div", { class: "hj-k" }, "PERINGKAT " + (g.st + 1) + " / " + HJ_ST.length), el("h2", null, S.n), el("p", { class: "hj-sub" }, S.sub), ...S.intro.map((t) => el("p", null, t)), b);
+  });
+}
+function hjQuiz(id, done) {
+  const qs = shuffle(HJ_Q[id].slice()).slice(0, 3); let i = 0, ok = 0;
+  const show = () => hjPanel((p) => {
+    const q = qs[i], ord = shuffle([0, 1, 2, 3]); p.append(el("div", { class: "hj-k" }, "SOALAN " + (i + 1) + " / " + qs.length), el("h3", null, q.q)); const lst = el("div", { class: "hj-opts" });
+    ord.forEach((oi, pos) => { const b = el("button", { type: "button", class: "hj-opt" }, "ABCD"[pos] + ". " + q.o[oi]); b.addEventListener("click", () => { const good = oi === q.a; if (good) ok++; HJ.g.tot++; if (good) HJ.g.ok++; [...lst.children].forEach((c, k) => { c.disabled = true; if (ord[k] === q.a) c.classList.add("ok"); else if (k === pos) c.classList.add("bad"); }); p.append(el("div", { class: "hj-fb " + (good ? "ok" : "bad") }, (good ? "Betul. " : "Kurang tepat. ") + q.e)); const nx = el("button", { type: "button", class: "hj-go" }, i + 1 >= qs.length ? "Teruskan" : "Soalan seterusnya"); nx.addEventListener("click", () => { i++; if (i >= qs.length) { hjPanelClose(); done(ok, qs.length); } else show(); }); p.append(nx); }); lst.appendChild(b); });
+    p.append(lst);
+  }); show();
+}
+function hjStageDone(ok, n) {
+  const g = HJ.g; g.sc.push({ id: HJ_ST[g.st].id, ok: ok, n: n }); try { beep(880, 0.15, "triangle", 0.07); } catch (e) { /* abaikan */ }
+  if (g.st + 1 >= HJ_ST.length) return hjEnd();
+  hjPanel((p) => { const b = el("button", { type: "button", class: "hj-go" }, "Ke peringkat seterusnya: " + HJ_ST[g.st + 1].n); b.addEventListener("click", () => { hjPanelClose(); hjLoadStage(g.st + 1); }); p.append(el("div", { class: "hj-k" }, "PERINGKAT SELESAI"), el("h2", null, HJ_ST[g.st].n + " selesai"), el("p", { class: "hj-score" }, ok + " / " + n + " soalan betul"), b); });
+}
+function hjEnd() {
+  const g = HJ.g, pct = g.tot ? Math.round(g.ok / g.tot * 100) : 0; prSaveBest("hj", pct); const xp = prXp("hj", 10 + Math.round(pct * 0.3));
+  hjPanel((p) => {
+    const rows = el("ol", { class: "hj-res" }); g.sc.forEach((s, i) => rows.appendChild(el("li", null, null, el("b", null, HJ_ST[i].n), el("span", null, s.ok + " / " + s.n))));
+    const a = el("button", { type: "button", class: "hj-go" }, "Main semula"), b = el("button", { type: "button", class: "hj-go alt" }, "Kembali ke Praktikal"); a.addEventListener("click", () => { hjPanelClose(); hjMenu(); }); b.addEventListener("click", hjClose);
+    p.append(el("div", { class: "hj-k" }, "TAMAT PERJALANAN"), el("h2", null, pct >= 80 ? "Semoga Haji Mabrur!" : "Perjalanan selesai"), el("p", { class: "hj-score" }, pct + "% (" + g.ok + " / " + g.tot + ")"), pct >= 80 ? el("p", null, "Anda menguasai manasik haji dengan baik.") : el("p", null, "Ulang simulasi untuk mengukuhkan ingatan anda tentang rukun, wajib dan larangan haji."), xp ? el("p", { class: "hj-xp" }, "+" + xp + " XP") : el("span"), rows, el("div", { class: "hj-row" }, null, a, b));
+  });
+}
+/* --- logik setiap peringkat --- */
+function hjMarker(m) { HJ.g.mk.push(Object.assign({ r: 2.2, show: () => true, on: () => {}, label: "", act: "Tindakan" }, m)); return m; }
+function hjObj(t) { const e = HJ.ui.obj; if (e) e.textContent = t; }
+function hjSetup(id) {
+  const g = HJ.g, o = g.o;
+  if (id === "miqat") {
+    hjObj("1. Pakai pakaian ihram di Bilik Ihram"); o.ih = false;
+    hjMarker({ x: -20, z: 6, label: "Bilik Ihram", act: "Pakai ihram (E)", show: () => !o.ih, on: () => { o.ih = true; g.look.ihram = true; hjToast("Anda memakai pakaian ihram. Niatkan ihram di tanda Niat."); hjObj("2. Berniat ihram di Tanda Niat"); } });
+    hjMarker({ x: 10, z: 24, label: "Tanda Niat", act: "Berniat (E)", show: () => o.ih, on: () => hjPanel((p) => { const b = el("button", { type: "button", class: "hj-go" }, "Lafazkan niat"); b.addEventListener("click", () => { hjPanelClose(); hjQuiz("miqat", hjStageDone); }); p.append(el("div", { class: "hj-k" }, "NIAT IHRAM HAJI"), el("h3", null, "Nawaitul hajja wa ahramtu bihi lillahi ta'ala"), el("p", null, "Sahaja aku berniat haji dan berihram dengannya kerana Allah Taala."), el("p", null, "Lafaz talbiah: Labbaikallahumma labbaik, labbaika la syarika laka labbaik, innal hamda wan ni'mata laka wal mulk, la syarika lak."), b); }) });
+  } else if (id === "tawaf") {
+    hjObj("Mulakan tawaf di garis hijau (Kaabah di sebelah kiri)"); o.tw = { on: false, cum: 0, last: 0, laps: 0, stage: 0 };
+    hjMarker({ x: 11, z: 8.6, label: "Maqam Ibrahim", act: "Solat sunat tawaf (E)", show: () => o.tw.stage === 1, on: () => hjPanel((p) => { const b = el("button", { type: "button", class: "hj-go" }, "Selesai solat"); b.addEventListener("click", () => { hjPanelClose(); o.tw.stage = 2; hjObj("Minum air zamzam"); }); p.append(el("div", { class: "hj-k" }, "SOLAT SUNAT TAWAF"), el("h3", null, "Dua rakaat di belakang Maqam Ibrahim"), el("p", null, "Rakaat pertama membaca Al-Kafirun dan rakaat kedua membaca Al-Ikhlas selepas Al-Fatihah."), b); }) });
+    hjMarker({ x: -20, z: 18, label: "Air Zamzam", act: "Minum zamzam (E)", show: () => o.tw.stage === 2, on: () => hjPanel((p) => { const b = el("button", { type: "button", class: "hj-go" }, "Teruskan"); b.addEventListener("click", () => { hjPanelClose(); hjQuiz("tawaf", hjStageDone); }); p.append(el("div", { class: "hj-k" }, "AIR ZAMZAM"), el("h3", null, "Allahumma inni as'aluka ilman nafi'a..."), el("p", null, "Meminum air zamzam adalah sunat. Berdoalah semasa meminumnya, menghadap kiblat."), b); }) });
+  } else if (id === "saie") {
+    hjObj("Berjalan dari Safa ke Marwah. Perjalanan 1 / 7"); o.sa = { trip: 0, tg: "marwah", fin: false };
+    hjMarker({ x: -5, z: 63, label: "Tukang Gunting", act: "Bertahallul (E)", show: () => o.sa.fin, on: () => hjPanel((p) => { const b = el("button", { type: "button", class: "hj-go" }, "Selesai bertahallul"); b.addEventListener("click", () => { hjPanelClose(); hjQuiz("saie", hjStageDone); }); p.append(el("div", { class: "hj-k" }, "TAHALLUL"), el("h3", null, HJ.sex === "m" ? "Lelaki afdal bercukur" : "Perempuan bergunting hujung rambut"), el("p", null, HJ.sex === "m" ? "Lelaki digalakkan bercukur kepala. Bergunting juga sah. Minimum tiga helai rambut." : "Perempuan menggunting hujung rambut sekadar satu ruas jari. Minimum tiga helai rambut."), el("p", null, "Tahallul ialah rukun haji dan umrah. Dengannya larangan ihram terbuka."), b); }) });
+  } else if (id === "arafah") {
+    hjObj("Masuk ke Zon Wuquf dan berdoa"); o.wq = { t: 0, tot: 25, done: false };
+  } else if (id === "muzdalifah") {
+    hjObj("Kutip batu: 0 / 7"); o.st = { n: 0 };
+    hjMarker({ x: 0, z: 40, r: 5, label: "Zon Mabit", act: "Bermalam / mabit (E)", show: () => o.st.n >= 7, on: () => hjPanel((p) => { const b = el("button", { type: "button", class: "hj-go" }, "Teruskan"); b.addEventListener("click", () => { hjPanelClose(); hjQuiz("muzdalifah", hjStageDone); }); p.append(el("div", { class: "hj-k" }, "MABIT DI MUZDALIFAH"), el("h3", null, "Bermalam sehingga selepas separuh malam"), el("p", null, "Jemaah berhenti dan berehat. Solat Maghrib dan Isyak dijamak. Mabit di Muzdalifah ialah wajib haji."), b); }) });
+  } else if (id === "mina") {
+    hjObj("Berdiri dalam Zon Lontar dan lontar batu: 0 / 7"); o.jm = { n: 0, ball: null };
+    hjMarker({ x: 0, z: 36, r: 7, label: "Zon Lontar", act: "Lontar batu (E)", show: () => o.jm.n < 7 && !o.jm.ball, on: () => { const p = g.p; o.jm.ball = { x: p.x, y: 1.6, z: p.z, t: 0, tx: R2(-2, 2), tz: 49 }; try { beep(520, 0.08, "triangle", 0.06); } catch (e) { /* abaikan */ } hjToast("Allahu Akbar!"); } });
+  }
+}
+function R2(a, b) { return a + Math.random() * (b - a); }
+function hjAct() {
+  const g = HJ.g; if (!g || g.modal || !g.near) return; try { g.near.on(); } catch (e) { /* abaikan */ }
+}
+function hjHud() { const g = HJ.g, u = HJ.ui; if (!u.hud) return; const S = HJ_ST[g.st]; u.hud.textContent = ""; u.hud.append(el("div", null, null, el("small", null, "Peringkat " + (g.st + 1) + " / " + HJ_ST.length), el("b", null, S.n)), el("div", null, null, el("small", null, "Soalan betul"), el("b", null, g.ok + " / " + g.tot))); }
+function hjTick(g, dt) {
+  const W = g.W, p = g.p, o = g.o, id = HJ_ST[g.st].id;
+  // NPC
+  W.npcs.forEach((n) => {
+    if (n.k === "orbit") { n.a += n.w * dt; n.x = Math.cos(n.a) * n.r; n.z = Math.sin(n.a) * n.r; n.yaw = Math.atan2(-Math.sin(n.a), Math.cos(n.a)) * 0 + Math.atan2(-Math.sin(n.a), Math.cos(n.a)); n.mv = 1; n.yaw = Math.atan2(-Math.sin(n.a), Math.cos(n.a)) ; n.yaw = Math.atan2(-Math.sin(n.a), Math.cos(n.a)); }
+    else if (n.k === "lane") { n.z += n.dir * n.sp * dt; if (n.z > 70) n.dir = -1; if (n.z < 0) n.dir = 1; n.yaw = n.dir > 0 ? 0 : Math.PI; n.mv = 1; }
+    else n.mv = 0;
+  });
+  if (g.modal) return;
+  const keys = HJ.keys, jx = HJ.camIn; if (jx) { g.cam.yaw += jx[0]; g.cam.pitch = clamp(g.cam.pitch + jx[1], 0.12, 0.9); HJ.camIn = null; }
+  g.cam.yaw += ((keys.cr ? 1 : 0) - (keys.cl ? 1 : 0)) * 2 * dt;
+  let ix = (keys.r ? 1 : 0) - (keys.l ? 1 : 0), iz = (keys.f ? 1 : 0) - (keys.b ? 1 : 0); if (HJ.js.on) { ix += HJ.js.x; iz += HJ.js.y; } const l = Math.hypot(ix, iz); if (l > 1) { ix /= l; iz /= l; }
+  const cy = Math.cos(g.cam.yaw), sy = Math.sin(g.cam.yaw), mx = cy * ix + sy * iz, mz = -sy * ix + cy * iz, ml = Math.hypot(mx, mz), sp = 5.2, k = Math.min(1, dt * 12);
+  p.vx += (mx * sp - p.vx) * k; p.vz += (mz * sp - p.vz) * k; if (ml > 0.1) { let da = Math.atan2(mx, mz) - p.yaw; while (da > Math.PI) da -= 6.2832; while (da < -Math.PI) da += 6.2832; p.yaw += da * Math.min(1, dt * 12); }
+  p.mv = Math.hypot(p.vx, p.vz) > 0.8 ? 1 : 0;
+  const hit = (x, z) => { for (const s of W.solids) if (x > s.x0 - 0.35 && x < s.x1 + 0.35 && z > s.z0 - 0.35 && z < s.z1 + 0.35) return true; return false; }, B = W.bounds;
+  let nx = p.x + p.vx * dt; if (nx > B[0] && nx < B[1] && !hit(nx, p.z)) p.x = nx; else p.vx = 0;
+  let nz = p.z + p.vz * dt; if (nz > B[2] && nz < B[3] && !hit(p.x, nz)) p.z = nz; else p.vz = 0;
+  // penanda
+  g.near = null; for (const m of g.mk) { if (!m.show()) continue; if (Math.hypot(p.x - m.x, p.z - m.z) < m.r + 0.8) { g.near = m; break; } }
+  const b = HJ.ui.act; if (b) { const t = g.near ? g.near.act : ""; if (b._t !== t) { b._t = t; b.hidden = !t; b.textContent = t; } }
+  if (id === "tawaf") {
+    const t = o.tw, r = Math.hypot(p.x, p.z), th = Math.atan2(p.z, p.x);
+    if (t.stage === 0) {
+      if (!t.on) { if (p.x > 5 && Math.abs(p.z) < 2.6 && r < 24) { t.on = true; t.last = th; t.cum = 0; hjToast("Tawaf bermula dari Hajarul Aswad. Bismillahi Allahu Akbar."); } }
+      else if (r > 8 && r < 23) { let d = th - t.last; while (d > Math.PI) d -= 6.2832; while (d < -Math.PI) d += 6.2832; t.cum = Math.max(0, t.cum + d); t.last = th; const laps = Math.min(7, Math.floor(t.cum / 6.2832)); if (laps > t.laps) { t.laps = laps; hjToast("Pusingan " + laps + " selesai"); try { beep(640 + laps * 40, 0.12, "triangle", 0.06); } catch (e) { /* abaikan */ } } if (t.laps >= 7) { t.stage = 1; hjObj("Solat sunat tawaf di Maqam Ibrahim"); hjToast("Tujuh pusingan selesai. Alhamdulillah!"); } else hjObj("Pusingan " + (t.laps + 1) + " / 7 (" + Math.round((t.cum % 6.2832) / 6.2832 * 100) + "%)"); }
+      else if (t.on) { t.last = th; hjObj("Kembali ke lingkaran tawaf (jauh dari Hijr Ismail)"); }
+    }
+  } else if (id === "saie") {
+    const s = o.sa; if (!s.fin) {
+      if (s.tg === "marwah" && p.z > 67) { s.trip++; s.tg = "safa"; hjToast("Perjalanan " + s.trip + " selesai di Marwah"); } else if (s.tg === "safa" && p.z < 3) { s.trip++; s.tg = "marwah"; hjToast("Perjalanan " + s.trip + " selesai di Safa"); }
+      if (s.trip >= 7) { s.fin = true; hjObj("Pergi ke Tukang Gunting untuk bertahallul"); hjToast("Tujuh perjalanan selesai di Marwah."); try { beep(880, 0.15, "triangle", 0.07); } catch (e) { /* abaikan */ } }
+      else { const lt = p.z > 28 && p.z < 42 ? " | Kawasan lampu hijau: berlari anak" : ""; hjObj("Perjalanan " + (s.trip + 1) + " / 7: menuju " + (s.tg === "marwah" ? "Marwah" : "Safa") + lt); }
+    }
+  } else if (id === "arafah") {
+    const w = o.wq, inz = Math.hypot(p.x, p.z - 22) < 11; if (!w.done) { if (inz) { w.t += dt; hjObj("Wuquf: " + Math.max(0, Math.ceil(w.tot - w.t)) + " saat lagi. Berdoa, berzikir dan beristighfar."); if (w.t >= w.tot) { w.done = true; hjToast("Wuquf selesai. Alhamdulillah."); hjQuiz("arafah", hjStageDone); } } else hjObj("Masuk ke Zon Wuquf (sempadan Arafah) dan berada di dalamnya"); }
+  } else if (id === "muzdalifah") {
+    W.rocks.forEach((r) => { if (!r.got && Math.hypot(p.x - r.x, p.z - r.z) < 1.1) { r.got = true; o.st.n++; try { beep(900 + o.st.n * 30, 0.06, "triangle", 0.05); } catch (e) { /* abaikan */ } if (o.st.n >= 7) { hjObj("Pergi ke Zon Mabit"); hjToast("Cukup tujuh biji batu. Pergi ke Zon Mabit."); } else hjObj("Kutip batu: " + o.st.n + " / 7"); } });
+  } else if (id === "mina") {
+    const j = o.jm, bl = j.ball; if (bl) { bl.t += dt * 1.4; const u = Math.min(1, bl.t); bl.x = p.x + (bl.tx - p.x) * u; bl.z = p.z + (bl.tz - p.z) * u; bl.y = 1.6 + Math.sin(u * Math.PI) * 3 - u * 0.4; if (u >= 1) { j.ball = null; j.n++; for (let i = 0; i < 8; i++) g.pts.push({ x: bl.x, y: 1.2, z: bl.z, vx: R2(-2, 2), vy: R2(1, 3), vz: R2(-2, 0), t: 0, life: 0.6, col: "#ffe27a" }); hjObj(j.n >= 7 ? "Semua batu dilontar" : "Lontar batu: " + j.n + " / 7"); if (j.n >= 7) { hjToast("Tujuh biji batu telah dilontar."); setTimeout(() => hjQuiz("mina", hjStageDone), 700); } } }
+  }
+  g.pts.forEach((q) => { q.t += dt; q.x += q.vx * dt; q.y += q.vy * dt; q.z += q.vz * dt; q.vy -= 9 * dt; }); g.pts = g.pts.filter((q) => q.t < q.life);
+}
+function hjLoop(ts) {
+  if (!HJ.open || !HJ.g) return; const dt = clamp((ts - HJ.last) / 1000 || 0.016, 0.001, 0.05); HJ.last = ts; const g = HJ.g; g.T += dt;
+  try { hjTick(g, dt); const c = g.cam, p = g.p, k = Math.min(1, dt * 8); c.tx += (p.x - c.tx) * k; c.tz += (p.z - c.tz) * k; c.ty = 1.3; hjDraw(g); hjHud(); } catch (e) { HJ.err = String(e && e.stack || e); }
+  HJ.raf = requestAnimationFrame(hjLoop);
+}
+function hjDraw(g) {
+  const c = HJ.cx, W = HJ.W, H = HJ.H, d = HJ.dpr, S = HJ_ST[g.st], th = S.th, C0 = g.cam, Wd = g.W, p = g.p; c.setTransform(d, 0, 0, d, 0, 0);
+  const cam = dwCam(C0.tx, C0.ty, C0.tz, C0.yaw, C0.pitch, C0.dist, W, H, 1.2), F = cam.F, hz = clamp(H / 2 - Math.tan(C0.pitch) * F, -H, H * 1.2);
+  c.fillStyle = "rgb(" + Math.round(DW_FOG[0] * 255) + "," + Math.round(DW_FOG[1] * 255) + "," + Math.round(DW_FOG[2] * 255) + ")"; c.fillRect(0, Math.max(0, hz), W, H);
+  rbSky(c, { T: g.T }, cam, th, W, H, hz, F);
+  const gq = []; const gx = cam.x, gz = cam.z; dwFace(cam, gq, [gx - 300, -0.02, gz - 300, gx + 300, -0.02, gz - 300, gx + 300, -0.02, gz + 300, gx - 300, -0.02, gz + 300], [0, 1, 0], Wd.ground, 1, false); dwPaint(c, gq, true);
+  const q = [], T = g.T, night = rbLum(th.sky[0]) < 0.3;
+  for (const f of Wd.stat) { const dx = f.cx - cam.x, dz = f.cz - cam.z; if (dx * dx + dz * dz > 6400) continue; dwFace(cam, q, f.v, f.n, f.col); }
+  Wd.signs.forEach((s) => dwText(cam, q, s.x, s.y, s.z, s.t, 0.5, "#fff"));
+  g.mk.forEach((m) => { if (!m.show()) return; const pu = 0.5 + 0.5 * Math.sin(T * 3); dwFlat(cam, q, m.x, 0.06, m.z, m.r, m.r, "#ffd23d", 0.28 + pu * 0.12); for (let i = 0; i < 8; i++) { const mm = q.length; dwSprite(cam, q, m.x, 0.6 + i * 0.55, m.z, 0.5 + pu * 0.1, "circle", "#ffe27a", 0.12); if (q.length > mm) q[mm].d += 0.1; } dwText(cam, q, m.x, 4.4 + pu * 0.15, m.z, m.label, 0.4, "#ffe27a"); });
+  Wd.rocks.forEach((r) => { if (r.got) return; dwBox(cam, q, dwTr(r.x, 0.15, r.z), 0.3, 0.3, 0.3, 0, 0, 0, "#d8d2c6"); const mm = q.length; dwSprite(cam, q, r.x, 0.3, r.z, 0.45, "circle", "#fff2b0", 0.18 + 0.1 * Math.sin(T * 4 + r.x)); if (q.length > mm) q[mm].d += 0.05; });
+  const b = g.o.jm && g.o.jm.ball; if (b) dwSprite(cam, q, b.x, b.y, b.z, 0.16, "circle", "#cfc8b8", 1);
+  Wd.npcs.forEach((n) => { if (Math.hypot(n.x - cam.x, n.z - cam.z) > 60) return; hjActor(g, cam, q, n.x, n.z, n.yaw || 0, { t: T + n.ph, mv: n.mv || 0, pose: n.k === "doa" ? "doa" : "" }, { sex: n.sex, skin: n.sk, ihram: true }); });
+  hjActor(g, cam, q, p.x, p.z, p.yaw, { t: T, mv: p.mv }, g.look); dwText(cam, q, p.x, 2.55, p.z, "Anda", 0.3, "#fff");
+  g.pts.forEach((e) => { dwSprite(cam, q, e.x, e.y, e.z, 0.08, "sq", e.col, clamp(1 - e.t / e.life, 0, 1)); });
+  dwPaint(c, q);
+  if (!HJ.vg || HJ.vgW !== W || HJ.vgH !== H) { const vg = c.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.45, W / 2, H / 2, Math.max(W, H) * 0.78); vg.addColorStop(0, "rgba(0,0,0,0)"); vg.addColorStop(1, "rgba(0,0,0,0.3)"); HJ.vg = vg; HJ.vgW = W; HJ.vgH = H; } c.fillStyle = HJ.vg; c.fillRect(0, 0, W, H);
+  const js = HJ.js; if (js && !js.on && "ontouchstart" in window) { c.globalAlpha = 0.22; c.strokeStyle = "#fff"; c.lineWidth = 3; c.beginPath(); c.arc(86, H - 86, 56, 0, 7); c.stroke(); c.fillStyle = "#fff"; c.beginPath(); c.arc(86, H - 86, 22, 0, 7); c.fill(); c.globalAlpha = 1; }
+  if (js && js.on) { c.globalAlpha = 0.5; c.strokeStyle = "#fff"; c.lineWidth = 3; c.beginPath(); c.arc(js.cx, js.cy, 56, 0, 7); c.stroke(); c.fillStyle = "#fff"; c.beginPath(); c.arc(js.cx + js.x * 40, js.cy - js.y * 40, 24, 0, 7); c.fill(); c.globalAlpha = 1; }
+}
+
+/* ---------- Slaid PdPc (v17.64): reka bentuk infografik gaya 3D Clay Anime untuk semua tajuk ---------- */
+const SL_PAL = [
+  { bg: "#FFE3E6", c1: "#FFC9D1", c2: "#FF7A8A" }, { bg: "#DDF3FF", c1: "#BDE5FF", c2: "#5BB8F5" }, { bg: "#DFF7EC", c1: "#C6F3E0", c2: "#6FD6B0" },
+  { bg: "#FFF0C2", c1: "#FFE9A8", c2: "#FFC94D" }, { bg: "#EDE4FF", c1: "#DCCBFF", c2: "#9F82EA" }, { bg: "#FFE9CF", c1: "#FFD9AE", c2: "#FFA95C" }
+];
+let SL_MID = 0;
+function slMascots(kind, w) {
+  const p = "m" + (++SL_MID) + "_", girl = kind !== "boy", boy = kind !== "girl", d = el("div", { class: "sl-mas", role: "img", "aria-label": "Maskot murid kartun 3D tanah liat" });
+  const defs = '<defs><radialGradient id="' + p + 'sk" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="#FFEBDD"/><stop offset=".6" stop-color="#FFCDAA"/><stop offset="1" stop-color="#EFA47C"/></radialGradient><radialGradient id="' + p + 'tu" cx=".3" cy=".25" r=".9"><stop offset="0" stop-color="#8FD3FF"/><stop offset=".65" stop-color="#4FA8EA"/><stop offset="1" stop-color="#3A82C8"/></radialGradient><radialGradient id="' + p + 'sh" cx=".3" cy=".2" r=".9"><stop offset="0" stop-color="#FFB0BC"/><stop offset=".7" stop-color="#FF7A8A"/><stop offset="1" stop-color="#E25570"/></radialGradient><radialGradient id="' + p + 'mn" cx=".3" cy=".2" r=".9"><stop offset="0" stop-color="#B8F0DC"/><stop offset=".7" stop-color="#6FD6B0"/><stop offset="1" stop-color="#3FB48C"/></radialGradient><radialGradient id="' + p + 'sg" cx=".3" cy=".2" r=".9"><stop offset="0" stop-color="#5A4A78"/><stop offset="1" stop-color="#2A1E44"/></radialGradient><radialGradient id="' + p + 'sn" cx=".3" cy=".2" r=".9"><stop offset="0" stop-color="#FFE08A"/><stop offset="1" stop-color="#F5A81C"/></radialGradient></defs>';
+  const G = '<g transform="translate(' + (boy ? 20 : 200) + ',270)"><rect x="85" y="285" width="230" height="110" rx="55" fill="url(#' + p + 'sh)"/><circle cx="200" cy="190" r="150" fill="url(#' + p + 'tu)"/><ellipse cx="200" cy="205" rx="104" ry="100" fill="url(#' + p + 'sk)"/><path d="M96 190 Q200 70 304 190 Q200 125 96 190Z" fill="url(#' + p + 'tu)"/><ellipse cx="156" cy="212" rx="21" ry="29" fill="#2B1B4A"/><ellipse cx="244" cy="212" rx="21" ry="29" fill="#2B1B4A"/><ellipse cx="156" cy="220" rx="14" ry="18" fill="#6C4BC4"/><ellipse cx="244" cy="220" rx="14" ry="18" fill="#6C4BC4"/><circle cx="149" cy="202" r="8" fill="#fff"/><circle cx="163" cy="226" r="4" fill="#fff"/><circle cx="237" cy="202" r="8" fill="#fff"/><circle cx="251" cy="226" r="4" fill="#fff"/><path d="M135 174 Q156 162 178 172M222 172 Q244 162 265 174" stroke="#4A2E24" stroke-width="6" fill="none" stroke-linecap="round"/><ellipse cx="122" cy="248" rx="20" ry="11" fill="#FF7F9A" opacity=".55"/><ellipse cx="278" cy="248" rx="20" ry="11" fill="#FF7F9A" opacity=".55"/><path d="M184 258 Q200 276 216 258" stroke="#B2475C" stroke-width="6" fill="none" stroke-linecap="round"/><ellipse cx="150" cy="82" rx="46" ry="16" fill="#fff" opacity=".35" transform="rotate(-20 150 82)"/></g>';
+  const B = '<g transform="translate(' + (girl ? 340 : 200) + ',290)"><rect x="85" y="285" width="230" height="110" rx="55" fill="url(#' + p + 'mn)"/><circle cx="200" cy="205" r="108" fill="url(#' + p + 'sk)"/><path d="M96 190 Q96 100 200 98 Q304 100 304 190 Q250 140 200 150 Q150 140 96 190Z" fill="#2A1E44"/><rect x="118" y="46" width="164" height="84" rx="34" fill="url(#' + p + 'sg)"/><rect x="118" y="108" width="164" height="14" rx="7" fill="url(#' + p + 'sn)"/><ellipse cx="156" cy="214" rx="21" ry="29" fill="#2B1B4A"/><ellipse cx="244" cy="214" rx="21" ry="29" fill="#2B1B4A"/><ellipse cx="156" cy="222" rx="14" ry="18" fill="#3FA06E"/><ellipse cx="244" cy="222" rx="14" ry="18" fill="#3FA06E"/><circle cx="149" cy="204" r="8" fill="#fff"/><circle cx="163" cy="228" r="4" fill="#fff"/><circle cx="237" cy="204" r="8" fill="#fff"/><circle cx="251" cy="228" r="4" fill="#fff"/><path d="M133 176 Q156 166 178 176M222 176 Q244 166 267 176" stroke="#2A1E44" stroke-width="7" fill="none" stroke-linecap="round"/><ellipse cx="120" cy="252" rx="20" ry="11" fill="#FF7F9A" opacity=".5"/><ellipse cx="280" cy="252" rx="20" ry="11" fill="#FF7F9A" opacity=".5"/><path d="M180 262 Q200 286 220 262 Q200 270 180 262Z" fill="#B2475C" stroke="#B2475C" stroke-width="5" stroke-linejoin="round"/></g>';
+  const star = '<g transform="translate(120,110)"><path d="M0 -46 L14 -14 L48 -12 L22 10 L31 44 L0 24 L-31 44 L-22 10 L-48 -12 L-14 -14Z" fill="url(#' + p + 'sn)" stroke="#fff" stroke-opacity=".5" stroke-width="5" stroke-linejoin="round"/></g><circle cx="680" cy="130" r="22" fill="url(#' + p + 'sh)"/><circle cx="700" cy="520" r="16" fill="url(#' + p + 'mn)"/>';
+  d.innerHTML = '<svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:' + (w || 360) + 'px;max-width:100%;height:auto">' + defs + '<ellipse cx="400" cy="772" rx="320" ry="20" fill="#3B2A5A" opacity=".16"/>' + (girl ? G : "") + (boy ? B : "") + star + '</svg>';
+  return d;
+}
+function slBuild(tid) {
+  const t = TOPIK[tid]; if (!t) return [];
+  const T = t.nama, sj = SUBJS[SUBJ], nota = (t.nota || []).filter(Boolean), qs = (BYTOPIK[tid] || []).slice().sort((a, b) => a.d - b.d);
+  const A = slShort(nota[0], 70), B = slShort(nota[1] || nota[0], 70), C = slShort(nota[2] || nota[1] || nota[0], 70);
+  const S = [], H = (cls, txt, ...kids) => el("div", { class: cls }, txt, ...kids);
+  const pal = (i) => SL_PAL[i % SL_PAL.length], sty = (i) => "--bg:" + pal(i).bg + ";--c1:" + pal(i).c1 + ";--c2:" + pal(i).c2;
+  const clay = (i, no, body, rv) => { const c = el("div", { class: "sl-cl" + (rv ? " rv" : ""), style: sty(i) }); c.append(el("span", { class: "sl-bd" }, String(no)), body); return c; };
+  const txtOf = (x, big) => { const d = el("div", { class: "sl-ct" + (big ? " big" : "") }); qSet(d, x); return d; };
+  const bul = (host, items, big) => { const g = H("sl-stack"); items.forEach((x, k) => g.appendChild(clay(k, k + 1, txtOf(x, big), true))); host.appendChild(g); };
+  const cut = (s, n) => { s = String(s || "").replace(/\s+/g, " ").trim(); return s.length > n ? s.slice(0, n).replace(/\s+\S*$/, "") + "..." : s; };
+  const mcq = (host, q) => {
+    const ord = shuffle([0, 1, 2, 3]), box = H("sl-opts"); let done = false;
+    const fb = H("sl-fb"); fb.hidden = true;
+    ord.forEach((oi, k) => {
+      const b = el("button", { type: "button", class: "sl-opt" }, null, el("b", null, "ABCD"[k]), qSet(el("span"), q.o[oi]));
+      b.addEventListener("click", () => {
+        if (done) return; done = true; const good = oi === q.a;
+        box.querySelectorAll(".sl-opt").forEach((x, j) => { x.disabled = true; x.classList.add(ord[j] === q.a ? "ok" : x === b ? "bad" : "dim"); });
+        arSnd(good ? "ok" : "bad"); fb.hidden = false; fb.className = "sl-fb " + (good ? "ok" : "bad");
+        fb.textContent = ""; fb.append(el("b", null, good ? "Betul! " : "Belum tepat. "), qSet(el("span"), q.e || ""));
+      });
+      box.appendChild(b);
+    });
+    host.append(qSet(H("sl-q"), q.q), box, fb);
+  };
+  // 1 Tajuk
+  S.push({ kick: "SLAID PdPc • " + sj.subjek.toUpperCase(), tip: "Mulakan dengan menyatakan tajuk dan hasil pembelajaran. Masa cadangan: 2 minit.", build: (h) => { h.classList.add("cover"); const L = H("sl-cv"); L.append(H("sl-code", "Misi " + t.kod), qSet(el("h1"), T), H("sl-sub", t.buku || ""), H("sl-chips", null, ...["Infografik", "Kuiz interaktif", "Aktiviti PAK21", "Soalan KBAT"].map((x, k) => { const c = el("span", { class: "sl-chip", style: sty(k) }, x); return c; })), H("sl-hint", "Tekan → atau Space untuk mula. Tekan N untuk nota guru, F untuk skrin penuh.")); h.append(L, slMascots("pair", 380)); } });
+  // 2 Objektif
+  S.push({ kick: "OBJEKTIF PEMBELAJARAN", tip: "Bacakan objektif dan semak di akhir sesi. Masa: 2 minit.", build: (h) => { h.append(H("sl-h", "Pada akhir sesi, murid dapat:")); bul(h, ["Menyatakan konsep dan isi penting bagi “" + T + "”.", "Menjelaskan: " + A, "Mengaitkan " + T + " dengan situasi dalam kehidupan sebenar.", "Menilai dan memberi hujah berdasarkan isi pembelajaran (KBAT)."]); h.append(H("sl-dskp", "Standard kandungan: " + (t.dskp || ""))); } });
+  // 3 Set induksi
+  if (qs.length) S.push({ kick: "SET INDUKSI • TEKA DAHULU", tip: "Murid meneka sebelum belajar. Tidak perlu betul; tujuannya menarik minat. Masa: 3 minit.", build: (h) => { h.append(H("sl-h", "Teka dahulu sebelum kita belajar!")); mcq(h, qs[0]); } });
+  // 4 Infografik ringkasan
+  if (nota.length >= 2) S.push({ kick: "INFOGRAFIK • TAJUK SEKILAS PANDANG", tip: "Beri murid 1 minit untuk membaca semua kad, kemudian minta mereka memilih satu kad dan menerangkan semula. Masa: 3 minit.", build: (h) => {
+    const hub = H("sl-hub"); hub.append(el("span", { class: "sl-hk" }, "TAJUK"), qSet(el("b"), T), el("small", null, nota.length + " isi penting"));
+    const g = H("sl-info"); nota.slice(0, 6).forEach((x, k) => { const lead = slShort(x, 64), rest = x.length > lead.length + 6 ? cut(x, 190) : ""; const b = H("sl-tx"); const hh = el("b"); qSet(hh, lead); b.appendChild(hh); if (rest) { const p = el("p"); qSet(p, rest); b.appendChild(p); } g.appendChild(clay(k, k + 1, b, false)); });
+    h.append(H("sl-h", "Isi penting sekilas pandang"), hub, g); } });
+  // 5 Isi penting (butiran)
+  for (let k = 0; k < nota.length; k += 3) {
+    const part = nota.slice(k, k + 3), no = Math.floor(k / 3) + 1, tot = Math.ceil(nota.length / 3);
+    S.push({ kick: "ISI PENTING " + no + " / " + tot, tip: "Klik atau tekan → untuk mendedahkan setiap isi, dan minta murid menerangkan semula dengan bahasa sendiri. Masa: 4 minit.", build: (h) => { h.append(H("sl-h", T)); const g = H("sl-stack"); part.forEach((x, j) => g.appendChild(clay(k + j, k + j + 1, txtOf(x, true), true))); h.appendChild(g); } });
+  }
+  // 6 Kad istilah
+  const terms = slTerms(nota);
+  if (terms.length >= 3) S.push({ kick: "KAD ISTILAH • KLIK UNTUK MEMBALIK", tip: "Murid cuba menerangkan istilah sebelum kad dibalik. Masa: 3 minit.", build: (h) => { h.append(H("sl-h", "Apakah maksudnya?")); const g = H("sl-cards"); terms.forEach((x, k) => { const c = H("sl-card"); c.style.cssText = sty(k); const f = H("sl-face f"), b = H("sl-face b"); qSet(f, x.t); qSet(b, x.d); c.append(f, b); c.addEventListener("click", () => { c.classList.toggle("flip"); arSnd("hov"); }); g.appendChild(c); }); h.appendChild(g); } });
+  // 7 Infografik aliran
+  if (nota.length >= 3) S.push({ kick: "INFOGRAFIK • ALIRAN ISI", tip: "Minta murid menerangkan hubungan antara setiap langkah atau isi dalam aliran ini. Masa: 3 minit.", build: (h) => {
+    h.append(H("sl-h", "Aliran isi tajuk")); const f = H("sl-flow");
+    nota.slice(0, 5).forEach((x, k, a) => { const c = el("div", { class: "sl-fs rv", style: sty(k) }); c.append(el("span", { class: "sl-bd" }, String(k + 1))); const d = el("div"); qSet(d, cut(slShort(x, 120), 120)); c.appendChild(d); f.appendChild(c); if (k < a.length - 1) f.appendChild(el("span", { class: "sl-ar rv", "aria-hidden": "true" }, "›")); });
+    h.append(f, H("sl-hint", "Klik atau tekan → untuk mendedahkan langkah seterusnya.")); } });
+  // 8 Peta minda
+  if (nota.length >= 3) S.push({ kick: "PETA MINDA INTERAKTIF", tip: "Klik setiap cabang untuk membuka penerangan. Boleh digunakan sebagai rumusan. Masa: 3 minit.", build: (h) => {
+    const wrap = H("sl-mm"), det = H("sl-mmd", "Klik satu cabang untuk melihat isinya."), ring = H("sl-ring");
+    ring.appendChild(qSet(H("sl-core"), T));
+    nota.slice(0, 6).forEach((x, k) => { const b = el("button", { type: "button", class: "sl-node", style: "--n:" + k + ";" + sty(k) }); qSet(b, slShort(x, 38)); b.addEventListener("click", () => { wrap.querySelectorAll(".sl-node").forEach((y) => y.classList.toggle("on", y === b)); qSet(det, x); arSnd("hov"); }); ring.appendChild(b); });
+    wrap.append(ring, det); h.append(H("sl-h", "Rumusan tajuk"), wrap); } });
+  // 9 Semak kefahaman
+  qs.slice(1, 4).forEach((q, k, a) => S.push({ kick: "SEMAK KEFAHAMAN " + (k + 1) + " / " + a.length, tip: "Klik jawapan atau gunakan Misi Jentik untuk kumpulan. Masa: 2 minit setiap soalan.", build: (h) => { mcq(h, q); } }));
+  // 10 PAK21
+  const base = slHash(tid + SUBJ), acts = [SL_ACT[base % SL_ACT.length], SL_ACT[(base + 3) % SL_ACT.length]];
+  const Qs = ["Apakah kepentingan " + T + " dalam kehidupan kita?", "Bagaimanakah isi “" + A + "” dapat diamalkan atau difahami dalam situasi sebenar?"];
+  acts.forEach((a, k) => S.push({ kick: "AKTIVITI PAK21 " + (k + 1) + " • " + a.k.toUpperCase(), tip: "Bahagikan murid kepada kumpulan 4 orang. Gunakan pemasa. Masa cadangan: " + a.m + " minit.", build: (h) => {
+    h.append(H("sl-h", a.n)); const steps = a.steps({ T: T, A: A, B: B, C: C, q: Qs[k] }); const g = H("sl-stack");
+    steps.forEach((s, j) => g.appendChild(clay(j + k * 2, j + 1, txtOf(s, false), true))); h.append(g, slTimer(Math.max(2, Math.round(a.m / 2))), H("sl-hint", "Kemahiran abad ke-21: " + a.k + ". Masa cadangan: " + a.m + " minit.")); } }));
+  // 11 Aktiviti permainan
+  S.push({ kick: "AKTIVITI PAK21 • PEMBELAJARAN BERASASKAN PERMAINAN", tip: "Mulakan Misi Jentik mod berkumpulan atau Latihan AR dengan projektor. Masa: 10 minit.", build: (h) => {
+    h.append(H("sl-h", "Cabaran kumpulan: jentik jawapan!"), H("sl-p", "Skuad bergilir menjawab soalan tajuk ini. Wakil skuad membuat isyarat OK untuk memilih dan menunjukkan tapak tangan untuk menjentik jawapan."));
+    const row = H("sl-row"); const go = (txt, fn) => { const b = el("button", { type: "button", class: "sl-btn big" }, txt); b.addEventListener("click", fn); row.appendChild(b); };
+    go("Mulakan Misi Jentik", () => { const id = tid; slClose(); jtOpen(id); }); go("Latihan AR berkumpulan", () => { const id = tid; slClose(); arOpen(id); }); h.append(row, slMascots("boy", 220)); } });
+  // 12 KBAT
+  slKbat(t).forEach((x, k, a) => S.push({ kick: "SOALAN KBAT " + (k + 1) + " / " + a.length + " • " + x.aras.toUpperCase(), tip: "Beri masa berfikir 3 minit, bincang dalam kumpulan, kemudian dedahkan cadangan isi. Jawapan murid yang berhujah baik wajar dihargai walaupun berbeza.", build: (h) => {
+    h.append(H("sl-lv", x.aras), qSet(H("sl-q big"), x.q), slTimer(3), H("sl-h2", "Cadangan isi jawapan"));
+    const g = H("sl-stack sm"); (x.isi.length ? x.isi : ["Berikan hujah, contoh dan kesimpulan."]).forEach((s, j) => g.appendChild(clay(j, j + 1, txtOf(s, false), true))); h.appendChild(g); } }));
+  // 13 Refleksi
+  S.push({ kick: "REFLEKSI • TIKET KELUAR 3-2-1", tip: "Murid menulis pada kertas kecil atau buku nota dan menyerahkannya sebelum keluar. Masa: 4 minit.", build: (h) => {
+    h.append(H("sl-h", "Tiket keluar")); const g = H("sl-stack");
+    [["3", "perkara baharu yang saya pelajari tentang " + T], ["2", "perkara yang saya ingin tahu lebih lanjut"], ["1", "soalan yang masih membingungkan saya"]].forEach((x, k) => g.appendChild(clay(k, x[0], txtOf("Tulis " + x[0] + " " + x[1], true), true))); h.appendChild(g); } });
+  // 14 Penutup
+  S.push({ kick: "PENUTUP", tip: "Ulangkaji dengan permainan di rumah. Murid boleh berlatih lagi dalam Misi Tempur.", build: (h) => {
+    h.classList.add("cover"); const L = H("sl-cv"); L.append(H("sl-h", "Terima kasih! Teruskan berlatih."), H("sl-p", "Mainkan misi ini untuk mengukuhkan kefahaman."));
+    const row = H("sl-row"); const go = (txt, fn) => { const b = el("button", { type: "button", class: "sl-btn big" }, txt); b.addEventListener("click", fn); row.appendChild(b); };
+    go("Misi Tempur", () => { const id = tid; slClose(); try { openBrief(id, "solo"); } catch (e) { selectMission(id); } }); go("Misi Jentik", () => { const id = tid; slClose(); jtOpen(id); }); go("Tutup slaid", slClose); L.appendChild(row); h.append(L, slMascots("pair", 340)); } });
+  return S;
+}
+
 function setView(v) {
   UI.view = v;
   { const f = document.getElementById("kmFab"); if (f) { f.hidden = v !== "map"; if (v === "map") { f.classList.remove("pop"); void f.offsetWidth; f.classList.add("pop"); } } }
   document.body.classList.toggle("vmap", v === "map");
-  ["map", "skuad", "team", "rank", "gudang", "pangkat", "guru", "latihan", "komen", "kelas"].forEach((n) => {
+  ["map", "skuad", "team", "rank", "gudang", "pangkat", "guru", "latihan", "komen", "kelas", "prak"].forEach((n) => {
     $("v-" + n).hidden = n !== v;
     $("tab-" + n).setAttribute("aria-selected", n === v ? "true" : "false");
   });
@@ -17613,6 +18451,7 @@ function setView(v) {
   if (v === "gudang") renderGudang();
   if (v === "latihan") renderLatihan();
   if (v === "kelas") renderKelas();
+  if (v === "prak") renderPrak();
   if (v === "komen") { renderKomen(); if (Date.now() - KM.at > 20000) kmLoad(); }
   if (v === "map") { renderChamp(); renderMaps(); renderList(); renderPanel(); }
   window.scrollTo(0, 0);
