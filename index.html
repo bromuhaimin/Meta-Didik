@@ -42,7 +42,7 @@
 .lrn-e{margin-top:6px;font-size:15px;color:var(--ink)}.lrn-s{font-size:12px;color:var(--muted);margin-top:4px}
 .lrn-score{font-family:var(--font-display);font-size:56px;color:var(--amber)}
 .lrn-rev{border-top:1px solid var(--line);padding:8px 0}.lrn-ra{color:var(--ok);font-weight:700;margin-top:4px}
-/* tema subjek v17.58 */
+/* tema subjek v17.59 */
 html[data-sj="tw"]{--bg:#0b100b;--bg2:#121a11;--bg3:#1a2418;--sjc:#2f9e8f;--line:color-mix(in srgb,#2f9e8f 38%,transparent);--line2:color-mix(in srgb,#2f9e8f 65%,transparent)}
 html[data-sj="pi"]{--bg:#0a0f1a;--bg2:#101826;--bg3:#172335;--sjc:#3a7bd5;--line:color-mix(in srgb,#3a7bd5 38%,transparent);--line2:color-mix(in srgb,#3a7bd5 65%,transparent)}
 html[data-sj="p3"]{--bg:#100b1a;--bg2:#171225;--bg3:#211a35;--sjc:#8a5cd6;--line:color-mix(in srgb,#8a5cd6 38%,transparent);--line2:color-mix(in srgb,#8a5cd6 65%,transparent)}
@@ -71,7 +71,7 @@ textarea.km-in{resize:vertical}
 .km-mod{margin-top:18px;padding-top:10px;border-top:1px solid var(--line)}
 .km-mod details>*{margin-top:8px}
 @media(max-width:560px){.km-r{grid-template-columns:1fr}}
-/* butang komen terapung v17.58 */
+/* butang komen terapung v17.59 */
 #kmFab{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));z-index:60;display:flex;align-items:center;gap:10px;padding:12px 18px 12px 14px;min-height:52px;border:2px solid var(--sjc,var(--amber));border-radius:999px;background:linear-gradient(135deg,var(--sjc,var(--amber)),color-mix(in srgb,var(--sjc,var(--amber)) 70%,#000));color:#fff;font-family:var(--font-util);font-weight:800;font-size:15px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.55),0 0 0 0 var(--sjc,var(--amber));text-shadow:0 1px 2px rgba(0,0,0,.5)}
 #kmFab svg{width:24px;height:24px;flex:none}
 #kmFab.pop{animation:kmpop .7s cubic-bezier(.2,1.4,.4,1) both,kmring 2.4s .9s ease-out 3}
@@ -81,7 +81,7 @@ textarea.km-in{resize:vertical}
 body.ingame #kmFab{display:none}
 @media(prefers-reduced-motion:reduce){#kmFab.pop{animation:none}}
 @media(max-width:560px){#kmFab{padding:12px 14px;font-size:14px}}
-/* kelas v17.58 */
+/* kelas v17.59 */
 .kk-code{padding:16px;display:flex;gap:18px;justify-content:space-between;align-items:center;flex-wrap:wrap}
 .kk-big{font-family:var(--font-display);font-size:44px;letter-spacing:.18em;color:var(--sjc,var(--amber))}
 .kk-qr{width:180px;height:180px;image-rendering:pixelated;background:#fff;border:6px solid #fff}
@@ -108,6 +108,11 @@ html.a11-c body{background:#000!important}
 html.a11-m *,html.a11-m *::before,html.a11-m *::after{animation:none!important;transition:none!important}
 @media(max-width:560px){.kk-r3{grid-template-columns:1fr}.kk-opts{grid-template-columns:1fr}}
 html,body{touch-action:manipulation}body.ar-lock,body.ar-lock *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+#gdBar{position:fixed;left:50%;transform:translateX(-50%);bottom:max(10px,env(safe-area-inset-bottom));z-index:150;display:flex;flex-direction:column;align-items:center;gap:6px;max-width:94vw;pointer-events:none}
+#gdBar>*{pointer-events:auto}
+.gd-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.gd-b{min-height:44px;padding:8px 14px;border:2px solid var(--amber);background:rgba(10,14,10,.92);color:var(--amber);font:800 14px var(--font-util);letter-spacing:.05em;border-radius:999px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.5)}
+.gd-hint{background:rgba(10,14,10,.95);border:1px solid var(--amber);color:#fff;padding:8px 12px;font-size:14px;max-width:min(520px,92vw);border-radius:8px}
 </style></head><body>
 <title>Gempur</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -802,7 +807,7 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
 <div id="rkBanner" role="status" hidden></div>
 <div id="app">
   <header class="top"><div class="top-in">
-    <div class="brand">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.58</small></div>
+    <div class="brand">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.59</small></div>
     <button class="meb" id="meBtn" type="button" aria-label="Profil anggota">
       <span id="meIns"></span>
       <span class="me-t"><span class="me-n" id="meName">Anggota</span><span class="me-r" id="meRank">Prebet</span><div class="xpbar"><i id="meXp"></i></div></span>
@@ -1281,7 +1286,7 @@ if (SUBJ === "sj") { DATA.tema = DATA_SJ.tema; DATA.topik = DATA_SJ.topik; DATA.
 if (SUBJ === "sc") { DATA.tema = DATA_SC.tema; DATA.topik = DATA_SC.topik; DATA.soalan = DATA_SC.soalan; }
 if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.soalan = DATA_MT.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v17.58"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v17.59"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -4797,7 +4802,7 @@ function blStart(practice) {
     qs = rd;
   }
   if (!practice) { const seen = blSeenLoad(); qs.forEach((x) => { seen[x.q.i] = (seen[x.q.i] | 0) + 1; }); try { localStorage.setItem("gt-bl-seen" + blSuf(), JSON.stringify(seen)); } catch (e) { /* abaikan */ } }
-  BL.g = { qs: qs, i: -1, score: 0, ok: 0, tot: 0, streak: 0, best: 0, wrong: [], phase: "idle", t: 0, tl: 0, bal: [], pt: [], fbT: 0, T: 0, ban: null, lastTick: 0, sec: c.sec, hold: c.hold, cls: cls ? { n: T, per: per, pause: c.pause ? 1 : 0, sq: c.names.slice(0, T).map((nm, i) => ({ name: nm, col: BL_TC[i], score: 0, ok: 0, tot: 0, streak: 0, best: 0, time: 0 })) } : null, team: 0 };
+  BL.g = { qs: qs, i: -1, score: 0, ok: 0, tot: 0, streak: 0, best: 0, wrong: [], phase: "idle", t: 0, tl: 0, bal: [], pt: [], fbT: 0, T: 0, ban: null, lastTick: 0, sec: c.sec + (cls ? 0 : gdAvSec()), hold: c.hold, cls: cls ? { n: T, per: per, pause: c.pause ? 1 : 0, sq: c.names.slice(0, T).map((nm, i) => ({ name: nm, col: BL_TC[i], score: 0, ok: 0, tot: 0, streak: 0, best: 0, time: 0 })) } : null, team: 0 };
   BL.mode = "play"; BL.cur.on = false; BL.kb = -1;
   const r = blRoot(); r.textContent = "";
   const cv = el("canvas", { class: "bl-cv" }); BL.cv = cv; BL.cx = cv.getContext("2d");
@@ -5771,7 +5776,7 @@ function bzQuiz() {
   box.append(qSet(el("h2", { class: "bz-qq" }), Q.q.q)); const opts = el("div", { class: "bz-qo" }), fb = el("div", { class: "bz-qf" });
   Q.texts.forEach((t, i) => { const b = el("button", { type: "button", class: "bz-opt" }, null, el("b", null, "ABCD"[i]), qSet(el("span"), t)); b.addEventListener("click", () => bzAnswer(i, opts, fb)); opts.appendChild(b); });
   box.append(opts, fb); w.appendChild(box);
-  const t0 = performance.now(), tmax = g.tl * 1000; BZ.tm = setInterval(() => { if (g.answered) return; const left = tmax - (performance.now() - t0); bar.style.width = clamp(left / tmax, 0, 1) * 100 + "%"; if (left <= 0) bzAnswer(-1, opts, fb); }, 100);
+  g.tAdd = 0; const t0 = performance.now(), tmax = g.tl * 1000; BZ.tm = setInterval(() => { if (g.answered) return; const left = tmax + (g.tAdd | 0) - (performance.now() - t0); bar.style.width = clamp(left / tmax, 0, 1) * 100 + "%"; if (left <= 0) bzAnswer(-1, opts, fb); }, 100);
 }
 function bzAnswer(i, opts, fb) {
   const g = BZ.g; if (!g || g.answered) return; g.answered = true; clearInterval(BZ.tm); const Q = g.cur, ok = i === Q.ans; g.tot++; lrnRec(Q.q, ok);
@@ -8796,7 +8801,7 @@ function jtStart() {
   const qs = arBuild(pool, n, per);
   { const seen = arSeenLoad(); qs.forEach((x) => { seen[x.q.i] = (seen[x.q.i] | 0) + 1; }); arSeenSave(seen); }
   const sq = []; for (let i = 0; i < n; i++) sq.push({ name: n > 1 ? c.names[i] : "Anda", col: AR_COL[i], score: 0, ok: 0, tot: 0, time: 0, streak: 0, best: 0 });
-  JT.g = { qs: qs, i: -1, sec: c.sec, sq: sq, grp: n > 1, pause: n > 1 && c.pause ? 1 : 0, paused: false, wrong: [], phase: "idle", t0: 0, hover: -1, cur: null };
+  JT.g = { qs: qs, i: -1, sec: c.sec + (n > 1 ? 0 : gdAvSec()), sq: sq, grp: n > 1, pause: n > 1 && c.pause ? 1 : 0, paused: false, wrong: [], phase: "idle", t0: 0, hover: -1, cur: null };
   JT.mode = "play"; jtBuildPlay(); jtNextQ();
 }
 function jtBuildPlay() {
@@ -9918,6 +9923,7 @@ function renderGudang() {
   });
   box.appendChild(ag);
   box.appendChild(el("p", { class: "muted" }, "Buka peti bekalan dalam misi untuk mendapat syiling, XP dan aksesori. Pemain lain nampak avatar dan aksesori anda dalam multiplayer."));
+  try { gdTabs(box); } catch (e) { /* abaikan */ }
 }
 
 /* =====================================================================
@@ -12309,7 +12315,7 @@ function openQuiz(crate) {
 }
 const D_PTS = [0, 100, 150, 220];
 function markWeak(q, good) {
-  lrnRec(q, good);
+  lrnRec(q, good, "tm");
   if (good && S.right) S.right[q.i] = 1;
   const w = P.lemah[q.t] || (P.lemah[q.t] = []), k = w.indexOf(q.i);
   if (good) { if (k >= 0) w.splice(k, 1); } else if (k < 0) w.push(q.i);
@@ -14910,10 +14916,11 @@ function lrnBadge(id) {
   return true;
 }
 /* rekod satu jawapan daripada mana-mana mod: [salah, betul, masa akhir, peringkat ulang kaji (-1 tiada, -2 dikuasai), hari ulang kaji] */
-function lrnRec(q, ok) {
+function lrnRec(q, ok, src) {
   try {
     if (!q || q.i == null || !QBYID[q.i]) return;
     const m = llMap(), c = lrnC(), td = lrnDay();
+    if (ok && src !== "tm") gdCoin(2);
     const e = m[q.i] || (m[q.i] = [0, 0, 0, -1, 0]);
     e[2] = Date.now();
     c.t++; c.sj[SUBJ] = (c.sj[SUBJ] | 0) + 1;
@@ -14989,7 +14996,7 @@ function lrnChalDone(ok) {
   const cs = P.cs || (P.cs = { n: 0, l: "", b: 0 }), t = dayKey(), y = dayKey(Date.now() - 864e5);
   let bonus = 0;
   if (cs.l !== t) { cs.n = cs.l === y ? (cs.n | 0) + 1 : 1; cs.l = t; cs.b = Math.max(cs.b | 0, cs.n); bonus = 10 * Math.min(cs.n, 7); }
-  const coins = 15 + ok * 5 + bonus;
+  const coins = Math.round((15 + ok * 5 + bonus) * (1 + 0.1 * (gdAvLv() - 1)) * (gdX2() ? 2 : 1));
   lrnGivePts(coins, ok * 4);
   if (cs.n >= 3) lrnBadge("cab3"); if (cs.n >= 7) lrnBadge("cab7"); if (cs.n >= 30) lrnBadge("cab30");
   return { coins: coins, bonus: bonus, streak: cs.n };
@@ -15186,7 +15193,7 @@ async function guruReportPdf(rows) {
   return saveFile(rptPdf(jpg, W, H), "Kad-Laporan-Gempur-" + (GURU.kelas || "semua-kelas").replace(/[^A-Za-z0-9]+/g, "-") + "-" + dayKey() + ".pdf");
 }
 
-/* ---------- Ruangan Komen (v17.58): dibaca semua, moderator boleh padam ---------- */
+/* ---------- Ruangan Komen (v17.59): dibaca semua, moderator boleh padam ---------- */
 const KM = { list: [], rep: {}, loading: false, err: "", at: 0, msg: "", armed: "", role: "Murid", last: 0 };
 const KM_BAD = ["bodoh", "babi", "sial", "pukimak", "puki", "pantat", "kontol", "bangsat", "celaka", "anjing", "keparat", "lancau", "cibai", "fuck", "shit", "bitch", "asshole", "tolol", "sundal", "jalang", "haram jadah"];
 function kmAdm() { try { return localStorage.getItem("gt-km-adm") || ""; } catch (e) { return ""; } }
@@ -15312,7 +15319,7 @@ function renderKomen() {
   box.appendChild(mod);
 }
 
-/* ---------- Pendaftaran guru (v17.58): rekod berasingan di nod guru_daftar ---------- */
+/* ---------- Pendaftaran guru (v17.59): rekod berasingan di nod guru_daftar ---------- */
 function gtRole() { try { return localStorage.getItem("gt-role") === "guru" ? "guru" : "murid"; } catch (e) { return "murid"; } }
 function gtRoleUi() {
   const g = (document.querySelector('input[name="inRole"]:checked') || {}).value === "guru";
@@ -16648,7 +16655,7 @@ function qrDraw(cv, text, px) {
   return cv;
 }
 
-/* ---------- Kelas, tugasan, ujian bermasa, soalan guru, analisis (v17.58) ---------- */
+/* ---------- Kelas, tugasan, ujian bermasa, soalan guru, analisis (v17.59) ---------- */
 const KK = { cfg: {}, data: null, code: "", mem: {}, mine: {}, resAll: {}, open: "", an: "", err: "", msg: "", loading: false, join: "", sel: "" };
 const KK_AL = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 function kkOn() { return !!(Net.fb && FB.url); }
@@ -16857,7 +16864,7 @@ function lrnAsk() {
   const qrow = el("div", { class: "lrn-qrow" }), qt = qSet(el("div", { class: "lrn-q" }), q.q);
   qrow.appendChild(qt);
   if (window.speechSynthesis) { const sp = kkBtn("Baca", "alt sm", () => kkSpeak(q.q + ". " + q.o.map((o, k) => "Pilihan " + "ABCD"[k] + ". " + o).join(". "))); sp.setAttribute("aria-label", "Baca soalan dengan suara"); qrow.appendChild(sp); }
-  const ord = shuffle([0, 1, 2, 3]), box = el("div", { class: "lrn-opts" }), fb = el("div", { class: "lrn-fb", hidden: "" });
+  const ord = shuffle([0, 1, 2, 3]); LP.ordNow = ord; const box = el("div", { class: "lrn-opts" }), fb = el("div", { class: "lrn-fb", hidden: "" });
   ord.forEach((oi, pos) => {
     const b = el("button", { type: "button", class: "lrn-opt" }); b.append(el("b", null, "ABCD"[pos]), qSet(el("span"), q.o[oi]));
     b.addEventListener("click", () => {
@@ -17086,7 +17093,7 @@ function renderKelas() {
   }, 900);
 })();
 
-/* ---------- Tambahan v17.58: tetapan, SPM, pengingat, lapor soalan, ringkasan sekolah, perlawanan kelas, mudah akses, luar talian ---------- */
+/* ---------- Tambahan v17.59: tetapan, SPM, pengingat, lapor soalan, ringkasan sekolah, perlawanan kelas, mudah akses, luar talian ---------- */
 async function kkCfgLoad() {
   if (!kkOn()) return;
   try { const c = await FB.req("GET", "tetapan"); if (c && typeof c === "object") KK.cfg = { tutor: /^https:\/\//.test(String(c.tutor || "")) ? String(c.tutor) : "", spm: /^\d{4}-\d{2}-\d{2}$/.test(String(c.spm || "")) ? String(c.spm) : "" }; } catch (e) { /* abaikan */ }
@@ -17233,6 +17240,110 @@ function a11Panel() {
 ["gesturestart", "gesturechange", "gestureend"].forEach((t) => document.addEventListener(t, (e) => { if (document.body.classList.contains("ar-lock") || document.body.classList.contains("ingame")) e.preventDefault(); }, { passive: false }));
 { let lt = 0; document.addEventListener("touchend", (e) => { if (!(document.body.classList.contains("ar-lock") || document.body.classList.contains("ingame"))) return; const n = Date.now(); if (n - lt < 320) e.preventDefault(); lt = n; }, { passive: false }); }
 document.addEventListener("touchmove", (e) => { if (e.touches.length > 1 && (document.body.classList.contains("ar-lock") || document.body.classList.contains("ingame")) && e.target && e.target.nodeName !== "CANVAS") e.preventDefault(); }, { passive: false });
+/* ---------- Gudang untuk semua mod (v17.59): syiling merentas mod, barang kuiz, bonus avatar ---------- */
+const GD_ITEMS = [
+  { id: "f5", n: "50:50", d: "Buang dua pilihan salah pada satu soalan.", p: 30 },
+  { id: "pt", n: "Petunjuk", d: "Papar topik dan rujukan buku teks bagi soalan itu.", p: 20 },
+  { id: "ms", n: "Masa +10 saat", d: "Tambah 10 saat pada soalan bermasa (Busana, Lagenda, Jentik solo).", p: 25 }
+];
+const GD_X2 = { p: 60, min: 15 }, GD_MAXSTOK = 9, GD_USE_DAY = 15;
+const GD = { tab: "av", cur: null, used: {}, hint: "", pend: 0, pop: 0 };
+function gdInv() { return P.gi || (P.gi = {}); }
+function gdAvLv() { try { return Math.max(1, Math.min(3, avLevel(P.av) | 0 || 1)); } catch (e) { return 1; } }
+function gdCap() { return 100 + (gdAvLv() - 1) * 30; }
+function gdAvSec() { return gdAvLv() - 1; }
+function gdX2() { return (P.x2t | 0) > Date.now(); }
+function gdToday() { const td = dayKey(); if (!P.gdc || P.gdc.d !== td) P.gdc = { d: td, n: 0 }; return P.gdc; }
+/* syiling sebenar daripada jawapan betul dalam mod selain Tempur (Tempur ada ganjaran misi sendiri) */
+function gdCoin(base) {
+  try {
+    const t = gdToday(); let n = base + (gdAvLv() - 1); if (gdX2()) n *= 2;
+    n = Math.min(n, gdCap() - t.n); if (n <= 0) return 0;
+    t.n += n; P.coin = (P.coin | 0) + n; GD.pend += n;
+    if (!GD.pop) GD.pop = setTimeout(() => { GD.pop = 0; const k = GD.pend; GD.pend = 0; if (k >= 4) { try { toast("+" + k + " syiling (" + gdToday().n + "/" + gdCap() + " hari ini)" + (gdX2() ? " | 2x aktif" : ""), "good"); } catch (e) { /* abaikan */ } } try { renderMe(); } catch (e) { /* abaikan */ } }, 6000);
+    return n;
+  } catch (e) { return 0; }
+}
+/* ----- konteks soalan aktif dalam mod individu ----- */
+function gdCtx() {
+  try {
+    if (typeof DG !== "undefined" && DG.g && DG.g.quiz && !DG.g.quiz.fb && DG.g.quiz.box) { const z = DG.g.quiz; return { q: z.q, ans: z.ans, opts: () => [...z.box.querySelectorAll(".dg-opt")], id: z }; }
+    if (typeof DW !== "undefined" && DW.g && DW.g.quiz && !DW.g.quiz.fb && DW.g.quiz.box) { const z = DW.g.quiz; return { q: z.q, ans: z.ans, opts: () => [...z.box.querySelectorAll(".dg-opt")], id: z }; }
+    if (typeof BZ !== "undefined" && BZ.g && BZ.g.phase === "quiz" && BZ.g.cur && !BZ.g.answered) { const g = BZ.g, Q = g.cur; return { q: Q.q, ans: Q.ans, opts: () => [...document.querySelectorAll("#bzOv .bz-qo .bz-opt")], time: () => { g.tAdd = (g.tAdd | 0) + 10000; }, id: Q }; }
+    if (LG.quiz && LG.quiz.cur && !LG.quiz.done && !(LG.team && LG.team.on)) { const Q = LG.quiz; return { q: Q.cur.q, ans: Q.cur.ans, opts: () => [...LG.root.querySelectorAll("#lgQz .lg-opt")], time: () => { Q.tl += 10; Q.tmax += 10; }, id: Q.cur }; }
+    if (JT.g && JT.g.phase === "ask" && !JT.g.grp && JT.g.cur) { const g = JT.g, it = g.cur; return { q: it.q, ans: it.ans, opts: () => [...JT.root.querySelectorAll(".jt-opt")], time: () => { g.t0 += 10000; }, id: it }; }
+    if (LP.cfg && !LP.cfg.exam && !LP.done && LP.ordNow && document.getElementById("lrnOv")) { const q = LP.qs[LP.i]; return { q: q, ans: LP.ordNow.indexOf(q.a), opts: () => [...document.querySelectorAll("#lrnOv .lrn-opt")], id: LP.ordNow }; }
+  } catch (e) { /* abaikan */ }
+  return null;
+}
+function gdPoll() {
+  const c = gdCtx();
+  if (!c) { if (GD.cur) { GD.cur = null; gdRender(); } return; }
+  if (!GD.cur || GD.cur.id !== c.id) { GD.cur = c; GD.used = {}; GD.hint = ""; gdRender(); }
+}
+setInterval(gdPoll, 450);
+function gdUseCount() { const td = dayKey(); if (!P.gu || P.gu.d !== td) P.gu = { d: td, n: 0 }; return P.gu; }
+function gdUse(id) {
+  const c = GD.cur; if (!c || GD.used[id]) return; const inv = gdInv(); if (!(inv[id] > 0)) return;
+  const u = gdUseCount(); if (u.n >= GD_USE_DAY) { toast("Had penggunaan barang kuiz hari ini (" + GD_USE_DAY + ") telah dicapai.", "warn"); return; }
+  if (id === "f5") {
+    const os = c.opts(); if (os.length < 4 || c.ans < 0) return;
+    const wr = shuffle([0, 1, 2, 3].filter((k) => k !== c.ans && !os[k].disabled)).slice(0, 2); if (wr.length < 2) { toast("Pilihan sudah terhad.", "warn"); return; }
+    wr.forEach((k) => { os[k].disabled = true; os[k].style.opacity = ".3"; os[k].style.textDecoration = "line-through"; });
+  } else if (id === "pt") {
+    const q = c.q, t = q && q.t && TOPIK[q.t];
+    GD.hint = "Petunjuk: " + (t ? "topik " + guruLab(t) + " " + t.nama : "topik tidak dinyatakan") + (q && q.s ? ". Rujukan: " + q.s : ".");
+  } else if (id === "ms") {
+    if (!c.time) { toast("Masa tambahan tidak tersedia dalam mod ini.", "warn"); return; }
+    c.time(); toast("+10 saat", "good");
+  }
+  inv[id]--; GD.used[id] = 1; u.n++; lrnSaveSoon(); gdRender();
+}
+function gdRender() {
+  let b = document.getElementById("gdBar");
+  const inv = gdInv(), ids = GD_ITEMS.filter((x) => (inv[x.id] | 0) > 0 && !GD.used[x.id]);
+  if (!GD.cur || (!ids.length && !GD.hint)) { if (b) b.hidden = true; return; }
+  if (!b) { b = el("div", { id: "gdBar", role: "toolbar", "aria-label": "Barang kuiz" }); document.body.appendChild(b); }
+  b.hidden = false; b.textContent = "";
+  if (GD.hint) b.appendChild(el("div", { class: "gd-hint" }, GD.hint));
+  const row = el("div", { class: "gd-row" });
+  ids.forEach((x) => { const k = el("button", { type: "button", class: "gd-b" }, x.n + " ×" + inv[x.id]); k.addEventListener("click", (e) => { e.stopPropagation(); gdUse(x.id); }); row.appendChild(k); });
+  b.appendChild(row);
+}
+/* ----- tab Gudang ----- */
+function gdBuy(id, p, qty) { const inv = gdInv(); if ((P.coin | 0) < p || (inv[id] | 0) >= GD_MAXSTOK) return; P.coin -= p; inv[id] = (inv[id] | 0) + (qty || 1); saveP(); renderGudang(); }
+function gdPanel() {
+  const w = el("div"), inv = gdInv(), t = gdToday();
+  w.appendChild(el("div", { class: "tagline util", style: "color:var(--khaki);margin-top:16px" }, "Barang kuiz (guna dalam mod individu)"));
+  w.appendChild(el("p", { class: "muted", style: "font-size:14px" }, "Muncul di bahagian bawah skrin semasa soalan dalam Latihan, Cabaran, Dunia Gempur, Busana, Lagenda dan Jentik (solo). Tidak boleh digunakan dalam ujian bermasa guru dan mod kumpulan. Maksimum " + GD_USE_DAY + " guna sehari, satu kali bagi setiap barang untuk setiap soalan."));
+  const g = el("div", { class: "shopgrid" });
+  GD_ITEMS.forEach((x) => { const c = el("div", { class: "shopcard" }), n = inv[x.id] | 0, b = el("button", { type: "button", class: "btn sm" }, "Beli 1 (" + x.p + " syiling)"); if ((P.coin | 0) < x.p || n >= GD_MAXSTOK) b.disabled = true; b.addEventListener("click", () => gdBuy(x.id, x.p, 1)); c.append(el("b", null, x.n), el("span", { class: "muted", style: "font-size:14px" }, x.d), el("span", null, "Simpanan: " + n + " / " + GD_MAXSTOK), b); g.appendChild(c); });
+  { const c = el("div", { class: "shopcard" }), on = gdX2(), b = el("button", { type: "button", class: "btn sm" }, (on ? "Tambah 15 minit" : "Aktifkan") + " (" + GD_X2.p + " syiling)"); if ((P.coin | 0) < GD_X2.p) b.disabled = true; b.addEventListener("click", () => { if ((P.coin | 0) < GD_X2.p) return; P.coin -= GD_X2.p; P.x2t = Math.max(Date.now(), P.x2t | 0) + GD_X2.min * 60000; saveP(); renderGudang(); toast("Syiling 2x aktif.", "good"); }); c.append(el("b", null, "Syiling 2×"), el("span", { class: "muted", style: "font-size:14px" }, "Gandakan syiling daripada jawapan betul dalam semua mod selama 15 minit."), el("span", null, on ? "Aktif: " + Math.ceil(((P.x2t | 0) - Date.now()) / 60000) + " minit lagi" : "Tidak aktif"), b); g.appendChild(c); }
+  w.appendChild(g);
+  const lv = gdAvLv();
+  w.appendChild(el("div", { class: "tagline util", style: "color:var(--khaki);margin-top:16px" }, "Bonus avatar anda (Tahap " + lv + ")"));
+  const ul = el("ul", { class: "muted", style: "font-size:14px;margin:6px 0 0 18px" });
+  [
+    "Syiling mod lain: 2 + " + (lv - 1) + " setiap jawapan betul (selain Tempur). Hari ini: " + t.n + " / " + gdCap() + ".",
+    "Cabaran harian: bonus syiling +" + (lv - 1) * 10 + "%.",
+    "Jentik dan Belon (solo): masa +" + (lv - 1) + " saat setiap soalan.",
+    "Tempur: perisai permulaan +" + (lv - 1) * 10 + "."
+  ].forEach((x) => ul.appendChild(el("li", null, x)));
+  w.append(ul, el("p", { class: "muted", style: "font-size:13px" }, "Naikkan tahap avatar di tab Avatar untuk bonus lebih besar."));
+  return w;
+}
+function gdTabs(box) {
+  const ch = [...box.children];
+  if (ch.length < 5 || !ch[1].classList.contains("avhero") || !ch[2].classList.contains("avgrid")) return;
+  let ia = ch.findIndex((x, i) => i > 3 && x.classList.contains("tagline") && /^Aksesori/.test(x.textContent));
+  if (ia < 0) ia = ch.length;
+  const wrap = (arr, k) => { const d = el("div", { "data-gd": k }); arr.forEach((x) => d.appendChild(x)); return d; };
+  const groups = { av: wrap([ch[1], ch[2]], "av"), sj: wrap(ch.slice(3, ia), "sj"), ak: wrap(ch.slice(ia), "ak"), bg: (() => { const d = gdPanel(); d.setAttribute("data-gd", "bg"); return d; })() };
+  const bar = segBtns([["av", "Avatar"], ["sj", "Persenjataan"], ["ak", "Aksesori"], ["bg", "Barang kuiz"]], GD.tab, (v) => { GD.tab = v; renderGudang(); }, "Bahagian gudang");
+  box.append(el("div", { style: "margin-top:12px" }, null, bar));
+  Object.keys(groups).forEach((k) => { groups[k].hidden = k !== GD.tab; box.appendChild(groups[k]); });
+}
+
 function setView(v) {
   UI.view = v;
   { const f = document.getElementById("kmFab"); if (f) { f.hidden = v !== "map"; if (v === "map") { f.classList.remove("pop"); void f.offsetWidth; f.classList.add("pop"); } } }
@@ -17821,7 +17932,7 @@ $("regReset").addEventListener("click", () => {
   Net.noMerge = true;
   P.dq = null; P.dqm = {}; P.lg = { n: 0, l: "" }; P.ss = null; P.sg = 0; P.sr = 0; P.stk = { n: 0, l: "", b: 0 }; P.st = { hs: 0, kl: 0, ok: 0, mis: 0, wp: 0 }; P.bd = {}; P.wk = ""; P.wp = 0; P.mk = ""; P.mp = 0;
   P.coin = 0; P.av = "inf"; P.avOwn = ["inf"]; P.avl = {}; P.acc = ""; P.accOwn = []; P.wo = []; P.pa = 0; P.ar = 0; P.hm = 0; P.lgs = { w: 0, n: 0, dr: 0, sh: 0 }; P.lz = 0;
-  P.xp = 0; P.la = 0; P.ad = 0; P.ld = ""; P.prog = {}; P.lemah = {}; P.seen = {}; P.sq = null; P.ll = {}; P.lc = null; P.lcd = {}; P.cs = null;
+  P.xp = 0; P.la = 0; P.ad = 0; P.ld = ""; P.prog = {}; P.lemah = {}; P.seen = {}; P.sq = null; P.ll = {}; P.lc = null; P.lcd = {}; P.cs = null; P.gi = {}; P.x2t = 0; P.gdc = null; P.gu = null;
   saveP(); $("reg").hidden = true; renderAll();
 });
 ["inName", "inKelas", "inSekolah"].forEach((id) => $(id).addEventListener("keydown", (e) => { if (e.key === "Enter") confirmReg(); }));
