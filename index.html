@@ -913,11 +913,13 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
 #slOv .sl-idx { background: #fff; color: #3B2A5A; border: 0; border-radius: 28px; box-shadow: var(--clay); } #slOv .sl-ix { color: #3B2A5A; } #slOv .sl-ix.on { background: #FFF0C2; }
 #slOv .sl-search { background: #fff; color: #3B2A5A; border: 0; border-radius: 999px; box-shadow: var(--clay); padding: 12px 20px; } #slOv .sl-pi { background: #fff; color: #3B2A5A; border: 0; border-radius: 24px; box-shadow: var(--clay); } #slOv .sl-pi:hover { background: #FFF0C2; }
 #slOv .sl-pk h1 { font: 600 clamp(28px,4vw,46px)/1.12 "Fredoka", var(--font-body); color: #3B2A5A; } #slOv .sl-pl h4 { color: #3B2A5A; }
+#hjOv .hj-done{font-size:14px!important;color:#9fe8c8!important}
+#v-prak .pr-hero{margin:10px 0 12px}
 </style>
 <div id="rkBanner" role="status" hidden></div>
 <div id="app">
   <header class="top"><div class="top-in">
-    <div class="brand">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.64</small></div>
+    <div class="brand">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.65</small></div>
     <button class="meb" id="meBtn" type="button" aria-label="Profil anggota">
       <span id="meIns"></span>
       <span class="me-t"><span class="me-n" id="meName">Anggota</span><span class="me-r" id="meRank">Prebet</span><div class="xpbar"><i id="meXp"></i></div></span>
@@ -17925,7 +17927,7 @@ const PR_MODS = [
     { id: "jz1", n: "Urutan pengurusan jenazah", kind: "seq", hint: "Empat perkara fardu kifayah: mandi, kafan, solat, kebumi. Ada persiapan sebelum itu.", steps: [
       { t: "Memejamkan mata dan menutup aurat jenazah", n: "Persediaan" }, { t: "Memandikan jenazah", n: "Fardu kifayah" }, { t: "Mengkafankan jenazah", n: "Fardu kifayah" }, { t: "Menyolatkan jenazah", n: "Fardu kifayah" }, { t: "Mengebumikan jenazah", n: "Fardu kifayah" }] },
     { id: "jz2", n: "Cara memandikan jenazah", kind: "seq", hint: "Tutup aurat dahulu, bersihkan najis, wuduk, kemudian siram bermula dari sebelah kanan.", steps: [
-      { t: "Meletakkan jenazah di tempat tertutup dan menutup auratnya", n: "Mulakan dengan menjaga kehormatan jenazah" }, { t: "Membersihkan najis dan kotoran daripada jenazah", n: "Sebelum memandikan" }, { t: "Mewuduk kan jenazah", n: "Sunat, bermula anggota wuduk" }, { t: "Menyiram air ke seluruh badan bermula bahagian kanan", n: "Wajib: meratakan air" }, { t: "Membasuh tiga kali dan basuhan akhir bersama kapur barus", n: "Sunat" }, { t: "Mengeringkan badan jenazah", n: "Sebelum dikafankan" }] },
+      { t: "Meletakkan jenazah di tempat tertutup dan menutup auratnya", n: "Mulakan dengan menjaga kehormatan jenazah" }, { t: "Membersihkan najis dan kotoran daripada jenazah", n: "Sebelum memandikan" }, { t: "Mewudukkan jenazah", n: "Sunat, bermula anggota wuduk" }, { t: "Menyiram air ke seluruh badan bermula bahagian kanan", n: "Wajib: meratakan air" }, { t: "Membasuh tiga kali dan basuhan akhir bersama kapur barus", n: "Sunat" }, { t: "Mengeringkan badan jenazah", n: "Sebelum dikafankan" }] },
     { id: "jz3", n: "Tertib solat jenazah", kind: "seq", hint: "Solat jenazah dilakukan berdiri, dengan empat takbir dan tanpa rukuk atau sujud.", steps: [
       { t: "Berniat solat jenazah", n: "Rukun" }, { t: "Takbir pertama dan membaca Al-Fatihah", n: "Takbir 1" }, { t: "Takbir kedua dan membaca selawat ke atas Nabi", n: "Takbir 2" }, { t: "Takbir ketiga dan berdoa untuk jenazah", n: "Takbir 3" }, { t: "Takbir keempat dan berdoa untuk jenazah serta orang Islam", n: "Takbir 4" }, { t: "Memberi salam", n: "Rukun" }] },
     { id: "jz4", n: "Situasi jenazah", kind: "mcq", hint: "Fikirkan hukum, bilangan dan cara yang betul.", qs: [
@@ -17949,8 +17951,10 @@ function prXp(id, n) {
 }
 function renderPrak() {
   const box = $("prakBody"); if (!box) return; box.textContent = ""; const best = prLoad();
-  const hj = el("div", { class: "pr-hero" }, null, el("div", { class: "pr-hico", "aria-hidden": "true" }, "🕋"), el("div", { class: "pr-htx" }, null, el("b", null, "Simulasi Haji 3D"), el("p", null, "Berjalan dari Miqat hingga ke Mina: ihram, tawaf, saie, tahallul, wuquf, mabit dan lontar jamrah. Jawab soalan di setiap manasik."), el("small", null, best.hj != null ? "Markah terbaik: " + best.hj + "%" : "Belum dimainkan")));
-  const hb = el("button", { type: "button", class: "btn" }, "Mula simulasi"); hb.addEventListener("click", () => { if (typeof hjOpen === "function") hjOpen(); }); hj.appendChild(hb); box.appendChild(hj);
+  [["🕋", "Simulasi Haji 3D", "Berjalan dari Miqat hingga ke Mina: ihram, tawaf, saie, tahallul, wuquf, mabit dan lontar jamrah. Jawab soalan di setiap manasik.", "hj", "hajj"], ["💧", "Simulasi Wuduk dan Solat 3D", "Berwuduk di tempat wuduk masjid, bertayammum ketika bermusafir, kemudian solat menghadap kiblat dengan tertib rukun.", "wd", "wuduk"], ["🕌", "Simulasi Pengurusan Jenazah 3D", "Laksanakan memandikan, mengkafankan, menyolatkan dan mengebumikan jenazah dengan tertib dan jawab soalan di setiap peringkat.", "jz", "jenazah"]].forEach((H) => {
+    const hj = el("div", { class: "pr-hero" }, null, el("div", { class: "pr-hico", "aria-hidden": "true" }, H[0]), el("div", { class: "pr-htx" }, null, el("b", null, H[1]), el("p", null, H[2]), el("small", null, best[H[3]] != null ? "Markah terbaik: " + best[H[3]] + "%" : "Belum dimainkan")));
+    const hb = el("button", { type: "button", class: "btn" }, "Mula simulasi"); hb.addEventListener("click", () => { if (typeof hjOpen === "function") hjOpen(H[4]); }); hj.appendChild(hb); box.appendChild(hj);
+  });
   PR_MODS.forEach((m) => {
     const sec = el("section", { class: "pr-mod" }, null, el("h3", null, m.ico + " " + m.n), el("p", { class: "muted" }, m.d)), g = el("div", { class: "pr-grid" });
     m.lessons.forEach((L) => { const b = el("button", { type: "button", class: "pr-card" }, null, el("b", null, L.n), el("span", null, L.kind === "seq" ? "Susun langkah · " + L.steps.length + " langkah" : "Situasi · " + L.qs.length + " soalan"), el("em", null, best[L.id] != null ? "★ Terbaik " + best[L.id] + "%" : "Belum cuba")); b.addEventListener("click", () => prStart(m, L)); g.appendChild(b); });
@@ -18052,7 +18056,7 @@ const HJ_ST = [
   { id: "muzdalifah", n: "Muzdalifah", sub: "Mabit dan kutip batu", th: { sky: ["#070c2a", "#2a2f6e"], hill: "#1a1c46", cloud: "#4a4f9a", accent: "#fff2b0" }, ground: "#6a6866", intro: ["Selepas matahari terbenam, jemaah bergerak ke Muzdalifah. Mabit di Muzdalifah ialah wajib haji.", "Di sini jemaah mengutip batu kecil untuk melontar jamrah di Mina, sebesar biji kacang tanah.", "Tugas anda: kutip sekurang-kurangnya tujuh biji batu, kemudian pergi ke Zon Mabit."] },
   { id: "mina", n: "Mina", sub: "Melontar Jamrah Aqabah", th: { sky: ["#63b6f2", "#e8f5ff"], hill: "#c8aa7c", cloud: "#ffffff", accent: "#ffe08a" }, ground: "#e3d3ae", intro: ["Pada 10 Zulhijjah, jemaah melontar Jamrah Aqabah dengan tujuh biji batu sambil bertakbir. Ia melambangkan penolakan godaan syaitan.", "Pada hari tasyrik (11–13 Zulhijjah) jemaah melontar tiga jamrah: Ula, Wusta dan Aqabah.", "Tugas anda: berdiri dalam Zon Lontar dan lontar tujuh biji batu ke arah jamrah."] }
 ];
-const HJ = { open: false, root: null, cv: null, cx: null, g: null, raf: 0, last: 0, W: 0, H: 0, dpr: 1, keys: {}, ui: {}, sex: "m", skin: 1, js: { on: false, id: -1, cx: 0, cy: 0, x: 0, y: 0 }, cd: { id: -1, x: 0, y: 0 }, camIn: null };
+const HJ = { mode: null, open: false, root: null, cv: null, cx: null, g: null, raf: 0, last: 0, W: 0, H: 0, dpr: 1, keys: {}, ui: {}, sex: "m", skin: 1, js: { on: false, id: -1, cx: 0, cy: 0, x: 0, y: 0 }, cd: { id: -1, x: 0, y: 0 }, camIn: null };
 /* --- pembina dunia --- */
 function hjCyl(W, x, y0, z, r, h, col, seg, solid) {
   seg = seg || 10; const top = dwHexMix(col, 1.1);
@@ -18074,7 +18078,7 @@ function hjMosque(W, cx, cz, w) {
 }
 function hjTent(W, x, z, s, col) { s = s || 3; hjBox(W, x, s * 0.35, z, s, s * 0.7, s, col || "#f6f2ea"); hjBox(W, x, s * 0.78, z, s * 0.7, s * 0.2, s * 0.7, dwHexMix(col || "#f6f2ea", 0.9)); }
 function hjNpcs(W, n, fn) { for (let i = 0; i < n; i++) { const o = fn(i); o.ph = Math.random() * 6; o.sk = Math.floor(Math.random() * 5); o.sex = o.sex || (Math.random() < 0.45 ? "f" : "m"); W.npcs.push(o); } }
-function hjNew(th, ground) { return { stat: [], solids: [], npcs: [], th: th, ground: ground, bounds: [-30, 30, -10, 80], signs: [], rocks: [] }; }
+function hjNew(th, ground) { return { stat: [], solids: [], dyn: [], npcs: [], th: th, ground: ground, bounds: [-30, 30, -10, 80], signs: [], rocks: [] }; }
 /* --- peringkat --- */
 function hjBuild(id) {
   const W = hjNew(HJ_ST.filter((s) => s.id === id)[0].th, HJ_ST.filter((s) => s.id === id)[0].ground), R = (a, b) => a + Math.random() * (b - a);
@@ -18132,36 +18136,44 @@ function hjFace(cam, q, Rb, hy, yaw) {
   for (let i = 0; i <= 6; i++) { const u = i / 6 * 2 - 1; D(u * 0.085, hy - 0.07 - (1 - u * u) * 0.04, 0.202, 0.011, "#2a1410", 1); }
 }
 function hjAvatar(cam, q, x, y, z, yaw, an, lk) {
-  const R = dwRY(yaw, x, y, z), t = an.t || 0, mv = an.mv || 0, sw = Math.sin(t * 9) * 0.55 * mv, bob = Math.abs(Math.sin(t * 9)) * 0.03 * mv, skin = DW_SKIN[lk.skin | 0], white = "#f3f0e8", B = (M, sx, sy, sz, ox, oy, oz, c, b) => dwBox(cam, q, M, sx, sy, sz, ox, oy, oz, c, b), Rb = dwMul(R, dwTr(0, bob, 0));
-  const doa = an.pose === "doa", armA = doa ? -1.35 : -sw, armB = doa ? -1.35 : sw;
+  const R = dwRY(yaw, x, y, z), t = an.t || 0, ps = an.pose || "", mv = ps ? 0 : (an.mv || 0), sw = Math.sin(t * 9) * 0.55 * mv, bob = Math.abs(Math.sin(t * 9)) * 0.03 * mv, skin = DW_SKIN[lk.skin | 0], white = "#f3f0e8";
+  let a = 0, drop = 0, arms = [-sw, sw], ax = 0.45, kneel = false;
+  if (ps === "doa") arms = [-1.35, -1.35]; else if (ps === "takbir") arms = [-2.5, -2.5]; else if (ps === "qiyam") { arms = [-1.15, -1.15]; ax = 0.2; }
+  else if (ps === "rukuk") { a = 1.5; arms = [-1.5, -1.5]; } else if (ps === "sujud") { a = 1.9; drop = 0.45; kneel = true; arms = [-3.1, -3.1]; }
+  else if (ps === "duduk") { drop = 0.45; kneel = true; arms = [-0.5, -0.5]; ax = 0.4; } else if (ps === "salam") { drop = 0.45; kneel = true; arms = [-0.5, -0.5]; ax = 0.4; }
+  const Rb = dwMul(R, dwTr(0, bob, 0)), U = dwMul(Rb, dwRX(a, 0, 0.95 - drop, 0)), PY = 0.95;
+  const B = (M, sx, sy, sz, ox, oy, oz, c, b) => dwBox(cam, q, M, sx, sy, sz, ox, oy, oz, c, b), Bu = (sx, sy, sz, ox, oy, oz, c, b) => dwBox(cam, q, U, sx, sy, sz, ox, oy - PY, oz, c, b);
+  const armPair = (col, hand, len) => [[arms[0], ax], [arms[1], -ax]].forEach((A) => { const M = dwMul(U, dwRX(A[0], A[1], 1.5 - PY, 0)); B(M, 0.2, len || 0.6, 0.22, 0, -(len || 0.6) / 2, 0, col, 0.94); B(M, 0.2, 0.14, 0.22, 0, -(len || 0.6) - 0.02, 0, hand); });
+  const headC = (col) => { dwCyl(cam, q, U, 0.2, 0.4, 0, 1.78 - PY, 0, skin, 1, 12); };
   if (lk.sex === "f") {
     const c = lk.ihram ? white : (lk.col || "#2f9a66"), hc = lk.ihram ? white : "#f0d8e8";
-    B(Rb, 0.68, 1.0, 0.44, 0, 0.58, 0, c); B(Rb, 0.6, 0.5, 0.36, 0, 1.3, 0, c, 1.06);
-    [[armA, 0.4], [armB, -0.4]].forEach((A) => { const M = dwMul(Rb, dwRX(A[0], A[1], 1.5, 0)); B(M, 0.2, 0.62, 0.22, 0, -0.3, 0, c, 0.94); B(M, 0.2, 0.14, 0.22, 0, -0.62, 0, skin); });
-    B(Rb, 0.48, 0.1, 0.5, 0, 2.06, 0, hc); B(Rb, 0.08, 0.5, 0.5, 0.26, 1.82, -0.02, hc, 0.93); B(Rb, 0.08, 0.5, 0.5, -0.26, 1.82, -0.02, hc, 0.93); B(Rb, 0.56, 0.54, 0.08, 0, 1.82, -0.26, hc, 0.9); B(Rb, 0.56, 0.1, 0.08, 0, 1.97, 0.25, hc, 1.04); B(Rb, 0.7, 0.34, 0.46, 0, 1.52, 0, hc, 1.02);
-    dwCyl(cam, q, Rb, 0.2, 0.38, 0, 1.78, 0, skin, 1, 12); hjFace(cam, q, Rb, 1.78, yaw);
+    if (kneel) B(Rb, 0.7, 0.5, 0.8, 0, 0.25, -0.1, c); else B(Rb, 0.68, 1.0, 0.44, 0, 0.58, 0, c);
+    Bu(0.6, 0.5, 0.36, 0, 1.3, 0, c, 1.06); armPair(c, skin);
+    Bu(0.48, 0.1, 0.5, 0, 2.06, 0, hc); Bu(0.08, 0.5, 0.5, 0.26, 1.82, -0.02, hc, 0.93); Bu(0.08, 0.5, 0.5, -0.26, 1.82, -0.02, hc, 0.93); Bu(0.56, 0.54, 0.08, 0, 1.82, -0.26, hc, 0.9); Bu(0.56, 0.1, 0.08, 0, 1.97, 0.25, hc, 1.04); Bu(0.7, 0.34, 0.46, 0, 1.52, 0, hc, 1.02);
+    headC(); if (a < 0.8) hjFace(cam, q, U, 1.78 - PY, yaw);
   } else {
-    const bot = lk.ihram ? white : "#2a3042", top = lk.ihram ? white : "#3a74d0";
-    B(dwMul(R, dwRX(sw * 0.6, 0.14, 0.9 + bob, 0)), 0.3, 0.9, 0.34, 0, -0.45, 0, bot); B(dwMul(R, dwRX(-sw * 0.6, -0.14, 0.9 + bob, 0)), 0.3, 0.9, 0.34, 0, -0.45, 0, bot);
-    if (lk.ihram) B(Rb, 0.7, 0.35, 0.42, 0, 0.9, 0, white);
-    B(Rb, 0.62, 0.6, 0.36, 0, 1.28, 0, top, 1.05);
-    if (lk.ihram) B(Rb, 0.24, 0.6, 0.38, 0.22, 1.3, 0, skin);
-    [[armA, 0.45], [armB, -0.45]].forEach((A) => { const M = dwMul(Rb, dwRX(A[0], A[1], 1.52, 0)); B(M, 0.2, 0.6, 0.22, 0, -0.3, 0, lk.ihram ? skin : top, 0.95); B(M, 0.2, 0.14, 0.22, 0, -0.6, 0, skin); });
-    B(Rb, 0.5, 0.12, 0.48, 0, 1.78, 0, "#1a1410"); dwCyl(cam, q, Rb, 0.2, 0.4, 0, 1.78, 0, skin, 1, 12); dwCyl(cam, q, Rb, 0.215, 0.1, 0, 1.97, 0, "#1a1410", 1, 12); hjFace(cam, q, Rb, 1.78, yaw);
+    const sol = !!lk.solat, bot = lk.ihram ? white : sol ? "#2d6a4f" : "#2a3042", top = lk.ihram || sol ? white : "#3a74d0", sleeve = lk.ihram ? skin : top;
+    if (kneel) { [-1, 1].forEach((s) => { B(Rb, 0.3, 0.5, 0.34, s * 0.17, 0.25, 0, bot); B(Rb, 0.3, 0.26, 0.62, s * 0.17, 0.13, -0.32, bot); }); }
+    else { B(dwMul(R, dwRX(sw * 0.6, 0.14, 0.9 + bob, 0)), 0.3, 0.9, 0.34, 0, -0.45, 0, bot); B(dwMul(R, dwRX(-sw * 0.6, -0.14, 0.9 + bob, 0)), 0.3, 0.9, 0.34, 0, -0.45, 0, bot); }
+    if (lk.ihram || sol) Bu(0.7, 0.35, 0.42, 0, 0.9, 0, lk.ihram ? white : bot);
+    Bu(0.62, 0.6, 0.36, 0, 1.28, 0, top, 1.05); if (lk.ihram) Bu(0.24, 0.6, 0.38, 0.22, 1.3, 0, skin);
+    armPair(sleeve, skin);
+    if (sol) { Bu(0.5, 0.2, 0.48, 0, 1.98, 0, "#17120e"); } else Bu(0.5, 0.12, 0.48, 0, 1.78, 0, "#1a1410");
+    headC(); if (!sol) dwCyl(cam, q, U, 0.215, 0.1, 0, 1.97 - PY, 0, "#1a1410", 1, 12); if (a < 0.8) hjFace(cam, q, U, 1.78 - PY, yaw);
   }
 }
 function hjActor(g, cam, q, x, z, yaw, an, lk) { const i0 = q.length; dwFlat(cam, q, x, 0.03, z, 0.5, 0.5, "#000000", 0.28); dwBias(q, i0, 2.4); const i1 = q.length; hjAvatar(cam, q, x, 0, z, yaw, an, lk); dwBias(q, i1, 3.0); }
 /* --- UI --- */
 function hjRoot() {
-  if (HJ.root) return HJ.root; const r = el("div", { id: "hjOv", role: "dialog", "aria-modal": "true", "aria-label": "Simulasi Haji 3D" }); document.body.appendChild(r); HJ.root = r; return r;
+  if (HJ.root) return HJ.root; const r = el("div", { id: "hjOv", role: "dialog", "aria-modal": "true", "aria-label": "Simulasi 3D" }); document.body.appendChild(r); HJ.root = r; return r;
 }
 function hjPanel(build) {
   const u = HJ.ui; if (!u.pan) return; u.pan.textContent = ""; u.pan.hidden = false; build(u.pan); if (HJ.g) HJ.g.modal = true;
 }
 function hjPanelClose() { const u = HJ.ui; if (u.pan) { u.pan.hidden = true; u.pan.textContent = ""; } if (HJ.g) HJ.g.modal = false; }
 function hjToast(t) { const e = HJ.ui.toast; if (!e) return; e.textContent = t; e.classList.remove("show"); void e.offsetWidth; e.classList.add("show"); }
-function hjOpen() {
-  if (HJ.open) return; HJ.open = true; document.body.classList.add("ar-lock"); const r = hjRoot(); r.hidden = false; r.textContent = "";
+function hjOpen(k) {
+  if (HJ.open) return; HJ.mode = HJ_MODES[k || "hajj"] || HJ_MODES.hajj; HJ.open = true; document.body.classList.add("ar-lock"); const r = hjRoot(); r.hidden = false; r.textContent = "";
   window.addEventListener("keydown", hjKey, true); window.addEventListener("keyup", hjKey, true); hjMenu();
 }
 function hjClose() {
@@ -18172,9 +18184,9 @@ function hjClose() {
 function hjMenu() {
   cancelAnimationFrame(HJ.raf); HJ.raf = 0; HJ.g = null; const r = hjRoot(); r.textContent = ""; const cl = el("button", { type: "button", class: "hj-x" }, "Tutup"); cl.addEventListener("click", hjClose);
   const sexB = segBtns([["m", "Lelaki"], ["f", "Perempuan"]], HJ.sex, (v) => { HJ.sex = v; }, "Jantina jemaah"), skB = segBtns([[0, "Cerah"], [1, "Sawo matang"], [2, "Sederhana"], [3, "Gelap"]], HJ.skin, (v) => { HJ.skin = +v; }, "Warna kulit");
-  const go = el("button", { type: "button", class: "hj-go" }, "MULA PERJALANAN HAJI"); go.addEventListener("click", () => hjStart());
-  r.append(cl, el("div", { class: "hj-menu" }, null, el("div", { class: "hj-k" }, "PRAKTIKAL · SIMULASI 3D"), el("h1", null, "Simulasi Haji"), el("p", null, "Lalui manasik haji dari Miqat hingga Mina. Berjalan, laksanakan setiap rukun dan wajib, dan jawab soalan di setiap peringkat. Simulasi ini untuk pembelajaran dan tidak menggantikan bimbingan ustaz atau pembimbing haji."),
-    el("div", { class: "hj-lst" }, null, ...HJ_ST.map((s, i) => el("span", null, (i + 1) + ". " + s.n))), el("label", { class: "hj-lb" }, "Jemaah"), sexB, el("label", { class: "hj-lb" }, "Warna kulit"), skB, go, el("small", null, "Kawalan: W A S D atau anak panah untuk berjalan, seret tetikus untuk kamera, E untuk bertindak. Telefon: kayu bedik kiri dan butang Tindakan.")));
+  const go = el("button", { type: "button", class: "hj-go" }, HJ.mode.go); go.addEventListener("click", () => hjStart());
+  r.append(cl, el("div", { class: "hj-menu" }, null, el("div", { class: "hj-k" }, "PRAKTIKAL · SIMULASI 3D"), el("h1", null, HJ.mode.title), el("p", null, HJ.mode.desc), el("p", null, "Lalui manasik haji dari Miqat hingga Mina. Berjalan, laksanakan setiap rukun dan wajib, dan jawab soalan di setiap peringkat. Simulasi ini untuk pembelajaran dan tidak menggantikan bimbingan ustaz atau pembimbing haji."),
+    el("div", { class: "hj-lst" }, null, ...hjSt().map((s, i) => el("span", null, (i + 1) + ". " + s.n))), el("label", { class: "hj-lb" }, "Jemaah"), sexB, el("label", { class: "hj-lb" }, "Warna kulit"), skB, go, el("small", null, "Kawalan: W A S D atau anak panah untuk berjalan, seret tetikus untuk kamera, E untuk bertindak. Telefon: kayu bedik kiri dan butang Tindakan.")));
 }
 function hjKey(e) {
   if (!HJ.open) return; const k = e.key.toLowerCase(), dn = e.type === "keydown", g = HJ.g;
@@ -18200,20 +18212,20 @@ function hjPtr(cv) {
   cv.addEventListener("wheel", (e) => { if (HJ.g) { HJ.g.cam.dist = clamp(HJ.g.cam.dist + Math.sign(e.deltaY) * 0.8, 4, 14); e.preventDefault(); } }, { passive: false });
 }
 function hjLoadStage(i) {
-  const g = HJ.g, S = HJ_ST[i]; g.st = i; g.W = hjBuild(S.id); g.mk = []; g.pts = []; g.look = { sex: HJ.sex, skin: HJ.skin, ihram: i > 0 }; g.o = {}; g.bonus = null;
-  dwApplyTheme(S.th); const sp = hjSpawn(S.id); g.p = { x: sp[0], z: sp[1], yaw: sp[2], vx: 0, vz: 0, mv: 0 }; g.cam = { yaw: sp[2], pitch: 0.34, dist: 8, tx: sp[0], ty: 1.3, tz: sp[1] };
+  const g = HJ.g, S = hjSt()[i]; g.st = i; g.W = HJ.mode.build(S.id); g.so = 0; g.sn = 0; g.lock = false; g.mk = []; g.pts = []; g.look = HJ.mode.look(i); g.o = {}; g.bonus = null;
+  dwApplyTheme(S.th); const sp = HJ.mode.spawn(S.id); g.p = { x: sp[0], z: sp[1], yaw: sp[2], vx: 0, vz: 0, mv: 0 }; g.cam = { yaw: sp[2], pitch: 0.34, dist: 8, tx: sp[0], ty: 1.3, tz: sp[1] };
   g.W.npcs.forEach((n) => { if (n.k === "orbit") { n.x = Math.cos(n.a) * n.r; n.z = Math.sin(n.a) * n.r; } });
-  hjSetup(S.id); hjHud(); hjIntro(S);
+  HJ.mode.setup(S.id); hjHud(); hjIntro(S);
 }
 function hjSpawn(id) { return { miqat: [0, -4, 0], tawaf: [16, -5, 0], saie: [0, 2, 0], arafah: [0, -8, 0], muzdalifah: [0, -6, 0], mina: [0, -6, 0] }[id]; }
 function hjIntro(S) {
   const g = HJ.g, last = g.st === 0; hjPanel((p) => {
     const b = el("button", { type: "button", class: "hj-go" }, "Mula peringkat"); b.addEventListener("click", hjPanelClose);
-    p.append(el("div", { class: "hj-k" }, "PERINGKAT " + (g.st + 1) + " / " + HJ_ST.length), el("h2", null, S.n), el("p", { class: "hj-sub" }, S.sub), ...S.intro.map((t) => el("p", null, t)), b);
+    p.append(el("div", { class: "hj-k" }, "PERINGKAT " + (g.st + 1) + " / " + hjSt().length), el("h2", null, S.n), el("p", { class: "hj-sub" }, S.sub), ...S.intro.map((t) => el("p", null, t)), b);
   });
 }
 function hjQuiz(id, done) {
-  const qs = shuffle(HJ_Q[id].slice()).slice(0, 3); let i = 0, ok = 0;
+  const qs = shuffle(hjQs(id).slice()).slice(0, 3); let i = 0, ok = 0;
   const show = () => hjPanel((p) => {
     const q = qs[i], ord = shuffle([0, 1, 2, 3]); p.append(el("div", { class: "hj-k" }, "SOALAN " + (i + 1) + " / " + qs.length), el("h3", null, q.q)); const lst = el("div", { class: "hj-opts" });
     ord.forEach((oi, pos) => { const b = el("button", { type: "button", class: "hj-opt" }, "ABCD"[pos] + ". " + q.o[oi]); b.addEventListener("click", () => { const good = oi === q.a; if (good) ok++; HJ.g.tot++; if (good) HJ.g.ok++; [...lst.children].forEach((c, k) => { c.disabled = true; if (ord[k] === q.a) c.classList.add("ok"); else if (k === pos) c.classList.add("bad"); }); p.append(el("div", { class: "hj-fb " + (good ? "ok" : "bad") }, (good ? "Betul. " : "Kurang tepat. ") + q.e)); const nx = el("button", { type: "button", class: "hj-go" }, i + 1 >= qs.length ? "Teruskan" : "Soalan seterusnya"); nx.addEventListener("click", () => { i++; if (i >= qs.length) { hjPanelClose(); done(ok, qs.length); } else show(); }); p.append(nx); }); lst.appendChild(b); });
@@ -18221,16 +18233,16 @@ function hjQuiz(id, done) {
   }); show();
 }
 function hjStageDone(ok, n) {
-  const g = HJ.g; g.sc.push({ id: HJ_ST[g.st].id, ok: ok, n: n }); try { beep(880, 0.15, "triangle", 0.07); } catch (e) { /* abaikan */ }
-  if (g.st + 1 >= HJ_ST.length) return hjEnd();
-  hjPanel((p) => { const b = el("button", { type: "button", class: "hj-go" }, "Ke peringkat seterusnya: " + HJ_ST[g.st + 1].n); b.addEventListener("click", () => { hjPanelClose(); hjLoadStage(g.st + 1); }); p.append(el("div", { class: "hj-k" }, "PERINGKAT SELESAI"), el("h2", null, HJ_ST[g.st].n + " selesai"), el("p", { class: "hj-score" }, ok + " / " + n + " soalan betul"), b); });
+  const g = HJ.g; ok += g.so; n += g.sn; g.sc.push({ id: hjSt()[g.st].id, ok: ok, n: n }); try { beep(880, 0.15, "triangle", 0.07); } catch (e) { /* abaikan */ }
+  if (g.st + 1 >= hjSt().length) return hjEnd();
+  hjPanel((p) => { const b = el("button", { type: "button", class: "hj-go" }, "Ke peringkat seterusnya: " + hjSt()[g.st + 1].n); b.addEventListener("click", () => { hjPanelClose(); hjLoadStage(g.st + 1); }); p.append(el("div", { class: "hj-k" }, "PERINGKAT SELESAI"), el("h2", null, hjSt()[g.st].n + " selesai"), el("p", { class: "hj-score" }, ok + " / " + n + " soalan betul"), b); });
 }
 function hjEnd() {
-  const g = HJ.g, pct = g.tot ? Math.round(g.ok / g.tot * 100) : 0; prSaveBest("hj", pct); const xp = prXp("hj", 10 + Math.round(pct * 0.3));
+  const g = HJ.g, pct = g.tot ? Math.round(g.ok / g.tot * 100) : 0; prSaveBest(HJ.mode.key, pct); const xp = prXp(HJ.mode.key, 10 + Math.round(pct * 0.3));
   hjPanel((p) => {
-    const rows = el("ol", { class: "hj-res" }); g.sc.forEach((s, i) => rows.appendChild(el("li", null, null, el("b", null, HJ_ST[i].n), el("span", null, s.ok + " / " + s.n))));
+    const rows = el("ol", { class: "hj-res" }); g.sc.forEach((s, i) => rows.appendChild(el("li", null, null, el("b", null, hjSt()[i].n), el("span", null, s.ok + " / " + s.n))));
     const a = el("button", { type: "button", class: "hj-go" }, "Main semula"), b = el("button", { type: "button", class: "hj-go alt" }, "Kembali ke Praktikal"); a.addEventListener("click", () => { hjPanelClose(); hjMenu(); }); b.addEventListener("click", hjClose);
-    p.append(el("div", { class: "hj-k" }, "TAMAT PERJALANAN"), el("h2", null, pct >= 80 ? "Semoga Haji Mabrur!" : "Perjalanan selesai"), el("p", { class: "hj-score" }, pct + "% (" + g.ok + " / " + g.tot + ")"), pct >= 80 ? el("p", null, "Anda menguasai manasik haji dengan baik.") : el("p", null, "Ulang simulasi untuk mengukuhkan ingatan anda tentang rukun, wajib dan larangan haji."), xp ? el("p", { class: "hj-xp" }, "+" + xp + " XP") : el("span"), rows, el("div", { class: "hj-row" }, null, a, b));
+    p.append(el("div", { class: "hj-k" }, "TAMAT SIMULASI"), el("h2", null, pct >= 80 ? HJ.mode.good : "Simulasi selesai"), el("p", { class: "hj-score" }, pct + "% (" + g.ok + " / " + g.tot + ")"), pct >= 80 ? el("p", null, HJ.mode.well) : el("p", null, HJ.mode.again), xp ? el("p", { class: "hj-xp" }, "+" + xp + " XP") : el("span"), rows, el("div", { class: "hj-row" }, null, a, b));
   });
 }
 /* --- logik setiap peringkat --- */
@@ -18263,9 +18275,9 @@ function R2(a, b) { return a + Math.random() * (b - a); }
 function hjAct() {
   const g = HJ.g; if (!g || g.modal || !g.near) return; try { g.near.on(); } catch (e) { /* abaikan */ }
 }
-function hjHud() { const g = HJ.g, u = HJ.ui; if (!u.hud) return; const S = HJ_ST[g.st]; u.hud.textContent = ""; u.hud.append(el("div", null, null, el("small", null, "Peringkat " + (g.st + 1) + " / " + HJ_ST.length), el("b", null, S.n)), el("div", null, null, el("small", null, "Soalan betul"), el("b", null, g.ok + " / " + g.tot))); }
+function hjHud() { const g = HJ.g, u = HJ.ui; if (!u.hud) return; const S = hjSt()[g.st]; u.hud.textContent = ""; u.hud.append(el("div", null, null, el("small", null, "Peringkat " + (g.st + 1) + " / " + hjSt().length), el("b", null, S.n)), el("div", null, null, el("small", null, "Jawapan betul"), el("b", null, g.ok + " / " + g.tot))); }
 function hjTick(g, dt) {
-  const W = g.W, p = g.p, o = g.o, id = HJ_ST[g.st].id;
+  const W = g.W, p = g.p, o = g.o, id = hjSt()[g.st].id;
   // NPC
   W.npcs.forEach((n) => {
     if (n.k === "orbit") { n.a += n.w * dt; n.x = Math.cos(n.a) * n.r; n.z = Math.sin(n.a) * n.r; n.yaw = Math.atan2(-Math.sin(n.a), Math.cos(n.a)) * 0 + Math.atan2(-Math.sin(n.a), Math.cos(n.a)); n.mv = 1; n.yaw = Math.atan2(-Math.sin(n.a), Math.cos(n.a)) ; n.yaw = Math.atan2(-Math.sin(n.a), Math.cos(n.a)); }
@@ -18275,7 +18287,8 @@ function hjTick(g, dt) {
   if (g.modal) return;
   const keys = HJ.keys, jx = HJ.camIn; if (jx) { g.cam.yaw += jx[0]; g.cam.pitch = clamp(g.cam.pitch + jx[1], 0.12, 0.9); HJ.camIn = null; }
   g.cam.yaw += ((keys.cr ? 1 : 0) - (keys.cl ? 1 : 0)) * 2 * dt;
-  let ix = (keys.r ? 1 : 0) - (keys.l ? 1 : 0), iz = (keys.f ? 1 : 0) - (keys.b ? 1 : 0); if (HJ.js.on) { ix += HJ.js.x; iz += HJ.js.y; } const l = Math.hypot(ix, iz); if (l > 1) { ix /= l; iz /= l; }
+  if (p.poseT > 0) { p.poseT -= dt; if (p.poseT <= 0) p.pose = ""; }
+  let ix = (keys.r ? 1 : 0) - (keys.l ? 1 : 0), iz = (keys.f ? 1 : 0) - (keys.b ? 1 : 0); if (HJ.js.on) { ix += HJ.js.x; iz += HJ.js.y; } if (g.lock) { ix = 0; iz = 0; } const l = Math.hypot(ix, iz); if (l > 1) { ix /= l; iz /= l; }
   const cy = Math.cos(g.cam.yaw), sy = Math.sin(g.cam.yaw), mx = cy * ix + sy * iz, mz = -sy * ix + cy * iz, ml = Math.hypot(mx, mz), sp = 5.2, k = Math.min(1, dt * 12);
   p.vx += (mx * sp - p.vx) * k; p.vz += (mz * sp - p.vz) * k; if (ml > 0.1) { let da = Math.atan2(mx, mz) - p.yaw; while (da > Math.PI) da -= 6.2832; while (da < -Math.PI) da += 6.2832; p.yaw += da * Math.min(1, dt * 12); }
   p.mv = Math.hypot(p.vx, p.vz) > 0.8 ? 1 : 0;
@@ -18285,6 +18298,11 @@ function hjTick(g, dt) {
   // penanda
   g.near = null; for (const m of g.mk) { if (!m.show()) continue; if (Math.hypot(p.x - m.x, p.z - m.z) < m.r + 0.8) { g.near = m; break; } }
   const b = HJ.ui.act; if (b) { const t = g.near ? g.near.act : ""; if (b._t !== t) { b._t = t; b.hidden = !t; b.textContent = t; } }
+  HJ.mode.tick(g, dt, id);
+  g.pts.forEach((q) => { q.t += dt; q.x += q.vx * dt; q.y += q.vy * dt; q.z += q.vz * dt; q.vy -= 9 * dt; }); g.pts = g.pts.filter((q) => q.t < q.life);
+}
+function hjHajTick(g, dt, id) {
+  const W = g.W, p = g.p, o = g.o;
   if (id === "tawaf") {
     const t = o.tw, r = Math.hypot(p.x, p.z), th = Math.atan2(p.z, p.x);
     if (t.stage === 0) {
@@ -18305,7 +18323,6 @@ function hjTick(g, dt) {
   } else if (id === "mina") {
     const j = o.jm, bl = j.ball; if (bl) { bl.t += dt * 1.4; const u = Math.min(1, bl.t); bl.x = p.x + (bl.tx - p.x) * u; bl.z = p.z + (bl.tz - p.z) * u; bl.y = 1.6 + Math.sin(u * Math.PI) * 3 - u * 0.4; if (u >= 1) { j.ball = null; j.n++; for (let i = 0; i < 8; i++) g.pts.push({ x: bl.x, y: 1.2, z: bl.z, vx: R2(-2, 2), vy: R2(1, 3), vz: R2(-2, 0), t: 0, life: 0.6, col: "#ffe27a" }); hjObj(j.n >= 7 ? "Semua batu dilontar" : "Lontar batu: " + j.n + " / 7"); if (j.n >= 7) { hjToast("Tujuh biji batu telah dilontar."); setTimeout(() => hjQuiz("mina", hjStageDone), 700); } } }
   }
-  g.pts.forEach((q) => { q.t += dt; q.x += q.vx * dt; q.y += q.vy * dt; q.z += q.vz * dt; q.vy -= 9 * dt; }); g.pts = g.pts.filter((q) => q.t < q.life);
 }
 function hjLoop(ts) {
   if (!HJ.open || !HJ.g) return; const dt = clamp((ts - HJ.last) / 1000 || 0.016, 0.001, 0.05); HJ.last = ts; const g = HJ.g; g.T += dt;
@@ -18313,7 +18330,7 @@ function hjLoop(ts) {
   HJ.raf = requestAnimationFrame(hjLoop);
 }
 function hjDraw(g) {
-  const c = HJ.cx, W = HJ.W, H = HJ.H, d = HJ.dpr, S = HJ_ST[g.st], th = S.th, C0 = g.cam, Wd = g.W, p = g.p; c.setTransform(d, 0, 0, d, 0, 0);
+  const c = HJ.cx, W = HJ.W, H = HJ.H, d = HJ.dpr, S = hjSt()[g.st], th = S.th, C0 = g.cam, Wd = g.W, p = g.p; c.setTransform(d, 0, 0, d, 0, 0);
   const cam = dwCam(C0.tx, C0.ty, C0.tz, C0.yaw, C0.pitch, C0.dist, W, H, 1.2), F = cam.F, hz = clamp(H / 2 - Math.tan(C0.pitch) * F, -H, H * 1.2);
   c.fillStyle = "rgb(" + Math.round(DW_FOG[0] * 255) + "," + Math.round(DW_FOG[1] * 255) + "," + Math.round(DW_FOG[2] * 255) + ")"; c.fillRect(0, Math.max(0, hz), W, H);
   rbSky(c, { T: g.T }, cam, th, W, H, hz, F);
@@ -18324,14 +18341,175 @@ function hjDraw(g) {
   g.mk.forEach((m) => { if (!m.show()) return; const pu = 0.5 + 0.5 * Math.sin(T * 3); dwFlat(cam, q, m.x, 0.06, m.z, m.r, m.r, "#ffd23d", 0.28 + pu * 0.12); for (let i = 0; i < 8; i++) { const mm = q.length; dwSprite(cam, q, m.x, 0.6 + i * 0.55, m.z, 0.5 + pu * 0.1, "circle", "#ffe27a", 0.12); if (q.length > mm) q[mm].d += 0.1; } dwText(cam, q, m.x, 4.4 + pu * 0.15, m.z, m.label, 0.4, "#ffe27a"); });
   Wd.rocks.forEach((r) => { if (r.got) return; dwBox(cam, q, dwTr(r.x, 0.15, r.z), 0.3, 0.3, 0.3, 0, 0, 0, "#d8d2c6"); const mm = q.length; dwSprite(cam, q, r.x, 0.3, r.z, 0.45, "circle", "#fff2b0", 0.18 + 0.1 * Math.sin(T * 4 + r.x)); if (q.length > mm) q[mm].d += 0.05; });
   const b = g.o.jm && g.o.jm.ball; if (b) dwSprite(cam, q, b.x, b.y, b.z, 0.16, "circle", "#cfc8b8", 1);
-  Wd.npcs.forEach((n) => { if (Math.hypot(n.x - cam.x, n.z - cam.z) > 60) return; hjActor(g, cam, q, n.x, n.z, n.yaw || 0, { t: T + n.ph, mv: n.mv || 0, pose: n.k === "doa" ? "doa" : "" }, { sex: n.sex, skin: n.sk, ihram: true }); });
-  hjActor(g, cam, q, p.x, p.z, p.yaw, { t: T, mv: p.mv }, g.look); dwText(cam, q, p.x, 2.55, p.z, "Anda", 0.3, "#fff");
+  Wd.npcs.forEach((n) => { if (Math.hypot(n.x - cam.x, n.z - cam.z) > 60) return; hjActor(g, cam, q, n.x, n.z, n.yaw || 0, { t: T + n.ph, mv: n.mv || 0, pose: n.pose || (n.k === "doa" ? "doa" : "") }, n.look || { sex: n.sex, skin: n.sk, ihram: true }); });
+  hjActor(g, cam, q, p.x, p.z, p.yaw, { t: T, mv: p.mv, pose: p.pose }, g.look); dwText(cam, q, p.x, 2.55, p.z, "Anda", 0.3, "#fff");
   g.pts.forEach((e) => { dwSprite(cam, q, e.x, e.y, e.z, 0.08, "sq", e.col, clamp(1 - e.t / e.life, 0, 1)); });
+  (Wd.dyn || []).forEach((e) => { if (e.show && !e.show()) return; dwBox(cam, q, dwTr(e.x, e.y, e.z), e.sx, e.sy, e.sz, 0, 0, 0, e.col); });
+  if (HJ.mode.draw) HJ.mode.draw(g, cam, q, T);
   dwPaint(c, q);
   if (!HJ.vg || HJ.vgW !== W || HJ.vgH !== H) { const vg = c.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.45, W / 2, H / 2, Math.max(W, H) * 0.78); vg.addColorStop(0, "rgba(0,0,0,0)"); vg.addColorStop(1, "rgba(0,0,0,0.3)"); HJ.vg = vg; HJ.vgW = W; HJ.vgH = H; } c.fillStyle = HJ.vg; c.fillRect(0, 0, W, H);
   const js = HJ.js; if (js && !js.on && "ontouchstart" in window) { c.globalAlpha = 0.22; c.strokeStyle = "#fff"; c.lineWidth = 3; c.beginPath(); c.arc(86, H - 86, 56, 0, 7); c.stroke(); c.fillStyle = "#fff"; c.beginPath(); c.arc(86, H - 86, 22, 0, 7); c.fill(); c.globalAlpha = 1; }
   if (js && js.on) { c.globalAlpha = 0.5; c.strokeStyle = "#fff"; c.lineWidth = 3; c.beginPath(); c.arc(js.cx, js.cy, 56, 0, 7); c.stroke(); c.fillStyle = "#fff"; c.beginPath(); c.arc(js.cx + js.x * 40, js.cy - js.y * 40, 24, 0, 7); c.fill(); c.globalAlpha = 1; }
 }
+
+/* ---------- Mod simulasi: Wuduk dan Solat, Pengurusan Jenazah (v17.64) ---------- */
+function hjSt() { return HJ.mode.st; }
+function hjQs(id) { return HJ.mode.q[id]; }
+function hjAdiff(a, b) { let d = a - b; while (d > Math.PI) d -= 6.2832; while (d < -Math.PI) d += 6.2832; return d; }
+function hjSplash(x, z, col, n) { const g = HJ.g; for (let i = 0; i < (n || 10); i++) g.pts.push({ x: x + R2(-0.3, 0.3), y: 1.2 + R2(0, 0.4), z: z + R2(0, 0.6), vx: R2(-0.8, 0.8), vy: R2(0.5, 2.2), vz: R2(0, 1.2), t: 0, life: 0.8, col: col || "#7fd4ff" }); }
+function hjWall(W, x, z, sx, sz, h, col) { hjBox(W, x, h / 2, z, sx, h, sz, col, true); }
+function hjLesson(id) { let r = null; PR_MODS.forEach((m) => m.lessons.forEach((L) => { if (L.id === id) r = L; })); return r; }
+function hjStepsFrom(id, poses, fx, hold) { return hjLesson(id).steps.map((s, i) => ({ t: s.t, n: s.n, pose: poses[i % poses.length], fx: fx ? fx[i % fx.length] : "", hold: hold || 1.7 })); }
+/* mekanik: pilih langkah seterusnya dalam dunia 3D */
+function hjSteps(cfg) {
+  const g = HJ.g, o = g.o, sp = o.sp = { i: 0, cfg: cfg, fresh: true, started: false, wait: false };
+  hjObj(cfg.obj0);
+  hjMarker({ x: cfg.x, z: cfg.z, r: cfg.r || 2.4, label: cfg.label, act: cfg.act || "Mula (E)", show: () => !sp.started && (!cfg.ready || cfg.ready()), on: () => { sp.started = true; if (cfg.lock) { g.lock = true; g.p.x = cfg.sx != null ? cfg.sx : g.p.x; g.p.z = cfg.sz != null ? cfg.sz : g.p.z; g.p.yaw = cfg.syaw != null ? cfg.syaw : g.p.yaw; g.cam.yaw = g.p.yaw; g.p.vx = g.p.vz = 0; } if (cfg.onStart) cfg.onStart(); hjStepPanel(sp); } });
+}
+function hjStepPanel(sp) {
+  const cfg = sp.cfg, S = cfg.steps, i = sp.i; if (i >= S.length) return; const cur = S[i];
+  hjPanel((p) => {
+    p.append(el("div", { class: "hj-k" }, "LANGKAH " + (i + 1) + " / " + S.length), el("h3", null, cfg.ask || "Apakah langkah seterusnya?"));
+    if (i > 0) p.append(el("p", { class: "hj-done" }, "Sudah: " + S.slice(Math.max(0, i - 2), i).map((s) => s.t).join(" › ")));
+    const pool = shuffle(S.filter((s, k) => k !== i).map((s) => s.t).concat(cfg.wrong || [])).slice(0, 3), opts = shuffle([cur.t].concat(pool)), lst = el("div", { class: "hj-opts" });
+    opts.forEach((tx, pos) => {
+      const b = el("button", { type: "button", class: "hj-opt" }, "ABCD"[pos] + ". " + tx);
+      b.addEventListener("click", () => {
+        const good = tx === cur.t, g = HJ.g;
+        if (sp.fresh) { sp.fresh = false; g.tot++; g.sn++; if (good) { g.ok++; g.so++; } }
+        if (!good) { b.disabled = true; b.classList.add("bad"); p.querySelectorAll(".hj-fb").forEach((x) => x.remove()); p.append(el("div", { class: "hj-fb bad" }, "Belum tepat. " + (cfg.hint || "Fikirkan tertib yang betul.") + " Cuba lagi."));
+          try { beep(220, 0.12, "sawtooth", 0.05); } catch (e) { /* abaikan */ } return; }
+        hjPanelClose(); sp.fresh = true; sp.i++; sp.wait = true; const pl = g.p; if (cur.pose) { pl.pose = cur.pose; pl.poseT = cur.hold || 1.7; }
+        if (cur.fx) hjSplash(pl.x + Math.sin(pl.yaw) * 0.5, pl.z + Math.cos(pl.yaw) * 0.5, cur.fx, 14);
+        hjToast("Betul: " + cur.t + (cur.n ? " (" + cur.n + ")" : "")); try { beep(740, 0.1, "triangle", 0.06); } catch (e) { /* abaikan */ }
+        if (cfg.onStep) cfg.onStep(i, cur);
+        const done = sp.i >= S.length;
+        hjObj(done ? "Semua langkah selesai!" : cfg.obj(sp.i));
+        setTimeout(() => { if (!HJ.open || HJ.g !== g) return; sp.wait = false; if (done) { g.lock = false; if (cfg.onDone) cfg.onDone(); } else hjStepPanel(sp); }, (cur.hold || 1.7) * 1000 + 200);
+      });
+      lst.appendChild(b);
+    });
+    p.append(lst);
+  });
+}
+/* ---------- mod WUDUK DAN SOLAT ---------- */
+const HJW_ST = [
+  { id: "wudu", n: "Berwuduk", sub: "Tertib wuduk di tempat wuduk masjid", th: { sky: ["#69b9f5", "#eef7ff"], hill: "#cdbd9a", cloud: "#ffffff", accent: "#fff0b0" }, ground: "#e9e1cf", intro: ["Wuduk ialah bersuci daripada hadas kecil dengan air mutlak. Rukun wuduk ada enam: niat, membasuh muka, membasuh tangan hingga siku, menyapu sebahagian kepala, membasuh kaki hingga buku lali dan tertib.", "Selain rukun, terdapat perbuatan sunat seperti membasuh tapak tangan, berkumur, menyedut air ke hidung dan membasuh telinga.", "Tugas anda: pergi ke paip wuduk, kemudian pilih langkah yang betul secara tertib."] },
+  { id: "tayam", n: "Tayammum", sub: "Bersuci dengan debu ketika tiada air", th: { sky: ["#6fc0f6", "#fff0cf"], hill: "#c8aa7c", cloud: "#ffffff", accent: "#ffe08a" }, ground: "#e3cd9d", intro: ["Anda bermusafir dan kehabisan air. Setelah berusaha mencarinya tetapi tidak menjumpainya, anda dibenarkan bertayammum menggunakan debu yang suci.", "Tayammum juga dibenarkan jika seseorang tidak boleh menggunakan air kerana sakit.", "Tugas anda: pergi ke batu berdebu di tepi jalan dan lakukan tayammum dengan tertib."] },
+  { id: "solat", n: "Solat", sub: "Rukun solat dari niat hingga salam", th: { sky: ["#cfe6ff", "#f6fbff"], hill: "#cfc3a8", cloud: "#ffffff", accent: "#fff0b0" }, ground: "#e7dccb", intro: ["Menghadap kiblat ialah syarat sah solat. Di dewan solat ini, arah kiblat ialah ke arah mihrab (anak panah kuning di lantai).", "Menurut mazhab Syafie, rukun solat ada 13 dan mesti dilakukan secara tertib.", "Tugas anda: berdiri di atas sejadah dan hadap kiblat, kemudian laksanakan rukun solat dengan tertib."] }
+];
+function hjWBuild(id) {
+  const S = HJW_ST.filter((s) => s.id === id)[0], W = hjNew(S.th, S.ground), R = (a, b) => a + Math.random() * (b - a);
+  if (id === "wudu") {
+    W.bounds = [-19, 19, -6, 22]; hjFloor(W, -22, -8, 44, 34, "#efe9dc"); hjWall(W, 0, 25, 46, 1, 9, "#f1e9d8"); hjWall(W, -22.5, 9, 1, 34, 6, "#ece3d0"); hjWall(W, 22.5, 9, 1, 34, 6, "#ece3d0");
+    for (let k = -3; k <= 3; k++) { const x = k * 5; hjBox(W, x, 0.5, 21.5, 1.6, 1, 1.2, "#8c8f99", true); hjBox(W, x, 1.02, 21.2, 1.5, 0.12, 0.9, "#cfe9ff"); hjBox(W, x, 1.9, 22.1, 0.2, 0.5, 0.2, "#c8c8d0"); hjBox(W, x, 1.7, 21.8, 0.2, 0.15, 0.5, "#c8c8d0"); hjBox(W, x, 0.3, 19.2, 0.9, 0.6, 0.9, "#6b4a2e"); hjBox(W, x, 6, 24.4, 1.8, 3, 0.2, "#2a3a5a"); }
+    W.signs.push({ x: 0, y: 7.4, z: 24, t: "TEMPAT WUDUK" }, { x: 0, y: 3.4, z: 21.6, t: "Hemat air, jangan membazir" });
+    for (let i = 0; i < 6; i++) hjPalm(W, R(-20, 20), R(-4, 4), R(4, 6)); hjMosque(W, 0, 40, 28);
+    hjNpcs(W, 6, (i) => { const sx = i % 3 === 0 ? "f" : "m"; return { k: "idle", x: (i - 2.5) * 7 + R(-1, 1), z: R(-3, 6), yaw: R(0, 6), sex: sx, look: { sex: sx, skin: (Math.random() * 5) | 0, ihram: false, col: "#e8a8c8" } }; });
+  } else if (id === "tayam") {
+    W.bounds = [-30, 30, -8, 44]; hjFloor(W, -4, -10, 8, 60, "#5a5a60"); hjBox(W, 0, 0.04, 20, 0.3, 0.05, 4, "#f2e6a0"); hjBox(W, 0, 0.04, 6, 0.3, 0.05, 4, "#f2e6a0"); hjBox(W, 0, 0.04, 34, 0.3, 0.05, 4, "#f2e6a0");
+    hjBox(W, 9, 1.0, 14, 4.2, 1.4, 2.2, "#cf3b3b", true); hjBox(W, 9, 2.0, 14, 2.4, 0.9, 2.0, "#a82828"); hjBox(W, 9, 1.9, 14, 2.2, 0.7, 2.1, "#bfe4ff"); [-1, 1].forEach((a) => [-1, 1].forEach((b) => hjCyl(W, 9 + a * 1.4, 0, 14 + b * 1.1, 0.45, 0.3, "#222", 8)));
+    for (let i = 0; i < 14; i++) hjBox(W, R(-28, -7) * (i % 2 ? 1 : -1), 0.4, R(-4, 40), R(1, 2.4), R(0.6, 1.4), R(1, 2), "#a89a86", true);
+    hjBox(W, -6.5, 0.5, 16, 2.6, 1.0, 1.8, "#9a8c78", true); W.signs.push({ x: -6.5, y: 2.2, z: 16, t: "BATU BERDEBU (SUCI)" }, { x: 9, y: 3.4, z: 14, t: "KERETA ANDA" });
+    for (let i = 0; i < 5; i++) hjPalm(W, R(-28, 28), R(26, 42), R(4, 6)); W.dyn.push({ x: 7.2, y: 0.25, z: 12.4, sx: 0.3, sy: 0.5, sz: 0.3, col: "#6ab8f0" }); W.signs.push({ x: 7.2, y: 1.1, z: 12.4, t: "Botol air kosong" });
+  } else if (id === "solat") {
+    W.bounds = [-17, 17, -6, 22]; hjFloor(W, -20, -8, 40, 36, "#dccfb4"); for (let r = -3; r <= 3; r++) hjBox(W, r * 4.4, 0.03, 12, 3.6, 0.06, 28, r % 2 ? "#cdb98f" : "#c1a978");
+    hjWall(W, 0, 28, 42, 1, 11, "#f4efe6"); hjWall(W, -20.5, 10, 1, 40, 11, "#efe8da"); hjWall(W, 20.5, 10, 1, 40, 11, "#efe8da"); hjWall(W, 0, -9, 42, 1, 11, "#efe8da");
+    hjBox(W, 0, 3.4, 27.2, 4.2, 6.8, 0.8, "#3a8a6a"); hjBox(W, 0, 3.0, 26.7, 2.8, 5.4, 0.3, "#1f5a44"); hjBox(W, 0, 6.9, 27.2, 4.8, 0.5, 0.9, "#d8b24a"); W.signs.push({ x: 0, y: 8.4, z: 27, t: "MIHRAB / KIBLAT" });
+    for (let k = 0; k < 4; k++) { const x = (k < 2 ? -1 : 1) * (k % 2 ? 8 : 14); hjCyl(W, x, 0, 18, 0.7, 10, "#f4efe6", 10, true); }
+    for (let k = -2; k <= 2; k++) { hjBox(W, k * 4, 7, 27.6, 1.4, 3.2, 0.2, "#7ad2ff"); }
+    for (let z = 3; z <= 21; z += 6) hjBox(W, 0, 0.05, z, 0.5, 0.06, 2.4, "#ffd23d");
+    hjBox(W, 0, 0.08, 10, 2.2, 0.1, 3.2, "#2f9a66"); hjBox(W, 0, 0.12, 10, 1.8, 0.06, 2.8, "#46b886"); hjBox(W, 0, 0.14, 11.1, 0.9, 0.05, 0.5, "#ffe08a"); W.signs.push({ x: 0, y: 1.6, z: 10, t: "SEJADAH" });
+    hjNpcs(W, 8, (i) => ({ k: "idle", x: (i - 3.5) * 3.8 + (i > 3 ? 1.5 : 0), z: 16 + (i % 2) * 3, yaw: 0, look: { sex: i % 3 === 0 ? "f" : "m", skin: i % 5, solat: true, ihram: i % 3 === 0 } }));
+  }
+  return W;
+}
+function hjWSpawn(id) { return { wudu: [0, -3, 0], tayam: [0, -4, 0], solat: [0, -4, Math.PI] }[id]; }
+function hjWSetup(id) {
+  const g = HJ.g;
+  if (id === "wudu") hjSteps({ x: 0, z: 17.2, label: "Paip wuduk", act: "Mula berwuduk (E)", obj0: "Pergi ke paip wuduk dan tekan Tindakan", steps: hjStepsFrom("wu1", ["qiyam", "doa"], [null, "#7fd4ff"]), wrong: ["Membasuh kaki dahulu sebelum muka", "Menyapu seluruh badan dengan air", "Meninggalkan niat", "Membasuh rambut sehingga basah semuanya"], hint: "Wuduk mesti tertib: mulakan dengan niat dan akhiri dengan doa.", obj: (i) => "Langkah " + (i + 1) + " / " + hjLesson("wu1").steps.length + ": berwuduk dengan tertib", onDone: () => hjQuiz("wudu", hjStageDone) });
+  else if (id === "tayam") hjSteps({ x: -6.5, z: 13.8, label: "Batu berdebu", act: "Mula tayammum (E)", obj0: "Pergi ke batu berdebu di tepi jalan", steps: hjStepsFrom("wu2", ["qiyam", "doa", "doa", "doa", "doa"], [null, "#d9c9a0", null, "#d9c9a0", null]), wrong: ["Membasuh muka dengan air", "Menyapu kepala", "Menyapu kedua-dua kaki hingga buku lali", "Menyiram debu ke seluruh badan"], hint: "Tayammum: niat, tepuk debu, sapu muka, tepuk debu lagi, sapu tangan hingga siku.", obj: (i) => "Langkah " + (i + 1) + " / 5: tayammum dengan tertib", onDone: () => hjQuiz("tayam", hjStageDone) });
+  else if (id === "solat") {
+    const o = g.o; o.sj = { ok: false }; hjObj("Berdiri di atas sejadah dan hadap kiblat (arah mihrab dan anak panah kuning)");
+    hjSteps({ x: 0, z: 10, r: 1.9, label: "Sejadah", act: "Mula solat (E)", lock: true, sx: 0, sz: 10, syaw: 0, obj0: "Hadap kiblat di atas sejadah", ready: () => Math.abs(hjAdiff(g.p.yaw, 0)) < 0.5, steps: hjStepsFrom("wu3", ["qiyam", "takbir", "qiyam", "rukuk", "takbir", "sujud", "duduk", "sujud", "duduk", "duduk", "salam"], null, 2.0), wrong: ["Memberi salam sebelum tahiyat akhir", "Sujud tiga kali berturut-turut", "Menoleh ke belakang", "Membaca azan"], hint: "Ingat tertib rukun solat dari niat hingga salam.", obj: (i) => "Rukun " + (i + 1) + " / 11 dalam solat", onDone: () => hjQuiz("solat", hjStageDone) });
+  }
+}
+const HJW_Q = (() => { const q = hjLesson("wu4").qs, X = (a) => a.map((i) => q[i]); return {
+  wudu: X([2, 3, 7, 0, 5]),
+  tayam: X([4, 5]).concat([{ q: "Tayammum dilakukan dengan menggunakan...", o: ["Air biasa", "Debu atau tanah yang suci", "Pasir yang bernajis", "Sabun"], a: 1, e: "Tayammum menggunakan debu yang suci apabila tiada air atau tidak boleh menggunakan air." }, { q: "Berapa kali tapak tangan ditepuk pada debu bagi tayammum menurut mazhab Syafie?", o: ["Sekali", "Dua kali", "Tiga kali", "Tujuh kali"], a: 1, e: "Dua kali tepukan: sekali untuk menyapu muka dan sekali lagi untuk menyapu kedua-dua tangan hingga siku." }]),
+  solat: X([6, 1]).concat([{ q: "Apakah rukun solat yang pertama?", o: ["Takbiratulihram", "Niat", "Berdiri", "Membaca Fatihah"], a: 1, e: "Niat ialah rukun solat yang pertama dan dilakukan serentak dengan takbiratulihram." }, { q: "Menghadap kiblat ketika solat ialah...", o: ["Sunat solat", "Syarat sah solat", "Rukun solat", "Perkara harus"], a: 1, e: "Menghadap kiblat ialah syarat sah solat bagi mereka yang mampu." }, { q: "Berapakah rakaat solat Zohor?", o: ["2", "3", "4", "5"], a: 2, e: "Solat Zohor empat rakaat." }])
+}; })();
+/* ---------- mod PENGURUSAN JENAZAH ---------- */
+const HJJ_ST = [
+  { id: "mandi", n: "Memandikan", sub: "Fardu kifayah pertama", th: { sky: ["#8ec9f2", "#eef7ff"], hill: "#cdbd9a", cloud: "#ffffff", accent: "#fff0b0" }, ground: "#dfeaef", intro: ["Memandikan jenazah Muslim ialah fardu kifayah. Jenazah lelaki dimandikan oleh lelaki, jenazah perempuan oleh perempuan atau mahramnya.", "Aurat jenazah mesti ditutup dan kehormatannya dijaga sepanjang proses.", "Tugas anda: pergi ke katil mandi dan pilih langkah memandikan jenazah dengan tertib."] },
+  { id: "kafan", n: "Mengkafankan", sub: "Fardu kifayah kedua", th: { sky: ["#8ec9f2", "#eef7ff"], hill: "#cdbd9a", cloud: "#ffffff", accent: "#fff0b0" }, ground: "#e9e1cf", intro: ["Mengkafankan jenazah ialah fardu kifayah. Sekurang-kurangnya jenazah ditutup seluruh badannya dengan sehelai kain.", "Yang sunat: jenazah lelaki dikafankan dengan tiga helai kain putih dan jenazah perempuan dengan lima helai.", "Tugas anda: lakukan langkah mengkafankan jenazah dengan tertib."] },
+  { id: "solatj", n: "Solat Jenazah", sub: "Fardu kifayah ketiga", th: { sky: ["#cfe6ff", "#f6fbff"], hill: "#cfc3a8", cloud: "#ffffff", accent: "#fff0b0" }, ground: "#e7dccb", intro: ["Solat jenazah ialah fardu kifayah. Ia dilakukan secara berdiri dengan empat takbir, tanpa rukuk dan sujud.", "Imam berdiri sejajar kepala jenazah lelaki atau sejajar pinggang jenazah perempuan, dan makmum berbaris di belakangnya.", "Tugas anda: berdiri di dalam saf dan laksanakan solat jenazah dengan tertib."] },
+  { id: "kubur", n: "Pengebumian", sub: "Fardu kifayah keempat", th: { sky: ["#8fd0f5", "#eaf6ff"], hill: "#8fb080", cloud: "#ffffff", accent: "#ffe08a" }, ground: "#9fcf8a", intro: ["Mengebumikan jenazah ialah fardu kifayah. Disunatkan menyegerakan pengurusan jenazah dan membawanya dengan penuh hormat.", "Jenazah diletakkan di dalam liang lahad di atas rusuk kanan, menghadap kiblat.", "Tugas anda: ke tepi liang lahad dan lakukan langkah pengebumian dengan tertib."] }
+];
+function hjCloth(W, x, y, z, sx, sy, sz, col, show) { W.dyn.push({ x: x, y: y, z: z, sx: sx, sy: sy, sz: sz, col: col, show: show }); }
+function hjJBuild(id) {
+  const S = HJJ_ST.filter((s) => s.id === id)[0], W = hjNew(S.th, S.ground), R = (a, b) => a + Math.random() * (b - a), pl = () => HJ.g.o.sp ? HJ.g.o.sp.i : 0, npc = (x, z, yaw, pose) => W.npcs.push({ k: "idle", x: x, z: z, yaw: yaw, pose: pose || "", ph: R(0, 6), sk: (Math.random() * 5) | 0, sex: HJ.sex, look: { sex: HJ.sex, skin: (Math.random() * 5) | 0, ihram: false, col: "#e8f1f4" } });
+  if (id === "mandi" || id === "kafan") {
+    W.bounds = [-12, 12, -4, 19]; hjFloor(W, -14, -6, 28, 30, "#e8f1f4"); for (let k = -6; k <= 6; k++) hjBox(W, k * 2, 0.03, 8, 0.05, 0.05, 30, "#cfdde4"); hjWall(W, 0, 22, 30, 1, 8, "#d9eaf0"); hjWall(W, -14.5, 9, 1, 30, 8, "#d3e4ea"); hjWall(W, 14.5, 9, 1, 30, 8, "#d3e4ea");
+    for (let k = -1; k <= 1; k++) hjBox(W, k * 7, 5, 21.4, 2.2, 3, 0.2, "#8fd0f5");
+    hjBox(W, 0, 1.0, 12, 2.4, 0.2, 4.0, "#aab4bd", true); [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach((a) => hjBox(W, a[0] * 1.0, 0.5, 12 + a[1] * 1.7, 0.2, 1.0, 0.2, "#7c8791"));
+    W.signs.push({ x: 0, y: 5.6, z: 21, t: id === "mandi" ? "BILIK MEMANDIKAN JENAZAH" : "RUANG MENGKAFANKAN JENAZAH" });
+    if (id === "mandi") {
+      hjCloth(W, 0, 1.28, 12, 0.9, 0.3, 2.5, "#bfe1ee", () => pl() < 5); hjCloth(W, 0, 1.36, 13.4, 0.36, 0.32, 0.4, "#bfe1ee", () => pl() < 5);
+      hjCloth(W, 0, 1.28, 12, 0.9, 0.3, 2.5, "#8cc4dc", () => pl() >= 5); hjCloth(W, 0, 1.36, 13.4, 0.36, 0.32, 0.4, "#8cc4dc", () => pl() >= 5);
+      hjCyl(W, -4.5, 0, 9, 0.6, 0.9, "#3a7bd5", 10, true); hjCyl(W, 4.5, 0, 9, 0.6, 0.9, "#3a7bd5", 10, true); hjCyl(W, 4.5, 0, 13, 0.35, 0.5, "#f5f5f0", 8, true); hjBox(W, -4.5, 0.2, 14, 1.6, 0.4, 1.0, "#f1f1e8", true);
+      W.signs.push({ x: -4.5, y: 1.6, z: 9, t: "Air" }, { x: 4.5, y: 1.4, z: 13, t: "Kapur barus" }, { x: -4.5, y: 1.2, z: 14, t: "Tuala" });
+      npc(-3, 12.5, Math.PI / 2, "doa"); npc(3, 12.5, -Math.PI / 2, "doa");
+    } else {
+      hjBox(W, 0, 1.2, 12, 2.6, 0.06, 3.6, "#d8d0c0", true);
+      hjCloth(W, 0, 1.28, 12, 2.0, 0.04, 3.2, "#fbfbf8", () => pl() >= 1); hjCloth(W, 0, 1.32, 12, 1.9, 0.04, 3.1, "#f4f2ea", () => pl() >= 1); hjCloth(W, 0, 1.36, 12, 1.8, 0.04, 3.0, "#ede9dd", () => pl() >= 1);
+      hjCloth(W, 0, 1.55, 12, 0.7, 0.34, 2.2, "#bfe1ee", () => pl() >= 2 && pl() < 4); hjCloth(W, 0, 1.55, 12, 1.0, 0.4, 2.8, "#fbfbf8", () => pl() >= 4);
+      [[0, 13.7], [0, 12], [0, 10.4]].forEach((a) => hjCloth(W, a[0], 1.58, a[1], 1.15, 0.12, 0.14, "#8a7f6a", () => pl() >= 5));
+      hjCyl(W, 4.5, 0, 13, 0.35, 0.5, "#f5f5f0", 8, true); W.signs.push({ x: 4.5, y: 1.4, z: 13, t: "Kapur barus" }, { x: -4.5, y: 1.6, z: 12, t: "Kain kafan" }); hjBox(W, -4.5, 0.5, 12, 1.6, 1.0, 1.2, "#f4f2ea", true);
+      npc(-3.2, 12, Math.PI / 2, "doa"); npc(3.2, 12, -Math.PI / 2, "doa");
+    }
+  } else if (id === "solatj") {
+    W.bounds = [-17, 17, -6, 22]; hjFloor(W, -20, -8, 40, 36, "#dccfb4"); for (let r = -3; r <= 3; r++) hjBox(W, r * 4.4, 0.03, 12, 3.6, 0.06, 28, r % 2 ? "#cdb98f" : "#c1a978");
+    hjWall(W, 0, 28, 42, 1, 11, "#f4efe6"); hjWall(W, -20.5, 10, 1, 40, 11, "#efe8da"); hjWall(W, 20.5, 10, 1, 40, 11, "#efe8da"); hjWall(W, 0, -9, 42, 1, 11, "#efe8da"); hjBox(W, 0, 3.4, 27.2, 4.2, 6.8, 0.8, "#3a8a6a"); W.signs.push({ x: 0, y: 8.2, z: 27, t: "MIHRAB / KIBLAT" });
+    hjBox(W, 0, 0.35, 19, 1.1, 0.7, 2.8, "#7a5a3a", true); hjBox(W, 0, 0.85, 19, 0.8, 0.34, 2.4, "#fbfbf8"); W.signs.push({ x: 0, y: 2.0, z: 19, t: "JENAZAH" });
+    W.npcs.push({ k: "idle", x: 0, z: 15.6, yaw: 0, ph: 1, sk: 1, sex: "m", pose: "qiyam", look: { sex: "m", skin: 1, solat: true } }); W.signs.push({ x: 0, y: 2.7, z: 15.6, t: "IMAM" });
+    for (let r = 0; r < 2; r++) for (let k = -3; k <= 3; k++) { if (r === 0 && k === 0) continue; W.npcs.push({ k: "idle", x: k * 2.1, z: 11.5 - r * 3, yaw: 0, ph: R(0, 6), sk: (Math.random() * 5) | 0, sex: k % 3 === 0 && r ? "f" : "m", pose: "qiyam", look: { sex: k % 3 === 0 && r ? "f" : "m", skin: (Math.random() * 5) | 0, solat: true, ihram: k % 3 === 0 && r } }); }
+  } else if (id === "kubur") {
+    W.bounds = [-24, 24, -6, 38]; hjFloor(W, -3, -8, 6, 46, "#cfc7b2"); for (let r = 0; r < 5; r++) for (let k = 0; k < 4; k++) [-1, 1].forEach((s) => { hjBox(W, s * (8 + k * 3.6), 0.25, 4 + r * 5.5, 1.0, 0.5, 2.2, "#b8aa88"); hjBox(W, s * (8 + k * 3.6), 0.7, 5 + r * 5.5, 0.5, 1.0, 0.15, "#d8d0c0"); });
+    hjBox(W, 0, 0.02, 26, 2.6, 0.06, 3.8, "#2e1f14"); hjBox(W, -2.6, 0.3, 26, 1.8, 0.6, 3.8, "#7a5a3a"); hjBox(W, 2.6, 0.3, 26, 1.8, 0.6, 3.8, "#7a5a3a");
+    hjBox(W, 0, 0.65, 10, 1.1, 0.5, 2.8, "#7a5a3a", false); hjCloth(W, 0, 1.05, 10, 0.8, 0.3, 2.2, "#fbfbf8", () => pl() < 1); hjBox(W, 0, 0.65, 10, 0.01, 0.01, 0.01, "#7a5a3a");
+    hjCloth(W, 3.6, 0.75, 26, 0.8, 0.3, 2.2, "#fbfbf8", () => pl() === 1); hjCloth(W, 0, 0.18, 26, 0.7, 0.24, 2.2, "#fbfbf8", () => pl() >= 2 && pl() < 4);
+    hjCloth(W, 0, 0.18, 26, 2.5, 0.12, 3.6, "#8a6a45", () => pl() >= 4 && pl() < 5); hjCloth(W, 0, 0.42, 26, 2.2, 0.5, 3.4, "#8a6540", () => pl() >= 5); hjCloth(W, 0, 0.9, 27.9, 0.5, 1.2, 0.15, "#d8d0c0", () => pl() >= 5);
+    W.signs.push({ x: 0, y: 3.2, z: 26, t: "LIANG LAHAD" }, { x: 0, y: 2.6, z: 10, t: "Keranda jenazah" }, { x: 0, y: 4.6, z: 38, t: "TANAH PERKUBURAN ISLAM" });
+    for (let k = 0; k < 8; k++) W.npcs.push({ k: "idle", x: (k < 4 ? -1 : 1) * (4 + (k % 4) * 1.2), z: 22 + (k % 4) * 2, yaw: k < 4 ? Math.PI / 2 : -Math.PI / 2, ph: R(0, 6), sk: (Math.random() * 5) | 0, sex: "m", pose: k % 2 ? "doa" : "", look: { sex: "m", skin: (Math.random() * 5) | 0, ihram: false } });
+    for (let i = 0; i < 6; i++) hjPalm(W, R(-22, 22), R(30, 38), R(4, 6));
+  }
+  return W;
+}
+function hjJSpawn(id) { return { mandi: [0, -2, 0], kafan: [0, -2, 0], solatj: [0, -4, 0], kubur: [0, -4, 0] }[id]; }
+function hjJSetup(id) {
+  const g = HJ.g;
+  if (id === "mandi") hjSteps({ x: 0, z: 9.6, r: 2.6, label: "Jenazah", act: "Mula memandikan (E)", obj0: "Pergi ke katil mandi jenazah", steps: hjStepsFrom("jz2", ["doa"], [null, "#7fd4ff", "#7fd4ff", "#7fd4ff", "#cfeaff", null]), wrong: ["Membiarkan aurat jenazah terbuka", "Memandikan jenazah di tempat terbuka", "Memandikan dengan air panas mendidih", "Menghiris kuku dan rambut jenazah"], hint: "Tutup aurat dahulu, bersihkan najis, wuduk, kemudian siram bermula dari sebelah kanan.", obj: (i) => "Langkah " + (i + 1) + " / 6: memandikan jenazah", onDone: () => hjQuiz("mandi", hjStageDone) });
+  else if (id === "kafan") hjSteps({ x: 0, z: 9.6, r: 2.6, label: "Kain kafan", act: "Mula mengkafankan (E)", obj0: "Pergi ke meja kain kafan", steps: [
+    { t: "Menghamparkan tiga lapis kain kafan secara bertindih", n: "Lelaki tiga helai", pose: "doa", hold: 1.7 }, { t: "Membaringkan jenazah terlentang di atas kain kafan", n: "Dengan penuh hormat", pose: "doa", hold: 1.7 }, { t: "Menyapu wangian dan kapur barus pada anggota sujud serta menutup lubang dengan kapas", n: "Sunat", pose: "doa", hold: 1.7 }, { t: "Melipat kain kafan satu persatu dari sebelah kiri kemudian kanan", n: "Lapisan demi lapisan", pose: "doa", hold: 1.7 }, { t: "Mengikat kain kafan di kepala, badan dan hujung kaki", n: "Ikatan dibuka semasa di liang lahad", pose: "doa", hold: 1.7 }],
+    wrong: ["Memakaikan pakaian biasa kepada jenazah", "Menutup muka jenazah dengan plastik", "Membiarkan jenazah tanpa kain di atas lantai", "Mengikat kain kafan terlalu ketat di leher"], hint: "Hamparkan kain, baringkan jenazah, wangikan, lipat, kemudian ikat.", obj: (i) => "Langkah " + (i + 1) + " / 5: mengkafankan jenazah", onDone: () => hjQuiz("kafan", hjStageDone) });
+  else if (id === "solatj") hjSteps({ x: 0, z: 11.5, r: 1.8, label: "Saf solat", act: "Berdiri dalam saf (E)", lock: true, sx: 0, sz: 11.5, syaw: 0, obj0: "Berdiri di dalam saf, tepat di belakang imam", steps: hjStepsFrom("jz3", ["qiyam", "takbir", "takbir", "takbir", "takbir", "qiyam"], null, 1.8), wrong: ["Rukuk selepas takbir pertama", "Sujud dua kali", "Membaca doa iftitah dan surah panjang selepas takbir keempat", "Duduk tahiyat"], hint: "Solat jenazah: berdiri, empat takbir, tanpa rukuk dan sujud, kemudian salam.", obj: (i) => "Langkah " + (i + 1) + " / 6: solat jenazah", onDone: () => hjQuiz("solatj", hjStageDone) });
+  else if (id === "kubur") hjSteps({ x: 0, z: 22.2, r: 2.6, label: "Liang lahad", act: "Mula mengebumikan (E)", obj0: "Pergi ke tepi liang lahad", steps: [
+    { t: "Membawa jenazah ke kubur dengan segera dan penuh hormat", n: "Sunat menyegerakan", pose: "doa", hold: 1.7 }, { t: "Meletakkan jenazah di liang lahad di atas rusuk kanan menghadap kiblat", n: "Wajib", pose: "doa", hold: 1.7 }, { t: "Membuka ikatan kain kafan", n: "Sunat", pose: "doa", hold: 1.7 }, { t: "Menutup liang lahad dengan papan atau batu bata lalu menimbus dengan tanah", n: "Menimbus kubur: wajib", pose: "doa", fx: "#9a7a52", hold: 1.9 }, { t: "Meninggikan kubur sekadar sejengkal, memasang batu nisan dan membaca doa", n: "Sunat", pose: "qiyam", hold: 1.8 }],
+    wrong: ["Meletakkan jenazah meniarap", "Menimbus kubur tanpa menutup liang lahad", "Membiarkan kubur rata tanpa sebarang tanda", "Menunda pengebumian tanpa sebab munasabah"], hint: "Bawa, letakkan di liang lahad, buka ikatan, tutup dan timbus, kemudian tinggikan kubur dan berdoa.", obj: (i) => "Langkah " + (i + 1) + " / 5: pengebumian", onDone: () => hjQuiz("kubur", hjStageDone) });
+}
+const HJJ_Q = (() => { const q = hjLesson("jz4").qs; return {
+  mandi: [q[5], q[0], { q: "Basuhan terakhir jenazah disunatkan dicampur dengan...", o: ["Kapur barus", "Garam", "Minyak masak", "Cuka"], a: 0, e: "Basuhan terakhir disunatkan dicampur dengan kapur barus." }, { q: "Jika jenazah tidak dapat dimandikan (contohnya kerana tiada air atau keadaan tubuhnya), apakah yang dilakukan?", o: ["Ditayammumkan", "Dibiarkan sahaja", "Disapu dengan minyak wangi sahaja", "Ditangguhkan tanpa had"], a: 0, e: "Jika tidak dapat dimandikan, jenazah ditayammumkan." }],
+  kafan: [q[2], { q: "Berapakah helai kain kafan yang sunat bagi jenazah perempuan?", o: ["Satu helai", "Tiga helai", "Lima helai", "Tujuh helai"], a: 2, e: "Jenazah perempuan sunat dikafankan dengan lima helai kain." }, { q: "Kafan yang paling minimum bagi jenazah ialah...", o: ["Sehelai kain yang menutup seluruh tubuh", "Hanya menutup aurat", "Pakaian harian", "Tiada kain"], a: 0, e: "Yang wajib ialah sehelai kain yang menutup seluruh tubuh jenazah." }],
+  solatj: [q[1], q[3], { q: "Apakah hukum solat jenazah?", o: ["Fardu ain", "Fardu kifayah", "Sunat muakkad", "Harus"], a: 1, e: "Solat jenazah ialah fardu kifayah." }, { q: "Imam berdiri di sebelah mana jenazah lelaki?", o: ["Sejajar kepala jenazah", "Sejajar kaki jenazah", "Jauh di belakang saf", "Di dalam kubur"], a: 0, e: "Imam disunatkan berdiri sejajar kepala jenazah lelaki dan sejajar pinggang jenazah perempuan." }],
+  kubur: [q[4], { q: "Apakah yang disunatkan terhadap ikatan kain kafan ketika jenazah diletakkan di liang lahad?", o: ["Ikatan dibuka", "Ikatan diketatkan lagi", "Ditambah ikatan baharu", "Dipotong seluruh kain"], a: 0, e: "Disunatkan membuka ikatan kain kafan." }, { q: "Kubur disunatkan ditinggikan dari tanah sekadar...", o: ["Sejengkal", "Setinggi pinggang", "Setinggi dada", "Rata dengan tanah"], a: 0, e: "Kubur disunatkan ditinggikan kira-kira sejengkal supaya dikenali dan tidak dipijak." }]
+}; })();
+/* ---------- daftar mod ---------- */
+const HJ_MODES = {
+  hajj: { key: "hj", title: "Simulasi Haji", desc: "Lalui manasik haji dari Miqat hingga Mina. Berjalan, laksanakan setiap rukun dan wajib, dan jawab soalan di setiap peringkat. Simulasi ini untuk pembelajaran dan tidak menggantikan bimbingan ustaz atau pembimbing haji.", go: "MULA PERJALANAN HAJI", good: "Semoga Haji Mabrur!", well: "Anda menguasai manasik haji dengan baik.", again: "Ulang simulasi untuk mengukuhkan ingatan anda tentang rukun, wajib dan larangan haji.", st: HJ_ST, q: HJ_Q, build: hjBuild, setup: hjSetup, spawn: hjSpawn, tick: hjHajTick, look: (i) => ({ sex: HJ.sex, skin: HJ.skin, ihram: i > 0 }) },
+  wuduk: { key: "wd", title: "Simulasi Wuduk dan Solat", desc: "Berwuduk di tempat wuduk masjid, bertayammum ketika bermusafir, kemudian menunaikan solat menghadap kiblat. Pilih langkah yang betul secara tertib dan lihat watak anda melakukannya. Simulasi ini untuk pembelajaran dan tidak menggantikan bimbingan guru atau ustaz.", go: "MULA SIMULASI", good: "Tahniah, tertib ibadah anda sangat baik!", well: "Anda menguasai tertib wuduk, tayammum dan solat dengan baik.", again: "Ulang simulasi untuk mengukuhkan tertib wuduk, tayammum dan rukun solat.", st: HJW_ST, q: HJW_Q, build: hjWBuild, setup: hjWSetup, spawn: hjWSpawn, tick: () => {}, look: (i) => ({ sex: HJ.sex, skin: HJ.skin, ihram: i === 2 && HJ.sex === "f", solat: i === 2 }) },
+  jenazah: { key: "jz", title: "Simulasi Pengurusan Jenazah", desc: "Laksanakan empat fardu kifayah: memandikan, mengkafankan, menyolatkan dan mengebumikan jenazah dengan tertib. Pilih langkah yang betul dan jawab soalan di setiap peringkat. Simulasi ini untuk pembelajaran dan tidak menggantikan bimbingan pihak yang berkelayakan.", go: "MULA SIMULASI", good: "Tahniah, anda menguasai pengurusan jenazah!", well: "Anda menguasai tertib pengurusan jenazah dengan baik.", again: "Ulang simulasi untuk mengukuhkan tertib memandikan, mengkafankan, menyolatkan dan mengebumikan jenazah.", st: HJJ_ST, q: HJJ_Q, build: hjJBuild, setup: hjJSetup, spawn: hjJSpawn, tick: () => {}, look: (i) => ({ sex: HJ.sex, skin: HJ.skin, ihram: false, solat: i === 2 }) }
+};
 
 /* ---------- Slaid PdPc (v17.64): reka bentuk infografik gaya 3D Clay Anime untuk semua tajuk ---------- */
 const SL_PAL = [
