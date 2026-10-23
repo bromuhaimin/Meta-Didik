@@ -113,6 +113,13 @@ html,body{touch-action:manipulation}body.ar-lock,body.ar-lock *{-webkit-user-sel
 .gd-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .gd-b{min-height:44px;padding:8px 14px;border:2px solid var(--amber);background:rgba(10,14,10,.92);color:var(--amber);font:800 14px var(--font-util);letter-spacing:.05em;border-radius:999px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.5)}
 .gd-hint{background:rgba(10,14,10,.95);border:1px solid var(--amber);color:#fff;padding:8px 12px;font-size:14px;max-width:min(520px,92vw);border-radius:8px}
+#dgOv #rbLb { position: fixed; z-index: 4; right: 12px; top: 214px; min-width: 150px; max-width: 210px; background: rgba(10,14,30,.6); border-radius: 8px; padding: 6px 8px; color: #fff; font: 700 12px var(--font-body); pointer-events: none; box-shadow: 0 2px 10px rgba(0,0,0,.3); }
+#dgOv #rbLb .rb-h { letter-spacing: .14em; font-size: 10px; color: #9fd0ff; margin-bottom: 4px; }
+#dgOv #rbLb .rb-r { display: flex; justify-content: space-between; gap: 10px; padding: 2px 5px; border-radius: 4px; }
+#dgOv #rbLb .rb-r.me { background: rgba(255,210,61,.2); color: #ffe27a; }
+#dgOv #rbLb .rb-n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 112px; }
+#dgOv #rbLb .rb-f { font-size: 9px; color: #8ea6c8; margin-top: 3px; text-align: right; }
+@media (max-width: 760px) { #dgOv #rbLb { display: none; } }
 </style></head><body>
 <title>Gempur</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -807,7 +814,7 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
 <div id="rkBanner" role="status" hidden></div>
 <div id="app">
   <header class="top"><div class="top-in">
-    <div class="brand">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.59</small></div>
+    <div class="brand">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.60</small></div>
     <button class="meb" id="meBtn" type="button" aria-label="Profil anggota">
       <span id="meIns"></span>
       <span class="me-t"><span class="me-n" id="meName">Anggota</span><span class="me-r" id="meRank">Prebet</span><div class="xpbar"><i id="meXp"></i></div></span>
@@ -4136,6 +4143,7 @@ function dwPaint(c, q, ns) {
     const it = q[i];
     if (it.k === 0) { const p = it.pts; c.fillStyle = it.fill; c.beginPath(); c.moveTo(p[0], p[1]); for (let j = 2; j < p.length; j += 2) c.lineTo(p[j], p[j + 1]); c.closePath(); c.fill(); if (it.ln) { c.strokeStyle = "rgba(0,0,0,.2)"; c.lineWidth = 1; c.stroke(); } else { c.strokeStyle = it.fill; c.lineWidth = 1; c.stroke(); } }
     else if (it.k === 3) { c.font = "800 " + Math.round(it.sz) + "px sans-serif"; c.textAlign = "center"; c.lineJoin = "round"; c.lineWidth = Math.max(3, it.sz * 0.25); c.strokeStyle = "rgba(0,0,0,.72)"; c.strokeText(it.t, it.x, it.y); c.fillStyle = it.col; c.fillText(it.t, it.x, it.y); }
+    else if (it.k === 6) { c.fillStyle = it.lo; c.beginPath(); c.ellipse(it.x, it.y + it.r * 0.12, it.r, it.ry, 0, 0, 7); c.fill(); c.fillStyle = it.hi; c.beginPath(); c.ellipse(it.x, it.y - it.r * 0.06, it.r * 0.86, it.ry * 0.86, 0, 0, 7); c.fill(); }
     else if (it.k === 4) { const w = it.w, x0 = it.x - w / 2; c.fillStyle = "rgba(0,0,0,.65)"; c.fillRect(x0 - 1.5, it.y - 1.5, w + 3, it.h + 3); c.fillStyle = it.col; c.fillRect(x0, it.y, w * it.f, it.h); if (it.f2) { c.fillStyle = "#9fe8ff"; c.fillRect(x0, it.y - 2.5, w * it.f2, 2); } }
     else if (it.k === 5) { c.strokeStyle = it.col; c.lineWidth = Math.max(1, it.w); c.lineCap = "round"; c.beginPath(); for (let j = -1; j <= 1; j++) { c.moveTo(it.x + j * it.w * 1.6, it.y); c.lineTo(it.x + j * it.w * 2.8 + it.sw, it.y - it.h * (j ? 0.78 : 1)); } c.stroke(); }
     else if (it.k === 2) { const p = it.pts; c.globalAlpha = it.a; c.fillStyle = it.col; c.beginPath(); c.moveTo(p[0], p[1]); for (let j = 2; j < p.length; j += 2) c.lineTo(p[j], p[j + 1]); c.closePath(); c.fill(); c.globalAlpha = 1; }
@@ -4491,7 +4499,7 @@ function dwNet(g, dt, ts) {
       if (pr.isMe || !pr.presence || typeof pr.presence !== "object" || n >= 14) continue; const v = pr.presence; if (typeof v.x !== "number" || typeof v.z !== "number") continue; n++; seen[pr.peer] = 1;
       let e = DW.peers[pr.peer]; const x = clamp(v.x, -200, 200), y = clamp(+v.y || 0, -20, 40), z = clamp(v.z, -50, 900);
       if (!e) e = DW.peers[pr.peer] = { x: x, y: y, z: z, r: +v.r || 0, ph: Math.random() * 6, en: -1 };
-      e.tx = x; e.ty = y; e.tz = z; e.tr = +v.r || 0; e.m = v.m ? 1 : 0; e.a = v.a ? 1 : 0; e.n = cleanName(String(v.n || "")).slice(0, 12) || "Pelajar"; if (e.c !== v.c || !e.cfg) { e.c = v.c; e.cfg = dwParse(v.c); }
+      e.tx = x; e.ty = y; e.tz = z; e.tr = +v.r || 0; e.m = v.m ? 1 : 0; e.a = v.a ? 1 : 0; e.n = cleanName(String(v.n || "")).slice(0, 12) || "Pelajar"; e.s = clamp(v.s | 0, 0, 99); if (e.c !== v.c || !e.cfg) { e.c = v.c; e.cfg = dwParse(v.c); }
       if (typeof v.e === "string" && DW_EM[v.e] && v.en !== e.en) { if (e.en !== -1) { e.bub = DW_EM[v.e]; e.bubT = g.T + 2.6; } e.en = v.en; }
     }
     for (const id in DW.peers) if (!seen[id]) delete DW.peers[id];
@@ -5471,13 +5479,13 @@ function bzSvg(o, g, skin, opt) {
   return s + "</svg>";
 }
 /* --- model 3D realistik (enjin kanvas dikongsi dengan Dunia Gempur): jaringan permukaan putaran berlorek lembut --- */
-const BZ3 = { seg: 48, dist: 4.4, fov: 2.3 };
+const BZ3 = { seg: 64, dist: 4.4, fov: 2.3 };
 function bzRZ(a, tx, ty, tz) { const c = Math.cos(a), s = Math.sin(a); return [c, -s, 0, tx, s, c, 0, ty, 0, 0, 1, tz]; }
 function bzMT(M, x, y, z) { return [M[0] * x + M[1] * y + M[2] * z + M[3], M[4] * x + M[5] * y + M[6] * z + M[7], M[8] * x + M[9] * y + M[10] * z + M[11]]; }
 function bzMN(M, x, y, z) { return [M[0] * x + M[1] * y + M[2] * z, M[4] * x + M[5] * y + M[6] * z, M[8] * x + M[9] * y + M[10] * z]; }
 /* putar: gelang [y, rx, rz, warna?] di sekitar paksi Y tempatan, ditukar oleh M. gaps: [[yLo, yHi, setengahSudut]] membuang muka di depan (theta = 0 ialah +Z) */
 function bzLathe(F, M, rings, col, o) {
-  o = o || {}; const seg = o.seg || BZ3.seg, n = rings.length, gaps = o.gaps || null, br = o.br || 1;
+  o = o || {}; if (!o.band && !o.nosub && rings.length > 2) rings = bzSub(rings); const seg = o.seg || BZ3.seg, n = rings.length, gaps = o.gaps || null, br = o.br || 1;
   for (let i = 0; i < n - 1; i++) {
     const a = rings[i], b = rings[i + 1], ym = (a[0] + b[0]) / 2;
     for (let j = 0; j < seg; j++) {
@@ -5513,7 +5521,7 @@ function bzTunicR(g, hem, flare, tight) {
   return r;
 }
 function bzArmRings(rad, len) { const r = [[0, rad + 0.004], [-0.1, rad - 0.002], [-0.28, rad - 0.012], [-0.3, rad - 0.013]]; const full = [[-0.44, rad - 0.018], [-0.575, rad - 0.024], [-0.585, rad - 0.024]]; r.push(...full); return r.filter((x) => -x[0] <= len + 0.0001 || x === r[0]).concat(len < 0.58 ? [[-len, rad - 0.01 + (len < 0.3 ? 0.0 : 0)]] : []); }
-function bzBuild(o, g, skin) {
+function bzBuild0(o, g, skin) {
   const F = [], D = [], fem = g === "f", SC = fem ? 0.98 : 1.03, itm = (k) => (o[k] ? BZ_ITEM[o[k].id] : null), hex = (k) => (o[k] ? (BZ_COL[o[k].c] || BZ_COLS[0]).h : "#999"), A = itm("atas"), B = itm("bawah"), K = itm("kepala"), Sm = itm("samping"), Sh = itm("kasut");
   const sw = fem ? 0.172 : 0.195, ang = 0.26, I = dwTr(0, 0, 0), IW = BZ_IW, IWd = BZ_IWD, off = BZ_CLOTH.off;
   // lantai pentas
@@ -5524,23 +5532,23 @@ function bzBuild(o, g, skin) {
   bzLathe(F, I, tor, IW, {});
   // kaki asas
   const legR = (rad) => [[0.0, rad], [-0.2, rad - 0.01], [-0.42, rad - 0.024], [-0.5, rad - 0.03], [-0.7, rad - 0.04], [-0.84, rad - 0.05]].map((x) => [x[0], x[1], x[1]]);
-  [-1, 1].forEach((s) => bzLathe(F, dwTr(s * 0.075, 0.9, 0), legR(0.082), IW, { seg: 16 }));
+  [-1, 1].forEach((s) => bzLathe(F, dwTr(s * 0.075, 0.9, 0), legR(0.082), skin, { seg: 28 }));
   // lengan asas
   const armM = (s) => bzRZ(s * ang, s * sw, 1.385, 0);
-  [-1, 1].forEach((s) => bzLathe(F, armM(s), bzArmRings(0.05, 0.58).map((x) => [x[0], x[1], x[1]]), IW, { seg: 14 }));
+  [-1, 1].forEach((s) => bzLathe(F, armM(s), bzArmRings(0.05, 0.58).map((x) => [x[0], x[1], x[1]]), skin, { seg: 28 }));
   // kasut dan kaki
   [-1, 1].forEach((s) => { bzEll(F, s * 0.075, 0.035, 0.03, 0.04, 0.032, 0.095, skin, {}); });
   // tangan
   [-1, 1].forEach((s) => { const w = bzMT(armM(s), 0, -0.6, 0); bzEll(F, w[0], w[1] - 0.02, w[2], 0.032, 0.05, 0.026, skin, { seg: 12 }); });
   // leher dan kepala
   bzLathe(F, I, [[1.5, 0.046, 0.046], [1.46, 0.05, 0.05], [1.4, 0.056, 0.054]], bzSh(skin, 0.92), { seg: 14 });
-  const head = []; for (let i = 0; i <= 12; i++) { const ph = i / 12 * Math.PI; head.push([1.605 + 0.117 * Math.cos(ph), 0.092 * Math.sin(ph), 0.106 * Math.sin(ph) * (ph > 2.2 ? 0.92 : 1)]); }
-  bzLathe(F, I, head, skin, { seg: 40, br: 1.02 });
+  const head = []; for (let i = 0; i <= 26; i++) { const ph = i / 26 * Math.PI; head.push([1.605 + 0.117 * Math.cos(ph), 0.092 * Math.sin(ph), 0.106 * Math.sin(ph) * (ph > 2.2 ? 0.92 : 1)]); }
+  bzLathe(F, I, head, skin, { seg: 56, br: 1.02, nosub: 1 });
   // pakaian: bawah
   const covLegs = B && (B.id.indexOf("skpendek") < 0 && B.id !== "m_spendek"), M0 = (s) => dwTr(s * 0.078, 0.9, 0);
   if (B) {
     const id = B.id, c = hex("bawah"), band = (c2) => (i, j) => (j % 6 === 0 && ((i + j) % 2 ? 1 : 0) ? c2 : null);
-    const pant = (r1, r2, y2, rmid) => { const rr = [[0.07, r1 + 0.012], [0.0, r1 + 0.012], [-0.2, (rmid || (r1 + r2) / 2) + 0.012], [-0.46, (rmid || (r1 + r2) / 2) + 0.01], [y2, r2 + 0.01]]; [-1, 1].forEach((s) => { const ry = [[0.07, r1 + 0.012, r1 + 0.012]].concat(rr.slice(1).filter((x) => 0.9 + x[0] >= 0.06 + 0.0 && -x[0] <= 0.9 - 0.05).map((x) => [x[0], x[1], x[1]])); bzLathe(F, M0(s), ry.filter((x) => x[0] > -0.82), c, { seg: 16 }); }); bzLathe(F, I, [[1.03, 0.154, 0.098], [0.95, 0.158, 0.103], [0.9, 0.16, 0.105]], c, {}); };
+    const pant = (r1, r2, y2, rmid) => { const rr = [[0.07, r1 + 0.012], [0.0, r1 + 0.012], [-0.2, (rmid || (r1 + r2) / 2) + 0.012], [-0.46, (rmid || (r1 + r2) / 2) + 0.01], [y2, r2 + 0.01]]; [-1, 1].forEach((s) => { const ry = [[0.07, r1 + 0.012, r1 + 0.012]].concat(rr.slice(1).filter((x) => 0.9 + x[0] >= 0.06 + 0.0 && -x[0] <= 0.9 - 0.05).map((x) => [x[0], x[1], x[1]])); bzLathe(F, M0(s), ry.filter((x) => x[0] > -0.835), c, { seg: 16 }); }); bzLathe(F, I, [[1.03, 0.154, 0.098], [0.95, 0.158, 0.103], [0.9, 0.16, 0.105]], c, {}); };
     if (id === "f_batik" || id === "f_songket" || id === "f_payung" || id === "f_skpendek") {
       const fl = id === "f_payung" ? 0.1 : 0.04, hem = id === "f_skpendek" ? 0.66 : 0.05, rings = [[1.04, 0.152 + off, 0.098 + off], [0.96, 0.168 + off, 0.115 + off]]; const st = 5;
       for (let s = 1; s <= st; s++) { const t = s / st, y = 0.96 - (0.96 - hem) * t, w = 0.168 + off + (0.06 + fl) * t * (id === "f_skpendek" ? 0.4 : 1); rings.push([y, w, w * 0.82]); }
@@ -17343,6 +17351,248 @@ function gdTabs(box) {
   box.append(el("div", { style: "margin-top:12px" }, null, bar));
   Object.keys(groups).forEach((k) => { groups[k].hidden = k !== GD.tab; box.appendChild(groups[k]); });
 }
+
+/* ---------- Misi Busana: avatar lebih berkarakter (v17.60) ---------- */
+const BZ_HK = 0.3, BZ_HY = 1.46; BZ3.fov = 1.95;
+function bzSm(a, b, x) { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); }
+function bzHs(y) { return 1 + BZ_HK * bzSm(1.4, 1.56, y); }
+function bzHp(x, y, z) { const s = bzHs(y); return [x * s, y > BZ_HY ? BZ_HY + (y - BZ_HY) * s : y, z * s]; }
+/* subbahagi gelang putaran dengan hermit monoton supaya permukaan licin (tanpa muka bersegi) */
+function bzSub(rings) {
+  const n = rings.length, ch = [0, 1, 2], out = [];
+  const mk = (k) => { const d = [], m = []; for (let i = 0; i < n - 1; i++) d.push(rings[i + 1][k] - rings[i][k]); for (let i = 0; i < n; i++) { if (i === 0) m.push(d[0]); else if (i === n - 1) m.push(d[n - 2]); else m.push(d[i - 1] * d[i] > 0 ? (d[i - 1] + d[i]) / 2 : 0); } for (let i = 0; i < n - 1; i++) { if (d[i] === 0) { m[i] = 0; m[i + 1] = 0; } else { const a = m[i] / d[i], b = m[i + 1] / d[i], h = a * a + b * b; if (h > 9) { const tt = 3 / Math.sqrt(h); m[i] = tt * a * d[i]; m[i + 1] = tt * b * d[i]; } } } return m; };
+  const M = ch.map(mk);
+  for (let i = 0; i < n - 1; i++) {
+    out.push(rings[i]);
+    for (let s = 1; s <= 2; s++) {
+      const t = s / 3, t2 = t * t, t3 = t2 * t, h00 = 2 * t3 - 3 * t2 + 1, h10 = t3 - 2 * t2 + t, h01 = -2 * t3 + 3 * t2, h11 = t3 - t2, r = [];
+      ch.forEach((k) => { const v = h00 * rings[i][k] + h10 * M[k][i] + h01 * rings[i + 1][k] + h11 * M[k][i + 1]; r.push(k === 0 ? v : Math.max(0, v)); });
+      if (rings[i][3]) r.push(rings[i][3]); out.push(r);
+    }
+  }
+  out.push(rings[n - 1]); return out;
+}
+const BZ_FACE = { f: { lash: 1, lip: "#c4545e", iris: "#4a3024" }, m: { lash: 0, lip: "#a8524c", iris: "#3a2a20" } };
+function bzBuild(o, g, skin) {
+  const m = bzBuild0(o, g, skin), F = m.F;
+  for (let i = 0; i < F.length; i++) { const v = F[i].v; for (let k = 0; k < v.length; k += 3) { const p = bzHp(v[k], v[k + 1], v[k + 2]); v[k] = p[0]; v[k + 1] = p[1]; v[k + 2] = p[2]; } }
+  m.D = m.D.filter((t) => !(t.p[2] <= 0.115 && t.p[1] > 1.53 && t.p[1] < 1.65 && t.r <= 0.02));
+  m.D.forEach((t) => { const p = bzHp(t.p[0], t.p[1], t.p[2]); t.p = p; t.r *= bzHs(t.p[1]); });
+  const fm = m.fem ? BZ_FACE.f : BZ_FACE.m, cy = BZ_HY + (1.605 - BZ_HY) * bzHs(1.605), Rx = 0.092 * 1.3, Ry = 0.153, Rz = 0.106 * 1.3;
+  const zS = (x, y) => Rz * Math.sqrt(Math.max(0.02, 1 - (x / Rx) * (x / Rx) - ((y - cy) / Ry) * ((y - cy) / Ry))) + 0.003;
+  const add = (x, y, r, col, a, flag, nx) => { const d = { p: [x, y, zS(x, y)], n: [nx || 0, 0, 1], r: r, col: col }; if (a != null) d.a = a; if (flag) d[flag] = 1; m.D.push(d); };
+  const dark = bzSh(skin, 0.74);
+  [-1, 1].forEach((s) => {
+    const ex = s * 0.054, ey = cy + 0.006;
+    add(ex, ey, 0.0235, "#fbfbf6", null, "bl"); add(ex, ey - 0.001, 0.0158, fm.iris, null, "bl"); add(ex, ey - 0.001, 0.0085, "#120c0a", null, "bl"); add(ex + 0.006, ey + 0.007, 0.0048, "#ffffff", null, "bl");
+    // kelopak tertutup ketika berkedip
+    for (let k = -1; k <= 1; k++) add(ex + k * 0.013, ey - 0.004 - (k === 0 ? 0 : 0.0015), 0.0072, "#2a1812", null, "lid");
+    // garisan bulu mata atas
+    for (let k = -2; k <= 2; k++) add(ex + k * 0.0125, ey + 0.021 - Math.abs(k) * 0.0035, 0.0058, "#1e120e");
+    if (fm.lash) { add(ex + s * 0.03, ey + 0.012, 0.0045, "#1e120e"); add(ex + s * 0.034, ey + 0.019, 0.004, "#1e120e"); }
+    // kening
+    for (let k = -2; k <= 2; k++) add(ex + k * 0.0125, ey + 0.046 - Math.abs(k) * 0.0013 - (k * s) * 0.0012, m.fem ? 0.0058 : 0.0078, m.fem ? "#3a261c" : "#241610");
+    // pipi
+    add(s * 0.082, cy - 0.036, 0.03, "#ff8a8a", 0.2, null, s * 0.5);
+  });
+  // hidung
+  add(0, cy - 0.022, 0.011, bzSh(skin, 0.86), 0.55); add(0.0, cy - 0.016, 0.006, bzSh(skin, 1.12), 0.6);
+  add(-0.011, cy - 0.034, 0.0045, bzSh(skin, 0.62), 0.9); add(0.011, cy - 0.034, 0.0045, bzSh(skin, 0.62), 0.9);
+  // mulut tersenyum
+  for (let k = -4; k <= 4; k++) { const u = k / 4; add(u * 0.036, cy - 0.066 - (1 - u * u) * 0.011 + (Math.abs(u) > 0.9 ? 0.004 : 0), Math.abs(u) < 0.6 ? 0.0066 : 0.0052, fm.lip, null); }
+  add(0, cy - 0.0715, 0.0045, bzSh(fm.lip, 1.2), 0.9);
+  // telinga
+  [-1, 1].forEach((s) => bzEll(m.F, s * (Rx - 0.002), cy - 0.01, -0.005, 0.011, 0.03, 0.02, skin, { seg: 10 }));
+  return m;
+}
+const BZ_BL = () => ((performance.now() / 1000) % 3.7) < 0.14;
+function bzRender3(c, W, H, mesh, yaw) {
+  const cam = dwCam(0, 0.86, 0, 0, 0.1, BZ3.dist, W, H, BZ3.fov * (H > W * 1.9 ? 0.8 : 1)), q = [], cy = Math.cos(yaw + Math.PI), sy = Math.sin(yaw + Math.PI), F = mesh.F, tt = performance.now() / 1000, bob = Math.sin(tt * 1.7) * 0.004, blink = BZ_BL();
+  const R = (x, y, z) => [cy * x + sy * z, y + (y > 0.05 ? bob : 0), -sy * x + cy * z];
+  for (let i = 0; i < F.length; i++) {
+    const f = F[i], v = f.v, a = R(v[0], v[1], v[2]), b = R(v[3], v[4], v[5]), d = R(v[6], v[7], v[8]), e = R(v[9], v[10], v[11]), n = R(f.n[0], f.n[1], f.n[2]);
+    const sp = Math.pow(Math.max(0, n[0] * BZ_LH[0] + n[1] * BZ_LH[1] + n[2] * BZ_LH[2]), 24) * 0.45, n0 = q.length;
+    dwFace(cam, q, [a[0], a[1], a[2], b[0], b[1], b[2], d[0], d[1], d[2], e[0], e[1], e[2]], n, f.col, (f.br || 1) * (1 + sp), true);
+    if (q.length > n0) q[n0].ln = false;
+  }
+  for (let i = 0; i < mesh.D.length; i++) {
+    const t = mesh.D[i]; if (t.bl && blink) continue; if (t.lid && !blink) continue;
+    const p = R(t.p[0], t.p[1], t.p[2]), nn = R(t.n[0], t.n[1], t.n[2]), vx = cam.x - p[0], vy = cam.y - p[1], vz = cam.z - p[2], L = Math.hypot(vx, vy, vz) || 1;
+    if ((nn[0] * vx + nn[1] * vy + nn[2] * vz) / L < 0.12) continue; const n0 = q.length; dwSprite(cam, q, p[0], p[1], p[2], t.r, "circle", t.col, t.a == null ? 1 : t.a); if (q.length > n0) q[n0].d -= 0.09;
+  }
+  const sh = []; dwFlat(cam, sh, 0, 0.004, 0, 0.5, 0.5, "#3a2418", 0.22);
+  c.clearRect(0, 0, W, H);
+  const gr = c.createRadialGradient(W / 2, H * 0.42, 8, W / 2, H * 0.42, Math.max(W, H) * 0.55); gr.addColorStop(0, "rgba(255,238,215,.26)"); gr.addColorStop(1, "rgba(255,238,215,0)"); c.fillStyle = gr; c.fillRect(0, 0, W, H);
+  dwPaint(c, sh, true); dwPaint(c, q, false);
+}
+
+/* ---------- Dunia Gempur gaya Roblox (v17.60) ---------- */
+function dwProj(cam, x, y, z) {
+  const dx = x - cam.x, dy = y - cam.y, dz = z - cam.z, X = dx * cam.rt[0] + dy * cam.rt[1] + dz * cam.rt[2], Y = dx * cam.up[0] + dy * cam.up[1] + dz * cam.up[2], Z = dx * cam.fw[0] + dy * cam.fw[1] + dz * cam.fw[2];
+  if (Z < 0.3) return null; return [cam.W / 2 + X / Z * cam.F, cam.H / 2 - Y / Z * cam.F, Z];
+}
+/* silinder berpaksi Y tempatan: jejari r, tinggi h, pusat (ox,oy,oz) dalam bingkai M */
+function dwCyl(cam, q, M, r, h, ox, oy, oz, col, br, seg) {
+  seg = seg || 12; br = br || 1;
+  const X = (a, b, c) => [M[0] * a + M[1] * b + M[2] * c + M[3], M[4] * a + M[5] * b + M[6] * c + M[7], M[8] * a + M[9] * b + M[10] * c + M[11]];
+  const hy = h / 2, bot = [], top = [];
+  for (let k = 0; k < seg; k++) { const a = k / seg * 6.2832; bot.push(X(ox + r * Math.sin(a), oy - hy, oz + r * Math.cos(a))); top.push(X(ox + r * Math.sin(a), oy + hy, oz + r * Math.cos(a))); }
+  for (let k = 0; k < seg; k++) {
+    const k2 = (k + 1) % seg, am = (k + 0.5) / seg * 6.2832, nl = [Math.sin(am), 0, Math.cos(am)];
+    const n = [M[0] * nl[0] + M[2] * nl[2], M[4] * nl[0] + M[6] * nl[2], M[8] * nl[0] + M[10] * nl[2]];
+    const a = bot[k], b = bot[k2], c = top[k2], d = top[k];
+    dwFace(cam, q, [a[0], a[1], a[2], b[0], b[1], b[2], c[0], c[1], c[2], d[0], d[1], d[2]], n, col, br);
+  }
+  const nt = [M[1], M[5], M[9]], ct = X(ox, oy + hy, oz), vx = cam.x - ct[0], vy = cam.y - ct[1], vz = cam.z - ct[2];
+  if (vx * nt[0] + vy * nt[1] + vz * nt[2] > 0) {
+    const pts = []; let ok = true;
+    for (let k = 0; k < seg; k++) { const p = dwProj(cam, top[k][0], top[k][1], top[k][2]); if (!p) { ok = false; break; } pts.push(p[0], p[1]); }
+    if (ok) { const dist = Math.sqrt(vx * vx + vy * vy + vz * vz), lit = 0.55 + 0.45 * Math.max(0, nt[0] * DW_L[0] + nt[1] * DW_L[1] + nt[2] * DW_L[2]); q.push({ d: dist, k: 0, pts: pts, fill: dwShade(col, lit * br * 1.05, clamp((dist - 38) / 70, 0, 0.95)), ln: false }); }
+  }
+}
+/* avatar gaya Roblox: kepala silinder, muka bersenyum, badan berkotak berlengan dan berkaki */
+function dwAvatar(cam, q, x, y, z, yaw, an, c, alpha) {
+  const R = dwRY(yaw, x, y, z), t = an.t || 0, mv = an.mv || 0, air = an.air ? 1 : 0, sw = Math.sin(t * 11) * 0.8 * mv, bob = air ? 0 : Math.abs(Math.sin(t * 11)) * 0.04 * mv, br = mv ? 0 : Math.sin(t * 2.4) * 0.012;
+  const B = (M, sx, sy, sz, ox, oy, oz, col, b) => dwBox(cam, q, M, sx, sy, sz, ox, oy, oz, col, b);
+  const skin = DW_SKIN[c.sk], shirt = DW_COL[c.sh], pants = DW_PANT[c.pn], shoeC = DW_SHOE[c.shoe], tud = DW_TDG[c.td];
+  const legA = air ? 0.5 : sw, legB = air ? -0.35 : -sw;
+  [[legA, 0.16], [legB, -0.16]].forEach((L) => { const M = dwMul(R, dwRX(L[0], L[1], 0.62 + bob, 0)); B(M, 0.3, 0.5, 0.3, 0, -0.25, 0, pants); B(M, 0.31, 0.12, 0.34, 0, -0.56, 0.02, shoeC); });
+  const Rb = dwMul(R, dwTr(0, bob, 0));
+  B(Rb, 0.64, 0.64 + br, 0.34, 0, 0.94 + br / 2, 0, shirt); B(Rb, 0.66, 0.06, 0.36, 0, 0.65, 0, dwHexMix(shirt, 0.62)); B(Rb, 0.2, 0.2, 0.02, 0, 1.0, 0.175, dwHexMix(shirt, 1.4)); B(Rb, 0.64, 0.07, 0.35, 0, 1.24 + br, 0, shirt, 1.12);
+  const wave = an.wave ? -2.7 + Math.sin(t * 12) * 0.3 : null, armA = wave != null ? wave : (air ? -2.5 : -sw * 1.1), armB = air ? -2.2 : sw * 1.1;
+  [[armA, 0.47], [armB, -0.47]].forEach((A) => { const M = dwMul(Rb, dwRX(A[0], A[1], 1.22 + br, 0)); B(M, 0.3, 0.36, 0.3, 0, -0.18, 0, shirt, 0.94); B(M, 0.3, 0.27, 0.3, 0, -0.495, 0, skin); });
+  const hy = 1.5 + br;
+  dwCyl(cam, q, Rb, 0.22, 0.42, 0, hy, 0, skin, 1.0, 16);
+  const n0 = q.length;
+  // muka: mata, kilauan, pipi dan senyuman klasik
+  const P = (a, b, cc) => [Rb[0] * a + Rb[1] * b + Rb[2] * cc + Rb[3], Rb[4] * a + Rb[5] * b + Rb[6] * cc + Rb[7], Rb[8] * a + Rb[9] * b + Rb[10] * cc + Rb[11]];
+  const hc = P(0, hy, 0), fw = [Math.sin(yaw), 0, Math.cos(yaw)], vx = cam.x - hc[0], vy = cam.y - hc[1], vz = cam.z - hc[2], vl = Math.hypot(vx, vy, vz) || 1;
+  if ((fw[0] * vx + fw[2] * vz) / vl > 0.12) {
+    const D = (a, b, cc, r, col, al) => { const p = P(a, b, cc), m = q.length; dwSprite(cam, q, p[0], p[1], p[2], r, "circle", col, al); if (q.length > m) q[m].d -= 0.45; };
+    const blink = (Math.floor(t * 1.0 + (x * 3.1 + z * 1.7)) % 4 === 0) && (t * 1.0 % 1) < 0.14;
+    [-1, 1].forEach((s) => {
+      if (blink) { D(s * 0.076, hy + 0.04, 0.222, 0.018, "#3a2418", 1); D(s * 0.076 + 0.012, hy + 0.04, 0.222, 0.014, "#3a2418", 1); D(s * 0.076 - 0.012, hy + 0.04, 0.222, 0.014, "#3a2418", 1); }
+      else { D(s * 0.076, hy + 0.04, 0.222, 0.034, "#14161c", 1); D(s * 0.076 - 0.009, hy + 0.052, 0.224, 0.011, "#ffffff", 0.95); }
+      D(s * 0.13, hy - 0.04, 0.2, 0.032, "#ff7a86", 0.22);
+    });
+    for (let i = 0; i <= 6; i++) { const u = i / 6 * 2 - 1; D(u * 0.095, hy - 0.075 - (1 - u * u) * 0.045, 0.222, 0.0125, "#2a1410", 1); }
+  }
+  for (let i = n0; i < q.length; i++) q[i].d -= 0.0;
+  if (tud) {
+    B(Rb, 0.58, 0.1, 0.58, 0, 1.76 + br, 0, tud); B(Rb, 0.08, 0.52, 0.54, 0.27, 1.5 + br, -0.02, tud, 0.92); B(Rb, 0.08, 0.52, 0.54, -0.27, 1.5 + br, -0.02, tud, 0.92); B(Rb, 0.58, 0.55, 0.08, 0, 1.5 + br, -0.27, tud, 0.9); B(Rb, 0.58, 0.09, 0.08, 0, 1.68 + br, 0.26, tud, 1.05); B(Rb, 0.68, 0.32, 0.42, 0, 1.13 + br, 0.02, tud, 1.02); B(Rb, 0.62, 0.08, 0.1, 0, 1.28 + br, 0.2, tud, 0.9);
+  } else {
+    const HC = "#2a1c14";
+    dwCyl(cam, q, Rb, 0.235, 0.14, 0, 1.69 + br, 0, HC, 1, 12); B(Rb, 0.44, 0.08, 0.05, 0, 1.64 + br, 0.215, HC); B(Rb, 0.44, 0.34, 0.06, 0, 1.55 + br, -0.215, HC);
+    if (c.hat === 1) { dwCyl(cam, q, Rb, 0.235, 0.22, 0, 1.8 + br, 0, "#1a1a1e", 1, 12); dwCyl(cam, q, Rb, 0.24, 0.035, 0, 1.71 + br, 0, "#e8c040", 1, 12); }
+    else if (c.hat === 2) { dwCyl(cam, q, Rb, 0.245, 0.15, 0, 1.77 + br, 0, "#d0303a", 1, 12); B(Rb, 0.34, 0.035, 0.2, 0, 1.71 + br, 0.34, "#a02028"); }
+    else if (c.hat === 3) { dwCyl(cam, q, Rb, 0.26, 0.2, 0, 1.79 + br, 0, "#f0c030", 1, 12); dwCyl(cam, q, Rb, 0.3, 0.035, 0, 1.7 + br, 0, "#d8a820", 1, 12); }
+    else if (c.hat === 4) { dwCyl(cam, q, Rb, 0.235, 0.13, 0, 1.77 + br, 0, "#f0c030", 1, 12); for (let i = 0; i < 5; i++) { const a = i / 5 * 6.2832; B(Rb, 0.07, 0.17, 0.07, Math.sin(a) * 0.2, 1.92 + br, Math.cos(a) * 0.2, "#ffd84a"); } }
+  }
+  if (c.gl) { B(Rb, 0.38, 0.09, 0.03, 0, 1.54 + br, 0.245, "#101014"); B(Rb, 0.44, 0.02, 0.03, 0, 1.54 + br, 0.248, "#c8c8d0"); }
+  if (c.bk) B(Rb, 0.42, 0.5, 0.16, 0, 0.95, -0.25, "#d85a30");
+  if (c.cape) { const cs = air ? 0.55 : 0.18 + mv * 0.2 + Math.sin(t * 9) * 0.05 * mv; B(dwMul(Rb, dwRX(cs, 0, 1.25, -0.2)), 0.58, 0.95, 0.05, 0, -0.45, -0.02, DW_CAPE[c.cape], 0.95); }
+}
+function dwActor(g, cam, q, x, y, z, yaw, an, cfg, name, bub) {
+  const gy = dwGround(g, x, y, z);
+  if (gy > -1e8) { const i0 = q.length; dwFlat(cam, q, x, gy + 0.03, z, 0.5, 0.5, "#000000", 0.3); dwBias(q, i0, 2.4); }
+  an.wave = bub ? 1 : 0;
+  const i1 = q.length; dwAvatar(cam, q, x, y, z, yaw, an, cfg); dwBias(q, i1, 3.0);
+  if (name) dwText(cam, q, x, y + 2.3, z, name, 0.3, "#fff");
+  if (bub) dwText(cam, q, x, y + 2.9, z, bub, 0.34, "#ffe27a");
+}
+/* dunia: langit berlapis, gunung, bintang, awan gebu, stud bergaya plastik dan partikel suasana */
+function rbLum(h) { const c = dwRgb(h); return (c[0] * 0.3 + c[1] * 0.59 + c[2] * 0.11) / 255; }
+function rbMix(a, b, t) { const x = dwRgb(a), y = dwRgb(b); return "rgb(" + Math.round(x[0] + (y[0] - x[0]) * t) + "," + Math.round(x[1] + (y[1] - x[1]) * t) + "," + Math.round(x[2] + (y[2] - x[2]) * t) + ")"; }
+function rbSky(c, g, cam, th, W, H, hz, F) {
+  const night = rbLum(th.sky[0]) < 0.3, wrap = (a) => { while (a > Math.PI) a -= 6.2832; while (a < -Math.PI) a += 6.2832; return a; };
+  const top = Math.max(10, hz), sk = c.createLinearGradient(0, 0, 0, top); sk.addColorStop(0, th.sky[0]); sk.addColorStop(0.55, rbMix(th.sky[0], th.sky[1], 0.7)); sk.addColorStop(1, th.sky[1]); c.fillStyle = sk; c.fillRect(0, 0, W, Math.max(0, hz) + 1);
+  if (night) { for (let i = 0; i < 70; i++) { const a = wrap(i * 0.0897 * 7 - cam.yaw); if (Math.abs(a) > 1.15) continue; const sx = W / 2 + Math.tan(a) * F, sy = hz - (0.08 + ((i * 53) % 100) / 100 * 0.7) * F; c.globalAlpha = 0.45 + 0.45 * Math.sin(g.T * 2 + i); c.fillStyle = "#fff"; c.fillRect(sx, sy, 2 + (i % 3 === 0 ? 1 : 0), 2); } c.globalAlpha = 1; }
+  const sunA = wrap(0.7 - cam.yaw);
+  if (Math.abs(sunA) < 1.3) { const sx = W / 2 + Math.tan(sunA) * F, sy = hz - 0.45 * F, gr = c.createRadialGradient(sx, sy, 6, sx, sy, 170); gr.addColorStop(0, th.accent); gr.addColorStop(1, "rgba(255,255,255,0)"); c.globalAlpha = night ? 0.28 : 0.42; c.fillStyle = gr; c.fillRect(sx - 170, sy - 170, 340, 340); c.globalAlpha = 0.95; c.fillStyle = th.accent; c.beginPath(); c.arc(sx, sy, night ? 30 : 38, 0, 7); c.fill(); c.globalAlpha = 1; }
+  // awan gebu daripada bulatan bertindih
+  for (let i = 0; i < 9; i++) { const a = wrap(i * 0.72 + g.T * 0.012 - cam.yaw); if (Math.abs(a) > 1.25) continue; const sx = W / 2 + Math.tan(a) * F, sy = hz - (0.25 + (i * 37 % 10) * 0.035) * F, k = 0.8 + (i % 3) * 0.18; c.fillStyle = th.cloud; c.globalAlpha = night ? 0.3 : 0.88; c.beginPath(); [[0, 0, 30], [-34, 8, 22], [34, 8, 24], [-14, -12, 24], [16, -10, 22], [0, 12, 30]].forEach((p) => { c.moveTo(sx + p[0] * k + p[2] * k, sy + p[1] * k); c.arc(sx + p[0] * k, sy + p[1] * k, p[2] * k, 0, 7); }); c.fill(); c.globalAlpha = 1; }
+  // gunung berlapis (jauh dan dekat)
+  const lay = (amp, base, col, al, sd) => { c.beginPath(); c.moveTo(0, hz + 2); for (let x = 0; x <= W + 8; x += 8) { const a = cam.yaw + Math.atan((x - W / 2) / F), h = 0.5 + 0.32 * Math.sin(a * 3 + sd) + 0.2 * Math.sin(a * 7 + sd * 2) + 0.1 * Math.sin(a * 13 + sd * 3); c.lineTo(x, hz + 2 - (base + h * amp) * (H / 720)); } c.lineTo(W, hz + 2); c.closePath(); c.globalAlpha = al; c.fillStyle = col; c.fill(); c.globalAlpha = 1; };
+  lay(120, 24, rbMix(th.hill, th.sky[1], 0.55), 0.8, 1); lay(78, 10, th.hill, 0.85, 4);
+  const hg = c.createLinearGradient(0, hz - 40, 0, hz + 8); hg.addColorStop(0, "rgba(255,255,255,0)"); hg.addColorStop(1, rbMix(th.sky[1], th.sky[1], 0)); c.globalAlpha = 0.5; c.fillStyle = hg; c.fillRect(0, hz - 40, W, 48); c.globalAlpha = 1;
+}
+function rbStuds(cam, q, g) {
+  const F = g.W.stat, X = cam.x, Z = cam.z; let n = 0;
+  for (let i = 0; i < F.length && n < 500; i++) {
+    const f = F[i]; if (f.n[1] !== 1) continue; const dx = f.cx - X, dz = f.cz - Z; if (dx * dx + dz * dz > 230) continue;
+    const v = f.v, y = v[1], x0 = Math.min(v[0], v[6]), x1 = Math.max(v[0], v[6]), z0 = Math.min(v[2], v[8]), z1 = Math.max(v[2], v[8]), nx = Math.max(1, Math.round((x1 - x0) / 1.0)), nz = Math.max(1, Math.round((z1 - z0) / 1.0));
+    if (cam.y - y < 0.3) continue; const hi = dwHexMix(f.col, 1.16), lo = dwHexMix(f.col, 0.78);
+    for (let a = 0; a < nx; a++) for (let b = 0; b < nz; b++) {
+      const sx = x0 + (a + 0.5) * (x1 - x0) / nx, sz = z0 + (b + 0.5) * (z1 - z0) / nz, p = dwProj(cam, sx, y, sz); if (!p) continue;
+      const r = 0.19 * cam.F / p[2]; if (r < 1.2 || p[0] < -r || p[0] > cam.W + r || p[1] < -r || p[1] > cam.H + r) continue;
+      const dist = Math.hypot(sx - cam.x, y - cam.y, sz - cam.z), vy = clamp((cam.y - y) / dist, 0.18, 1);
+      q.push({ d: dist - 0.12, k: 6, x: p[0], y: p[1], r: r, ry: r * vy, hi: hi, lo: lo }); n++;
+    }
+  }
+}
+function rbMotes(cam, q, g, night, th) {
+  for (let i = 0; i < 26; i++) {
+    const a = i * 2.399 + g.T * (0.05 + (i % 5) * 0.012), rr = 5 + (i * 7) % 15, x = cam.x + Math.cos(a) * rr, z = cam.z + Math.sin(a) * rr, y = cam.y + 0.2 + ((i * 13) % 10) * 0.3 + Math.sin(g.T * 0.8 + i) * 0.5;
+    const m = q.length; dwSprite(cam, q, x, y, z, night ? 0.055 : 0.04, "circle", night ? "#ffe9a0" : "#ffffff", (night ? 0.45 + 0.4 * Math.sin(g.T * 3 + i * 1.7) : 0.35)); if (q.length > m) { q[m].d += 0; }
+  }
+}
+function dwDraw(g) {
+  const c = DW.cx, W = DW.W, H = DW.H, d = DW.dpr, th = g.W.th, C0 = g.cam;
+  c.setTransform(d, 0, 0, d, 0, 0);
+  const cam = dwCam(C0.tx, C0.ty, C0.tz, C0.yaw, C0.pitch, C0.dist, W, H, 1.2);
+  if (g.shake > 0) { cam.x += (Math.random() - 0.5) * 0.4 * g.shake; cam.y += (Math.random() - 0.5) * 0.4 * g.shake; }
+  const F = cam.F, hz = clamp(H / 2 - Math.tan(C0.pitch) * F, -H, H * 1.2), fogS = "rgb(" + Math.round(DW_FOG[0] * 255) + "," + Math.round(DW_FOG[1] * 255) + "," + Math.round(DW_FOG[2] * 255) + ")";
+  c.fillStyle = fogS; c.fillRect(0, Math.max(0, hz), W, H);
+  const night = rbLum(th.sky[0]) < 0.3;
+  rbSky(c, g, cam, th, W, H, hz, F);
+  const q = [], T = g.T, p = g.p;
+  // lava
+  const gx = Math.floor(cam.x / 6) * 6, gz = Math.floor(cam.z / 6) * 6, ly = g.W.lavaY;
+  for (let i = -9; i <= 9; i++) for (let j = -9; j <= 9; j++) { const a = gx + i * 6, b = gz + j * 6; dwFace(cam, q, [a, ly, b, a + 6, ly, b, a + 6, ly, b + 6, a, ly, b + 6], [0, 1, 0], ((i + j) & 1) ? "#f07a24" : "#d84a18", 0.95 + 0.12 * Math.sin(T * 1.8 + i * 1.3 + j * 0.9 + (a + b) * 0.05)); }
+  for (const f of g.W.stat) { const dx = f.cx - cam.x, dz = f.cz - cam.z; if (dx * dx + dz * dz > 16500) continue; dwFace(cam, q, f.v, f.n, f.col); }
+  rbStuds(cam, q, g);
+  g.W.movers.forEach((m) => { dwBox(cam, q, dwTr(m.x, m.y - m.h / 2, m.z), m.w, m.h, m.d, 0, 0, 0, th.accent); });
+  g.W.fades.forEach((f) => { if (!f.on) return; const sh = f.t > 0 ? Math.sin(T * 55) * 0.06 : 0; dwBox(cam, q, dwTr(f.x + sh, f.y - 0.3, f.z), f.w, 0.6, f.d, 0, 0, 0, "#e8e0d0"); });
+  g.W.springs.forEach((s) => { dwBox(cam, q, dwTr(s.x, s.y + 0.1, s.z), s.w, 0.2, s.d, 0, 0, 0, "#3a3a44"); const hh = 0.4 * (1 - (s.sq || 0)); dwBox(cam, q, dwTr(s.x, s.y + 0.2 + hh / 2, s.z), s.w * 0.9, hh, s.d * 0.9, 0, 0, 0, "#ff5d6e"); });
+  g.W.kills.forEach((k) => { const glow = 0.5 + 0.5 * Math.sin(T * 5); dwBox(cam, q, dwTr((k.x0 + k.x1) / 2, k.y0 + 0.2, (k.z0 + k.z1) / 2), k.x1 - k.x0, 0.4, k.z1 - k.z0, 0, 0, 0, "#c02828"); dwBox(cam, q, dwTr((k.x0 + k.x1) / 2, k.y0 + 0.55, (k.z0 + k.z1) / 2), (k.x1 - k.x0) * 0.5, 0.3, (k.z1 - k.z0) * 0.5, 0, 0, 0, "#ff4a4a", 0.9 + glow * 0.3); });
+  g.W.spinners.forEach((s, i) => { if (i === 0 || g.W.spinners[i - 1].x !== s.x) dwBox(cam, q, dwTr(s.x, s.y - 0.0, s.z), 0.9, 1.0, 0.9, 0, -0.0, 0, "#6a6a78"); const M = dwRY(-s.a, s.x, s.y + 0.25, s.z); dwBox(cam, q, M, s.len * 2, 0.5, 0.4, 0, 0, 0, "#e03a3a"); dwBox(cam, q, M, s.len * 0.4, 0.52, 0.42, s.len * 0.7, 0, 0, "#ffffff"); dwBox(cam, q, M, s.len * 0.4, 0.52, 0.42, -s.len * 0.7, 0, 0, "#ffffff"); });
+  g.W.checks.forEach((k) => { dwBox(cam, q, dwTr(k.x, k.y + 1.5, k.z), 0.14, 3, 0.14, 0, 0, 0, "#cfd6dc"); dwBox(cam, q, dwTr(k.x + 0.7, k.y + 2.6 + Math.sin(T * 4) * 0.05, k.z), 1.4, 0.9, 0.06, 0, 0, 0, k.got ? "#3dd66a" : "#ff5d6e"); if (!k.got) { const m = q.length; dwSprite(cam, q, k.x, k.y + 0.05, k.z, 1.5 + Math.sin(T * 3) * 0.12, "circle", "#ff5d6e", 0.16); if (q.length > m) q[m].d += 6; } });
+  g.W.gates.forEach((gt) => {
+    if (gt.open) return; const sh = gt.shake > 0 ? Math.sin(T * 60) * 0.12 * gt.shake : 0, cw = gt.w / 4, rh = gt.h / 2;
+    for (let i = 0; i < 4; i++) for (let j = 0; j < 2; j++) dwBox(cam, q, dwTr(gt.x - gt.w / 2 + cw * (i + 0.5) + sh, gt.y + rh * (j + 0.5), gt.z), cw, rh, gt.d, 0, 0, 0, (i + j) % 2 ? "#8a8fa0" : "#6a6f84");
+    dwBox(cam, q, dwTr(gt.x + sh, gt.y + 2.2, gt.z - gt.d / 2 - 0.05), 3, 2.4, 0.12, 0, 0, 0, "#ffd23d"); dwText(cam, q, gt.x + sh, gt.y + 1.8, gt.z - gt.d / 2 - 0.2, "?", 1.5, "#2a1c04"); dwText(cam, q, gt.x, gt.y + gt.h + 0.7 + Math.sin(T * 3) * 0.1, gt.z, "PINTU SOALAN " + (gt.s + 1), 0.45, "#fff");
+  });
+  const tr = g.W.trophy; if (tr) { dwBox(cam, q, dwTr(tr.x, tr.y + 0.25, tr.z), 2.4, 0.5, 2.4, 0, 0, 0, "#e8e0d0"); dwBox(cam, q, dwRY(T, tr.x, tr.y + 1.35, tr.z), 1.1, 1.0, 1.1, 0, 0, 0, "#ffd23d"); dwBox(cam, q, dwRY(T, tr.x, tr.y + 0.85, tr.z), 0.35, 0.5, 0.35, 0, 0, 0, "#ffd23d"); dwBox(cam, q, dwRY(T, tr.x, tr.y + 2.0, tr.z), 0.6, 0.35, 0.6, 0, 0, 0, "#ffe27a"); dwSprite(cam, q, tr.x, tr.y + 1.6, tr.z, 2.2 + Math.sin(T * 4) * 0.2, "circle", "#ffe27a", 0.18); dwText(cam, q, tr.x, tr.y + 3.2, tr.z, "PIALA", 0.5, "#ffe27a"); }
+  g.W.coins.forEach((k) => { if (k.got) return; const yy = k.y + Math.sin(T * 3 + k.x) * 0.08; dwSprite(cam, q, k.x, yy, k.z, 0.3, "coin", "#ffd23d", 1, Math.abs(Math.cos(T * 3 + k.x * 0.7)) * 0.9 + 0.1); if (Math.hypot(k.x - cam.x, k.z - cam.z) < 26) { const m = q.length; dwSprite(cam, q, k.x, yy, k.z, 0.55, "circle", "#ffd23d", 0.08); if (q.length > m) q[m].d += 0.05; } });
+  g.W.signs.forEach((s) => dwText(cam, q, s.x, s.y, s.z, s.t, 0.5, "#fff"));
+  rbMotes(cam, q, g, night, th);
+  // pelakon
+  const npc = g.W.npc; dwActor(g, cam, q, npc.x, 0, npc.z, Math.atan2(p.x - npc.x, p.z - npc.z) * (Math.hypot(p.x - npc.x, p.z - npc.z) < 9 ? 1 : 0), { t: T * 0.5, mv: 0 }, DW_NPC, "Cikgu Gempur", g.near === "npc" ? "Tekan E" : null);
+  for (const id in DW.peers) { const e = DW.peers[id]; if (Math.hypot(e.x - cam.x, e.z - cam.z) > 70) continue; dwActor(g, cam, q, e.x, e.y, e.z, e.r, { t: T + e.ph, mv: e.m, air: e.a }, e.cfg, e.n, e.bub && T < e.bubT ? e.bub : null); }
+  if (p.dead <= 0 && !(p.inv > 0 && Math.floor(T * 14) % 2)) dwActor(g, cam, q, p.x, p.y, p.z, p.yaw, { t: T, mv: p.on && Math.hypot(p.vx, p.vz) > 1 ? 1 : 0, air: !p.on }, DW.cfg, DW.cfg.name, g.myB && T < g.myBT ? g.myB : null);
+  g.pt.forEach((e) => { const a = 1 - e.t / e.life; dwSprite(cam, q, e.x, e.y, e.z, e.r, e.sq ? "sq" : "circle", e.col, clamp(a * 1.6, 0, 1)); });
+  dwPaint(c, q);
+  // vinyet lembut dan cahaya
+  if (!DW.vg || DW.vgW !== W || DW.vgH !== H) { const vg = c.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.45, W / 2, H / 2, Math.max(W, H) * 0.78); vg.addColorStop(0, "rgba(0,0,0,0)"); vg.addColorStop(1, "rgba(0,0,0,0.34)"); DW.vg = vg; DW.vgW = W; DW.vgH = H; }
+  c.fillStyle = DW.vg; c.fillRect(0, 0, W, H);
+  const js = DW.js; if (js && !js.on && DW.coarse) { c.globalAlpha = 0.22; c.strokeStyle = "#fff"; c.lineWidth = 3; c.beginPath(); c.arc(86, H - 86, 56, 0, 7); c.stroke(); c.fillStyle = "#fff"; c.beginPath(); c.arc(86, H - 86, 22, 0, 7); c.fill(); c.globalAlpha = 1; }
+  if (js && js.on) { c.globalAlpha = 0.5; c.strokeStyle = "#fff"; c.lineWidth = 3; c.beginPath(); c.arc(js.cx, js.cy, 56, 0, 7); c.stroke(); c.fillStyle = "#fff"; c.beginPath(); c.arc(js.cx + js.x * 40, js.cy - js.y * 40, 24, 0, 7); c.fill(); c.globalAlpha = 1; }
+}
+/* papan pendahulu pemain gaya Roblox */
+function rbLbTick() {
+  const root = DG.root, g = DW.g, on = !!(root && !root.hidden && DW.on && DW.mode === "play" && g && !g.quiz && !g.shop);
+  let box = document.getElementById("rbLb");
+  if (!on) { if (box) box.remove(); return; }
+  if (!box) { box = el("div", { id: "rbLb", "aria-label": "Senarai pemain" }); root.appendChild(box); }
+  const rows = [{ n: DW.cfg.name || "Pelajar", s: g.W.gates.filter((x) => x.open).length, c: g.coins, me: 1 }];
+  for (const id in DW.peers) { const e = DW.peers[id]; rows.push({ n: e.n || "Pelajar", s: e.s | 0, c: null, me: 0 }); }
+  rows.sort((a, b) => b.s - a.s || b.me - a.me);
+  const sig = rows.map((r) => r.n + r.s + (r.c == null ? "" : r.c)).join("|"); if (box._s === sig) return; box._s = sig; box.textContent = "";
+  box.appendChild(el("div", { class: "rb-h" }, "PEMAIN"));
+  rows.slice(0, 8).forEach((r) => box.appendChild(el("div", { class: "rb-r" + (r.me ? " me" : "") }, null, el("span", { class: "rb-n" }, r.n), el("b", null, r.s + (r.c == null ? "" : " · " + r.c)))));
+  box.appendChild(el("div", { class: "rb-f" }, "pintu · syiling"));
+}
+setInterval(rbLbTick, 450);
 
 function setView(v) {
   UI.view = v;
