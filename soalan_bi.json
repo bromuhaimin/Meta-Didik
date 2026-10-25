@@ -1,0 +1,4131 @@
+{
+ "versi": "202610251400",
+ "dikemas": "2026-10-25T14:00:00",
+ "nota": "Fail ini diurus melalui bank.html. Jangan ubah nama medan. a = indeks jawapan betul (0=A, 1=B, 2=C, 3=D). d = aras (1 mudah, 2 sederhana, 3 sukar). status: aktif atau gantung. Soalan Bahasa Inggeris Tingkatan 4 dan 5 ini dijana berdasarkan DSKP KSSM; perlu disemak oleh guru Bahasa Inggeris sebelum digunakan.",
+ "topik": [
+  {
+   "id": "BI-T4-1",
+   "nama": "Listening: Main Ideas, Details and Attitudes",
+   "tingkatan": 4
+  },
+  {
+   "id": "BI-T4-2",
+   "nama": "Guessing Meaning from Context",
+   "tingkatan": 4
+  },
+  {
+   "id": "BI-T4-3",
+   "nama": "Speaking: Explaining, Justifying and Using Register",
+   "tingkatan": 4
+  },
+  {
+   "id": "BI-T4-4",
+   "nama": "Reading: Main Points, Details and Writer's Attitude",
+   "tingkatan": 4
+  },
+  {
+   "id": "BI-T4-5",
+   "nama": "Reading: Text Types and Features",
+   "tingkatan": 4
+  },
+  {
+   "id": "BI-T4-6",
+   "nama": "Writing: Explaining Visuals, Causes and Consequences",
+   "tingkatan": 4
+  },
+  {
+   "id": "BI-T4-7",
+   "nama": "Writing: Organising Ideas and Opinion Texts",
+   "tingkatan": 4
+  },
+  {
+   "id": "BI-T4-8",
+   "nama": "Writing Accuracy: Punctuation, Spelling and Register",
+   "tingkatan": 4
+  },
+  {
+   "id": "BI-T4-9",
+   "nama": "Grammar: Tenses, Subject-Verb Agreement and Articles",
+   "tingkatan": 4
+  },
+  {
+   "id": "BI-T4-10",
+   "nama": "Literature in Action: Plot, Character, Theme and Style",
+   "tingkatan": 4
+  },
+  {
+   "id": "BI-T5-1",
+   "nama": "Listening: Longer Texts and Complex Questions",
+   "tingkatan": 5
+  },
+  {
+   "id": "BI-T5-2",
+   "nama": "Speaking: Discussing, Summarising and Presenting",
+   "tingkatan": 5
+  },
+  {
+   "id": "BI-T5-3",
+   "nama": "Reading: Inference, Fact and Opinion, Bias",
+   "tingkatan": 5
+  },
+  {
+   "id": "BI-T5-4",
+   "nama": "Reading: Informational Texts (News, Emails, Notices, Advertisements)",
+   "tingkatan": 5
+  },
+  {
+   "id": "BI-T5-5",
+   "nama": "Writing: Formal and Informal Emails and Letters",
+   "tingkatan": 5
+  },
+  {
+   "id": "BI-T5-6",
+   "nama": "Writing: Articles, Reviews and Reports",
+   "tingkatan": 5
+  },
+  {
+   "id": "BI-T5-7",
+   "nama": "Grammar: Conditionals, Passive Voice, Reported Speech and Connectors",
+   "tingkatan": 5
+  },
+  {
+   "id": "BI-T5-8",
+   "nama": "Literature: Poems, Short Stories and Novel Components",
+   "tingkatan": 5
+  }
+ ],
+ "soalan": [
+  {
+   "i": 0,
+   "t": "BI-T4-1",
+   "d": 2,
+   "q": "The speaker says, 'The bus was late, so we missed the first act.' Why did they miss it?",
+   "o": [
+    "They did not like it.",
+    "The bus was late.",
+    "They overslept.",
+    "They lost their tickets."
+   ],
+   "a": 1,
+   "e": "So shows the result of the bus being late.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 1,
+   "t": "BI-T4-1",
+   "d": 3,
+   "q": "A good strategy when a listening answer is a number is to listen for ...",
+   "o": [
+    "the speaker's accent",
+    "only the first number",
+    "the longest word",
+    "figures and units, and check for corrections such as 'sorry, I mean'"
+   ],
+   "a": 3,
+   "e": "Speakers may self-correct, so the final number is the answer.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 2,
+   "t": "BI-T4-1",
+   "d": 2,
+   "q": "'In conclusion' signals ...",
+   "o": [
+    "the beginning",
+    "a question",
+    "the final summary",
+    "an example"
+   ],
+   "a": 2,
+   "e": "It introduces the closing summary.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 3,
+   "t": "BI-T4-1",
+   "d": 3,
+   "q": "A listener is asked, 'What was the speaker's purpose?' The answer is found by ...",
+   "o": [
+    "choosing the longest option",
+    "counting the words",
+    "identifying why the speaker spoke: to inform, persuade or advise",
+    "remembering the first sentence only"
+   ],
+   "a": 2,
+   "e": "Purpose relates to the reason for speaking.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 4,
+   "t": "BI-T4-1",
+   "d": 2,
+   "q": "Before listening, it is useful to ...",
+   "o": [
+    "read the questions and predict the answers",
+    "close your eyes",
+    "write every word",
+    "ignore the options"
+   ],
+   "a": 0,
+   "e": "Predicting prepares your mind to listen for key information.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 5,
+   "t": "BI-T4-1",
+   "d": 1,
+   "q": "The main idea of a talk is ...",
+   "o": [
+    "the central point the speaker wants to convey",
+    "a small detail in the middle",
+    "the speaker's name",
+    "the title of the book"
+   ],
+   "a": 0,
+   "e": "The main idea is the overall point of a talk.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 6,
+   "t": "BI-T4-1",
+   "d": 2,
+   "q": "A speaker says, 'I was thrilled to win, but a little nervous.' Her attitude is ...",
+   "o": [
+    "confused and lazy",
+    "bored and calm",
+    "excited but slightly anxious",
+    "angry and sad"
+   ],
+   "a": 2,
+   "e": "Thrilled shows excitement and nervous shows anxiety.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 7,
+   "t": "BI-T4-1",
+   "d": 2,
+   "q": "While listening, you should note ...",
+   "o": [
+    "full sentences",
+    "nothing at all",
+    "only the title",
+    "keywords"
+   ],
+   "a": 3,
+   "e": "Keywords are quick to write and enough to remember.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 8,
+   "t": "BI-T4-1",
+   "d": 2,
+   "q": "'However' usually signals ...",
+   "o": [
+    "an addition",
+    "a contrast",
+    "a time",
+    "an example"
+   ],
+   "a": 1,
+   "e": "However introduces a contrasting idea.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 9,
+   "t": "BI-T4-1",
+   "d": 1,
+   "q": "Signal words such as 'first' and 'next' show ...",
+   "o": [
+    "the speaker's age",
+    "the number of listeners",
+    "the order of ideas",
+    "the colour of the room"
+   ],
+   "a": 2,
+   "e": "They signal sequence.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 10,
+   "t": "BI-T4-1",
+   "d": 3,
+   "q": "A speaker says, 'It wasn't exactly the best meal I've had.' The speaker implies that the meal was ...",
+   "o": [
+    "delicious",
+    "exciting",
+    "expensive",
+    "not very good"
+   ],
+   "a": 3,
+   "e": "The understatement implies a negative opinion.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 11,
+   "t": "BI-T4-1",
+   "d": 1,
+   "q": "Which word shows a positive attitude?",
+   "o": [
+    "delighted",
+    "disappointed",
+    "annoyed",
+    "worried"
+   ],
+   "a": 0,
+   "e": "Delighted shows happiness.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 12,
+   "t": "BI-T4-1",
+   "d": 3,
+   "q": "'Not only is it cheap, but it is also durable.' The speaker is ...",
+   "o": [
+    "ignoring it",
+    "praising the product",
+    "complaining about it",
+    "asking a question"
+   ],
+   "a": 1,
+   "e": "Not only ... but also adds positive points.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 13,
+   "t": "BI-T4-1",
+   "d": 1,
+   "q": "Which question word asks about time?",
+   "o": [
+    "Where",
+    "How many",
+    "Who",
+    "When"
+   ],
+   "a": 3,
+   "e": "When asks about time.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 14,
+   "t": "BI-T4-2",
+   "d": 3,
+   "q": "'The politician's candid remarks surprised everyone because he usually avoided speaking honestly.' Candid means ...",
+   "o": [
+    "secret",
+    "rude",
+    "honest and direct",
+    "polite"
+   ],
+   "a": 2,
+   "e": "Surprise and 'usually avoided speaking honestly' show candid is the opposite.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 15,
+   "t": "BI-T4-2",
+   "d": 1,
+   "q": "In 'A habitat, or the natural home of an animal, is protected', the clue is ...",
+   "o": [
+    "definition",
+    "example",
+    "contrast",
+    "comparison"
+   ],
+   "a": 0,
+   "e": "The phrase 'or the natural home...' defines habitat.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 16,
+   "t": "BI-T4-2",
+   "d": 2,
+   "q": "'Nutritious foods such as vegetables and fruits are essential.' Nutritious means ...",
+   "o": [
+    "old",
+    "healthy and good for the body",
+    "expensive",
+    "dangerous"
+   ],
+   "a": 1,
+   "e": "Vegetables and fruits are examples of healthy food.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 17,
+   "t": "BI-T4-2",
+   "d": 2,
+   "q": "'Unlike his generous sister, he is stingy.' Stingy means ...",
+   "o": [
+    "unwilling to give or spend money",
+    "very generous",
+    "very tall",
+    "very noisy"
+   ],
+   "a": 0,
+   "e": "Unlike generous means the opposite of generous.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 18,
+   "t": "BI-T4-2",
+   "d": 3,
+   "q": "A reader meets an unfamiliar word in a digital article. The best first step is to ...",
+   "o": [
+    "skip the whole paragraph",
+    "use clues in the sentence, then check an online dictionary",
+    "stop reading",
+    "guess without reading"
+   ],
+   "a": 1,
+   "e": "Using clues first, then verifying, builds understanding.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 19,
+   "t": "BI-T4-2",
+   "d": 1,
+   "q": "Context clues are ...",
+   "o": [
+    "the page number",
+    "the dictionary entry",
+    "the title of the book",
+    "words around an unfamiliar word that help you guess its meaning"
+   ],
+   "a": 3,
+   "e": "Context means the surrounding words.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 20,
+   "t": "BI-T4-2",
+   "d": 2,
+   "q": "The word 'drought' in 'The drought left farmers with dry fields and no water' means ...",
+   "o": [
+    "a festival",
+    "a heavy flood",
+    "a strong wind",
+    "a long period without rain"
+   ],
+   "a": 3,
+   "e": "Dry fields and no water are clues.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 21,
+   "t": "BI-T4-2",
+   "d": 3,
+   "q": "'Her reluctance to join was obvious; she kept looking at the door.' Reluctance means ...",
+   "o": [
+    "confidence",
+    "eagerness",
+    "happiness",
+    "unwillingness"
+   ],
+   "a": 3,
+   "e": "Looking at the door shows she did not want to stay.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 22,
+   "t": "BI-T4-2",
+   "d": 2,
+   "q": "In 'The room was so tiny that it could barely fit a bed', tiny means ...",
+   "o": [
+    "very large",
+    "very small",
+    "very cold",
+    "very bright"
+   ],
+   "a": 1,
+   "e": "So ... that shows result: it can barely fit a bed.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 23,
+   "t": "BI-T4-2",
+   "d": 3,
+   "q": "In 'He is a meticulous worker, checking every detail twice', meticulous means ...",
+   "o": [
+    "careless",
+    "fast",
+    "very careful about details",
+    "lazy"
+   ],
+   "a": 2,
+   "e": "Checking every detail twice shows carefulness.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 24,
+   "t": "BI-T4-2",
+   "d": 1,
+   "q": "In 'She was jubilant, or extremely happy', jubilant means ...",
+   "o": [
+    "very angry",
+    "very sad",
+    "very tired",
+    "extremely happy"
+   ],
+   "a": 3,
+   "e": "The synonym clue 'extremely happy' explains it.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 25,
+   "t": "BI-T4-2",
+   "d": 2,
+   "q": "Which is an example clue signal?",
+   "o": [
+    "unlike",
+    "on the other hand",
+    "such as",
+    "however"
+   ],
+   "a": 2,
+   "e": "Such as introduces examples.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 26,
+   "t": "BI-T4-2",
+   "d": 1,
+   "q": "'Unlike' signals ...",
+   "o": [
+    "a time order",
+    "a definition",
+    "a contrast",
+    "an example"
+   ],
+   "a": 2,
+   "e": "Unlike introduces the opposite.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 27,
+   "t": "BI-T4-2",
+   "d": 2,
+   "q": "After guessing a word's meaning, you should ...",
+   "o": [
+    "check that it fits the sentence",
+    "never use a dictionary",
+    "ignore the rest of the sentence",
+    "change the word"
+   ],
+   "a": 0,
+   "e": "Checking avoids misunderstanding.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 28,
+   "t": "BI-T4-3",
+   "d": 2,
+   "q": "To summarise a story's main points, you can say ...",
+   "o": [
+    "In short, the story is about ...",
+    "Whatever.",
+    "I do not know.",
+    "The end."
+   ],
+   "a": 0,
+   "e": "In short introduces a summary.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 29,
+   "t": "BI-T4-3",
+   "d": 3,
+   "q": "Which sentence best justifies an opinion?",
+   "o": [
+    "I believe uniforms should be kept because they promote equality; for example, students are not judged by their clothes.",
+    "I like uniforms.",
+    "Uniforms are fine.",
+    "Uniforms, yes."
+   ],
+   "a": 0,
+   "e": "It states opinion, reason and example.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 30,
+   "t": "BI-T4-3",
+   "d": 3,
+   "q": "A friend says, 'I failed the test.' A suitable informal response expressing sympathy is ...",
+   "o": [
+    "That is your problem.",
+    "It does not matter to me.",
+    "Serves you right.",
+    "Oh no, I'm so sorry. Do you want to talk about it?"
+   ],
+   "a": 3,
+   "e": "It expresses empathy.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 31,
+   "t": "BI-T4-3",
+   "d": 3,
+   "q": "Which sentence uses formal register correctly?",
+   "o": [
+    "Tell me what to do.",
+    "Gimme the instructions.",
+    "Explain it again, okay?",
+    "I would be grateful if you could clarify the instructions."
+   ],
+   "a": 3,
+   "e": "Would be grateful and could are polite formal forms.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 32,
+   "t": "BI-T4-3",
+   "d": 2,
+   "q": "To justify an opinion, you should give ...",
+   "o": [
+    "a long silence",
+    "a joke only",
+    "a question only",
+    "a reason and an example"
+   ],
+   "a": 3,
+   "e": "Opinion + reason + example forms a strong justification.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 33,
+   "t": "BI-T4-3",
+   "d": 1,
+   "q": "Which is a formal greeting?",
+   "o": [
+    "Hey, bro!",
+    "Good morning, Mr Tan.",
+    "Yo, teacher!",
+    "What's up, mate?"
+   ],
+   "a": 1,
+   "e": "Formal language is polite and complete.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 34,
+   "t": "BI-T4-3",
+   "d": 2,
+   "q": "In an interview, you should speak ...",
+   "o": [
+    "using slang",
+    "very softly",
+    "formally and clearly",
+    "without eye contact"
+   ],
+   "a": 2,
+   "e": "Interviews require formal register.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 35,
+   "t": "BI-T4-3",
+   "d": 1,
+   "q": "Which phrase gives a result?",
+   "o": [
+    "As a result",
+    "On the other hand",
+    "In my opinion",
+    "For example"
+   ],
+   "a": 0,
+   "e": "As a result introduces a consequence.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 36,
+   "t": "BI-T4-3",
+   "d": 1,
+   "q": "Which phrase expresses regret?",
+   "o": [
+    "I am delighted to see you.",
+    "I look forward to it.",
+    "I wish I had studied harder.",
+    "It is hilarious."
+   ],
+   "a": 2,
+   "e": "I wish I had ... expresses regret.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 37,
+   "t": "BI-T4-3",
+   "d": 1,
+   "q": "Which word expresses a cause?",
+   "o": [
+    "however",
+    "because",
+    "although",
+    "meanwhile"
+   ],
+   "a": 1,
+   "e": "Because introduces a cause.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 38,
+   "t": "BI-T4-3",
+   "d": 3,
+   "q": "Which pair gives an advantage and a disadvantage of studying online?",
+   "o": [
+    "Flexible schedule; flexible location",
+    "Cheap; inexpensive",
+    "Convenient; easy",
+    "Flexible schedule; difficult to stay focused"
+   ],
+   "a": 3,
+   "e": "An advantage and a disadvantage show opposite points.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 39,
+   "t": "BI-T4-3",
+   "d": 2,
+   "q": "Which sentence is informal?",
+   "o": [
+    "I am going to have lunch.",
+    "I shall have a light snack.",
+    "I'm gonna grab a snack.",
+    "I would like some refreshments."
+   ],
+   "a": 2,
+   "e": "Gonna and grab are informal.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 40,
+   "t": "BI-T4-3",
+   "d": 2,
+   "q": "The best phrase to check understanding is ...",
+   "o": [
+    "If I understand correctly, you mean that ...",
+    "Speak louder.",
+    "That's wrong.",
+    "Never mind."
+   ],
+   "a": 0,
+   "e": "It repeats back what the speaker said.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 41,
+   "t": "BI-T4-3",
+   "d": 2,
+   "q": "Which is a disadvantage phrase?",
+   "o": [
+    "One benefit is that it saves time.",
+    "The main drawback is that it is costly.",
+    "I fully support it.",
+    "It is a great idea."
+   ],
+   "a": 1,
+   "e": "Drawback shows a disadvantage.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 42,
+   "t": "BI-T4-4",
+   "d": 2,
+   "q": "The sentence 'Unfortunately, the project was cancelled' shows that the writer feels ...",
+   "o": [
+    "surprised only",
+    "proud",
+    "sad or regretful",
+    "excited"
+   ],
+   "a": 2,
+   "e": "Unfortunately shows regret.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 43,
+   "t": "BI-T4-4",
+   "d": 2,
+   "q": "Supporting details are used to ...",
+   "o": [
+    "replace the topic sentence",
+    "confuse the reader",
+    "shorten the text",
+    "explain or prove the main idea"
+   ],
+   "a": 3,
+   "e": "They develop the main point.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 44,
+   "t": "BI-T4-4",
+   "d": 2,
+   "q": "A suitable title for a paragraph about the benefits of exercise is ...",
+   "o": [
+    "My Pet Cat",
+    "Why Exercise Matters",
+    "The History of Paper",
+    "A Rainy Day"
+   ],
+   "a": 1,
+   "e": "A title reflects the main idea.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 45,
+   "t": "BI-T4-4",
+   "d": 3,
+   "q": "Which is the best summary sentence?",
+   "o": [
+    "The article says plastic bags are many colours.",
+    "Recycling is something people do on Sundays.",
+    "The writer lives near a recycling centre.",
+    "The article explains how recycling reduces waste and protects the environment."
+   ],
+   "a": 3,
+   "e": "A summary states the main points.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 46,
+   "t": "BI-T4-4",
+   "d": 1,
+   "q": "Which is a fact?",
+   "o": [
+    "Malaysia has thirteen states.",
+    "Nasi lemak is the best food.",
+    "The park is beautiful.",
+    "Rainy days are boring."
+   ],
+   "a": 0,
+   "e": "Facts can be verified.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 47,
+   "t": "BI-T4-4",
+   "d": 1,
+   "q": "Skimming means ...",
+   "o": [
+    "reading every word slowly",
+    "memorising the text",
+    "reading backwards",
+    "reading quickly to get the general idea"
+   ],
+   "a": 3,
+   "e": "Skimming gives an overview.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 48,
+   "t": "BI-T4-4",
+   "d": 1,
+   "q": "A topic sentence usually states ...",
+   "o": [
+    "the writer's address",
+    "the main point of the paragraph",
+    "a minor detail",
+    "a date only"
+   ],
+   "a": 1,
+   "e": "Topic sentences state the main idea.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 49,
+   "t": "BI-T4-4",
+   "d": 2,
+   "q": "Which is an opinion?",
+   "o": [
+    "Online learning is better than classroom learning.",
+    "Classes start at 8 a.m.",
+    "Online learning uses the internet.",
+    "The school has 30 classrooms."
+   ],
+   "a": 0,
+   "e": "Better than is a judgement.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 50,
+   "t": "BI-T4-4",
+   "d": 2,
+   "q": "Which word shows a negative attitude?",
+   "o": [
+    "remarkable",
+    "delightful",
+    "disappointing",
+    "inspiring"
+   ],
+   "a": 2,
+   "e": "Disappointing is negative.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 51,
+   "t": "BI-T4-4",
+   "d": 2,
+   "q": "Which question is answered by scanning?",
+   "o": [
+    "What is the overall tone?",
+    "In what year was the museum built?",
+    "What is the best title?",
+    "What is the writer's main purpose?"
+   ],
+   "a": 1,
+   "e": "A date is specific information.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 52,
+   "t": "BI-T4-4",
+   "d": 3,
+   "q": "A writer describes a policy as 'a reckless decision that endangers everyone'. The writer's attitude is ...",
+   "o": [
+    "neutral",
+    "supportive",
+    "strongly critical",
+    "amused"
+   ],
+   "a": 2,
+   "e": "Reckless and endangers show strong criticism.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 53,
+   "t": "BI-T4-4",
+   "d": 1,
+   "q": "Scanning means ...",
+   "o": [
+    "translating the text",
+    "looking for specific information",
+    "reading for general idea",
+    "writing a summary"
+   ],
+   "a": 1,
+   "e": "Scanning searches for details.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 54,
+   "t": "BI-T4-4",
+   "d": 3,
+   "q": "The writer says, 'The new park, though small, is delightful.' The word 'though' shows ...",
+   "o": [
+    "a contrast",
+    "a time",
+    "an example",
+    "a cause"
+   ],
+   "a": 0,
+   "e": "Though shows a contrast.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 55,
+   "t": "BI-T4-4",
+   "d": 3,
+   "q": "To check the writer's attitude, you should look at ...",
+   "o": [
+    "the size of the font",
+    "the page number",
+    "word choice and tone",
+    "the number of paragraphs"
+   ],
+   "a": 2,
+   "e": "Attitude is revealed through language.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 56,
+   "t": "BI-T4-5",
+   "d": 2,
+   "q": "Which is a feature of a notice?",
+   "o": [
+    "poetry",
+    "dialogue",
+    "short and clear information",
+    "long narrative"
+   ],
+   "a": 2,
+   "e": "Notices must be concise.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 57,
+   "t": "BI-T4-5",
+   "d": 2,
+   "q": "Which text type includes a greeting, body and closing?",
+   "o": [
+    "poster",
+    "email",
+    "recipe",
+    "news headline"
+   ],
+   "a": 1,
+   "e": "Emails and letters have that structure.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 58,
+   "t": "BI-T4-5",
+   "d": 2,
+   "q": "Which verb form is common in instructions?",
+   "o": [
+    "past perfect",
+    "passive only",
+    "imperative",
+    "future perfect"
+   ],
+   "a": 2,
+   "e": "Instructions use commands such as 'Mix the flour'.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 59,
+   "t": "BI-T4-5",
+   "d": 3,
+   "q": "A persuasive article uses rhetorical questions to ...",
+   "o": [
+    "make readers think and agree",
+    "list rules",
+    "provide statistics only",
+    "end the article"
+   ],
+   "a": 0,
+   "e": "Rhetorical questions engage readers.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 60,
+   "t": "BI-T4-5",
+   "d": 3,
+   "q": "To investigate a national issue such as air pollution, you should ...",
+   "o": [
+    "ignore the data",
+    "read one blog only",
+    "ask only friends",
+    "read several reliable sources and compare viewpoints"
+   ],
+   "a": 3,
+   "e": "Using varied sources reduces bias.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 61,
+   "t": "BI-T4-5",
+   "d": 3,
+   "q": "Why do news reports often use quotes?",
+   "o": [
+    "to make the report longer",
+    "to replace facts",
+    "to confuse readers",
+    "to add credibility and show different viewpoints"
+   ],
+   "a": 3,
+   "e": "Quotes support the report.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 62,
+   "t": "BI-T4-5",
+   "d": 2,
+   "q": "A headline like 'Floods Hit Kelantan' is written in ...",
+   "o": [
+    "long past tense",
+    "short, present tense for impact",
+    "poetry",
+    "question form"
+   ],
+   "a": 1,
+   "e": "Headlines are short and often use present tense.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 63,
+   "t": "BI-T4-5",
+   "d": 2,
+   "q": "Which is a feature of a blog post?",
+   "o": [
+    "personal voice",
+    "tables only",
+    "no opinion",
+    "legal terms only"
+   ],
+   "a": 0,
+   "e": "Blogs often use personal voice.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 64,
+   "t": "BI-T4-5",
+   "d": 1,
+   "q": "The lead paragraph of a news report answers ...",
+   "o": [
+    "who, what, when, where and why",
+    "only when",
+    "only who",
+    "only where"
+   ],
+   "a": 0,
+   "e": "The lead contains key information.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 65,
+   "t": "BI-T4-5",
+   "d": 2,
+   "q": "To check if an online source is reliable, you should ...",
+   "o": [
+    "count the adverts",
+    "read the title only",
+    "check the author, date and evidence",
+    "only look at the pictures"
+   ],
+   "a": 2,
+   "e": "Reliability depends on author and evidence.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 66,
+   "t": "BI-T4-5",
+   "d": 1,
+   "q": "An advertisement often uses ...",
+   "o": [
+    "technical lists",
+    "long paragraphs",
+    "persuasive language and short phrases",
+    "historical dates only"
+   ],
+   "a": 2,
+   "e": "Adverts persuade quickly.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 67,
+   "t": "BI-T4-5",
+   "d": 1,
+   "q": "A news report usually begins with ...",
+   "o": [
+    "a poem",
+    "a headline and lead paragraph",
+    "a recipe",
+    "a dialogue only"
+   ],
+   "a": 1,
+   "e": "News reports state key facts first.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 68,
+   "t": "BI-T4-5",
+   "d": 1,
+   "q": "A formal letter ends with ...",
+   "o": [
+    "Later!",
+    "See ya!",
+    "Bye-bye!",
+    "Yours faithfully / Yours sincerely"
+   ],
+   "a": 3,
+   "e": "Formal letters have formal closings.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 69,
+   "t": "BI-T4-5",
+   "d": 3,
+   "q": "Which sentence is most suitable for a formal email?",
+   "o": [
+    "Hey, answer lah.",
+    "I would appreciate your reply at your earliest convenience.",
+    "Reply me fast.",
+    "Need your reply now!!"
+   ],
+   "a": 1,
+   "e": "Formal emails use polite expressions.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 70,
+   "t": "BI-T4-6",
+   "d": 2,
+   "q": "Which sentence has the correct tense for a completed event shown in a chart?",
+   "o": [
+    "In 2022, the number of visitors reaching 5,000.",
+    "In 2022, the number of visitors reach 5,000.",
+    "In 2022, the number of visitors reached 5,000.",
+    "In 2022, the number of visitors will reach 5,000."
+   ],
+   "a": 2,
+   "e": "Past tense for completed events.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 71,
+   "t": "BI-T4-6",
+   "d": 1,
+   "q": "A pie chart shows ...",
+   "o": [
+    "change over time",
+    "a story",
+    "proportions of a whole",
+    "a timetable"
+   ],
+   "a": 2,
+   "e": "Pie charts show parts of a whole.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 72,
+   "t": "BI-T4-6",
+   "d": 3,
+   "q": "A chart shows 45% of students walk to school, 30% take buses and 25% cycle. The correct comparison is ...",
+   "o": [
+    "The largest group walks to school, while the smallest group cycles.",
+    "Everyone walks.",
+    "Most students cycle.",
+    "Buses are the least popular."
+   ],
+   "a": 0,
+   "e": "45% is highest, 25% is lowest.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 73,
+   "t": "BI-T4-6",
+   "d": 2,
+   "q": "Which phrase shows consequence?",
+   "o": [
+    "due to",
+    "owing to",
+    "As a result",
+    "because of"
+   ],
+   "a": 2,
+   "e": "As a result introduces consequence.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 74,
+   "t": "BI-T4-6",
+   "d": 2,
+   "q": "The first sentence in describing a chart should ...",
+   "o": [
+    "state what the chart shows",
+    "list all numbers",
+    "end the writing",
+    "give a personal opinion"
+   ],
+   "a": 0,
+   "e": "Introduce the visual first.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 75,
+   "t": "BI-T4-6",
+   "d": 3,
+   "q": "Which linker is suitable to add a consequence?",
+   "o": [
+    "Meanwhile",
+    "Consequently",
+    "Although",
+    "For example"
+   ],
+   "a": 1,
+   "e": "Consequently shows result.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 76,
+   "t": "BI-T4-6",
+   "d": 2,
+   "q": "The graph shows sales rose from 20 to 80 between 2020 and 2024. Which sentence describes this?",
+   "o": [
+    "Sales increased sharply from 20 to 80 between 2020 and 2024.",
+    "Sales were stable at 80.",
+    "Sales decreased from 20 to 80.",
+    "Sales fell sharply."
+   ],
+   "a": 0,
+   "e": "The numbers went up.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 77,
+   "t": "BI-T4-6",
+   "d": 3,
+   "q": "A report says, 'Water use fluctuated between 2018 and 2022.' This means water use ...",
+   "o": [
+    "went up and down",
+    "stayed the same",
+    "only increased",
+    "only decreased"
+   ],
+   "a": 0,
+   "e": "Fluctuate means vary.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 78,
+   "t": "BI-T4-6",
+   "d": 1,
+   "q": "A line graph shows ...",
+   "o": [
+    "parts of a whole only",
+    "change over time",
+    "a map",
+    "a list of names"
+   ],
+   "a": 1,
+   "e": "Line graphs show trends.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 79,
+   "t": "BI-T4-6",
+   "d": 3,
+   "q": "Which sentence best explains a consequence?",
+   "o": [
+    "Families are many.",
+    "The cost of living is a topic.",
+    "Saving is a verb.",
+    "As the cost of living rose, many families began to save more."
+   ],
+   "a": 3,
+   "e": "It shows cause and effect.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 80,
+   "t": "BI-T4-6",
+   "d": 1,
+   "q": "Which phrase shows cause?",
+   "o": [
+    "consequently",
+    "due to",
+    "as a result",
+    "therefore"
+   ],
+   "a": 1,
+   "e": "Due to introduces cause.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 81,
+   "t": "BI-T4-6",
+   "d": 2,
+   "q": "A bar chart is best used to ...",
+   "o": [
+    "show a map",
+    "compare different categories",
+    "show change over many years",
+    "show a story"
+   ],
+   "a": 1,
+   "e": "Bars compare categories.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 82,
+   "t": "BI-T4-6",
+   "d": 2,
+   "q": "Which sentence explains a cause?",
+   "o": [
+    "Rivers are long.",
+    "Pollution is a big word.",
+    "Fish live in water.",
+    "Many fish died due to pollution in the river."
+   ],
+   "a": 3,
+   "e": "Due to explains why fish died.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 83,
+   "t": "BI-T4-6",
+   "d": 1,
+   "q": "Which word describes an upward trend?",
+   "o": [
+    "drop",
+    "decline",
+    "fall",
+    "increase"
+   ],
+   "a": 3,
+   "e": "Increase means go up.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 84,
+   "t": "BI-T4-7",
+   "d": 3,
+   "q": "Which connector best introduces a final paragraph?",
+   "o": [
+    "On the other hand",
+    "Meanwhile",
+    "In conclusion",
+    "For instance"
+   ],
+   "a": 2,
+   "e": "In conclusion signals the end.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 85,
+   "t": "BI-T4-7",
+   "d": 2,
+   "q": "Which is the best order for an opinion essay?",
+   "o": [
+    "Examples only",
+    "Conclusion, reasons, introduction",
+    "Reasons only",
+    "Introduction with stand, reasons with examples, conclusion"
+   ],
+   "a": 3,
+   "e": "This is a logical order.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 86,
+   "t": "BI-T4-7",
+   "d": 2,
+   "q": "Editing includes ...",
+   "o": [
+    "changing the font only",
+    "adding more pictures",
+    "shortening the title",
+    "checking content, organisation, language and accuracy"
+   ],
+   "a": 3,
+   "e": "Editing improves the draft.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 87,
+   "t": "BI-T4-7",
+   "d": 2,
+   "q": "Which sentence states a stand?",
+   "o": [
+    "Students exist.",
+    "I strongly believe that students should do community service.",
+    "Some do, some do not.",
+    "Community service is a phrase."
+   ],
+   "a": 1,
+   "e": "It states a clear opinion.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 88,
+   "t": "BI-T4-7",
+   "d": 2,
+   "q": "The conclusion of an opinion essay should ...",
+   "o": [
+    "restate the stand and summarise main reasons",
+    "introduce a new topic",
+    "avoid opinions",
+    "contain a long story"
+   ],
+   "a": 0,
+   "e": "Conclusions wrap up the argument.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 89,
+   "t": "BI-T4-7",
+   "d": 1,
+   "q": "A topic sentence states ...",
+   "o": [
+    "a date",
+    "the main idea of the paragraph",
+    "the writer's age",
+    "a minor detail"
+   ],
+   "a": 1,
+   "e": "It introduces the paragraph's focus.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 90,
+   "t": "BI-T4-7",
+   "d": 1,
+   "q": "Which connector shows contrast?",
+   "o": [
+    "However",
+    "Furthermore",
+    "Moreover",
+    "Firstly"
+   ],
+   "a": 0,
+   "e": "However shows contrast.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 91,
+   "t": "BI-T4-7",
+   "d": 3,
+   "q": "After receiving feedback that your essay lacks examples, you should ...",
+   "o": [
+    "change the title only",
+    "write a shorter introduction",
+    "add specific examples to each body paragraph",
+    "delete the conclusion"
+   ],
+   "a": 2,
+   "e": "Examples strengthen arguments.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 92,
+   "t": "BI-T4-7",
+   "d": 1,
+   "q": "Which connector adds an idea?",
+   "o": [
+    "However",
+    "In addition",
+    "On the contrary",
+    "In contrast"
+   ],
+   "a": 1,
+   "e": "In addition adds to the previous point.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 93,
+   "t": "BI-T4-7",
+   "d": 3,
+   "q": "Which of the following is a weak supporting sentence?",
+   "o": [
+    "Many people like it.",
+    "One reason is that online materials are updated regularly.",
+    "For example, e-books are lighter than printed books.",
+    "A recent survey shows 70% of students prefer reading online."
+   ],
+   "a": 0,
+   "e": "It is vague and lacks evidence.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 94,
+   "t": "BI-T4-7",
+   "d": 2,
+   "q": "Which sentence expresses regret?",
+   "o": [
+    "I am furious at the noise.",
+    "I was amused.",
+    "I regret not asking for help earlier.",
+    "I felt delighted."
+   ],
+   "a": 2,
+   "e": "Regret shows disappointment about the past.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 95,
+   "t": "BI-T4-7",
+   "d": 2,
+   "q": "Which sentence is a good topic sentence?",
+   "o": [
+    "Many books.",
+    "Reading regularly improves vocabulary.",
+    "I like it.",
+    "Reading, yes."
+   ],
+   "a": 1,
+   "e": "It states a clear main idea.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 96,
+   "t": "BI-T4-7",
+   "d": 3,
+   "q": "Which paragraph is best organised?",
+   "o": [
+    "Exercise. Heart. Stress. Sports.",
+    "Exercise health but heart stress sports.",
+    "Firstly, exercise improves health. For example, it strengthens the heart. In addition, it reduces stress. Therefore, schools should promote sports.",
+    "Sports, yes! Heart good."
+   ],
+   "a": 2,
+   "e": "It has topic sentence, support, connector and conclusion.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 97,
+   "t": "BI-T4-7",
+   "d": 1,
+   "q": "An essay has ...",
+   "o": [
+    "only an ending",
+    "only a title",
+    "only body paragraphs",
+    "an introduction, body and conclusion"
+   ],
+   "a": 3,
+   "e": "Standard essay structure.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 98,
+   "t": "BI-T4-8",
+   "d": 3,
+   "q": "A letter to a principal should begin with ...",
+   "o": [
+    "Hi dude,",
+    "Yo Principal,",
+    "Hey,",
+    "Dear Sir/Madam,"
+   ],
+   "a": 3,
+   "e": "Formal greeting suits the audience.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 99,
+   "t": "BI-T4-8",
+   "d": 2,
+   "q": "Which sentence uses an apostrophe correctly?",
+   "o": [
+    "The teachers' book is on the table (one teacher).",
+    "The teacher book's is on the table.",
+    "The teachers book is on the table.",
+    "The teacher's book is on the table."
+   ],
+   "a": 3,
+   "e": "Singular possessive uses 's.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 100,
+   "t": "BI-T4-8",
+   "d": 1,
+   "q": "Which sentence uses capital letters correctly?",
+   "o": [
+    "on monday, aisha went to kuala lumpur.",
+    "On Monday, aisha went to kuala Lumpur.",
+    "On Monday, Aisha went to Kuala Lumpur.",
+    "On monday, Aisha went to Kuala lumpur."
+   ],
+   "a": 2,
+   "e": "Capitalise days and names.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 101,
+   "t": "BI-T4-8",
+   "d": 1,
+   "q": "Which is correctly spelled?",
+   "o": [
+    "necessery",
+    "necesary",
+    "necessary",
+    "neccessary"
+   ],
+   "a": 2,
+   "e": "Necessary has one c and two s.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 102,
+   "t": "BI-T4-8",
+   "d": 2,
+   "q": "Choose the correct word: 'The new rule will ____ many students.'",
+   "o": [
+    "affected by",
+    "effect",
+    "affects of",
+    "affect"
+   ],
+   "a": 3,
+   "e": "Affect is the verb.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 103,
+   "t": "BI-T4-8",
+   "d": 1,
+   "q": "Choose the correct word: 'The students left ____ bags in the classroom.'",
+   "o": [
+    "there",
+    "they're",
+    "their",
+    "thier"
+   ],
+   "a": 2,
+   "e": "Their shows possession.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 104,
+   "t": "BI-T4-8",
+   "d": 3,
+   "q": "Which sentence is both correctly punctuated and formal?",
+   "o": [
+    "I cannot attend the meeting; however, I will send a representative.",
+    "I cannot attend, so whatever.",
+    "I can't come lah, but I will send somebody.",
+    "I cant attend the meeting, however I will send someone."
+   ],
+   "a": 0,
+   "e": "Semicolon and however are used correctly.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 105,
+   "t": "BI-T4-8",
+   "d": 3,
+   "q": "Which sentence has the correct spelling?",
+   "o": [
+    "The government must protect the environment.",
+    "The goverment must protect the environment.",
+    "The goverment must protect the enviroment.",
+    "The government must protect the enviroment."
+   ],
+   "a": 0,
+   "e": "Both words must be correct.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 106,
+   "t": "BI-T4-8",
+   "d": 3,
+   "q": "Which sentence is correct?",
+   "o": [
+    "Your report is ready, and your welcome to collect it.",
+    "Your report is ready, and you're welcome to collect it.",
+    "You're report is ready, and your welcome to collect it.",
+    "Your report is ready, and you welcome to collect it."
+   ],
+   "a": 1,
+   "e": "You're = you are.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 107,
+   "t": "BI-T4-8",
+   "d": 2,
+   "q": "Which is informal?",
+   "o": [
+    "I am extremely fatigued.",
+    "I'm so tired, mate!",
+    "I shall retire early.",
+    "I would appreciate rest."
+   ],
+   "a": 1,
+   "e": "I'm and mate are informal.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 108,
+   "t": "BI-T4-8",
+   "d": 1,
+   "q": "Choose the correct word: '____ a beautiful day.'",
+   "o": [
+    "Its",
+    "It's",
+    "Is",
+    "Its'"
+   ],
+   "a": 1,
+   "e": "It's = it is.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 109,
+   "t": "BI-T4-8",
+   "d": 2,
+   "q": "Which sentence is formal?",
+   "o": [
+    "I would like to request an extension.",
+    "Gimme more time.",
+    "I wanna extend.",
+    "Can I have more time or what?"
+   ],
+   "a": 0,
+   "e": "Would like to is formal.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 110,
+   "t": "BI-T4-8",
+   "d": 2,
+   "q": "Choose the correct word: 'Pollution has a bad ____ on health.'",
+   "o": [
+    "affected",
+    "effect",
+    "affect",
+    "affects"
+   ],
+   "a": 1,
+   "e": "Effect is the noun.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 111,
+   "t": "BI-T4-8",
+   "d": 2,
+   "q": "Which sentence uses a comma correctly?",
+   "o": [
+    "We bought apples, oranges and bananas.",
+    "We bought, apples oranges and bananas.",
+    "We bought apples oranges and bananas,",
+    "We bought apples oranges, and bananas."
+   ],
+   "a": 0,
+   "e": "Commas separate list items.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 112,
+   "t": "BI-T4-9",
+   "d": 3,
+   "q": "Choose the correct form: 'The books on the shelf ____ new.'",
+   "o": [
+    "be",
+    "are",
+    "was being",
+    "is"
+   ],
+   "a": 1,
+   "e": "The subject is books (plural).",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 113,
+   "t": "BI-T4-9",
+   "d": 2,
+   "q": "Choose the correct form: 'I ____ my homework already.'",
+   "o": [
+    "am finish",
+    "finishes",
+    "have finished",
+    "finished yesterday"
+   ],
+   "a": 2,
+   "e": "Present perfect links to now.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 114,
+   "t": "BI-T4-9",
+   "d": 1,
+   "q": "Which is correct?",
+   "o": [
+    "an university",
+    "a universities",
+    "a university",
+    "an universe"
+   ],
+   "a": 2,
+   "e": "University begins with a consonant sound /ju/.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 115,
+   "t": "BI-T4-9",
+   "d": 3,
+   "q": "Which sentence uses the correct tense for a general truth?",
+   "o": [
+    "The sun rises in the east.",
+    "The sun is rising in the east always.",
+    "The sun has rose in the east.",
+    "The sun rose in the east."
+   ],
+   "a": 0,
+   "e": "General truths use simple present.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 116,
+   "t": "BI-T4-9",
+   "d": 2,
+   "q": "Which sentence is correct?",
+   "o": [
+    "Water is essential for life.",
+    "Waters is essential for life.",
+    "The water is essential for life in general.",
+    "A water is essential for life."
+   ],
+   "a": 0,
+   "e": "No article is needed for general uncountable nouns.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 117,
+   "t": "BI-T4-9",
+   "d": 2,
+   "q": "Choose the correct form: 'Yesterday, we ____ the museum.'",
+   "o": [
+    "have visit",
+    "visited",
+    "visit",
+    "visits"
+   ],
+   "a": 1,
+   "e": "Past tense for a completed action.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 118,
+   "t": "BI-T4-9",
+   "d": 1,
+   "q": "Choose the correct form: 'She ____ to school every day.'",
+   "o": [
+    "walked yesterday",
+    "walk",
+    "walking",
+    "walks"
+   ],
+   "a": 3,
+   "e": "Singular subject she takes walks.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 119,
+   "t": "BI-T4-9",
+   "d": 3,
+   "q": "Which sentence is correct?",
+   "o": [
+    "She is best student in the class.",
+    "She is the best student of class.",
+    "She is a best student in the class.",
+    "She is the best student in the class."
+   ],
+   "a": 3,
+   "e": "Superlatives take the.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 120,
+   "t": "BI-T4-9",
+   "d": 2,
+   "q": "Choose the correct form: 'Each of the students ____ a textbook.'",
+   "o": [
+    "have",
+    "were",
+    "has",
+    "are having"
+   ],
+   "a": 2,
+   "e": "Each takes a singular verb.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 121,
+   "t": "BI-T4-9",
+   "d": 3,
+   "q": "Choose the correct form: 'By the time we arrived, the film ____ started.'",
+   "o": [
+    "had",
+    "have",
+    "will",
+    "has"
+   ],
+   "a": 0,
+   "e": "Past perfect: had started.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 122,
+   "t": "BI-T4-9",
+   "d": 2,
+   "q": "Choose the correct form: 'Look! The baby ____.'",
+   "o": [
+    "slept",
+    "sleeps",
+    "has sleep",
+    "is sleeping"
+   ],
+   "a": 3,
+   "e": "Present continuous describes an action now.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 123,
+   "t": "BI-T4-9",
+   "d": 2,
+   "q": "Choose the correct form: 'Neither of the boys ____ ready.'",
+   "o": [
+    "be",
+    "is",
+    "were",
+    "are"
+   ],
+   "a": 1,
+   "e": "Neither takes a singular verb.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 124,
+   "t": "BI-T4-9",
+   "d": 1,
+   "q": "Choose the correct form: 'They ____ football on Fridays.'",
+   "o": [
+    "plays",
+    "played yesterday",
+    "playing",
+    "play"
+   ],
+   "a": 3,
+   "e": "Plural subject takes play.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 125,
+   "t": "BI-T4-9",
+   "d": 1,
+   "q": "Which is correct?",
+   "o": [
+    "a hours",
+    "a hour",
+    "an hour",
+    "an hours"
+   ],
+   "a": 2,
+   "e": "Hour begins with a vowel sound.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 126,
+   "t": "BI-T4-10",
+   "d": 1,
+   "q": "The central message of a text is the ...",
+   "o": [
+    "title only",
+    "theme",
+    "conflict only",
+    "setting"
+   ],
+   "a": 1,
+   "e": "Theme is the underlying message.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 127,
+   "t": "BI-T4-10",
+   "d": 2,
+   "q": "We learn about a character through ...",
+   "o": [
+    "the book cover",
+    "the font",
+    "what they say, do and think",
+    "the page count"
+   ],
+   "a": 2,
+   "e": "Characterisation is shown through speech and action.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 128,
+   "t": "BI-T4-10",
+   "d": 2,
+   "q": "'Her smile was as bright as the sun' is a ...",
+   "o": [
+    "personification",
+    "symbol",
+    "metaphor",
+    "simile"
+   ],
+   "a": 3,
+   "e": "As ... as is a simile.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 129,
+   "t": "BI-T4-10",
+   "d": 1,
+   "q": "The time and place of a story is the ...",
+   "o": [
+    "irony",
+    "theme",
+    "plot",
+    "setting"
+   ],
+   "a": 3,
+   "e": "Setting is where and when.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 130,
+   "t": "BI-T4-10",
+   "d": 3,
+   "q": "To respond to a text, a sentence like 'The poem made me feel hopeful because it describes new beginnings' shows ...",
+   "o": [
+    "a definition",
+    "plot summary",
+    "personal response with explanation",
+    "a spelling error"
+   ],
+   "a": 2,
+   "e": "The student explains feelings with a reason.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 131,
+   "t": "BI-T4-10",
+   "d": 2,
+   "q": "A character who opposes the main character is the ...",
+   "o": [
+    "protagonist",
+    "poet",
+    "antagonist",
+    "narrator"
+   ],
+   "a": 2,
+   "e": "Antagonist is the opposing force.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 132,
+   "t": "BI-T4-10",
+   "d": 2,
+   "q": "A suitable imaginative response is to ...",
+   "o": [
+    "copy the text",
+    "count the words",
+    "ignore the text",
+    "write an alternative ending"
+   ],
+   "a": 3,
+   "e": "It shows creativity and understanding.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 133,
+   "t": "BI-T4-10",
+   "d": 3,
+   "q": "Which statement shows evaluation of style?",
+   "o": [
+    "The story is long.",
+    "The story has a title.",
+    "The author uses vivid imagery to show the loneliness of the setting.",
+    "The story is in a school."
+   ],
+   "a": 2,
+   "e": "Evaluation links style to meaning.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 134,
+   "t": "BI-T4-10",
+   "d": 1,
+   "q": "The sequence of events in a story is called ...",
+   "o": [
+    "plot",
+    "theme",
+    "setting",
+    "tone"
+   ],
+   "a": 0,
+   "e": "Plot is the order of events.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 135,
+   "t": "BI-T4-10",
+   "d": 3,
+   "q": "In a story, a character returns the lost wallet despite being poor. This shows the value of ...",
+   "o": [
+    "honesty",
+    "jealousy",
+    "greed",
+    "laziness"
+   ],
+   "a": 0,
+   "e": "Returning the wallet shows honesty.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 136,
+   "t": "BI-T4-10",
+   "d": 2,
+   "q": "The highest point of tension in a story is the ...",
+   "o": [
+    "setting",
+    "exposition",
+    "resolution",
+    "climax"
+   ],
+   "a": 3,
+   "e": "Climax is the peak.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 137,
+   "t": "BI-T4-10",
+   "d": 3,
+   "q": "A rose symbolising love is an example of ...",
+   "o": [
+    "setting",
+    "symbolism",
+    "plot",
+    "theme"
+   ],
+   "a": 1,
+   "e": "A symbol represents an idea.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 138,
+   "t": "BI-T4-10",
+   "d": 2,
+   "q": "'The wind whispered through the trees' is an example of ...",
+   "o": [
+    "personification",
+    "simile",
+    "hyperbole",
+    "irony"
+   ],
+   "a": 0,
+   "e": "Wind is given human action.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 139,
+   "t": "BI-T4-10",
+   "d": 1,
+   "q": "The main character in a story is the ...",
+   "o": [
+    "setting",
+    "protagonist",
+    "antagonist",
+    "narrator only"
+   ],
+   "a": 1,
+   "e": "Protagonist is the main character.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 140,
+   "t": "BI-T5-1",
+   "d": 1,
+   "q": "Which is a good note-taking strategy?",
+   "o": [
+    "write full sentences",
+    "draw only pictures",
+    "use keywords and abbreviations",
+    "write the whole speech"
+   ],
+   "a": 2,
+   "e": "Short notes save time.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 141,
+   "t": "BI-T5-1",
+   "d": 3,
+   "q": "An interview contains: 'I don't deny it was risky.' This means the speaker ...",
+   "o": [
+    "admits it was risky",
+    "is confused",
+    "says it was safe",
+    "avoids the topic"
+   ],
+   "a": 0,
+   "e": "Don't deny = admit.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 142,
+   "t": "BI-T5-1",
+   "d": 2,
+   "q": "A speaker says, 'It's not as if I enjoy waiting in long queues.' The speaker is ...",
+   "o": [
+    "delighted",
+    "annoyed",
+    "indifferent",
+    "excited"
+   ],
+   "a": 1,
+   "e": "The tone shows annoyance.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 143,
+   "t": "BI-T5-1",
+   "d": 3,
+   "q": "After finishing a listening task, you should ...",
+   "o": [
+    "change all answers",
+    "check that each answer is supported by the recording",
+    "guess randomly",
+    "leave blanks"
+   ],
+   "a": 1,
+   "e": "Review improves accuracy.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 144,
+   "t": "BI-T5-1",
+   "d": 2,
+   "q": "Which strategy helps with an unfamiliar word in listening?",
+   "o": [
+    "guess randomly",
+    "stop listening",
+    "use context and the speaker's tone",
+    "ask the speaker to repeat all"
+   ],
+   "a": 2,
+   "e": "Context helps you infer meaning.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 145,
+   "t": "BI-T5-1",
+   "d": 2,
+   "q": "The speaker says, 'Prices rose 5% in 2022 and fell 3% in 2023.' Over the two years, prices ...",
+   "o": [
+    "fell then rose",
+    "rose then fell slightly",
+    "stayed the same",
+    "always rose"
+   ],
+   "a": 1,
+   "e": "Rose then fell.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 146,
+   "t": "BI-T5-1",
+   "d": 2,
+   "q": "A complex question often asks about ...",
+   "o": [
+    "reasons or implied meaning",
+    "the colour of the room",
+    "only the speaker's name",
+    "the speaker's age"
+   ],
+   "a": 0,
+   "e": "Complex questions need deeper understanding.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 147,
+   "t": "BI-T5-1",
+   "d": 1,
+   "q": "In a long talk, the best way to follow the main idea is to ...",
+   "o": [
+    "ignore the introduction",
+    "count the sentences",
+    "write every word",
+    "listen for signal words and keywords"
+   ],
+   "a": 3,
+   "e": "Signal words and keywords guide you.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 148,
+   "t": "BI-T5-1",
+   "d": 1,
+   "q": "A rising intonation at the end of a sentence often shows ...",
+   "o": [
+    "a final statement",
+    "a command",
+    "a greeting",
+    "a question or surprise"
+   ],
+   "a": 3,
+   "e": "Rising tone signals a question.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 149,
+   "t": "BI-T5-1",
+   "d": 2,
+   "q": "If a speaker corrects herself, 'Meet at 3, sorry, I mean 4', the answer is ...",
+   "o": [
+    "3",
+    "no time",
+    "3 and 4",
+    "4"
+   ],
+   "a": 3,
+   "e": "The correction replaces the first number.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 150,
+   "t": "BI-T5-1",
+   "d": 1,
+   "q": "A distractor in a multiple-choice question is ...",
+   "o": [
+    "the correct answer",
+    "the title",
+    "an option that sounds similar to the recording but has the wrong meaning",
+    "a heading"
+   ],
+   "a": 2,
+   "e": "Distractors tempt you with similar words.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 151,
+   "t": "BI-T5-1",
+   "d": 2,
+   "q": "The speaker says, 'I would have gone, but the rain was heavy.' The speaker ...",
+   "o": [
+    "did not go",
+    "will go",
+    "went",
+    "is going"
+   ],
+   "a": 0,
+   "e": "Would have gone but ... means did not go.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 152,
+   "t": "BI-T5-1",
+   "d": 3,
+   "q": "A news report says, 'Authorities urged residents to evacuate immediately.' The purpose of the sentence is to ...",
+   "o": [
+    "describe a hobby",
+    "advertise",
+    "inform about an urgent warning",
+    "entertain"
+   ],
+   "a": 2,
+   "e": "Urged and immediately show urgency.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 153,
+   "t": "BI-T5-1",
+   "d": 3,
+   "q": "A speaker says, 'The new policy sounds good on paper, but it may not work in practice.' The speaker is ...",
+   "o": [
+    "amused",
+    "certain",
+    "bored",
+    "doubtful"
+   ],
+   "a": 3,
+   "e": "But it may not work shows doubt.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 154,
+   "t": "BI-T5-2",
+   "d": 1,
+   "q": "A good speaker maintains ...",
+   "o": [
+    "no eye contact",
+    "eye contact",
+    "a whisper",
+    "a very fast pace"
+   ],
+   "a": 1,
+   "e": "Eye contact engages the audience.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 155,
+   "t": "BI-T5-2",
+   "d": 2,
+   "q": "To summarise a story, you should ...",
+   "o": [
+    "give only your opinion",
+    "state the main idea and key events",
+    "read it aloud again",
+    "retell every detail"
+   ],
+   "a": 1,
+   "e": "A summary is brief.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 156,
+   "t": "BI-T5-2",
+   "d": 3,
+   "q": "A speaker begins, 'Have you ever wondered why we throw away so much food?' This is a ...",
+   "o": [
+    "summary",
+    "conclusion",
+    "signpost",
+    "rhetorical question to engage the audience"
+   ],
+   "a": 3,
+   "e": "It involves the audience in the topic.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 157,
+   "t": "BI-T5-2",
+   "d": 3,
+   "q": "Which phrase is most suitable for responding to a challenge from an audience member?",
+   "o": [
+    "I won't answer that.",
+    "You don't understand.",
+    "That is an interesting point. Let me explain further.",
+    "Whatever."
+   ],
+   "a": 2,
+   "e": "It is polite and constructive.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 158,
+   "t": "BI-T5-2",
+   "d": 3,
+   "q": "Which response best summarises: 'The story follows a poor boy who finds a wallet, returns it, and is rewarded with a scholarship'?",
+   "o": [
+    "A poor boy is rewarded with a scholarship after returning a lost wallet.",
+    "A wallet is a kind of bag.",
+    "The boy was poor.",
+    "Scholarships are expensive."
+   ],
+   "a": 0,
+   "e": "It captures the main idea.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 159,
+   "t": "BI-T5-2",
+   "d": 2,
+   "q": "Which signpost introduces the second point?",
+   "o": [
+    "Next",
+    "In conclusion",
+    "Finally",
+    "To begin with"
+   ],
+   "a": 0,
+   "e": "Next introduces another point.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 160,
+   "t": "BI-T5-2",
+   "d": 1,
+   "q": "Which phrase signals the start of a presentation?",
+   "o": [
+    "Good morning everyone. Today I will talk about ...",
+    "Ummm.",
+    "Bye!",
+    "Okay so, yeah."
+   ],
+   "a": 0,
+   "e": "A clear opening starts the talk.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 161,
+   "t": "BI-T5-2",
+   "d": 1,
+   "q": "A polite way to disagree is ...",
+   "o": [
+    "That's stupid.",
+    "You are wrong.",
+    "No way!",
+    "I see your point, but I think differently."
+   ],
+   "a": 3,
+   "e": "It keeps the conversation respectful.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 162,
+   "t": "BI-T5-2",
+   "d": 1,
+   "q": "'To sum up' is used to ...",
+   "o": [
+    "conclude",
+    "begin",
+    "add an example",
+    "ask a question"
+   ],
+   "a": 0,
+   "e": "It signals a conclusion.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 163,
+   "t": "BI-T5-2",
+   "d": 2,
+   "q": "Which sentence shows partial agreement?",
+   "o": [
+    "Maybe.",
+    "I agree to some extent, but there are other factors.",
+    "I do not care.",
+    "I completely disagree."
+   ],
+   "a": 1,
+   "e": "It acknowledges the view while adding another.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 164,
+   "t": "BI-T5-2",
+   "d": 3,
+   "q": "Which is the best justification for 'Students should wear uniforms'?",
+   "o": [
+    "Everyone says so.",
+    "I like uniforms.",
+    "Uniforms reduce peer pressure, as shown by a study in which 80% of students felt equal.",
+    "Uniforms are good."
+   ],
+   "a": 2,
+   "e": "It gives a reason and evidence.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 165,
+   "t": "BI-T5-2",
+   "d": 2,
+   "q": "A suitable pace for a presentation is ...",
+   "o": [
+    "whispering",
+    "very fast",
+    "too slow",
+    "steady and clear"
+   ],
+   "a": 3,
+   "e": "A steady pace helps the audience follow.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 166,
+   "t": "BI-T5-2",
+   "d": 2,
+   "q": "Which is an example of evidence?",
+   "o": [
+    "It is just so.",
+    "Everyone knows.",
+    "According to a recent survey, 70% of teenagers use social media daily.",
+    "I feel it is true."
+   ],
+   "a": 2,
+   "e": "Statistics are evidence.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 167,
+   "t": "BI-T5-2",
+   "d": 2,
+   "q": "If you do not understand a question, you can say ...",
+   "o": [
+    "Say again!",
+    "What?",
+    "I don't know your question.",
+    "Could you please repeat or rephrase the question?"
+   ],
+   "a": 3,
+   "e": "It is polite.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 168,
+   "t": "BI-T5-3",
+   "d": 1,
+   "q": "A fact can be ...",
+   "o": [
+    "a guess",
+    "a feeling",
+    "only believed",
+    "checked and proven"
+   ],
+   "a": 3,
+   "e": "Facts are verifiable.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 169,
+   "t": "BI-T5-3",
+   "d": 3,
+   "q": "A writer says, 'Cyclists are a menace to everyone.' The statement is ...",
+   "o": [
+    "a statistic",
+    "an opinion that is generalised",
+    "a neutral statement",
+    "a verified fact"
+   ],
+   "a": 1,
+   "e": "Menace and everyone are emotive generalisations.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 170,
+   "t": "BI-T5-3",
+   "d": 1,
+   "q": "Bias means ...",
+   "o": [
+    "a title",
+    "a one-sided view",
+    "a balanced argument",
+    "a graph"
+   ],
+   "a": 1,
+   "e": "Bias ignores other perspectives.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 171,
+   "t": "BI-T5-3",
+   "d": 2,
+   "q": "'Most experts agree' is an unreliable claim unless ...",
+   "o": [
+    "it is repeated",
+    "it is in a heading",
+    "it names the experts and the evidence",
+    "it is bold"
+   ],
+   "a": 2,
+   "e": "Evidence is needed to support claims.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 172,
+   "t": "BI-T5-3",
+   "d": 2,
+   "q": "The text says, 'He checked his watch for the third time.' What can you infer?",
+   "o": [
+    "He is in the library.",
+    "He is asleep.",
+    "He is happy.",
+    "He is impatient or worried."
+   ],
+   "a": 3,
+   "e": "Checking repeatedly suggests impatience.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 173,
+   "t": "BI-T5-3",
+   "d": 3,
+   "q": "A text says, 'After the new law, accidents dropped by 20%.' This supports the claim that ...",
+   "o": [
+    "the law is useless",
+    "the law may have reduced accidents",
+    "the law was unfair",
+    "accidents are increasing"
+   ],
+   "a": 1,
+   "e": "The statistic suggests a link.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 174,
+   "t": "BI-T5-3",
+   "d": 1,
+   "q": "Inference means ...",
+   "o": [
+    "memorising the text",
+    "skipping a paragraph",
+    "copying the text",
+    "working out meaning not directly stated"
+   ],
+   "a": 3,
+   "e": "Inference uses clues.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 175,
+   "t": "BI-T5-3",
+   "d": 2,
+   "q": "The purpose of an advertisement is usually to ...",
+   "o": [
+    "persuade",
+    "entertain only",
+    "inform neutrally",
+    "warn"
+   ],
+   "a": 0,
+   "e": "Adverts persuade readers to buy.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 176,
+   "t": "BI-T5-3",
+   "d": 2,
+   "q": "Which sentence contains an emotive word suggesting bias?",
+   "o": [
+    "This outrageous plan will ruin everything.",
+    "The plan starts in March.",
+    "The plan has three stages.",
+    "The plan was approved by the board."
+   ],
+   "a": 0,
+   "e": "Outrageous and ruin are emotive.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 177,
+   "t": "BI-T5-3",
+   "d": 3,
+   "q": "To evaluate a news article, you should ask ...",
+   "o": [
+    "what colour the font is",
+    "how long the title is",
+    "how many pages it has",
+    "who wrote it, why, and what evidence is given"
+   ],
+   "a": 3,
+   "e": "Evaluating considers the source and evidence.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 178,
+   "t": "BI-T5-3",
+   "d": 2,
+   "q": "Which is an opinion?",
+   "o": [
+    "The phone weighs 180 grams.",
+    "The phone has a 6-inch screen.",
+    "This is the best phone ever made.",
+    "The phone was released in 2025."
+   ],
+   "a": 2,
+   "e": "Best is a judgement.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 179,
+   "t": "BI-T5-3",
+   "d": 2,
+   "q": "Which tone is shown by 'We must act now before it is too late!'?",
+   "o": [
+    "urgent",
+    "neutral",
+    "bored",
+    "humorous"
+   ],
+   "a": 0,
+   "e": "Must act now shows urgency.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 180,
+   "t": "BI-T5-3",
+   "d": 3,
+   "q": "A review that mentions only the good points of a product may be ...",
+   "o": [
+    "neutral",
+    "factual",
+    "biased",
+    "balanced"
+   ],
+   "a": 2,
+   "e": "One-sided information shows bias.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 181,
+   "t": "BI-T5-3",
+   "d": 1,
+   "q": "An opinion is ...",
+   "o": [
+    "a belief or judgement",
+    "a date",
+    "always a number",
+    "always true"
+   ],
+   "a": 0,
+   "e": "Opinions can differ.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 182,
+   "t": "BI-T5-4",
+   "d": 2,
+   "q": "A testimonial in an advertisement is ...",
+   "o": [
+    "an instruction",
+    "a fact",
+    "a customer's positive statement",
+    "a statistic"
+   ],
+   "a": 2,
+   "e": "Testimonials persuade.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 183,
+   "t": "BI-T5-4",
+   "d": 3,
+   "q": "An email says, 'Further to our earlier discussion, please find attached the revised schedule.' The purpose is to ...",
+   "o": [
+    "decline an invitation",
+    "greet a friend",
+    "complain",
+    "provide updated information"
+   ],
+   "a": 3,
+   "e": "It is a formal follow-up.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 184,
+   "t": "BI-T5-4",
+   "d": 3,
+   "q": "A brochure says, 'Limited seats. Book now!' The language is meant to create ...",
+   "o": [
+    "a sense of safety only",
+    "a sense of urgency",
+    "a sense of boredom",
+    "a sense of humour"
+   ],
+   "a": 1,
+   "e": "Limited and now create urgency.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 185,
+   "t": "BI-T5-4",
+   "d": 2,
+   "q": "Quotes in a news article ...",
+   "o": [
+    "replace the headline",
+    "are always opinions",
+    "add credibility and viewpoints",
+    "make the text shorter"
+   ],
+   "a": 2,
+   "e": "Quotes show sources.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 186,
+   "t": "BI-T5-4",
+   "d": 1,
+   "q": "A slogan is ...",
+   "o": [
+    "a table",
+    "a short catchy phrase",
+    "a long essay",
+    "a formal letter"
+   ],
+   "a": 1,
+   "e": "Slogans are memorable.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 187,
+   "t": "BI-T5-4",
+   "d": 2,
+   "q": "A notice says, 'Registration closes on 15 March at 5 p.m.' What is the deadline?",
+   "o": [
+    "Not stated",
+    "15 March, 5 a.m.",
+    "15 March, 5 p.m.",
+    "5 March"
+   ],
+   "a": 2,
+   "e": "Deadline is as stated.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 188,
+   "t": "BI-T5-4",
+   "d": 1,
+   "q": "A notice usually includes ...",
+   "o": [
+    "a story",
+    "a joke",
+    "a poem",
+    "what, when, where and contact details"
+   ],
+   "a": 3,
+   "e": "Notices give practical details.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 189,
+   "t": "BI-T5-4",
+   "d": 1,
+   "q": "Before reading a chart, you should read ...",
+   "o": [
+    "only the colours",
+    "the last number",
+    "the title and labels",
+    "nothing"
+   ],
+   "a": 2,
+   "e": "Titles and labels explain the data.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 190,
+   "t": "BI-T5-4",
+   "d": 3,
+   "q": "Which claim is best supported by a bar chart showing higher sales in December?",
+   "o": [
+    "Sales peaked in December.",
+    "Sales were lowest in December.",
+    "Sales fell in December.",
+    "Sales never changed."
+   ],
+   "a": 0,
+   "e": "Higher sales mean a peak.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 191,
+   "t": "BI-T5-4",
+   "d": 3,
+   "q": "An advert claims, '9 out of 10 users recommend it.' To judge the claim, you should ask ...",
+   "o": [
+    "who was surveyed and how many",
+    "how long the slogan is",
+    "what colour the product is",
+    "where the logo is"
+   ],
+   "a": 0,
+   "e": "Evidence behind statistics matters.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 192,
+   "t": "BI-T5-4",
+   "d": 2,
+   "q": "A table shows that Class A has 30 students and Class B has 25. The difference is ...",
+   "o": [
+    "10",
+    "15",
+    "55",
+    "5"
+   ],
+   "a": 3,
+   "e": "30 − 25 = 5.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 193,
+   "t": "BI-T5-4",
+   "d": 1,
+   "q": "Which text type has a headline?",
+   "o": [
+    "poem",
+    "news article",
+    "diary",
+    "recipe"
+   ],
+   "a": 1,
+   "e": "News stories have headlines.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 194,
+   "t": "BI-T5-4",
+   "d": 2,
+   "q": "An advertisement says, 'Why settle for less?' This is a ...",
+   "o": [
+    "statistic",
+    "definition",
+    "fact",
+    "rhetorical question"
+   ],
+   "a": 3,
+   "e": "It persuades by prompting thought.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 195,
+   "t": "BI-T5-4",
+   "d": 2,
+   "q": "An email subject line should ...",
+   "o": [
+    "state the purpose briefly",
+    "be a long story",
+    "contain personal secrets",
+    "be left blank"
+   ],
+   "a": 0,
+   "e": "It tells the reader the topic.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 196,
+   "t": "BI-T5-5",
+   "d": 1,
+   "q": "An informal email may start with ...",
+   "o": [
+    "Hi Aina,",
+    "Respected Sir,",
+    "Dear Sir/Madam,",
+    "To whom it may concern,"
+   ],
+   "a": 0,
+   "e": "Hi is informal.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 197,
+   "t": "BI-T5-5",
+   "d": 3,
+   "q": "Your friend asks for advice about exam stress. The best informal response is ...",
+   "o": [
+    "Study.",
+    "Why ask me?",
+    "Hi Aina, I know exams can be stressful. Try making a study timetable and take short breaks. You'll do great!",
+    "Dear Sir, I suggest you study."
+   ],
+   "a": 2,
+   "e": "Friendly, supportive and informal.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 198,
+   "t": "BI-T5-5",
+   "d": 2,
+   "q": "A closing sentence in a formal email might be ...",
+   "o": [
+    "Catch you later.",
+    "Whatever.",
+    "Bye!",
+    "I look forward to your reply."
+   ],
+   "a": 3,
+   "e": "Formal and polite.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 199,
+   "t": "BI-T5-5",
+   "d": 1,
+   "q": "Yours faithfully is used when the letter begins with ...",
+   "o": [
+    "Dear Sir/Madam",
+    "Hello Aina",
+    "Dear Mr Tan",
+    "Hi John"
+   ],
+   "a": 0,
+   "e": "Faithfully matches Dear Sir/Madam.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 200,
+   "t": "BI-T5-5",
+   "d": 2,
+   "q": "An informal ending could be ...",
+   "o": [
+    "Yours sincerely,",
+    "See you soon!",
+    "With due respect,",
+    "Yours faithfully,"
+   ],
+   "a": 1,
+   "e": "Informal closings are friendly.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 201,
+   "t": "BI-T5-5",
+   "d": 3,
+   "q": "Which pair is correct?",
+   "o": [
+    "Dear Sir/Madam, ... Yours sincerely",
+    "Hi Mr Lim, ... Yours faithfully",
+    "Dear Mr Lim, ... Yours sincerely",
+    "Dear Mr Lim, ... Yours faithfully"
+   ],
+   "a": 2,
+   "e": "Named recipient: sincerely.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 202,
+   "t": "BI-T5-5",
+   "d": 2,
+   "q": "In the body of a letter, you should ...",
+   "o": [
+    "avoid giving details",
+    "give details in clear paragraphs",
+    "use only abbreviations",
+    "write one long sentence"
+   ],
+   "a": 1,
+   "e": "Clear paragraphs are easy to follow.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 203,
+   "t": "BI-T5-5",
+   "d": 1,
+   "q": "Yours sincerely is used when the letter begins with ...",
+   "o": [
+    "Dear Sir/Madam",
+    "Dear Mr Tan",
+    "To whom it may concern",
+    "Hey"
+   ],
+   "a": 1,
+   "e": "Sincerely matches a named person.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 204,
+   "t": "BI-T5-5",
+   "d": 2,
+   "q": "Which phrase is polite and formal?",
+   "o": [
+    "Please just do it.",
+    "Confirm my booking now.",
+    "I would be grateful if you could confirm my booking.",
+    "Hurry up and confirm."
+   ],
+   "a": 2,
+   "e": "Would be grateful is polite.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 205,
+   "t": "BI-T5-5",
+   "d": 2,
+   "q": "Which sentence is too informal for a formal email?",
+   "o": [
+    "The report will be sent tomorrow.",
+    "Gonna send it tmrw, ok?",
+    "I shall send the report tomorrow.",
+    "I will send it tomorrow."
+   ],
+   "a": 1,
+   "e": "Gonna and tmrw are informal.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 206,
+   "t": "BI-T5-5",
+   "d": 1,
+   "q": "A formal letter begins with ...",
+   "o": [
+    "Hey!",
+    "What's up,",
+    "Dear Sir/Madam,",
+    "Yo,"
+   ],
+   "a": 2,
+   "e": "Formal greeting.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 207,
+   "t": "BI-T5-5",
+   "d": 3,
+   "q": "Before sending an email, you should ...",
+   "o": [
+    "remove the subject",
+    "delete the greeting",
+    "add more emojis",
+    "proofread for spelling, tone and attachments"
+   ],
+   "a": 3,
+   "e": "Proofreading avoids errors.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 208,
+   "t": "BI-T5-5",
+   "d": 2,
+   "q": "A suitable opening sentence for a formal enquiry is ...",
+   "o": [
+    "I am writing to enquire about the volunteer programme.",
+    "Reply fast.",
+    "Hey, tell me about it.",
+    "I want info."
+   ],
+   "a": 0,
+   "e": "It states the purpose politely.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 209,
+   "t": "BI-T5-5",
+   "d": 3,
+   "q": "Which is the best subject line for a complaint about a late delivery?",
+   "o": [
+    "Very important!!!",
+    "Hey",
+    "Problem",
+    "Complaint regarding delayed delivery of Order #1234"
+   ],
+   "a": 3,
+   "e": "It states the purpose clearly.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 210,
+   "t": "BI-T5-6",
+   "d": 3,
+   "q": "Which sentence evaluates a book effectively?",
+   "o": [
+    "It has pages.",
+    "It was written.",
+    "The book is a book.",
+    "The plot is gripping, although the ending feels rushed."
+   ],
+   "a": 3,
+   "e": "It gives balanced evaluation.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 211,
+   "t": "BI-T5-6",
+   "d": 3,
+   "q": "A writer includes statistics in an article to ...",
+   "o": [
+    "confuse readers",
+    "support the argument with evidence",
+    "avoid conclusions",
+    "lengthen the article"
+   ],
+   "a": 1,
+   "e": "Statistics provide evidence.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 212,
+   "t": "BI-T5-6",
+   "d": 1,
+   "q": "A report is usually ...",
+   "o": [
+    "humorous only",
+    "a poem",
+    "formal and objective",
+    "very emotional"
+   ],
+   "a": 2,
+   "e": "Reports present findings objectively.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 213,
+   "t": "BI-T5-6",
+   "d": 2,
+   "q": "Which is the best title for an article about reducing plastic waste?",
+   "o": [
+    "My Day",
+    "Small Steps to Cut Plastic Waste",
+    "Hello",
+    "Waste"
+   ],
+   "a": 1,
+   "e": "A clear, catchy title.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 214,
+   "t": "BI-T5-6",
+   "d": 2,
+   "q": "Which connector adds a contrasting point in a review?",
+   "o": [
+    "However",
+    "Moreover",
+    "Furthermore",
+    "In addition"
+   ],
+   "a": 0,
+   "e": "However shows contrast.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 215,
+   "t": "BI-T5-6",
+   "d": 2,
+   "q": "A topic sentence in an article paragraph ...",
+   "o": [
+    "introduces the main idea",
+    "gives the title",
+    "ends the article",
+    "lists sources only"
+   ],
+   "a": 0,
+   "e": "It states the paragraph's focus.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 216,
+   "t": "BI-T5-6",
+   "d": 3,
+   "q": "Which ordering is best for a report?",
+   "o": [
+    "Recommendations, title, findings",
+    "Findings only",
+    "Conclusion, introduction, title",
+    "Title, introduction, findings, conclusion, recommendations"
+   ],
+   "a": 3,
+   "e": "Standard report format.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 217,
+   "t": "BI-T5-6",
+   "d": 1,
+   "q": "An article usually begins with ...",
+   "o": [
+    "a conclusion only",
+    "a long list",
+    "a catchy title and engaging introduction",
+    "an apology"
+   ],
+   "a": 2,
+   "e": "Hook the reader.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 218,
+   "t": "BI-T5-6",
+   "d": 1,
+   "q": "A review includes ...",
+   "o": [
+    "only a plot summary",
+    "an evaluation and recommendation",
+    "only a title",
+    "only a date"
+   ],
+   "a": 1,
+   "e": "Reviews evaluate.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 219,
+   "t": "BI-T5-6",
+   "d": 2,
+   "q": "Which sentence is suitable for a report?",
+   "o": [
+    "Everyone loves it.",
+    "Online is cool.",
+    "It was found that 60% of students prefer online learning.",
+    "I think students like online."
+   ],
+   "a": 2,
+   "e": "Formal, objective wording.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 220,
+   "t": "BI-T5-6",
+   "d": 3,
+   "q": "Which is the most appropriate language for the recommendations section of a report?",
+   "o": [
+    "Bins are good.",
+    "It is recommended that the school provides more recycling bins.",
+    "Get more bins, lol.",
+    "Just add bins."
+   ],
+   "a": 1,
+   "e": "Formal recommendation structure.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 221,
+   "t": "BI-T5-6",
+   "d": 2,
+   "q": "Which sentence suggests a strong recommendation in a review?",
+   "o": [
+    "The film exists.",
+    "I may watch it.",
+    "I highly recommend this film to anyone who enjoys mystery.",
+    "It is a film."
+   ],
+   "a": 2,
+   "e": "Highly recommend states a clear recommendation.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 222,
+   "t": "BI-T5-6",
+   "d": 2,
+   "q": "A report conclusion may include ...",
+   "o": [
+    "jokes",
+    "personal stories only",
+    "a recipe",
+    "recommendations"
+   ],
+   "a": 3,
+   "e": "Reports end with recommendations.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 223,
+   "t": "BI-T5-6",
+   "d": 1,
+   "q": "Which word is positive in a review?",
+   "o": [
+    "engaging",
+    "predictable",
+    "disappointing",
+    "boring"
+   ],
+   "a": 0,
+   "e": "Engaging is positive.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 224,
+   "t": "BI-T5-7",
+   "d": 1,
+   "q": "Passive: 'The window ____ by the boy.'",
+   "o": [
+    "broke",
+    "was broken",
+    "is breaking",
+    "has broke"
+   ],
+   "a": 1,
+   "e": "Be + past participle.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 225,
+   "t": "BI-T5-7",
+   "d": 2,
+   "q": "Choose the correct sentence.",
+   "o": [
+    "If I am you, I would apologise.",
+    "If I be you, I would apologise.",
+    "If I were you, I would apologise.",
+    "If I was you, I will apologise."
+   ],
+   "a": 2,
+   "e": "Second conditional uses were for all subjects in formal English.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 226,
+   "t": "BI-T5-7",
+   "d": 3,
+   "q": "Which sentence expresses a regret about the past?",
+   "o": [
+    "If I had left earlier, I would not have missed the bus.",
+    "If I leave earlier, I would not have missed the bus.",
+    "If I leave earlier, I will not miss the bus.",
+    "If I left earlier, I would not miss the bus."
+   ],
+   "a": 0,
+   "e": "Third conditional expresses regret.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 227,
+   "t": "BI-T5-7",
+   "d": 1,
+   "q": "Which connector shows contrast?",
+   "o": [
+    "because",
+    "although",
+    "therefore",
+    "since"
+   ],
+   "a": 1,
+   "e": "Although shows contrast.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 228,
+   "t": "BI-T5-7",
+   "d": 1,
+   "q": "First conditional: 'If it rains, we ____ at home.'",
+   "o": [
+    "would stay",
+    "stayed",
+    "would have stayed",
+    "will stay"
+   ],
+   "a": 3,
+   "e": "If + present, will + verb.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 229,
+   "t": "BI-T5-7",
+   "d": 2,
+   "q": "Which connector shows result?",
+   "o": [
+    "however",
+    "even though",
+    "although",
+    "therefore"
+   ],
+   "a": 3,
+   "e": "Therefore shows consequence.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 230,
+   "t": "BI-T5-7",
+   "d": 2,
+   "q": "Third conditional: 'If she had studied, she ____ passed.'",
+   "o": [
+    "would",
+    "will have",
+    "would have",
+    "has"
+   ],
+   "a": 2,
+   "e": "Third conditional uses would have + past participle.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 231,
+   "t": "BI-T5-7",
+   "d": 2,
+   "q": "Which sentence is passive?",
+   "o": [
+    "The cake was baked by my mother.",
+    "My mother will bake.",
+    "My mother baked the cake.",
+    "My mother is baking."
+   ],
+   "a": 0,
+   "e": "Subject receives action.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 232,
+   "t": "BI-T5-7",
+   "d": 1,
+   "q": "Second conditional: 'If I won the lottery, I ____ the world.'",
+   "o": [
+    "would have travelled",
+    "travelled",
+    "will travel",
+    "would travel"
+   ],
+   "a": 3,
+   "e": "If + past, would + verb.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 233,
+   "t": "BI-T5-7",
+   "d": 2,
+   "q": "Reported speech: 'I am tired,' he said. → He said that he ____ tired.",
+   "o": [
+    "was",
+    "is",
+    "will be",
+    "were"
+   ],
+   "a": 0,
+   "e": "Present moves to past.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 234,
+   "t": "BI-T5-7",
+   "d": 3,
+   "q": "Reported question: 'Where do you live?' she asked. → She asked me ____.",
+   "o": [
+    "where I live was",
+    "where do I live",
+    "where did I live",
+    "where I lived"
+   ],
+   "a": 3,
+   "e": "Reported questions use statement word order.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 235,
+   "t": "BI-T5-7",
+   "d": 3,
+   "q": "Choose the best connector: 'He was tired; ____, he continued working.'",
+   "o": [
+    "nevertheless",
+    "therefore",
+    "so",
+    "because"
+   ],
+   "a": 0,
+   "e": "Nevertheless shows contrast.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 236,
+   "t": "BI-T5-7",
+   "d": 3,
+   "q": "Which sentence uses the passive correctly?",
+   "o": [
+    "The report is submit by the committee.",
+    "The report has been submitted by the committee.",
+    "The report has submitted by the committee.",
+    "The report was submit by the committee."
+   ],
+   "a": 1,
+   "e": "Has been + past participle.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 237,
+   "t": "BI-T5-7",
+   "d": 2,
+   "q": "Reported speech: She said, 'I will call you tomorrow.' → She said she ____ me the next day.",
+   "o": [
+    "calls",
+    "will call",
+    "would call",
+    "called tomorrow"
+   ],
+   "a": 2,
+   "e": "Will becomes would; tomorrow becomes the next day.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 238,
+   "t": "BI-T5-8",
+   "d": 2,
+   "q": "Third-person point of view uses ...",
+   "o": [
+    "you only",
+    "I, we",
+    "no pronouns",
+    "he, she, they"
+   ],
+   "a": 3,
+   "e": "Narrator is outside the story.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 239,
+   "t": "BI-T5-8",
+   "d": 1,
+   "q": "The point of view using 'I' is called ...",
+   "o": [
+    "second person",
+    "first person",
+    "third person",
+    "fourth person"
+   ],
+   "a": 1,
+   "e": "First-person narration uses I.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 240,
+   "t": "BI-T5-8",
+   "d": 3,
+   "q": "Which sentence best compares a novel and a short story?",
+   "o": [
+    "A novel is always shorter.",
+    "A novel has more characters and sub-plots, while a short story focuses on a single incident.",
+    "A short story has many sub-plots.",
+    "They have no plot."
+   ],
+   "a": 1,
+   "e": "A clear comparison of scope.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 241,
+   "t": "BI-T5-8",
+   "d": 1,
+   "q": "A novel is generally ...",
+   "o": [
+    "longer with more characters and sub-plots",
+    "without characters",
+    "without a plot",
+    "shorter than a poem"
+   ],
+   "a": 0,
+   "e": "Novels are longer and more complex.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 242,
+   "t": "BI-T5-8",
+   "d": 3,
+   "q": "A short story ends with the protagonist forgiving her rival. This most likely conveys ...",
+   "o": [
+    "the value of revenge",
+    "the value of laziness",
+    "the value of secrecy",
+    "the value of forgiveness"
+   ],
+   "a": 3,
+   "e": "The resolution reveals the message.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 243,
+   "t": "BI-T5-8",
+   "d": 2,
+   "q": "A theme of a story where a boy keeps trying after many failures is ...",
+   "o": [
+    "jealousy",
+    "laziness",
+    "selfishness",
+    "perseverance"
+   ],
+   "a": 3,
+   "e": "Continuing despite failure is perseverance.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 244,
+   "t": "BI-T5-8",
+   "d": 1,
+   "q": "A poem often uses ...",
+   "o": [
+    "footnotes",
+    "bullets only",
+    "imagery and figurative language",
+    "tables"
+   ],
+   "a": 2,
+   "e": "Poetry uses imagery.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 245,
+   "t": "BI-T5-8",
+   "d": 1,
+   "q": "A moral value is ...",
+   "o": [
+    "a punctuation mark",
+    "a spelling rule",
+    "a principle such as honesty",
+    "a font"
+   ],
+   "a": 2,
+   "e": "Moral values guide behaviour.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 246,
+   "t": "BI-T5-8",
+   "d": 3,
+   "q": "Which question best helps analyse a character?",
+   "o": [
+    "How many pages are in the book?",
+    "What do the character's actions and words reveal about personality?",
+    "What colour is the cover?",
+    "Who printed the book?"
+   ],
+   "a": 1,
+   "e": "Character analysis focuses on words and actions.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 247,
+   "t": "BI-T5-8",
+   "d": 2,
+   "q": "Repeating a word for emphasis in a poem is called ...",
+   "o": [
+    "repetition",
+    "setting",
+    "rhyme",
+    "plot"
+   ],
+   "a": 0,
+   "e": "Repetition emphasises an idea.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 248,
+   "t": "BI-T5-8",
+   "d": 2,
+   "q": "Which sentence uses evidence from a text?",
+   "o": [
+    "I like her.",
+    "The story is good.",
+    "The writer shows courage when Aina rescues the child, saying, 'I won't let go.'",
+    "Aina is brave."
+   ],
+   "a": 2,
+   "e": "It cites an event and a quote.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 249,
+   "t": "BI-T5-8",
+   "d": 2,
+   "q": "A diary entry from a character's view is a type of ...",
+   "o": [
+    "definition",
+    "imaginative response",
+    "plot summary",
+    "spelling test"
+   ],
+   "a": 1,
+   "e": "It shows creative understanding.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 250,
+   "t": "BI-T5-8",
+   "d": 2,
+   "q": "In a short story, the climax is ...",
+   "o": [
+    "the turning point of highest tension",
+    "the end of the page",
+    "the title",
+    "the first line"
+   ],
+   "a": 0,
+   "e": "Climax is the peak.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 251,
+   "t": "BI-T5-8",
+   "d": 3,
+   "q": "A poem describes 'a heavy silence settled like dust'. This is a ...",
+   "o": [
+    "simile with imagery",
+    "rhyme",
+    "dialogue",
+    "plot twist"
+   ],
+   "a": 0,
+   "e": "Like dust is a comparison creating imagery.",
+   "s": "Buku Teks Bahasa Inggeris KSSM Tingkatan 5",
+   "status": "aktif"
+  }
+ ]
+}

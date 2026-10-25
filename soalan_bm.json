@@ -1,0 +1,4083 @@
+{
+ "versi": "202610251400",
+ "dikemas": "2026-10-25T14:00:00",
+ "nota": "Fail ini diurus melalui bank.html. Jangan ubah nama medan. a = indeks jawapan betul (0=A, 1=B, 2=C, 3=D). d = aras (1 mudah, 2 sederhana, 3 sukar). status: aktif atau gantung. Soalan Bahasa Melayu Tingkatan 4 dan 5 ini dijana berdasarkan DSKP KSSM; perlu disemak oleh guru Bahasa Melayu sebelum digunakan.",
+ "topik": [
+  {
+   "id": "BM-T4-1",
+   "nama": "Kata Tunggal, Kata Majmuk dan Kata Terbitan",
+   "tingkatan": 4
+  },
+  {
+   "id": "BM-T4-2",
+   "nama": "Kata Ganda dan Akronim",
+   "tingkatan": 4
+  },
+  {
+   "id": "BM-T4-3",
+   "nama": "Kata Nama dan Kata Kerja",
+   "tingkatan": 4
+  },
+  {
+   "id": "BM-T4-4",
+   "nama": "Kata Adjektif dan Kata Tugas",
+   "tingkatan": 4
+  },
+  {
+   "id": "BM-T4-5",
+   "nama": "Frasa",
+   "tingkatan": 4
+  },
+  {
+   "id": "BM-T4-6",
+   "nama": "Ayat Dasar, Ayat Tunggal dan Ayat Majmuk",
+   "tingkatan": 4
+  },
+  {
+   "id": "BM-T4-7",
+   "nama": "Jenis Ayat",
+   "tingkatan": 4
+  },
+  {
+   "id": "BM-T4-8",
+   "nama": "Peribahasa",
+   "tingkatan": 4
+  },
+  {
+   "id": "BM-T4-9",
+   "nama": "Prosa dan Puisi (Seni Bahasa)",
+   "tingkatan": 4
+  },
+  {
+   "id": "BM-T4-10",
+   "nama": "Membaca, Memahami dan Menulis dengan Terancang",
+   "tingkatan": 4
+  },
+  {
+   "id": "BM-T5-1",
+   "nama": "Ejaan, Tanda Baca dan Penyuntingan",
+   "tingkatan": 5
+  },
+  {
+   "id": "BM-T5-2",
+   "nama": "Kata Hubung dan Penanda Wacana",
+   "tingkatan": 5
+  },
+  {
+   "id": "BM-T5-3",
+   "nama": "Ayat Aktif dan Ayat Pasif",
+   "tingkatan": 5
+  },
+  {
+   "id": "BM-T5-4",
+   "nama": "Ayat Majmuk: Gabungan, Pancangan dan Campuran",
+   "tingkatan": 5
+  },
+  {
+   "id": "BM-T5-5",
+   "nama": "Kesalahan Ayat dan Laras Bahasa",
+   "tingkatan": 5
+  },
+  {
+   "id": "BM-T5-6",
+   "nama": "Peribahasa dan Gaya Bahasa",
+   "tingkatan": 5
+  },
+  {
+   "id": "BM-T5-7",
+   "nama": "Unsur Karya Sastera: Sajak, Cerpen, Novel dan Drama",
+   "tingkatan": 5
+  },
+  {
+   "id": "BM-T5-8",
+   "nama": "Penulisan: Karangan, Rumusan dan Penulisan Rasmi",
+   "tingkatan": 5
+  }
+ ],
+ "soalan": [
+  {
+   "i": 0,
+   "t": "BM-T4-1",
+   "d": 2,
+   "q": "me + kutip = ...",
+   "o": [
+    "mengutip",
+    "menkutip",
+    "mengkutip",
+    "memkutip"
+   ],
+   "a": 0,
+   "e": "Huruf k pada awal kata dasar luluh: mengutip.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 1,
+   "t": "BM-T4-1",
+   "d": 1,
+   "q": "Manakah kata tunggal?",
+   "o": [
+    "rumah tangga",
+    "berumah",
+    "rumah",
+    "perumahan"
+   ],
+   "a": 2,
+   "e": "Kata tunggal belum berimbuhan. Rumah ialah kata dasar. Rumah tangga ialah kata majmuk.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 2,
+   "t": "BM-T4-1",
+   "d": 1,
+   "q": "me + tulis = ...",
+   "o": [
+    "menglis",
+    "mentulis",
+    "memulis",
+    "menulis"
+   ],
+   "a": 3,
+   "e": "Huruf t pada awal kata dasar luluh apabila menerima awalan meN-.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 3,
+   "t": "BM-T4-1",
+   "d": 2,
+   "q": "Perkataan manakah menerima apitan?",
+   "o": [
+    "bermain",
+    "kegembiraan",
+    "bergembira",
+    "gembira"
+   ],
+   "a": 1,
+   "e": "Kegembiraan = ke-an + gembira.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 4,
+   "t": "BM-T4-1",
+   "d": 1,
+   "q": "Antara yang berikut, yang manakah kata majmuk yang telah mantap?",
+   "o": [
+    "suruhanjaya",
+    "suru hanjaya",
+    "suruh-jaya",
+    "suruh jaya"
+   ],
+   "a": 0,
+   "e": "Suruhanjaya ialah kata majmuk mantap yang ditulis serangkai.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 5,
+   "t": "BM-T4-1",
+   "d": 2,
+   "q": "Perkataan 'jawatankuasa' ialah ...",
+   "o": [
+    "kata majmuk mantap",
+    "kata tunggal",
+    "kata ganda",
+    "kata terbitan"
+   ],
+   "a": 0,
+   "e": "Jawatankuasa dibentuk daripada jawatan dan kuasa dan ditulis serangkai.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 6,
+   "t": "BM-T4-1",
+   "d": 3,
+   "q": "Kata majmuk yang ditulis dengan betul ialah ...",
+   "o": [
+    "olahraga",
+    "ola hraga",
+    "olah raga",
+    "olah-raga"
+   ],
+   "a": 0,
+   "e": "Olahraga ialah kata majmuk mantap yang ditulis serangkai.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 7,
+   "t": "BM-T4-1",
+   "d": 1,
+   "q": "Kata majmuk ialah ...",
+   "o": [
+    "makan-makan",
+    "kereta api",
+    "pelajaran",
+    "berjalan"
+   ],
+   "a": 1,
+   "e": "Kereta api terdiri daripada dua kata yang membentuk satu makna baharu.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 8,
+   "t": "BM-T4-1",
+   "d": 2,
+   "q": "Perkataan 'bertanggungjawab' terdiri daripada ...",
+   "o": [
+    "awalan ber- + kata dasar tanggung + jawab",
+    "akhiran -jawab",
+    "apitan ber-an",
+    "awalan ber- + kata majmuk tanggungjawab"
+   ],
+   "a": 3,
+   "e": "Tanggungjawab ialah kata majmuk mantap yang menerima awalan ber-.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 9,
+   "t": "BM-T4-1",
+   "d": 2,
+   "q": "Bentuk yang betul bagi me + cuci ialah ...",
+   "o": [
+    "memcuci",
+    "mengcuci",
+    "mencuci",
+    "mencuci-cuci sahaja"
+   ],
+   "a": 2,
+   "e": "Kata dasar bermula dengan c menerima men-: mencuci.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 10,
+   "t": "BM-T4-1",
+   "d": 3,
+   "q": "Pasangan yang semuanya kata terbitan ialah ...",
+   "o": [
+    "tulis, pena, menulis",
+    "penulis, tulisan, menulis",
+    "bermain, main, permainan",
+    "penulis, buku, rumah"
+   ],
+   "a": 1,
+   "e": "Penulis, tulisan dan menulis semuanya berimbuhan. Pasangan lain mengandungi kata dasar.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 11,
+   "t": "BM-T4-1",
+   "d": 1,
+   "q": "Perkataan 'pelajaran' mengandungi imbuhan ...",
+   "o": [
+    "akhiran -an sahaja",
+    "sisipan -el-",
+    "apitan pe-an",
+    "awalan pe- sahaja"
+   ],
+   "a": 2,
+   "e": "Pelajaran terbit daripada ajar dengan apitan pe-an.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 12,
+   "t": "BM-T4-1",
+   "d": 3,
+   "q": "Ayat yang menggunakan kata terbitan dengan betul ialah ...",
+   "o": [
+    "Ali sedang mambaca buku cerita.",
+    "Ali sedang mebaca buku cerita.",
+    "Ali sedang membaca buku cerita.",
+    "Ali sedang memaca buku cerita."
+   ],
+   "a": 2,
+   "e": "Me + baca menjadi membaca.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 13,
+   "t": "BM-T4-1",
+   "d": 3,
+   "q": "Manakah yang bukan kata terbitan?",
+   "o": [
+    "kecantikan",
+    "pelari",
+    "berkawan",
+    "kelapa"
+   ],
+   "a": 3,
+   "e": "Kelapa ialah kata dasar. Ke- pada kelapa bukan imbuhan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 14,
+   "t": "BM-T4-1",
+   "d": 2,
+   "q": "Kata terbitan yang betul ialah ...",
+   "o": [
+    "mempukul",
+    "memukul",
+    "menpukul",
+    "mempukul-pukul"
+   ],
+   "a": 1,
+   "e": "Huruf p luluh apabila menerima meN-: pukul menjadi memukul.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 15,
+   "t": "BM-T4-2",
+   "d": 1,
+   "q": "Manakah akronim?",
+   "o": [
+    "DBP",
+    "SPM",
+    "MARA",
+    "KPM"
+   ],
+   "a": 2,
+   "e": "MARA disebut sebagai satu perkataan. KPM, DBP dan SPM dieja huruf demi huruf.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 16,
+   "t": "BM-T4-2",
+   "d": 1,
+   "q": "Kata ganda berentak ialah ...",
+   "o": [
+    "kuih-muih",
+    "jalan-jalan",
+    "buku-buku",
+    "laki-laki"
+   ],
+   "a": 0,
+   "e": "Kuih-muih digandakan dengan perubahan bunyi (berentak).",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 17,
+   "t": "BM-T4-2",
+   "d": 1,
+   "q": "Contoh kata ganda separa ialah ...",
+   "o": [
+    "pohon-pohon",
+    "kayu-kayan",
+    "hijau-hijau",
+    "pepohon"
+   ],
+   "a": 3,
+   "e": "Pepohon menggandakan sebahagian suku kata pertama kata dasar pohon.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 18,
+   "t": "BM-T4-2",
+   "d": 3,
+   "q": "Manakah kata ganda yang tidak tepat penggunaannya?",
+   "o": [
+    "ramai-ramai",
+    "bersama-sama",
+    "tolong-menolong",
+    "ramai-ramai orang"
+   ],
+   "a": 3,
+   "e": "Ramai-ramai sudah bermaksud ramai orang, jadi tambahan perkataan orang membazir.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 19,
+   "t": "BM-T4-2",
+   "d": 2,
+   "q": "Akronim 'Petronas' singkatan daripada ...",
+   "o": [
+    "Petrol Nasional Bersatu",
+    "Petroleum Negara",
+    "Petroliam Nasional Berhad",
+    "Perbadanan Tenaga Nasional"
+   ],
+   "a": 2,
+   "e": "Petronas ialah akronim bagi Petroliam Nasional Berhad.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 20,
+   "t": "BM-T4-2",
+   "d": 2,
+   "q": "DBP (Dewan Bahasa dan Pustaka) dieja huruf demi huruf. Bentuk ini dikenali sebagai ...",
+   "o": [
+    "akronim",
+    "singkatan",
+    "kata majmuk",
+    "kata ganda"
+   ],
+   "a": 1,
+   "e": "DBP dieja D-B-P maka ia singkatan, bukan akronim.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 21,
+   "t": "BM-T4-2",
+   "d": 3,
+   "q": "Perkataan 'tetamu' ialah ...",
+   "o": [
+    "kata ganda berentak",
+    "kata ganda separa",
+    "kata ganda penuh",
+    "akronim"
+   ],
+   "a": 1,
+   "e": "Tetamu digandakan separa daripada tamu dengan perubahan bunyi.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 22,
+   "t": "BM-T4-2",
+   "d": 1,
+   "q": "Manakah kata ganda penuh?",
+   "o": [
+    "sayur-mayur",
+    "pepohon",
+    "lelaki",
+    "buku-buku"
+   ],
+   "a": 3,
+   "e": "Buku-buku menggandakan seluruh kata dasar.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 23,
+   "t": "BM-T4-2",
+   "d": 3,
+   "q": "Manakah ayat yang menggunakan akronim dengan betul?",
+   "o": [
+    "B.N.M melaporkan berita itu.",
+    "Bernama-bernama melaporkan berita itu.",
+    "Bernama melaporkan berita itu.",
+    "Berna-ma melaporkan berita itu."
+   ],
+   "a": 2,
+   "e": "Akronim Bernama ditulis sebagai satu perkataan dengan huruf besar pada huruf pertama.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 24,
+   "t": "BM-T4-2",
+   "d": 3,
+   "q": "Pasangan yang kedua-duanya kata ganda berentak ialah ...",
+   "o": [
+    "kuda-kuda, kereta-kereta",
+    "hiruk-pikuk, gunung-ganang",
+    "lelaki, pepohon",
+    "buku-buku, rumah-rumah"
+   ],
+   "a": 1,
+   "e": "Hiruk-pikuk dan gunung-ganang digandakan dengan perubahan bunyi.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 25,
+   "t": "BM-T4-2",
+   "d": 2,
+   "q": "'Berlari-lari' menunjukkan perbuatan yang ...",
+   "o": [
+    "bermaksud banyak orang",
+    "dilakukan berulang kali atau santai",
+    "dilakukan sekali sahaja",
+    "bermaksud sangat besar"
+   ],
+   "a": 1,
+   "e": "Kata kerja digandakan untuk menunjukkan perbuatan berulang atau santai.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 26,
+   "t": "BM-T4-2",
+   "d": 2,
+   "q": "Kata ganda yang salah dalam ayat 'Beberapa buku-buku diletakkan di atas meja' ialah ...",
+   "o": [
+    "buku-buku, kerana 'beberapa' sudah menunjukkan jamak",
+    "diletakkan, kerana kata kerja pasif",
+    "meja, kerana kata nama am",
+    "beberapa, kerana tidak perlu"
+   ],
+   "a": 0,
+   "e": "Kata bilangan seperti beberapa tidak digunakan bersama kata ganda.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 27,
+   "t": "BM-T4-2",
+   "d": 2,
+   "q": "Ayat yang betul ialah ...",
+   "o": [
+    "Kanak-kanak itu bermain di taman.",
+    "Kanakkanak itu bermain di taman.",
+    "Kanak-kanak-kanak itu bermain di taman.",
+    "Banyak kanak-kanak itu bermain di taman."
+   ],
+   "a": 0,
+   "e": "Kanak-kanak sudah kata ganda jadi tidak digandakan lagi.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 28,
+   "t": "BM-T4-2",
+   "d": 2,
+   "q": "'Sayur-mayur' ialah kata ganda ...",
+   "o": [
+    "berentak",
+    "separa",
+    "tunggal",
+    "penuh"
+   ],
+   "a": 0,
+   "e": "Sayur-mayur digandakan dengan bunyi berentak.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 29,
+   "t": "BM-T4-3",
+   "d": 1,
+   "q": "Perkataan 'keadilan' ialah kata nama ...",
+   "o": [
+    "am",
+    "khas",
+    "ganti",
+    "abstrak"
+   ],
+   "a": 3,
+   "e": "Keadilan tidak dapat dilihat atau disentuh, maka kata nama abstrak.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 30,
+   "t": "BM-T4-3",
+   "d": 3,
+   "q": "Ayat pasif yang salah ialah ...",
+   "o": [
+    "Buku itu dibaca oleh Salmah.",
+    "Surat itu ditulis oleh adik.",
+    "Rumah itu dibina oleh kontraktor.",
+    "Surat itu menulis oleh adik."
+   ],
+   "a": 3,
+   "e": "Ayat pasif menggunakan kata kerja berawalan di-, bukan me-.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 31,
+   "t": "BM-T4-3",
+   "d": 3,
+   "q": "Jenis kata nama dalam 'Gunung Kinabalu' ialah ...",
+   "o": [
+    "kata nama ganti",
+    "kata nama khas",
+    "kata nama am",
+    "kata nama abstrak"
+   ],
+   "a": 1,
+   "e": "Nama tempat yang tertentu ialah kata nama khas.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 32,
+   "t": "BM-T4-3",
+   "d": 3,
+   "q": "Dalam ayat 'Ayah membeli sebuah kereta baharu', objeknya ialah ...",
+   "o": [
+    "sebuah kereta baharu",
+    "membeli",
+    "ayah",
+    "baharu"
+   ],
+   "a": 0,
+   "e": "Objek ialah yang dikenakan perbuatan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 33,
+   "t": "BM-T4-3",
+   "d": 2,
+   "q": "Manakah kata nama am?",
+   "o": [
+    "Cikgu Aminah",
+    "guru",
+    "Malaysia",
+    "Bahasa Inggeris"
+   ],
+   "a": 1,
+   "e": "Guru ialah nama umum.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 34,
+   "t": "BM-T4-3",
+   "d": 2,
+   "q": "Ayat pasif yang betul bagi 'Ali menendang bola' ialah ...",
+   "o": [
+    "Bola menendang Ali.",
+    "Bola ditendang oleh Ali.",
+    "Ali ditendang bola.",
+    "Bola ditendang Ali oleh."
+   ],
+   "a": 1,
+   "e": "Dalam ayat pasif, objek menjadi subjek dan kata kerja menggunakan di-.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 35,
+   "t": "BM-T4-3",
+   "d": 2,
+   "q": "Dalam ayat 'Adik membaca komik', kata kerja ialah ...",
+   "o": [
+    "membaca",
+    "adik",
+    "komik",
+    "membaca komik"
+   ],
+   "a": 0,
+   "e": "Membaca menyatakan perbuatan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 36,
+   "t": "BM-T4-3",
+   "d": 2,
+   "q": "Kata kerja transitif dalam ayat 'Emak memasak nasi goreng' ialah ...",
+   "o": [
+    "memasak",
+    "emak",
+    "nasi",
+    "goreng"
+   ],
+   "a": 0,
+   "e": "Memasak memerlukan objek nasi goreng.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 37,
+   "t": "BM-T4-3",
+   "d": 2,
+   "q": "Manakah ayat yang menggunakan kata kerja tak transitif?",
+   "o": [
+    "Pelajar itu membaca buku.",
+    "Pelajar itu memukul bola.",
+    "Pelajar itu menulis surat.",
+    "Pelajar itu berlari di padang."
+   ],
+   "a": 3,
+   "e": "Berlari tidak memerlukan objek.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 38,
+   "t": "BM-T4-3",
+   "d": 1,
+   "q": "Manakah kata kerja?",
+   "o": [
+    "sekolah",
+    "cantik",
+    "menulis",
+    "buku"
+   ],
+   "a": 2,
+   "e": "Menulis menyatakan perbuatan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 39,
+   "t": "BM-T4-3",
+   "d": 1,
+   "q": "Manakah kata nama khas?",
+   "o": [
+    "kampung",
+    "gunung",
+    "sungai",
+    "Sungai Pahang"
+   ],
+   "a": 3,
+   "e": "Sungai Pahang ialah nama tertentu, jadi kata nama khas.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 40,
+   "t": "BM-T4-3",
+   "d": 3,
+   "q": "Kata nama dalam ayat 'Murid-murid sedang belajar dengan tekun' ialah ...",
+   "o": [
+    "murid-murid",
+    "sedang",
+    "tekun",
+    "belajar"
+   ],
+   "a": 0,
+   "e": "Murid-murid menamakan orang.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 41,
+   "t": "BM-T4-3",
+   "d": 1,
+   "q": "Kata kerja tak transitif ialah ...",
+   "o": [
+    "menulis",
+    "memakan",
+    "tidur",
+    "membaca"
+   ],
+   "a": 2,
+   "e": "Tidur tidak memerlukan objek.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 42,
+   "t": "BM-T4-3",
+   "d": 2,
+   "q": "Kata nama abstrak dalam ayat 'Kejujurannya dihargai ramai' ialah ...",
+   "o": [
+    "ramai",
+    "tiada",
+    "kejujurannya",
+    "dihargai"
+   ],
+   "a": 2,
+   "e": "Kejujuran ialah sifat yang tidak dapat disentuh.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 43,
+   "t": "BM-T4-4",
+   "d": 3,
+   "q": "Ayat 'Dia sangat paling rajin' salah kerana ...",
+   "o": [
+    "ayat itu pasif",
+    "dia ialah kata ganti",
+    "penguat tidak digunakan bersama darjah paling",
+    "rajin bukan adjektif"
+   ],
+   "a": 2,
+   "e": "Sangat dan paling tidak digunakan bersama.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 44,
+   "t": "BM-T4-4",
+   "d": 2,
+   "q": "Kata hubung dalam ayat 'Ali rajin kerana dia mahu berjaya' ialah ...",
+   "o": [
+    "rajin",
+    "kerana",
+    "mahu",
+    "Ali"
+   ],
+   "a": 1,
+   "e": "Kerana menghubungkan dua klausa.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 45,
+   "t": "BM-T4-4",
+   "d": 2,
+   "q": "Kata penegas ialah ...",
+   "o": [
+    "-lah",
+    "dan",
+    "atau",
+    "di"
+   ],
+   "a": 0,
+   "e": "Kata penegas seperti -lah, -kah dan -tah menegaskan bahagian ayat.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 46,
+   "t": "BM-T4-4",
+   "d": 1,
+   "q": "Kata penguat dalam 'sangat cantik' ialah ...",
+   "o": [
+    "sangat cantik",
+    "sangat",
+    "cantik",
+    "tiada"
+   ],
+   "a": 1,
+   "e": "Sangat menguatkan adjektif cantik.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 47,
+   "t": "BM-T4-4",
+   "d": 3,
+   "q": "Manakah ayat yang tepat?",
+   "o": [
+    "Kami belajar bersungguh-sungguh supaya berjaya.",
+    "Kami belajar bersungguh-sungguh untuk supaya berjaya.",
+    "Kami belajar bersungguh-sungguh supaya untuk berjaya.",
+    "Kami belajar bersungguh-sungguh agar supaya berjaya."
+   ],
+   "a": 0,
+   "e": "Agar dan supaya mempunyai fungsi sama; tidak digunakan serentak.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 48,
+   "t": "BM-T4-4",
+   "d": 2,
+   "q": "Ayat yang betul ialah ...",
+   "o": [
+    "Dia pergi ke pasar untuk membeli sayur.",
+    "Dia pergi pada pasar untuk membeli sayur.",
+    "Dia pergi ke pasar kerana membeli sayur.",
+    "Dia pergi di pasar untuk membeli sayur."
+   ],
+   "a": 0,
+   "e": "Ke menunjukkan arah tempat.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 49,
+   "t": "BM-T4-4",
+   "d": 2,
+   "q": "Kata sendi nama 'daripada' digunakan untuk ...",
+   "o": [
+    "menyatakan tujuan",
+    "menyatakan sebab",
+    "menunjukkan arah tempat",
+    "menunjukkan asal atau perbandingan"
+   ],
+   "a": 3,
+   "e": "Daripada menunjukkan asal bahan, orang atau perbandingan, manakala dari menunjukkan tempat.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 50,
+   "t": "BM-T4-4",
+   "d": 3,
+   "q": "Ayat yang menggunakan 'dari' dengan betul ialah ...",
+   "o": [
+    "Hadiah ini dari datuk saya.",
+    "Baju ini diperbuat dari kapas.",
+    "Dia lebih tinggi dari saya.",
+    "Mereka pulang dari Kuala Lumpur."
+   ],
+   "a": 3,
+   "e": "Dari digunakan untuk tempat atau masa. Daripada digunakan untuk orang, asal bahan dan perbandingan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 51,
+   "t": "BM-T4-4",
+   "d": 1,
+   "q": "Kata hubung ialah ...",
+   "o": [
+    "amat",
+    "tetapi",
+    "di",
+    "lah"
+   ],
+   "a": 1,
+   "e": "Tetapi menghubungkan dua ayat atau frasa.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 52,
+   "t": "BM-T4-4",
+   "d": 1,
+   "q": "Manakah kata adjektif?",
+   "o": [
+    "sekolah",
+    "makan",
+    "tinggi",
+    "di"
+   ],
+   "a": 2,
+   "e": "Tinggi menerangkan sifat.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 53,
+   "t": "BM-T4-4",
+   "d": 2,
+   "q": "'Terlalu pantas' mengandungi ...",
+   "o": [
+    "kata sendi dan kata nama",
+    "kata kerja dan kata hubung",
+    "kata penguat dan adjektif",
+    "dua kata nama"
+   ],
+   "a": 2,
+   "e": "Terlalu ialah penguat dan pantas ialah adjektif.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 54,
+   "t": "BM-T4-4",
+   "d": 2,
+   "q": "Perbandingan yang betul ialah ...",
+   "o": [
+    "Dia paling lebih tinggi daripada abangnya.",
+    "Dia amat paling tinggi abangnya.",
+    "Dia lebih tinggi dari pada abangnya.",
+    "Dia lebih tinggi daripada abangnya."
+   ],
+   "a": 3,
+   "e": "Lebih ... daripada digunakan untuk membandingkan dua perkara.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 55,
+   "t": "BM-T4-4",
+   "d": 1,
+   "q": "Kata sendi nama ialah ...",
+   "o": [
+    "kepada",
+    "kerana",
+    "sangat",
+    "dan"
+   ],
+   "a": 0,
+   "e": "Kepada mendahului frasa nama.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 56,
+   "t": "BM-T4-4",
+   "d": 3,
+   "q": "Kata hubung pancangan ialah ...",
+   "o": [
+    "atau",
+    "dan",
+    "tetapi",
+    "bahawa"
+   ],
+   "a": 3,
+   "e": "Bahawa ialah kata hubung pancangan yang memperkenalkan klausa komplemen.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 57,
+   "t": "BM-T4-5",
+   "d": 1,
+   "q": "'Guru baharu' ialah frasa ...",
+   "o": [
+    "adjektif",
+    "sendi nama",
+    "kerja",
+    "nama"
+   ],
+   "a": 3,
+   "e": "Inti frasa ialah guru, iaitu kata nama.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 58,
+   "t": "BM-T4-5",
+   "d": 2,
+   "q": "Frasa sendi nama dalam ayat 'Mereka tinggal di Kuantan' ialah ...",
+   "o": [
+    "tinggal",
+    "Kuantan sahaja",
+    "di Kuantan",
+    "Mereka"
+   ],
+   "a": 2,
+   "e": "Di ialah kata sendi nama dan Kuantan ialah frasa nama.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 59,
+   "t": "BM-T4-5",
+   "d": 1,
+   "q": "'Sedang membaca' ialah frasa ...",
+   "o": [
+    "nama",
+    "adjektif",
+    "kerja",
+    "sendi nama"
+   ],
+   "a": 2,
+   "e": "Inti frasa ialah membaca, iaitu kata kerja.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 60,
+   "t": "BM-T4-5",
+   "d": 2,
+   "q": "Manakah frasa nama?",
+   "o": [
+    "pekerja kilang itu",
+    "sedang bekerja",
+    "sangat rajin",
+    "di kilang"
+   ],
+   "a": 0,
+   "e": "Pekerja ialah inti kata nama.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 61,
+   "t": "BM-T4-5",
+   "d": 2,
+   "q": "Frasa adjektif dalam 'Bunga itu sangat harum' ialah ...",
+   "o": [
+    "bunga itu",
+    "harum bunga",
+    "sangat harum",
+    "itu sangat"
+   ],
+   "a": 2,
+   "e": "Inti ialah harum.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 62,
+   "t": "BM-T4-5",
+   "d": 1,
+   "q": "'Sangat cantik' ialah frasa ...",
+   "o": [
+    "kerja",
+    "adjektif",
+    "nama",
+    "sendi nama"
+   ],
+   "a": 1,
+   "e": "Inti ialah cantik, iaitu adjektif.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 63,
+   "t": "BM-T4-5",
+   "d": 1,
+   "q": "'Di perpustakaan' ialah frasa ...",
+   "o": [
+    "nama",
+    "kerja",
+    "adjektif",
+    "sendi nama"
+   ],
+   "a": 3,
+   "e": "Frasa bermula dengan kata sendi nama di.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 64,
+   "t": "BM-T4-5",
+   "d": 2,
+   "q": "Frasa nama dalam ayat 'Murid baharu itu membaca buku' ialah ...",
+   "o": [
+    "murid baharu itu",
+    "buku sahaja",
+    "baharu itu",
+    "membaca buku"
+   ],
+   "a": 0,
+   "e": "Murid baharu itu ialah subjek, berinti kata nama murid.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 65,
+   "t": "BM-T4-5",
+   "d": 2,
+   "q": "Dalam ayat 'Kakak membeli buku', 'membeli buku' ialah ...",
+   "o": [
+    "objek sahaja",
+    "subjek",
+    "kata hubung",
+    "predikat"
+   ],
+   "a": 3,
+   "e": "Predikat ialah bahagian yang menerangkan subjek dan biasanya berinti kata kerja.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 66,
+   "t": "BM-T4-5",
+   "d": 2,
+   "q": "Frasa kerja dalam ayat 'Adik sedang bermain di taman' ialah ...",
+   "o": [
+    "Adik",
+    "sedang bermain",
+    "taman",
+    "di taman"
+   ],
+   "a": 1,
+   "e": "Inti ialah bermain.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 67,
+   "t": "BM-T4-5",
+   "d": 3,
+   "q": "Predikat dalam 'Ayah pergi ke pejabat' ialah ...",
+   "o": [
+    "Ayah",
+    "ke pejabat sahaja",
+    "pergi ke pejabat",
+    "Ayah pergi"
+   ],
+   "a": 2,
+   "e": "Predikat ialah bahagian yang menerangkan subjek.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 68,
+   "t": "BM-T4-5",
+   "d": 3,
+   "q": "'Amat bersungguh-sungguh' ialah frasa ...",
+   "o": [
+    "kerja",
+    "sendi nama",
+    "nama",
+    "adjektif"
+   ],
+   "a": 3,
+   "e": "Bersungguh-sungguh ialah adjektif.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 69,
+   "t": "BM-T4-5",
+   "d": 3,
+   "q": "Frasa kerja yang betul ialah ...",
+   "o": [
+    "telah selesai",
+    "telah akan",
+    "telah sudah",
+    "sedang akan"
+   ],
+   "a": 0,
+   "e": "Kata bantu aspek tidak digunakan serentak jika bercanggah makna.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 70,
+   "t": "BM-T4-5",
+   "d": 3,
+   "q": "Dalam ayat 'Pelajar yang rajin itu mendapat hadiah', subjeknya ialah ...",
+   "o": [
+    "rajin itu mendapat",
+    "Pelajar yang rajin itu",
+    "hadiah",
+    "mendapat hadiah"
+   ],
+   "a": 1,
+   "e": "Subjek ialah frasa nama pelajar yang rajin itu.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 71,
+   "t": "BM-T4-6",
+   "d": 3,
+   "q": "Ayat songsang bagi 'Murid itu sedang menulis' ialah ...",
+   "o": [
+    "Sedang murid itu menulis sahaja.",
+    "Murid itu menulis sedang.",
+    "Sedang menulis murid itu.",
+    "Menulis sedang murid itu."
+   ],
+   "a": 2,
+   "e": "Predikat sedang menulis didahulukan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 72,
+   "t": "BM-T4-6",
+   "d": 2,
+   "q": "Susunan biasa ayat tunggal ialah ...",
+   "o": [
+    "objek diikuti subjek",
+    "kata hubung diikuti subjek",
+    "predikat diikuti subjek",
+    "subjek diikuti predikat"
+   ],
+   "a": 3,
+   "e": "Susunan biasa ialah S + P.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 73,
+   "t": "BM-T4-6",
+   "d": 1,
+   "q": "Ayat 'Bunga itu cantik' berpola ...",
+   "o": [
+    "FN + FN",
+    "FN + FS",
+    "FN + FK",
+    "FN + FA"
+   ],
+   "a": 3,
+   "e": "Cantik ialah frasa adjektif.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 74,
+   "t": "BM-T4-6",
+   "d": 1,
+   "q": "Ayat 'Adik berlari' berpola ...",
+   "o": [
+    "FN + FS",
+    "FN + FA",
+    "FN + FK",
+    "FN + FN"
+   ],
+   "a": 2,
+   "e": "Berlari ialah frasa kerja.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 75,
+   "t": "BM-T4-6",
+   "d": 3,
+   "q": "Ayat 'Ali rajin tetapi adiknya malas' ialah ayat majmuk ...",
+   "o": [
+    "songsang",
+    "gabungan",
+    "pancangan",
+    "dasar"
+   ],
+   "a": 1,
+   "e": "Tetapi ialah kata hubung gabungan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 76,
+   "t": "BM-T4-6",
+   "d": 1,
+   "q": "Ayat 'Mereka di kantin' berpola ...",
+   "o": [
+    "FN + FS",
+    "FN + FN",
+    "FN + FK",
+    "FN + FA"
+   ],
+   "a": 0,
+   "e": "Di kantin ialah frasa sendi nama.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 77,
+   "t": "BM-T4-6",
+   "d": 3,
+   "q": "Ayat 'Dia pulang kerana hari sudah gelap' ialah ayat ...",
+   "o": [
+    "majmuk pancangan",
+    "tunggal",
+    "majmuk gabungan",
+    "dasar"
+   ],
+   "a": 0,
+   "e": "Kerana ialah kata hubung pancangan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 78,
+   "t": "BM-T4-6",
+   "d": 1,
+   "q": "Ayat yang mengandungi satu klausa dinamakan ayat ...",
+   "o": [
+    "pancangan",
+    "tunggal",
+    "majmuk",
+    "gabungan"
+   ],
+   "a": 1,
+   "e": "Ayat tunggal mempunyai satu subjek dan satu predikat.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 79,
+   "t": "BM-T4-6",
+   "d": 3,
+   "q": "Ayat yang bukan ayat dasar ialah ...",
+   "o": [
+    "Rumah itu besar.",
+    "Ayah guru.",
+    "Adik tidur.",
+    "Kerana hujan lebat, kami tidak keluar."
+   ],
+   "a": 3,
+   "e": "Ayat dasar hanya satu subjek dan satu predikat tanpa tambahan klausa.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 80,
+   "t": "BM-T4-6",
+   "d": 2,
+   "q": "Ayat songsang ialah ...",
+   "o": [
+    "Budak itu menangis.",
+    "Budak itu dan ibunya menangis.",
+    "Menangislah budak itu.",
+    "Budak itu menangis kerana jatuh."
+   ],
+   "a": 2,
+   "e": "Predikat didahulukan sebelum subjek.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 81,
+   "t": "BM-T4-6",
+   "d": 2,
+   "q": "Predikat dalam 'Adik makan nasi' ialah ...",
+   "o": [
+    "makan nasi",
+    "Adik",
+    "Adik makan",
+    "nasi"
+   ],
+   "a": 0,
+   "e": "Predikat ialah bahagian yang menerangkan subjek.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 82,
+   "t": "BM-T4-6",
+   "d": 2,
+   "q": "Kata hubung gabungan ialah ...",
+   "o": [
+    "kerana",
+    "tetapi",
+    "bahawa",
+    "jika"
+   ],
+   "a": 1,
+   "e": "Tetapi menggabungkan dua klausa yang setara.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 83,
+   "t": "BM-T4-6",
+   "d": 2,
+   "q": "Ayat majmuk ialah ...",
+   "o": [
+    "Aminah menulis surat.",
+    "Ali membaca buku.",
+    "Ali membaca buku dan Aminah menulis surat.",
+    "Buku itu menarik."
+   ],
+   "a": 2,
+   "e": "Ayat mengandungi dua klausa yang digabungkan dengan dan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 84,
+   "t": "BM-T4-6",
+   "d": 1,
+   "q": "Ayat 'Kakak guru' berpola ...",
+   "o": [
+    "FN + FA",
+    "FN + FN",
+    "FN + FS",
+    "FN + FK"
+   ],
+   "a": 1,
+   "e": "Kakak ialah frasa nama dan guru juga frasa nama.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 85,
+   "t": "BM-T4-7",
+   "d": 2,
+   "q": "Ayat tanya tanpa kata tanya yang betul ialah ...",
+   "o": [
+    "Di mana awak makan?",
+    "Apakah adakah awak makan?",
+    "Adakah awak sudah makan?",
+    "Siapa adakah awak?"
+   ],
+   "a": 2,
+   "e": "Adakah digunakan di awal untuk bertanya jawapan ya atau tidak.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 86,
+   "t": "BM-T4-7",
+   "d": 2,
+   "q": "Ayat tanya dengan kata tanya ialah ...",
+   "o": [
+    "Wah, mesyuarat itu panjang!",
+    "Bilakah mesyuarat itu diadakan?",
+    "Mesyuarat itu diadakan semalam.",
+    "Hadir dalam mesyuarat itu."
+   ],
+   "a": 1,
+   "e": "Bilakah ialah kata tanya.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 87,
+   "t": "BM-T4-7",
+   "d": 1,
+   "q": "Ayat 'Siapakah nama anda?' ialah ayat ...",
+   "o": [
+    "tanya",
+    "seruan",
+    "perintah",
+    "penyata"
+   ],
+   "a": 0,
+   "e": "Ada kata tanya siapakah.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 88,
+   "t": "BM-T4-7",
+   "d": 3,
+   "q": "Ayat yang tidak menggunakan tanda baca yang betul ialah ...",
+   "o": [
+    "Siapakah yang datang?",
+    "Aduh, sakitnya kaki saya.",
+    "Pergilah ke sekolah.",
+    "Dia membaca buku."
+   ],
+   "a": 1,
+   "e": "Ayat seruan sepatutnya menggunakan tanda seru: Aduh, sakitnya kaki saya!",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 89,
+   "t": "BM-T4-7",
+   "d": 1,
+   "q": "Tanda baca yang digunakan di hujung ayat tanya ialah ...",
+   "o": [
+    "koma",
+    "noktah",
+    "tanda soal",
+    "tanda seru"
+   ],
+   "a": 2,
+   "e": "Ayat tanya diakhiri tanda soal (?).",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 90,
+   "t": "BM-T4-7",
+   "d": 3,
+   "q": "Ayat 'Mengapa dia tidak hadir?' menunjukkan ...",
+   "o": [
+    "ayat seruan",
+    "ayat perintah",
+    "ayat tanya yang meminta sebab",
+    "ayat penyata"
+   ],
+   "a": 2,
+   "e": "Mengapa bertanya tentang sebab.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 91,
+   "t": "BM-T4-7",
+   "d": 1,
+   "q": "Ayat 'Tutup pintu itu.' ialah ayat ...",
+   "o": [
+    "penyata",
+    "seruan",
+    "tanya",
+    "perintah"
+   ],
+   "a": 3,
+   "e": "Ayat mengandungi suruhan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 92,
+   "t": "BM-T4-7",
+   "d": 2,
+   "q": "Ayat perintah larangan ialah ...",
+   "o": [
+    "Jangan membuang sampah di sini.",
+    "Makanlah nasi itu.",
+    "Silakan duduk.",
+    "Tolonglah bukakan pintu."
+   ],
+   "a": 0,
+   "e": "Jangan menunjukkan larangan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 93,
+   "t": "BM-T4-7",
+   "d": 2,
+   "q": "Ayat seruan menggunakan ...",
+   "o": [
+    "kata hubung",
+    "kata bantu",
+    "kata seru",
+    "kata sendi nama"
+   ],
+   "a": 2,
+   "e": "Kata seru seperti wah dan aduhai.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 94,
+   "t": "BM-T4-7",
+   "d": 1,
+   "q": "Ayat 'Kami pergi ke perpustakaan.' ialah ayat ...",
+   "o": [
+    "perintah",
+    "seruan",
+    "tanya",
+    "penyata"
+   ],
+   "a": 3,
+   "e": "Ayat memberi maklumat.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 95,
+   "t": "BM-T4-7",
+   "d": 1,
+   "q": "Ayat 'Wah, cantiknya pemandangan itu!' ialah ayat ...",
+   "o": [
+    "perintah",
+    "seruan",
+    "penyata",
+    "tanya"
+   ],
+   "a": 1,
+   "e": "Wah ialah kata seru dan ayat menyatakan kagum.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 96,
+   "t": "BM-T4-7",
+   "d": 2,
+   "q": "Ayat perintah silaan ialah ...",
+   "o": [
+    "Jangan masuk.",
+    "Masuk!",
+    "Tolong masuk.",
+    "Silakan masuk."
+   ],
+   "a": 3,
+   "e": "Silakan ialah jemputan sopan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 97,
+   "t": "BM-T4-7",
+   "d": 3,
+   "q": "Ayat 'Amboi, sombongnya dia!' menyatakan perasaan ...",
+   "o": [
+    "bertanya",
+    "menyuruh",
+    "gembira sahaja",
+    "tidak puas hati atau menyindir"
+   ],
+   "a": 3,
+   "e": "Amboi ialah kata seru yang menyatakan sindiran atau tidak puas hati.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 98,
+   "t": "BM-T4-7",
+   "d": 3,
+   "q": "Ayat perintah yang sopan ialah ...",
+   "o": [
+    "Tolong tutup pintu itu.",
+    "Tutup!",
+    "Kamu mesti tutup pintu itu.",
+    "Tutup pintu itu!"
+   ],
+   "a": 0,
+   "e": "Tolong menjadikan ayat bernada permintaan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 99,
+   "t": "BM-T4-8",
+   "d": 1,
+   "q": "Peribahasa yang bermaksud 'jangan tergesa-gesa asalkan selamat' ialah ...",
+   "o": [
+    "Ringan tulang",
+    "Biar lambat asal selamat",
+    "Seperti katak di bawah tempurung",
+    "Bagai kacang lupakan kulit"
+   ],
+   "a": 1,
+   "e": "Biar lambat asal selamat menasihati supaya berhati-hati.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 100,
+   "t": "BM-T4-8",
+   "d": 1,
+   "q": "'Besar kepala' bermaksud ...",
+   "o": [
+    "marah",
+    "cerdik",
+    "sombong",
+    "berani"
+   ],
+   "a": 2,
+   "e": "Besar kepala bermaksud sombong atau angkuh.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 101,
+   "t": "BM-T4-8",
+   "d": 2,
+   "q": "'Pagar makan padi' bermaksud ...",
+   "o": [
+    "orang yang dipercayai mengkhianati amanah",
+    "orang yang suka makan",
+    "orang yang rajin",
+    "orang yang menanam padi"
+   ],
+   "a": 0,
+   "e": "Pagar sepatutnya melindungi, tetapi memakan padi.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 102,
+   "t": "BM-T4-8",
+   "d": 3,
+   "q": "'Hancur badan dikandung tanah, budi baik dikenang jua' menasihati kita supaya ...",
+   "o": [
+    "bersikap sombong",
+    "menyimpan dendam",
+    "mengenang dan menghargai budi orang",
+    "menjimatkan wang"
+   ],
+   "a": 2,
+   "e": "Budi baik sentiasa dikenang walaupun orang itu telah tiada.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 103,
+   "t": "BM-T4-8",
+   "d": 2,
+   "q": "'Seperti katak di bawah tempurung' bermaksud ...",
+   "o": [
+    "orang yang kaya",
+    "orang yang sombong",
+    "orang yang cerdik",
+    "orang yang berpengetahuan sempit"
+   ],
+   "a": 3,
+   "e": "Katak di bawah tempurung hanya nampak dunia yang kecil.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 104,
+   "t": "BM-T4-8",
+   "d": 2,
+   "q": "'Bagai air dengan minyak' bermaksud ...",
+   "o": [
+    "sangat serasi",
+    "sangat kaya",
+    "sangat miskin",
+    "tidak sehaluan atau tidak serasi"
+   ],
+   "a": 3,
+   "e": "Air dan minyak tidak bersatu.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 105,
+   "t": "BM-T4-8",
+   "d": 1,
+   "q": "'Tangan panjang' bermaksud ...",
+   "o": [
+    "suka mencuri",
+    "suka menolong",
+    "kuat",
+    "rajin"
+   ],
+   "a": 0,
+   "e": "Tangan panjang ialah kiasan bagi pencuri.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 106,
+   "t": "BM-T4-8",
+   "d": 1,
+   "q": "'Bagai aur dengan tebing' ialah ...",
+   "o": [
+    "simpulan bahasa",
+    "pepatah",
+    "perumpamaan",
+    "perbilangan"
+   ],
+   "a": 2,
+   "e": "Perumpamaan menggunakan kata bandingan bagai.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 107,
+   "t": "BM-T4-8",
+   "d": 2,
+   "q": "'Bersatu teguh, bercerai roboh' menasihati kita supaya ...",
+   "o": [
+    "bersendirian",
+    "bersatu padu",
+    "berjimat",
+    "berhati-hati"
+   ],
+   "a": 1,
+   "e": "Perpaduan menguatkan, perpecahan melemahkan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 108,
+   "t": "BM-T4-8",
+   "d": 1,
+   "q": "'Ringan tulang' bermaksud ...",
+   "o": [
+    "malas",
+    "rajin",
+    "kurus",
+    "sihat"
+   ],
+   "a": 1,
+   "e": "Ringan tulang ialah simpulan bahasa yang bermaksud rajin.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 109,
+   "t": "BM-T4-8",
+   "d": 3,
+   "q": "Peribahasa yang bermaksud mengharapkan sesuatu yang sukar dicapai ialah ...",
+   "o": [
+    "Bagai aur dengan tebing",
+    "Bagai pungguk rindukan bulan",
+    "Biar lambat asal selamat",
+    "Bersatu teguh, bercerai roboh"
+   ],
+   "a": 1,
+   "e": "Pungguk rindukan bulan menggambarkan harapan yang sukar tercapai.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 110,
+   "t": "BM-T4-8",
+   "d": 3,
+   "q": "Ayat yang menggunakan peribahasa dengan betul ialah ...",
+   "o": [
+    "Dia terlalu besar kepala kerana kepalanya besar.",
+    "Besar kepala menolong ibunya di dapur.",
+    "Dia terlalu besar kepala sehingga tidak menerima teguran.",
+    "Rumah itu besar kepala."
+   ],
+   "a": 2,
+   "e": "Besar kepala bermaksud sombong, bukan saiz kepala.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 111,
+   "t": "BM-T4-8",
+   "d": 3,
+   "q": "Peribahasa 'seperti telur di hujung tanduk' menggambarkan ...",
+   "o": [
+    "keadaan yang sangat bahaya",
+    "keadaan gembira",
+    "keadaan selamat",
+    "keadaan sunyi"
+   ],
+   "a": 0,
+   "e": "Telur di hujung tanduk mudah jatuh dan pecah.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 112,
+   "t": "BM-T4-8",
+   "d": 2,
+   "q": "Peribahasa 'bagai kacang lupakan kulit' ditujukan kepada ...",
+   "o": [
+    "orang yang miskin",
+    "orang yang jujur",
+    "orang yang rajin",
+    "orang yang lupa asal usul atau jasa orang"
+   ],
+   "a": 3,
+   "e": "Kacang lupakan kulit menyindir orang yang lupa daratan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 113,
+   "t": "BM-T4-9",
+   "d": 1,
+   "q": "Pantun mempunyai ... baris serangkap.",
+   "o": [
+    "lapan",
+    "enam",
+    "empat",
+    "dua"
+   ],
+   "a": 2,
+   "e": "Pantun lazimnya empat baris serangkap.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 114,
+   "t": "BM-T4-9",
+   "d": 3,
+   "q": "Syair berbeza daripada pantun kerana ...",
+   "o": [
+    "semua baris syair mengandungi maksud dan rima a-a-a-a",
+    "syair mempunyai pembayang",
+    "syair tiada rima",
+    "syair hanya dua baris"
+   ],
+   "a": 0,
+   "e": "Syair tidak mempunyai pembayang dan maksud yang terpisah.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 115,
+   "t": "BM-T4-9",
+   "d": 1,
+   "q": "Rima syair ialah ...",
+   "o": [
+    "a-b-a-b",
+    "a-a-a-a",
+    "a-a-b-b",
+    "a-b-b-a"
+   ],
+   "a": 1,
+   "e": "Syair mempunyai rima akhir sama pada semua baris.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 116,
+   "t": "BM-T4-9",
+   "d": 2,
+   "q": "Tempat, masa dan masyarakat dalam cerita dinamakan ...",
+   "o": [
+    "tema",
+    "latar",
+    "plot",
+    "gaya bahasa"
+   ],
+   "a": 1,
+   "e": "Latar meliputi tempat, masa dan masyarakat.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 117,
+   "t": "BM-T4-9",
+   "d": 2,
+   "q": "Skrip drama mengandungi ...",
+   "o": [
+    "hanya rima",
+    "hanya pengajaran",
+    "babak, dialog dan arahan pentas",
+    "hanya pembayang"
+   ],
+   "a": 2,
+   "e": "Skrip drama ditulis dalam bentuk dialog dan arahan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 118,
+   "t": "BM-T4-9",
+   "d": 1,
+   "q": "Karya yang ditulis dalam bentuk perenggan bebas ialah ...",
+   "o": [
+    "gurindam",
+    "syair",
+    "prosa",
+    "pantun"
+   ],
+   "a": 2,
+   "e": "Prosa tidak terikat pada rangkap dan rima.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 119,
+   "t": "BM-T4-9",
+   "d": 3,
+   "q": "Mesej utama atau idea pokok dalam karya dinamakan ...",
+   "o": [
+    "latar",
+    "dialog",
+    "tema",
+    "plot"
+   ],
+   "a": 2,
+   "e": "Tema ialah idea utama pengarang.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 120,
+   "t": "BM-T4-9",
+   "d": 1,
+   "q": "Dua baris pertama dalam pantun dinamakan ...",
+   "o": [
+    "maksud",
+    "pembayang",
+    "klimaks",
+    "konflik"
+   ],
+   "a": 1,
+   "e": "Pembayang mendahului maksud.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 121,
+   "t": "BM-T4-9",
+   "d": 3,
+   "q": "Watak yang menentang watak utama dalam cerita dinamakan ...",
+   "o": [
+    "pembayang",
+    "antagonis",
+    "protagonis",
+    "pengarang"
+   ],
+   "a": 1,
+   "e": "Antagonis ialah watak penentang.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 122,
+   "t": "BM-T4-9",
+   "d": 2,
+   "q": "Bahagian cerita yang menunjukkan puncak ketegangan dinamakan ...",
+   "o": [
+    "pengenalan",
+    "peleraian",
+    "nilai",
+    "klimaks"
+   ],
+   "a": 3,
+   "e": "Klimaks ialah titik tertinggi konflik.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 123,
+   "t": "BM-T4-9",
+   "d": 2,
+   "q": "Puisi berunsur jenaka, sindiran atau ejekan ialah ...",
+   "o": [
+    "pantun nasihat",
+    "gurindam",
+    "syair",
+    "seloka"
+   ],
+   "a": 3,
+   "e": "Seloka bersifat menyindir secara jenaka.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 124,
+   "t": "BM-T4-9",
+   "d": 3,
+   "q": "Pantun yang betul pembayang dan maksudnya ialah ...",
+   "o": [
+    "Pisang emas dibawa belayar, masak sebiji di atas peti; hutang emas boleh dibayar, hutang budi dibawa mati.",
+    "Hutang emas boleh dibayar, hutang budi dibawa mati.",
+    "Hutang budi dibawa mati, hutang budi dibawa mati.",
+    "Pisang emas dibawa belayar, pisang emas dibawa belayar."
+   ],
+   "a": 0,
+   "e": "Pantun lengkap mempunyai pembayang dan maksud dengan rima a-b-a-b.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 125,
+   "t": "BM-T4-9",
+   "d": 1,
+   "q": "Rima pantun empat kerat ialah ...",
+   "o": [
+    "a-b-a-b",
+    "a-a-b-b",
+    "a-a-a-a",
+    "a-b-b-a"
+   ],
+   "a": 0,
+   "e": "Rima akhir pantun ialah a-b-a-b.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 126,
+   "t": "BM-T4-9",
+   "d": 2,
+   "q": "Unsur yang menerangkan susunan peristiwa dalam cerpen ialah ...",
+   "o": [
+    "latar",
+    "nilai",
+    "tema",
+    "plot"
+   ],
+   "a": 3,
+   "e": "Plot ialah rangkaian peristiwa.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 127,
+   "t": "BM-T4-10",
+   "d": 2,
+   "q": "Ayat 'Kerajaan telah menambah bilangan perpustakaan desa pada tahun 2020' ialah ...",
+   "o": [
+    "soalan retorik",
+    "fakta",
+    "pendapat",
+    "seruan"
+   ],
+   "a": 1,
+   "e": "Maklumat tersebut boleh dibuktikan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 128,
+   "t": "BM-T4-10",
+   "d": 3,
+   "q": "Perenggan yang baik mempunyai ...",
+   "o": [
+    "tiada ayat topik",
+    "tiga idea berbeza",
+    "hanya ayat contoh",
+    "hanya satu idea utama"
+   ],
+   "a": 3,
+   "e": "Satu perenggan menerangkan satu isi utama.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 129,
+   "t": "BM-T4-10",
+   "d": 3,
+   "q": "Kesalahan dalam 'Para pelajar-pelajar dikehendaki hadir' ialah ...",
+   "o": [
+    "kata hubung salah",
+    "tanda baca salah",
+    "pengulangan jamak yang tidak perlu",
+    "ejaan salah"
+   ],
+   "a": 2,
+   "e": "Para sudah menunjukkan jamak; kata ganda tidak diperlukan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 130,
+   "t": "BM-T4-10",
+   "d": 1,
+   "q": "Karangan lazimnya terdiri daripada ...",
+   "o": [
+    "tajuk sahaja",
+    "pendahuluan, isi dan penutup",
+    "penutup sahaja",
+    "isi sahaja"
+   ],
+   "a": 1,
+   "e": "Struktur asas karangan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 131,
+   "t": "BM-T4-10",
+   "d": 3,
+   "q": "Isi tersirat ialah ...",
+   "o": [
+    "maklumat yang tidak dinyatakan secara terus tetapi boleh disimpulkan",
+    "tajuk bab",
+    "bahagian penutup",
+    "maklumat yang jelas dalam ayat topik"
+   ],
+   "a": 0,
+   "e": "Isi tersirat diperoleh melalui inferens.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 132,
+   "t": "BM-T4-10",
+   "d": 3,
+   "q": "Ayat 'Oleh itu, kita perlu menjaga alam sekitar.' paling sesuai berada pada ...",
+   "o": [
+    "penutup atau kesimpulan",
+    "ayat topik perenggan pertama",
+    "pendahuluan",
+    "tajuk"
+   ],
+   "a": 0,
+   "e": "Oleh itu menyimpulkan akibat atau cadangan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 133,
+   "t": "BM-T4-10",
+   "d": 1,
+   "q": "Isi pokok dalam sesebuah perenggan dinamakan ...",
+   "o": [
+    "idea utama",
+    "ayat contoh",
+    "penutup",
+    "kata kunci"
+   ],
+   "a": 0,
+   "e": "Idea utama ialah pokok perbincangan perenggan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 134,
+   "t": "BM-T4-10",
+   "d": 1,
+   "q": "Maklumat yang boleh dibuktikan benar dinamakan ...",
+   "o": [
+    "sindiran",
+    "pendapat",
+    "fakta",
+    "andaian"
+   ],
+   "a": 2,
+   "e": "Fakta boleh disahkan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 135,
+   "t": "BM-T4-10",
+   "d": 1,
+   "q": "Penanda wacana ialah ...",
+   "o": [
+    "di sekolah",
+    "rajin",
+    "oleh itu",
+    "sedang"
+   ],
+   "a": 2,
+   "e": "Oleh itu menghubungkan sebab dan akibat.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 136,
+   "t": "BM-T4-10",
+   "d": 2,
+   "q": "Semasa menyunting, perkara pertama yang perlu disemak ialah ...",
+   "o": [
+    "jenis pen",
+    "warna kertas",
+    "ejaan, tanda baca dan tatabahasa",
+    "bilangan halaman sahaja"
+   ],
+   "a": 2,
+   "e": "Penyuntingan memperbaiki bahasa.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 137,
+   "t": "BM-T4-10",
+   "d": 2,
+   "q": "Penanda wacana yang menunjukkan tambahan isi ialah ...",
+   "o": [
+    "walau bagaimanapun",
+    "selain itu",
+    "sebaliknya",
+    "oleh itu"
+   ],
+   "a": 1,
+   "e": "Selain itu menambah isi.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 138,
+   "t": "BM-T4-10",
+   "d": 2,
+   "q": "Penanda wacana yang menunjukkan pertentangan ialah ...",
+   "o": [
+    "tambahan pula",
+    "walau bagaimanapun",
+    "selain itu",
+    "pertama"
+   ],
+   "a": 1,
+   "e": "Walau bagaimanapun menunjukkan pertentangan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 139,
+   "t": "BM-T4-10",
+   "d": 1,
+   "q": "Ayat yang memperkenalkan idea utama dalam perenggan ialah ...",
+   "o": [
+    "ayat penutup",
+    "ayat tergantung",
+    "ayat contoh",
+    "ayat topik"
+   ],
+   "a": 3,
+   "e": "Ayat topik biasanya terletak di awal perenggan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 140,
+   "t": "BM-T4-10",
+   "d": 2,
+   "q": "Ayat 'Pada pendapat saya, membaca buku fizikal lebih seronok' ialah ...",
+   "o": [
+    "tajuk",
+    "penutup",
+    "fakta",
+    "pendapat"
+   ],
+   "a": 3,
+   "e": "Ada penanda pendapat peribadi.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "i": 141,
+   "t": "BM-T5-1",
+   "d": 3,
+   "q": "Kesalahan dalam ayat 'Ali pergi kepasar.' ialah ...",
+   "o": [
+    "Ali sepatutnya huruf kecil",
+    "pergi sepatutnya ditulis rapat",
+    "tiada kesalahan",
+    "ke pasar sepatutnya ditulis terpisah"
+   ],
+   "a": 3,
+   "e": "Ke ialah kata sendi nama.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 142,
+   "t": "BM-T5-1",
+   "d": 3,
+   "q": "Pembetulan bagi 'Mereka dibawa kerumah sakit' ialah ...",
+   "o": [
+    "Mereka di bawa ke rumah sakit.",
+    "Mereka dibawa ke rumahsakit.",
+    "Mereka dibawa ke rumah sakit.",
+    "Mereka dibawa kerumah sakit."
+   ],
+   "a": 2,
+   "e": "Dibawa ialah kata kerja pasif dan ke ialah kata sendi nama.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 143,
+   "t": "BM-T5-1",
+   "d": 3,
+   "q": "Langkah menyunting yang paling awal selepas selesai menulis ialah ...",
+   "o": [
+    "membaca semula dan menyemak ejaan serta tatabahasa",
+    "menambah ayat panjang",
+    "menyalin semula tanpa membaca",
+    "mengurangkan isi"
+   ],
+   "a": 0,
+   "e": "Semakan menjamin ketepatan bahasa.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 144,
+   "t": "BM-T5-1",
+   "d": 1,
+   "q": "Tanda koma digunakan untuk ...",
+   "o": [
+    "menamatkan ayat tanya",
+    "menunjukkan seruan",
+    "memisahkan suku kata",
+    "memisahkan item dalam senarai"
+   ],
+   "a": 3,
+   "e": "Koma memisahkan perkataan dalam senarai.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 145,
+   "t": "BM-T5-1",
+   "d": 2,
+   "q": "Ayat yang menggunakan huruf besar salah ialah ...",
+   "o": [
+    "Hari ini hari Rabu.",
+    "Kami belajar Bahasa Inggeris.",
+    "Saya belajar di Sekolah Menengah Kebangsaan Seri Aman.",
+    "Saya belajar di Sekolah menengah itu."
+   ],
+   "a": 3,
+   "e": "Sekolah menengah umum tidak perlu huruf besar kecuali nama khas.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 146,
+   "t": "BM-T5-1",
+   "d": 2,
+   "q": "Ejaan yang betul ialah ...",
+   "o": [
+    "buku ku",
+    "buku-ku",
+    "bukuku",
+    "buku- ku"
+   ],
+   "a": 2,
+   "e": "Ku ditulis rapat dengan perkataan sebelumnya.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 147,
+   "t": "BM-T5-1",
+   "d": 1,
+   "q": "Ejaan yang betul ialah ...",
+   "o": [
+    "disekolah",
+    "di sekolah",
+    "dis ekolah",
+    "di-sekolah"
+   ],
+   "a": 1,
+   "e": "Di ialah kata sendi nama dan ditulis terpisah.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 148,
+   "t": "BM-T5-1",
+   "d": 1,
+   "q": "Ayat yang menggunakan huruf besar dengan betul ialah ...",
+   "o": [
+    "Cikgu Aminah mengajar Bahasa Melayu pada hari Isnin.",
+    "cikgu aminah mengajar bahasa melayu pada Hari Isnin.",
+    "Cikgu aminah mengajar bahasa Melayu pada hari isnin.",
+    "cikgu Aminah mengajar Bahasa melayu pada hari Isnin."
+   ],
+   "a": 0,
+   "e": "Huruf besar digunakan pada nama khas, hari dan nama bahasa.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 149,
+   "t": "BM-T5-1",
+   "d": 3,
+   "q": "Tanda baca yang sesuai di hujung ayat 'Mengapa dia tidak hadir' ialah ...",
+   "o": [
+    "tanda soal",
+    "koma",
+    "noktah",
+    "tanda seru"
+   ],
+   "a": 0,
+   "e": "Ayat tanya diakhiri tanda soal.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 150,
+   "t": "BM-T5-1",
+   "d": 2,
+   "q": "Ejaan yang betul ialah ...",
+   "o": [
+    "rumah nya",
+    "rumahnya",
+    "rumah-nya",
+    "rum ahnya"
+   ],
+   "a": 1,
+   "e": "-nya ditulis rapat.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 151,
+   "t": "BM-T5-1",
+   "d": 2,
+   "q": "Tanda baca yang sesuai sebelum menyenaraikan beberapa buah negara ialah ...",
+   "o": [
+    "tanda seru",
+    "tanda soal",
+    "noktah dua",
+    "tanda petik"
+   ],
+   "a": 2,
+   "e": "Noktah dua (:) digunakan sebelum senarai.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 152,
+   "t": "BM-T5-1",
+   "d": 1,
+   "q": "Ejaan yang betul bagi kata kerja pasif ialah ...",
+   "o": [
+    "di baca",
+    "dibaca",
+    "dibaca-",
+    "di-baca"
+   ],
+   "a": 1,
+   "e": "Di- sebagai awalan ditulis rapat dengan kata kerja.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 153,
+   "t": "BM-T5-1",
+   "d": 2,
+   "q": "Ayat yang betul tanda bacanya ialah ...",
+   "o": [
+    "Oleh itu. kita perlu bersatu padu",
+    "Oleh itu, kita perlu bersatu padu.",
+    "Oleh itu kita, perlu bersatu padu.",
+    "Oleh itu: kita perlu bersatu padu."
+   ],
+   "a": 1,
+   "e": "Koma diletakkan selepas penanda wacana di awal ayat.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 154,
+   "t": "BM-T5-1",
+   "d": 2,
+   "q": "Ayat yang betul ialah ...",
+   "o": [
+    "Ibu, membeli sayur, ikan dan, buah-buahan.",
+    "Ibu membeli: sayur, ikan. dan buah-buahan.",
+    "Ibu membeli sayur, ikan dan buah-buahan.",
+    "Ibu membeli sayur ikan dan buah-buahan."
+   ],
+   "a": 2,
+   "e": "Koma digunakan untuk memisahkan item dalam senarai.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 155,
+   "t": "BM-T5-2",
+   "d": 2,
+   "q": "Kata hubung 'bahawa' digunakan selepas ...",
+   "o": [
+    "kata kerja seperti mengatakan",
+    "kata ganda",
+    "kata seru",
+    "kata adjektif"
+   ],
+   "a": 0,
+   "e": "Bahawa memperkenalkan klausa komplemen.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 156,
+   "t": "BM-T5-2",
+   "d": 2,
+   "q": "'Walaupun hujan lebat, kami tetap pergi.' Kata hubung pancangan ialah ...",
+   "o": [
+    "kami",
+    "walaupun",
+    "tetap",
+    "hujan"
+   ],
+   "a": 1,
+   "e": "Walaupun menyatakan pertentangan atau konsesi.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 157,
+   "t": "BM-T5-2",
+   "d": 1,
+   "q": "Kata hubung yang menunjukkan tujuan ialah ...",
+   "o": [
+    "namun",
+    "jika",
+    "supaya",
+    "kerana"
+   ],
+   "a": 2,
+   "e": "Supaya menyatakan tujuan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 158,
+   "t": "BM-T5-2",
+   "d": 2,
+   "q": "Ayat yang betul ialah ...",
+   "o": [
+    "Dia berjaya, kerana dia rajin berusaha dan.",
+    "Dia berjaya kerana dia rajin berusaha.",
+    "Dia berjaya walaupun tetapi rajin.",
+    "Dia berjaya agar supaya rajin."
+   ],
+   "a": 1,
+   "e": "Kerana menunjukkan sebab.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 159,
+   "t": "BM-T5-2",
+   "d": 1,
+   "q": "Kata hubung pancangan ialah ...",
+   "o": [
+    "kerana",
+    "tetapi",
+    "dan",
+    "atau"
+   ],
+   "a": 0,
+   "e": "Kerana memperkenalkan klausa bawahan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 160,
+   "t": "BM-T5-2",
+   "d": 1,
+   "q": "Kata hubung gabungan ialah ...",
+   "o": [
+    "supaya",
+    "bahawa",
+    "dan",
+    "kerana"
+   ],
+   "a": 2,
+   "e": "Dan menghubungkan unsur setara.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 161,
+   "t": "BM-T5-2",
+   "d": 3,
+   "q": "Dalam 'Dia datang lalu duduk', kata hubung 'lalu' menunjukkan ...",
+   "o": [
+    "urutan perbuatan",
+    "pertentangan",
+    "sebab",
+    "syarat"
+   ],
+   "a": 0,
+   "e": "Lalu menyatakan perbuatan berturutan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 162,
+   "t": "BM-T5-2",
+   "d": 2,
+   "q": "Kata hubung yang menunjukkan akibat ialah ...",
+   "o": [
+    "oleh itu",
+    "jika",
+    "kerana",
+    "supaya"
+   ],
+   "a": 0,
+   "e": "Oleh itu menunjukkan akibat atau kesimpulan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 163,
+   "t": "BM-T5-2",
+   "d": 3,
+   "q": "Ayat yang menggunakan kata hubung pertentangan dengan betul ialah ...",
+   "o": [
+    "Dia pandai, kerana malas berusaha.",
+    "Dia pandai, namun malas berusaha.",
+    "Dia pandai, supaya malas berusaha.",
+    "Dia pandai, jika malas berusaha."
+   ],
+   "a": 1,
+   "e": "Namun menunjukkan pertentangan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 164,
+   "t": "BM-T5-2",
+   "d": 2,
+   "q": "Ayat yang salah kerana penggunaan dua kata hubung serentak ialah ...",
+   "o": [
+    "Dia hadir walaupun sakit.",
+    "Walaupun dia sakit, dia hadir.",
+    "Dia sakit tetapi dia hadir.",
+    "Walaupun dia sakit, tetapi dia hadir."
+   ],
+   "a": 3,
+   "e": "Walaupun dan tetapi tidak digunakan serentak.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 165,
+   "t": "BM-T5-2",
+   "d": 1,
+   "q": "Kata hubung yang menunjukkan syarat ialah ...",
+   "o": [
+    "lalu",
+    "supaya",
+    "kerana",
+    "jika"
+   ],
+   "a": 3,
+   "e": "Jika menyatakan syarat.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 166,
+   "t": "BM-T5-2",
+   "d": 1,
+   "q": "Penanda wacana untuk menambah isi ialah ...",
+   "o": [
+    "walau bagaimanapun",
+    "sebaliknya",
+    "selain itu",
+    "kerana"
+   ],
+   "a": 2,
+   "e": "Selain itu menambah isi baharu.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 167,
+   "t": "BM-T5-2",
+   "d": 3,
+   "q": "Penanda wacana yang sesuai untuk memulakan perenggan penutup ialah ...",
+   "o": [
+    "tambahan pula",
+    "contohnya",
+    "pertama",
+    "kesimpulannya"
+   ],
+   "a": 3,
+   "e": "Kesimpulannya menandakan penutup.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 168,
+   "t": "BM-T5-2",
+   "d": 3,
+   "q": "Ayat yang betul ialah ...",
+   "o": [
+    "Guru menyatakan, bahawa, peperiksaan akan bermula esok.",
+    "Guru menyatakan agar bahawa peperiksaan bermula esok.",
+    "Guru menyatakan supaya bahawa peperiksaan esok.",
+    "Guru menyatakan bahawa peperiksaan akan bermula esok."
+   ],
+   "a": 3,
+   "e": "Bahawa memperkenalkan klausa komplemen.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 169,
+   "t": "BM-T5-3",
+   "d": 2,
+   "q": "Ayat aktif bagi 'Pagar itu dicat oleh ayah' ialah ...",
+   "o": [
+    "Pagar itu mengecat ayah.",
+    "Ayah dicat pagar itu.",
+    "Ayah dicat oleh pagar.",
+    "Ayah mengecat pagar itu."
+   ],
+   "a": 3,
+   "e": "Pelaku ayah menjadi subjek.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 170,
+   "t": "BM-T5-3",
+   "d": 3,
+   "q": "Ayat pasif diri pertama yang betul ialah ...",
+   "o": [
+    "Tugasan itu dikami laksanakan.",
+    "Tugasan itu kami laksanakan.",
+    "Tugasan itu dilaksanakan kami.",
+    "Tugasan itu kami melaksanakan."
+   ],
+   "a": 1,
+   "e": "Tidak menggunakan imbuhan pada kata kerja.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 171,
+   "t": "BM-T5-3",
+   "d": 2,
+   "q": "Bentuk pasif bagi 'Mak Cik Rubiah menjahit baju itu' ialah ...",
+   "o": [
+    "Baju itu menjahit Mak Cik Rubiah.",
+    "Baju itu dijahit Mak Cik Rubiah saya.",
+    "Baju itu jahit Mak Cik Rubiah.",
+    "Baju itu dijahit oleh Mak Cik Rubiah."
+   ],
+   "a": 3,
+   "e": "Objek menjadi subjek dan kata kerja menerima di-.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 172,
+   "t": "BM-T5-3",
+   "d": 1,
+   "q": "Awalan kata kerja ayat pasif diri ketiga ialah ...",
+   "o": [
+    "me-",
+    "ber-",
+    "pe-",
+    "di-"
+   ],
+   "a": 3,
+   "e": "Di- digunakan untuk pasif diri ketiga.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 173,
+   "t": "BM-T5-3",
+   "d": 1,
+   "q": "Ayat aktif ialah ...",
+   "o": [
+    "Ditendang bola oleh Ali.",
+    "Bola ditendang.",
+    "Ali menendang bola.",
+    "Bola ditendang oleh Ali."
+   ],
+   "a": 2,
+   "e": "Subjek Ali melakukan perbuatan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 174,
+   "t": "BM-T5-3",
+   "d": 2,
+   "q": "Ayat pasif diri pertama yang betul ialah ...",
+   "o": [
+    "Surat itu saya menulis.",
+    "Surat itu saya tulis.",
+    "Surat itu disaya tulis.",
+    "Surat itu ditulis saya."
+   ],
+   "a": 1,
+   "e": "Kata ganti nama pertama diikuti kata kerja tanpa imbuhan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 175,
+   "t": "BM-T5-3",
+   "d": 3,
+   "q": "Tujuan menggunakan ayat pasif ialah ...",
+   "o": [
+    "menambah kata hubung",
+    "menukar kata kerja menjadi nama",
+    "menamatkan ayat",
+    "menegaskan perkara yang menerima perbuatan"
+   ],
+   "a": 3,
+   "e": "Pasif menekankan objek atau penerima perbuatan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 176,
+   "t": "BM-T5-3",
+   "d": 1,
+   "q": "Ayat pasif ialah ...",
+   "o": [
+    "Ali berlari.",
+    "Bola ditendang oleh Ali.",
+    "Ali tidur.",
+    "Ali menendang bola."
+   ],
+   "a": 1,
+   "e": "Subjek bola menerima perbuatan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 177,
+   "t": "BM-T5-3",
+   "d": 1,
+   "q": "Kata kerja yang boleh dipasifkan ialah kata kerja ...",
+   "o": [
+    "tak transitif",
+    "kata sendi nama",
+    "transitif",
+    "kata hubung"
+   ],
+   "a": 2,
+   "e": "Pasif memerlukan objek.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 178,
+   "t": "BM-T5-3",
+   "d": 3,
+   "q": "Ayat yang tidak boleh dipasifkan ialah ...",
+   "o": [
+    "Adik tidur.",
+    "Ali membaca buku.",
+    "Ibu memasak lauk.",
+    "Ayah membaiki kereta."
+   ],
+   "a": 0,
+   "e": "Tidur ialah kata kerja tak transitif.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 179,
+   "t": "BM-T5-3",
+   "d": 2,
+   "q": "Ayat pasif yang salah ialah ...",
+   "o": [
+    "Buku itu membaca oleh adik.",
+    "Buku itu dibaca oleh adik.",
+    "Buku itu saya baca.",
+    "Buku itu kamu baca."
+   ],
+   "a": 0,
+   "e": "Ayat pasif tidak menggunakan me-.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 180,
+   "t": "BM-T5-3",
+   "d": 3,
+   "q": "'Surat itu telah dihantar oleh pengurus' ialah ayat ...",
+   "o": [
+    "pasif diri pertama",
+    "aktif",
+    "pasif diri ketiga",
+    "ayat tunggal songsang"
+   ],
+   "a": 2,
+   "e": "Di- menunjukkan diri ketiga.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 181,
+   "t": "BM-T5-3",
+   "d": 2,
+   "q": "Ayat pasif diri kedua yang betul ialah ...",
+   "o": [
+    "Kerja rumah itu kamu siapkan.",
+    "Kerja rumah itu kamu menyiapkan.",
+    "Kerja rumah itu disiapkan kamu.",
+    "Kerja rumah itu dikamu siapkan."
+   ],
+   "a": 0,
+   "e": "Kata ganti nama kedua diikuti kata kerja tanpa imbuhan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 182,
+   "t": "BM-T5-4",
+   "d": 3,
+   "q": "Kata hubung pancangan yang menyatakan tujuan ialah ...",
+   "o": [
+    "atau",
+    "supaya",
+    "dan",
+    "lalu"
+   ],
+   "a": 1,
+   "e": "Supaya menyatakan tujuan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 183,
+   "t": "BM-T5-4",
+   "d": 3,
+   "q": "Ayat 'Cikgu berkata bahawa peperiksaan bermula esok' ialah ayat majmuk ...",
+   "o": [
+    "pancangan komplemen",
+    "gabungan",
+    "campuran",
+    "pancangan relatif"
+   ],
+   "a": 0,
+   "e": "Bahawa memperkenalkan klausa komplemen.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 184,
+   "t": "BM-T5-4",
+   "d": 3,
+   "q": "Klausa dalam ayat 'Dia datang tetapi tidak lama' ialah ...",
+   "o": [
+    "satu klausa sahaja",
+    "tiada klausa",
+    "klausa bawahan",
+    "dua klausa setara"
+   ],
+   "a": 3,
+   "e": "Tetapi menghubungkan dua klausa setara.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 185,
+   "t": "BM-T5-4",
+   "d": 3,
+   "q": "Ayat majmuk yang betul ialah ...",
+   "o": [
+    "Kami belajar rajin dan jika lulus.",
+    "Kami belajar rajin kerana supaya lulus.",
+    "Kami belajar rajin supaya kami lulus.",
+    "Kami belajar rajin agar supaya kami lulus."
+   ],
+   "a": 2,
+   "e": "Supaya menyatakan tujuan; tidak digunakan dengan agar serentak.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 186,
+   "t": "BM-T5-4",
+   "d": 2,
+   "q": "Ayat 'Dia berhenti kerana dia penat' ialah ayat majmuk ...",
+   "o": [
+    "gabungan",
+    "pancangan keterangan",
+    "pancangan relatif",
+    "campuran"
+   ],
+   "a": 1,
+   "e": "Kerana memperkenalkan klausa keterangan sebab.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 187,
+   "t": "BM-T5-4",
+   "d": 2,
+   "q": "Ayat majmuk campuran ialah ...",
+   "o": [
+    "Ali membaca buku.",
+    "Ali yang rajin itu membaca.",
+    "Ali membaca buku dan Siti menulis surat kerana mereka mahu belajar.",
+    "Dia pergi kerana lapar."
+   ],
+   "a": 2,
+   "e": "Mengandungi gabungan dan pancangan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 188,
+   "t": "BM-T5-4",
+   "d": 1,
+   "q": "Pancangan relatif menggunakan kata ...",
+   "o": [
+    "yang",
+    "dan",
+    "bahawa",
+    "jika"
+   ],
+   "a": 0,
+   "e": "Yang memperkenalkan klausa relatif.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 189,
+   "t": "BM-T5-4",
+   "d": 2,
+   "q": "Ayat yang bukan ayat majmuk ialah ...",
+   "o": [
+    "Murid yang rajin berjaya.",
+    "Dia pulang kerana hujan.",
+    "Bunga itu cantik.",
+    "Bunga itu cantik dan harum."
+   ],
+   "a": 2,
+   "e": "Bunga itu cantik hanya satu klausa.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 190,
+   "t": "BM-T5-4",
+   "d": 1,
+   "q": "Ayat majmuk gabungan ialah ...",
+   "o": [
+    "Murid yang rajin itu berjaya.",
+    "Ali bermain bola.",
+    "Siti berkata bahawa dia lapar.",
+    "Ali bermain bola dan Siti membaca buku."
+   ],
+   "a": 3,
+   "e": "Dan menggabungkan dua klausa setara.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 191,
+   "t": "BM-T5-4",
+   "d": 1,
+   "q": "Ayat majmuk pancangan menggunakan kata hubung ...",
+   "o": [
+    "sangat, amat, terlalu",
+    "di, ke, dari",
+    "dan, atau, tetapi",
+    "kerana, jika, yang"
+   ],
+   "a": 3,
+   "e": "Kata hubung pancangan memperkenalkan klausa bawahan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 192,
+   "t": "BM-T5-4",
+   "d": 3,
+   "q": "Ayat 'Walaupun hujan lebat, mereka tetap hadir' ialah ayat majmuk ...",
+   "o": [
+    "ayat dasar",
+    "pancangan komplemen",
+    "pancangan keterangan",
+    "gabungan"
+   ],
+   "a": 2,
+   "e": "Walaupun menyatakan keadaan yang bercanggah.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 193,
+   "t": "BM-T5-4",
+   "d": 2,
+   "q": "Ayat 'Murid yang bijak itu menjawab soalan' ialah ayat majmuk ...",
+   "o": [
+    "pancangan relatif",
+    "gabungan",
+    "campuran",
+    "pancangan komplemen"
+   ],
+   "a": 0,
+   "e": "Yang menerangkan murid.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 194,
+   "t": "BM-T5-4",
+   "d": 1,
+   "q": "Pancangan komplemen menggunakan kata ...",
+   "o": [
+    "dan",
+    "bahawa",
+    "tetapi",
+    "yang"
+   ],
+   "a": 1,
+   "e": "Bahawa mengikuti kata kerja pernyataan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 195,
+   "t": "BM-T5-4",
+   "d": 2,
+   "q": "Kata hubung 'dan' ialah kata hubung ...",
+   "o": [
+    "seruan",
+    "gabungan",
+    "pancangan",
+    "penegas"
+   ],
+   "a": 1,
+   "e": "Dan menggabungkan unsur setara.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 196,
+   "t": "BM-T5-5",
+   "d": 2,
+   "q": "Ayat tergantung ialah ...",
+   "o": [
+    "Kerana dia tidak hadir.",
+    "Dia tidak hadir kerana sakit.",
+    "Bunga itu cantik.",
+    "Murid itu rajin."
+   ],
+   "a": 0,
+   "e": "Ayat hanya mempunyai klausa bawahan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 197,
+   "t": "BM-T5-5",
+   "d": 2,
+   "q": "Pembetulan bagi 'Saya akan buat presentation esok' ialah ...",
+   "o": [
+    "Saya akan buat pembentangan esok sahaja.",
+    "Saya akan membuat presentation esok.",
+    "Saya akan membuat pembentangan esok.",
+    "Saya akan presentation esok."
+   ],
+   "a": 2,
+   "e": "Gunakan padanan bahasa Melayu.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 198,
+   "t": "BM-T5-5",
+   "d": 1,
+   "q": "Contoh pleonasme ialah ...",
+   "o": [
+    "supaya",
+    "agar supaya",
+    "demi",
+    "agar"
+   ],
+   "a": 1,
+   "e": "Agar dan supaya sama maksud, jadi tidak digunakan serentak.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 199,
+   "t": "BM-T5-5",
+   "d": 2,
+   "q": "Laras bahasa formal digunakan dalam ...",
+   "o": [
+    "komen santai",
+    "mesej kepada rakan",
+    "surat rasmi",
+    "perbualan harian"
+   ],
+   "a": 2,
+   "e": "Surat rasmi memerlukan bahasa baku.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 200,
+   "t": "BM-T5-5",
+   "d": 3,
+   "q": "Kesalahan dalam 'Kebanyakan para peserta' ialah ...",
+   "o": [
+    "ejaan",
+    "tanda soal",
+    "kata hubung",
+    "pleonasme"
+   ],
+   "a": 3,
+   "e": "Kebanyakan dan para sama-sama menunjukkan jamak.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 201,
+   "t": "BM-T5-5",
+   "d": 2,
+   "q": "Kesalahan dalam 'Demi untuk berjaya, dia belajar bersungguh-sungguh' ialah ...",
+   "o": [
+    "ejaan",
+    "pleonasme",
+    "ayat tergantung",
+    "tanda baca"
+   ],
+   "a": 1,
+   "e": "Demi dan untuk sama makna.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 202,
+   "t": "BM-T5-5",
+   "d": 1,
+   "q": "Bahasa rojak ialah ...",
+   "o": [
+    "bahasa formal",
+    "bahasa sastera",
+    "bahasa baku",
+    "percampuran bahasa Melayu dengan bahasa lain tanpa keperluan"
+   ],
+   "a": 3,
+   "e": "Rojak mencampur bahasa secara tidak tepat.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 203,
+   "t": "BM-T5-5",
+   "d": 2,
+   "q": "Ayat yang betul ialah ...",
+   "o": [
+    "Rumah yang mana dia tinggal sangat besar.",
+    "Rumah mana dia tinggal sangat besar.",
+    "Rumah di mana dia tinggal sangat besar.",
+    "Rumah tempat dia tinggal sangat besar."
+   ],
+   "a": 3,
+   "e": "Di mana sebagai kata hubung ialah pengaruh bahasa asing.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 204,
+   "t": "BM-T5-5",
+   "d": 3,
+   "q": "Mengapakah bahasa baku penting dalam peperiksaan?",
+   "o": [
+    "kerana tiada tanda baca",
+    "kerana memudahkan pemahaman dan menunjukkan kesempurnaan bahasa",
+    "kerana mesti banyak peribahasa",
+    "kerana semua ayat mesti panjang"
+   ],
+   "a": 1,
+   "e": "Bahasa baku menjamin ketepatan dan kejelasan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 205,
+   "t": "BM-T5-5",
+   "d": 1,
+   "q": "Ayat tergantung ialah ayat yang ...",
+   "o": [
+    "terlalu panjang",
+    "menggunakan peribahasa",
+    "tidak lengkap kerana tiada klausa utama",
+    "menggunakan pantun"
+   ],
+   "a": 2,
+   "e": "Klausa bawahan sahaja tidak membentuk ayat lengkap.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 206,
+   "t": "BM-T5-5",
+   "d": 1,
+   "q": "Ayat yang betul ialah ...",
+   "o": [
+    "Para guru berkumpul di dewan.",
+    "Para guru-guru berkumpul di dewan.",
+    "Semua para guru-guru berkumpul.",
+    "Para-para guru berkumpul di dewan."
+   ],
+   "a": 0,
+   "e": "Para sudah menunjukkan jamak.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 207,
+   "t": "BM-T5-5",
+   "d": 3,
+   "q": "Ayat yang betul ialah ...",
+   "o": [
+    "Kita hendaklah menjaga kebersihan.",
+    "Kita adalah hendaklah menjaga kebersihan.",
+    "Kita hendaklah untuk menjaga kebersihan.",
+    "Kita menjaga kebersihan adalah."
+   ],
+   "a": 0,
+   "e": "Hendaklah memadai.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 208,
+   "t": "BM-T5-5",
+   "d": 3,
+   "q": "Ayat yang menggunakan bahasa baku ialah ...",
+   "o": [
+    "Saya tidak dapat hadir kerana demam.",
+    "Aku tak datang sebab sakit.",
+    "Saya tak boleh datang sebab demam la.",
+    "Saya x hadir kerana fever."
+   ],
+   "a": 0,
+   "e": "Ayat baku menggunakan perkataan lengkap dan tepat.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 209,
+   "t": "BM-T5-6",
+   "d": 1,
+   "q": "'Wajahnya seperti bulan purnama' ialah ...",
+   "o": [
+    "metafora",
+    "simile",
+    "personifikasi",
+    "hiperbola"
+   ],
+   "a": 1,
+   "e": "Seperti ialah kata bandingan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 210,
+   "t": "BM-T5-6",
+   "d": 1,
+   "q": "'Angin berbisik di telingaku' ialah ...",
+   "o": [
+    "personifikasi",
+    "metafora",
+    "simile",
+    "hiperbola"
+   ],
+   "a": 0,
+   "e": "Angin diberi sifat manusia.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 211,
+   "t": "BM-T5-6",
+   "d": 1,
+   "q": "'Dia bunga di taman ini' ialah ...",
+   "o": [
+    "metafora",
+    "simile",
+    "personifikasi",
+    "hiperbola"
+   ],
+   "a": 0,
+   "e": "Perbandingan tanpa kata bandingan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 212,
+   "t": "BM-T5-6",
+   "d": 3,
+   "q": "Gaya bahasa yang meminta jawapan tersirat dan tidak memerlukan jawapan ialah ...",
+   "o": [
+    "soalan retorik",
+    "hiperbola",
+    "simile",
+    "personifikasi"
+   ],
+   "a": 0,
+   "e": "Retorik digunakan untuk menegaskan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 213,
+   "t": "BM-T5-6",
+   "d": 1,
+   "q": "'Suaranya menggegarkan seluruh alam' ialah ...",
+   "o": [
+    "metafora",
+    "hiperbola",
+    "simile",
+    "personifikasi"
+   ],
+   "a": 1,
+   "e": "Melebih-lebihkan keadaan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 214,
+   "t": "BM-T5-6",
+   "d": 3,
+   "q": "Ayat yang menggunakan peribahasa dengan tepat ialah ...",
+   "o": [
+    "Mereka bersatu hati seperti air dengan minyak.",
+    "Mereka bersatu hati, bak kata peribahasa, bersatu teguh bercerai roboh.",
+    "Mereka bersatu hati bagai kacang lupakan kulit.",
+    "Mereka bersatu hati kerana besar kepala."
+   ],
+   "a": 1,
+   "e": "Peribahasa mesti sesuai dengan konteks.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 215,
+   "t": "BM-T5-6",
+   "d": 3,
+   "q": "Pengulangan perkataan di awal baris atau ayat dinamakan ...",
+   "o": [
+    "metafora",
+    "personifikasi",
+    "simile",
+    "anafora (repetisi)"
+   ],
+   "a": 3,
+   "e": "Pengulangan memberi penegasan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 216,
+   "t": "BM-T5-6",
+   "d": 2,
+   "q": "'Ibu ialah pelita hidupku' ialah ...",
+   "o": [
+    "simile",
+    "personifikasi",
+    "metafora",
+    "hiperbola"
+   ],
+   "a": 2,
+   "e": "Ibu dibandingkan dengan pelita tanpa kata bandingan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 217,
+   "t": "BM-T5-6",
+   "d": 2,
+   "q": "Perumpamaan 'bagai aur dengan tebing' bermaksud ...",
+   "o": [
+    "permusuhan",
+    "kesombongan",
+    "kekayaan",
+    "hubungan yang saling bergantung"
+   ],
+   "a": 3,
+   "e": "Aur dan tebing saling memerlukan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 218,
+   "t": "BM-T5-6",
+   "d": 3,
+   "q": "Ayat yang menggunakan hiperbola ialah ...",
+   "o": [
+    "Aku akan makan tengah hari nanti.",
+    "Perutku lapar.",
+    "Perutku lapar sehingga dapat makan sebuah gunung.",
+    "Aku lapar kerana tidak makan."
+   ],
+   "a": 2,
+   "e": "Hiperbola melebih-lebihkan keadaan lapar.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 219,
+   "t": "BM-T5-6",
+   "d": 2,
+   "q": "Kata bandingan simile ialah ...",
+   "o": [
+    "dan, atau, tetapi",
+    "sangat, amat, paling",
+    "umpama, laksana, bagai",
+    "di, ke, dari"
+   ],
+   "a": 2,
+   "e": "Kata bandingan simile.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 220,
+   "t": "BM-T5-6",
+   "d": 2,
+   "q": "Gaya bahasa 'Air matanya mengalir seperti sungai' ialah ...",
+   "o": [
+    "personifikasi",
+    "repetisi",
+    "metafora",
+    "simile"
+   ],
+   "a": 3,
+   "e": "Seperti ialah kata bandingan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 221,
+   "t": "BM-T5-6",
+   "d": 2,
+   "q": "'Matahari tersenyum menyambut pagi' ialah ...",
+   "o": [
+    "ironi",
+    "simile",
+    "personifikasi",
+    "hiperbola"
+   ],
+   "a": 2,
+   "e": "Matahari tidak boleh tersenyum, maka sifat manusia diberikan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 222,
+   "t": "BM-T5-7",
+   "d": 3,
+   "q": "Pengajaran yang boleh diambil apabila watak berusaha gigih sehingga berjaya ialah ...",
+   "o": [
+    "kejayaan tidak perlu usaha",
+    "usaha berterusan membawa kejayaan",
+    "iri hati menguntungkan",
+    "bergantung pada nasib"
+   ],
+   "a": 1,
+   "e": "Usaha gigih menjadi nilai positif.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 223,
+   "t": "BM-T5-7",
+   "d": 1,
+   "q": "Pilihan kata dalam puisi dinamakan ...",
+   "o": [
+    "diksi",
+    "persoalan",
+    "plot",
+    "rima"
+   ],
+   "a": 0,
+   "e": "Diksi ialah pemilihan kata.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 224,
+   "t": "BM-T5-7",
+   "d": 3,
+   "q": "Contoh nilai murni yang ditunjukkan apabila watak menolong jiran yang susah ialah ...",
+   "o": [
+    "sombong",
+    "bertolong-tolongan",
+    "pentingkan diri",
+    "tamak"
+   ],
+   "a": 1,
+   "e": "Menolong menunjukkan bertolong-tolongan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 225,
+   "t": "BM-T5-7",
+   "d": 2,
+   "q": "Teknik plot yang memberi isyarat peristiwa akan datang dinamakan ...",
+   "o": [
+    "imbas kembali",
+    "klimaks",
+    "imbas muka",
+    "pengenalan"
+   ],
+   "a": 2,
+   "e": "Imbas muka meramalkan peristiwa hadapan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 226,
+   "t": "BM-T5-7",
+   "d": 3,
+   "q": "Bahagian plot yang menunjukkan puncak konflik ialah ...",
+   "o": [
+    "permulaan",
+    "peleraian",
+    "pengenalan",
+    "klimaks"
+   ],
+   "a": 3,
+   "e": "Klimaks ialah puncak ketegangan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 227,
+   "t": "BM-T5-7",
+   "d": 2,
+   "q": "Teknik plot yang mengimbas peristiwa lampau dinamakan ...",
+   "o": [
+    "peleraian",
+    "imbas muka",
+    "imbas kembali",
+    "klimaks"
+   ],
+   "a": 2,
+   "e": "Imbas kembali membawa pembaca ke masa lalu.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 228,
+   "t": "BM-T5-7",
+   "d": 3,
+   "q": "Mesej dalam sajak disampaikan melalui ...",
+   "o": [
+    "tarikh terbit",
+    "nama pengarang sahaja",
+    "bilangan halaman",
+    "diksi, imej dan gaya bahasa"
+   ],
+   "a": 3,
+   "e": "Unsur sajak menyampaikan mesej.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 229,
+   "t": "BM-T5-7",
+   "d": 2,
+   "q": "Perwatakan boleh dikesan melalui ...",
+   "o": [
+    "nama penerbit",
+    "jumlah halaman",
+    "tajuk sahaja",
+    "dialog, tindakan dan huraian pengarang"
+   ],
+   "a": 3,
+   "e": "Perwatakan dihuraikan dalam cerita.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 230,
+   "t": "BM-T5-7",
+   "d": 1,
+   "q": "Watak utama dalam cerita dinamakan ...",
+   "o": [
+    "diksi",
+    "latar",
+    "protagonis",
+    "antagonis"
+   ],
+   "a": 2,
+   "e": "Protagonis ialah watak utama.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 231,
+   "t": "BM-T5-7",
+   "d": 2,
+   "q": "Watak yang menentang watak utama dinamakan ...",
+   "o": [
+    "antagonis",
+    "pembaca",
+    "protagonis",
+    "pengarang"
+   ],
+   "a": 0,
+   "e": "Antagonis ialah watak penentang.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 232,
+   "t": "BM-T5-7",
+   "d": 2,
+   "q": "Persoalan dalam karya ialah ...",
+   "o": [
+    "bilangan baris",
+    "nama watak",
+    "tempat cerita",
+    "isu kecil yang menyokong tema"
+   ],
+   "a": 3,
+   "e": "Persoalan menyokong tema.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 233,
+   "t": "BM-T5-7",
+   "d": 1,
+   "q": "Tempat, masa dan masyarakat dalam karya dinamakan ...",
+   "o": [
+    "tema",
+    "plot",
+    "latar",
+    "rima"
+   ],
+   "a": 2,
+   "e": "Latar menunjukkan situasi.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 234,
+   "t": "BM-T5-7",
+   "d": 3,
+   "q": "Latar masyarakat dalam karya menunjukkan ...",
+   "o": [
+    "adat resam dan cara hidup masyarakat",
+    "jam waktu",
+    "nama tempat sahaja",
+    "tajuk bab"
+   ],
+   "a": 0,
+   "e": "Latar masyarakat melibatkan sosiobudaya.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 235,
+   "t": "BM-T5-7",
+   "d": 1,
+   "q": "Idea pokok yang ingin disampaikan pengarang dinamakan ...",
+   "o": [
+    "latar",
+    "tema",
+    "dialog",
+    "plot"
+   ],
+   "a": 1,
+   "e": "Tema ialah mesej utama.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 236,
+   "t": "BM-T5-8",
+   "d": 3,
+   "q": "Mengapakah rumusan perlu menggunakan ayat sendiri?",
+   "o": [
+    "untuk menunjukkan kefahaman",
+    "supaya teks lebih panjang",
+    "supaya tiada isi",
+    "supaya salin penuh"
+   ],
+   "a": 0,
+   "e": "Ayat sendiri menunjukkan kefahaman.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 237,
+   "t": "BM-T5-8",
+   "d": 1,
+   "q": "Penutup surat rasmi lazimnya ialah ...",
+   "o": [
+    "Wassalam, kawanmu",
+    "Salam sayang",
+    "Ikhlas daripada kawan",
+    "Yang benar"
+   ],
+   "a": 3,
+   "e": "Penutup rasmi 'Yang benar' atau 'Saya yang menurut perintah' mengikut jenis surat.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 238,
+   "t": "BM-T5-8",
+   "d": 3,
+   "q": "Fakta yang sesuai menyokong isi karangan tentang kepentingan bersukan ialah ...",
+   "o": [
+    "saya rasa bersukan seronok",
+    "bersukan itu menyeronokkan sahaja",
+    "kajian menunjukkan bersukan meningkatkan kesihatan",
+    "semua orang suka bersukan"
+   ],
+   "a": 2,
+   "e": "Fakta disokong bukti.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 239,
+   "t": "BM-T5-8",
+   "d": 1,
+   "q": "Rumusan ialah ...",
+   "o": [
+    "kritikan",
+    "salinan penuh",
+    "pantun",
+    "ringkasan dengan isi penting"
+   ],
+   "a": 3,
+   "e": "Rumusan mengekalkan isi penting.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 240,
+   "t": "BM-T5-8",
+   "d": 2,
+   "q": "Ucapan formal ditutup dengan ...",
+   "o": [
+    "senarai nama",
+    "ucapan terima kasih",
+    "soalan",
+    "pantun sahaja"
+   ],
+   "a": 1,
+   "e": "Penutup ucapan ialah terima kasih.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 241,
+   "t": "BM-T5-8",
+   "d": 3,
+   "q": "Ayat pembuka surat rasmi permohonan yang sesuai ialah ...",
+   "o": [
+    "Hai Tuan, apa khabar?",
+    "Tolong luluskan cepat.",
+    "Saya ingin memohon kebenaran untuk mengadakan aktiviti kebersihan.",
+    "Aku nak minta izin."
+   ],
+   "a": 2,
+   "e": "Ayat pembuka rasmi dan tepat.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 242,
+   "t": "BM-T5-8",
+   "d": 1,
+   "q": "Ucapan formal bermula dengan ...",
+   "o": [
+    "penghormatan kepada hadirin",
+    "isi tanpa salam",
+    "penutup",
+    "pantun sahaja"
+   ],
+   "a": 0,
+   "e": "Penghormatan mendahului isi ucapan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 243,
+   "t": "BM-T5-8",
+   "d": 2,
+   "q": "Dalam rumusan, perkara yang perlu dielakkan ialah ...",
+   "o": [
+    "mengekalkan isi penting",
+    "menggunakan ayat bersambung",
+    "menyalin contoh dan huraian panjang",
+    "menulis ayat sendiri"
+   ],
+   "a": 2,
+   "e": "Rumusan hendaklah ringkas.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 244,
+   "t": "BM-T5-8",
+   "d": 2,
+   "q": "Salam pembuka surat rasmi kepada pengetua yang tidak dikenali ialah ...",
+   "o": [
+    "Abang,",
+    "Assalamualaikum kawan,",
+    "Tuan,",
+    "Hai Cikgu,"
+   ],
+   "a": 2,
+   "e": "Gunakan salam rasmi.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 245,
+   "t": "BM-T5-8",
+   "d": 2,
+   "q": "Bahasa yang digunakan dalam surat rasmi ialah ...",
+   "o": [
+    "singkatan SMS",
+    "bahasa baku yang sopan",
+    "bahasa pasar",
+    "bahasa rojak"
+   ],
+   "a": 1,
+   "e": "Surat rasmi memerlukan bahasa baku.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 246,
+   "t": "BM-T5-8",
+   "d": 2,
+   "q": "Bahagian laporan yang menyatakan butiran aktiviti ialah ...",
+   "o": [
+    "tajuk sahaja",
+    "nama penerbit",
+    "salam penutup",
+    "isi atau butir laporan"
+   ],
+   "a": 3,
+   "e": "Butiran menerangkan aktiviti.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 247,
+   "t": "BM-T5-8",
+   "d": 3,
+   "q": "Ayat penghubung yang sesuai dalam isi karangan kedua ialah ...",
+   "o": [
+    "kesimpulannya",
+    "selain itu",
+    "pertama",
+    "dahulu"
+   ],
+   "a": 1,
+   "e": "Selain itu memperkenalkan isi tambahan.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  },
+  {
+   "i": 248,
+   "t": "BM-T5-8",
+   "d": 1,
+   "q": "Bahagian karangan yang merumuskan isi ialah ...",
+   "o": [
+    "penutup",
+    "tajuk",
+    "isi pertama",
+    "pendahuluan"
+   ],
+   "a": 0,
+   "e": "Penutup merumuskan idea.",
+   "s": "Buku Teks Bahasa Melayu KSSM Tingkatan 5",
+   "status": "aktif"
+  }
+ ]
+}
