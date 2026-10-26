@@ -104,7 +104,7 @@ let B = null, dirty = false, page = 0, open = new Set(), dupMap = {}, saveT = 0;
 function normQ(x) {
   const o = Array.isArray(x.o) ? x.o.slice(0, 4).map((v) => String(v == null ? "" : v)) : [];
   while (o.length < 4) o.push("");
-  return { id: Number(x.id), t: String(x.t || ""), d: Number(x.d) || 1, q: String(x.q || ""), o: o, a: Number.isInteger(Number(x.a)) ? Number(x.a) : -1, e: String(x.e || ""), s: String(x.s || ""), status: x.status === "gantung" ? "gantung" : "aktif" };
+  return { id: Number(x.id != null ? x.id : x.i), t: String(x.t || ""), d: Number(x.d) || 1, q: String(x.q || ""), o: o, a: Number.isInteger(Number(x.a)) ? Number(x.a) : -1, e: String(x.e || ""), s: String(x.s || ""), status: x.status === "gantung" ? "gantung" : "aktif" };
 }
 function loadBank(j, label) {
   if (!j || !Array.isArray(j.soalan)) { say("Fail tidak sah: tiada senarai 'soalan'.", "bad"); return; }
