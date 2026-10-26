@@ -1101,11 +1101,13 @@ body.vmap #fabDock{bottom:calc(var(--dockh,190px) + 26px + env(safe-area-inset-b
 .klrow .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .klrow b{font-family:var(--font-display);font-size:13px;color:var(--neon)}
 @media(max-width:900px){.kllay{grid-template-columns:minmax(0,1fr)}.kltank{height:56vh}}
+.panel>.mgl{display:block!important;font:800 11px var(--font-display);letter-spacing:.2em;text-transform:uppercase;color:var(--neon);margin:4px 2px 0;opacity:.85}
+@media(min-width:1000px){.panel{display:grid!important;grid-template-columns:minmax(0,1fr) auto;column-gap:18px}.panel>*{grid-column:1/-1}.panel>.mgl.k{grid-area:4/1}.panel>.row.k{grid-area:5/1}.panel>.mgl.pd{grid-area:4/2}.panel>.row.pd{grid-area:5/2}.panel>.starrow{grid-row:3}}
 </style>
 <div id="rkBanner" role="status" hidden></div>
 <div id="app">
   <header class="top"><div class="top-in">
-    <div class="brand" role="link" tabindex="0" aria-label="Gempur, kembali ke peta">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.76</small></div>
+    <div class="brand" role="link" tabindex="0" aria-label="Gempur, kembali ke peta">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.79</small></div>
     <div class="sjm" id="sjm"><button type="button" aria-haspopup="menu" aria-expanded="false"><span class="sjm-l">Subjek</span><b id="sjmName"></b></button><div class="sjm-pop" role="menu" hidden></div></div>
     <button class="wallet" id="walletBtn" type="button" aria-label="Syiling. Buka Gudang avatar"><span class="wc"></span><b class="walnum">0</b><span class="walpop" aria-hidden="true"></span></button>
     <button class="meb" id="meBtn" type="button" aria-label="Profil anggota">
@@ -1182,7 +1184,7 @@ body.vmap #fabDock{bottom:calc(var(--dockh,190px) + 26px + env(safe-area-inset-b
       <div id="kelasBody"></div>
     </section>
     <section id="v-prak" hidden>
-    <h2 class="sec">Praktikal</h2>
+    <h2 class="sec">Amali</h2>
     <p class="lead">Latihan amali: simulasi, urutan langkah dan situasi sebenar.</p>
     <div id="prakBody"></div>
   </section>
@@ -1592,7 +1594,7 @@ if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.
 if (SUBJ === "bm") { DATA.tema = DATA_BM.tema; DATA.topik = DATA_BM.topik; DATA.soalan = DATA_BM.soalan; }
 if (SUBJ === "bi") { DATA.tema = DATA_BI.tema; DATA.topik = DATA_BI.topik; DATA.soalan = DATA_BI.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v17.76"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v17.79"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -3682,7 +3684,7 @@ function arSetup() {
     startBtn.disabled = pool.length < c.n;
   };
   const kh = KHAS_BY[AR.tid], tn = TOPIK[AR.tid];
-  const scopes = kh && kh.rahsia ? [["khas", (SUBJ === "tw" ? "Soalan Operasi Rahsia" : "Soalan Operasi Rahsia (Ujian Akhir)")]] : kh ? [["khas", "Semua topik " + (kh.tk === "s" ? "Tingkatan 4 dan 5 (gaya SPM)" : "Tingkatan " + kh.tk)]] : [["misi", "Misi ini sahaja"], ["negeri", "Semua misi negeri " + DATA.negeri[tn.negeri].nama], ["tema", "Semua misi tema ini"], ["semua", "Semua misi subjek ini"]];
+  const scopes = kh && kh.rahsia ? [["khas", (SUBJ === "tw" ? "Soalan Operasi Rahsia" : "Soalan Operasi Rahsia")]] : kh ? [["khas", "Semua topik " + (kh.tk === "s" ? "Tingkatan 4 dan 5 (gaya SPM)" : "Tingkatan " + kh.tk)]] : [["misi", "Misi ini sahaja"], ["negeri", "Semua misi negeri " + DATA.negeri[tn.negeri].nama], ["tema", "Semua misi tema ini"], ["semua", "Semua misi subjek ini"]];
   const left = el("section", { class: "ar-card ar-l" }, null,
     el("h3", null, null, el("span", { class: "ar-no" }, "01"), "Bentuk skuad"),
     el("label", { class: "ar-lb" }, "Bilangan kumpulan"),
@@ -8457,7 +8459,7 @@ body.ar-lock { overflow: hidden; }
 `;
 (function () { const s = document.createElement("style"); s.id = "arCss"; s.textContent = AR_CSS; document.head.appendChild(s); })();
 
-const MODE_ICO = {"tm": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><circle cx=\"16\" cy=\"16\" r=\"9\" fill=\"#e6f2c8\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.4\"/><circle cx=\"16\" cy=\"16\" r=\"3.4\" fill=\"#142012\"/><path d=\"M16 3v6M16 23v6M3 16h6M23 16h6\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.6\" fill=\"none\"/></svg></span>", "ar": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><path d=\"M16 4 L27 9.5 L16 15 L5 9.5Z\" fill=\"#e9fbff\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M5 9.5 L16 15 L16 26 L5 20.5Z\" fill=\"#7fd6e6\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M27 9.5 L16 15 L16 26 L27 20.5Z\" fill=\"#2a8fa6\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/></svg></span>", "jt": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><path d=\"M10 18V9.500a2 2 0 0 1 4 0V15M14 15V6.500a2 2 0 0 1 4 0V15M18 15V8a2 2 0 0 1 4 0v8M22 16v-3a2 2 0 0 1 4 0v7c0 5.500-3 9.500-9 9.500h-1.500c-3 0-5-1.500-7-5l-3-5.500a2 2 0 0 1 3.300-2.200L10 20\" fill=\"#fff3d0\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.8\"/></svg></span>", "lg": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><path d=\"M16 3l11 4v8c0 7-5 11-11 14C10 26 5 22 5 15V7z\" fill=\"#ffd9c9\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.8\"/><path d=\"M16 3v26C10 26 5 22 5 15V7z\" fill=\"#ef8a6a\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.8\"/><path d=\"M16 9v13M11.500 13.500h9\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.4\" fill=\"none\"/></svg></span>", "pr": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><path d=\"M11 4h10M13 4v8L6 25a3 3 0 0 0 2.6 4.5h14.8A3 3 0 0 0 26 25l-7-13V4\" fill=\"#2fd6a5\" fill-opacity=\".35\" stroke=\"#eafff8\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2\"/></svg></span>", "nl": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><path d=\"M18 3 7 18h7l-2 11 12-17h-7z\" fill=\"#ffd75e\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2\"/></svg></span>", "bl": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><ellipse cx=\"16\" cy=\"13\" rx=\"8.500\" ry=\"10\" fill=\"#ffd0e4\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.8\"/><ellipse cx=\"12.500\" cy=\"9.500\" rx=\"2\" ry=\"3.200\" fill=\"#fff\" opacity=\".85\"/><path d=\"M14 23.500l2 2.500 2-2.500z\" fill=\"#d6457f\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.5\"/><path d=\"M16 26c-3 1.800-1 3.200-1 4.500\" fill=\"none\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.6\"/></svg></span>", "dw": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><path d=\"M10 9 L16.5 12.25 L10 15.5 L3.5 12.25Z\" fill=\"#d8f5a0\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M3.5 12.25 L10 15.5 L10 22 L3.5 18.75Z\" fill=\"#7cc040\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M16.5 12.25 L10 15.5 L10 22 L16.5 18.75Z\" fill=\"#4a8a22\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M22 9 L28.5 12.25 L22 15.5 L15.5 12.25Z\" fill=\"#d8f5a0\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M15.5 12.25 L22 15.5 L22 22 L15.5 18.75Z\" fill=\"#7cc040\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M28.5 12.25 L22 15.5 L22 22 L28.5 18.75Z\" fill=\"#4a8a22\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M16 2.5 L22.5 5.75 L16 9 L9.5 5.75Z\" fill=\"#eaffc0\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M9.5 5.75 L16 9 L16 15.5 L9.5 12.25Z\" fill=\"#8fd04a\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M22.5 5.75 L16 9 L16 15.5 L22.5 12.25Z\" fill=\"#58a02a\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/></svg></span>", "bz": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><path d=\"M11 4L3 9l3 5 3-1.500V28h14V12.500l3 1.500 3-5-8-5c-1 2-3 3-5 3s-4-1-5-3z\" fill=\"#f0d4ff\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.8\"/><path d=\"M16 7c2 0 4-1 5-3l8 5-3 5-3-1.500V28h-7z\" fill=\"#b57fe0\" opacity=\".55\"/></svg></span>", "sl": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><rect x=\"7\" y=\"3\" width=\"22\" height=\"4\" rx=\"2\" fill=\"#d9b93a\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><rect x=\"4\" y=\"6\" width=\"24\" height=\"16\" rx=\"2\" fill=\"#fff5b8\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.8\"/><path d=\"M9 18l4-4.500 3 3 4-5.500 3 6\" fill=\"none\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2\"/><path d=\"M16 22v5M11 28h10\" fill=\"none\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.2\"/></svg></span>", "mp": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><path d=\"M9 5h14v7a7 7 0 0 1-14 0z\" fill=\"#fff0b0\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.8\"/><path d=\"M9 8H4c0 5 2 7 5 7M23 8h5c0 5-2 7-5 7\" fill=\"none\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.8\"/><path d=\"M16 19v5M12 24h8M11 28h10\" fill=\"none\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.4\"/></svg></span>"}, MODE_LAB = {"Misi Tempur": "tm", "Latihan AR": "ar", "Misi Jentik": "jt", "Misi Lagenda": "lg", "Misi Belon": "bl", "Next Level": "nl", "Praktikal": "pr", "Dunia Gempur": "dw", "Misi Busana": "bz", "Slaid PdPc": "sl", "Main Battle (pertandingan)": "mp"};
+const MODE_ICO = {"tm": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><circle cx=\"16\" cy=\"16\" r=\"9\" fill=\"#e6f2c8\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.4\"/><circle cx=\"16\" cy=\"16\" r=\"3.4\" fill=\"#142012\"/><path d=\"M16 3v6M16 23v6M3 16h6M23 16h6\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.6\" fill=\"none\"/></svg></span>", "ar": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><path d=\"M16 4 L27 9.5 L16 15 L5 9.5Z\" fill=\"#e9fbff\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M5 9.5 L16 15 L16 26 L5 20.5Z\" fill=\"#7fd6e6\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M27 9.5 L16 15 L16 26 L27 20.5Z\" fill=\"#2a8fa6\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/></svg></span>", "jt": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><path d=\"M10 18V9.500a2 2 0 0 1 4 0V15M14 15V6.500a2 2 0 0 1 4 0V15M18 15V8a2 2 0 0 1 4 0v8M22 16v-3a2 2 0 0 1 4 0v7c0 5.500-3 9.500-9 9.500h-1.500c-3 0-5-1.500-7-5l-3-5.500a2 2 0 0 1 3.300-2.200L10 20\" fill=\"#fff3d0\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.8\"/></svg></span>", "lg": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><path d=\"M16 3l11 4v8c0 7-5 11-11 14C10 26 5 22 5 15V7z\" fill=\"#ffd9c9\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.8\"/><path d=\"M16 3v26C10 26 5 22 5 15V7z\" fill=\"#ef8a6a\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.8\"/><path d=\"M16 9v13M11.500 13.500h9\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.4\" fill=\"none\"/></svg></span>", "pr": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><path d=\"M11 4h10M13 4v8L6 25a3 3 0 0 0 2.6 4.5h14.8A3 3 0 0 0 26 25l-7-13V4\" fill=\"#2fd6a5\" fill-opacity=\".35\" stroke=\"#eafff8\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2\"/></svg></span>", "nl": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><path d=\"M18 3 7 18h7l-2 11 12-17h-7z\" fill=\"#ffd75e\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2\"/></svg></span>", "bl": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><ellipse cx=\"16\" cy=\"13\" rx=\"8.500\" ry=\"10\" fill=\"#ffd0e4\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.8\"/><ellipse cx=\"12.500\" cy=\"9.500\" rx=\"2\" ry=\"3.200\" fill=\"#fff\" opacity=\".85\"/><path d=\"M14 23.500l2 2.500 2-2.500z\" fill=\"#d6457f\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.5\"/><path d=\"M16 26c-3 1.800-1 3.200-1 4.500\" fill=\"none\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.6\"/></svg></span>", "dw": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><path d=\"M10 9 L16.5 12.25 L10 15.5 L3.5 12.25Z\" fill=\"#d8f5a0\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M3.5 12.25 L10 15.5 L10 22 L3.5 18.75Z\" fill=\"#7cc040\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M16.5 12.25 L10 15.5 L10 22 L16.5 18.75Z\" fill=\"#4a8a22\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M22 9 L28.5 12.25 L22 15.5 L15.5 12.25Z\" fill=\"#d8f5a0\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M15.5 12.25 L22 15.5 L22 22 L15.5 18.75Z\" fill=\"#7cc040\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M28.5 12.25 L22 15.5 L22 22 L28.5 18.75Z\" fill=\"#4a8a22\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M16 2.5 L22.5 5.75 L16 9 L9.5 5.75Z\" fill=\"#eaffc0\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M9.5 5.75 L16 9 L16 15.5 L9.5 12.25Z\" fill=\"#8fd04a\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><path d=\"M22.5 5.75 L16 9 L16 15.5 L22.5 12.25Z\" fill=\"#58a02a\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/></svg></span>", "bz": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><path d=\"M11 4L3 9l3 5 3-1.500V28h14V12.500l3 1.500 3-5-8-5c-1 2-3 3-5 3s-4-1-5-3z\" fill=\"#f0d4ff\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.8\"/><path d=\"M16 7c2 0 4-1 5-3l8 5-3 5-3-1.500V28h-7z\" fill=\"#b57fe0\" opacity=\".55\"/></svg></span>", "sl": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><rect x=\"7\" y=\"3\" width=\"22\" height=\"4\" rx=\"2\" fill=\"#d9b93a\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.4\"/><rect x=\"4\" y=\"6\" width=\"24\" height=\"16\" rx=\"2\" fill=\"#fff5b8\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.8\"/><path d=\"M9 18l4-4.500 3 3 4-5.500 3 6\" fill=\"none\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2\"/><path d=\"M16 22v5M11 28h10\" fill=\"none\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.2\"/></svg></span>", "mp": "<span class=\"mi\" aria-hidden=\"true\"><svg viewBox=\"0 0 32 32\"><path d=\"M9 5h14v7a7 7 0 0 1-14 0z\" fill=\"#fff0b0\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.8\"/><path d=\"M9 8H4c0 5 2 7 5 7M23 8h5c0 5-2 7-5 7\" fill=\"none\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"1.8\"/><path d=\"M16 19v5M12 24h8M11 28h10\" fill=\"none\" stroke=\"#142012\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.4\"/></svg></span>"}, MODE_LAB = {"Misi Tempur": "tm", "Latihan AR": "ar", "Misi Jentik": "jt", "Misi Lagenda": "lg", "Misi Belon": "bl", "Next Level": "nl", "Amali": "pr", "Dunia Gempur": "dw", "Misi Busana": "bz", "Slaid PdPc": "sl", "Main Battle (pertandingan)": "mp"};
 function decorModes(root) {
   root.querySelectorAll("button.btn").forEach((b) => {
     if (b.dataset.mode) return;
@@ -8487,7 +8489,7 @@ function renderPanel() {
   t.nota.forEach((x) => ul.appendChild(el("li", null, x)));
   const go = el("button", { type: "button", class: "btn" }, "Misi Tempur");
   go.addEventListener("click", () => tempurChoose(t.id));
-  const prb = el("button", { type: "button", class: "btn alt", id: "btnPR" }, "Praktikal");
+  const prb = el("button", { type: "button", class: "btn alt", id: "btnPR" }, "Amali");
   prb.title = "Latihan amali: simulasi, urutan langkah dan situasi sebenar";
   prb.addEventListener("click", () => setView("prak"));
   const arb = el("button", { type: "button", class: "btn alt", id: "btnAR" }, "Latihan AR");
@@ -8518,7 +8520,7 @@ function renderPanel() {
     el("div", { class: "tagline" }, SUBJ !== "tw" ? "Tingkatan " + tm.tingkatan + " | " + tm.nama + " | " + (SUBJ === "pi" || SUBJ === "p3" ? "Pelajaran " : "Misi ") + t.kod : "Tingkatan " + tm.tingkatan + " | Tema " + tm.id.split("-")[1] + " | Misi " + t.kod),
     el("h3", null, t.nama),
     sr,
-    el("div", { class: "row" }, go, prb, arb, jtb, lgb, blb, nlb, dwb, bzb, slb));
+    el("div", { class: "mgl k" }, "Kendiri murid"), el("div", { class: "row k" }, go, prb, lgb, dwb, bzb), el("div", { class: "mgl pd" }, "PdPc guru"), el("div", { class: "row pd" }, slb, arb, jtb, blb, nlb));
   decorModes(p);
   // pilihan misi lain dalam negeri yang sama
   const sibs = DATA.topik.filter((x) => x.negeri === t.negeri);
@@ -13045,9 +13047,9 @@ const RHS = SUBJ === "tw" ? { id: "KR", n: "Operasi Rahsia", pendek: "RHS", tk: 
   nota: ["Operasi khas ini menggunakan soalan rahsia Tasawwur Islam Tingkatan 4.",
     "Soalan merangkumi Bahagian A (istilah, isi tempat kosong, jadual, carta, benar atau salah) dan Bahagian B (soalan berstruktur) yang ditukar kepada soalan aneka pilihan.",
     "Peti soalan turun dari udara berkala. Cari beam kuning dan jawab. Musuh datang bergelombang.",
-    "Latihan AR juga tersedia: guru boleh menekan butang Jeda selepas setiap jawapan untuk membincangkan jawapan bersama murid."] } : { id: "KR", n: "Operasi Rahsia: Ujian Akhir", pendek: "RHS", tk: "3", warna: "#f0c040", key: "r", rahsia: 1,
-  dskpTxt: "Soalan daripada Ujian Akhir Sesi Akademik Pendidikan Islam Tingkatan 3 dan panduan penskoran.",
-  nota: ["Operasi khas ini menggunakan soalan daripada kertas Ujian Akhir Sesi Akademik Pendidikan Islam Tingkatan 3.",
+    "Latihan AR juga tersedia: guru boleh menekan butang Jeda selepas setiap jawapan untuk membincangkan jawapan bersama murid."] } : { id: "KR", n: "Operasi Rahsia", pendek: "RHS", tk: "3", warna: "#f0c040", key: "r", rahsia: 1,
+  dskpTxt: "Soalan Pendidikan Islam Tingkatan 3 dan panduan penskoran.",
+  nota: ["Operasi khas ini menggunakan soalan Pendidikan Islam Tingkatan 3.",
     "Soalan merangkumi semua bidang: Al-Quran, Hadis, Akidah, Fiqah, Sirah dan Akhlak, termasuk soalan isi tempat kosong dan pernyataan.",
     "Peti soalan turun dari udara berkala. Cari beam kuning dan jawab. Musuh datang bergelombang.",
     "Latihan AR juga tersedia: guru boleh menekan butang Jeda selepas setiap jawapan untuk membincangkan jawapan bersama murid."] };
@@ -13162,7 +13164,7 @@ function sqKhasRecord(ids) {
 }
 function khasAfter(res, score) {
   const notes = [];
-  if (res.khas === "KR") { notes.push({ t: "Operasi Rahsia tamat. Soalan " + (SUBJ === "tw" ? "peperiksaan akhir tahun" : "Ujian Akhir") + " tidak dikira dalam Cabaran Kumpulan Soalan pasukan." }); return notes; }
+  if (res.khas === "KR") { notes.push({ t: "Operasi Rahsia tamat. Soalan " + (SUBJ === "tw" ? "peperiksaan akhir tahun" : "Operasi Rahsia") + " tidak dikira dalam Cabaran Kumpulan Soalan pasukan." }); return notes; }
   const r = sqKhasRecord(res.right || []);
   if (r.none) notes.push({ t: "Sertai pasukan (tab Pasukan) supaya soalan yang anda jawab betul dikira dalam Cabaran Kumpulan Soalan." });
   else if (r.warn) notes.push({ t: "Pasukan " + r.n + " belum mempunyai " + SQ_MIN + " ahli, jadi liputan soalan belum dikira.", warn: 1 });
@@ -13431,7 +13433,7 @@ function renderKhasPanel(p, kh) {
   for (let i = 0; i < 3; i++) sr.appendChild(el("span", i < (r.b | 0) ? null : { class: "off" }, "★"));
   const go = el("button", { type: "button", class: "btn" }, "Misi Tempur");
   go.addEventListener("click", () => tempurChoose(kh.id, { khas: 1, noTeam: !!kh.rahsia }));
-  const prk = el("button", { type: "button", class: "btn alt", id: "btnPRk" }, "Praktikal");
+  const prk = el("button", { type: "button", class: "btn alt", id: "btnPRk" }, "Amali");
   prk.title = "Latihan amali: simulasi, urutan langkah dan situasi sebenar";
   prk.addEventListener("click", () => setView("prak"));
   const ark = el("button", { type: "button", class: "btn alt", id: "btnARk" }, "Latihan AR");
@@ -13458,8 +13460,8 @@ function renderKhasPanel(p, kh) {
   const bd = el("button", { type: "button", class: "btn alt sm" }, "Papan pertandingan");
   bd.addEventListener("click", () => { UI.boardMode = "khas"; UI.khasLv = kh.id; setView("rank"); });
   p.append(close, el("div", { class: "tagline" }, "Latihan khas"), el("h3", null, kh.n),
-    el("div", { class: "muted" }, kh.rahsia ? (SUBJ === "tw" ? "Operasi Rahsia Tasawwur Islam Tingkatan 4. " : "Ujian Akhir Sesi Akademik Pendidikan Islam Tingkatan 3. ") + khasAll(kh).length + " soalan dalam bank." : "Semua topik " + (kh.tk === "s" ? "Tingkatan 4 dan 5, gaya SPM" : "Tingkatan " + kh.tk) + ". " + khasAll(kh).length + " soalan dalam bank."),
-    sr, el("div", { class: "row" }, go, prk, ark, jtk, lgk, blk, nlk, dwk, bzk));
+    el("div", { class: "muted" }, kh.rahsia ? (SUBJ === "tw" ? "Operasi Rahsia Tasawwur Islam Tingkatan 4. " : "Operasi Rahsia Pendidikan Islam Tingkatan 3. ") + khasAll(kh).length + " soalan dalam bank." : "Semua topik " + (kh.tk === "s" ? "Tingkatan 4 dan 5, gaya SPM" : "Tingkatan " + kh.tk) + ". " + khasAll(kh).length + " soalan dalam bank."),
+    sr, el("div", { class: "mgl k" }, "Kendiri murid"), el("div", { class: "row k" }, go, prk, lgk, dwk, bzk), el("div", { class: "mgl pd" }, "PdPc guru"), el("div", { class: "row pd" }, ark, jtk, blk, nlk));
   decorModes(p);
   const ul = el("ul"); khasT(kh).nota.forEach((x) => ul.appendChild(el("li", null, x)));
   const d = el("details"); d.open = true; d.append(el("summary", { class: "tagline", style: "color:var(--khaki);cursor:pointer" }, "Cara bermain"), ul);
@@ -18238,7 +18240,7 @@ function prResult(w) {
   w.append(el("div", { class: "pr-score" }, null, el("b", null, sc + "%"), el("span", null, sc >= 90 ? "Cemerlang!" : sc >= 70 ? "Bagus!" : "Cuba lagi untuk memperbaiki")), el("p", { class: "pr-lead" }, L.kind === "seq" ? "Silap: " + PR.mist + " kali." : "Betul " + PR.ok + " daripada " + total + " soalan."));
   if (xp) w.appendChild(el("p", { class: "pr-xp" }, "+" + xp + " XP"));
   if (L.kind === "seq") { const ol = el("ol", { class: "pr-done" }); L.steps.forEach((s) => ol.appendChild(el("li", null, null, s.t, el("small", null, s.n || "")))); w.append(el("h3", null, "Urutan yang betul"), ol); }
-  const again = el("button", { type: "button", class: "pr-go" }, "Cuba lagi"), back = el("button", { type: "button", class: "pr-go alt" }, "Kembali ke Praktikal"); again.addEventListener("click", () => prStart(PR.m, L)); back.addEventListener("click", prClose); w.append(el("div", { class: "pr-row" }, null, again, back));
+  const again = el("button", { type: "button", class: "pr-go" }, "Cuba lagi"), back = el("button", { type: "button", class: "pr-go alt" }, "Kembali ke Amali"); again.addEventListener("click", () => prStart(PR.m, L)); back.addEventListener("click", prClose); w.append(el("div", { class: "pr-row" }, null, again, back));
 }
 
 /* ---------- Simulasi Haji 3D (v17.63): pengembaraan manasik dengan kuiz ---------- */
@@ -18467,7 +18469,7 @@ function hjEnd() {
   const g = HJ.g, pct = g.tot ? Math.round(g.ok / g.tot * 100) : 0; prSaveBest(HJ.mode.key, pct); const xp = prXp(HJ.mode.key, 10 + Math.round(pct * 0.3));
   hjPanel((p) => {
     const rows = el("ol", { class: "hj-res" }); g.sc.forEach((s, i) => rows.appendChild(el("li", null, null, el("b", null, hjSt()[i].n), el("span", null, s.ok + " / " + s.n))));
-    const a = el("button", { type: "button", class: "hj-go" }, "Main semula"), b = el("button", { type: "button", class: "hj-go alt" }, "Kembali ke Praktikal"); a.addEventListener("click", () => { hjPanelClose(); hjMenu(); }); b.addEventListener("click", hjClose);
+    const a = el("button", { type: "button", class: "hj-go" }, "Main semula"), b = el("button", { type: "button", class: "hj-go alt" }, "Kembali ke Amali"); a.addEventListener("click", () => { hjPanelClose(); hjMenu(); }); b.addEventListener("click", hjClose);
     p.append(el("div", { class: "hj-k" }, "TAMAT SIMULASI"), el("h2", null, pct >= 80 ? HJ.mode.good : "Simulasi selesai"), el("p", { class: "hj-score" }, pct + "% (" + g.ok + " / " + g.tot + ")"), pct >= 80 ? el("p", null, HJ.mode.well) : el("p", null, HJ.mode.again), xp ? el("p", { class: "hj-xp" }, "+" + xp + " XP") : el("span"), rows, el("div", { class: "hj-row" }, null, a, b));
   });
 }
@@ -18939,7 +18941,7 @@ function slPickPart(tid) {
   box.appendChild(g); r.append(el("div", { class: "sl-bg" }), x, box);
 }
 
-/* ---------- Tooltip hexagon peta (v17.76): tajuk muncul terus apabila tetikus di atas penanda ---------- */
+/* ---------- Tooltip hexagon peta (v17.79): tajuk muncul terus apabila tetikus di atas penanda ---------- */
 (function () {
   let tp = null, cur = "";
   const get = () => { if (!tp) { tp = el("div", { class: "pin-tip", role: "tooltip" }); tp.hidden = true; document.body.appendChild(tp); } return tp; };
