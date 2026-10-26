@@ -1047,13 +1047,67 @@ body.vmap #fabDock{bottom:calc(var(--dockh,190px) + 26px + env(safe-area-inset-b
 #fabDock>button{min-height:44px!important;max-height:44px;max-width:44px;box-sizing:border-box}
 .dock{padding-top:6px}
 @media(max-width:700px){.meb .me-t{display:none}.meb{padding:4px!important}.panel .tagline{display:none}.panel h3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.wrap{padding-inline:10px!important}}
+/* ===== v17.76: Gudang avatar 2D + Kolam Ikan ===== */
+.wallet{pointer-events:auto!important;cursor:pointer!important}
+.wallet:hover{box-shadow:0 0 22px rgba(255,210,61,.5)!important}
+.mnmore button.hot{color:var(--neon);border-color:var(--line2);background:rgba(41,230,255,.1)}
+.mapav1{transform-box:fill-box;transform-origin:50% 100%;animation:avpop .55s cubic-bezier(.2,1.7,.4,1) both}
+.mapav2{transform-box:fill-box;transform-origin:50% 100%;animation:avbob 1.9s ease-in-out .6s infinite}
+@keyframes avpop{0%{transform:scale(0) translateY(10px);opacity:0}60%{opacity:1}100%{transform:scale(1) translateY(0);opacity:1}}
+@keyframes avbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.6px)}}
+@media(prefers-reduced-motion:reduce){.mapav1,.mapav2{animation:none}}
+/* gudang avatar */
+#v-gudang .zvfirst{max-width:560px;margin:10px auto;text-align:center;padding:20px;border-radius:22px;background:var(--panel);border:1px solid var(--line2)}
+.zvpicks{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.zvpick{display:grid;justify-items:center;gap:4px;padding:12px 18px;min-height:44px;border-radius:20px;border:1px solid var(--line2);background:rgba(41,230,255,.07);color:var(--ink);cursor:pointer;font:700 17px var(--font-body)}
+.zvpick:hover,.zvpick:focus-visible{background:rgba(41,230,255,.2);outline:none;box-shadow:0 0 22px rgba(41,230,255,.35)}
+.zvhero{display:flex;gap:20px;align-items:center;flex-wrap:wrap;padding:16px;border-radius:22px;background:var(--panel);border:1px solid var(--line2);margin-bottom:14px}
+.zvpv{padding:8px 14px;border-radius:18px;background:radial-gradient(ellipse at 50% 30%,rgba(41,230,255,.2),transparent 70%),rgba(255,255,255,.04)}
+.zvctl{display:grid;gap:10px;min-width:220px;flex:1}
+.zvlbl{font:700 12px var(--font-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.zvsw{display:flex;gap:8px;flex-wrap:wrap}
+.zvsw button{width:44px;height:44px;border-radius:50%;border:3px solid transparent;cursor:pointer}
+.zvsw button[aria-pressed=true]{border-color:#fff;box-shadow:0 0 0 2px var(--neon),0 0 14px var(--neon)}
+.zvcoin{display:flex;align-items:center;gap:8px;font:800 22px var(--font-display);color:#ffe27a}
+.zvcoin .wc{width:30px;height:30px;display:inline-block}
+.zvshop .seg{display:flex;flex-wrap:wrap;margin-bottom:12px}
+.zvgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.zvit{display:grid;justify-items:center;gap:4px;text-align:center;padding:10px;border-radius:18px;background:var(--panel);border:1px solid var(--line)}
+.zvit.on{border-color:var(--neon);box-shadow:0 0 18px rgba(41,230,255,.3)}
+.zvit b{font-size:15px}
+.zvmini{border-radius:12px;background:rgba(255,255,255,.04);padding:4px 8px}
+/* kolam ikan */
+.klbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
+.klbar select{min-height:44px;border-radius:999px;padding:0 14px;background:rgba(8,13,36,.9);color:var(--ink);border:1px solid var(--line2);font:700 14px var(--font-body)}
+.kllay{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:14px;align-items:start}
+.klstage{border-radius:22px;overflow:hidden;border:1px solid var(--line2);box-shadow:0 0 40px rgba(41,230,255,.12)}
+.kltank{position:relative;height:min(64vh,620px);min-height:320px;background:#0a2c5e}
+.kltank canvas{display:block;touch-action:manipulation;cursor:pointer}
+.klstage:fullscreen{border-radius:0}.klstage:fullscreen .kltank{height:100vh}
+.klhint{position:absolute;left:12px;bottom:10px;font:600 13px var(--font-body);color:rgba(255,255,255,.75);text-shadow:0 1px 3px rgba(0,0,0,.6);pointer-events:none}
+.klinfo{position:absolute;transform:translateX(-50%);display:grid;gap:2px;padding:8px 12px;border-radius:14px;background:rgba(8,13,36,.92);border:1px solid var(--line2);color:var(--ink);font:600 14px var(--font-body);pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.klinfo[hidden]{display:none}
+.klside{display:grid;gap:12px}
+.klme{padding:14px;border-radius:18px;background:var(--panel);border:1px solid var(--line2);display:grid;gap:6px}
+.klme h3{margin:0;font-family:var(--font-display);font-size:16px}
+.klst{font-weight:700;color:#ffe27a}
+.klpb{height:10px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden}.klpb i{display:block;height:100%;background:linear-gradient(90deg,var(--neon),var(--lime));box-shadow:0 0 10px var(--neon)}
+.kllist{display:grid;gap:6px;max-height:min(52vh,520px);overflow:auto;padding-right:2px}
+.klrow{display:flex;align-items:center;gap:10px;min-height:44px;padding:6px 12px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);cursor:pointer;text-align:left;font:600 15px var(--font-body)}
+.klrow.me{border-color:rgba(255,210,61,.7);background:rgba(255,210,61,.1)}
+.klrow.on{border-color:var(--neon);box-shadow:0 0 14px rgba(41,230,255,.35)}
+.klrow .no{width:22px;text-align:center;font-weight:800;color:var(--muted)}
+.klrow i{width:14px;height:14px;border-radius:50%;flex:none}
+.klrow .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.klrow b{font-family:var(--font-display);font-size:13px;color:var(--neon)}
+@media(max-width:900px){.kllay{grid-template-columns:minmax(0,1fr)}.kltank{height:56vh}}
 </style>
 <div id="rkBanner" role="status" hidden></div>
 <div id="app">
   <header class="top"><div class="top-in">
-    <div class="brand" role="link" tabindex="0" aria-label="Gempur, kembali ke peta">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.75</small></div>
+    <div class="brand" role="link" tabindex="0" aria-label="Gempur, kembali ke peta">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.76</small></div>
     <div class="sjm" id="sjm"><button type="button" aria-haspopup="menu" aria-expanded="false"><span class="sjm-l">Subjek</span><b id="sjmName"></b></button><div class="sjm-pop" role="menu" hidden></div></div>
-    <button class="wallet" id="walletBtn" type="button" aria-label="Syiling" tabindex="-1"><span class="wc"></span><b class="walnum">0</b><span class="walpop" aria-hidden="true"></span></button>
+    <button class="wallet" id="walletBtn" type="button" aria-label="Syiling. Buka Gudang avatar"><span class="wc"></span><b class="walnum">0</b><span class="walpop" aria-hidden="true"></span></button>
     <button class="meb" id="meBtn" type="button" aria-label="Profil anggota">
       <span id="meIns"></span>
       <span class="me-t"><span class="me-n" id="meName">Anggota</span><span class="me-r" id="meRank">Prebet</span><div class="xpbar"><i id="meXp"></i></div></span>
@@ -1078,7 +1132,7 @@ body.vmap #fabDock{bottom:calc(var(--dockh,190px) + 26px + env(safe-area-inset-b
       <div class="dock">
         <aside class="panel" id="panel" aria-live="polite"></aside>
       </div>
-      <div class="mnmore" role="group" aria-label="Menu lain"><button type="button" data-v="latihan">Latihan</button><button type="button" data-v="kelas">Kelas</button><button type="button" data-v="rank">Kedudukan</button><button type="button" data-v="pangkat">Pangkat</button><button type="button" data-v="komen">Komen</button><button type="button" data-v="guru">Guru</button></div>
+      <div class="mnmore" role="group" aria-label="Menu lain"><button type="button" class="hot" data-v="kolam">Kolam Ikan</button><button type="button" class="hot" data-v="gudang">Gudang</button><button type="button" data-v="latihan">Latihan</button><button type="button" data-v="kelas">Kelas</button><button type="button" data-v="rank">Kedudukan</button><button type="button" data-v="pangkat">Pangkat</button><button type="button" data-v="komen">Komen</button><button type="button" data-v="guru">Guru</button></div>
     </section>
 
     <section id="v-skuad" hidden>
@@ -1103,6 +1157,18 @@ body.vmap #fabDock{bottom:calc(var(--dockh,190px) + 26px + env(safe-area-inset-b
       <h2 class="sec">Kedudukan pemain</h2>
       <p class="lead">Disusun mengikut mata pangkat. Mata diperoleh daripada jawapan betul, sasaran tumpas dan misi yang selesai.</p>
       <div id="rankBody"></div>
+    </section>
+
+    <section id="v-gudang" hidden>
+      <h2 class="sec">Gudang avatar</h2>
+      <p class="lead">Beli pakaian dan kelengkapan avatar dengan syiling. Semuanya menutup aurat. Avatar anda muncul di atas peta operasi.</p>
+      <div id="gudangBody"></div>
+    </section>
+
+    <section id="v-kolam" hidden>
+      <h2 class="sec">Kolam Ikan Kelas</h2>
+      <p class="lead">Setiap murid ada seekor ikan. Semakin banyak mata, semakin besar ikan anda.</p>
+      <div id="kolamBody"></div>
     </section>
 
     <section id="v-latihan" hidden>
@@ -1526,7 +1592,7 @@ if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.
 if (SUBJ === "bm") { DATA.tema = DATA_BM.tema; DATA.topik = DATA_BM.topik; DATA.soalan = DATA_BM.soalan; }
 if (SUBJ === "bi") { DATA.tema = DATA_BI.tema; DATA.topik = DATA_BI.topik; DATA.soalan = DATA_BI.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v17.75"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v17.76"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -3063,6 +3129,7 @@ function buildMap(svgId, view, ids) {
   });
   kbatPin(gP, svgId);
   svg.append(defs, gE, gS, gT, gL, gP);
+  try { zvPlaceOnMap(svg, gP); } catch (e) { /* abaikan */ }
 }
 function renderMaps() {
   buildMap("svgPen", DATA.views.pen, ["perlis", "kedah", "penang", "perak", "kelantan", "terengganu", "pahang", "selangor", "wp", "nsembilan", "melaka", "johor"]);
@@ -10047,7 +10114,7 @@ function coinSvg() {
 }
 function walFmt(n) { return Math.round(n).toLocaleString("en-US"); }
 function walFill() { document.querySelectorAll(".wc").forEach((e) => { if (!e.firstChild) e.innerHTML = coinSvg(); }); }
-function walSet(v) { WAL.shown = v; const t = walFmt(v); document.querySelectorAll(".walnum").forEach((e) => { e.textContent = t; }); const b = $("walletBtn"); if (b) b.setAttribute("aria-label", "Syiling " + t); }
+function walSet(v) { WAL.shown = v; const t = walFmt(v); document.querySelectorAll(".walnum").forEach((e) => { e.textContent = t; }); const b = $("walletBtn"); if (b) b.setAttribute("aria-label", "Syiling " + t + ". Buka Gudang avatar"); }
 function walPop(txt, cls) {
   document.querySelectorAll(".walpop").forEach((h) => { if (!h.offsetParent) return; const s = el("span", { class: "wp " + cls }, txt); h.appendChild(s); setTimeout(() => s.remove(), 1500); });
 }
@@ -18872,7 +18939,7 @@ function slPickPart(tid) {
   box.appendChild(g); r.append(el("div", { class: "sl-bg" }), x, box);
 }
 
-/* ---------- Tooltip hexagon peta (v17.75): tajuk muncul terus apabila tetikus di atas penanda ---------- */
+/* ---------- Tooltip hexagon peta (v17.76): tajuk muncul terus apabila tetikus di atas penanda ---------- */
 (function () {
   let tp = null, cur = "";
   const get = () => { if (!tp) { tp = el("div", { class: "pin-tip", role: "tooltip" }); tp.hidden = true; document.body.appendChild(tp); } return tp; };
@@ -18902,7 +18969,7 @@ function setView(v) {
   { const f = document.getElementById("kmFab"); if (f) { f.hidden = v !== "map"; if (v === "map") { f.classList.remove("pop"); void f.offsetWidth; f.classList.add("pop"); } } }
   document.body.classList.toggle("vmap", v === "map");
   { const bb = document.getElementById("backBar"); if (bb) bb.hidden = v === "map"; }
-  ["map", "skuad", "team", "rank", "pangkat", "guru", "latihan", "komen", "kelas", "prak"].forEach((n) => {
+  ["map", "skuad", "team", "rank", "gudang", "kolam", "pangkat", "guru", "latihan", "komen", "kelas", "prak"].forEach((n) => {
     $("v-" + n).hidden = n !== v;
   });
   if ((v === "rank" || v === "pangkat") && Net.refreshBoard && Date.now() - (Net.lastRefresh || 0) > 8000) { Net.lastRefresh = Date.now(); try { Net.refreshBoard(); } catch (e) { /* abaikan */ } }
@@ -18913,7 +18980,8 @@ function setView(v) {
   if (v === "team") renderTeam();
   if (v === "pangkat") renderPangkat();
   if (v === "guru") { if (GURU.rows && Date.now() - GURU.at > 60000) GURU.rows = null; renderGuru(); }
-  if (v === "gudang") renderGudang();
+  if (v === "gudang") renderGudangZv();
+  if (v === "kolam") renderKolam();
   if (v === "latihan") renderLatihan();
   if (v === "kelas") renderKelas();
   if (v === "prak") renderPrak();
@@ -18921,7 +18989,7 @@ function setView(v) {
   if (v === "map") { renderChamp(); renderMaps(); renderList(); renderPanel(); }
   window.scrollTo(0, 0);
 }
-function renderAll() { renderChamp(); renderMe(); renderMaps(); renderList(); renderPanel(); renderPangkat(); if (UI.view === "gudang") renderGudang(); if (UI.view === "rank") renderBoard(); if (UI.view === "team") renderTeam(); if (UI.view === "skuad") renderSquad(); }
+function renderAll() { renderChamp(); renderMe(); renderMaps(); renderList(); renderPanel(); renderPangkat(); if (UI.view === "gudang") renderGudangZv(); if (UI.view === "rank") renderBoard(); if (UI.view === "team") renderTeam(); if (UI.view === "skuad") renderSquad(); }
 
 /* ---------- Taklimat sebelum misi ---------- */
 function openBrief(id, mode, go) {
@@ -20047,7 +20115,8 @@ function mnStep(dir) {
   if (UI.view !== "map") return false;
   const pins = mnPins(); if (!pins.length) return false;
   const c = (g) => { const r = g.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; };
-  let cur = UI.sel ? pins.find((g) => g.dataset.t === UI.sel) : null;
+  const hid = (typeof mapHere === "function") ? mapHere() : UI.sel;
+  let cur = hid ? pins.find((g) => g.dataset.t === hid) : null;
   let best = null;
   if (!cur) { best = pins.slice().sort((a, b) => (c(a).y - c(b).y) || (c(a).x - c(b).x))[0]; }
   else {
@@ -20127,6 +20196,385 @@ function fabDock() {
   if (dock && window.ResizeObserver && !dock.dataset.ro) { dock.dataset.ro = "1"; new ResizeObserver(() => document.documentElement.style.setProperty("--dockh", Math.round(dock.getBoundingClientRect().height) + "px")).observe(dock); }
 }
 mnInit(); fabDock(); setTimeout(fabDock, 300); setTimeout(fabDock, 1500); setTimeout(fabDock, 4000);
+
+
+/* ---------- v17.76: Gudang avatar 2D (pakaian menutup aurat, wajah tanpa ciri) ---------- */
+let _zvSeq = 0;
+const ZV_SKIN = ["#f6d5b8", "#e9b98f", "#d39a6b", "#b9784a", "#8d5a36", "#5f3b22"];
+const ZV_OCOL = [["gn", "Hijau daun", "#2f9e6a", 0], ["bl", "Biru laut", "#2f6bd0", 30], ["rd", "Merah delima", "#c43b52", 40], ["yl", "Kuning madu", "#e8b93a", 40], ["pu", "Ungu", "#7b5cd6", 40], ["pk", "Merah jambu", "#e883ab", 40], ["tq", "Hijau kebiruan", "#1fb3b0", 50], ["bk", "Hitam", "#2a2d37", 50], ["wh", "Putih", "#f1f1ec", 60], ["gd", "Emas", "#d9a830", 120]];
+const ZV_HCOL = [["w", "Putih", "#f4f4f0", 0], ["pk", "Merah jambu", "#f29bb8", 30], ["bl", "Biru langit", "#7fc2ee", 30], ["gr", "Hijau pudina", "#6fcf9e", 30], ["lv", "Ungu lavender", "#b79df0", 40], ["yl", "Kuning", "#f5d36a", 40], ["rd", "Merah delima", "#d94a5a", 50], ["nv", "Biru laut", "#2c4a8f", 50], ["bk", "Hitam", "#262a33", 50], ["gd", "Emas", "#e0b341", 120]];
+const ZV_IT = [];
+(function () {
+  const zi = (id, s, n, p, g) => ZV_IT.push({ id: id, s: s, n: n, p: p, g: g || "*" });
+  zi("ou_sc", "ou", "Pakaian sekolah", 0); zi("ou_my", "ou", "Baju Melayu", 120, "L"); zi("ou_sm", "ou", "Baju Melayu bersampin", 260, "L");
+  zi("ou_kr", "ou", "Baju Kurung", 120, "P"); zi("ou_jb", "ou", "Jubah", 200); zi("ou_tk", "ou", "Pakaian sukan", 90);
+  ZV_OCOL.forEach((c) => zi("oc_" + c[0], "oc", c[1], c[3]));
+  zi("hd_no", "hd", "Tanpa penutup", 0, "L"); zi("hd_sk", "hd", "Songkok", 60, "L"); zi("hd_kp", "hd", "Kopiah", 40, "L"); zi("hd_sb", "hd", "Serban", 150, "L"); zi("hd_tp", "hd", "Topi", 50, "L");
+  zi("hd_td", "hd", "Tudung bawal", 0, "P"); zi("hd_sw", "hd", "Tudung sarung", 70, "P"); zi("hd_tl", "hd", "Tudung labuh", 100, "P"); zi("hd_ts", "hd", "Tudung sukan", 80, "P");
+  ZV_HCOL.forEach((c) => zi("hc_" + c[0], "hc", c[1], c[3]));
+  zi("fc_no", "fc", "Tiada", 0); zi("fc_cm", "fc", "Cermin mata bulat", 60); zi("fc_cs", "fc", "Cermin mata segi", 60); zi("fc_sg", "fc", "Cermin mata hitam", 80);
+  zi("hn_no", "hn", "Tiada", 0); zi("hn_bk", "hn", "Buku", 40); zi("hn_ts", "hn", "Tasbih", 60); zi("hn_qr", "hn", "Mushaf", 150); zi("hn_jg", "hn", "Jalur Gemilang", 100); zi("hn_bl", "hn", "Bola sepak", 70); zi("hn_tr", "hn", "Trofi", 300);
+  zi("bk_no", "bk", "Tiada", 0); zi("bk_bg", "bk", "Beg sekolah", 70);
+  zi("bd_no", "bd", "Tiada", 0); zi("bd_st", "bd", "Lencana bintang", 50); zi("bd_pf", "bd", "Lencana pengawas", 90); zi("bd_md", "bd", "Pingat emas", 200);
+  zi("pt_no", "pt", "Tiada", 0); zi("pt_bd", "pt", "Burung kenari", 180); zi("pt_ar", "pt", "Arnab", 220); zi("pt_ct", "pt", "Kucing", 250);
+  zi("fr_no", "fr", "Tiada", 0); zi("fr_bz", "fr", "Bingkai gangsa", 60); zi("fr_sv", "fr", "Bingkai perak", 150); zi("fr_gd", "fr", "Bingkai emas", 300); zi("fr_ne", "fr", "Bingkai neon", 450);
+})();
+const ZV_SLOTS = [["ou", "Pakaian"], ["oc", "Warna baju"], ["hd", "Penutup kepala"], ["hc", "Warna penutup"], ["fc", "Cermin mata"], ["hn", "Pegangan"], ["bk", "Beg"], ["bd", "Lencana"], ["pt", "Haiwan"], ["fr", "Bingkai"]];
+const zvItem = (id) => ZV_IT.find((x) => x.id === id) || null;
+function zvShade(h, k) { const n = parseInt(h.slice(1), 16), f = (c) => Math.max(0, Math.min(255, Math.round(k < 0 ? c * (1 + k) : c + (255 - c) * k))); return "rgb(" + f(n >> 16) + "," + f((n >> 8) & 255) + "," + f(n & 255) + ")"; }
+function zvCol(arr, id) { const k = String(id || "").slice(3), c = arr.find((x) => x[0] === k) || arr[0]; return c[2]; }
+function zvState() {
+  const z = P.zv && typeof P.zv === "object" ? P.zv : (P.zv = { g: "", sk: 1, own: [], eq: {} });
+  if (!Array.isArray(z.own)) z.own = []; if (!z.eq || typeof z.eq !== "object") z.eq = {};
+  return z;
+}
+function zvOk(z, it) { return !!it && (it.g === "*" || it.g === z.g) && (it.p === 0 || z.own.indexOf(it.id) >= 0); }
+function zvDef(z, s) { return { ou: "ou_sc", oc: "oc_gn", hd: z.g === "P" ? "hd_td" : "hd_no", hc: "hc_w", fc: "fc_no", hn: "hn_no", bk: "bk_no", bd: "bd_no", pt: "pt_no", fr: "fr_no" }[s]; }
+function zvEqAll(z) { const e = {}; ZV_SLOTS.forEach(([s]) => { const it = zvItem(z.eq[s]); e[s] = zvOk(z, it) && it.s === s ? it.id : zvDef(z, s); }); return e; }
+function zvInner(z, e, o) {
+  o = o || {};
+  const g = z.g === "P" ? "P" : "L", sk = ZV_SKIN[clamp(z.sk | 0, 0, 5)], skd = zvShade(sk, -0.12);
+  const oc = zvCol(ZV_OCOL, e.oc), hc = zvCol(ZV_HCOL, e.hc), ocd = zvShade(oc, -0.28), ocl = zvShade(oc, 0.3), hcd = zvShade(hc, -0.22);
+  const ou = e.ou, sch = ou === "ou_sc", long = ou === "ou_kr" || ou === "ou_jb" || (sch && g === "P");
+  const topC = sch ? "#f4f4f0" : oc, botC = sch ? "#27345a" : (ou === "ou_tk" ? ocd : oc);
+  let s = "";
+  if (!o.noframe && e.fr !== "fr_no") {
+    const fc = { fr_bz: "#b7793a", fr_sv: "#c9d2dc", fr_gd: "#f0c53c", fr_ne: "#29e6ff" }[e.fr];
+    s += '<rect x="2" y="2" width="96" height="126" rx="14" fill="rgba(255,255,255,.07)" stroke="' + fc + '" stroke-width="3.2"' + (e.fr === "fr_ne" ? ' style="filter:drop-shadow(0 0 3px #29e6ff)"' : "") + "/>";
+  }
+  s += '<ellipse cx="50" cy="123" rx="25" ry="3.6" fill="#000" opacity=".25"/>';
+  if (e.bk === "bk_bg") s += '<rect x="22" y="54" width="56" height="38" rx="9" fill="#e0674a"/><rect x="22" y="54" width="56" height="10" rx="5" fill="#c9553a"/>';
+  if (!long) {
+    s += '<rect x="35" y="86" width="13" height="32" rx="4" fill="' + botC + '"/><rect x="52" y="86" width="13" height="32" rx="4" fill="' + botC + '"/>';
+    if (ou === "ou_tk") s += '<rect x="36" y="92" width="2.4" height="24" fill="#f4f4f0"/><rect x="62" y="92" width="2.4" height="24" fill="#f4f4f0"/>';
+  }
+  const shoe = ou === "ou_tk" ? "#f1f1f1" : "#2a2a33";
+  s += '<rect x="32" y="116" width="17" height="8" rx="4" fill="' + shoe + '"/><rect x="51" y="116" width="17" height="8" rx="4" fill="' + shoe + '"/>';
+  s += '<rect x="44" y="40" width="12" height="14" rx="3" fill="' + skd + '"/>';
+  if (long) {
+    if (sch) s += '<path d="M30 53Q50 46 70 53L72 90H28Z" fill="' + topC + '"/><path d="M28 88H72L76 117Q50 123 24 117Z" fill="' + botC + '"/>';
+    else {
+      s += '<path d="M30 53Q50 46 70 53L76 117Q50 123 24 117Z" fill="' + oc + '"/><path d="M25 110Q50 116 75 110L76 117Q50 123 24 117Z" fill="' + ocd + '" opacity=".55"/>';
+      if (ou === "ou_jb") { s += '<path d="M50 52V119" stroke="' + ocd + '" stroke-width="1.4"/>'; for (let i = 0; i < 4; i++) s += '<circle cx="50" cy="' + (60 + i * 8) + '" r="1.4" fill="#e0b341"/>'; }
+      else s += '<path d="M40 56Q50 62 60 56" fill="none" stroke="' + ocl + '" stroke-width="1.6"/><rect x="34" y="84" width="32" height="3" rx="1.5" fill="' + ocl + '" opacity=".55"/>';
+    }
+  } else {
+    s += '<rect x="30" y="50" width="40" height="42" rx="9" fill="' + topC + '"/>';
+    if (sch) s += '<path d="M43 50L50 59L57 50Z" fill="#d6d6cf"/><rect x="37" y="66" width="8" height="8" rx="1.5" fill="none" stroke="#c4c4bc" stroke-width="1"/>';
+    else if (ou === "ou_my" || ou === "ou_sm") { s += '<rect x="43" y="49" width="14" height="5" rx="2.5" fill="' + ocd + '"/>'; for (let i = 0; i < 3; i++) s += '<circle cx="50" cy="' + (59 + i * 6) + '" r="1.3" fill="#e0b341"/>'; }
+    else if (ou === "ou_tk") s += '<rect x="30" y="52" width="3" height="38" fill="#f4f4f0"/><rect x="67" y="52" width="3" height="38" fill="#f4f4f0"/>';
+    if (ou === "ou_sm") s += '<rect x="27" y="80" width="46" height="15" rx="4" fill="#9c2f45"/><path d="M27 86H73" stroke="#e0b341" stroke-width="1.6"/>';
+  }
+  if (e.bk === "bk_bg") s += '<rect x="35" y="52" width="5" height="32" rx="2" fill="#b94a31"/><rect x="60" y="52" width="5" height="32" rx="2" fill="#b94a31"/>';
+  const arm = sch ? "#f4f4f0" : oc;
+  s += '<rect x="19" y="54" width="12" height="38" rx="6" fill="' + arm + '" transform="rotate(4 25 54)"/><rect x="69" y="54" width="12" height="38" rx="6" fill="' + arm + '" transform="rotate(-4 75 54)"/>';
+  s += '<circle cx="24" cy="95" r="5" fill="' + sk + '"/><circle cx="76" cy="95" r="5" fill="' + sk + '"/>';
+  /* kepala */
+  const hd = e.hd;
+  if (g === "P") {
+    const path = { hd_td: "M50 8Q76 8 78 38Q80 56 76 72Q50 80 24 72Q20 56 22 38Q24 8 50 8Z", hd_tl: "M50 8Q76 8 78 38Q82 70 84 100Q50 110 16 100Q18 70 22 38Q24 8 50 8Z", hd_sw: "M50 10Q70 10 72 36Q73 52 70 62Q50 66 30 62Q27 52 28 36Q30 10 50 10Z", hd_ts: "M50 12Q68 12 69 34Q69 48 64 54Q50 58 36 54Q31 48 31 34Q32 12 50 12Z" }[hd] || "M50 8Q76 8 78 38Q80 56 76 72Q50 80 24 72Q20 56 22 38Q24 8 50 8Z";
+    s += '<path d="' + path + '" fill="' + hc + '"/><path d="' + path + '" fill="none" stroke="' + hcd + '" stroke-width="1.2" opacity=".6"/>';
+    if (hd === "hd_td" || hd === "hd_tl") s += '<path d="M30 62Q50 70 70 62" fill="none" stroke="' + hcd + '" stroke-width="1" opacity=".5"/>';
+    s += '<ellipse cx="50" cy="35" rx="13.5" ry="15.5" fill="' + sk + '" stroke="' + hcd + '" stroke-width="1.2" stroke-opacity=".5"/>';
+  } else {
+    s += '<circle cx="50" cy="32" r="18" fill="' + sk + '"/>';
+    if (hd === "hd_no") s += '<path d="M32 30Q31 11 50 11Q69 11 68 30Q62 21 50 21Q38 21 32 30Z" fill="#23232b"/>';
+    else s += '<path d="M32 30Q31 14 50 14Q69 14 68 30Q62 23 50 23Q38 23 32 30Z" fill="#23232b"/>';
+    if (hd === "hd_sk") s += '<path d="M33 22L34 6Q50 2 66 6L67 22Q50 26 33 22Z" fill="#1d1d24"/><path d="M34 8Q50 5 66 8" stroke="#3c3c48" stroke-width="1.2" fill="none"/>';
+    else if (hd === "hd_kp") s += '<path d="M32 25Q31 5 50 5Q69 5 68 25Q50 29 32 25Z" fill="' + hc + '"/><path d="M34 14Q50 9 66 14M33 20Q50 15 67 20" stroke="' + hcd + '" stroke-width="1" fill="none" opacity=".6"/>';
+    else if (hd === "hd_sb") { s += '<path d="M31 26Q29 3 50 3Q71 3 69 26Q50 31 31 26Z" fill="' + hc + '"/><path d="M33 12Q50 22 67 10M31 19Q50 28 69 17" stroke="' + hcd + '" stroke-width="1.6" fill="none" opacity=".7"/><path d="M64 20L76 40L70 44L62 26Z" fill="' + hc + '" stroke="' + hcd + '" stroke-width="1"/>'; }
+    else if (hd === "hd_tp") s += '<path d="M32 23Q32 6 50 6Q68 6 68 23Z" fill="' + hc + '"/><path d="M29 23Q50 33 71 23Q50 27 29 23Z" fill="' + hcd + '"/>';
+  }
+  const fy = g === "P" ? 36 : 34;
+  if (e.fc === "fc_cm") s += '<circle cx="43" cy="' + fy + '" r="5.4" fill="rgba(190,230,255,.3)" stroke="#2a2a33" stroke-width="1.4"/><circle cx="57" cy="' + fy + '" r="5.4" fill="rgba(190,230,255,.3)" stroke="#2a2a33" stroke-width="1.4"/><path d="M48.4 ' + fy + 'H51.6" stroke="#2a2a33" stroke-width="1.4"/>';
+  else if (e.fc === "fc_cs") s += '<rect x="37.5" y="' + (fy - 4.5) + '" width="10.5" height="9" rx="2" fill="rgba(190,230,255,.3)" stroke="#2a2a33" stroke-width="1.4"/><rect x="52" y="' + (fy - 4.5) + '" width="10.5" height="9" rx="2" fill="rgba(190,230,255,.3)" stroke="#2a2a33" stroke-width="1.4"/><path d="M48 ' + fy + 'H52" stroke="#2a2a33" stroke-width="1.4"/>';
+  else if (e.fc === "fc_sg") s += '<rect x="37" y="' + (fy - 4.5) + '" width="11.5" height="9" rx="3.5" fill="#15151b"/><rect x="51.5" y="' + (fy - 4.5) + '" width="11.5" height="9" rx="3.5" fill="#15151b"/><path d="M48 ' + (fy - 1) + 'H52" stroke="#15151b" stroke-width="1.6"/>';
+  /* pegangan di tangan kanan */
+  const h = e.hn;
+  if (h === "hn_bk") s += '<rect x="66" y="82" width="17" height="21" rx="2" fill="#3f7fd9"/><rect x="80" y="83" width="3" height="19" fill="#f4f4f0"/><rect x="69" y="87" width="8" height="2" fill="#cfe3ff"/>';
+  else if (h === "hn_ts") s += '<circle cx="77" cy="102" r="8" fill="none" stroke="#2fa57a" stroke-width="3" stroke-dasharray="2.4 1.6"/><path d="M77 110V118" stroke="#e0b341" stroke-width="2.2"/>';
+  else if (h === "hn_qr") s += '<rect x="66" y="82" width="17" height="22" rx="2.5" fill="#1f7a4d"/><rect x="68" y="84" width="13" height="18" rx="1.5" fill="none" stroke="#e0b341" stroke-width="1.2"/><circle cx="74.5" cy="93" r="3" fill="none" stroke="#e0b341" stroke-width="1.2"/>';
+  else if (h === "hn_jg") { s += '<rect x="79" y="52" width="2" height="52" fill="#8a6a3a"/>'; for (let i = 0; i < 14; i++) s += '<rect x="81" y="' + (54 + i * 1.1) + '" width="17" height="1.1" fill="' + (i % 2 ? "#f5f5f0" : "#cc2236") + '"/>'; s += '<rect x="81" y="54" width="9" height="7.7" fill="#14306b"/><circle cx="84.2" cy="57.8" r="2.3" fill="#f4d03a"/><circle cx="85" cy="57.8" r="1.9" fill="#14306b"/><circle cx="86.7" cy="57.8" r=".9" fill="#f4d03a"/>'; }
+  else if (h === "hn_bl") s += '<circle cx="77" cy="104" r="9" fill="#f6f6f2" stroke="#2a2a33" stroke-width="1.2"/><path d="M77 99l4 3-1.5 4.6h-5L73 102z" fill="#2a2a33"/><path d="M69 100l3 2M85 100l-3 2M72 110l2-3M82 110l-2-3" stroke="#2a2a33" stroke-width="1"/>';
+  else if (h === "hn_tr") s += '<path d="M69 84H85V92Q85 99 77 100Q69 99 69 92Z" fill="#f0c53c"/><path d="M69 86H65Q65 93 70 94M85 86H89Q89 93 84 94" fill="none" stroke="#f0c53c" stroke-width="2"/><rect x="75" y="100" width="4" height="6" fill="#d9a830"/><rect x="71" y="105" width="12" height="4" rx="1" fill="#8a6a2a"/>';
+  /* lencana */
+  const by = g === "P" || long ? 82 : 66;
+  if (e.bd === "bd_st") s += '<path d="M38 ' + (by - 6) + 'l1.8 3.8 4.2.5-3.1 2.8.9 4.1-3.8-2.1-3.8 2.1.9-4.1-3.1-2.8 4.2-.5z" fill="#f4c542" stroke="#b8860b" stroke-width=".6"/>';
+  else if (e.bd === "bd_pf") s += '<path d="M33 ' + (by - 7) + 'H43V' + (by + 1) + 'Q38 ' + (by + 6) + ' 33 ' + (by + 1) + 'Z" fill="#2d4fa8" stroke="#f4f4f0" stroke-width="1"/><path d="M38 ' + (by - 4) + 'V' + (by + 2) + 'M35 ' + (by - 1) + 'H41" stroke="#f4f4f0" stroke-width="1.2"/>';
+  else if (e.bd === "bd_md") s += '<path d="M34 ' + (by - 8) + 'L38 ' + (by - 1) + 'L42 ' + (by - 8) + '" fill="none" stroke="#cc2236" stroke-width="2.4"/><circle cx="38" cy="' + (by + 2) + '" r="5" fill="#f0c53c" stroke="#b8860b" stroke-width="1"/><circle cx="38" cy="' + (by + 2) + '" r="2.4" fill="none" stroke="#b8860b" stroke-width=".8"/>';
+  /* haiwan */
+  if (e.pt === "pt_ct") s += '<path d="M25 118Q4 118 7 104" fill="none" stroke="#d08a3a" stroke-width="3.4" stroke-linecap="round"/><ellipse cx="17" cy="116" rx="10" ry="6.5" fill="#e0a050"/><circle cx="18" cy="106" r="6.6" fill="#e0a050"/><path d="M12.6 102.6l1.2-6 4 3.4zM23.4 102.6l-1.2-6-4 3.4z" fill="#e0a050"/><path d="M14 112h8M14 116h8" stroke="#c0803a" stroke-width="1" opacity=".7"/>';
+  else if (e.pt === "pt_bd") s += '<ellipse cx="15" cy="115" rx="9" ry="6.8" fill="#f4d03a"/><circle cx="21" cy="108" r="5.4" fill="#f4d03a"/><path d="M25.5 108l4 1.4-4 1.4z" fill="#f08a2a"/><path d="M6 117l-6 3 7 .5z" fill="#e0b82a"/><path d="M11 114Q15 119 19 114" fill="#e8bb28"/>';
+  else if (e.pt === "pt_ar") s += '<ellipse cx="16" cy="116" rx="10" ry="6.4" fill="#f1f1ee"/><circle cx="21" cy="109" r="6" fill="#f1f1ee"/><ellipse cx="19" cy="97" rx="2.4" ry="7" fill="#f1f1ee"/><ellipse cx="24" cy="97.6" rx="2.4" ry="6.6" fill="#f1f1ee"/><ellipse cx="19" cy="97.4" rx="1" ry="4.6" fill="#f2b8c6"/><circle cx="6.5" cy="116" r="3.2" fill="#fff"/>';
+  return s;
+}
+function zvSvg(z, sz, o) {
+  o = o || {}; const e = o.eq || zvEqAll(z);
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="' + (sz || 120) + '" height="' + Math.round((sz || 120) * 1.3) + '" viewBox="0 0 100 130" role="img" aria-label="Avatar murid">' + zvInner(z, e, o) + "</svg>";
+}
+/* ---------- avatar pada peta ---------- */
+function zvMapNode(x, y) {
+  const z = zvState(); if (z.g !== "L" && z.g !== "P") return null;
+  const outer = sv("g", { class: "mapav", transform: "translate(" + x + "," + y + ")", "pointer-events": "none" });
+  const g1 = sv("g", { class: "mapav1" }), g2 = sv("g", { class: "mapav2" });
+  g2.appendChild(sv("ellipse", { cx: 0, cy: 0.5, rx: 8, ry: 2, fill: "#000", opacity: ".35" }));
+  const inner = sv("g", { transform: "translate(-14,-37) scale(.28)" });
+  inner.innerHTML = zvInner(z, zvEqAll(z), { noframe: true });
+  g2.appendChild(inner); g1.appendChild(g2); outer.appendChild(g1);
+  return outer;
+}
+function mapHere() {
+  if (UI.sel) return UI.sel;
+  const t = DATA.topik.find((x) => progOf(x.id).b === 0); return (t || DATA.topik[0]).id;
+}
+function zvPlaceOnMap(svg, gP) {
+  const id = mapHere(); const pin = [].find.call(gP.querySelectorAll(".pin"), (g) => g.getAttribute("data-t") === id); if (!pin) return;
+  const pg = pin.querySelector("polygon"); if (!pg) return;
+  const pts = pg.getAttribute("points").trim().split(/\s+/).map((p) => p.split(",").map(Number));
+  let cx = 0, top = 1e9; pts.forEach((p) => { cx += p[0]; if (p[1] < top) top = p[1]; }); cx /= pts.length;
+  const n = zvMapNode(cx, top - 1.5); if (n) svg.appendChild(n);
+}
+/* ---------- skrin Gudang ---------- */
+const ZVUI = { slot: "ou" };
+function zvEquip(id) { const z = zvState(), it = zvItem(id); if (!zvOk(z, it)) return; z.eq[it.s] = it.id; saveP(); }
+function zvBuy(id) {
+  const z = zvState(), it = zvItem(id); if (!it || z.own.indexOf(id) >= 0 || (it.g !== "*" && it.g !== z.g)) return;
+  if ((P.coin | 0) < it.p) { toast("Syiling belum cukup. Kumpul lagi dalam misi dan peti bekalan.", "warn"); return; }
+  P.coin -= it.p; z.own.push(id); z.eq[it.s] = id; saveP();
+  try { toast(it.n + " kini milik anda dan sedang dipakai.", "good"); } catch (e) { /* abaikan */ }
+  renderGudangZv();
+}
+function renderGudangZv() {
+  const box = $("gudangBody"); if (!box) return;
+  box.textContent = "";
+  const z = zvState();
+  if (z.g !== "L" && z.g !== "P") {
+    const c = el("div", { class: "zvfirst" });
+    const mk = (g, t) => { const b = el("button", { type: "button", class: "zvpick" }); b.innerHTML = zvSvg({ g: g, sk: 1, own: [], eq: {} }, 120, { noframe: true }); b.append(el("b", null, t)); b.addEventListener("click", () => { z.g = g; saveP(); renderGudangZv(); setTimeout(() => { try { renderMaps(); } catch (e) { /* abaikan */ } }, 0); }); return b; };
+    c.append(el("div", { class: "tagline" }, "Cipta avatar"), el("h3", null, "Pilih gaya avatar anda"), el("p", { class: "muted" }, "Pakaian dan penutup kepala sentiasa menutup aurat. Wajah avatar sengaja tidak dilukis."), el("div", { class: "zvpicks" }, mk("L", "Lelaki"), mk("P", "Perempuan")));
+    box.appendChild(c); return;
+  }
+  const e = zvEqAll(z);
+  const hero = el("div", { class: "zvhero" }), pv = el("div", { class: "zvpv" });
+  pv.innerHTML = zvSvg(z, 190);
+  const ctl = el("div", { class: "zvctl" });
+  ctl.append(el("div", { class: "tagline" }, "Avatar anda"),
+    segBtns([["L", "Lelaki"], ["P", "Perempuan"]], z.g, (v) => { z.g = v; saveP(); renderGudangZv(); renderMaps(); }, "Gaya avatar"),
+    el("div", { class: "zvlbl" }, "Warna kulit"));
+  const sw = el("div", { class: "zvsw", role: "group", "aria-label": "Warna kulit" });
+  ZV_SKIN.forEach((c, i) => { const b = el("button", { type: "button", "aria-label": "Warna kulit " + (i + 1), "aria-pressed": (z.sk | 0) === i ? "true" : "false" }); b.style.background = c; b.addEventListener("click", () => { z.sk = i; saveP(); renderGudangZv(); renderMaps(); }); sw.appendChild(b); });
+  const wal = el("div", { class: "zvcoin" }); const ci = el("span", { class: "wc" }); ci.innerHTML = coinSvg(); wal.append(ci, el("b", { class: "walnum" }, walFmt(P.coin | 0)), el("span", { class: "muted" }, "syiling"));
+  ctl.append(sw, wal, el("p", { class: "muted", style: "font-size:13px;margin:6px 0 0" }, "Avatar anda muncul di atas peta operasi. Kumpul syiling daripada misi dan peti bekalan."));
+  hero.append(pv, ctl);
+  const shop = el("div", { class: "zvshop" });
+  shop.appendChild(segBtns(ZV_SLOTS, ZVUI.slot, (v) => { ZVUI.slot = v; renderGudangZv(); }, "Jenis barang"));
+  const grid = el("div", { class: "zvgrid" });
+  ZV_IT.filter((it) => it.s === ZVUI.slot && (it.g === "*" || it.g === z.g)).sort((a, b) => a.p - b.p).forEach((it) => {
+    const own = it.p === 0 || z.own.indexOf(it.id) >= 0, on = e[it.s] === it.id;
+    const c = el("div", { class: "zvit" + (on ? " on" : "") });
+    const ev = Object.assign({}, e); ev[it.s] = it.id;
+    const p = el("div", { class: "zvmini" }); p.innerHTML = zvSvg(z, 78, { eq: ev, noframe: it.s !== "fr" });
+    const b = el("button", { type: "button", class: "btn sm" + (own ? " alt" : "") }, on ? "Dipakai" : own ? "Pakai" : "Beli " + it.p);
+    if (on || (!own && (P.coin | 0) < it.p)) b.disabled = true;
+    b.addEventListener("click", () => { if (own) { zvEquip(it.id); renderGudangZv(); renderMaps(); } else { zvBuy(it.id); renderMaps(); } });
+    c.append(p, el("b", null, it.n), el("span", { class: "muted", style: "font-size:13px" }, own ? (on ? "Sedang dipakai" : "Dimiliki") : it.p + " syiling" + ((P.coin | 0) < it.p ? " (kurang " + (it.p - (P.coin | 0)) + ")" : "")), b);
+    grid.appendChild(c);
+  });
+  shop.appendChild(grid);
+  box.append(hero, shop);
+}
+
+
+/* ---------- v17.76: Kolam Ikan kelas (ganjaran: ikan membesar mengikut mata) ---------- */
+const KL = { rows: null, at: 0, busy: false, err: "", cls: null, per: "semua", names: "semua", fish: {}, food: [], bub: [], raf: 0, cv: null, sel: null, w: 0, h: 0, last: 0, list: [], ro: null };
+const KL_PAL = [
+  { b: "#ff8fb8", a: "#ffd6e6", f: "#ff5f98" }, { b: "#ffbe3d", a: "#fff0b0", f: "#ff8a1f" }, { b: "#3fd0c4", a: "#b9fff4", f: "#1b9aa6" }, { b: "#7aa8ff", a: "#d4e3ff", f: "#4a72e0" },
+  { b: "#b78cff", a: "#e8dcff", f: "#8556e0" }, { b: "#ff7a6b", a: "#ffd0c8", f: "#e04a3d" }, { b: "#7be08a", a: "#d4ffd9", f: "#38b24a" }, { b: "#f4e04a", a: "#fffbc4", f: "#d9b41f" },
+  { b: "#5fd3ff", a: "#d1f4ff", f: "#2a9fe0" }, { b: "#ff9f5a", a: "#ffe0c4", f: "#e06a1f" }, { b: "#e07be0", a: "#ffd6ff", f: "#b43fb4" }, { b: "#9fb4c8", a: "#e6eef5", f: "#6d8aa6" }
+];
+const KL_ST = [[0, "Benih"], [50, "Anak ikan"], [200, "Remaja"], [600, "Dewasa"], [1500, "Raja kolam"]];
+function klStage(x) { let i = 0; KL_ST.forEach((s, k) => { if (x >= s[0]) i = k; }); return i; }
+function klHash(s) { let h = 2166136261; s = String(s); for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function klSize(pts, per) { const k = per === "minggu" ? 90 : 380; return 15 + 58 * (1 - 1 / (1 + Math.max(0, pts) / k)); }
+async function klLoad(force) {
+  if (KL.busy) return; if (!force && Date.now() - KL.at < 40000) return;
+  const sid = mySid(); if (!sid || !(Net.fb && FB.url)) { KL.at = Date.now(); klBuild(); return; }
+  KL.busy = true;
+  try {
+    let v;
+    try { v = await FB.req("GET", "pemain", undefined, "orderBy=%22sid%22&equalTo=" + encodeURIComponent(JSON.stringify(sid))); }
+    catch (e) { if (e.code === 400) v = await FB.req("GET", "pemain"); else throw e; }
+    v = v || {};
+    KL.rows = Object.keys(v).map((id) => Object.assign({ id: id }, v[id])).filter((r) => r && typeof r === "object" && r.sid === sid && docSj(r.id) === SUBJ).map((r) => Object.assign(r, { id: docUid(r.id) }));
+    KL.err = "";
+  } catch (e) { KL.err = "Tidak dapat memuat rakan sekelas (kod " + (e.code || "rangkaian") + ")."; }
+  KL.at = Date.now(); KL.busy = false; if (UI.view === "kolam") klBuild();
+}
+function klEntries() {
+  const now = Date.now(), wk = weekKey(), sid = mySid(), src = (KL.rows && KL.rows.length) ? KL.rows : Net.board, m = {};
+  (src || []).forEach((r) => { if (!r || r.id === Net.uid || !sid || r.sid !== sid) return; m[r.id] = r; });
+  const arr = Object.keys(m).map((id) => {
+    const r = m[id]; return { id: id, n: cleanName(r.n) || "Murid", k: String(r.k || "").trim().toUpperCase().slice(0, 12), x: Math.round(decayXp(r.xp || 0, r.la, r.ad, now)), w: r.wk === wk ? (r.wp | 0) : 0, me: false };
+  });
+  arr.push({ id: Net.uid || "me", n: cleanName(P.nama) || "Anda", k: String(P.kelas || "").trim().toUpperCase().slice(0, 12), x: Math.round(decayXp(P.xp || 0, P.la, P.ad, now)), w: P.wk === wk ? (P.wp | 0) : 0, me: true });
+  return arr;
+}
+function klView() {
+  const all = klEntries(), per = KL.per;
+  const classes = [...new Set(all.map((e) => e.k).filter(Boolean))].sort();
+  if (KL.cls === null) KL.cls = (P.kelas || "").trim().toUpperCase() && classes.indexOf((P.kelas || "").trim().toUpperCase()) >= 0 ? (P.kelas || "").trim().toUpperCase() : "";
+  let rows = all.filter((e) => !KL.cls || e.k === KL.cls || e.me && false);
+  rows.forEach((e) => { e.pts = per === "minggu" ? e.w : e.x; });
+  rows.sort((a, b) => b.pts - a.pts || (a.n < b.n ? -1 : 1));
+  if (rows.length > 60) { const me = rows.find((e) => e.me); rows = rows.slice(0, 60); if (me && rows.indexOf(me) < 0) rows[59] = me; }
+  rows.forEach((e, i) => { e.no = i + 1; });
+  return { rows: rows, classes: classes, all: all };
+}
+function klSync() {
+  const v = klView(); KL.list = v.rows; const W = Math.max(300, KL.w), H = Math.max(200, KL.h), seen = {};
+  v.rows.forEach((e) => {
+    seen[e.id] = 1; let f = KL.fish[e.id];
+    if (!f) { const h = klHash(e.id + "|" + e.n); f = KL.fish[e.id] = { id: e.id, sp: h % 4, pal: (h >>> 3) % KL_PAL.length, x: 40 + Math.random() * (W - 80), y: 60 + Math.random() * (H * 0.65), vx: 0, vy: 0, tx: 0, ty: 0, tt: 0, dir: Math.random() < 0.5 ? 1 : -1, ph: Math.random() * 6, sz: 10, eat: 0, tilt: 0 }; f.tx = f.x; f.ty = f.y; }
+    f.e = e; f.target = klSize(e.pts, KL.per) * clamp(W / 1000, 0.6, 1.1);
+  });
+  Object.keys(KL.fish).forEach((id) => { if (!seen[id]) delete KL.fish[id]; });
+}
+function klFish(c, f, t) {
+  const e = f.e, s = f.sz * (1 + f.eat * 0.12), p = KL_PAL[f.pal], sw = Math.sin(f.ph) * 0.5;
+  const rx = s * (f.sp === 1 ? 1.15 : f.sp === 2 ? 0.75 : 0.95), ry = s * (f.sp === 1 ? 0.5 : f.sp === 2 ? 0.88 : f.sp === 3 ? 0.52 : 0.66);
+  c.save(); c.translate(f.x, f.y); c.scale(f.dir, 1); c.rotate(f.tilt * f.dir);
+  if (e.me) { c.save(); c.globalAlpha = 0.5 + 0.2 * Math.sin(t / 300); c.strokeStyle = "#ffe27a"; c.lineWidth = 2.4; c.setLineDash([6, 5]); c.beginPath(); c.ellipse(0, 0, rx * 1.55, ry * 1.6, 0, 0, 6.283); c.stroke(); c.restore(); }
+  c.fillStyle = p.f;
+  c.beginPath();
+  if (f.sp === 3) { c.moveTo(-rx * 0.8, 0); c.quadraticCurveTo(-rx * 1.7, -ry * (2 + sw), -rx * 2.3, -ry * (1.2 + sw)); c.quadraticCurveTo(-rx * 1.9, 0, -rx * 2.3, ry * (1.2 - sw)); c.quadraticCurveTo(-rx * 1.7, ry * (2 - sw), -rx * 0.8, 0); }
+  else { c.moveTo(-rx * 0.8, 0); c.lineTo(-rx * 1.7, -ry * (1.1 + sw)); c.quadraticCurveTo(-rx * 1.45, 0, -rx * 1.7, ry * (1.1 - sw)); }
+  c.closePath(); c.fill();
+  c.beginPath(); c.moveTo(-rx * 0.4, -ry * 0.85); c.quadraticCurveTo(0, -ry * (f.sp === 2 ? 2.1 : 1.65), rx * 0.45, -ry * 0.8); c.closePath(); c.fill();
+  c.beginPath(); c.moveTo(-rx * 0.1, ry * 0.8); c.quadraticCurveTo(rx * 0.1, ry * (f.sp === 2 ? 1.9 : 1.4), rx * 0.4, ry * 0.8); c.closePath(); c.fill();
+  const gr = c.createLinearGradient(0, -ry, 0, ry); gr.addColorStop(0, p.a); gr.addColorStop(0.35, p.b); gr.addColorStop(1, p.f);
+  c.fillStyle = gr; c.beginPath(); c.ellipse(0, 0, rx, ry, 0, 0, 6.283); c.fill();
+  c.save(); c.beginPath(); c.ellipse(0, 0, rx, ry, 0, 0, 6.283); c.clip();
+  c.strokeStyle = "rgba(255,255,255,.28)"; c.lineWidth = Math.max(1, s * 0.05);
+  for (let i = -1; i < 4; i++) for (let j = -2; j < 3; j++) { c.beginPath(); c.arc(-rx * 0.5 + i * rx * 0.4 + (j & 1) * rx * 0.2, j * ry * 0.38, rx * 0.2, -1.2, 1.2); c.stroke(); }
+  if (f.sp === 2) { c.fillStyle = p.f; c.globalAlpha = 0.45; c.fillRect(-rx * 0.1, -ry, rx * 0.35, ry * 2); }
+  c.restore();
+  c.fillStyle = "#fff"; c.beginPath(); c.arc(rx * 0.55, -ry * 0.18, Math.max(2, s * 0.17), 0, 6.283); c.fill();
+  c.fillStyle = "#1b2233"; c.beginPath(); c.arc(rx * 0.6, -ry * 0.16, Math.max(1.2, s * 0.09), 0, 6.283); c.fill();
+  c.fillStyle = "#fff"; c.beginPath(); c.arc(rx * 0.63, -ry * 0.22, Math.max(.6, s * 0.03), 0, 6.283); c.fill();
+  c.strokeStyle = "rgba(0,0,0,.3)"; c.lineWidth = 1.2; c.beginPath(); c.arc(rx * 0.86, ry * 0.12, s * 0.1, 0.3, 1.9); c.stroke();
+  if (e.no <= 3 && e.pts > 0) { const cy = -ry * 1.15 - s * 0.1; c.fillStyle = e.no === 1 ? "#ffd23d" : e.no === 2 ? "#dfe6ee" : "#d9955a"; c.strokeStyle = "rgba(0,0,0,.35)"; c.lineWidth = 1; const w = s * 0.34; c.beginPath(); c.moveTo(-w, cy); c.lineTo(-w, cy - w * 0.9); c.lineTo(-w * 0.5, cy - w * 0.4); c.lineTo(0, cy - w * 1.1); c.lineTo(w * 0.5, cy - w * 0.4); c.lineTo(w, cy - w * 0.9); c.lineTo(w, cy); c.closePath(); c.fill(); c.stroke(); }
+  c.restore();
+  const show = KL.names === "semua" || e.me || KL.sel === f.id;
+  if (show) {
+    const nm = String(e.n).slice(0, 14), fs = clamp(11 + s * 0.05, 11, 15); c.font = "700 " + fs + "px Rajdhani, system-ui, sans-serif"; c.textAlign = "center"; c.lineWidth = 3; c.strokeStyle = "rgba(4,16,40,.8)"; c.fillStyle = e.me ? "#ffe27a" : "#fff";
+    const ly = f.y - ry * (e.no <= 3 ? 2.35 : 1.55) - 6; c.strokeText(nm, f.x, ly); c.fillText(nm, f.x, ly);
+  }
+  if (KL.sel === f.id) { c.save(); c.strokeStyle = "#29e6ff"; c.lineWidth = 2; c.beginPath(); c.ellipse(f.x, f.y, rx * 1.4, ry * 1.5, 0, 0, 6.283); c.stroke(); c.restore(); }
+}
+function klScene(c, W, H, t, rm) {
+  const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#2a8fd0"); g.addColorStop(0.55, "#145c9c"); g.addColorStop(1, "#0a2c5e"); c.fillStyle = g; c.fillRect(0, 0, W, H);
+  if (!rm) { c.save(); c.globalAlpha = 0.07; c.fillStyle = "#fff"; for (let i = 0; i < 5; i++) { const x = ((i * 0.23 + 0.05) * W + Math.sin(t / 3000 + i) * 40); c.beginPath(); c.moveTo(x, 0); c.lineTo(x + 70, 0); c.lineTo(x + 200, H); c.lineTo(x + 60, H); c.closePath(); c.fill(); } c.restore(); }
+  const sy = H * 0.9; const sg = c.createLinearGradient(0, sy, 0, H); sg.addColorStop(0, "#e2cf99"); sg.addColorStop(1, "#a8935c"); c.fillStyle = sg; c.beginPath(); c.moveTo(0, sy + 8); for (let x = 0; x <= W; x += 40) c.lineTo(x, sy + Math.sin(x * 0.02) * 6); c.lineTo(W, H); c.lineTo(0, H); c.closePath(); c.fill();
+  [[0.08, "#2fb36a", 70], [0.17, "#3fd08a", 54], [0.46, "#2fb36a", 80], [0.7, "#3fd08a", 64], [0.93, "#2fb36a", 76]].forEach((a, i) => { const x = a[0] * W; c.strokeStyle = a[1]; c.lineWidth = 7; c.lineCap = "round"; c.beginPath(); c.moveTo(x, sy + 6); for (let k = 1; k <= 6; k++) c.lineTo(x + Math.sin(t / 700 * (rm ? 0.2 : 1) + i + k * 0.7) * 7 * k / 3, sy + 6 - k * a[2] / 6); c.stroke(); });
+  [[0.3, "#ff6f91", 1], [0.57, "#ff9f5a", 1.2], [0.84, "#c77dff", 1]].forEach((a) => { const x = a[0] * W, s = a[2] * Math.max(0.6, W / 900) * 24; c.fillStyle = a[1]; for (let k = -2; k <= 2; k++) { c.beginPath(); c.ellipse(x + k * s * 0.5, sy + 4 - Math.abs(k) * -2, s * 0.28, s * (1.1 - Math.abs(k) * 0.2), k * 0.2, 0, 6.283); c.fill(); } });
+  const cx = W * 0.8, cy = sy + 4, bw = Math.max(34, W * 0.06); c.fillStyle = "#8a5a2a"; c.fillRect(cx - bw / 2, cy - bw * 0.55, bw, bw * 0.55); c.fillStyle = "#a8722f"; c.beginPath(); c.ellipse(cx, cy - bw * 0.55, bw / 2, bw * 0.28, 0, Math.PI, 0); c.fill(); c.fillStyle = "#f0c53c"; c.fillRect(cx - 3, cy - bw * 0.62, 6, 8);
+  KL.bub.forEach((b) => { c.strokeStyle = "rgba(255,255,255,.55)"; c.lineWidth = 1.2; c.beginPath(); c.arc(b.x, b.y, b.r, 0, 6.283); c.stroke(); });
+}
+function klStep(dt, t) {
+  const W = KL.w, H = KL.h, rm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches, sp = rm ? 0.35 : 1;
+  if (Math.random() < dt * 3 && KL.bub.length < 26) KL.bub.push({ x: Math.random() * W, y: H * 0.9, r: 2 + Math.random() * 4, v: 25 + Math.random() * 35 });
+  KL.bub.forEach((b) => { b.y -= b.v * dt * sp; b.x += Math.sin(b.y * 0.05) * 0.3; }); KL.bub = KL.bub.filter((b) => b.y > -10);
+  KL.food.forEach((fd) => { fd.y = Math.min(H * 0.88, fd.y + fd.v * dt); fd.age += dt; }); KL.food = KL.food.filter((fd) => fd.age < 14);
+  Object.keys(KL.fish).forEach((id) => {
+    const f = KL.fish[id]; f.sz += (f.target - f.sz) * Math.min(1, dt * 2.5); f.eat = Math.max(0, f.eat - dt * 3); f.ph += dt * (4 + 6 * Math.hypot(f.vx, f.vy) / 80) * sp;
+    let tgt = null, bd = 1e9;
+    KL.food.forEach((fd) => { const d = Math.hypot(fd.x - f.x, fd.y - f.y); if (d < bd && d < 340) { bd = d; tgt = fd; } });
+    if (tgt) { f.tx = tgt.x; f.ty = tgt.y; f.tt = 0.5; if (bd < f.sz * 0.7 + 6) { KL.food.splice(KL.food.indexOf(tgt), 1); f.eat = 1; for (let i = 0; i < 3; i++) KL.bub.push({ x: f.x + f.dir * f.sz, y: f.y, r: 2 + Math.random() * 2, v: 40 }); } }
+    else { f.tt -= dt; if (f.tt <= 0 || Math.hypot(f.tx - f.x, f.ty - f.y) < 20) { f.tx = 30 + Math.random() * (W - 60); f.ty = 50 + Math.random() * (H * 0.74); f.tt = 2 + Math.random() * 4; } }
+    const dx = f.tx - f.x, dy = f.ty - f.y, d = Math.hypot(dx, dy) || 1, spd = (30 + 60 / (1 + f.sz / 30)) * (tgt ? 1.8 : 1) * sp;
+    f.vx += (dx / d * spd - f.vx) * Math.min(1, dt * 1.6); f.vy += (dy / d * spd - f.vy) * Math.min(1, dt * 1.6);
+    f.x = clamp(f.x + f.vx * dt, f.sz, W - f.sz); f.y = clamp(f.y + f.vy * dt, f.sz * 0.8 + 18, H * 0.9 - f.sz * 0.5);
+    if (Math.abs(f.vx) > 6) f.dir = f.vx > 0 ? 1 : -1; f.tilt = clamp(f.vy / 140, -0.4, 0.4);
+  });
+}
+function klFrame(ts) {
+  if (UI.view !== "kolam" || !KL.cv) { KL.raf = 0; return; }
+  KL.raf = requestAnimationFrame(klFrame);
+  if (document.hidden) { KL.last = 0; return; }
+  const dt = KL.last ? Math.min(0.05, (ts - KL.last) / 1000) : 0.016; KL.last = ts;
+  const c = KL.cv.getContext("2d"), dpr = KL.dpr || 1, rm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  c.setTransform(dpr, 0, 0, dpr, 0, 0); klStep(dt, ts); klScene(c, KL.w, KL.h, ts, rm);
+  Object.keys(KL.fish).map((id) => KL.fish[id]).sort((a, b) => a.sz - b.sz).forEach((f) => klFish(c, f, ts));
+  KL.food.forEach((fd) => { c.fillStyle = "#ffb347"; c.beginPath(); c.arc(fd.x, fd.y, 3.2, 0, 6.283); c.fill(); c.fillStyle = "#ffe0a8"; c.beginPath(); c.arc(fd.x - 0.8, fd.y - 0.8, 1.2, 0, 6.283); c.fill(); });
+  const inf = document.getElementById("klInfo");
+  if (inf && KL.sel && KL.fish[KL.sel]) { const f = KL.fish[KL.sel]; inf.style.left = clamp(f.x, 90, KL.w - 90) + "px"; inf.style.top = Math.max(8, f.y - f.sz * 1.4 - 70) + "px"; }
+}
+function klFit() {
+  const w = document.getElementById("klTank"), cv = KL.cv; if (!w || !cv) return;
+  const r = w.getBoundingClientRect(); if (r.width < 10) return;
+  KL.dpr = Math.min(2, window.devicePixelRatio || 1); KL.w = r.width; KL.h = r.height;
+  cv.width = Math.round(r.width * KL.dpr); cv.height = Math.round(r.height * KL.dpr); cv.style.width = r.width + "px"; cv.style.height = r.height + "px";
+  Object.keys(KL.fish).forEach((id) => { const f = KL.fish[id]; f.x = clamp(f.x, 20, KL.w - 20); f.y = clamp(f.y, 20, KL.h * 0.85); });
+}
+function klDrop(x, y, n) { for (let i = 0; i < (n || 1); i++) if (KL.food.length < 40) KL.food.push({ x: x + (Math.random() - 0.5) * 24, y: y, v: 28 + Math.random() * 20, age: 0 }); }
+function klInfo() {
+  const inf = document.getElementById("klInfo"); if (!inf) return;
+  const f = KL.sel && KL.fish[KL.sel]; if (!f) { inf.hidden = true; return; }
+  const e = f.e; inf.hidden = false; inf.textContent = "";
+  inf.append(el("b", null, (e.me ? "Anda: " : "") + e.n), el("span", null, KL_ST[klStage(e.x)][1] + " | " + e.pts + " mata" + (KL.per === "minggu" ? " minggu ini" : "")), el("span", { class: "muted" }, "Kedudukan #" + e.no + (e.k ? " | " + e.k : "")));
+}
+function klBuild() {
+  const box = $("kolamBody"); if (!box) return;
+  const v = klView(); KL.list = v.rows;
+  box.textContent = "";
+  const bar = el("div", { class: "klbar" });
+  const sel = el("select", { id: "klCls", "aria-label": "Pilih kelas" }); sel.appendChild(el("option", { value: "" }, "Semua kelas sekolah"));
+  v.classes.forEach((k) => { const o = el("option", { value: k }, "Kelas " + k); if (KL.cls === k) o.selected = true; sel.appendChild(o); });
+  sel.addEventListener("change", () => { KL.cls = sel.value; KL.sel = null; klBuild(); });
+  const rf = el("button", { type: "button", class: "btn alt sm" }, "Segarkan"); rf.addEventListener("click", () => klLoad(true));
+  const feed = el("button", { type: "button", class: "btn sm" }, "Beri makan semua"); feed.addEventListener("click", () => { for (let i = 0; i < 16; i++) setTimeout(() => klDrop(30 + Math.random() * (KL.w - 60), 6, 1), i * 70); });
+  const fs = el("button", { type: "button", class: "btn alt sm" }, "Skrin penuh"); fs.addEventListener("click", () => { const w = document.getElementById("klStage"); if (!w) return; if (document.fullscreenElement) document.exitFullscreen(); else if (w.requestFullscreen) w.requestFullscreen(); });
+  bar.append(sel, segBtns([["semua", "Keseluruhan"], ["minggu", "Minggu ini"]], KL.per, (x) => { KL.per = x; klBuild(); }, "Tempoh mata"), segBtns([["semua", "Semua nama"], ["sentuh", "Nama bila disentuh"]], KL.names, (x) => { KL.names = x; klBuild(); }, "Paparan nama"), feed, fs, rf);
+  box.appendChild(bar);
+  box.appendChild(el("p", { class: "muted", style: "margin:6px 0;font-size:13px" }, "Saiz ikan mengikut mata dalam subjek " + SUBJS[SUBJ].subjek + ". Mata naik apabila anda menjawab dengan betul dan menamatkan misi."));
+  if (KL.err) box.appendChild(el("div", { class: "notice warn" }, KL.err));
+  const lay = el("div", { class: "kllay" });
+  const stage = el("div", { id: "klStage", class: "klstage" }), tank = el("div", { id: "klTank", class: "kltank" }), cv = el("canvas", { id: "klCv", role: "img", "aria-label": "Kolam ikan kelas. Setiap ikan mewakili seorang murid dan membesar apabila mata bertambah." });
+  const info = el("div", { id: "klInfo", class: "klinfo", hidden: "" });
+  tank.append(cv, info, el("div", { class: "klhint" }, "Sentuh air untuk beri makan. Sentuh ikan untuk lihat maklumat."));
+  stage.appendChild(tank);
+  const side = el("aside", { class: "klside" });
+  const me = v.rows.find((e) => e.me) || { x: Math.round(P.xp || 0), pts: 0, no: 1, n: P.nama || "Anda" };
+  const st = klStage(me.x), nx = KL_ST[st + 1], card = el("div", { class: "klme" });
+  card.append(el("div", { class: "tagline" }, "Ikan anda"), el("h3", null, cleanName(P.nama) || "Anda"), el("div", { class: "klst" }, KL_ST[st][1] + " | " + me.x + " mata"));
+  const pb = el("div", { class: "klpb", role: "img", "aria-label": "Kemajuan ke tahap seterusnya" }), pi = el("i"); pi.style.width = (nx ? clamp((me.x - KL_ST[st][0]) / (nx[0] - KL_ST[st][0]), 0, 1) * 100 : 100) + "%"; pb.appendChild(pi);
+  card.append(pb, el("div", { class: "muted", style: "font-size:13px" }, nx ? "Tambah " + (nx[0] - me.x) + " mata lagi untuk jadi " + nx[1] + "." : "Ikan anda sudah Raja kolam!"));
+  const lst = el("div", { class: "kllist", role: "list" });
+  v.rows.forEach((e) => {
+    const f = KL.fish[e.id], p = KL_PAL[f ? f.pal : (klHash(e.id + "|" + e.n) >>> 3) % KL_PAL.length];
+    const r = el("button", { type: "button", role: "listitem", class: "klrow" + (e.me ? " me" : "") + (KL.sel === e.id ? " on" : "") });
+    const dot = el("i"); dot.style.background = p.b; r.append(el("span", { class: "no" }, e.no <= 3 ? ["1", "2", "3"][e.no - 1] : String(e.no)), dot, el("span", { class: "nm" }, e.n + (e.k ? "  " + e.k : "")), el("b", null, String(e.pts)));
+    r.addEventListener("click", () => { KL.sel = KL.sel === e.id ? null : e.id; klInfo(); lst.querySelectorAll(".klrow").forEach((x) => x.classList.remove("on")); if (KL.sel) r.classList.add("on"); });
+    lst.appendChild(r);
+  });
+  side.append(card, lst);
+  if (v.rows.length < 2) box.appendChild(el("div", { class: "notice" }, "Hanya ikan anda dalam kolam. Rakan sekelas akan muncul apabila mereka mendaftar dengan sekolah dan kelas yang sama, dan apabila peranti ada sambungan internet."));
+  lay.append(stage, side); box.appendChild(lay);
+  KL.cv = cv;
+  const hit = (cx, cy) => { let best = null, bd = 1e9; Object.keys(KL.fish).forEach((id) => { const f = KL.fish[id], d = Math.hypot((cx - f.x) / (f.sz * 1.1), (cy - f.y) / (f.sz * 0.8)); if (d < 1 && d < bd) { bd = d; best = f; } }); return best; };
+  cv.addEventListener("pointerdown", (ev) => {
+    const r = cv.getBoundingClientRect(), x = ev.clientX - r.left, y = ev.clientY - r.top, f = hit(x, y);
+    if (f) { KL.sel = KL.sel === f.id ? null : f.id; f.eat = 1; klInfo(); lst.querySelectorAll(".klrow").forEach((q, i) => q.classList.toggle("on", KL.list[i] && KL.list[i].id === KL.sel)); }
+    else { KL.sel = null; klInfo(); klDrop(x, y, 3); }
+  });
+  klFit(); klSync(); klInfo();
+  if (KL.ro) KL.ro.disconnect(); if (window.ResizeObserver) { KL.ro = new ResizeObserver(() => klFit()); KL.ro.observe(tank); }
+  if (!KL.raf) KL.raf = requestAnimationFrame(klFrame);
+}
+function renderKolam() { klBuild(); klLoad(false); if (!KL.tick) KL.tick = setInterval(() => { if (UI.view === "kolam" && !document.hidden) { klLoad(false); klSync(); } }, 15000); }
+document.addEventListener("fullscreenchange", () => { setTimeout(klFit, 120); });
+
+document.addEventListener("click", (ev) => { const b = ev.target && ev.target.closest && ev.target.closest("#walletBtn"); if (b && !(typeof S !== "undefined" && S && S.running)) setView("gudang"); });
 
 </script>
 
