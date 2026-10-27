@@ -1048,6 +1048,8 @@ body.vmap #fabDock{bottom:calc(var(--dockh,190px) + 26px + env(safe-area-inset-b
 .wallet{pointer-events:auto!important;cursor:pointer!important}
 .wallet:hover{box-shadow:0 0 22px rgba(255,210,61,.5)!important}
 .mnmore button.hot{color:var(--neon);border-color:var(--line2);background:rgba(41,230,255,.1)}
+.mnmore #dmBtn{flex-basis:100%;max-width:420px;min-height:52px;font-size:15px;color:#2b1900;border:0;background:linear-gradient(90deg,#ffd45a,#6fe0a6 55%,#5ad1ff);box-shadow:0 0 0 1px rgba(255,255,255,.25),0 6px 22px rgba(90,209,255,.35);letter-spacing:.06em}
+.mnmore #dmBtn:hover,.mnmore #dmBtn:focus-visible{color:#000;filter:brightness(1.08)}
 .mapav1{transform-box:fill-box;transform-origin:50% 100%;animation:avpop .55s cubic-bezier(.2,1.7,.4,1) both}
 .mapav2{transform-box:fill-box;transform-origin:50% 100%;animation:avbob 1.9s ease-in-out .6s infinite}
 @keyframes avpop{0%{transform:scale(0) translateY(10px);opacity:0}60%{opacity:1}100%{transform:scale(1) translateY(0);opacity:1}}
@@ -8187,15 +8189,25 @@ function lgRoot() {
   const r = el("div", { id: "lgOv", role: "dialog", "aria-modal": "true", "aria-label": "Misi Lagenda" });
   document.body.appendChild(r); LG.root = r; return r;
 }
-/* v17.88: Dunia Gempur Malaysia (dunia terbuka peta Malaysia) dimuat daripada dunia.js hanya apabila dibuka */
+/* v17.88: Dunia Gempur Malaysia (dunia maya peta Malaysia untuk semua tajuk subjek semasa).
+   Dibuka daripada butang di peta utama; dunia.js dimuat hanya apabila diperlukan. */
 function lmOpen(tid) {
+  if (typeof S !== "undefined" && S && S.running) { toast("Selesaikan atau keluar daripada misi dahulu.", "warn"); return; }
   if (window.LMX) { window.LMX.open(tid); return; }
   if (lmOpen.busy) return; lmOpen.busy = true;
   const s = document.createElement("script"); s.src = "dunia.js";
-  s.onload = () => { lmOpen.busy = false; if (window.LMX) window.LMX.open(tid); else dgOpen(tid); };
-  s.onerror = () => { lmOpen.busy = false; s.remove(); toast("Dunia Gempur Malaysia tidak dapat dimuatkan. Membuka Dunia Gempur klasik.", "warn"); dgOpen(tid); };
+  s.onload = () => { lmOpen.busy = false; if (window.LMX) window.LMX.open(tid); };
+  s.onerror = () => { lmOpen.busy = false; s.remove(); toast("Dunia Gempur Malaysia tidak dapat dimuatkan. Semak sambungan internet dan cuba lagi.", "warn"); };
   document.head.appendChild(s);
 }
+function lmBtnInit() {
+  const row = document.querySelector(".mnmore"); if (!row) return;
+  let b = document.getElementById("dmBtn");
+  if (!b) { b = el("button", { type: "button", id: "dmBtn", title: "Dunia maya 3D: jelajah peta Malaysia bersama rakan dan jawab semua tajuk subjek ini" }, "🌏 Dunia Gempur Malaysia"); b.dataset.ok = "1"; b.addEventListener("click", () => lmOpen("")); }
+  if (row.firstChild !== b) row.insertBefore(b, row.firstChild);
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", lmBtnInit); else setTimeout(lmBtnInit, 0);
+setTimeout(lmBtnInit, 700);
 function lgOpen(tid) {
   LG.tid = tid; LG.open = true; document.body.classList.add("ar-lock"); lgPrefLoad(); LG.sel.topics = [];
   const r = lgRoot(); r.hidden = false; arFsBtn(true);
@@ -8549,8 +8561,8 @@ function renderPanel() {
   nlb.title = "Bebola jawapan atas kamera: kawalan jari, tetikus, sentuhan atau kekunci A-D";
   nlb.addEventListener("click", () => nlOpen(t.id));
   const dwb = el("button", { type: "button", class: "btn alt", id: "btnDW" }, "Dunia Gempur");
-  dwb.title = "Dunia Gempur Malaysia: jelajah peta Malaysia 3D bersama rakan, tawan Menara Ilmu dan ziarahi tempat pelancongan";
-  dwb.addEventListener("click", () => lmOpen(t.id));
+  dwb.title = "Dunia blok 3D: jelajah, obby 3D, buka pintu soalan, kedai avatar dan main bersama rakan";
+  dwb.addEventListener("click", () => dgOpen(t.id));
   const bzb = el("button", { type: "button", class: "btn alt", id: "btnBZ" }, "Misi Busana");
   bzb.title = "Dandan busana sopan mengikut tema majlis, dinilai pengadil";
   bzb.addEventListener("click", () => bzOpen(t.id));
