@@ -1,6 +1,6 @@
 {
- "versi": "202610220900",
- "dikemas": "2026-10-22T09:00:00",
+ "versi": "202610281200",
+ "dikemas": "2026-10-28T12:00:00",
  "nota": "Fail ini diurus melalui bank.html. Jangan ubah nama medan. a = indeks jawapan betul (0=A, 1=B, 2=C, 3=D). d = aras (1 mudah, 2 sederhana, 3 sukar). status: aktif atau gantung.",
  "topik": [
   {
@@ -12167,6 +12167,774 @@
    "a": 3,
    "e": "Kesenian yang dibenarkan termasuk seni ukir, seni khat dan kaligrafi, seramik dan fotografik.",
    "s": "Operasi Rahsia(c)(iii)",
+   "status": "aktif"
+  },
+  {
+   "id": 754,
+   "t": "T4-1.5",
+   "d": 1,
+   "q": "Bilangan prinsip pandangan hidup Islam ialah ...",
+   "o": [
+    "Enam",
+    "Tujuh",
+    "Empat",
+    "Lima"
+   ],
+   "a": 0,
+   "e": "Rabbaniyyah, Syumuliyyah, 'Alamiyyah, Waqi'iyyah, Thabat dan Murunah.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 755,
+   "t": "T4-1.5",
+   "d": 2,
+   "q": "Islam diterima oleh pelbagai bangsa dari Afrika hingga Asia Tenggara. Hal ini membuktikan prinsip ...",
+   "o": [
+    "'Alamiyyah",
+    "Murunah",
+    "Waqi'iyyah",
+    "Thabat"
+   ],
+   "a": 0,
+   "e": "Islam bersifat sejagat dan sesuai untuk semua manusia.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 756,
+   "t": "T4-1.5",
+   "d": 2,
+   "q": "Hukum solat fardu lima waktu kekal wajib sejak zaman Nabi SAW hingga kini. Ini contoh prinsip ...",
+   "o": [
+    "'Alamiyyah",
+    "Waqi'iyyah",
+    "Thabat",
+    "Murunah"
+   ],
+   "a": 2,
+   "e": "Thabat ialah ketetapan ajaran Islam yang qat'iyy.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 757,
+   "t": "T4-1.5",
+   "d": 2,
+   "q": "Musafir dibenarkan menjamak dan mengqasar solat. Kelonggaran ini menunjukkan prinsip ...",
+   "o": [
+    "Murunah",
+    "Rabbaniyyah",
+    "Thabat",
+    "'Alamiyyah"
+   ],
+   "a": 0,
+   "e": "Murunah ialah keluwesan Islam mengikut keadaan.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 758,
+   "t": "T4-1.5",
+   "d": 3,
+   "q": "Seorang pengguna media sosial mendakwa Islam tidak sesuai dengan dunia moden. Prinsip yang paling tepat untuk menjawabnya ialah ...",
+   "o": [
+    "Tiada prinsip yang sesuai",
+    "Waqi'iyyah dan Murunah kerana Islam praktikal serta anjal dalam perkara cabang",
+    "Rabbaniyyah kerana ia ciptaan manusia",
+    "Thabat sahaja kerana semua hukum tidak boleh berubah"
+   ],
+   "a": 1,
+   "e": "Islam praktikal dan luwes tanpa mengubah perkara asas.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 759,
+   "t": "T4-1.5",
+   "d": 3,
+   "q": "Perbankan tanpa riba dilaksanakan di banyak negara. Prinsip pandangan hidup Islam yang paling jelas ialah ...",
+   "o": [
+    "Murunah kerana riba dibenarkan",
+    "Syumuliyyah kerana Islam meliputi ekonomi dan seluruh kehidupan",
+    "Thabat kerana semua sistem ekonomi sama",
+    "'Alamiyyah kerana hanya untuk orang Islam"
+   ],
+   "a": 1,
+   "e": "Islam lengkap merangkumi semua aspek kehidupan.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 760,
+   "t": "T4-3.3",
+   "d": 1,
+   "q": "Ta'awun dalam asas pergaulan Islam bermaksud ...",
+   "o": [
+    "Saling bersaing",
+    "Saling mengenali",
+    "Saling bekerjasama",
+    "Saling memahami"
+   ],
+   "a": 2,
+   "e": "Ta'awun ialah tolong-menolong dalam kebaikan.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 761,
+   "t": "T4-3.3",
+   "d": 1,
+   "q": "Namimah bermaksud ...",
+   "o": [
+    "Bertegur sapa",
+    "Memberi salam",
+    "Bersangka baik",
+    "Mengadu domba"
+   ],
+   "a": 3,
+   "e": "Namimah memecahbelahkan hubungan sesama manusia.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 762,
+   "t": "T4-3.3",
+   "d": 2,
+   "q": "Ayat yang melarang berprasangka buruk, mengintip dan mengumpat terdapat dalam Surah ...",
+   "o": [
+    "Al-Fatihah: 5",
+    "Al-Fil: 1",
+    "Al-Hujurat: 12",
+    "Al-Ma'un: 1"
+   ],
+   "a": 2,
+   "e": "Larangan ini menjaga keharmonian pergaulan.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 763,
+   "t": "T4-3.3",
+   "d": 2,
+   "q": "Sikap bersangka buruk (su'uzan) paling bercanggah dengan asas pergaulan ...",
+   "o": [
+    "Ta'awun",
+    "Tafahum",
+    "Ta'aruf",
+    "Takaful"
+   ],
+   "a": 1,
+   "e": "Saling memahami menuntut sangka baik.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 764,
+   "t": "T4-3.3",
+   "d": 3,
+   "q": "Dalam kumpulan mesej kelas, Lina menyebarkan tangkap layar perbualan peribadi rakannya. Adab pergaulan yang dilanggar ialah ...",
+   "o": [
+    "Menjaga maruah dan rahsia orang lain",
+    "Bekerjasama",
+    "Memberi salam",
+    "Menepati masa"
+   ],
+   "a": 0,
+   "e": "Mendedahkan rahsia orang lain merosakkan hubungan.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 765,
+   "t": "T4-3.3",
+   "d": 3,
+   "q": "Program anak angkat antara murid bandar dan luar bandar paling jelas menerapkan asas pergaulan ...",
+   "o": [
+    "Su'uzan",
+    "Ta'aruf",
+    "Ghibah",
+    "Namimah"
+   ],
+   "a": 1,
+   "e": "Saling mengenali latar belakang dan budaya.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 766,
+   "t": "T4-3.1",
+   "d": 1,
+   "q": "Hak perlindungan nyawa dijamin Islam melalui ...",
+   "o": [
+    "Pengharaman berniaga",
+    "Pengharaman bersukan",
+    "Pengharaman belajar",
+    "Pengharaman membunuh tanpa hak"
+   ],
+   "a": 3,
+   "e": "Nyawa ialah antara lima perkara yang dipelihara syariat.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 767,
+   "t": "T4-3.1",
+   "d": 1,
+   "q": "Rancangan Integrasi Murid untuk Perpaduan dikenali dengan singkatan ...",
+   "o": [
+    "PINTAR",
+    "KRIM",
+    "RIMUP",
+    "PROSTAR"
+   ],
+   "a": 2,
+   "e": "RIMUP menghimpunkan murid pelbagai jenis sekolah dan kaum.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 768,
+   "t": "T4-3.1",
+   "d": 2,
+   "q": "Pengharaman riba dalam Sistem Sosial Islam bertujuan ...",
+   "o": [
+    "Mengurangkan zakat",
+    "Menegakkan keadilan ekonomi dan mengelakkan penindasan",
+    "Menggalakkan hutang",
+    "Menambah keuntungan bank"
+   ],
+   "a": 1,
+   "e": "Riba menindas golongan yang memerlukan.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 769,
+   "t": "T4-3.1",
+   "d": 2,
+   "q": "Hak kehormatan diri dipelihara dalam Islam melalui larangan ...",
+   "o": [
+    "Bersukan",
+    "Bersedekah",
+    "Menuduh zina tanpa saksi (qazaf) dan mengaibkan orang lain",
+    "Berniaga"
+   ],
+   "a": 2,
+   "e": "Maruah setiap individu dijaga.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 770,
+   "t": "T4-3.1",
+   "d": 3,
+   "q": "Seorang pemimpin masyarakat mengutamakan projek untuk keluarganya berbanding keperluan penduduk. Etika Sistem Sosial Islam yang dilanggar ialah ...",
+   "o": [
+    "Menghormati kepelbagaian budaya",
+    "Berpandukan wahyu",
+    "Mengutamakan kepentingan umum berbanding kepentingan peribadi",
+    "Iman dan takwa"
+   ],
+   "a": 2,
+   "e": "Kepentingan umum mesti didahulukan.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 771,
+   "t": "T4-3.1",
+   "d": 3,
+   "q": "Bagaimanakah institusi masjid menyokong Sistem Sosial Islam dalam masyarakat?",
+   "o": [
+    "Menjadi pusat ibadah, ilmu dan kebajikan setempat",
+    "Menjadi tempat berniaga sahaja",
+    "Menjadi tempat berehat sahaja",
+    "Ditutup selain waktu solat"
+   ],
+   "a": 0,
+   "e": "Masjid zaman Nabi SAW berperanan sebagai pusat masyarakat.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 772,
+   "t": "T4-3.5",
+   "d": 1,
+   "q": "Seni khat yang terkenal dengan bentuk huruf bersegi ialah ...",
+   "o": [
+    "Kufi",
+    "Diwani",
+    "Thuluth",
+    "Nasakh"
+   ],
+   "a": 0,
+   "e": "Khat Kufi antara gaya khat terawal.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 773,
+   "t": "T4-3.5",
+   "d": 1,
+   "q": "Ragam hias tumbuhan yang berulang-ulang dalam seni Islam dikenali sebagai ...",
+   "o": [
+    "Patung",
+    "Arabes",
+    "Potret",
+    "Lakaran figura"
+   ],
+   "a": 1,
+   "e": "Arabes menggunakan corak daun dan bunga.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 774,
+   "t": "T4-3.5",
+   "d": 1,
+   "q": "Contoh seni bina Islam yang indah di Malaysia ialah ...",
+   "o": [
+    "Masjid Zahir, Alor Setar",
+    "Piramid Giza",
+    "Menara Eiffel, Paris",
+    "Tembok Besar China"
+   ],
+   "a": 0,
+   "e": "Masjid Zahir terkenal dengan seni bina Islam.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 775,
+   "t": "T4-3.5",
+   "d": 2,
+   "q": "Mengapakah seni Islam banyak menggunakan corak geometri dan tumbuhan berbanding lukisan makhluk bernyawa?",
+   "o": [
+    "Pelukis tidak mahir",
+    "Mengelakkan unsur pemujaan dan mengikut garis panduan syarak",
+    "Tiada sebab",
+    "Geometri lebih murah"
+   ],
+   "a": 1,
+   "e": "Seni Islam menjauhi unsur yang membawa kepada syirik.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 776,
+   "t": "T4-3.5",
+   "d": 3,
+   "q": "Seorang pereka grafik diminta menghasilkan poster yang mendedahkan aurat untuk melariskan produk. Tindakan yang menepati adab kesenian Islam ialah ...",
+   "o": [
+    "Tidak membalas permintaan",
+    "Menurut sahaja",
+    "Meniru poster lain",
+    "Mencadangkan reka bentuk lain yang menarik tanpa mendedahkan aurat"
+   ],
+   "a": 3,
+   "e": "Kreativiti tidak boleh melanggar syarak.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 777,
+   "t": "T4-3.5",
+   "d": 3,
+   "q": "Kepentingan seni khat dalam tamadun Islam ialah ...",
+   "o": [
+    "Memelihara dan mengindahkan penulisan al-Quran serta warisan ilmu",
+    "Menggantikan bacaan al-Quran",
+    "Menghias rumah semata-mata",
+    "Tiada kepentingan"
+   ],
+   "a": 0,
+   "e": "Khat berkembang seiring penulisan mushaf.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 778,
+   "t": "T4-1.4",
+   "d": 1,
+   "q": "Contoh akhlak mazmumah terhadap diri sendiri ialah ...",
+   "o": [
+    "Sabar",
+    "Bersyukur",
+    "Rajin",
+    "Malas dan tidak menjaga kebersihan"
+   ],
+   "a": 3,
+   "e": "Mengabaikan diri ialah akhlak tercela.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 779,
+   "t": "T4-1.4",
+   "d": 1,
+   "q": "Muhasabah bermaksud ...",
+   "o": [
+    "Bersenam",
+    "Mengumpat orang",
+    "Menghitung dan menilai diri sendiri",
+    "Melawan musuh"
+   ],
+   "a": 2,
+   "e": "Muhasabah membantu memperbaiki akhlak.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 780,
+   "t": "T4-1.4",
+   "d": 2,
+   "q": "Contoh akhlak mahmudah terhadap alam ialah ...",
+   "o": [
+    "Membuang sisa ke sungai",
+    "Memburu untuk keseronokan",
+    "Tidak menebang pokok sewenang-wenangnya",
+    "Membakar sampah secara terbuka"
+   ],
+   "a": 2,
+   "e": "Menjaga alam ialah amanah khalifah.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 781,
+   "t": "T4-1.4",
+   "d": 2,
+   "q": "Perbezaan akhlak Islam dengan etika ciptaan manusia ialah ...",
+   "o": [
+    "Akhlak Islam bersumberkan wahyu dan tetap, etika boleh berubah mengikut masyarakat",
+    "Etika bersumberkan wahyu",
+    "Kedua-duanya sama",
+    "Akhlak Islam berubah-ubah"
+   ],
+   "a": 0,
+   "e": "Akhlak Islam berpaksikan al-Quran dan al-Sunnah.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 782,
+   "t": "T4-1.4",
+   "d": 3,
+   "q": "Selepas tewas dalam pertandingan, Ali segera mengucapkan tahniah kepada pemenang. Akhlak yang ditunjukkan ialah ...",
+   "o": [
+    "Berlapang dada dan menghormati orang lain",
+    "Hasad",
+    "Takbur",
+    "Riak"
+   ],
+   "a": 0,
+   "e": "Menerima kekalahan dengan baik ialah akhlak terpuji.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 783,
+   "t": "T4-1.4",
+   "d": 3,
+   "q": "Kesan akhlak mulia kepada individu ialah ...",
+   "o": [
+    "Dibenci rakan",
+    "Hidup tenang serta dikasihi Allah dan manusia",
+    "Rezeki berkurang",
+    "Ditakuti orang"
+   ],
+   "a": 1,
+   "e": "Akhlak mulia membawa kebahagiaan dunia dan akhirat.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 784,
+   "t": "T4-3.4",
+   "d": 1,
+   "q": "Nasyid ialah contoh hiburan yang ...",
+   "o": [
+    "Wajib",
+    "Makruh dalam semua keadaan",
+    "Diharamkan sepenuhnya",
+    "Dibenarkan jika liriknya baik dan tidak melalaikan"
+   ],
+   "a": 3,
+   "e": "Hiburan yang menepati syarak dibenarkan.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 785,
+   "t": "T4-3.4",
+   "d": 1,
+   "q": "Hiburan yang melalaikan hingga meninggalkan solat fardu hukumnya ...",
+   "o": [
+    "Harus",
+    "Sunat",
+    "Wajib",
+    "Haram"
+   ],
+   "a": 3,
+   "e": "Meninggalkan kewajipan kerana hiburan berdosa.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 786,
+   "t": "T4-3.4",
+   "d": 2,
+   "q": "Peristiwa Aisyah RA menonton orang Habsyah bermain tombak di masjid menunjukkan ...",
+   "o": [
+    "Islam melarang semua hiburan",
+    "Hiburan wajib",
+    "Masjid tempat konsert",
+    "Islam membenarkan hiburan yang tidak melanggar syarak"
+   ],
+   "a": 3,
+   "e": "Riwayat al-Bukhari dan Muslim.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 787,
+   "t": "T4-3.4",
+   "d": 2,
+   "q": "Permainan video dibenarkan dalam Islam dengan syarat ...",
+   "o": [
+    "Dimainkan sepanjang malam",
+    "Tiada had masa",
+    "Ada pertaruhan wang",
+    "Tidak melalaikan dan tiada unsur judi, keganasan melampau atau aurat terdedah"
+   ],
+   "a": 3,
+   "e": "Hiburan mesti sederhana dan bersih.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 788,
+   "t": "T4-3.4",
+   "d": 3,
+   "q": "Kelab sekolah ingin mengadakan pertandingan karaoke. Cadangan yang paling selari dengan adab berhibur ialah ...",
+   "o": [
+    "Mengadakannya pada waktu solat",
+    "Menukar kepada pertandingan nasyid atau deklamasi sajak bermesej positif dengan menjaga pergaulan",
+    "Mengenakan bayaran pertaruhan",
+    "Membenarkan pakaian tidak menutup aurat"
+   ],
+   "a": 1,
+   "e": "Hiburan yang mendidik jiwa.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 789,
+   "t": "T4-3.4",
+   "d": 3,
+   "q": "Mengapakah Islam tidak mengharamkan hiburan secara mutlak?",
+   "o": [
+    "Hiburan menggantikan ibadah",
+    "Hiburan wajib",
+    "Hiburan memenuhi fitrah manusia untuk berehat dan bergembira",
+    "Tiada dalil langsung tentang hiburan"
+   ],
+   "a": 2,
+   "e": "Islam agama fitrah yang seimbang.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 790,
+   "t": "T4-3.2",
+   "d": 1,
+   "q": "Keluarga asas terdiri daripada ...",
+   "o": [
+    "Datuk dan nenek sahaja",
+    "Rakan sekerja",
+    "Suami, isteri dan anak-anak",
+    "Jiran tetangga"
+   ],
+   "a": 2,
+   "e": "Keluarga asas ialah unit terkecil masyarakat.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 791,
+   "t": "T4-3.2",
+   "d": 1,
+   "q": "Tanggungjawab utama menyediakan nafkah keluarga terletak pada ...",
+   "o": [
+    "Jiran",
+    "Anak sulung",
+    "Suami",
+    "Kerajaan"
+   ],
+   "a": 2,
+   "e": "Surah an-Nisa' ayat 34.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 792,
+   "t": "T4-3.2",
+   "d": 2,
+   "q": "Sakinah, mawaddah wa rahmah bermaksud ...",
+   "o": [
+    "Kekuatan",
+    "Kekayaan dan kemewahan",
+    "Ketenangan, kasih sayang dan belas kasihan",
+    "Kemasyhuran"
+   ],
+   "a": 2,
+   "e": "Surah ar-Rum ayat 21.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 793,
+   "t": "T4-3.2",
+   "d": 2,
+   "q": "Tanggungjawab anak terhadap ibu bapa yang sudah tua ialah ...",
+   "o": [
+    "Menghantar mereka ke rumah orang tua tanpa sebab",
+    "Meninggalkan mereka",
+    "Menjaga dan menyara mereka dengan penuh kasih sayang",
+    "Membiarkan mereka"
+   ],
+   "a": 2,
+   "e": "Surah al-Isra' ayat 23-24.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 794,
+   "t": "T4-3.2",
+   "d": 3,
+   "q": "Ibu bapa Lina sibuk bekerja hingga jarang berbual dengan anak-anak. Cadangan terbaik ialah ...",
+   "o": [
+    "Membiarkan keadaan itu",
+    "Menetapkan masa berkualiti bersama seperti makan malam dan solat berjemaah",
+    "Memberi lebih banyak wang",
+    "Memarahi anak-anak"
+   ],
+   "a": 1,
+   "e": "Masa bersama mengeratkan hubungan keluarga.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 795,
+   "t": "T4-3.2",
+   "d": 3,
+   "q": "Kesan keruntuhan institusi keluarga kepada masyarakat ialah ...",
+   "o": [
+    "Pendidikan lebih baik",
+    "Gejala sosial seperti lari dari rumah dan jenayah meningkat",
+    "Masyarakat harmoni",
+    "Ekonomi meningkat"
+   ],
+   "a": 1,
+   "e": "Keluarga ialah asas masyarakat yang sejahtera.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 796,
+   "t": "T4-1.1",
+   "d": 1,
+   "q": "Perkataan 'al-Din' bermaksud ...",
+   "o": [
+    "Budaya sahaja",
+    "Bangsa",
+    "Agama dan cara hidup",
+    "Negara"
+   ],
+   "a": 2,
+   "e": "Al-Din merangkumi seluruh kehidupan.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 797,
+   "t": "T4-1.1",
+   "d": 1,
+   "q": "Rukun Iman yang terakhir ialah beriman kepada ...",
+   "o": [
+    "Kitab-kitab",
+    "Hari akhirat",
+    "Malaikat",
+    "Qadak dan qadar"
+   ],
+   "a": 3,
+   "e": "Rukun Iman keenam.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 798,
+   "t": "T4-1.1",
+   "d": 1,
+   "q": "Bilangan Rukun Islam ialah ...",
+   "o": [
+    "Tujuh",
+    "Tiga",
+    "Lima",
+    "Enam"
+   ],
+   "a": 2,
+   "e": "Syahadah, solat, zakat, puasa dan haji.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 799,
+   "t": "T4-1.1",
+   "d": 2,
+   "q": "Ayat yang menyatakan bahawa agama yang diredai di sisi Allah ialah Islam terdapat dalam Surah ...",
+   "o": [
+    "Al-Fil: 1",
+    "An-Nas: 1",
+    "Ali Imran: 19",
+    "Al-Kautsar: 1"
+   ],
+   "a": 2,
+   "e": "'Sesungguhnya agama di sisi Allah ialah Islam.'",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 800,
+   "t": "T4-1.1",
+   "d": 3,
+   "q": "Seseorang menjaga solat tetapi menipu dalam perniagaan. Kefahaman yang perlu dibetulkan ialah ...",
+   "o": [
+    "Solat sahaja sudah mencukupi",
+    "Islam ialah cara hidup yang meliputi ibadah dan muamalat",
+    "Perniagaan tiada kaitan dengan agama",
+    "Islam hanya ibadah khusus"
+   ],
+   "a": 1,
+   "e": "Islam sebagai al-Din meliputi semua aspek.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 801,
+   "t": "T4-1.1",
+   "d": 3,
+   "q": "Mengapakah Islam, Iman dan Ihsan perlu digabungkan dalam kehidupan?",
+   "o": [
+    "Kerana ketiga-tiganya sama",
+    "Supaya mudah dihafal",
+    "Kerana ihsan tidak penting",
+    "Supaya akidah, ibadah dan akhlak seimbang dan sempurna"
+   ],
+   "a": 3,
+   "e": "Hadis Jibril menghimpunkan ketiga-tiganya.",
+   "s": "Buku Teks Tasawwur Islam Tingkatan 4",
    "status": "aktif"
   }
  ]

@@ -1,6 +1,6 @@
 {
- "versi": "202610191200",
- "dikemas": "2026-10-19T12:00:00",
+ "versi": "202610281200",
+ "dikemas": "2026-10-28T12:00:00",
  "nota": "Fail ini diurus melalui bank.html. Jangan ubah nama medan. a = indeks jawapan betul (0=A, 1=B, 2=C, 3=D). d = aras (1 mudah, 2 sederhana, 3 sukar). status: aktif atau gantung. Soalan Pendidikan Islam Tingkatan 3 ini perlu disemak oleh guru mata pelajaran.",
  "topik": [
   {
@@ -11519,6 +11519,486 @@
    "a": 2,
    "e": "Mengabaikan kempen boleh meningkatkan buli siber, pendedahan maklumat peribadi serta jenayah sosial dan maksiat.",
    "s": "Ujian Akhir PI T3, Bahagian E Soalan 5(g)",
+   "status": "aktif"
+  },
+  {
+   "i": 711,
+   "t": "P3-1.1",
+   "d": 1,
+   "q": "Doa dalam Surah al-A'raf ayat 23 dilafazkan oleh ...",
+   "o": [
+    "Nabi Yunus AS",
+    "Nabi Musa AS",
+    "Nabi Nuh AS",
+    "Nabi Adam AS dan Hawa"
+   ],
+   "a": 3,
+   "e": "Doa taubat Nabi Adam AS dan Hawa.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 1: Allah Pengampun Segala Dosa",
+   "status": "aktif"
+  },
+  {
+   "i": 712,
+   "t": "P3-1.1",
+   "d": 1,
+   "q": "Istighfar bermaksud ...",
+   "o": [
+    "Bersyukur kepada Allah",
+    "Memohon keampunan Allah",
+    "Memuji Allah",
+    "Mengagungkan Allah"
+   ],
+   "a": 1,
+   "e": "Lafaznya 'Astaghfirullah'.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 1: Allah Pengampun Segala Dosa",
+   "status": "aktif"
+  },
+  {
+   "i": 713,
+   "t": "P3-1.1",
+   "d": 2,
+   "q": "Antara syarat taubat nasuha ialah ...",
+   "o": [
+    "Menunggu tua",
+    "Menyesal, berhenti melakukan dosa dan berazam tidak mengulanginya",
+    "Mengulangi dosa",
+    "Berdiam diri"
+   ],
+   "a": 1,
+   "e": "Taubat yang sebenar-benarnya.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 1: Allah Pengampun Segala Dosa",
+   "status": "aktif"
+  },
+  {
+   "i": 714,
+   "t": "P3-1.1",
+   "d": 2,
+   "q": "Jika dosa melibatkan hak manusia, syarat tambahan taubat ialah ...",
+   "o": [
+    "Bersedekah kepada orang lain sahaja",
+    "Memulangkan hak atau meminta maaf kepada orang itu",
+    "Berpuasa tiga hari",
+    "Tidak perlu apa-apa"
+   ],
+   "a": 1,
+   "e": "Hak manusia mesti diselesaikan.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 1: Allah Pengampun Segala Dosa",
+   "status": "aktif"
+  },
+  {
+   "i": 715,
+   "t": "P3-1.1",
+   "d": 3,
+   "q": "Sufian terlanjur mengumpat rakannya. Langkah taubat yang paling lengkap ialah ...",
+   "o": [
+    "Menyembunyikan perbuatannya",
+    "Menyalahkan rakan",
+    "Beristighfar, menyesal, meminta maaf kepada rakan dan tidak mengulanginya",
+    "Beristighfar sahaja tanpa meminta maaf"
+   ],
+   "a": 2,
+   "e": "Taubat dosa sesama manusia memerlukan kemaafan.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 1: Allah Pengampun Segala Dosa",
+   "status": "aktif"
+  },
+  {
+   "i": 716,
+   "t": "P3-1.2",
+   "d": 1,
+   "q": "Surah al-Kahf ialah surah yang ke-... dalam al-Quran.",
+   "o": [
+    "67",
+    "36",
+    "18",
+    "2"
+   ],
+   "a": 2,
+   "e": "Surah ke-18.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 2: Al-Quran Petunjuk Kebenaran",
+   "status": "aktif"
+  },
+  {
+   "i": 717,
+   "t": "P3-1.2",
+   "d": 1,
+   "q": "Ashabul Kahfi ialah ...",
+   "o": [
+    "Kaum Nabi Hud",
+    "Pedagang dari Yaman",
+    "Raja yang zalim",
+    "Pemuda beriman yang berlindung di dalam gua"
+   ],
+   "a": 3,
+   "e": "Mereka mempertahankan akidah daripada pemerintah zalim.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 2: Al-Quran Petunjuk Kebenaran",
+   "status": "aktif"
+  },
+  {
+   "i": 718,
+   "t": "P3-1.2",
+   "d": 2,
+   "q": "Ayat 2 Surah al-Kahf menyifatkan al-Quran sebagai 'qayyiman', iaitu ...",
+   "o": [
+    "Bengkok",
+    "Lurus dan menjadi pedoman",
+    "Hanya untuk orang Arab",
+    "Sukar difahami"
+   ],
+   "a": 1,
+   "e": "Al-Quran lurus tanpa sebarang kebengkokan.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 2: Al-Quran Petunjuk Kebenaran",
+   "status": "aktif"
+  },
+  {
+   "i": 719,
+   "t": "P3-1.2",
+   "d": 2,
+   "q": "Menurut ayat 4-5 Surah al-Kahf, al-Quran memberi amaran kepada orang yang mendakwa ...",
+   "o": [
+    "Hari akhirat benar",
+    "Nabi Muhammad SAW utusan Allah",
+    "Allah mempunyai anak",
+    "Allah Maha Esa"
+   ],
+   "a": 2,
+   "e": "Dakwaan itu pembohongan besar terhadap Allah.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 2: Al-Quran Petunjuk Kebenaran",
+   "status": "aktif"
+  },
+  {
+   "i": 720,
+   "t": "P3-1.2",
+   "d": 3,
+   "q": "Anis membaca Surah al-Kahf setiap Jumaat dan cuba memahami kisahnya. Kesan yang diharapkan ialah ...",
+   "o": [
+    "Menjadi kaya",
+    "Tidak perlu solat",
+    "Mendapat cahaya petunjuk dan teguh iman menghadapi fitnah",
+    "Dapat meramal masa depan"
+   ],
+   "a": 2,
+   "e": "Kelebihan membaca dan menghayati Surah al-Kahf.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 2: Al-Quran Petunjuk Kebenaran",
+   "status": "aktif"
+  },
+  {
+   "i": 721,
+   "t": "P3-1.4",
+   "d": 1,
+   "q": "Pancaindera ialah ...",
+   "o": [
+    "Harta",
+    "Deria yang dikurniakan Allah untuk mengenal alam seperti mata dan telinga",
+    "Organ dalaman sahaja",
+    "Pakaian"
+   ],
+   "a": 1,
+   "e": "Nikmat yang akan dipertanggungjawabkan.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 4: Pancaindera yang Dimanfaatkan",
+   "status": "aktif"
+  },
+  {
+   "i": 722,
+   "t": "P3-1.4",
+   "d": 1,
+   "q": "Menurut ayat 179 Surah al-A'raf, hati sepatutnya digunakan untuk ...",
+   "o": [
+    "Menyimpan dendam",
+    "Memahami ayat-ayat Allah",
+    "Mengumpat",
+    "Mencari kemasyhuran"
+   ],
+   "a": 1,
+   "e": "Hati yang tidak memahami ayat Allah dicela.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 4: Pancaindera yang Dimanfaatkan",
+   "status": "aktif"
+  },
+  {
+   "i": 723,
+   "t": "P3-1.4",
+   "d": 2,
+   "q": "Lidah juga perlu dijaga kerana ...",
+   "o": [
+    "Kata-kata tidak berdosa",
+    "Lidah tidak penting",
+    "Setiap kata-kata dicatat dan dipertanggungjawabkan",
+    "Lidah boleh berehat"
+   ],
+   "a": 2,
+   "e": "Surah Qaf ayat 18.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 4: Pancaindera yang Dimanfaatkan",
+   "status": "aktif"
+  },
+  {
+   "i": 724,
+   "t": "P3-1.4",
+   "d": 2,
+   "q": "Contoh penyalahgunaan mata ialah ...",
+   "o": [
+    "Membaca al-Quran",
+    "Menonton bahan lucah dan ganas",
+    "Melihat keindahan alam",
+    "Membaca buku ilmu"
+   ],
+   "a": 1,
+   "e": "Mata mesti dijaga daripada perkara haram.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 4: Pancaindera yang Dimanfaatkan",
+   "status": "aktif"
+  },
+  {
+   "i": 725,
+   "t": "P3-1.4",
+   "d": 3,
+   "q": "Iqbal menghabiskan masa mendengar gosip dan fitnah di media sosial. Berdasarkan Surah al-Isra' ayat 36, nasihat terbaik ialah ...",
+   "o": [
+    "Teruskan kerana tidak berdosa",
+    "Menambah masa mendengar",
+    "Berkongsi gosip itu",
+    "Menggunakan pendengaran untuk perkara bermanfaat kerana ia akan dipersoalkan"
+   ],
+   "a": 3,
+   "e": "Pendengaran, penglihatan dan hati akan ditanya.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 4: Pancaindera yang Dimanfaatkan",
+   "status": "aktif"
+  },
+  {
+   "i": 726,
+   "t": "P3-1.8",
+   "d": 1,
+   "q": "Proses kejadian manusia dalam rahim diterangkan secara terperinci dalam Surah ...",
+   "o": [
+    "Al-Ikhlas: 1-4",
+    "Al-Mu'minun: 12-14",
+    "Al-Fatihah: 1-7",
+    "An-Nas: 1-6"
+   ],
+   "a": 1,
+   "e": "Nutfah, 'alaqah, mudghah, tulang dan daging.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 8: Penciptaan Manusia Bukti Kekuasaan Allah",
+   "status": "aktif"
+  },
+  {
+   "i": 727,
+   "t": "P3-1.8",
+   "d": 1,
+   "q": "Peringkat 'izam' dalam kejadian manusia bermaksud ...",
+   "o": [
+    "Air mani",
+    "Darah beku",
+    "Bayi lahir",
+    "Pembentukan tulang"
+   ],
+   "a": 3,
+   "e": "Selepas mudghah terbentuk tulang.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 8: Penciptaan Manusia Bukti Kekuasaan Allah",
+   "status": "aktif"
+  },
+  {
+   "i": 728,
+   "t": "P3-1.8",
+   "d": 2,
+   "q": "Selepas tulang terbentuk, Allah membalutnya dengan ...",
+   "o": [
+    "Kulit sahaja",
+    "Rambut",
+    "Kuku",
+    "Daging"
+   ],
+   "a": 3,
+   "e": "Surah al-Mu'minun ayat 14.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 8: Penciptaan Manusia Bukti Kekuasaan Allah",
+   "status": "aktif"
+  },
+  {
+   "i": 729,
+   "t": "P3-1.8",
+   "d": 2,
+   "q": "Penemuan embriologi moden yang selari dengan al-Quran membuktikan ...",
+   "o": [
+    "Sains lebih tinggi daripada wahyu",
+    "Tiada kaitan antara keduanya",
+    "Al-Quran ialah wahyu daripada Allah Yang Maha Mengetahui",
+    "Al-Quran ditulis oleh saintis"
+   ],
+   "a": 2,
+   "e": "Al-Quran menerangkannya lebih 1,400 tahun lalu.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 8: Penciptaan Manusia Bukti Kekuasaan Allah",
+   "status": "aktif"
+  },
+  {
+   "i": 730,
+   "t": "P3-1.8",
+   "d": 3,
+   "q": "Menyedari dirinya dicipta dengan sempurna, Mariam menjaga pemakanan dan kesihatannya. Penghayatan ini menunjukkan ...",
+   "o": [
+    "Bersyukur dengan menjaga amanah tubuh badan",
+    "Takbur",
+    "Riak",
+    "Membazir"
+   ],
+   "a": 0,
+   "e": "Tubuh badan ialah amanah Allah.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 8: Penciptaan Manusia Bukti Kekuasaan Allah",
+   "status": "aktif"
+  },
+  {
+   "i": 731,
+   "t": "P3-4.1",
+   "d": 1,
+   "q": "Mempelajari ilmu perubatan supaya masyarakat mempunyai doktor Muslim hukumnya ...",
+   "o": [
+    "Fardu ain",
+    "Harus",
+    "Sunat",
+    "Fardu kifayah"
+   ],
+   "a": 3,
+   "e": "Keperluan masyarakat ditanggung secara kolektif.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 15: Konsep Fardu Ain dan Fardu Kifayah",
+   "status": "aktif"
+  },
+  {
+   "i": 732,
+   "t": "P3-4.1",
+   "d": 1,
+   "q": "Puasa Ramadan bagi Muslim yang mukalaf hukumnya ...",
+   "o": [
+    "Fardu ain",
+    "Makruh",
+    "Sunat",
+    "Fardu kifayah"
+   ],
+   "a": 0,
+   "e": "Wajib ke atas setiap individu.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 15: Konsep Fardu Ain dan Fardu Kifayah",
+   "status": "aktif"
+  },
+  {
+   "i": 733,
+   "t": "P3-4.1",
+   "d": 2,
+   "q": "Menjawab salam yang diberikan kepada sekumpulan orang hukumnya ...",
+   "o": [
+    "Fardu kifayah",
+    "Sunat",
+    "Harus",
+    "Fardu ain"
+   ],
+   "a": 0,
+   "e": "Memadai seorang daripada kumpulan menjawab.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 15: Konsep Fardu Ain dan Fardu Kifayah",
+   "status": "aktif"
+  },
+  {
+   "i": 734,
+   "t": "P3-4.1",
+   "d": 2,
+   "q": "Perbezaan utama fardu ain dan fardu kifayah ialah ...",
+   "o": [
+    "Fardu kifayah lebih utama",
+    "Fardu ain tidak berdosa jika ditinggalkan",
+    "Tiada perbezaan",
+    "Fardu ain wajib atas setiap individu, fardu kifayah memadai dilakukan oleh sebahagian"
+   ],
+   "a": 3,
+   "e": "Berbeza dari segi pihak yang dipertanggungjawabkan.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 15: Konsep Fardu Ain dan Fardu Kifayah",
+   "status": "aktif"
+  },
+  {
+   "i": 735,
+   "t": "P3-4.1",
+   "d": 3,
+   "q": "Di sebuah kampung tiada seorang pun yang tahu memandikan jenazah. Tindakan terbaik penduduk ialah ...",
+   "o": [
+    "Menyalahkan imam",
+    "Menghantar beberapa orang mempelajari pengurusan jenazah",
+    "Menunggu orang luar setiap kali",
+    "Membiarkan sahaja"
+   ],
+   "a": 1,
+   "e": "Semua berdosa jika fardu kifayah diabaikan.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 15: Konsep Fardu Ain dan Fardu Kifayah",
+   "status": "aktif"
+  },
+  {
+   "i": 736,
+   "t": "P3-4.5",
+   "d": 1,
+   "q": "Waktu qiyamullail ialah ...",
+   "o": [
+    "Selepas solat Asar",
+    "Selepas solat Subuh",
+    "Selepas solat Isyak hingga sebelum terbit fajar",
+    "Waktu Dhuha"
+   ],
+   "a": 2,
+   "e": "Menghidupkan malam dengan ibadah.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 19: Qiyamullail Memangkin Kekuatan Jiwa",
+   "status": "aktif"
+  },
+  {
+   "i": 737,
+   "t": "P3-4.5",
+   "d": 1,
+   "q": "Solat tahajud lebih afdal dilakukan selepas ...",
+   "o": [
+    "Solat Maghrib",
+    "Makan",
+    "Solat Asar",
+    "Tidur seketika"
+   ],
+   "a": 3,
+   "e": "Tahajud ialah solat malam selepas bangun tidur.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 19: Qiyamullail Memangkin Kekuatan Jiwa",
+   "status": "aktif"
+  },
+  {
+   "i": 738,
+   "t": "P3-4.5",
+   "d": 2,
+   "q": "Waktu yang paling afdal untuk qiyamullail ialah ...",
+   "o": [
+    "Tengah hari",
+    "Awal waktu Maghrib",
+    "Sepertiga malam yang akhir",
+    "Selepas Subuh"
+   ],
+   "a": 2,
+   "e": "Waktu Allah memakbulkan doa (riwayat al-Bukhari dan Muslim).",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 19: Qiyamullail Memangkin Kekuatan Jiwa",
+   "status": "aktif"
+  },
+  {
+   "i": 739,
+   "t": "P3-4.5",
+   "d": 2,
+   "q": "Bilangan rakaat solat witir yang paling sedikit ialah ...",
+   "o": [
+    "Satu rakaat",
+    "Empat rakaat",
+    "Enam rakaat",
+    "Dua rakaat"
+   ],
+   "a": 0,
+   "e": "Witir bermaksud ganjil.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 19: Qiyamullail Memangkin Kekuatan Jiwa",
+   "status": "aktif"
+  },
+  {
+   "i": 740,
+   "t": "P3-4.5",
+   "d": 3,
+   "q": "Sebelum peperiksaan, Haris bangun malam untuk solat hajat, kemudian tidur semula dan bangun awal untuk Subuh. Sikap ini menunjukkan ...",
+   "o": [
+    "Membuang masa",
+    "Riak",
+    "Menggabungkan usaha, doa dan menjaga solat fardu",
+    "Mengabaikan kesihatan"
+   ],
+   "a": 2,
+   "e": "Qiyamullail yang seimbang menguatkan jiwa.",
+   "s": "Buku Teks PI Tingkatan 3, Pelajaran 19: Qiyamullail Memangkin Kekuatan Jiwa",
    "status": "aktif"
   }
  ]
