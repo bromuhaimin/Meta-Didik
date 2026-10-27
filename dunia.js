@@ -1204,7 +1204,7 @@ function lmAvatarDrop(g, av, e) { g.scene.remove(av.g); try { AV3.dispose(av, g.
 function lmBubble(av, text) {
   if (av.bub) { av.g.remove(av.bub); av.bub = null; }
   if (!text) return;
-  av.bub = lmLabel(text, { fs: 30, k: 0.03, bg: "rgba(255,255,255,.95)", fg: "#1b2a3a", dt: false }); av.bub.position.y = 8.9; av.g.add(av.bub); av.bubT = 3;
+  av.bubTx = text; av.bub = lmLabel(text, { fs: 30, k: 0.03, bg: "rgba(255,255,255,.95)", fg: "#1b2a3a", dt: false }); av.bub.position.y = 8.9; av.g.add(av.bub); av.bubT = 3;
 }
 
 /* ---------- pergerakan pemain, perlanggaran dan kamera ---------- */
@@ -1263,17 +1263,17 @@ function lmUpdateCam(g, dt) {
 
 /* ---------- multiplayer (kehadiran bilik; sama seperti Dunia Gempur) ---------- */
 async function lmNetJoin(code, kind) {
-  lmNetLeave(); if (!Net.room) { toast("Bilik bersama memerlukan sambungan pelayan Firebase (versi GitHub Pages).", "warn"); return false; }
+  lmNetLeave(); if (!Net.room) { if (kind === "open") LM.openRetry = performance.now() + 1e9; toast("Bilik bersama memerlukan sambungan pelayan Firebase (versi GitHub Pages).", "warn"); return false; }
   const tok = ++LM.tok; LM.roomCode = code; LM.roomKind = kind;
   try {
-    const r = await Net.room.join("lm-" + SUBJ + "-" + code);
+    const r = await Net.room.join(kind === "open" ? "lmo-" + code : "lm-" + SUBJ + "-" + code);
     if (tok !== LM.tok || !LM.on) { try { await r.leave(); } catch (e) { /* abaikan */ } return false; }
     LM.room = r; LM.sent = 0; LM.pollT = 0; LM.lastSig = "";
     return true;
   } catch (e) { LM.room = null; toast("Gagal masuk bilik. Cuba lagi.", "warn"); return false; }
 }
 function lmNetLeave() {
-  LM.tok++; const r = LM.room; LM.room = null;
+  LM.tok++; const r = LM.room; LM.room = null; lmVoiceOff(); LM.myPeer = "";
   const g = LM.g; if (g) for (const id in LM.peers) lmAvatarDrop(g, LM.peers[id].av, LM.peers[id]);
   LM.peers = {};
   if (r) { try { const x = r.leave(); if (x && x.catch) x.catch(() => {}); } catch (e) { /* abaikan */ } }
@@ -1294,13 +1294,17 @@ function lmNet(g, dt, ts) {
     if (e.fy && !e.ferry) { e.ferry = lmFerry(); g.scene.add(e.ferry); }
     if (e.ferry) { e.ferry.visible = e.fy; if (e.fy) { const fx = Math.sin(e.r), fz = Math.cos(e.r); e.ferry.position.set(e.x - fx * 6, Math.sin(g.T * 1.7) * 0.25, e.z - fz * 6); e.ferry.rotation.y = Math.atan2(-fz, fx); } }
     if (e.plane) { e.plane.visible = e.pl; if (e.pl) { e.plane.position.set(e.x, e.y, e.z); e.plane.rotation.y = Math.atan2(-Math.cos(e.r), Math.sin(e.r)); e.plane.userData.body.rotation.set(e.pb, 0, e.pp, "YXZ"); } }
+    if (e.tk && (!e.av.bub || e.av.bubTx !== "bercakap...")) lmBubble(e.av, "bercakap...");
+    if (e.tk) e.av.bubT = 0.6;
     if (e.av.bub && (e.av.bubT -= dt) <= 0) lmBubble(e.av, "");
   }
+  lmOpenTick(g, ts);
   const r = LM.room; if (!r) return;
   const p = g.p;
-  if (ts - LM.sent > 200) {
+  if (LM.vc && ts - (LM.vcT || 0) > 700) { LM.vcT = ts; lmVoiceTick(g); }
+  if (ts - LM.sent > (LM.roomKind === "open" ? 500 : 200)) {
     LM.sent = ts;
-    const o = { x: +p.x.toFixed(1), y: +p.y.toFixed(1), z: +p.z.toFixed(1), r: +p.yaw.toFixed(2), m: p.moving ? 1 : 0, a: p.on ? 0 : 1, n: cleanName(P.nama) || "Pelajar", c: g.myCode, st: lmStamps(), fy: g.sail ? 1 : 0, pl: g.flight ? 1 : 0, pp: g.flight ? +g.flight.pitch.toFixed(2) : 0, pb: g.flight ? +g.flight.bank.toFixed(2) : 0 };
+    const o = { x: +p.x.toFixed(1), y: +p.y.toFixed(1), z: +p.z.toFixed(1), r: +p.yaw.toFixed(2), m: p.moving ? 1 : 0, a: p.on ? 0 : 1, n: lmMyName(), c: g.myCode, st: lmStamps(), fy: g.sail ? 1 : 0, pl: g.flight ? 1 : 0, pp: g.flight ? +g.flight.pitch.toFixed(2) : 0, pb: g.flight ? +g.flight.bank.toFixed(2) : 0 };
     const sig = [o.x, o.y, o.z, o.r, o.m, o.a, o.st, o.pl, o.pp, o.pb, o.fy].join(",");
     if (sig !== LM.lastSig) { LM.lastSig = sig; try { const x = r.presence(o); if (x && x.catch) x.catch(() => {}); } catch (e) { /* abaikan */ } }
   }
@@ -1308,21 +1312,245 @@ function lmNet(g, dt, ts) {
     LM.pollT = ts; let a = []; try { a = r.peers(); } catch (e) { a = []; }
     const seen = {}; let n = 0;
     for (const pr of a) {
-      if (pr.isMe || !pr.presence || typeof pr.presence !== "object" || n >= 30) continue;
+      if (pr.isMe) { LM.myPeer = pr.peer; continue; }
+      if (!pr.presence || typeof pr.presence !== "object" || n >= 30) continue;
       const v = pr.presence; if (typeof v.x !== "number" || typeof v.z !== "number") continue;
       n++; seen[pr.peer] = 1;
       const x = clamp(v.x, -1600, 1800), y = clamp(+v.y || 0, -5, 400), z = clamp(v.z, -800, 800), nm = cleanName(String(v.n || "")) || "Pelajar";
       let e = LM.peers[pr.peer];
       if (e && (e.c !== v.c || e.n !== nm)) { lmAvatarDrop(g, e.av, e); e = null; }
-      if (!e) { const av = lmAvatar(v.c, nm, false); g.scene.add(av.g); e = LM.peers[pr.peer] = { x: x, y: y, z: z, r: +v.r || 0, av: av, c: v.c, n: nm, en: v.en | 0 }; } /* emote lama sebelum kita masuk tidak dipaparkan */
+      if (!e) { const av = lmAvatar(v.c, nm, false); g.scene.add(av.g); e = LM.peers[pr.peer] = { id: pr.peer, x: x, y: y, z: z, r: +v.r || 0, av: av, c: v.c, n: nm, en: v.en | 0, cn: v.cn | 0 }; } /* emote lama sebelum kita masuk tidak dipaparkan */
       e.tx = x; e.ty = y; e.tz = z; e.tr = +v.r || 0; e.m = !!v.m; e.a = !!v.a; e.st = clamp(v.st | 0, 0, 999); e.pl = !!v.pl; e.fy = !!v.fy; e.pp = clamp(+v.pp || 0, -1, 1); e.pb = clamp(+v.pb || 0, -1, 1);
-      if (typeof v.e === "string" && EMOTE[v.e] && (v.en | 0) !== e.en) { lmBubble(e.av, EMOTE[v.e]); e.en = v.en | 0; }
+      if (typeof v.e === "string" && EMOTE[v.e] && (v.en | 0) !== e.en) { if (!lmMuted(pr.peer)) lmBubble(e.av, EMOTE[v.e]); e.en = v.en | 0; }
+      if (typeof v.ct === "string" && (v.cn | 0) !== e.cn) { e.cn = v.cn | 0; lmChatGot(e, v.ct); }
+      e.vo = !!v.vo && LM.roomKind !== "open"; e.tk = e.vo && !!v.tk && !lmMuted(pr.peer); e.vs = v.vs && typeof v.vs === "object" ? v.vs : null;
     }
     for (const id in LM.peers) if (!seen[id]) { lmAvatarDrop(g, LM.peers[id].av, LM.peers[id]); delete LM.peers[id]; }
   }
 }
 function lmFriendsNear(g, r) {
   let n = 0; for (const id in LM.peers) { const e = LM.peers[id]; if (Math.hypot(e.x - g.p.x, e.z - g.p.z) < r) n++; } return n;
+}
+
+/* ---------- Dunia Terbuka (v17.95): sesiapa sahaja boleh masuk tanpa kod ----------
+   Pemain dibahagi kepada saluran ikut zon (maksimum LMO.CH seorang) supaya setiap peranti hanya menerima
+   data pemain berdekatan. Daftar ringkas "lmo/<uid>" (cap masa pelayan) mengira pemain serentak; had
+   LMO.MAX menjaga had 100 sambungan pelan Firebase Spark untuk seluruh aplikasi. */
+const LMO = { MAX: 40, CH: 20, HB: 30000, TTL: 75000 };
+const ZONES = { utara: "Utara", tengah: "Tengah", timur: "Pantai Timur", selatan: "Selatan", borneo: "Borneo" };
+const ZONE_OF = { perlis: "utara", kedah: "utara", penang: "utara", perak: "utara", jambatan: "utara", selangor: "tengah", wp: "tengah", nsembilan: "tengah", melaka: "tengah", kelantan: "timur", terengganu: "timur", pahang: "timur", johor: "selatan", sarawak: "borneo", sabah: "borneo" };
+function lmZone(k) { if (ISL_BY[k]) k = ISL_BY[k].from; return ZONE_OF[k] || ""; }
+/* PUT tanpa print=silent supaya pelayan memulangkan cap masa sebenar (jam peranti murid mungkin tidak tepat) */
+async function lmoPut(c) {
+  const r = await fetch(FB.url + "/lmo/" + FB.getUid() + ".json", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ t: { ".sv": "timestamp" }, c: c }) });
+  if (!r.ok) { const e = new Error("fb " + r.status); e.code = r.status; throw e; }
+  let v = null; try { v = await r.json(); } catch (e) { v = null; }
+  return v && typeof v.t === "number" ? v.t : Date.now();
+}
+function lmoStop() {
+  LM.otok = (LM.otok | 0) + 1; clearInterval(LM.oHb);
+  if (LM.oHb && FB.url) FB.req("DELETE", "lmo/" + FB.getUid()).catch(() => {});
+  LM.oHb = 0; LM.oCh = ""; LM.joining = false;
+}
+async function lmOpenJoin(zone) {
+  const tok = LM.otok = (LM.otok | 0) + 1; LM.joining = true; LM.roomKind = "open"; LM.zone = zone;
+  try {
+    let ch = zone + "-1";
+    if (FB.url) {
+      const now = await lmoPut(LM.oCh || "");
+      const all = (await FB.req("GET", "lmo")) || {}, me = FB.getUid(), per = {};
+      let n = 0;
+      for (const k in all) { const v = all[k]; if (k === me || !v || typeof v.t !== "number" || now - v.t > LMO.TTL) continue; n++; if (v.c) per[v.c] = (per[v.c] | 0) + 1; }
+      if (tok !== LM.otok || !LM.on) return false;
+      if (n >= LMO.MAX) {
+        LM.openFull = true; LM.openRetry = performance.now() + 60000; lmNetLeave();
+        clearInterval(LM.oHb); LM.oHb = 0; LM.oCh = ""; FB.req("DELETE", "lmo/" + me).catch(() => {});
+        return false;
+      }
+      let i = 1; while ((per[zone + "-" + i] | 0) >= LMO.CH && i < 9) i++;
+      ch = zone + "-" + i; await lmoPut(ch);
+      if (tok !== LM.otok || !LM.on) return false;
+      LM.oCh = ch; clearInterval(LM.oHb); LM.oHb = setInterval(() => { lmoPut(LM.oCh).catch(() => {}); }, LMO.HB);
+    }
+    LM.openFull = false;
+    return await lmNetJoin(ch, "open");
+  } catch (e) { LM.openRetry = performance.now() + 30000; return false; }
+  finally { if (tok === LM.otok) LM.joining = false; }
+}
+/* tukar saluran apabila pemain berada di zon baharu lebih 2.5 saat (elak berulang-alik di sempadan) */
+function lmOpenTick(g, ts) {
+  if (LM.roomKind !== "open" || LM.joining) return;
+  if (!LM.room) {
+    if (ts > (LM.openRetry || 0)) { LM.openRetry = ts + 60000; lmOpenJoin(LM.zone || "tengah").then((ok) => { if (ok) lmPop("Masuk Dunia Terbuka"); }); }
+    return;
+  }
+  if (g.flight || g.sail || ts - (LM.zT || 0) < 1000) return;
+  LM.zT = ts;
+  const z = lmZone(lmAt(g.p.x, g.p.z));
+  if (!z || z === LM.zone) { LM.zNew = ""; return; }
+  if (LM.zNew !== z) { LM.zNew = z; LM.zAt = ts; return; }
+  if (ts - LM.zAt > 2500) { LM.zNew = ""; lmOpenJoin(z).then((ok) => { if (ok) lmPop("Zon " + ZONES[z]); }); }
+}
+window.addEventListener("pagehide", () => { if (LM.oHb && FB.url) { try { fetch(FB.url + "/lmo/" + FB.getUid() + ".json", { method: "DELETE", keepalive: true }); } catch (e) { /* abaikan */ } } });
+
+/* nama di Dunia Terbuka: satu perkataan sahaja (privasi murid); gelaran lazim dilangkau */
+const NM_SKIP = { muhammad: 1, muhamad: 1, mohammad: 1, mohamad: 1, mohd: 1, muhd: 1, md: 1, nur: 1, nurul: 1, nor: 1, noor: 1, siti: 1, wan: 1, nik: 1, tengku: 1, abdul: 1, abd: 1, ab: 1, mat: 1, "a.": 1 };
+function lmShortName(s) {
+  const w = cleanName(s).split(" ").filter(Boolean);
+  const pk = w.find((x) => !NM_SKIP[x.toLowerCase()]) || w[0] || "";
+  return pk.slice(0, 12) || "Pelajar";
+}
+function lmMyName() { return LM.roomKind === "open" ? lmShortName(P.nama) : (cleanName(P.nama) || "Pelajar"); }
+
+/* ---------- chat teks bertapis ---------- */
+const lmNormW = (w) => String(w).toLowerCase().replace(/[0@4]/g, (c) => (c === "0" ? "o" : "a")).replace(/[1!|]/g, "i").replace(/3/g, "e").replace(/[5$]/g, "s").replace(/7/g, "t").replace(/[^a-z]/g, "").replace(/(.)\1+/g, "$1");
+const CHAT_BAD = ["bodoh", "bodo", "bangang", "bongok", "bengap", "babi", "sial", "celaka", "keparat", "puki", "pukimak", "kimak", "pantat", "butoh", "konek", "lancau", "pundek", "jubur", "lahanat", "sundal", "pelacur", "bapuk", "pondan", "tolol", "goblok", "anjing", "haramjadah", "bangsat", "mampus", "palat", "pepek", "cibai", "kanina", "lanjiao", "fuck", "fck", "fuk", "shit", "bitch", "dick", "pussy", "asshole", "bastard", "porn", "sex", "seks", "nigga", "nigger", "stupid", "idiot", "kys", "gay"].map(lmNormW);
+const CHAT_PRE = CHAT_BAD.filter((w) => w.length >= 5 && w !== "konek");
+const CHAT_HIDDEN = ["pukimak", "haramjadah", "pelacur", "lahanat", "keparat", "pundek", "bangang", "asshole", "bastard", "lanjiao", "kanina"].map(lmNormW); /* dikesan walaupun dijarakkan */
+function lmBadWord(w) { const n = lmNormW(w); return !!n && (CHAT_BAD.indexOf(n) >= 0 || CHAT_PRE.some((b) => n.startsWith(b))); }
+function lmChatFilter(s) {
+  /* huruf dijarakkan ("b o d o h") digabung dahulu */
+  const flat = lmNormW(s.replace(/\b(\w)\s+(?=\w\b)/g, "$1"));
+  if (CHAT_HIDDEN.some((b) => flat.indexOf(b) >= 0)) return "***";
+  return s.replace(/\b(\w)(\s+\w\b)+/g, (m) => (lmBadWord(m.replace(/\s+/g, "")) ? "***" : m)).split(" ").map((w) => (lmBadWord(w) ? "*".repeat(Math.min(6, w.length)) : w)).join(" ");
+}
+function lmChatContact(s) { return /(https?:|www\.|\.com|\.my\b|\.net|@|wa\.me|t\.me|telegram|whatsapp|insta|tiktok)/i.test(s) || /\d{6,}/.test(s.replace(/[\s.\-+()]/g, "")); }
+function lmChatClean(raw) { return String(raw || "").replace(/[\u0000-\u001f<>]/g, "").replace(/\s+/g, " ").trim().slice(0, 80); }
+function lmChatAdd(name, text, cls) {
+  const lg = LM.ui.chatLog; if (!lg) return;
+  const d = el("div", { class: "ln" + (cls ? " " + cls : "") }); if (name) d.append(el("b", null, name + ": ")); d.append(text);
+  lg.appendChild(d); while (lg.children.length > 8) lg.firstChild.remove();
+  setTimeout(() => d.classList.add("old"), 30000);
+}
+function lmChatSend(raw) {
+  const g = LM.g; if (!g) return false;
+  let s = lmChatClean(raw); if (!s) return false;
+  if (!LM.room) { lmChatAdd("", "Chat hanya tersedia apabila bermain bersama (Dunia Terbuka atau bilik).", "sys"); return false; }
+  const now = Date.now(); if (now - (LM.chatAt || 0) < 3000) { lmChatAdd("", "Tunggu 3 saat sebelum menghantar mesej lagi.", "sys"); return false; }
+  if (lmChatContact(s)) { lmChatAdd("", "Pautan, e-mel, media sosial dan nombor telefon tidak dibenarkan.", "sys"); return false; }
+  s = lmChatFilter(s); LM.chatAt = now; LM.cn = (LM.cn | 0) + 1;
+  lmBubble(g.me, s); g.me.bubT = 5; lmChatAdd(lmMyName(), s, "me");
+  try { const x = LM.room.presence({ ct: s, cn: LM.cn }); if (x && x.catch) x.catch(() => {}); } catch (e) { /* abaikan */ }
+  return true;
+}
+function lmChatGot(e, raw) {
+  const s = lmChatClean(raw); if (!s || lmChatContact(s) || lmMuted(e.id)) return;
+  const t = lmChatFilter(s); e.last = t; lmBubble(e.av, t); e.av.bubT = 5; lmChatAdd(e.n, t);
+}
+/* senyap dan lapor (disimpan ikut uid peranti) */
+const lmUidOf = (peer) => String(peer || "").split("_")[0];
+function lmMutes() { if (!LM.mutes) { try { LM.mutes = JSON.parse(localStorage.getItem("gt-lm-mute") || "{}") || {}; } catch (e) { LM.mutes = {}; } } return LM.mutes; }
+function lmMuted(peer) { return !!lmMutes()[lmUidOf(peer)]; }
+function lmMuteSet(peer, on) {
+  const m = lmMutes(), u = lmUidOf(peer); if (on) m[u] = 1; else delete m[u];
+  try { localStorage.setItem("gt-lm-mute", JSON.stringify(m)); } catch (e) { /* abaikan */ }
+  const e = LM.peers[peer]; if (on && e && e.av.bub) lmBubble(e.av, "");
+}
+function lmReport(peer) {
+  const e = LM.peers[peer]; if (!e) return;
+  LM.rep = LM.rep || {}; if (LM.rep[lmUidOf(peer)]) { toast("Pemain ini sudah dilaporkan.", "warn"); return; }
+  LM.rep[lmUidOf(peer)] = 1; lmMuteSet(peer, true);
+  if (FB.url) FB.req("POST", "lmlapor", { u: lmUidOf(peer), n: String(e.n).slice(0, 16), m: String(e.last || "").slice(0, 80), r: String((LM.roomKind === "open" ? "o-" : "") + (LM.roomCode || "")).slice(0, 24), by: FB.getUid(), t: { ".sv": "timestamp" } }).catch(() => {});
+  toast("Laporan dihantar kepada pentadbir. Pemain ini disenyapkan untuk anda.", "ok");
+}
+
+/* ---------- suara tekan-untuk-cakap (WebRTC, hanya bilik sekolah/kod rakan) ----------
+   Isyarat SDP lengkap (tanpa trickle) dihantar melalui medan kehadiran "vs"; peserta dengan id lebih kecil
+   memulakan tawaran. Maksimum VC_MAX rakan terdekat dalam jarak VC_R. Tanpa pelayan TURN, sesetengah
+   rangkaian (data mudah alih/CGNAT, tembok api sekolah) mungkin tidak dapat bersambung. */
+const ICE = [{ urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302"] }];
+const VC_R = 70, VC_MAX = 5;
+function lmVoiceOk() { return !!LM.room && (LM.roomKind === "rakan" || LM.roomKind === "sekolah") && typeof RTCPeerConnection !== "undefined"; }
+async function lmVoiceOn() {
+  if (!lmVoiceOk()) { toast("Suara hanya untuk bilik sekolah atau bilik kod rakan.", "warn"); return; }
+  if (LM.vc) return;
+  const v = LM.vc = { stream: null, pcs: {}, sig: {}, tk: false, retry: {}, busy: false };
+  lmVoiceUi();
+  try {
+    v.stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+    v.stream.getAudioTracks().forEach((t) => (t.enabled = false));
+  } catch (e) { v.stream = null; toast("Mikrofon tidak dibenarkan. Anda masih boleh mendengar rakan.", "warn"); }
+  if (LM.vc !== v) { if (v.stream) v.stream.getTracks().forEach((t) => t.stop()); return; }
+  try { LM.room.presence({ vo: 1, tk: 0 }); } catch (e) { /* abaikan */ }
+  lmVoiceUi();
+}
+function lmVoiceOff() {
+  const v = LM.vc; LM.vc = null; if (!v) return;
+  for (const id in v.pcs) lmPcClose(v, id);
+  if (v.stream) v.stream.getTracks().forEach((t) => t.stop());
+  if (LM.room) { try { LM.room.presence({ vo: null, tk: null, vs: null }); } catch (e) { /* abaikan */ } }
+  lmVoiceUi();
+}
+function lmVoiceUi() {
+  const ui = LM.ui; if (!ui.vcB) return;
+  ui.vcB.hidden = !lmVoiceOk(); ui.vcB.textContent = LM.vc ? "🎙 Suara: buka" : "🎙 Suara: tutup";
+  ui.ptt.hidden = !LM.vc; ui.ptt.classList.toggle("ok", !!(LM.vc && LM.vc.tk));
+}
+function lmPcClose(v, id) {
+  const c = v.pcs[id]; if (!c) return; delete v.pcs[id];
+  try { c.pc.close(); } catch (e) { /* abaikan */ }
+  if (c.au) { try { c.au.pause(); } catch (e) { /* abaikan */ } c.au.srcObject = null; }
+  if (v.sig[id]) { delete v.sig[id]; v.dirty = true; }
+}
+function lmTalk(on) {
+  const v = LM.vc; if (!v) return;
+  if (!v.stream) { if (on) lmChatAdd("", "Mikrofon tidak tersedia: anda hanya boleh mendengar.", "sys"); return; }
+  if (v.tk === on) return;
+  v.tk = on; v.stream.getAudioTracks().forEach((t) => (t.enabled = on));
+  if (LM.room) { try { LM.room.presence({ tk: on ? 1 : 0 }); } catch (e) { /* abaikan */ } }
+  lmVoiceUi();
+}
+function lmGather(pc) {
+  return new Promise((res) => {
+    if (pc.iceGatheringState === "complete") { res(); return; }
+    const t = setTimeout(res, 2500);
+    pc.addEventListener("icegatheringstatechange", () => { if (pc.iceGatheringState === "complete") { clearTimeout(t); res(); } });
+  });
+}
+function lmPcNew(v, id) {
+  const pc = new RTCPeerConnection({ iceServers: ICE });
+  const c = { pc: pc, s: "", at: performance.now(), au: null, ok: false, rs: false };
+  if (v.stream) v.stream.getAudioTracks().forEach((t) => pc.addTrack(t, v.stream)); else pc.addTransceiver("audio", { direction: "recvonly" });
+  pc.ontrack = (ev) => {
+    if (!c.au) { c.au = new Audio(); c.au.autoplay = true; }
+    c.au.srcObject = ev.streams[0] || new MediaStream([ev.track]);
+    const p = c.au.play(); if (p && p.catch) p.catch(() => {});
+  };
+  pc.onconnectionstatechange = () => { if (pc.connectionState === "connected") c.ok = true; };
+  v.pcs[id] = c; return c;
+}
+async function lmVoiceTick(g) {
+  const v = LM.vc, me = LM.myPeer; if (!v || v.busy || !me) return;
+  if (!lmVoiceOk()) { lmVoiceOff(); return; }
+  const now = performance.now(), want = {};
+  Object.keys(LM.peers).map((id) => ({ id: id, e: LM.peers[id], d: Math.hypot(LM.peers[id].x - g.p.x, LM.peers[id].z - g.p.z) }))
+    .filter((o) => o.e.vo && o.d < VC_R && !lmMuted(o.id)).sort((a, b) => a.d - b.d).slice(0, VC_MAX).forEach((o) => (want[o.id] = o));
+  for (const id in v.pcs) if (!want[id]) lmPcClose(v, id);
+  v.busy = true;
+  try {
+    for (const id in want) {
+      const e = want[id].e, their = e.vs && typeof e.vs === "object" ? e.vs[me] : null; let c = v.pcs[id];
+      if (c && (c.pc.connectionState === "failed" || (!c.ok && now - c.at > 20000))) { lmPcClose(v, id); v.retry[id] = now + 10000; c = null; }
+      if (me < id) { /* pemula */
+        if (!c) {
+          if (now < (v.retry[id] || 0)) continue;
+          c = lmPcNew(v, id); c.s = Math.random().toString(36).slice(2, 8);
+          await c.pc.setLocalDescription(await c.pc.createOffer()); await lmGather(c.pc);
+          if (v.pcs[id] !== c || LM.vc !== v) continue;
+          v.sig[id] = { s: c.s, o: c.pc.localDescription.sdp }; v.dirty = true;
+        } else if (!c.rs && their && their.s === c.s && typeof their.a === "string") { c.rs = true; await c.pc.setRemoteDescription({ type: "answer", sdp: their.a }); }
+      } else if (their && typeof their.o === "string" && (!c || c.s !== their.s)) { /* penjawab */
+        if (c) lmPcClose(v, id);
+        c = lmPcNew(v, id); c.s = String(their.s || ""); c.rs = true;
+        await c.pc.setRemoteDescription({ type: "offer", sdp: their.o }); await c.pc.setLocalDescription(await c.pc.createAnswer()); await lmGather(c.pc);
+        if (v.pcs[id] !== c || LM.vc !== v) continue;
+        v.sig[id] = { s: c.s, a: c.pc.localDescription.sdp }; v.dirty = true;
+      }
+      c = v.pcs[id]; if (c && c.au) c.au.volume = clamp(1.15 - want[id].d / VC_R, 0.15, 1);
+    }
+  } catch (err) { /* sambungan gagal: dicuba semula selepas tamat masa */ }
+  v.busy = false;
+  if (v.dirty && LM.vc === v && LM.room) { v.dirty = false; try { LM.room.presence({ vs: Object.keys(v.sig).length ? Object.assign({}, v.sig) : null }); } catch (e) { /* abaikan */ } }
 }
 
 /* ---------- Papan Kenangan dalam talian (nod Firebase "ziarah/<tempat>/<uid>") ---------- */
@@ -1415,6 +1643,20 @@ const LM_CSS = `
 #lmOv .lm-toast{position:absolute;left:50%;top:22%;transform:translateX(-50%);font:900 22px Fredoka,Nunito,sans-serif;color:#ffd45a;text-shadow:0 2px 0 #6b4a00,0 4px 18px rgba(0,0,0,.6);pointer-events:none;animation:lmUp 1.6s ease-out forwards;z-index:2;white-space:nowrap}
 @keyframes lmUp{0%{opacity:0;transform:translate(-50%,10px) scale(.8)}15%{opacity:1;transform:translate(-50%,0) scale(1.1)}100%{opacity:0;transform:translate(-50%,-40px)}}
 #lmOv.touch .lm-emo{display:none}
+#lmOv .lm-chat{position:absolute;left:max(10px,env(safe-area-inset-left));bottom:calc(76px + env(safe-area-inset-bottom));width:min(340px,46vw);display:flex;flex-direction:column;gap:4px;z-index:1}
+#lmOv .lm-chat[hidden]{display:none}
+#lmOv .lm-chat .log{display:flex;flex-direction:column;gap:3px;pointer-events:none}
+#lmOv .lm-chat .ln{background:rgba(8,24,40,.72);border-radius:10px;padding:4px 9px;font:700 13px/1.35 Nunito,sans-serif;overflow-wrap:anywhere;transition:opacity .6s}
+#lmOv .lm-chat .ln b{color:#ffd45a}#lmOv .lm-chat .ln.me b{color:#6fe0a6}#lmOv .lm-chat .ln.sys{color:#ffc2a8;font-style:italic}
+#lmOv .lm-chat .ln.old{opacity:0}#lmOv .lm-chat.open .ln.old{opacity:.85}
+#lmOv .lm-chat form{display:flex;gap:6px}
+#lmOv .lm-chat input{flex:1;min-width:0;font:700 14px Nunito,sans-serif;padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.3);background:rgba(8,24,40,.82);color:#fff}
+#lmOv .lm-chat button{padding:6px 10px}
+#lmOv.touch .lm-chat{left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom));width:min(340px,44vw)}
+#lmOv .lm-ptt{position:absolute;right:calc(16px + env(safe-area-inset-right));bottom:calc(16px + env(safe-area-inset-bottom));padding:12px 16px;border-radius:16px;font-size:15px}
+#lmOv.touch .lm-ptt{bottom:calc(112px + env(safe-area-inset-bottom));border-radius:50%;width:72px;height:72px;padding:0;font-size:12px}
+#lmOv .lm-ptt.ok{background:#d6453d;border-color:#ffb4ad}
+#lmOv .lm-pl{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}#lmOv .lm-pl button{font-size:12px;padding:4px 8px}
 @media (max-height:500px){#lmOv .lm-top{flex-direction:row;flex-wrap:wrap;justify-content:flex-end;max-width:62vw;top:calc(max(10px,env(safe-area-inset-top)) + 84px)}#lmOv .lm-top button{padding:6px 9px;font-size:12px}#lmOv .lm-mm{width:150px;height:76px}#lmOv .lm-quest{font-size:12px;max-width:220px}}
 @media (max-width:640px){#lmOv .lm-mm{width:140px;height:72px}#lmOv .lm-top{top:calc(max(10px,env(safe-area-inset-top)) + 80px)}#lmOv .lm-hud{max-width:calc(100% - 160px)}#lmOv .lm-emo{display:none}#lmOv .lm-quest{display:none}}
 @media (prefers-reduced-motion:reduce){#lmOv .lm-prompt,#lmOv .lm-box,#lmOv .lm-toast{animation:none}}
@@ -1429,6 +1671,7 @@ function lmRoot() {
 function lmCard(build, cls) {
   lmCardClose();
   const g = LM.g; if (g) { g.ui = true; for (const k in LM.keys) LM.keys[k] = false; }
+  if (LM.vc) lmTalk(false);
   const c = el("div", { class: "lm-card" + (cls ? " " + cls : "") }), b = el("div", { class: "lm-box" });
   c.appendChild(b); LM.root.appendChild(c); LM.ui.card = c; build(b);
   const f = b.querySelector("button.pri, button"); if (f && !TOUCH) f.focus();
@@ -1453,8 +1696,10 @@ function lmSetup() {
   b.append(el("div", { class: "lm-kick" }, "Dunia maya · " + SUBJS[SUBJ].nama), el("h2", null, "META GEMPUR"));
   b.append(el("p", null, "Jelajah peta Malaysia 3D bersama rakan. Kesemua " + nT + " tajuk " + SUBJS[SUBJ].subjek + " menjadi Menara Ilmu di negeri masing-masing, sama seperti peta operasi. Tawan setiap menara, ziarahi tempat pelancongan dan gantung nama anda pada Papan Kenangan. Tukar subjek di halaman utama untuk menjelajah tajuk subjek lain."));
   b.append(el("p", { class: "lm-ex" }, (ng ? "Anda bermula di " + ng.pendek + " (" + (t.kod || t.id) + " " + t.nama + ", menara seterusnya yang belum ditawan). " : "") + "Kawalan: W A S D atau anak panah untuk bergerak, Shift lari, Space lompat, E berinteraksi, M peta, P pasport, T senarai tajuk, seret tetikus untuk pusing kamera. Di telefon: kayu bedik kiri dan butang kanan."));
-  const solo = lmBtn("Main solo", "pri", () => lmStart(""));
-  const row = el("div", { class: "lm-row" }, solo);
+  const solo = lmBtn("Main solo", Net.room ? "" : "pri", () => lmStart(""));
+  const row = el("div", { class: "lm-row" });
+  if (Net.room) row.append(lmBtn("🌏 Masuk Dunia Terbuka", "pri", () => lmStart("", "open")));
+  row.append(solo);
   if (Net.room) {
     const sid = typeof mySid === "function" ? mySid() : "";
     row.append(lmBtn("Cipta bilik rakan", "", () => lmStart(lmCode(), "rakan")));
@@ -1463,6 +1708,7 @@ function lmSetup() {
     const join = lmBtn("Masuk kod", "", () => { const v = String(inp.value || "").toUpperCase().replace(/[^A-Z0-9]/g, ""); if (v.length < 4) { toast("Masukkan kod bilik 4 hingga 6 aksara.", "warn"); return; } lmStart(v, "rakan"); });
     inp.addEventListener("keydown", (e) => { e.stopPropagation(); if (e.key === "Enter") join.click(); });
     b.append(row, el("div", { class: "lm-row" }, inp, join));
+    b.append(el("p", { class: "lm-ex" }, "🌏 Dunia Terbuka: murid dari seluruh Malaysia boleh terus masuk dan berbual melalui chat. Hanya nama pertama dipaparkan. Kata kesat ditapis; pautan dan nombor telefon disekat. Tekan Bilik untuk senyapkan atau laporkan pemain. Mic (tekan-untuk-cakap) hanya ada dalam bilik sekolah dan bilik kod rakan."));
   } else {
     b.append(row, el("p", { class: "lm-ex" }, "Main bersama rakan memerlukan sambungan pelayan Firebase (versi GitHub Pages). Mod solo tetap boleh dimainkan."));
   }
@@ -1737,13 +1983,20 @@ function lmSelfie(pl) {
 /* senarai pemain dalam bilik */
 function lmRoomPanel() {
   lmCard((b) => {
-    b.append(el("div", { class: "lm-kick" }, "Bilik bersama"), el("h2", null, LM.room ? (LM.roomKind === "sekolah" ? "Bilik sekolah" : "Kod bilik: " + LM.roomCode) : "Main solo"));
-    if (LM.room && LM.roomKind !== "sekolah") b.append(el("p", null, "Kongsi kod " + LM.roomCode + " dengan rakan. Mereka pilih Dunia Gempur, tekan Masuk kod dan taip kod ini."));
+    const op = LM.roomKind === "open";
+    b.append(el("div", { class: "lm-kick" }, op ? "Dunia Terbuka" : "Bilik bersama"), el("h2", null, op ? "Zon " + (ZONES[LM.zone] || "") + (LM.room ? " · saluran " + String(LM.roomCode).split("-")[1] : "") : LM.room ? (LM.roomKind === "sekolah" ? "Bilik sekolah" : "Kod bilik: " + LM.roomCode) : "Main solo"));
+    if (op) b.append(el("p", null, LM.room ? "Anda melihat pemain dalam zon yang sama (maksimum " + LMO.CH + " sesaluran). Saluran bertukar sendiri apabila anda bergerak ke zon lain." : LM.openFull ? "Dunia Terbuka penuh (" + LMO.MAX + " pemain serentak). Anda bermain solo dan akan dimasukkan semula secara automatik apabila ada tempat." : "Menyambung ke Dunia Terbuka..."),
+      el("p", { class: "lm-ex" }, "Jaga adab: kata kesat ditapis, pautan dan nombor telefon disekat. Tekan Senyap atau Lapor pada pemain yang mengganggu. Mic hanya ada dalam bilik sekolah atau bilik kod rakan."));
+    if (LM.room && LM.roomKind === "rakan") b.append(el("p", null, "Kongsi kod " + LM.roomCode + " dengan rakan. Mereka pilih Dunia Gempur, tekan Masuk kod dan taip kod ini."));
     const list = el("div", { class: "lm-grid" });
     list.appendChild(el("div", { class: "lm-stamp on" }, el("b", null, (cleanName(P.nama) || "Saya") + " (anda)"), el("div", null, lmStamps() + " cop pasport")));
-    Object.keys(LM.peers).forEach((id) => { const e = LM.peers[id]; list.appendChild(el("div", { class: "lm-stamp" }, el("b", null, e.n), el("div", null, (e.st | 0) + " cop pasport"))); });
+    Object.keys(LM.peers).forEach((id) => {
+      const e = LM.peers[id], mu = lmMuted(id);
+      const mb = lmBtn(mu ? "Nyahsenyap" : "Senyap", "", () => { lmMuteSet(id, !mu); lmRoomPanel(); });
+      list.appendChild(el("div", { class: "lm-stamp" }, el("b", null, e.n + (e.vo ? " 🎙" : "") + (mu ? " 🔇" : "")), el("div", null, (e.st | 0) + " cop pasport"), el("div", { class: "lm-pl" }, mb, lmBtn("Lapor", "", () => { if (confirm("Laporkan " + e.n + " kerana mengganggu?")) { lmReport(id); lmRoomPanel(); } }))));
+    });
     b.appendChild(list);
-    if (!LM.room) b.append(el("p", { class: "lm-ex" }, "Untuk main bersama, keluar ke skrin mula dan pilih Cipta bilik rakan atau Masuk kod."));
+    if (!LM.room && !op) b.append(el("p", { class: "lm-ex" }, "Untuk main bersama, keluar ke skrin mula dan pilih Dunia Terbuka, Cipta bilik rakan atau Masuk kod."));
     b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose)));
   });
 }
@@ -1904,7 +2157,22 @@ function lmHud() {
   top.append(lmBtn("Pasport (P)", "", () => lmPassport()), lmBtn("Tajuk (T)", "", () => lmPassport("tajuk")), ui.skyB, lmBtn("Bilik", "", lmRoomPanel), lmBtn("Swafoto", "", () => lmSelfie(null)),
     ui.snd = lmBtn(LM.mute ? "Bunyi: tutup" : "Bunyi: buka", "", () => { LM.mute = !LM.mute; ui.snd.textContent = LM.mute ? "Bunyi: tutup" : "Bunyi: buka"; }),
     lmBtn("Keluar", "", () => { if (confirm("Keluar dari META GEMPUR? Cop pasport dan menara yang ditawan sudah disimpan.")) lmClose(); }));
+  ui.vcB = lmBtn("🎙 Suara: tutup", "", () => { if (LM.vc) lmVoiceOff(); else lmVoiceOn(); }); ui.vcB.hidden = true; top.insertBefore(ui.vcB, top.children[4]);
   r.appendChild(top);
+  ui.ptt = el("button", { type: "button", class: "lm-ptt", hidden: "" }, TOUCH ? "Tekan & cakap" : "Tahan V untuk cakap");
+  const pt = (on) => (ev) => { ev.preventDefault(); lmTalk(on); };
+  ui.ptt.addEventListener("pointerdown", pt(true)); ["pointerup", "pointerleave", "pointercancel"].forEach((k) => ui.ptt.addEventListener(k, pt(false)));
+  ui.ptt.addEventListener("contextmenu", (ev) => ev.preventDefault());
+  r.appendChild(ui.ptt);
+  ui.chat = el("div", { class: "lm-chat", hidden: "" }); ui.chatLog = el("div", { class: "log", "aria-live": "polite" });
+  ui.chatIn = el("input", { maxlength: "80", placeholder: TOUCH ? "Tulis mesej..." : "Tekan C untuk chat", "aria-label": "Mesej chat", autocomplete: "off", enterkeyhint: "send" });
+  const cf = el("form", null, ui.chatIn, el("button", { type: "submit" }, "Hantar"));
+  cf.addEventListener("submit", (ev) => { ev.preventDefault(); if (lmChatSend(ui.chatIn.value)) ui.chatIn.value = ""; if (!TOUCH) ui.chatIn.blur(); });
+  ui.chatIn.addEventListener("focus", () => { for (const k in LM.keys) LM.keys[k] = false; ui.chat.classList.add("open"); });
+  ui.chatIn.addEventListener("blur", () => ui.chat.classList.remove("open"));
+  ui.chatIn.addEventListener("keydown", (ev) => { ev.stopPropagation(); if (ev.key === "Escape") ui.chatIn.blur(); });
+  ui.chatIn.addEventListener("keyup", (ev) => ev.stopPropagation());
+  ui.chat.append(ui.chatLog, cf); r.appendChild(ui.chat);
   ui.prompt = el("button", { type: "button", class: "pri lm-prompt", hidden: "" }); ui.prompt.addEventListener("click", lmInteract); r.appendChild(ui.prompt);
   const emo = el("div", { class: "lm-emo" });
   Object.keys(EMOTE).forEach((k, i) => emo.appendChild(lmBtn((i + 1) + " " + EMOTE[k], "", () => lmEmote(k))));
@@ -1923,7 +2191,9 @@ function lmHudTick(g) {
   if (DATA.negeri[k] || ISL_BY[k]) g.lastK = k;
   ui.coin.innerHTML = ""; ui.coin.append("🪙 ", el("b", null, String(P.coin | 0)));
   ui.stamp.textContent = "📘 Cop " + s.pl + "/" + s.plN; ui.tw.textContent = "🏰 Menara " + s.tw + "/" + s.twN;
-  const np = Object.keys(LM.peers).length; ui.peers.hidden = !LM.room; ui.peers.textContent = "👥 " + (np + 1) + (LM.roomKind === "sekolah" ? " · sekolah" : LM.roomCode ? " · " + LM.roomCode : "");
+  const np = Object.keys(LM.peers).length, op = LM.roomKind === "open"; ui.peers.hidden = !LM.room && !op;
+  ui.peers.textContent = op ? (LM.room ? "🌏 " + (np + 1) + " · " + (ZONES[LM.zone] || "") : LM.openFull ? "🌏 Penuh · main solo" : "🌏 Menyambung...") : "👥 " + (np + 1) + (LM.roomKind === "sekolah" ? " · sekolah" : LM.roomCode ? " · " + LM.roomCode : "");
+  ui.chat.hidden = !LM.room; if (!ui.vcB.hidden !== lmVoiceOk()) lmVoiceUi();
   if (g.wp) { ui.wp.hidden = false; const d = Math.round(Math.hypot(g.wp.x - g.p.x, g.wp.z - g.p.z)); ui.wp.textContent = "📍 " + g.wp.n + " · " + d + " m"; if (d < 12) { g.wp = null; lmWpSet(); } }
   else ui.wp.hidden = true;
 }
@@ -1956,8 +2226,10 @@ function lmKey(e) {
   if (dn && k === "escape") { e.preventDefault(); if (LM.ui.big) lmBigMap(); else if (LM.ui.card) lmCardClose(); else if (confirm("Keluar dari META GEMPUR?")) lmClose(); return; }
   if (g.ui) return;
   if ([" ", "arrowup", "arrowdown", "arrowleft", "arrowright"].indexOf(k) >= 0) e.preventDefault();
+  if (k === "v") { lmTalk(dn); return; }
   LM.keys[k] = dn;
   if (!dn) return;
+  if (k === "c" && LM.ui.chatIn && !LM.ui.chat.hidden) { e.preventDefault(); LM.keys[k] = false; LM.ui.chatIn.focus(); return; }
   if (k === "e" || k === "enter") lmInteract();
   else if (k === "m") lmBigMap();
   else if (k === "p") lmPassport("tempat");
@@ -2045,7 +2317,7 @@ function lmOpen(tid) {
   lmSetup();
 }
 function lmStart(code, kind) {
-  const r = LM.root;
+  const r = LM.root; LM.roomKind = kind || ""; LM.roomCode = ""; LM.openFull = false; LM.openRetry = 0; LM.zone = "";
   lmCardClose(); r.textContent = "";
   const ld = el("div", { class: "lm-card" }, el("div", { class: "lm-box" }, el("div", { class: "lm-kick" }, "META GEMPUR"), el("h2", null, "Membina peta Malaysia..."), el("p", null, "Menyusun negeri, menara ilmu dan tempat pelancongan.")));
   r.appendChild(ld);
@@ -2056,12 +2328,13 @@ function lmStart(code, kind) {
     LM.on = true; g.last = 0;
     window.addEventListener("keydown", lmKey, true); window.addEventListener("keyup", lmKey, true); window.addEventListener("resize", lmResize);
     LM.raf = requestAnimationFrame(lmLoop);
-    if (code) { const ok = await lmNetJoin(code, kind); if (ok) lmPop(kind === "sekolah" ? "Masuk bilik sekolah" : "Bilik " + code); }
+    if (kind === "open") { LM.zone = lmZone(lmAt(g.p.x, g.p.z)) || "tengah"; lmOpenJoin(LM.zone).then((ok) => { if (ok) lmPop("Masuk Dunia Terbuka · " + ZONES[LM.zone]); else if (LM.openFull) toast("Dunia Terbuka sedang penuh. Anda bermain solo dahulu; sistem akan cuba masuk semula setiap minit.", "warn"); }); }
+    else if (code) { const ok = await lmNetJoin(code, kind); if (ok) lmPop(kind === "sekolah" ? "Masuk bilik sekolah" : "Bilik " + code); }
     lmPop("Selamat datang ke Malaysia!");
   }, 30);
 }
 function lmClose() {
-  LM.on = false; cancelAnimationFrame(LM.raf); lmNetLeave(); lmEngine(0);
+  LM.on = false; cancelAnimationFrame(LM.raf); lmoStop(); lmNetLeave(); lmEngine(0); LM.roomKind = "";
   window.removeEventListener("keydown", lmKey, true); window.removeEventListener("keyup", lmKey, true); window.removeEventListener("resize", lmResize);
   const g = LM.g;
   if (g) {
