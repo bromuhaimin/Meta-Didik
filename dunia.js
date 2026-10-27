@@ -482,7 +482,7 @@ function lmModel(type, rnd) {
       g.add(lmMesh(lmBox(6, 1.6, 2), "#9aa6b2", 0, 24, 0)); r = 10; break;
     case "gunung": /* gunung kini puncak rupa bumi yang boleh didaki; di puncak ada tugu dan bendera */
       g.add(lmMesh(new T.DodecahedronGeometry(1.6, 0), "#8d8576", 0, 0.8, 0)); g.add(lmMesh(new T.DodecahedronGeometry(1.1, 0), "#9a9283", 0.9, 1.9, 0.3));
-      g.add(lmMesh(lmCyl(0.1, 0.1, 6, 6), "#d9d9d9", 0, 3.5, 0)); g.add(lmMesh(lmBox(2.6, 1.6, 0.1), "#d63b3b", 1.3, 5.6, 0)); g.add(lmMesh(lmBox(2.6, 0.8, 0.11), "#f4f4f4", 1.3, 5.2, 0)); r = 0; break;
+      g.add(lmMesh(lmCyl(0.1, 0.1, 6, 6), "#d9d9d9", 0, 3.5, 0)); { const jg = new T.Mesh(GEO.pflag || (GEO.pflag = new T.PlaneGeometry(2.8, 1.4)), new T.MeshBasicMaterial({ map: lmFlagTex(), side: T.DoubleSide })); jg.position.set(1.45, 5.7, 0); g.add(jg); } r = 0; break; /* Jalur Gemilang */
     case "bukit": /* bukit rupa bumi; pondok rehat di puncak */
       g.add(lmMesh(lmBox(4, 3, 4), "#c96f4a", 0, 1.5, 0)); g.add(lmMesh(new T.ConeGeometry(3.4, 2.4, 4), "#7a3a2a", 0, 4.2, 0)); r = 3; break;
     case "gua":
