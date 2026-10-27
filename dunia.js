@@ -22,9 +22,9 @@ const PLACES = [
   ["kd-jerai", "kedah", "Gunung Jerai", "gunung", 81.8, 101.7, "Gunung Jerai (1,217 m) menjadi panduan pelayar sejak zaman dahulu dan terletak berhampiran tapak arkeologi Lembah Bujang."],
   ["kd-bujang", "kedah", "Lembah Bujang", "candi", 81.9, 108.7, "Lembah Bujang ialah tapak arkeologi tertua di Asia Tenggara yang pernah menjadi pelabuhan perdagangan penting."],
   ["kd-zahir", "kedah", "Masjid Zahir", "masjid", 79, 90.7, "Masjid Zahir di Alor Setar dibina pada tahun 1912 dan antara masjid tercantik di Malaysia."],
+  ["pg-jambatan", "penang", "Jambatan Pulau Pinang", "jambatan", 83, 130.6, "Jambatan Pulau Pinang sepanjang 13.5 km menghubungkan pulau dengan Seberang Perai sejak 1985."],
   ["pg-kapitan", "penang", "Masjid Kapitan Keling", "masjid", 75.6, 120.0, "Masjid Kapitan Keling di George Town dibina pada abad ke-19 oleh komuniti Muslim India."],
   ["pg-bendera", "penang", "Bukit Bendera", "bukit", 72.6, 124.0, "Bukit Bendera (833 m) boleh dinaiki dengan kereta api funikular dan menawarkan pemandangan George Town."],
-  ["pg-jambatan", "penang", "Jambatan Pulau Pinang", "jambatan", 83, 130.6, "Jambatan Pulau Pinang sepanjang 13.5 km menghubungkan pulau dengan Seberang Perai sejak 1985."],
   ["pk-ubudiah", "perak", "Masjid Ubudiah", "masjid", 105.2, 148.5, "Masjid Ubudiah di Kuala Kangsar terkenal dengan kubah emasnya dan siap dibina pada tahun 1917."],
   ["pk-kellie", "perak", "Istana Kellie", "istana", 112.7, 161.9, "Istana Kellie di Batu Gajah ialah binaan lama yang tidak sempat disiapkan pada awal abad ke-20."],
   ["pk-condong", "perak", "Menara Condong Teluk Intan", "menara", 107.8, 180.9, "Menara Condong Teluk Intan dibina pada tahun 1885 sebagai menara jam dan tangki air."],
@@ -441,30 +441,43 @@ function lmCoinMesh() {
 }
 function lmBuildWorld(g) {
   const avoid = [];
-  /* Menara Ilmu: susun di sekitar pin negeri */
-  const byState = {};
-  DATA.topik.forEach((t) => { if (DATA.negeri[t.negeri]) (byState[t.negeri] || (byState[t.negeri] = [])).push(t); });
-  for (const k in byState) {
-    const pins = DATA.negeri[k].pins && DATA.negeri[k].pins.length ? DATA.negeri[k].pins : [[0, 0]];
-    byState[k].forEach((t, i) => {
-      const pn = pins[i % pins.length], j = Math.floor(i / pins.length), base = toW(k, pn[0], pn[1]);
+  /* Menara Ilmu: satu bagi setiap tajuk, pada titik yang sama seperti peta operasi (t.xy atau pin negeri) */
+  const used = [];
+  DATA.topik.forEach((t) => {
+    const k = t.negeri, n = DATA.negeri[k]; if (!n) return;
+    {
+      const pins = n.pins && n.pins.length ? n.pins : [[0, 0]], xy = t.xy || pins[(t.pin | 0) % pins.length] || pins[0], base = toW(k, xy[0], xy[1]);
       let x = base.x, z = base.z;
-      if (j > 0) {
-        for (let tr = 0; tr < 10; tr++) { const a = j * 2.4 + tr * 0.7, d = 9 + j * 3 + tr; const nx = base.x + Math.cos(a) * d, nz = base.z + Math.sin(a) * d; if (lmAt(nx, nz) === k) { x = nx; z = nz; break; } }
-      }
+      /* dua tajuk pada titik yang sama: anjak sedikit supaya tidak bertindih */
+      for (let tr = 0; tr < 14 && used.some((u) => Math.hypot(u.x - x, u.z - z) < 12); tr++) { const a = tr * 1.3, d = 12 + tr * 2; const nx = base.x + Math.cos(a) * d, nz = base.z + Math.sin(a) * d; if (lmAt(nx, nz) === k) { x = nx; z = nz; } }
+      used.push({ x: x, z: z });
       const tw = lmTower(t); tw.g.position.set(x, 0, z); g.scene.add(tw.g);
       const lb = lmLabel((t.kod || t.id) + " " + t.nama, { fs: 30, k: 0.03, bd: (TEMA[t.tema] && TEMA[t.tema].warna) || "#5ad1ff" }); lb.position.set(x, 14.5, z); g.scene.add(lb);
       const o = { kind: "tw", id: t.id, t: t, k: k, x: x, z: z, r: 2.4, ir: 7, m: tw, lb: lb };
       g.items.push(o); g.cols.push({ x: x, z: z, r: 2.4, h: 13 }); avoid.push({ x: x, z: z, r: 6 });
       lmTowerState(o);
-    });
-  }
+    }
+  });
   /* tempat pelancongan */
+  const placed = [];
   PLACES.forEach((p) => {
     const [id, k, nama, type, sx, sy, fakta] = p; if (!DATA.negeri[k]) return;
     let w = toW(k, sx, sy);
     if (id === "pg-jambatan" && RAST.bridge) { const b = RAST.bridge; w = toW(k, (b[0] + b[2]) / 2 + 2.2, (b[1] + b[3]) / 2 + 2.6); }
     const R = lmRand(id), md = lmModel(type, R), rot = R() * 6.28;
+    /* cari ruang lapang: jauh daripada Menara Ilmu (kedudukan ikut subjek) dan mercu tanda lain.
+       W.P. terletak di tengah Selangor, jadi mercu tanda KL boleh melimpah ke Selangor. */
+    if (id !== "pg-jambatan") {
+      const rr = Math.max(md.r, 6), okK = (q) => q === k || (k === "wp" && q === "selangor");
+      const free = (x, z) => okK(lmAt(x, z)) && lmLandW(x + rr, z) && lmLandW(x - rr, z) && lmLandW(x, z + rr) && lmLandW(x, z - rr)
+        && !used.some((u) => Math.hypot(u.x - x, u.z - z) < rr + 8) && !placed.some((u) => Math.hypot(u.x - x, u.z - z) < rr + u.r + 6);
+      if (!free(w.x, w.z)) {
+        let best = null;
+        for (let d = 4; d <= 120 && !best; d += 4) for (let i = 0; i < 16; i++) { const a = i * 0.3927 + d * 0.1, x = w.x + Math.cos(a) * d, z = w.z + Math.sin(a) * d; if (free(x, z)) { best = { x: x, z: z }; break; } }
+        if (best) w = best;
+      }
+    }
+    placed.push({ x: w.x, z: w.z, r: Math.max(md.r, 6) });
     md.g.position.set(w.x, 0, w.z); md.g.rotation.y = rot; g.scene.add(md.g);
     const pl = { kind: "pl", id: id, k: k, n: nama, type: type, fakta: fakta, x: w.x, z: w.z, r: md.r, ir: Math.max(md.r, 6) + 9, m: md.g, names: [] };
     /* papan kenangan di hadapan mercu tanda */
@@ -784,10 +797,10 @@ function lmSetup() {
   r.appendChild(el("div", { style: "position:absolute;inset:0;background:radial-gradient(900px 520px at 20% 0%,#2f8fd055,transparent),radial-gradient(800px 500px at 90% 100%,#3aa66a44,transparent),#0b2a44" }));
   const c = el("div", { class: "lm-card", style: "background:none" }), b = el("div", { class: "lm-box", style: "width:min(720px,100%)" });
   c.appendChild(b); r.appendChild(c);
-  const t = TOPIK[LM.tid], ng = t && DATA.negeri[t.negeri];
-  b.append(el("div", { class: "lm-kick" }, "Dunia Gempur · " + SUBJS[SUBJ].nama), el("h2", null, "Dunia Gempur Malaysia"));
-  b.append(el("p", null, "Jelajah peta Malaysia 3D bersama rakan. Pergi ke setiap negeri, jawab kuiz di Menara Ilmu mengikut tajuk negeri itu, ziarahi tempat pelancongan dan gantung nama anda pada Papan Kenangan."));
-  b.append(el("p", { class: "lm-ex" }, (ng ? "Anda bermula di " + ng.pendek + (t ? " (" + (t.kod || t.id) + " " + t.nama + ")" : "") + ". " : "") + "Kawalan: W A S D atau anak panah untuk bergerak, Shift lari, Space lompat, E berinteraksi, M peta, P pasport, seret tetikus untuk pusing kamera. Di telefon: kayu bedik kiri dan butang kanan."));
+  const t = lmNextTopic(), ng = t && DATA.negeri[t.negeri], nT = DATA.topik.filter((x) => DATA.negeri[x.negeri]).length;
+  b.append(el("div", { class: "lm-kick" }, "Dunia maya · " + SUBJS[SUBJ].nama), el("h2", null, "Dunia Gempur Malaysia"));
+  b.append(el("p", null, "Jelajah peta Malaysia 3D bersama rakan. Kesemua " + nT + " tajuk " + SUBJS[SUBJ].subjek + " menjadi Menara Ilmu di negeri masing-masing, sama seperti peta operasi. Tawan setiap menara, ziarahi tempat pelancongan dan gantung nama anda pada Papan Kenangan. Tukar subjek di halaman utama untuk menjelajah tajuk subjek lain."));
+  b.append(el("p", { class: "lm-ex" }, (ng ? "Anda bermula di " + ng.pendek + " (" + (t.kod || t.id) + " " + t.nama + ", menara seterusnya yang belum ditawan). " : "") + "Kawalan: W A S D atau anak panah untuk bergerak, Shift lari, Space lompat, E berinteraksi, M peta, P pasport, seret tetikus untuk pusing kamera. Di telefon: kayu bedik kiri dan butang kanan."));
   const solo = lmBtn("Main solo", "pri", () => lmStart(""));
   const row = el("div", { class: "lm-row" }, solo);
   if (Net.room) {
@@ -803,12 +816,16 @@ function lmSetup() {
   }
   const q = LM.st.gq;
   const gq = lmBtn("Grafik: " + (q ? "Tinggi" : "Jimat"), "", () => { LM.st.gq = LM.gq = q ? 0 : 1; lmSave(); lmSetup(); });
-  const klasik = lmBtn("Dunia Gempur klasik (Obby)", "", () => { const tid = LM.tid; lmClose(); dgOpen(tid); });
   const x = lmBtn("Tutup", "", lmClose);
-  b.append(el("div", { class: "lm-row" }, gq, klasik, x));
+  b.append(el("div", { class: "lm-row" }, gq, x));
   const st = lmSummary();
   b.append(el("p", { class: "lm-ex" }, "Pasport anda: " + st.pl + "/" + st.plN + " tempat diziarahi, " + st.tw + "/" + st.twN + " Menara Ilmu ditawan."));
   if (!TOUCH) solo.focus();
+}
+/* menara seterusnya: tajuk pertama (ikut susunan peta operasi) yang belum ditawan */
+function lmNextTopic() {
+  const ts = DATA.topik.filter((t) => DATA.negeri[t.negeri]);
+  return (LM.tid && TOPIK[LM.tid]) || ts.find((t) => (LM.st.tw[t.id] | 0) < 3) || ts[0] || null;
 }
 function lmCode() { const a = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let s = ""; for (let i = 0; i < 5; i++) s += a[Math.floor(Math.random() * a.length)]; return s; }
 function lmSummary() {
@@ -1113,7 +1130,7 @@ function lmBuildScene() {
   return g;
 }
 function lmSpawn(g) {
-  const tw = g.items.find((x) => x.kind === "tw" && x.id === LM.tid) || g.items.find((x) => x.kind === "ap" && x.id === "ap-klia") || g.items[0];
+  const nt = lmNextTopic(), tw = (nt && g.items.find((x) => x.kind === "tw" && x.id === nt.id)) || g.items.find((x) => x.kind === "ap" && x.id === "ap-klia") || g.items[0];
   const j = Math.random() * 6.2832;
   let x = tw.x + 10 + Math.cos(j) * 4, z = tw.z + 10 + Math.sin(j) * 4;
   for (let i = 0; i < 24 && !lmLandW(x, z); i++) { x = tw.x + Math.cos(i) * (6 + i); z = tw.z + Math.sin(i) * (6 + i); }
@@ -1261,7 +1278,7 @@ function lmLoop(ts) {
 }
 /* ---------- buka, mula, tutup ---------- */
 function lmOpen(tid) {
-  if (!T) { toast("Grafik 3D tidak tersedia pada peranti ini. Membuka Dunia Gempur klasik.", "warn"); dgOpen(tid); return; }
+  if (!T) { toast("Grafik 3D (WebGL) tidak tersedia pada peranti ini.", "warn"); return; }
   LM.tid = tid || ""; LM.on = false; lmLoad(); lmRaster();
   document.body.classList.add("ar-lock");
   lmSetup();
@@ -1273,7 +1290,7 @@ function lmStart(code, kind) {
   r.appendChild(ld);
   setTimeout(async () => {
     const g = lmBuildScene();
-    if (!g) { ld.remove(); toast("WebGL tidak dapat dimulakan. Membuka Dunia Gempur klasik.", "warn"); const tid = LM.tid; lmClose(); dgOpen(tid); return; }
+    if (!g) { ld.remove(); toast("Grafik 3D (WebGL) tidak dapat dimulakan pada peranti ini.", "warn"); lmClose(); return; }
     ld.remove(); LM.daily = lmDaily(); lmHud(); lmSpawn(g); lmPointers(LM.cv); lmWpSet();
     LM.on = true; g.last = 0;
     window.addEventListener("keydown", lmKey, true); window.addEventListener("keyup", lmKey, true); window.addEventListener("resize", lmResize);
