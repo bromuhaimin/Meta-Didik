@@ -1,8 +1,8 @@
 /* =====================================================================
-   LAGENDA MALAYSIA (v17.88): dunia terbuka gaya blok di atas peta Malaysia.
+   DUNIA GEMPUR MALAYSIA (v17.88): dunia terbuka gaya blok di atas peta Malaysia.
    Murid berjalan ke setiap negeri, menjawab kuiz di Menara Ilmu (ikut tajuk negeri itu),
    menziarahi tempat pelancongan, menggantung nama pada Papan Kenangan dan bermain bersama rakan.
-   Fail ini dimuat hanya apabila mod dibuka (lmOpen dalam index.html). Bergantung pada
+   Fail ini dimuat hanya apabila butang Dunia Gempur ditekan (lmOpen dalam index.html). Bergantung pada
    pemboleh ubah global index.html: THREE, DATA, TOPIK, BYTOPIK, QLIST, P, Net, SUBJ, SUBJS dan utiliti.
    ===================================================================== */
 (function () {
@@ -757,7 +757,7 @@ const LM_CSS = `
 function lmRoot() {
   if (!document.getElementById("lmCss")) { const s = document.createElement("style"); s.id = "lmCss"; s.textContent = LM_CSS; document.head.appendChild(s); }
   let r = document.getElementById("lmOv");
-  if (!r) { r = el("div", { id: "lmOv", role: "dialog", "aria-modal": "true", "aria-label": "Lagenda Malaysia" }); document.body.appendChild(r); }
+  if (!r) { r = el("div", { id: "lmOv", role: "dialog", "aria-modal": "true", "aria-label": "Dunia Gempur Malaysia" }); document.body.appendChild(r); }
   r.textContent = ""; r.hidden = false; r.classList.toggle("touch", !!TOUCH);
   LM.root = r; return r;
 }
@@ -785,7 +785,7 @@ function lmSetup() {
   const c = el("div", { class: "lm-card", style: "background:none" }), b = el("div", { class: "lm-box", style: "width:min(720px,100%)" });
   c.appendChild(b); r.appendChild(c);
   const t = TOPIK[LM.tid], ng = t && DATA.negeri[t.negeri];
-  b.append(el("div", { class: "lm-kick" }, "Misi Lagenda · " + SUBJS[SUBJ].nama), el("h2", null, "Lagenda Malaysia"));
+  b.append(el("div", { class: "lm-kick" }, "Dunia Gempur · " + SUBJS[SUBJ].nama), el("h2", null, "Dunia Gempur Malaysia"));
   b.append(el("p", null, "Jelajah peta Malaysia 3D bersama rakan. Pergi ke setiap negeri, jawab kuiz di Menara Ilmu mengikut tajuk negeri itu, ziarahi tempat pelancongan dan gantung nama anda pada Papan Kenangan."));
   b.append(el("p", { class: "lm-ex" }, (ng ? "Anda bermula di " + ng.pendek + (t ? " (" + (t.kod || t.id) + " " + t.nama + ")" : "") + ". " : "") + "Kawalan: W A S D atau anak panah untuk bergerak, Shift lari, Space lompat, E berinteraksi, M peta, P pasport, seret tetikus untuk pusing kamera. Di telefon: kayu bedik kiri dan butang kanan."));
   const solo = lmBtn("Main solo", "pri", () => lmStart(""));
@@ -803,9 +803,9 @@ function lmSetup() {
   }
   const q = LM.st.gq;
   const gq = lmBtn("Grafik: " + (q ? "Tinggi" : "Jimat"), "", () => { LM.st.gq = LM.gq = q ? 0 : 1; lmSave(); lmSetup(); });
-  const moba = lmBtn("Arena Lagenda (MOBA klasik)", "", () => { const tid = LM.tid; lmClose(); lgOpen(tid); });
+  const klasik = lmBtn("Dunia Gempur klasik (Obby)", "", () => { const tid = LM.tid; lmClose(); dgOpen(tid); });
   const x = lmBtn("Tutup", "", lmClose);
-  b.append(el("div", { class: "lm-row" }, gq, moba, x));
+  b.append(el("div", { class: "lm-row" }, gq, klasik, x));
   const st = lmSummary();
   b.append(el("p", { class: "lm-ex" }, "Pasport anda: " + st.pl + "/" + st.plN + " tempat diziarahi, " + st.tw + "/" + st.twN + " Menara Ilmu ditawan."));
   if (!TOUCH) solo.focus();
@@ -875,7 +875,7 @@ function lmTowerOpen(o) {
       lmCard((b) => {
         b.append(el("div", { class: "lm-kick" }, pass ? "Menara ditawan" : "Cuba lagi"), el("h2", null, ok + "/" + tot + " betul"));
         b.append(el("p", null, pass ? "Bendera menara " + (t.kod || t.id) + " kini berwarna emas." : "Betul sekurang-kurangnya 3 untuk menawan menara. Baca nota dan cuba lagi."));
-        b.append(el("p", { class: "lm-ex" }, "XP +" + xp + (xp === 0 ? " (kuota XP harian Lagenda telah penuh)" : "") + (pass && fr ? " · Bonus rakan: +2 syiling kerana " + fr + " rakan berada berdekatan." : "")));
+        b.append(el("p", { class: "lm-ex" }, "XP +" + xp + (xp === 0 ? " (kuota XP harian Dunia Gempur Malaysia telah penuh)" : "") + (pass && fr ? " · Bonus rakan: +2 syiling kerana " + fr + " rakan berada berdekatan." : "")));
         b.append(el("div", { class: "lm-row" }, lmBtn("Teruskan jelajah", "pri", lmCardClose), pass ? null : lmBtn("Cuba lagi", "", () => lmTowerOpen(o))));
       });
     }
@@ -910,7 +910,7 @@ function lmPlaceOpen(pl) {
       } else xp = lmXp(ok * 2);
       lmCard((b) => {
         b.append(el("div", { class: "lm-kick" }, pass ? "Ziarah berjaya" : "Belum berjaya"), el("h2", null, ok + "/" + tot + " betul"));
-        b.append(el("p", { class: "lm-ex" }, "XP +" + xp + (xp === 0 && ok ? " (kuota XP harian Lagenda telah penuh)" : "")));
+        b.append(el("p", { class: "lm-ex" }, "XP +" + xp + (xp === 0 && ok ? " (kuota XP harian Dunia Gempur Malaysia telah penuh)" : "")));
         if (pass) {
           const hung = !!LM.st.nm[pl.id];
           b.append(el("p", null, hung ? "Nama anda sudah tergantung di sini. Anda boleh gantung semula untuk naik ke atas senarai." : "Gantung nama anda pada Papan Kenangan sebagai tanda anda telah menziarahi " + pl.n + "."));
@@ -976,7 +976,7 @@ function lmPassport() {
   lmCard((b) => {
     const s = lmSummary();
     b.append(el("div", { class: "lm-kick" }, "Pasport Ziarah · " + (cleanName(P.nama) || "Pelajar")), el("h2", null, s.pl + "/" + s.plN + " cop · " + s.tw + "/" + s.twN + " menara"));
-    if (s.pl >= s.plN) b.append(el("p", null, "Gelaran: Pengembara Lagenda Malaysia! Anda telah menziarahi semua tempat."));
+    if (s.pl >= s.plN) b.append(el("p", null, "Gelaran: Pengembara Dunia Gempur Malaysia! Anda telah menziarahi semua tempat."));
     const grid = el("div", { class: "lm-grid" });
     Object.keys(DATA.negeri).forEach((k) => {
       const pls = PLACES.filter((p) => p[1] === k), tws = DATA.topik.filter((t) => t.negeri === k);
@@ -1001,11 +1001,11 @@ function lmSelfie(pl) {
     const W = 1080, H = Math.round(W * img.height / img.width) + 150, c = document.createElement("canvas"); c.width = W; c.height = H;
     const x = c.getContext("2d"); x.fillStyle = "#0b2a44"; x.fillRect(0, 0, W, H); x.drawImage(img, 0, 0, W, H - 150);
     x.fillStyle = "#ffd45a"; x.font = "900 46px Nunito, sans-serif"; x.fillText((cleanName(P.nama) || "Saya") + " di " + (pl ? pl.n : DATA.negeri[lmAt(g.p.x, g.p.z)] ? DATA.negeri[lmAt(g.p.x, g.p.z)].pendek : "Malaysia"), 36, H - 86);
-    x.fillStyle = "#cde3f3"; x.font = "700 30px Nunito, sans-serif"; x.fillText("Lagenda Malaysia · Gempur · " + new Date().toLocaleDateString("ms-MY"), 36, H - 38);
+    x.fillStyle = "#cde3f3"; x.font = "700 30px Nunito, sans-serif"; x.fillText("Dunia Gempur Malaysia · " + new Date().toLocaleDateString("ms-MY"), 36, H - 38);
     lmCard((b) => {
       b.append(el("div", { class: "lm-kick" }, "Swafoto"), el("h2", null, pl ? pl.n : "Kenangan jelajah"));
-      const im = el("img", { src: c.toDataURL("image/jpeg", 0.88), alt: "Swafoto Lagenda Malaysia", style: "width:100%;border-radius:12px;margin:8px 0" }); b.appendChild(im);
-      const a = el("a", { href: im.src, download: "swafoto-lagenda.jpg", style: "display:none" }); b.appendChild(a);
+      const im = el("img", { src: c.toDataURL("image/jpeg", 0.88), alt: "Swafoto Dunia Gempur Malaysia", style: "width:100%;border-radius:12px;margin:8px 0" }); b.appendChild(im);
+      const a = el("a", { href: im.src, download: "swafoto-dunia-gempur.jpg", style: "display:none" }); b.appendChild(a);
       b.append(el("div", { class: "lm-row" }, lmBtn("Muat turun", "pri", () => a.click()), lmBtn("Tutup", "", lmCardClose)));
     });
   };
@@ -1015,7 +1015,7 @@ function lmSelfie(pl) {
 function lmRoomPanel() {
   lmCard((b) => {
     b.append(el("div", { class: "lm-kick" }, "Bilik bersama"), el("h2", null, LM.room ? (LM.roomKind === "sekolah" ? "Bilik sekolah" : "Kod bilik: " + LM.roomCode) : "Main solo"));
-    if (LM.room && LM.roomKind !== "sekolah") b.append(el("p", null, "Kongsi kod " + LM.roomCode + " dengan rakan. Mereka pilih Misi Lagenda, tekan Masuk kod dan taip kod ini."));
+    if (LM.room && LM.roomKind !== "sekolah") b.append(el("p", null, "Kongsi kod " + LM.roomCode + " dengan rakan. Mereka pilih Dunia Gempur, tekan Masuk kod dan taip kod ini."));
     const list = el("div", { class: "lm-grid" });
     list.appendChild(el("div", { class: "lm-stamp on" }, el("b", null, (cleanName(P.nama) || "Saya") + " (anda)"), el("div", null, lmStamps() + " cop pasport")));
     Object.keys(LM.peers).forEach((id) => { const e = LM.peers[id]; list.appendChild(el("div", { class: "lm-stamp" }, el("b", null, e.n), el("div", null, (e.st | 0) + " cop pasport"))); });
@@ -1088,7 +1088,7 @@ function lmWpSet() {
 /* ---------- adegan ---------- */
 function lmBuildScene() {
   const gq = LM.gq, r = LM.root;
-  const cv = el("canvas", { class: "lm-cv", "aria-label": "Dunia Lagenda Malaysia" }); r.appendChild(cv); LM.cv = cv;
+  const cv = el("canvas", { class: "lm-cv", "aria-label": "Dunia Gempur Malaysia, paparan 3D" }); r.appendChild(cv); LM.cv = cv;
   let renderer;
   try { renderer = new T.WebGLRenderer({ canvas: cv, antialias: !!gq, powerPreference: "high-performance" }); } catch (e) { return null; }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, gq ? 1.75 : 1.25));
@@ -1133,7 +1133,7 @@ function lmHud() {
   const top = el("div", { class: "lm-top" });
   top.append(lmBtn("Pasport (P)", "", lmPassport), lmBtn("Bilik", "", lmRoomPanel), lmBtn("Swafoto", "", () => lmSelfie(null)),
     ui.snd = lmBtn(LM.mute ? "Bunyi: tutup" : "Bunyi: buka", "", () => { LM.mute = !LM.mute; ui.snd.textContent = LM.mute ? "Bunyi: tutup" : "Bunyi: buka"; }),
-    lmBtn("Keluar", "", () => { if (confirm("Keluar dari Lagenda Malaysia? Cop pasport dan menara yang ditawan sudah disimpan.")) lmClose(); }));
+    lmBtn("Keluar", "", () => { if (confirm("Keluar dari Dunia Gempur Malaysia? Cop pasport dan menara yang ditawan sudah disimpan.")) lmClose(); }));
   r.appendChild(top);
   ui.prompt = el("button", { type: "button", class: "pri lm-prompt", hidden: "" }); ui.prompt.addEventListener("click", lmInteract); r.appendChild(ui.prompt);
   const emo = el("div", { class: "lm-emo" });
@@ -1182,7 +1182,7 @@ function lmKey(e) {
   if (!LM.on || !LM.g) return;
   const t = e.target; if (t && (t.nodeName === "INPUT" || t.nodeName === "TEXTAREA")) return;
   const k = String(e.key || "").toLowerCase(), dn = e.type === "keydown", g = LM.g;
-  if (dn && k === "escape") { e.preventDefault(); if (LM.ui.big) lmBigMap(); else if (LM.ui.card) lmCardClose(); else if (confirm("Keluar dari Lagenda Malaysia?")) lmClose(); return; }
+  if (dn && k === "escape") { e.preventDefault(); if (LM.ui.big) lmBigMap(); else if (LM.ui.card) lmCardClose(); else if (confirm("Keluar dari Dunia Gempur Malaysia?")) lmClose(); return; }
   if (g.ui) return;
   if ([" ", "arrowup", "arrowdown", "arrowleft", "arrowright"].indexOf(k) >= 0) e.preventDefault();
   LM.keys[k] = dn;
@@ -1261,7 +1261,7 @@ function lmLoop(ts) {
 }
 /* ---------- buka, mula, tutup ---------- */
 function lmOpen(tid) {
-  if (!T) { toast("Grafik 3D tidak tersedia pada peranti ini. Membuka Arena Lagenda.", "warn"); lgOpen(tid); return; }
+  if (!T) { toast("Grafik 3D tidak tersedia pada peranti ini. Membuka Dunia Gempur klasik.", "warn"); dgOpen(tid); return; }
   LM.tid = tid || ""; LM.on = false; lmLoad(); lmRaster();
   document.body.classList.add("ar-lock");
   lmSetup();
@@ -1269,11 +1269,11 @@ function lmOpen(tid) {
 function lmStart(code, kind) {
   const r = LM.root;
   lmCardClose(); r.textContent = "";
-  const ld = el("div", { class: "lm-card" }, el("div", { class: "lm-box" }, el("div", { class: "lm-kick" }, "Lagenda Malaysia"), el("h2", null, "Membina peta Malaysia..."), el("p", null, "Menyusun negeri, menara ilmu dan tempat pelancongan.")));
+  const ld = el("div", { class: "lm-card" }, el("div", { class: "lm-box" }, el("div", { class: "lm-kick" }, "Dunia Gempur Malaysia"), el("h2", null, "Membina peta Malaysia..."), el("p", null, "Menyusun negeri, menara ilmu dan tempat pelancongan.")));
   r.appendChild(ld);
   setTimeout(async () => {
     const g = lmBuildScene();
-    if (!g) { ld.remove(); toast("WebGL tidak dapat dimulakan. Membuka Arena Lagenda.", "warn"); const tid = LM.tid; lmClose(); lgOpen(tid); return; }
+    if (!g) { ld.remove(); toast("WebGL tidak dapat dimulakan. Membuka Dunia Gempur klasik.", "warn"); const tid = LM.tid; lmClose(); dgOpen(tid); return; }
     ld.remove(); LM.daily = lmDaily(); lmHud(); lmSpawn(g); lmPointers(LM.cv); lmWpSet();
     LM.on = true; g.last = 0;
     window.addEventListener("keydown", lmKey, true); window.addEventListener("keyup", lmKey, true); window.addEventListener("resize", lmResize);
