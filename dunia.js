@@ -8,93 +8,96 @@
 (function () {
 "use strict";
 const T = window.THREE;
-const SC = 6;            /* 1 unit peta SVG = 6 unit dunia (v18.2: peta 1.5 kali lebih besar) */
-const K = SC / 4;        /* faktor skala berbanding peta asal (SC 4) */
-const BX = 40;           /* Borneo dianjak ke timur supaya Laut China Selatan kelihatan */
-const OX = 350, OZ = 182; /* pusat dunia dalam koordinat SVG (selepas anjakan) */
-const BORNEO = { sarawak: 1, sabah: 1 };
+/* v18.5: dunia mengikut unjuran geografi sebenar (meta-geo.json): 3 unit dunia = 1 km.
+   Sempadan negeri daripada geoBoundaries (ADM1), ketinggian daripada SRTM (jubin Terrarium). */
+const SC = 6;            /* tinggalan: skala lama bagi saiz objek */
+const K = SC / 4;        /* faktor saiz objek berbanding peta asal */
+const WB = { x0: -3400, z0: -1250, w: 6800, h: 2450 }; /* sempadan dunia (unit) */
+let GEOD = null;
+const ll = (lat, lon) => ({ x: (lon - GEOD.lon0) * GEOD.kx * GEOD.U, z: (GEOD.lat0 - lat) * GEOD.kz * GEOD.U });
 const XP_CAP = 80, XP_KEY = "gt-lm-xp";
 const EMOTE = { salam: "Assalamualaikum!", hebat: "Hebat!", jom: "Jom ikut saya!", tahniah: "Tahniah!" };
 
 /* [id, negeri, nama, jenis model, x, y (SVG), fakta] */
+/* tempat pelancongan: [id, negeri, nama, jenis, lat, lon, fakta] (koordinat sebenar, v18.5) */
 const PLACES = [
-  ["pl-kelam", "perlis", "Gua Kelam", "gua", 73.4, 66.4, "Gua Kelam ialah gua batu kapur sepanjang kira-kira 370 meter dengan titian kayu di dalamnya. Dahulu ia laluan pelombong bijih timah."],
-  ["pl-wangkelian", "perlis", "Wang Kelian", "bukit", 70.2, 74.6, "Wang Kelian terletak di sempadan Malaysia-Thailand dan terkenal dengan pasar sempadan serta pemandangan bukit batu kapur."],
-  ["kd-jerai", "kedah", "Gunung Jerai", "gunung", 81.8, 101.7, "Gunung Jerai (1,217 m) menjadi panduan pelayar sejak zaman dahulu dan terletak berhampiran tapak arkeologi Lembah Bujang."],
-  ["kd-bujang", "kedah", "Lembah Bujang", "candi", 81.9, 108.7, "Lembah Bujang ialah tapak arkeologi tertua di Asia Tenggara yang pernah menjadi pelabuhan perdagangan penting."],
-  ["kd-zahir", "kedah", "Masjid Zahir", "masjid", 79, 90.7, "Masjid Zahir di Alor Setar dibina pada tahun 1912 dan antara masjid tercantik di Malaysia."],
-  ["pg-jambatan", "penang", "Jambatan Pulau Pinang", "jambatan", 83, 130.6, "Jambatan Pulau Pinang sepanjang 13.5 km menghubungkan pulau dengan Seberang Perai sejak 1985."],
-  ["pg-kapitan", "penang", "Masjid Kapitan Keling", "masjid", 75.6, 120.0, "Masjid Kapitan Keling di George Town dibina pada abad ke-19 oleh komuniti Muslim India."],
-  ["pg-bendera", "penang", "Bukit Bendera", "bukit", 72.6, 124.0, "Bukit Bendera (833 m) boleh dinaiki dengan kereta api funikular dan menawarkan pemandangan George Town."],
-  ["pk-ubudiah", "perak", "Masjid Ubudiah", "masjid", 105.2, 148.5, "Masjid Ubudiah di Kuala Kangsar terkenal dengan kubah emasnya dan siap dibina pada tahun 1917."],
-  ["pk-kellie", "perak", "Istana Kellie", "istana", 112.7, 161.9, "Istana Kellie di Batu Gajah ialah binaan lama yang tidak sempat disiapkan pada awal abad ke-20."],
-  ["pk-condong", "perak", "Menara Condong Teluk Intan", "menara", 107.8, 180.9, "Menara Condong Teluk Intan dibina pada tahun 1885 sebagai menara jam dan tangki air."],
-  ["pk-belum", "perak", "Hutan Belum-Temenggor", "hutan", 126.8, 117.5, "Hutan Belum-Temenggor dianggarkan berusia lebih 130 juta tahun dan menjadi habitat burung enggang."],
-  ["kn-kglaut", "kelantan", "Masjid Kampung Laut", "masjid", 163.9, 96.8, "Masjid Kampung Laut antara masjid tertua di Malaysia, dibina tanpa paku menggunakan kayu cengal."],
-  ["kn-siti", "kelantan", "Pasar Siti Khadijah", "pasar", 159.1, 91.7, "Pasar Siti Khadijah di Kota Bharu terkenal kerana kebanyakan peniaganya ialah wanita."],
-  ["kn-cahaya", "kelantan", "Pantai Cahaya Bulan", "pantai", 164.8, 87.6, "Pantai Cahaya Bulan ialah pantai popular di Kota Bharu, terkenal dengan wakaf dan layang-layang."],
-  ["tr-kristal", "terengganu", "Masjid Kristal", "masjid", 199, 130.1, "Masjid Kristal di Taman Tamadun Islam dibina daripada keluli, kaca dan kristal, siap pada tahun 2008."],
-  ["tr-kenyir", "terengganu", "Tasik Kenyir", "tasik", 184.3, 139, "Tasik Kenyir ialah tasik buatan manusia terbesar di Asia Tenggara dengan lebih 340 pulau kecil."],
-  ["tr-payang", "terengganu", "Pasar Payang", "pasar", 200.1, 123.2, "Pasar Payang terkenal dengan kain batik, songket dan keropok lekor Terengganu."],
-  ["ph-tamannegara", "pahang", "Taman Negara", "hutan", 168.8, 165.8, "Taman Negara ialah hutan hujan tropika berusia lebih 130 juta tahun dengan titian kanopi yang panjang."],
-  ["ph-cameron", "pahang", "Cameron Highlands", "ladang", 130, 165, "Cameron Highlands terkenal dengan ladang teh, strawberi dan cuaca sejuk."],
-  ["ph-fraser", "pahang", "Bukit Fraser", "bukit", 141.6, 193.7, "Bukit Fraser ialah tanah tinggi berhawa sejuk yang terkenal dengan menara jamnya."],
-  ["ph-cempedak", "pahang", "Pantai Teluk Cempedak", "pantai", 207.9, 189.7, "Pantai Teluk Cempedak di Kuantan mempunyai pasir putih dan laluan pejalan kaki di tepi bukit."],
-  ["sl-biru", "selangor", "Masjid Sultan Salahuddin Abdul Aziz Shah", "masjid", 129.9, 221.9, "Masjid Biru di Shah Alam mempunyai antara kubah masjid terbesar di dunia."],
-  ["sl-melawati", "selangor", "Bukit Melawati", "kota", 117.2, 210.5, "Bukit Melawati di Kuala Selangor menyimpan kesan kota lama dan rumah api."],
-  ["sl-sekinchan", "selangor", "Sawah Padi Sekinchan", "sawah", 113.9, 204.4, "Sekinchan terkenal dengan sawah padi luas yang menghasilkan beras berkualiti tinggi."],
-  ["wp-klcc", "wp", "Menara Berkembar Petronas", "berkembar", 138.4, 219.4, "Menara Berkembar Petronas setinggi 452 m pernah menjadi bangunan tertinggi di dunia (1998-2004)."],
-  ["wp-negara", "wp", "Masjid Negara", "masjid", 135.9, 222.6, "Masjid Negara dibuka pada tahun 1965 dengan bumbung berbentuk payung bintang 16 bucu."],
-  ["wp-menarakl", "wp", "Menara Kuala Lumpur", "menara", 138.6, 223.8, "Menara Kuala Lumpur setinggi 421 m digunakan untuk telekomunikasi dan cerapan anak bulan."],
-  ["ns-pd", "nsembilan", "Pantai Port Dickson", "pantai", 143.7, 245.3, "Port Dickson terkenal dengan pantainya yang panjang dan menjadi destinasi percutian keluarga."],
-  ["ns-serimenanti", "nsembilan", "Istana Lama Seri Menanti", "istana", 156.7, 239.4, "Istana Lama Seri Menanti dibina tanpa paku dengan 99 tiang kayu yang melambangkan pahlawan suku."],
-  ["mk-afamosa", "melaka", "Kota A Famosa", "kota", 158.1, 258.8, "A Famosa dibina oleh Portugis selepas menawan Melaka pada tahun 1511; hanya pintu Porta de Santiago yang tinggal."],
-  ["mk-selat", "melaka", "Masjid Selat Melaka", "masjid", 164.5, 261.5, "Masjid Selat Melaka dibina di atas tiang di Pulau Melaka dan kelihatan terapung ketika air pasang."],
-  ["jh-abubakar", "johor", "Masjid Sultan Abu Bakar", "masjid", 228.5, 291.9, "Masjid Sultan Abu Bakar di Johor Bahru siap pada tahun 1900 dengan gabungan seni bina Victoria dan Moor."],
-  ["jh-piai", "johor", "Tanjung Piai", "pantai", 218.1, 295.5, "Tanjung Piai ialah hujung paling selatan tanah besar benua Asia dan kawasan paya bakau Ramsar."],
-  ["jh-ledang", "johor", "Gunung Ledang", "gunung", 181, 254.1, "Gunung Ledang (1,276 m) terkenal dalam legenda Puteri Gunung Ledang."],
-  ["sw-waterfront", "sarawak", "Kuching Waterfront", "bandar", 289.1, 273.7, "Kuching Waterfront terletak di tebing Sungai Sarawak, berhadapan Bangunan DUN Sarawak."],
-  ["sw-niah", "sarawak", "Gua Niah", "gua", 420.7, 193.5, "Gua Niah ialah tapak penemuan tengkorak manusia berusia kira-kira 40,000 tahun."],
-  ["sw-mulu", "sarawak", "Taman Negara Gunung Mulu", "gunung", 459.9, 185, "Taman Negara Gunung Mulu ialah Tapak Warisan Dunia UNESCO dengan Gua Rusa yang sangat besar."],
-  ["sw-bako", "sarawak", "Taman Negara Bako", "hutan", 325.3, 266.6, "Taman Negara Bako ialah taman negara tertua di Sarawak dan habitat monyet belanda."],
-  ["sb-kinabalu", "sabah", "Gunung Kinabalu", "gunung", 527.5, 112.6, "Gunung Kinabalu (4,095 m) ialah gunung tertinggi di Malaysia dan Tapak Warisan Dunia UNESCO."],
-  ["sb-masjidkk", "sabah", "Masjid Bandaraya Kota Kinabalu", "masjid", 509.8, 115.8, "Masjid Bandaraya Kota Kinabalu dibina di tepi lagun dan kelihatan seperti terapung."],
-  ["sb-sepilok", "sabah", "Sepilok", "hutan", 580.8, 120.1, "Pusat Pemulihan Orang Utan Sepilok menjaga orang utan yatim sebelum dilepaskan ke hutan."],
-  ["sb-kinabatangan", "sabah", "Sungai Kinabatangan", "sungai", 594.3, 133.3, "Sungai Kinabatangan ialah sungai kedua terpanjang di Malaysia dan habitat gajah pygmy Borneo."],
+  ["pl-kelam", "perlis", "Gua Kelam", "gua", 6.645, 100.205, "Gua Kelam ialah gua batu kapur sepanjang kira-kira 370 meter dengan titian kayu di dalamnya. Dahulu ia laluan pelombong bijih timah."],
+  ["pl-wangkelian", "perlis", "Wang Kelian", "bukit", 6.68, 100.187, "Wang Kelian terletak di sempadan Malaysia-Thailand dan terkenal dengan pasar sempadan serta pemandangan bukit batu kapur."],
+  ["kd-jerai", "kedah", "Gunung Jerai", "gunung", 5.787, 100.433, "Gunung Jerai (1,217 m) menjadi panduan pelayar sejak zaman dahulu dan terletak berhampiran tapak arkeologi Lembah Bujang."],
+  ["kd-bujang", "kedah", "Lembah Bujang", "candi", 5.738, 100.417, "Lembah Bujang ialah tapak arkeologi tertua di Asia Tenggara yang pernah menjadi pelabuhan perdagangan penting."],
+  ["kd-zahir", "kedah", "Masjid Zahir", "masjid", 6.1215, 100.3672, "Masjid Zahir di Alor Setar dibina pada tahun 1912 dan antara masjid tercantik di Malaysia."],
+  ["pg-jambatan", "penang", "Jambatan Pulau Pinang", "jambatan", 5.356, 100.342, "Jambatan Pulau Pinang sepanjang 13.5 km menghubungkan pulau dengan Seberang Perai sejak 1985."],
+  ["pg-kapitan", "penang", "Masjid Kapitan Keling", "masjid", 5.4167, 100.3378, "Masjid Kapitan Keling di George Town dibina pada abad ke-19 oleh komuniti Muslim India."],
+  ["pg-bendera", "penang", "Bukit Bendera", "bukit", 5.4243, 100.269, "Bukit Bendera (833 m) boleh dinaiki dengan kereta api funikular dan menawarkan pemandangan George Town."],
+  ["pk-ubudiah", "perak", "Masjid Ubudiah", "masjid", 4.7795, 100.958, "Masjid Ubudiah di Kuala Kangsar terkenal dengan kubah emasnya dan siap dibina pada tahun 1917."],
+  ["pk-kellie", "perak", "Istana Kellie", "istana", 4.471, 101.088, "Istana Kellie di Batu Gajah ialah binaan lama yang tidak sempat disiapkan pada awal abad ke-20."],
+  ["pk-condong", "perak", "Menara Condong Teluk Intan", "menara", 4.024, 101.02, "Menara Condong Teluk Intan dibina pada tahun 1885 sebagai menara jam dan tangki air."],
+  ["pk-belum", "perak", "Hutan Belum-Temenggor", "hutan", 5.55, 101.4, "Hutan Belum-Temenggor dianggarkan berusia lebih 130 juta tahun dan menjadi habitat burung enggang."],
+  ["kn-kglaut", "kelantan", "Masjid Kampung Laut", "masjid", 6.0623, 102.2489, "Masjid Kampung Laut antara masjid tertua di Malaysia, dibina tanpa paku menggunakan kayu cengal."],
+  ["kn-siti", "kelantan", "Pasar Siti Khadijah", "pasar", 6.129, 102.239, "Pasar Siti Khadijah di Kota Bharu terkenal kerana kebanyakan peniaganya ialah wanita."],
+  ["kn-cahaya", "kelantan", "Pantai Cahaya Bulan", "pantai", 6.195, 102.285, "Pantai Cahaya Bulan ialah pantai popular di Kota Bharu, terkenal dengan wakaf dan layang-layang."],
+  ["tr-kristal", "terengganu", "Masjid Kristal", "masjid", 5.321, 103.123, "Masjid Kristal di Taman Tamadun Islam dibina daripada keluli, kaca dan kristal, siap pada tahun 2008."],
+  ["tr-kenyir", "terengganu", "Tasik Kenyir", "tasik", 5.0, 102.7, "Tasik Kenyir ialah tasik buatan manusia terbesar di Asia Tenggara dengan lebih 340 pulau kecil."],
+  ["tr-payang", "terengganu", "Pasar Payang", "pasar", 5.337, 103.139, "Pasar Payang terkenal dengan kain batik, songket dan keropok lekor Terengganu."],
+  ["ph-tamannegara", "pahang", "Taman Negara", "hutan", 4.379, 102.401, "Taman Negara ialah hutan hujan tropika berusia lebih 130 juta tahun dengan titian kanopi yang panjang."],
+  ["ph-cameron", "pahang", "Cameron Highlands", "ladang", 4.471, 101.377, "Cameron Highlands terkenal dengan ladang teh, strawberi dan cuaca sejuk."],
+  ["ph-fraser", "pahang", "Bukit Fraser", "bukit", 3.712, 101.738, "Bukit Fraser ialah tanah tinggi berhawa sejuk yang terkenal dengan menara jamnya."],
+  ["ph-cempedak", "pahang", "Pantai Teluk Cempedak", "pantai", 3.812, 103.372, "Pantai Teluk Cempedak di Kuantan mempunyai pasir putih dan laluan pejalan kaki di tepi bukit."],
+  ["sl-biru", "selangor", "Masjid Sultan Salahuddin Abdul Aziz Shah", "masjid", 3.0784, 101.5203, "Masjid Biru di Shah Alam mempunyai antara kubah masjid terbesar di dunia."],
+  ["sl-melawati", "selangor", "Bukit Melawati", "kota", 3.341, 101.247, "Bukit Melawati di Kuala Selangor menyimpan kesan kota lama dan rumah api."],
+  ["sl-sekinchan", "selangor", "Sawah Padi Sekinchan", "sawah", 3.508, 101.105, "Sekinchan terkenal dengan sawah padi luas yang menghasilkan beras berkualiti tinggi."],
+  ["wp-klcc", "wp", "Menara Berkembar Petronas", "berkembar", 3.1579, 101.7116, "Menara Berkembar Petronas setinggi 452 m pernah menjadi bangunan tertinggi di dunia (1998-2004)."],
+  ["wp-negara", "wp", "Masjid Negara", "masjid", 3.1418, 101.6918, "Masjid Negara dibuka pada tahun 1965 dengan bumbung berbentuk payung bintang 16 bucu."],
+  ["wp-menarakl", "wp", "Menara Kuala Lumpur", "menara", 3.1528, 101.7038, "Menara Kuala Lumpur setinggi 421 m digunakan untuk telekomunikasi dan cerapan anak bulan."],
+  ["ns-pd", "nsembilan", "Pantai Port Dickson", "pantai", 2.473, 101.855, "Port Dickson terkenal dengan pantainya yang panjang dan menjadi destinasi percutian keluarga."],
+  ["ns-serimenanti", "nsembilan", "Istana Lama Seri Menanti", "istana", 2.71, 102.15, "Istana Lama Seri Menanti dibina tanpa paku dengan 99 tiang kayu yang melambangkan pahlawan suku."],
+  ["mk-afamosa", "melaka", "Kota A Famosa", "kota", 2.1916, 102.2503, "A Famosa dibina oleh Portugis selepas menawan Melaka pada tahun 1511; hanya pintu Porta de Santiago yang tinggal."],
+  ["mk-selat", "melaka", "Masjid Selat Melaka", "masjid", 2.1844, 102.247, "Masjid Selat Melaka dibina di atas tiang di Pulau Melaka dan kelihatan terapung ketika air pasang."],
+  ["jh-abubakar", "johor", "Masjid Sultan Abu Bakar", "masjid", 1.457, 103.747, "Masjid Sultan Abu Bakar di Johor Bahru siap pada tahun 1900 dengan gabungan seni bina Victoria dan Moor."],
+  ["jh-piai", "johor", "Tanjung Piai", "pantai", 1.267, 103.51, "Tanjung Piai ialah hujung paling selatan tanah besar benua Asia dan kawasan paya bakau Ramsar."],
+  ["jh-ledang", "johor", "Gunung Ledang", "gunung", 2.373, 102.608, "Gunung Ledang (1,276 m) terkenal dalam legenda Puteri Gunung Ledang."],
+  ["sw-waterfront", "sarawak", "Kuching Waterfront", "bandar", 1.559, 110.348, "Kuching Waterfront terletak di tebing Sungai Sarawak, berhadapan Bangunan DUN Sarawak."],
+  ["sw-niah", "sarawak", "Gua Niah", "gua", 3.815, 113.781, "Gua Niah ialah tapak penemuan tengkorak manusia berusia kira-kira 40,000 tahun."],
+  ["sw-mulu", "sarawak", "Taman Negara Gunung Mulu", "gunung", 4.047, 114.915, "Taman Negara Gunung Mulu ialah Tapak Warisan Dunia UNESCO dengan Gua Rusa yang sangat besar."],
+  ["sw-bako", "sarawak", "Taman Negara Bako", "hutan", 1.716, 110.47, "Taman Negara Bako ialah taman negara tertua di Sarawak dan habitat monyet belanda."],
+  ["sb-kinabalu", "sabah", "Gunung Kinabalu", "gunung", 6.075, 116.558, "Gunung Kinabalu (4,095 m) ialah gunung tertinggi di Malaysia dan Tapak Warisan Dunia UNESCO."],
+  ["sb-masjidkk", "sabah", "Masjid Bandaraya Kota Kinabalu", "masjid", 5.9945, 116.103, "Masjid Bandaraya Kota Kinabalu dibina di tepi lagun dan kelihatan seperti terapung."],
+  ["sb-sepilok", "sabah", "Sepilok", "hutan", 5.864, 117.95, "Pusat Pemulihan Orang Utan Sepilok menjaga orang utan yatim sebelum dilepaskan ke hutan."],
+  ["sb-kinabatangan", "sabah", "Sungai Kinabatangan", "sungai", 5.52, 118.29, "Sungai Kinabatangan ialah sungai kedua terpanjang di Malaysia dan habitat gajah pygmy Borneo."],
   /* v18.2: tempat pelancongan tambahan (peta 1.5 kali lebih besar) */
-  ["pl-alhussain", "perlis", "Masjid Al-Hussain Kuala Perlis", "masjid", 70, 78, "Masjid Al-Hussain dibina di atas air di muara Sungai Perlis dan kelihatan terapung ketika air pasang."],
-  ["kd-menara", "kedah", "Menara Alor Setar", "menara", 80, 92.5, "Menara Alor Setar setinggi 165.5 m menjadi mercu tanda ibu negeri Kedah dan tempat cerapan anak bulan."],
-  ["kd-pedu", "kedah", "Tasik Pedu", "tasik", 95, 86, "Tasik Pedu ialah tasik empangan di utara Kedah yang membekalkan air untuk sawah padi di Dataran Kedah."],
-  ["pg-feringghi", "penang", "Pantai Batu Feringghi", "pantai", 73.3, 117.8, "Batu Feringghi ialah pantai peranginan terkenal di utara Pulau Pinang dengan pasar malamnya."],
-  ["pk-tempurung", "perak", "Gua Tempurung", "gua", 116, 168, "Gua Tempurung di Gopeng ialah antara gua batu kapur terpanjang di Semenanjung Malaysia."],
-  ["pk-taiping", "perak", "Taman Tasik Taiping", "tasik", 99, 142, "Taman Tasik Taiping ialah taman awam tertua di Malaysia, dibina di atas bekas lombong bijih timah."],
-  ["kn-stong", "kelantan", "Gunung Stong", "gunung", 148, 118, "Gunung Stong di Dabong terkenal dengan air terjun bertingkat yang antara tertinggi di Asia Tenggara."],
-  ["tr-terapung", "terengganu", "Masjid Tengku Tengah Zaharah", "masjid", 201.5, 127, "Masjid Tengku Tengah Zaharah atau Masjid Terapung dibina di kuala sungai dan siap pada tahun 1995."],
-  ["tr-kemasik", "terengganu", "Pantai Kemasik", "pantai", 206, 165, "Pantai Kemasik di Kemaman terkenal dengan batu-batan besar dan air laut yang jernih."],
-  ["ph-genting", "pahang", "Tanah Tinggi Genting", "bukit", 143.5, 208, "Tanah Tinggi Genting terletak kira-kira 1,800 m dari aras laut dan boleh dinaiki dengan kereta kabel."],
-  ["ph-chini", "pahang", "Tasik Chini", "tasik", 185, 197, "Tasik Chini ialah tasik semula jadi kedua terbesar di Malaysia dan rizab biosfera UNESCO."],
-  ["ph-charas", "pahang", "Gua Charas", "gua", 196, 182, "Gua Charas berhampiran Kuantan ialah gua batu kapur dengan tangga panjang ke dalam bukit."],
-  ["sl-batu", "selangor", "Gua Batu", "gua", 137.5, 214.5, "Gua Batu ialah bukit batu kapur berusia kira-kira 400 juta tahun di utara Kuala Lumpur."],
-  ["sl-kelip", "selangor", "Kelip-kelip Kampung Kuantan", "sungai", 118.5, 208, "Kampung Kuantan di Kuala Selangor terkenal dengan kelip-kelip yang menyala di pokok berembang tebing sungai."],
-  ["wp-putra", "wp", "Masjid Putra Putrajaya", "masjid", 139, 233, "Masjid Putra di Putrajaya berkubah merah jambu dan dibina di tepi Tasik Putrajaya pada tahun 1999."],
-  ["ns-seremban", "nsembilan", "Masjid Negeri Seremban", "masjid", 149.5, 236, "Masjid Negeri Seremban mempunyai sembilan tiang dan kubah yang melambangkan sembilan luak Negeri Sembilan."],
-  ["mk-taming", "melaka", "Menara Taming Sari", "menara", 160, 260, "Menara Taming Sari ialah menara tinjau berputar setinggi 110 m di Bandar Hilir, Melaka."],
-  ["jh-desaru", "johor", "Pantai Desaru", "pantai", 240, 285, "Pantai Desaru di Kota Tinggi terkenal dengan pasir putih sepanjang 25 km dan pokok rhu."],
-  ["jh-endau", "johor", "Taman Negara Endau-Rompin", "hutan", 212, 246, "Taman Negara Endau-Rompin ialah hutan hujan dataran rendah yang menjadi habitat harimau Malaya."],
-  ["sw-budaya", "sarawak", "Kampung Budaya Sarawak", "istana", 297.3, 266.8, "Kampung Budaya Sarawak di kaki Gunung Santubong mempamerkan rumah tradisional kaum-kaum di Sarawak."],
-  ["sw-lambir", "sarawak", "Taman Negara Bukit Lambir", "hutan", 440, 176, "Bukit Lambir berhampiran Miri ialah hutan yang sangat kaya dengan spesies pokok dan air terjun."],
-  ["sb-kundasang", "sabah", "Kundasang", "ladang", 533, 118, "Kundasang di kaki Gunung Kinabalu terkenal dengan ladang sayur, ladang tenusu dan udara sejuk."],
-  ["sb-kudat", "sabah", "Hujung Borneo", "pantai", 530, 80, "Hujung Borneo (Tanjung Simpang Mengayau) di Kudat ialah titik paling utara Pulau Borneo."],
-  ["sb-danum", "sabah", "Lembah Danum", "hutan", 575, 165, "Lembah Danum ialah hutan hujan dara yang dilindungi dan habitat orang utan serta burung enggang."]
+  ["pl-alhussain", "perlis", "Masjid Al-Hussain Kuala Perlis", "masjid", 6.3965, 100.13, "Masjid Al-Hussain dibina di atas air di muara Sungai Perlis dan kelihatan terapung ketika air pasang."],
+  ["kd-menara", "kedah", "Menara Alor Setar", "menara", 6.122, 100.366, "Menara Alor Setar setinggi 165.5 m menjadi mercu tanda ibu negeri Kedah dan tempat cerapan anak bulan."],
+  ["kd-pedu", "kedah", "Tasik Pedu", "tasik", 6.25, 100.75, "Tasik Pedu ialah tasik empangan di utara Kedah yang membekalkan air untuk sawah padi di Dataran Kedah."],
+  ["pg-feringghi", "penang", "Pantai Batu Feringghi", "pantai", 5.476, 100.249, "Batu Feringghi ialah pantai peranginan terkenal di utara Pulau Pinang dengan pasar malamnya."],
+  ["pk-tempurung", "perak", "Gua Tempurung", "gua", 4.416, 101.188, "Gua Tempurung di Gopeng ialah antara gua batu kapur terpanjang di Semenanjung Malaysia."],
+  ["pk-taiping", "perak", "Taman Tasik Taiping", "tasik", 4.855, 100.748, "Taman Tasik Taiping ialah taman awam tertua di Malaysia, dibina di atas bekas lombong bijih timah."],
+  ["kn-stong", "kelantan", "Gunung Stong", "gunung", 5.34, 101.97, "Gunung Stong di Dabong terkenal dengan air terjun bertingkat yang antara tertinggi di Asia Tenggara."],
+  ["tr-terapung", "terengganu", "Masjid Tengku Tengah Zaharah", "masjid", 5.2735, 103.1648, "Masjid Tengku Tengah Zaharah atau Masjid Terapung dibina di kuala sungai dan siap pada tahun 1995."],
+  ["tr-kemasik", "terengganu", "Pantai Kemasik", "pantai", 4.43, 103.46, "Pantai Kemasik di Kemaman terkenal dengan batu-batan besar dan air laut yang jernih."],
+  ["ph-genting", "pahang", "Tanah Tinggi Genting", "bukit", 3.423, 101.793, "Tanah Tinggi Genting terletak kira-kira 1,800 m dari aras laut dan boleh dinaiki dengan kereta kabel."],
+  ["ph-chini", "pahang", "Tasik Chini", "tasik", 3.438, 102.915, "Tasik Chini ialah tasik semula jadi kedua terbesar di Malaysia dan rizab biosfera UNESCO."],
+  ["ph-charas", "pahang", "Gua Charas", "gua", 3.908, 103.15, "Gua Charas berhampiran Kuantan ialah gua batu kapur dengan tangga panjang ke dalam bukit."],
+  ["sl-batu", "selangor", "Gua Batu", "gua", 3.2379, 101.684, "Gua Batu ialah bukit batu kapur berusia kira-kira 400 juta tahun di utara Kuala Lumpur."],
+  ["sl-kelip", "selangor", "Kelip-kelip Kampung Kuantan", "sungai", 3.36, 101.27, "Kampung Kuantan di Kuala Selangor terkenal dengan kelip-kelip yang menyala di pokok berembang tebing sungai."],
+  ["wp-putra", "wp", "Masjid Putra Putrajaya", "masjid", 2.936, 101.689, "Masjid Putra di Putrajaya berkubah merah jambu dan dibina di tepi Tasik Putrajaya pada tahun 1999."],
+  ["ns-seremban", "nsembilan", "Masjid Negeri Seremban", "masjid", 2.727, 101.939, "Masjid Negeri Seremban mempunyai sembilan tiang dan kubah yang melambangkan sembilan luak Negeri Sembilan."],
+  ["mk-taming", "melaka", "Menara Taming Sari", "menara", 2.191, 102.247, "Menara Taming Sari ialah menara tinjau berputar setinggi 110 m di Bandar Hilir, Melaka."],
+  ["jh-desaru", "johor", "Pantai Desaru", "pantai", 1.545, 104.26, "Pantai Desaru di Kota Tinggi terkenal dengan pasir putih sepanjang 25 km dan pokok rhu."],
+  ["jh-endau", "johor", "Taman Negara Endau-Rompin", "hutan", 2.53, 103.36, "Taman Negara Endau-Rompin ialah hutan hujan dataran rendah yang menjadi habitat harimau Malaya."],
+  ["sw-budaya", "sarawak", "Kampung Budaya Sarawak", "istana", 1.75, 110.317, "Kampung Budaya Sarawak di kaki Gunung Santubong mempamerkan rumah tradisional kaum-kaum di Sarawak."],
+  ["sw-lambir", "sarawak", "Taman Negara Bukit Lambir", "hutan", 4.2, 114.04, "Bukit Lambir berhampiran Miri ialah hutan yang sangat kaya dengan spesies pokok dan air terjun."],
+  ["sb-kundasang", "sabah", "Kundasang", "ladang", 5.979, 116.58, "Kundasang di kaki Gunung Kinabalu terkenal dengan ladang sayur, ladang tenusu dan udara sejuk."],
+  ["sb-kudat", "sabah", "Hujung Borneo", "pantai", 7.037, 116.744, "Hujung Borneo (Tanjung Simpang Mengayau) di Kudat ialah titik paling utara Pulau Borneo."],
+  ["sb-danum", "sabah", "Lembah Danum", "hutan", 4.965, 117.8, "Lembah Danum ialah hutan hujan dara yang dilindungi dan habitat orang utan serta burung enggang."]
 ];
-/* lapangan terbang untuk perjalanan pantas (x, y SVG sebelum anjakan) */
+/* lapangan terbang untuk perjalanan pantas: [id, negeri, nama, lat, lon] */
 const AIRPORTS = [
-  ["ap-klia", "selangor", "KLIA Sepang", 136.5, 236.0],
-  ["ap-pg", "penang", "Lapangan Terbang Pulau Pinang", 84.0, 127.5],
-  ["ap-kb", "kelantan", "Lapangan Terbang Kota Bharu", 158.0, 100.0],
-  ["ap-jb", "johor", "Lapangan Terbang Senai", 222.0, 282.0],
-  ["ap-kch", "sarawak", "Lapangan Terbang Kuching", 300.0, 279.0],
-  ["ap-bki", "sabah", "Lapangan Terbang Kota Kinabalu", 516.0, 126.0]
+  ["ap-klia", "selangor", "KLIA Sepang", 2.7456, 101.7099],
+  ["ap-pg", "penang", "Lapangan Terbang Pulau Pinang", 5.2971, 100.2770],
+  ["ap-kb", "kelantan", "Lapangan Terbang Kota Bharu", 6.1668, 102.2930],
+  ["ap-jb", "johor", "Lapangan Terbang Senai", 1.6413, 103.6697],
+  ["ap-kch", "sarawak", "Lapangan Terbang Kuching", 1.4847, 110.3470],
+  ["ap-bki", "sabah", "Lapangan Terbang Kota Kinabalu", 5.9372, 116.0510]
 ];
 const STATE_COL = {
   perlis: "#8fd16a", kedah: "#b6dd5c", penang: "#6fcf9e", perak: "#9ccc65", kelantan: "#c5e17a", terengganu: "#7fd6a8",
@@ -110,9 +113,48 @@ const LM = window.LMX = {
 
 /* ---------- utiliti ---------- */
 const lmRand = (seed) => rng(hashStr(String(seed)));
-const shiftX = (k, x) => x + (BORNEO[k] ? BX : 0);
-const toW = (k, x, y) => ({ x: (shiftX(k, x) - OX) * SC, z: (y - OZ) * SC });
-const toS = (wx, wz) => ({ x: wx / SC + OX, y: wz / SC + OZ }); /* koordinat SVG beranjak */
+/* koordinat SVG peta operasi (titik menara tajuk) -> dunia: pemetaan linear kotak sempadan negeri SVG ke kotak
+   sempadan negeri sebenar, kemudian dipastikan berada di daratan negeri itu */
+const SVGA = {};
+function lmRingsBox(rings) { let x0 = 1e9, z0 = 1e9, x1 = -1e9, z1 = -1e9; for (const r of rings) for (const q of r) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); z0 = Math.min(z0, q[1]); z1 = Math.max(z1, q[1]); } return { x0: x0, z0: z0, w: x1 - x0 || 1, h: z1 - z0 || 1 }; }
+function lmMainRing(k) { const rs = (GEOD.states[k] || []); let best = rs[0] || [[0, 0]], ba = -1; for (const r of rs) { const b = lmRingsBox([r]), a = b.w * b.h; if (a > ba) { ba = a; best = r; } } return best; }
+function toW(k, x, y) {
+  let A = SVGA[k];
+  if (!A) {
+    let sb = null, ba = -1;
+    String(DATA.negeri[k].d).split("M").filter(Boolean).forEach((sp) => { const n = sp.replace(/Z/g, "").match(/-?[\d.]+/g).map(Number), pts = []; for (let i = 0; i + 1 < n.length; i += 2) pts.push([n[i], n[i + 1]]); const b = lmRingsBox([pts]); if (b.w * b.h > ba) { ba = b.w * b.h; sb = b; } });
+    A = SVGA[k] = { s: sb, w: lmRingsBox([lmMainRing(k)]) };
+  }
+  return { x: A.w.x0 + (x - A.s.x0) / A.s.w * A.w.w, z: A.w.z0 + (y - A.s.z0) / A.s.h * A.w.h };
+}
+/* titik terdekat yang berada di daratan negeri k */
+function lmSnap(k, w, maxR) {
+  const ok = (x, z) => { const q = lmAt(x, z); return q === k || (k === "wp" && q === "selangor"); };
+  if (ok(w.x, w.z)) return w;
+  for (let d = 3; d <= (maxR || 240); d += 3) for (let i = 0; i < 24; i++) { const a = i / 24 * 6.2832, x = w.x + Math.cos(a) * d, z = w.z + Math.sin(a) * d; if (ok(x, z)) return { x: x, z: z }; }
+  return w;
+}
+/* muat data geografi (sekali) */
+function lmGeoLoad() {
+  if (GEOD) return Promise.resolve(GEOD);
+  if (LM.geoP) return LM.geoP;
+  const v = typeof APP_VER !== "undefined" ? "?v=" + APP_VER : "";
+  LM.geoP = Promise.all([fetch("meta-geo.json" + v).then((r) => { if (!r.ok) throw new Error("geo " + r.status); return r.json(); }), fetch("meta-dem.bin" + v).then((r) => { if (!r.ok) throw new Error("dem " + r.status); return r.arrayBuffer(); })])
+    .then(([gj, buf]) => { gj.demB = new Uint8Array(buf); GEOD = gj; return gj; }).catch((e) => { LM.geoP = null; throw e; });
+  return LM.geoP;
+}
+/* ketinggian sebenar (meter) daripada grid DEM; -1 = di luar kawasan data */
+function lmDem(wx, wz) {
+  for (const r of GEOD.dem) {
+    const fx = (wx - r.x0) / GEOD.cs, fz = (wz - r.z0) / GEOD.cs;
+    if (fx < 0 || fz < 0 || fx >= r.nx - 1 || fz >= r.nz - 1) continue;
+    const i = fx | 0, j = fz | 0, u = fx - i, v = fz - j, B = GEOD.demB, o = r.o + j * r.nx + i, e = (k) => { const q = B[k] / 4; return q * q; };
+    return (e(o) * (1 - u) + e(o + 1) * u) * (1 - v) + (e(o + r.nx) * (1 - u) + e(o + r.nx + 1) * u) * v;
+  }
+  return -1;
+}
+/* jarak ke tepi kawasan DEM (untuk melandaikan daratan negara jiran ke laut) */
+function lmDemEdge(wx, wz) { let best = 0; for (const r of GEOD.dem) { const d = Math.min(wx - r.x0, wz - r.z0, r.x0 + (r.nx - 1) * GEOD.cs - wx, r.z0 + (r.nz - 1) * GEOD.cs - wz); if (d > best) best = d; } return best; }
 function lmSave() {
   try { localStorage.setItem("gt-lm-" + SUBJ, JSON.stringify(LM.st)); } catch (e) { /* abaikan */ }
 }
@@ -184,38 +226,28 @@ function lmMesh(geo, col, x, y, z, o) {
   return m;
 }
 
-/* ---------- peta raster: negeri di bawah setiap titik (untuk daratan, label dan peta mini) ---------- */
-const RS = 2, RX0 = 20, RY0 = 50, RW = 1340, RH = 520;
+/* ---------- peta raster: negeri di bawah setiap titik (dunia sebenar, ~1 km sepiksel) ---------- */
+const RS = 0.33, RW = Math.ceil(WB.w * RS), RH = Math.ceil(WB.h * RS);
 const RAST = { keys: [], data: null, paths: {} };
 function lmRaster() {
   if (RAST.data) return;
   const c = document.createElement("canvas"); c.width = RW; c.height = RH;
   const x = c.getContext("2d"); const keys = RAST.keys = Object.keys(DATA.negeri);
+  x.setTransform(RS, 0, 0, RS, -WB.x0 * RS, -WB.z0 * RS); x.lineJoin = "round";
   keys.forEach((k, i) => {
-    const p = RAST.paths[k] = new Path2D(DATA.negeri[k].d);
-    x.setTransform(RS, 0, 0, RS, (-RX0 + (BORNEO[k] ? BX : 0)) * RS, -RY0 * RS);
-    x.fillStyle = x.strokeStyle = "rgb(" + ((i + 1) * 16) + ",0,0)"; x.lineWidth = 0.9; x.lineJoin = "round";
-    x.fill(p); x.stroke(p);
+    const p = RAST.paths[k] = new Path2D();
+    (GEOD.states[k] || []).forEach((r) => { r.forEach((q, j) => (j ? p.lineTo(q[0], q[1]) : p.moveTo(q[0], q[1]))); p.closePath(); });
+    x.fillStyle = x.strokeStyle = "rgb(" + ((i + 1) * 16) + ",0,0)"; x.lineWidth = 2; x.fill(p); x.stroke(p);
   });
-  /* jambatan Pulau Pinang: sambung titik terdekat pulau dan tanah besar */
-  const br = lmBridgeSeg();
-  if (br) { x.setTransform(RS, 0, 0, RS, -RX0 * RS, -RY0 * RS); x.strokeStyle = "rgb(240,0,0)"; x.lineWidth = 1.7; x.lineCap = "round"; x.beginPath(); x.moveTo(br[0], br[1]); x.lineTo(br[2], br[3]); x.stroke(); }
+  /* Jambatan Pulau Pinang (Gelugor - Perai) */
+  const a = ll(5.3553, 100.3075), b = ll(5.3580, 100.3780), br = [a.x, a.z, b.x, b.z];
+  x.strokeStyle = "rgb(240,0,0)"; x.lineWidth = 5; x.lineCap = "round"; x.beginPath(); x.moveTo(br[0], br[1]); x.lineTo(br[2], br[3]); x.stroke();
   lmRasterIslands(x);
   RAST.data = x.getImageData(0, 0, RW, RH).data; RAST.bridge = br;
 }
-function lmBridgeSeg() {
-  const pg = DATA.negeri.penang; if (!pg) return null;
-  const sp = pg.d.split("M").filter(Boolean).map((t) => { const n = t.replace(/Z/g, "").match(/-?[\d.]+/g).map(Number), p = []; for (let i = 0; i < n.length; i += 2) p.push([n[i], n[i + 1]]); return p; });
-  if (sp.length < 2) return null;
-  let best = null;
-  for (const a of sp[0]) for (const b of sp[1]) { const d = Math.hypot(a[0] - b[0], a[1] - b[1]); if (!best || d < best[0]) best = [d, a, b]; }
-  if (!best) return null;
-  const a = best[1], b = best[2], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1;
-  return [a[0] - dx / l * 1.2, a[1] - dy / l * 1.2, b[0] + dx / l * 1.2, b[1] + dy / l * 1.2];
-}
 /* pulangkan kunci negeri ("" = laut, "jambatan" = jambatan) bagi koordinat dunia */
 function lmAt(wx, wz) {
-  const s = toS(wx, wz), px = Math.round((s.x - RX0) * RS), py = Math.round((s.y - RY0) * RS);
+  const px = Math.round((wx - WB.x0) * RS), py = Math.round((wz - WB.z0) * RS);
   if (px < 0 || py < 0 || px >= RW || py >= RH) return "";
   const o = (py * RW + px) * 4; if (RAST.data[o + 3] < 110) return "";
   const r = RAST.data[o]; if (r >= 232) return "jambatan";
@@ -228,15 +260,7 @@ const lmLandW = (wx, wz) => lmAt(wx, wz) !== "";
 /* Grid ketinggian meliputi seluruh peta. Daratan diambil daripada peta raster negeri; ketinggian dijana
    daripada jarak ke pantai, hingar fbm, banjaran (Titiwangsa, Crocker) dan puncak gunung. Tapak rata
    ("pad") disediakan untuk menara, mercu tanda dan lapangan terbang supaya model duduk elok. */
-const TER = { cs: 4, x0: -1320 * K, z0: -528 * K, nx: 0, nz: 0, h: null, land: null, st: null, dIn: null };
-const STATE_AMP = { perlis: 0.5, kedah: 0.6, penang: 0.8, perak: 1, kelantan: 0.9, terengganu: 0.7, pahang: 1, selangor: 0.5, wp: 0.2, nsembilan: 0.7, melaka: 0.3, johor: 0.5, sarawak: 0.9, sabah: 1 };
-/* banjaran dalam koordinat SVG asal: [negeri rujukan (untuk anjakan Borneo), tinggi, lebar dunia, titik...] */
-const RANGES = [
-  ["perak", 34, 70, [[126, 96], [133, 128], [138, 160], [142, 190], [152, 218], [163, 238]]],
-  ["kelantan", 22, 60, [[150, 120], [170, 150], [185, 170]]],
-  ["sabah", 38, 70, [[505, 150], [520, 125], [532, 105], [545, 88]]],
-  ["sarawak", 26, 90, [[330, 268], [380, 250], [430, 222], [470, 196]]]
-];
+const TER = { cs: 6, x0: WB.x0, z0: WB.z0, nx: 0, nz: 0, h: null, land: null, st: null, fg: null, dIn: null, dOut: null };
 function lmHash(a, b) { let n = (Math.imul(a, 374761393) + Math.imul(b, 668265263)) | 0; n = Math.imul(n ^ (n >>> 13), 1274126177); return ((n ^ (n >>> 16)) >>> 0) / 4294967295; }
 function lmNoise(x, z) {
   const xi = Math.floor(x), zi = Math.floor(z), xf = x - xi, zf = z - zi, u = xf * xf * (3 - 2 * xf), v = zf * zf * (3 - 2 * zf);
@@ -266,40 +290,37 @@ function lmDist(mask, nx, nz, cs) {
   }
   return d;
 }
+/* v18.5: ketinggian daripada DEM sebenar (SRTM). Ketinggian dibesarkan secara tidak linear supaya bukit kelihatan
+   (1 km mendatar = 3 unit; 4,095 m Kinabalu ~ 66 unit). Daratan negara jiran (Thailand, Indonesia, Brunei,
+   Singapura) dipaparkan tetapi tidak boleh dijejaki. */
+function lmElevY(m) { return 0.55 + 22 * Math.pow(Math.max(0, m) / 1000, 0.95); }
+/* puncak sebenar (meter): DEM 1.7 km melicinkan puncak, jadi puncak dinaikkan semula di lokasi mercu tanda */
+const PEAK_M = { "sb-kinabalu": 4095, "sw-mulu": 2376, "kd-jerai": 1217, "jh-ledang": 1276, "kn-stong": 1422, "pg-bendera": 833, "ph-genting": 1800, "ph-cameron": 1500, "ph-fraser": 1300 };
 function lmTerrainBase(g) {
-  const cs = TER.cs = LM.gq ? 5 : 9, nx = TER.nx = Math.floor(2680 * K / cs) + 1, nz = TER.nz = Math.floor(1040 * K / cs) + 1, N = nx * nz;
-  const land = TER.land = new Uint8Array(N), st = TER.st = new Uint8Array(N), keys = RAST.keys;
+  const cs = TER.cs = LM.gq ? 6 : 12, nx = TER.nx = Math.floor(WB.w / cs) + 1, nz = TER.nz = Math.floor(WB.h / cs) + 1, N = nx * nz;
+  TER.x0 = WB.x0; TER.z0 = WB.z0;
+  const land = TER.land = new Uint8Array(N), st = TER.st = new Uint8Array(N), fg = TER.fg = new Uint8Array(N), dem = new Float32Array(N), keys = RAST.keys;
   for (let z = 0; z < nz; z++) for (let x = 0; x < nx; x++) {
-    const k = lmAt(TER.x0 + x * cs, TER.z0 + z * cs), i = z * nx + x;
-    if (k && k !== "jambatan") { land[i] = 1; st[i] = keys.indexOf(k) + 1; }
+    const wx = TER.x0 + x * cs, wz = TER.z0 + z * cs, k = lmAt(wx, wz), i = z * nx + x;
+    if (k && k !== "jambatan") { land[i] = 1; st[i] = keys.indexOf(k) + 1; dem[i] = Math.max(0, lmDem(wx, wz)); continue; }
+    const m = lmDem(wx, wz); if (m > 3 && k !== "jambatan") { const e = lmDemEdge(wx, wz); if (e > 18) { land[i] = 1; fg[i] = 1; dem[i] = m * Math.min(1, (e - 18) / 60); } }
   }
   const sea = new Uint8Array(N); for (let i = 0; i < N; i++) sea[i] = land[i] ? 0 : 1;
   const dIn = TER.dIn = lmDist(sea, nx, nz, cs), dOut = TER.dOut = lmDist(land, nx, nz, cs);
-  /* amplitud ikut negeri, dilicinkan supaya tiada anak tangga di sempadan */
-  let amp = new Float32Array(N);
-  for (let i = 0; i < N; i++) amp[i] = st[i] ? (STATE_AMP[keys[st[i] - 1]] || 0.6) : 0.4;
-  const blur = (src) => { const out = new Float32Array(N), r = Math.max(2, Math.round(28 / cs)); for (let z = 0; z < nz; z++) { let s = 0, c = 0; for (let x = -r; x <= r; x++) if (x >= 0 && x < nx) { s += src[z * nx + x]; c++; } for (let x = 0; x < nx; x++) { out[z * nx + x] = s / c; const xa = x - r, xb = x + r + 1; if (xa >= 0) { s -= src[z * nx + xa]; c--; } if (xb < nx) { s += src[z * nx + xb]; c++; } } } const o2 = new Float32Array(N); for (let x = 0; x < nx; x++) { let s = 0, c = 0; for (let z = -r; z <= r; z++) if (z >= 0 && z < nz) { s += out[z * nx + x]; c++; } for (let z = 0; z < nz; z++) { o2[z * nx + x] = s / c; const za = z - r, zb = z + r + 1; if (za >= 0) { s -= out[za * nx + x]; c--; } if (zb < nz) { s += out[zb * nx + x]; c++; } } } return o2; };
-  amp = blur(amp);
-  /* banjaran dan puncak dalam koordinat dunia */
-  const ranges = RANGES.map(([k, ht, w, pts]) => ({ ht: ht, w: w * K, p: pts.map((q) => toW(k, q[0], q[1])) }));
-  const peaks = [];
-  for (const it of g.items) {
-    if (it.kind !== "pl") continue;
-    if (it.type === "gunung") peaks.push({ x: it.x, z: it.z, h: it.id === "sb-kinabalu" ? 92 : it.id === "sw-mulu" ? 58 : 42, r: it.id === "sb-kinabalu" ? 70 : 48 });
-    else if (it.type === "bukit") peaks.push({ x: it.x, z: it.z, h: 22, r: 30 });
-  }
-  lmIslands().forEach((o) => o.pk.forEach((q) => peaks.push({ x: (o.x + q[0] - OX) * SC, z: (o.y + q[1] - OZ) * SC, h: q[2], r: q[3] * K })));
   const h = TER.h = new Float32Array(N), sm = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
   for (let z = 0; z < nz; z++) for (let x = 0; x < nx; x++) {
     const i = z * nx + x, wx = TER.x0 + x * cs, wz = TER.z0 + z * cs;
     if (!land[i]) { h[i] = -1.4 - Math.min(dOut[i], 70) / 70 * 16 + (lmNoise(wx / 40, wz / 40) - 0.5) * 1.5; continue; }
-    const D = dIn[i], inl = sm(14, 150, D), A = amp[i];
-    let v = 0.55 + Math.min(D, 30) * 0.075;
-    v += A * inl * (5 + lmFbm(wx / 230, wz / 230) * 30 + lmFbm(wx / 70 + 7, wz / 70) * 8);
-    let rg = 0; for (const R of ranges) { let md = 1e9; for (let j = 0; j < R.p.length - 1; j++) md = Math.min(md, lmSegDist(wx, wz, R.p[j].x, R.p[j].z, R.p[j + 1].x, R.p[j + 1].z)); if (md < R.w * 2.2) rg = Math.max(rg, R.ht * Math.exp(-(md * md) / (R.w * R.w)) * (0.7 + 0.6 * lmFbm(wx / 60, wz / 60))); }
-    v += rg * sm(4, 40, D);
-    for (const q of peaks) { const d2 = (wx - q.x) * (wx - q.x) + (wz - q.z) * (wz - q.z); if (d2 < q.r * q.r * 6) v = Math.max(v, v * 0.3 + q.h * Math.exp(-d2 / (q.r * q.r)) * sm(2, 20, D)); }
-    h[i] = Math.min(v, 100);
+    const D = dIn[i], inl = sm(6, 60, D);
+    let v = lmElevY(dem[i]);
+    v = Math.min(v, 0.6 + D * 0.35);                         /* pantai landai */
+    if (!fg[i]) v += (lmFbm(wx / 45, wz / 45) - 0.5) * 2.2 * inl * (0.4 + Math.min(1, v / 12)); /* butiran kecil */
+    h[i] = clamp(v, 0.45, 100);
+  }
+  for (const it of g.items) {
+    const pm = it.kind === "pl" && PEAK_M[it.id]; if (!pm) continue;
+    const ty = lmElevY(pm), r = 14 + pm / 160, R2 = r * r, xa = Math.max(0, Math.floor((it.x - r * 3 - TER.x0) / cs)), xb = Math.min(nx - 1, Math.ceil((it.x + r * 3 - TER.x0) / cs)), za = Math.max(0, Math.floor((it.z - r * 3 - TER.z0) / cs)), zb = Math.min(nz - 1, Math.ceil((it.z + r * 3 - TER.z0) / cs));
+    for (let z = za; z <= zb; z++) for (let x = xa; x <= xb; x++) { const i = z * nx + x; if (!land[i]) continue; const d2 = (TER.x0 + x * cs - it.x) ** 2 + (TER.z0 + z * cs - it.z) ** 2, k = Math.exp(-d2 / R2); if (ty * k > h[i]) h[i] = h[i] + (ty * k - h[i]) * Math.min(1, k * 1.6); }
   }
 }
 function lmPad(g, x, z, r, top, sh) { g.pads.push({ x: x, z: z, r: r, top: !!top, sh: sh || null }); }
@@ -338,7 +359,7 @@ function lmBuildTerrain(g) {
   lmTerrainPads(g); lmRailCarve(g);
   const { cs, nx, nz, h, x0, z0, land, st, dIn } = TER, N = nx * nz, keys = RAST.keys;
   const pos = new Float32Array(N * 3), col = new Float32Array(N * 3), uv = new Float32Array(N * 2);
-  const C = (hex) => new T.Color(hex), sand = C(0xe6d39a), wet = C(0xb9a571), grass = C(0x4f8a34), grass2 = C(0x6f9a3c), forest = C(0x24552a), rock = C(0x6f6a5e), snow = C(0xf4f6f8), sea0 = C(0xd8c58e), sea1 = C(0x2b5f6e);
+  const C = (hex) => new T.Color(hex), sand = C(0xe6d39a), wet = C(0xb9a571), grass = C(0x4f8a34), grass2 = C(0x6f9a3c), forest = C(0x24552a), rock = C(0x6f6a5e), snow = C(0xa9a59c), sea0 = C(0xd8c58e), sea1 = C(0x2b5f6e);
   const tmp = new T.Color(), tint = {};
   keys.forEach((k, i) => { tint[i + 1] = new T.Color(STATE_COL[k] || "#8fd16a"); });
   for (let z = 0; z < nz; z++) for (let x = 0; x < nx; x++) {
@@ -354,6 +375,7 @@ function lmBuildTerrain(g) {
       if (y > 42 || slope > 0.85) tmp.lerp(rock, clamp(Math.max((y - 42) / 22, (slope - 0.85) * 1.6), 0, 0.85) * (0.75 + 0.25 * n));
       if (y > 72) tmp.lerp(snow, clamp((y - 72) / 10, 0, 1));
       if (st[i] && tint[st[i]]) tmp.lerp(tint[st[i]], 0.1);
+      if (TER.fg[i]) tmp.lerp(C(0x8a9a78), 0.45); /* negara jiran */
     }
     col[i * 3] = tmp.r; col[i * 3 + 1] = tmp.g; col[i * 3 + 2] = tmp.b;
   }
@@ -376,10 +398,10 @@ function lmBuildTerrain(g) {
   g.border = {};
   for (const k of keys) {
     const grp = new T.Group(), mat = new T.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.35 });
-    DATA.negeri[k].d.split("M").filter(Boolean).forEach((sp) => {
-      const nn = sp.replace(/Z/g, "").match(/-?[\d.]+/g).map(Number), pts = [];
-      for (let j = 0; j < nn.length; j += 2) {
-        const a = toW(k, nn[j], nn[j + 1]), b = toW(k, nn[(j + 2) % nn.length], nn[(j + 3) % nn.length]), seg = Math.max(1, Math.ceil(Math.hypot(b.x - a.x, b.z - a.z) / 6));
+    (GEOD.states[k] || []).forEach((ring) => {
+      const pts = [];
+      for (let j = 0; j < ring.length; j++) {
+        const a = { x: ring[j][0], z: ring[j][1] }, b = { x: ring[(j + 1) % ring.length][0], z: ring[(j + 1) % ring.length][1] }, seg = Math.max(1, Math.ceil(Math.hypot(b.x - a.x, b.z - a.z) / 6));
         for (let s = 0; s < seg; s++) { const px = a.x + (b.x - a.x) * s / seg, pz = a.z + (b.z - a.z) * s / seg; pts.push(new T.Vector3(px, Math.max(0.15, lmHRaw(px, pz)) + 0.35, pz)); }
       }
       if (pts.length) { pts.push(pts[0].clone()); grp.add(new T.Line(new T.BufferGeometry().setFromPoints(pts), mat)); }
@@ -389,7 +411,7 @@ function lmBuildTerrain(g) {
   /* jambatan Pulau Pinang */
   const br = RAST.bridge;
   if (br) {
-    const a = toW("penang", br[0], br[1]), b = toW("penang", br[2], br[3]), len = Math.hypot(b.x - a.x, b.z - a.z), ang = Math.atan2(b.z - a.z, b.x - a.x);
+    const a = { x: br[0], z: br[1] }, b = { x: br[2], z: br[3] }, len = Math.hypot(b.x - a.x, b.z - a.z), ang = Math.atan2(b.z - a.z, b.x - a.x);
     const grp = new T.Group(); grp.position.set((a.x + b.x) / 2, 1.25, (a.z + b.z) / 2); grp.rotation.y = -ang;
     grp.add(lmMesh(lmBox(len, 0.6, 6), "#d9d3c4", 0, -0.3, 0));
     for (let i = -1; i <= 1; i += 2) grp.add(lmMesh(lmBox(len, 0.9, 0.35), "#f2efe6", 0, 0.45, i * 2.9));
@@ -432,7 +454,7 @@ function lmBuildSky(g) {
   g.sunDisc = new T.Sprite(new T.SpriteMaterial({ map: sunTex, fog: false, depthWrite: false, transparent: true })); g.sunDisc.scale.set(160, 160, 1); g.sunDisc.renderOrder = -9; g.scene.add(g.sunDisc);
   const puff = lmTex(128, 128, (x, w) => { for (let i = 0; i < 7; i++) { const cx = 30 + Math.random() * 68, cy = 50 + Math.random() * 30, r = 22 + Math.random() * 18, gr = x.createRadialGradient(cx, cy, 0, cx, cy, r); gr.addColorStop(0, "rgba(255,255,255,.95)"); gr.addColorStop(1, "rgba(255,255,255,0)"); x.fillStyle = gr; x.fillRect(0, 0, w, w); } });
   const clouds = new T.Group(), R = lmRand("lm-cloud"), cm = new T.SpriteMaterial({ map: puff, transparent: true, depthWrite: false, opacity: 0.9 });
-  for (let i = 0; i < (LM.gq ? 70 : 36); i++) { const s = new T.Sprite(cm); const k = 60 + R() * 70; s.scale.set(k * 1.8, k, 1); s.position.set((-1300 + R() * 2900) * K, 130 + R() * 70, (-650 + R() * 1250) * K); clouds.add(s); }
+  for (let i = 0; i < (LM.gq ? 70 : 36); i++) { const s = new T.Sprite(cm); const k = 60 + R() * 70; s.scale.set(k * 1.8, k, 1); s.position.set(WB.x0 + R() * WB.w, 130 + R() * 70, WB.z0 + R() * WB.h); clouds.add(s); }
   g.scene.add(clouds); g.clouds = clouds;
 }
 /* ---------- tumbuhan: pokok hutan, pokok kelapa di pantai, batu ---------- */
@@ -450,12 +472,13 @@ function lmBuildTrees(g, avoid) {
   const pT = mk(palmT, lmMat("#9b7046"), NP), pC = mk(palmC, new T.MeshLambertMaterial({ color: 0x2f7a35, side: T.DoubleSide, flatShading: true }), NP);
   const rocks = mk(rockG, new T.MeshLambertMaterial({ color: 0x8e877a, flatShading: true }), NR);
   const mt = new T.Matrix4(), q = new T.Quaternion(), sc = new T.Vector3(), pos = new T.Vector3(), col = new T.Color(), up = new T.Vector3(0, 1, 0);
-  const ok = (x, z) => { const k = lmAt(x, z); return k && k !== "jambatan" && k !== "wp" && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + 4); };
+  const fgAt = (x, z) => { const xi = Math.round((x - TER.x0) / TER.cs), zi = Math.round((z - TER.z0) / TER.cs); return xi >= 0 && zi >= 0 && xi < TER.nx && zi < TER.nz && TER.fg[zi * TER.nx + xi]; };
+  const ok = (x, z) => { const k = lmAt(x, z); return ((k && k !== "jambatan" && k !== "wp") || (!k && fgAt(x, z) && R() < 0.35)) && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + 4); };
   const put = (m, i, x, y, z, s, sy, rot) => { q.setFromAxisAngle(up, rot); mt.compose(pos.set(x, y, z), q, sc.set(s, sy, s)); m.setMatrixAt(i, mt); };
   let n = 0, np = 0, nr = 0, tries = 0;
-  while ((n < NT || np < NP || nr < NR) && tries < 160000) {
+  while ((n < NT || np < NP || nr < NR) && tries < 400000) {
     tries++;
-    const x = (-1300 + R() * 2630) * K, z = (-520 + R() * 1020) * K; if (!ok(x, z)) continue;
+    const x = WB.x0 + R() * WB.w, z = WB.z0 + R() * WB.h; if (!ok(x, z)) continue;
     const y = lmHRaw(x, z); if (y < 0.4) continue;
     const ci = Math.round((z - TER.z0) / TER.cs) * TER.nx + Math.round((x - TER.x0) / TER.cs), D = TER.dIn[ci] || 0;
     if (D < 22 && y < 4) { if (np < NP && R() < 0.8) { const s = 0.8 + R() * 0.5; put(pT, np, x, y - 0.2, z, s, s * (0.9 + R() * 0.4), R() * 6.28); put(pC, np, x, y - 0.2, z, s, s * (0.9 + R() * 0.4), R() * 6.28); np++; } continue; }
@@ -493,6 +516,120 @@ function lmMasjid(grp, o) {
     grp.add(lmMesh(new T.ConeGeometry(1.1, 3, 8), dome, x, 17.5, z));
   }
   grp.add(lmMesh(lmBox(4, 4.5, 1), "#7a5a3a", 0, 2.25, 7.05));
+}
+/* ---------- v18.5: masjid mengikut reka bentuk sebenar ---------- */
+function lmDomeG(r, onion) {
+  const k = "dome" + r + (onion ? "o" : "");
+  if (GEO[k]) return GEO[k];
+  const pts = [];
+  if (onion) { for (let i = 0; i <= 14; i++) { const t = i / 14, a = t * Math.PI; pts.push(new T.Vector2(Math.max(0.001, r * (Math.sin(a * 0.92) * (1 + 0.25 * Math.sin(a))) * (1 - t * 0.15)), r * 1.45 * t)); } pts.push(new T.Vector2(0.001, r * 1.65)); }
+  else { for (let i = 0; i <= 12; i++) { const a = i / 12 * Math.PI / 2; pts.push(new T.Vector2(Math.max(0.001, Math.cos(a) * r), Math.sin(a) * r)); } }
+  return (GEO[k] = new T.LatheGeometry(pts, 24));
+}
+function lmDome(g, r, col, x, y, z, onion, finial) {
+  const d = lmMesh(lmDomeG(r, onion), col, x, y, z); g.add(d);
+  if (finial !== false) { const top = onion ? r * 1.65 : r; g.add(lmMesh(lmCyl(0.08, 0.12, 1.4, 6), "#e0b341", x, y + top + 0.6, z)); g.add(lmMesh(lmSph(0.22, 8, 6), "#e0b341", x, y + top + 1.35, z)); }
+  return d;
+}
+/* menara azan: batang, balkoni dan kepala */
+function lmMinaret(g, x, z, h, r, col, cap, o) {
+  o = o || {};
+  if (o.square) g.add(lmMesh(lmBox(r * 2, h, r * 2), col, x, h / 2, z));
+  else g.add(lmMesh(lmCyl(r * 0.85, r, h, 12), col, x, h / 2, z));
+  if (o.stripe) for (let i = 1; i < 6; i++) g.add(lmMesh(lmCyl(r * 0.97, r * 0.97, 0.6, 12), o.stripe, x, h * i / 6, z));
+  g.add(lmMesh(lmCyl(r * 1.45, r * 1.45, 0.35, 14), o.bal || col, x, h * 0.78, z));
+  g.add(lmMesh(lmCyl(r * 0.7, r * 0.7, h * 0.1, 10), col, x, h + h * 0.05, z));
+  if (o.cone) g.add(lmMesh(new T.ConeGeometry(r * 1.1, r * 3.2, o.cone), cap, x, h * 1.1 + r * 1.6, z));
+  else lmDome(g, r * 0.95, cap, x, h * 1.1, z, !!o.onion);
+}
+function lmWater(g, r, y) { g.add(lmMesh(lmCyl(r, r, 0.3, 32), "#2f8fcf", 0, (y || 0) + 0.15, 0, { ns: 1 })); }
+function lmStilts(g, w, d, h) { for (let x = -w / 2; x <= w / 2 + 0.01; x += w / 3) for (let z = -d / 2; z <= d / 2 + 0.01; z += d / 3) g.add(lmMesh(lmBox(0.5, h, 0.5), "#d9d3c4", x, h / 2, z)); }
+function lmArches(g, w, h, y, z, n, col) { for (let i = 0; i < n; i++) g.add(lmMesh(lmBox(w / n * 0.55, h, 0.15), col || "#3a3028", -w / 2 + (i + 0.5) * w / n, y, z)); }
+function lmMosque(id) {
+  const g = new T.Group(); let r = 12;
+  const W = "#f4efe3";
+  switch (id) {
+    case "kd-zahir": /* Masjid Zahir: kubah hitam, lima kubah, menara sudut */
+      g.add(lmMesh(lmBox(18, 6, 16), W, 0, 3, 0)); lmArches(g, 16, 3.4, 2.6, 8.05, 7);
+      lmDome(g, 4.6, "#1d1d22", 0, 6, 0, true);
+      for (const [x, z] of [[-8, -7], [8, -7], [-8, 7], [8, 7]]) { g.add(lmMesh(lmCyl(1.3, 1.3, 9, 10), W, x, 4.5, z)); lmDome(g, 1.4, "#1d1d22", x, 9, z, true); }
+      lmMinaret(g, 12, 0, 20, 1.1, W, "#1d1d22", { onion: true }); r = 13; break;
+    case "pg-kapitan": /* Masjid Kapitan Keling: gaya Mughal, kubah bawang, menara Moor berasingan */
+      g.add(lmMesh(lmBox(16, 6, 12), "#efe3c4", 0, 3, 0)); lmArches(g, 14, 3.2, 2.6, 6.05, 6, "#6b5a3a");
+      lmDome(g, 3.8, "#b88a2a", 0, 6, 0, true);
+      for (const [x, z] of [[-7, -5], [7, -5], [-7, 5], [7, 5]]) lmDome(g, 1.1, "#b88a2a", x, 6, z, true);
+      lmMinaret(g, -12, 6, 17, 1.2, "#efe3c4", "#b88a2a", { onion: true, square: true }); r = 12; break;
+    case "pk-ubudiah": /* Masjid Ubudiah: kubah emas, empat menara berjalur merah putih */
+      g.add(lmMesh(lmBox(14, 6, 14), W, 0, 3, 0)); lmArches(g, 12, 3.2, 2.6, 7.05, 5);
+      lmDome(g, 4.6, "#e0b341", 0, 6, 0, true);
+      for (const [x, z] of [[-8.5, -8.5], [8.5, -8.5], [-8.5, 8.5], [8.5, 8.5]]) lmMinaret(g, x, z, 18, 0.95, W, "#e0b341", { onion: true, stripe: "#c0392b" });
+      r = 13; break;
+    case "kn-kglaut": /* Masjid Kampung Laut: kayu cengal, bumbung meru tiga tingkat */
+      g.add(lmMesh(lmBox(13, 0.8, 13), "#6b4a2b", 0, 1.2, 0)); lmStilts(g, 12, 12, 1.2);
+      g.add(lmMesh(lmBox(12, 4, 12), "#8a5a32", 0, 3.6, 0));
+      for (let i = 0; i < 3; i++) { const c = lmMesh(new T.ConeGeometry(9.5 - i * 2.6, 2.6, 4), "#4a2e1a", 0, 6.8 + i * 2.4, 0); c.rotation.y = Math.PI / 4; g.add(c); if (i < 2) g.add(lmMesh(lmBox((9.5 - i * 2.6) * 0.95, 1, (9.5 - i * 2.6) * 0.95), "#8a5a32", 0, 7.9 + i * 2.4, 0)); }
+      g.add(lmMesh(lmCyl(0.12, 0.2, 2, 6), "#e0b341", 0, 13.6, 0)); r = 9; break;
+    case "tr-kristal": { /* Masjid Kristal: keluli, kaca dan kristal */
+      lmWater(g, 18);
+      const glass = new T.MeshPhongMaterial({ color: 0x9fdcf0, transparent: true, opacity: 0.6, shininess: 120, specular: 0xffffff });
+      g.add(lmMesh(lmBox(16, 6, 14), glass, 0, 3.3, 0)); g.add(lmMesh(lmBox(16.2, 0.4, 14.2), "#c9d2dc", 0, 6.4, 0));
+      g.add(lmMesh(lmDomeG(4.4, false), glass, 0, 6.6, 0)); g.add(lmMesh(lmCyl(0.2, 0.2, 3, 6), "#c9d2dc", 0, 12, 0));
+      for (const [x, z] of [[-8, -7], [8, -7], [-8, 7], [8, 7]]) { g.add(lmMesh(lmCyl(0.8, 1, 16, 8), glass, x, 8, z)); g.add(lmMesh(new T.OctahedronGeometry(1.2, 0), glass, x, 17.2, z)); }
+      r = 12; break; }
+    case "sl-biru": /* Masjid Sultan Salahuddin Abdul Aziz Shah: kubah biru-perak besar, empat menara tertinggi */
+      g.add(lmMesh(lmBox(22, 7, 22), W, 0, 3.5, 0)); lmArches(g, 20, 4, 3, 11.05, 8);
+      g.add(lmMesh(lmCyl(7, 7.4, 2.4, 24), W, 0, 8.2, 0)); lmDome(g, 7.2, "#2f6fb5", 0, 9.4, 0, false);
+      for (let i = 0; i < 8; i++) { const a = i / 8 * 6.2832; g.add(lmMesh(lmBox(0.25, 4, 0.25), "#cfe0f2", Math.cos(a) * 5.2, 12, Math.sin(a) * 5.2)); }
+      for (const [x, z] of [[-14, -14], [14, -14], [-14, 14], [14, 14]]) lmMinaret(g, x, z, 38, 1.1, W, "#2f6fb5", { bal: "#2f6fb5" });
+      r = 16; break;
+    case "wp-negara": { /* Masjid Negara: bumbung payung bintang 16 bucu, menara 73 m */
+      lmWater(g, 15);
+      g.add(lmMesh(lmBox(20, 4, 20), W, 0, 2.2, 0)); lmArches(g, 18, 2.6, 2, 10.05, 9, "#5a7a8a");
+      const um = lmMesh(new T.ConeGeometry(11, 3.4, 16), "#5fb5c8", 0, 5.9, 0); g.add(um);
+      const um2 = lmMesh(new T.ConeGeometry(10.6, 3.2, 16), "#3f95ab", 0, 5.8, 0); um2.rotation.y = Math.PI / 16; g.add(um2);
+      g.add(lmMesh(lmCyl(1.1, 1.3, 32, 12), W, 13, 16, -6)); const cap = lmMesh(new T.ConeGeometry(2.6, 2.2, 16), "#5fb5c8", 13, 33, -6); g.add(cap);
+      r = 14; break; }
+    case "mk-selat": /* Masjid Selat Melaka: di atas tiang di laut, kubah keemasan, menara rumah api */
+      lmWater(g, 17); lmStilts(g, 14, 12, 1.4);
+      g.add(lmMesh(lmBox(14, 5, 12), W, 0, 3.9, 0)); lmArches(g, 12, 2.6, 3.4, 6.05, 5);
+      lmDome(g, 3.6, "#c8963c", 0, 6.4, 0, false);
+      lmMinaret(g, 10, -5, 22, 1.2, W, "#c8963c", { bal: "#c8963c" }); r = 11; break;
+    case "jh-abubakar": /* Masjid Sultan Abu Bakar: Victoria-Moor, bumbung biru, empat menara jam */
+      g.add(lmMesh(lmBox(22, 6, 14), W, 0, 3, 0)); lmArches(g, 20, 3.2, 2.6, 7.05, 9, "#3a6aa8");
+      { const rf = lmMesh(new T.ConeGeometry(13, 3.2, 4), "#3a6aa8", 0, 7.6, 0); rf.rotation.y = Math.PI / 4; rf.scale.z = 0.62; g.add(rf); }
+      for (const [x, z] of [[-11, -7], [11, -7], [-11, 7], [11, 7]]) { g.add(lmMesh(lmBox(2.6, 14, 2.6), W, x, 7, z)); g.add(lmMesh(lmBox(2.7, 1.4, 2.7), "#3a6aa8", x, 11, z)); lmDome(g, 1.3, "#3a6aa8", x, 14, z, true); }
+      r = 14; break;
+    case "sb-masjidkk": /* Masjid Bandaraya Kota Kinabalu: kubah biru bergaris emas, di tepi lagun */
+      lmWater(g, 19);
+      g.add(lmMesh(lmBox(18, 6, 18), W, 0, 3.3, 0)); lmArches(g, 16, 3.2, 3, 9.05, 7, "#2d6fc0");
+      g.add(lmMesh(lmCyl(5.4, 5.6, 1.6, 24), W, 0, 7, 0)); lmDome(g, 5.6, "#2d6fc0", 0, 7.8, 0, false);
+      { const t = lmMesh(new T.TorusGeometry(5.5, 0.2, 6, 32), "#e0b341", 0, 8.0, 0); t.rotation.x = Math.PI / 2; g.add(t); }
+      for (const [x, z] of [[-11, -11], [11, -11], [-11, 11], [11, 11]]) lmMinaret(g, x, z, 24, 0.9, W, "#2d6fc0", { bal: "#e0b341" });
+      r = 14; break;
+    case "pl-alhussain": /* Masjid Al-Hussain: di atas air di Kuala Perlis */
+      lmWater(g, 16); lmStilts(g, 12, 12, 1.4);
+      g.add(lmMesh(lmBox(12, 5, 12), W, 0, 3.9, 0)); lmArches(g, 10, 2.6, 3.4, 6.05, 4);
+      lmDome(g, 3.4, "#e0b341", 0, 6.4, 0, true);
+      lmMinaret(g, -9, 6, 18, 1, W, "#e0b341", { onion: true });
+      g.add(lmMesh(lmBox(2.4, 0.4, 10), "#c9c0ad", 0, 1.6, 11)); r = 10; break;
+    case "tr-terapung": /* Masjid Tengku Tengah Zaharah (Masjid Terapung): putih, gaya Moor, di kuala sungai */
+      lmWater(g, 17); lmStilts(g, 14, 12, 1.2);
+      g.add(lmMesh(lmBox(14, 5.5, 12), W, 0, 3.95, 0)); lmArches(g, 12, 3, 3.4, 6.05, 5, "#4f7f6a");
+      lmDome(g, 3.8, "#f2f2ee", 0, 6.7, 0, true); { const t = lmMesh(new T.TorusGeometry(3.7, 0.18, 6, 28), "#e0b341", 0, 6.9, 0); t.rotation.x = Math.PI / 2; g.add(t); }
+      lmMinaret(g, 10, 6, 20, 1, W, "#f2f2ee", { onion: true, bal: "#e0b341" }); r = 11; break;
+    case "wp-putra": /* Masjid Putra: granit merah jambu, menara 116 m, di tepi tasik */
+      lmWater(g, 18);
+      g.add(lmMesh(lmBox(18, 6, 16), "#e8c2c0", 0, 3.3, 0)); lmArches(g, 16, 3.2, 3, 8.05, 7, "#8a4a50");
+      g.add(lmMesh(lmCyl(5.2, 5.4, 1.8, 24), "#e8c2c0", 0, 7.2, 0)); lmDome(g, 5.4, "#d98a98", 0, 8.1, 0, false);
+      lmMinaret(g, 13, -4, 36, 1.4, "#e8c2c0", "#d98a98", { square: true, bal: "#d98a98" }); r = 14; break;
+    case "ns-seremban": /* Masjid Negeri Seremban: sembilan tiang dan sembilan bumbung kon (sembilan luak) */
+      g.add(lmMesh(lmCyl(9, 9.5, 5, 18), W, 0, 2.5, 0));
+      for (let i = 0; i < 9; i++) { const a = i / 9 * 6.2832; g.add(lmMesh(lmCyl(0.7, 0.8, 7, 8), W, Math.cos(a) * 8.8, 3.5, Math.sin(a) * 8.8)); g.add(lmMesh(new T.ConeGeometry(1.4, 3.6, 8), "#2f6f8a", Math.cos(a) * 8.8, 8.8, Math.sin(a) * 8.8)); }
+      g.add(lmMesh(new T.ConeGeometry(7.5, 6, 18), "#2f6f8a", 0, 8, 0)); g.add(lmMesh(lmCyl(0.12, 0.2, 2, 6), "#e0b341", 0, 12, 0));
+      r = 11; break;
+    default: lmMasjid(g, {}); r = 11;
+  }
+  return { g: g, r: r };
 }
 function lmModel(type, rnd) {
   const g = new T.Group(); let r = 9;
@@ -900,14 +1037,14 @@ function lmTrafficTick(g, dt) {
     if (t.pt <= 0 && Math.hypot(x - g.p.x, z - g.p.z) < 900) { t.pt = 0.12; const dx = (t.b.x - t.a.x) / t.d, dz = (t.b.z - t.a.z) / t.d; lmPuff(g, x - dx * 6, t.y + 2.5, z - dz * 6, 2, 3.5, 2.2, 0.5); }
   }
 }
-/* ---------- pulau Misi Khas dan feri (v17.94) ---------- */
-/* Pulau dalam koordinat SVG beranjak (Borneo sudah +BX). kh: senarai id Misi Khas mengikut keutamaan.
-   from: negeri jeti tanah besar. pk: puncak [dx, dy, tinggi, jejari dunia]. */
+/* ---------- pulau Misi Khas dan feri (v17.94; v18.5 ikut garis pantai sebenar) ---------- */
+/* kh: senarai id Misi Khas mengikut keutamaan. from: negeri jeti tanah besar, port: jeti sebenar [lat, lon].
+   sc: pembesaran untuk permainan (Pangkor dan Sipadan terlalu kecil untuk markas pada skala sebenar). */
 const ISLANDS = [
-  { id: "i-lkw", n: "Pulau Langkawi", kh: ["K4", "K3"], x: 40, y: 80, rx: 11, ry: 9, from: "kedah", port: "Jeti Kuala Kedah", lm: "helang", pk: [[-3, -2, 34, 34]] },
-  { id: "i-tio", n: "Pulau Tioman", kh: ["K5"], x: 240, y: 212, rx: 5, ry: 8.5, from: "johor", port: "Jeti Mersing", lm: "tioman", pk: [[0, 2.5, 30, 16], [1.4, 4, 26, 12]] },
-  { id: "i-pkr", n: "Pulau Pangkor", kh: ["KS"], x: 75, y: 172, rx: 6, ry: 7, from: "perak", port: "Jeti Lumut", lm: "kota", pk: [[0, -2, 16, 18]] },
-  { id: "i-sip", n: "Pulau Sipadan", kh: ["KR"], x: 650, y: 197, rx: 6.5, ry: 6, from: "sabah", port: "Jeti Semporna", lm: "rumahapi", pk: [] }
+  { id: "i-lkw", n: "Pulau Langkawi", kh: ["K4", "K3"], from: "kedah", port: "Jeti Kuala Kedah", pll: [6.1067, 100.2878], lm: "helang", sc: 1 },
+  { id: "i-tio", n: "Pulau Tioman", kh: ["K5"], from: "johor", port: "Jeti Mersing", pll: [2.4330, 103.8420], lm: "tioman", sc: 1 },
+  { id: "i-pkr", n: "Pulau Pangkor", kh: ["KS"], from: "perak", port: "Jeti Lumut", pll: [4.2335, 100.6300], lm: "kota", sc: 2.4 },
+  { id: "i-sip", n: "Pulau Sipadan", kh: ["KR"], from: "sabah", port: "Jeti Semporna", pll: [4.4815, 118.6110], lm: "rumahapi", sc: 1 }
 ];
 const ISL_BY = {};
 function lmIslands() {
@@ -915,19 +1052,20 @@ function lmIslands() {
   const out = [];
   ISLANDS.forEach((d, j) => {
     const kid = d.kh.find((k) => typeof KHAS_BY !== "undefined" && KHAS_BY[k]); if (!kid) return;
-    const R = lmRand(d.id), pts = [];
-    for (let i = 0; i < 28; i++) { const a = i / 28 * 6.2832, k = 0.82 + R() * 0.3 + Math.sin(a * 3 + j) * 0.06; pts.push([d.x + Math.cos(a) * d.rx * k, d.y + Math.sin(a) * d.ry * k]); }
-    const p = new Path2D(); pts.forEach((q, i) => (i ? p.lineTo(q[0], q[1]) : p.moveTo(q[0], q[1]))); p.closePath();
-    const o = Object.assign({}, d, { j: j, kid: kid, khas: KHAS_BY[kid], pts: pts, path: p });
+    const gi = (GEOD.isl || []).find((q) => q.id === d.id); if (!gi || gi.ring < 0) return;
+    const cx = gi.c[0], cz = gi.c[1], ring = GEOD.states[gi.k][gi.ring].map((q) => [cx + (q[0] - cx) * d.sc, cz + (q[1] - cz) * d.sc]);
+    const p = new Path2D(); ring.forEach((q, i) => (i ? p.lineTo(q[0], q[1]) : p.moveTo(q[0], q[1]))); p.closePath();
+    const bb = lmRingsBox([ring]);
+    const o = Object.assign({}, d, { j: j, kid: kid, khas: KHAS_BY[kid], c: { x: cx, z: cz }, ring: ring, path: p, rad: Math.min(bb.w, bb.h) / 2 });
     out.push(o); ISL_BY[d.id] = o;
   });
   LM.isl = out; return out;
 }
 /* lukis pulau ke peta raster (saluran hijau) */
 function lmRasterIslands(x) {
-  lmIslands().forEach((o) => { x.setTransform(RS, 0, 0, RS, -RX0 * RS, -RY0 * RS); x.fillStyle = "rgb(0," + ((o.j + 1) * 40) + ",0)"; x.fill(o.path); });
+  lmIslands().forEach((o) => { x.fillStyle = x.strokeStyle = "rgb(0," + ((o.j + 1) * 40) + ",0)"; x.lineWidth = 2; x.fill(o.path); x.stroke(o.path); });
 }
-const lmIslW = (o) => ({ x: (o.x - OX) * SC, z: (o.y - OZ) * SC });
+const lmIslW = (o) => o.c;
 function lmPlaceName(k) { return ISL_BY[k] ? ISL_BY[k].n : k === "jambatan" ? "Jambatan Pulau Pinang" : DATA.negeri[k] ? DATA.negeri[k].nama : "Laut"; }
 function lmPlaceShort(k) { return ISL_BY[k] ? ISL_BY[k].n : DATA.negeri[k] ? DATA.negeri[k].pendek : "Laut"; }
 
@@ -981,25 +1119,20 @@ function lmMarkas(o) {
   const flag = lmMesh(lmBox(3, 1.7, 0.1), "#9aa3ad", 5, 7.2, 0); g.add(flag);
   return { g: g, cr: cr, flag: flag };
 }
-/* titik pantai tanah besar paling hampir dengan pulau */
-function lmCoastNear(state, sx, sy, blocked) {
-  /* titik pantai terdekat yang lapang (jauh daripada menara, mercu tanda dan bukit) */
+/* titik pantai tanah besar (bucu sempadan negeri) paling hampir dengan jeti sebenar, lapang dan menghadap laut ke arah pulau */
+function lmCoastNear(state, tgt, isl, blocked) {
   const all = [];
-  DATA.negeri[state].d.split("M").filter(Boolean).forEach((sp) => {
-    const n = sp.replace(/Z/g, "").match(/-?[\d.]+/g).map(Number);
-    for (let i = 0; i < n.length; i += 2) { const px = shiftX(state, n[i]), py = n[i + 1]; all.push({ d: Math.hypot(px - sx, py - sy), x: px, y: py }); }
-  });
+  (GEOD.states[state] || []).forEach((r) => r.forEach((q) => all.push({ d: Math.hypot(q[0] - tgt.x, q[1] - tgt.z), x: q[0], z: q[1] })));
   all.sort((a, b) => a.d - b.d);
-  const ix = (sx - OX) * SC, iz = (sy - OZ) * SC;
-  const coast = (q) => { const wx = (q.x - OX) * SC, wz = (q.y - OZ) * SC, l = Math.hypot(ix - wx, iz - wz) || 1, ux = (ix - wx) / l, uz = (iz - wz) / l; return lmAt(wx + ux * 8, wz + uz * 8) === "" && lmAt(wx - ux * 8, wz - uz * 8) === state; };
-  const free = (q) => { const wx = (q.x - OX) * SC, wz = (q.y - OZ) * SC; return coast(q) && !(blocked || []).some((b) => Math.hypot(b.x - wx, b.z - wz) < b.r + 22); };
-  const clr = (q) => { const wx = (q.x - OX) * SC, wz = (q.y - OZ) * SC; return Math.min(1e9, ...(blocked || []).map((b) => Math.hypot(b.x - wx, b.z - wz) - b.r)); };
-  const cs = all.slice(0, 60).filter(coast);
-  return all.slice(0, 60).find(free) || (cs.length ? cs.sort((a, b) => clr(b) - clr(a))[0] : all[0]);
+  const coast = (q) => { const l = Math.hypot(isl.x - q.x, isl.z - q.z) || 1, ux = (isl.x - q.x) / l, uz = (isl.z - q.z) / l; return lmAt(q.x + ux * 8, q.z + uz * 8) === "" && lmAt(q.x - ux * 8, q.z - uz * 8) === state; };
+  const free = (q) => coast(q) && !(blocked || []).some((b) => Math.hypot(b.x - q.x, b.z - q.z) < b.r + 22);
+  const clr = (q) => Math.min(1e9, ...(blocked || []).map((b) => Math.hypot(b.x - q.x, b.z - q.z) - b.r));
+  const near = all.slice(0, 80), cs = near.filter(coast);
+  return near.find(free) || (cs.length ? cs.sort((a, b) => clr(b) - clr(a))[0] : near[0] || tgt);
 }
 function lmBuildIslands(g, gnd, avoid) {
   lmIslands().forEach((o) => {
-    const c = lmIslW(o), ct = lmCoastNear(o.from, o.x, o.y, avoid), cw = { x: (ct.x - OX) * SC, z: (ct.y - OZ) * SC };
+    const c = lmIslW(o), ct = lmCoastNear(o.from, ll(o.pll[0], o.pll[1]), c, avoid), cw = { x: ct.x, z: ct.z };
     const dx = c.x - cw.x, dz = c.z - cw.z, dl = Math.hypot(dx, dz) || 1, ux = dx / dl, uz = dz / dl;
     /* jeti tanah besar: akar di darat, hujung ke arah pulau */
     let ax = cw.x - ux * 6, az = cw.z - uz * 6; for (let i = 0; i < 20 && !lmLandW(ax, az); i++) { ax -= ux * 2; az -= uz * 2; }
@@ -1024,7 +1157,7 @@ function lmBuildIslands(g, gnd, avoid) {
     g.items.push(it); g.cols.push({ x: c.x, z: c.z, r: 7, h: 12 });
     let lm = null;
     if (o.lm === "helang") lm = lmHelang(); else if (o.lm === "rumahapi") lm = lmRumahApi(); else if (o.lm === "kota") lm = lmModel("kota", lmRand(o.id));
-    if (lm) { const ox = c.x + uz * 22, oz = c.z - ux * 22; lm.g.position.set(ox, 0, oz); g.scene.add(lm.g); gnd.push([lm.g, 0]); lmPad(g, ox, oz, Math.max(lm.r, 6) + 2); if (lm.r) g.cols.push({ x: ox, z: oz, r: lm.r, h: 20 }); it.lmk = lm.g; }
+    if (lm) { const off = Math.min(22, Math.max(10, o.rad * 0.55)), ox = c.x + uz * off, oz = c.z - ux * off; lm.g.position.set(ox, 0, oz); g.scene.add(lm.g); gnd.push([lm.g, 0]); lmPad(g, ox, oz, Math.max(lm.r, 6) + 2); if (lm.r) g.cols.push({ x: ox, z: oz, r: lm.r, h: 20 }); it.lmk = lm.g; }
     avoid.push({ x: c.x, z: c.z, r: 16 }, { x: ax, z: az, r: 10 }, { x: bx, z: bz, r: 9 });
     lmIslandState(it);
   });
@@ -1072,7 +1205,7 @@ function lmHorn() { if (LM.mute) return; arBeep(110, 0.9, "sawtooth", 0.05); set
 function lmSail(jt) {
   const g = LM.g; if (!g || g.flight || g.sail) return;
   const a = jt.end, b = jt.other.end, mid = { x: (a.x + b.x) / 2 + jt.dir.z * 40, z: (a.z + b.z) / 2 - jt.dir.x * 40 };
-  const boat = jt.ferry || jt.other.ferry; const dur = clamp(Math.hypot(b.x - a.x, b.z - a.z) / 22, 7, 16);
+  const boat = jt.ferry || jt.other.ferry; const dur = clamp(Math.hypot(b.x - a.x, b.z - a.z) / 12, 8, 22);
   g.sail = { jt: jt, boat: boat, a: a, b: b, c: mid, t: -1.4, dur: dur, wake: 0, home: { p: boat.position.clone(), r: boat.rotation.y } };
   g.ui = true; if (g.sky5) g.sky5.sp.visible = false; lmHorn(); lmPop("Feri akan bertolak");
   lmSailHud(true);
@@ -1117,9 +1250,22 @@ function lmSailEnd(g) {
 /* ---------- v18.2: kereta api ETS (utara) dan ECRL (Pantai Timur) dari Kuala Lumpur ----------
    Stesen dalam koordinat SVG asal (seperti PLACES). Landasan dibina selepas rupa bumi siap: titik setiap
    4 unit, ketinggian dilicinkan (jambatan di atas lurah/sungai, terowong menembusi banjaran). */
+/* laluan sebenar: [negeri, nama, lat, lon, berhenti?]. Titik tanpa henti mengikut jajaran landasan.
+   ETS: Laluan Pantai Barat KTM. ECRL: jajaran Gombak - Kota Bharu (termasuk terowong Genting). */
 const RAILS = [
-  { id: "ets", n: "ETS", nm: "ETS KTM", col: "#1f4fa8", c2: "#f2c13a", st: [["wp", "KL Sentral", 136.3, 223], ["selangor", "Rawang", 131, 211], ["perak", "Tanjung Malim", 129, 193.1], ["perak", "Ipoh", 114, 157], ["perak", "Taiping", 98, 141], ["penang", "Butterworth", 81, 122], ["kedah", "Sungai Petani", 84, 112], ["kedah", "Alor Setar", 80, 94], ["perlis", "Padang Besar", 73.4, 65.5]] },
-  { id: "ecrl", n: "ECRL", nm: "ECRL", col: "#0e8a6a", c2: "#9be3c9", st: [["selangor", "Gombak (KL)", 141, 215], ["pahang", "Bentong", 150, 211], ["pahang", "Mentakab", 166, 203], ["pahang", "Kuantan", 203, 192], ["terengganu", "Kemaman", 205, 170], ["terengganu", "Dungun", 205, 152], ["terengganu", "Kuala Terengganu", 197, 127], ["terengganu", "Jerteh", 178, 108], ["kelantan", "Kota Bharu", 160, 95]] }
+  { id: "ets", n: "ETS", nm: "ETS KTM", col: "#1f4fa8", c2: "#f2c13a", st: [
+    ["wp", "KL Sentral", 3.1340, 101.6869, 1], ["selangor", "Kepong Sentral", 3.2087, 101.6286, 0], ["selangor", "Rawang", 3.3207, 101.5749, 1], ["selangor", "Kuala Kubu Bharu", 3.5536, 101.6400, 0],
+    ["perak", "Tanjung Malim", 3.6847, 101.5180, 1], ["perak", "Slim River", 3.8283, 101.4033, 0], ["perak", "Sungkai", 3.9946, 101.3135, 0], ["perak", "Bidor", 4.1093, 101.2862, 0],
+    ["perak", "Tapah Road", 4.1766, 101.1990, 0], ["perak", "Kampar", 4.3089, 101.1544, 1], ["perak", "Batu Gajah", 4.4719, 101.0418, 0], ["perak", "Ipoh", 4.5975, 101.0727, 1],
+    ["perak", "Sungai Siput", 4.8225, 101.0688, 0], ["perak", "Kuala Kangsar", 4.7720, 100.9370, 1], ["perak", "Taiping", 4.8530, 100.7384, 1], ["perak", "Parit Buntar", 5.1260, 100.4932, 0],
+    ["penang", "Bukit Mertajam", 5.3633, 100.4610, 1], ["penang", "Tasek Gelugor", 5.4811, 100.4986, 0], ["kedah", "Sungai Petani", 5.6451, 100.4870, 1], ["kedah", "Gurun", 5.8166, 100.4737, 0],
+    ["kedah", "Alor Setar", 6.1197, 100.3746, 1], ["kedah", "Kodiang", 6.3756, 100.3000, 0], ["perlis", "Arau", 6.4294, 100.2707, 1], ["perlis", "Padang Besar", 6.6626, 100.3218, 1]] },
+  { id: "ecrl", n: "ECRL", nm: "ECRL", col: "#0e8a6a", c2: "#9be3c9", st: [
+    ["selangor", "Gombak (KL)", 3.2393, 101.7105, 1], ["pahang", "Genting (terowong)", 3.3600, 101.8300, 0], ["pahang", "Bentong", 3.5000, 101.9000, 1], ["pahang", "Karak", 3.4200, 102.0300, 0],
+    ["pahang", "Mentakab", 3.4900, 102.3400, 1], ["pahang", "Maran", 3.5800, 102.7700, 0], ["pahang", "Kuantan", 3.8400, 103.2500, 1], ["pahang", "Pelabuhan Kuantan", 3.9650, 103.3700, 0],
+    ["pahang", "Cherating", 4.1200, 103.3900, 0], ["terengganu", "Kemaman", 4.2300, 103.4100, 1], ["terengganu", "Kerteh", 4.5200, 103.4300, 0], ["terengganu", "Dungun", 4.7700, 103.4000, 1],
+    ["terengganu", "Kuala Terengganu", 5.3000, 103.0600, 1], ["terengganu", "Penarik", 5.5900, 102.8000, 0], ["terengganu", "Kota Putera", 5.6800, 102.6200, 0], ["terengganu", "Jerteh", 5.7400, 102.4900, 1],
+    ["kelantan", "Pasir Puteh", 5.8300, 102.4000, 0], ["kelantan", "Kota Bharu", 6.1000, 102.2600, 1]] }
 ];
 const CAR = 16.6; /* panjang gerabak + sambungan */
 function lmStationModel(L, name) {
@@ -1159,22 +1305,25 @@ function lmRailsPlan(g, used, placed, avoid, gnd) {
   g.rails = [];
   RAILS.forEach((L) => {
     const sts = [];
-    L.st.forEach(([k, name, sx, sy], i) => {
+    const via = [];
+    L.st.forEach(([k, name, la, lo, stop], i) => {
       if (!DATA.negeri[k]) return;
+      if (!stop) { via.push({ i: i, w: ll(la, lo) }); return; }
       const okK = (q) => q === k || (k === "wp" && q === "selangor") || (k === "selangor" && q === "wp");
       const free = (x, z) => okK(lmAt(x, z)) && lmLandW(x + 16, z) && lmLandW(x - 16, z) && lmLandW(x, z + 14) && lmLandW(x, z - 14)
         && !used.some((u) => Math.hypot(u.x - x, u.z - z) < 20) && !placed.some((u) => Math.hypot(u.x - x, u.z - z) < u.r + 22) && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + 14);
-      let w = toW(k, sx, sy);
-      if (!free(w.x, w.z)) { let best = null; for (let d = 6; d <= 120 && !best; d += 6) for (let j = 0; j < 16; j++) { const a = j * 0.3927 + d * 0.07, x = w.x + Math.cos(a) * d, z = w.z + Math.sin(a) * d; if (free(x, z)) { best = { x: x, z: z }; break; } } if (best) w = best; }
+      let w = ll(la, lo);
+      if (!free(w.x, w.z)) { let best = null; for (let d = 6; d <= 60 && !best; d += 6) for (let j = 0; j < 16; j++) { const a = j * 0.3927 + d * 0.07, x = w.x + Math.cos(a) * d, z = w.z + Math.sin(a) * d; if (free(x, z)) { best = { x: x, z: z }; break; } } if (best) w = best; }
       const m = lmStationModel(L, name); m.position.set(w.x, 0, w.z); g.scene.add(m);
       lmPad(g, w.x, w.z, 18);
-      const st = { kind: "st", id: L.id + "-" + i, k: k, n: "Stesen " + name, nm: name, line: null, i: sts.length, x: w.x, z: w.z, r: 0, ir: 13, m: m };
+      const st = { kind: "st", id: L.id + "-" + i, k: k, n: "Stesen " + name, nm: name, line: null, i: sts.length, o: i, x: w.x, z: w.z, r: 0, ir: 13, m: m };
       sts.push(st); g.items.push(st); avoid.push({ x: w.x, z: w.z, r: 22 });
     });
-    const R = { L: L, st: sts, pts: null, cum: null, sS: [], train: null, s: 0, dir: 1, wait: 4, next: 1 };
+    const R = { L: L, st: sts, via: via, pts: null, cum: null, sS: [], train: null, s: 0, dir: 1, wait: 4, next: 1 };
     sts.forEach((q) => (q.line = R));
     /* ruang bebas pokok sepanjang garis lurus antara stesen */
-    for (let i = 0; i < sts.length - 1; i++) { const a = sts[i], b = sts[i + 1], d = Math.hypot(b.x - a.x, b.z - a.z); for (let t = 0; t <= d; t += 10) avoid.push({ x: a.x + (b.x - a.x) * t / d, z: a.z + (b.z - a.z) * t / d, r: 5 }); }
+    const seq = sts.map((q) => ({ o: q.o, x: q.x, z: q.z })).concat(via.map((v) => ({ o: v.i, x: v.w.x, z: v.w.z }))).sort((a, b) => a.o - b.o); R.ctrl = seq;
+    for (let i = 0; i < seq.length - 1; i++) { const a = seq[i], b = seq[i + 1], d = Math.hypot(b.x - a.x, b.z - a.z) || 1; for (let t = 0; t <= d; t += 10) avoid.push({ x: a.x + (b.x - a.x) * t / d, z: a.z + (b.z - a.z) * t / d, r: 5 }); }
     g.rails.push(R);
   });
 }
@@ -1183,7 +1332,7 @@ const RAIL_CUT = 16; /* potongan lebih dalam daripada ini menjadi terowong berpo
 function lmRailsPath(g, avoid) {
   for (const R of g.rails) {
     const S = R.st; if (S.length < 2) continue;
-    const ctrl = S.map((q) => new T.Vector3(q.x, 0, q.z)), curve = new T.CatmullRomCurve3(ctrl, false, "centripetal", 0.3);
+    const ctrl = R.ctrl.map((q) => new T.Vector3(q.x, 0, q.z)), curve = new T.CatmullRomCurve3(ctrl, false, "centripetal", 0.5);
     const tot = curve.getLength(), n = Math.max(20, Math.round(tot / 4)), raw = curve.getSpacedPoints(n);
     /* landasan melencong mengelak menara, mercu tanda, lapangan terbang dan markas (stesen kekal) */
     const obs = [];
@@ -1393,7 +1542,7 @@ function lmSwimOk(x, z) {
   if (lmCanStand(x, z) || lmAt(x, z) === "jambatan" || !TER.dOut) return false;
   const xi = Math.round((x - TER.x0) / TER.cs), zi = Math.round((z - TER.z0) / TER.cs);
   if (xi < 0 || zi < 0 || xi >= TER.nx || zi >= TER.nz) return false;
-  return TER.dOut[zi * TER.nx + xi] < SWIM_MAX;
+  const ci = zi * TER.nx + xi; return !TER.land[ci] && TER.dOut[ci] < SWIM_MAX;
 }
 const lmCanGo = (x, z) => lmCanStand(x, z) || lmSwimOk(x, z);
 
@@ -1422,7 +1571,7 @@ function lmBuildWorld(g) {
   DATA.topik.forEach((t) => {
     const k = t.negeri, n = DATA.negeri[k]; if (!n) return;
     {
-      const pins = n.pins && n.pins.length ? n.pins : [[0, 0]], xy = t.xy || pins[(t.pin | 0) % pins.length] || pins[0], base = toW(k, xy[0], xy[1]);
+      const pins = n.pins && n.pins.length ? n.pins : [[0, 0]], xy = t.xy || pins[(t.pin | 0) % pins.length] || pins[0], base = lmSnap(k, toW(k, xy[0], xy[1]));
       let x = base.x, z = base.z;
       /* dua tajuk pada titik yang sama: anjak sedikit supaya tidak bertindih */
       for (let tr = 0; tr < 14 && used.some((u) => Math.hypot(u.x - x, u.z - z) < 12); tr++) { const a = tr * 1.3, d = 12 + tr * 2; const nx = base.x + Math.cos(a) * d, nz = base.z + Math.sin(a) * d; if (lmAt(nx, nz) === k) { x = nx; z = nz; } }
@@ -1437,10 +1586,10 @@ function lmBuildWorld(g) {
   /* tempat pelancongan */
   const placed = [];
   PLACES.forEach((p) => {
-    const [id, k, nama, type, sx, sy, fakta] = p; if (!DATA.negeri[k]) return;
-    let w = toW(k, sx, sy);
-    if (id === "pg-jambatan" && RAST.bridge) { const b = RAST.bridge; w = toW(k, (b[0] + b[2]) / 2 + 2.2, (b[1] + b[3]) / 2 + 2.6); }
-    const R = lmRand(id), md = lmModel(type, R), rot = R() * 6.28;
+    const [id, k, nama, type, la, lo, fakta] = p; if (!DATA.negeri[k]) return;
+    let w = ll(la, lo);
+    if (id === "pg-jambatan" && RAST.bridge) { const b = RAST.bridge; w = { x: (b[0] + b[2]) / 2, z: (b[1] + b[3]) / 2 }; }
+    const R = lmRand(id), md = type === "masjid" ? lmMosque(id) : lmModel(type, R), rot = R() * 6.28;
     /* cari ruang lapang: jauh daripada Menara Ilmu (kedudukan ikut subjek) dan mercu tanda lain.
        W.P. terletak di tengah Selangor, jadi mercu tanda KL boleh melimpah ke Selangor. */
     if (id !== "pg-jambatan") {
@@ -1454,7 +1603,8 @@ function lmBuildWorld(g) {
       }
     }
     placed.push({ x: w.x, z: w.z, r: Math.max(md.r, 6) });
-    md.g.position.set(w.x, 0, w.z); md.g.rotation.y = rot; g.scene.add(md.g); gnd.push([md.g, 0]);
+    md.g.position.set(w.x, 0, w.z); md.g.rotation.y = rot; g.scene.add(md.g);
+    if (id === "pg-jambatan" && RAST.bridge) { const b = RAST.bridge; md.g.rotation.y = -Math.atan2(b[3] - b[1], b[2] - b[0]); md.g.position.y = -2.9; } else gnd.push([md.g, 0]); /* gerbang menara jambatan di atas air */
     if (type === "gunung" || type === "bukit") lmPad(g, w.x, w.z, 5, true); else lmPad(g, w.x, w.z, Math.max(md.r, 8) + 3);
     const pl = { kind: "pl", id: id, k: k, n: nama, type: type, fakta: fakta, x: w.x, z: w.z, r: md.r, ir: Math.max(md.r, 6) + 9, m: md.g, names: [] };
     /* papan kenangan di hadapan mercu tanda */
@@ -1475,8 +1625,8 @@ function lmBuildWorld(g) {
   });
   /* lapangan terbang lengkap: landasan dipilih supaya muat di darat dan jauh daripada menara serta mercu tanda */
   AIRPORTS.forEach((a) => {
-    const [id, k, nama, sx, sy] = a; if (!DATA.negeri[k]) return;
-    const c = toW(k, sx, sy), blocked = used.map((u) => ({ x: u.x, z: u.z, r: 8 })).concat(placed.map((q) => ({ x: q.x, z: q.z, r: q.r })));
+    const [id, k, nama, la, lo] = a; if (!DATA.negeri[k]) return;
+    const c = ll(la, lo), blocked = used.map((u) => ({ x: u.x, z: u.z, r: 8 })).concat(placed.map((q) => ({ x: q.x, z: q.z, r: q.r })));
     const fit = lmRunwayFit(c.x, c.z, blocked, k), ux = Math.cos(fit.a), uz = Math.sin(fit.a), px = -uz, pz = ux, sh = { x: fit.x, z: fit.z, h: null };
     const m = lmAirport(fit.L); m.position.set(fit.x, 0, fit.z); m.rotation.y = -fit.a; g.scene.add(m); gnd.push([m, 0]);
     for (let t = -fit.L - 6; t <= fit.L + 6; t += 8) lmPad(g, fit.x + ux * t, fit.z + uz * t, 9, false, sh);
@@ -1502,8 +1652,8 @@ function lmBuildWorld(g) {
   /* syiling harian bertaburan (deterministik mengikut hari) */
   const R = lmRand("lm-coin-" + dayKey()), got = new Set(LM.st.cd.got);
   let n = 0, tries = 0;
-  while (n < 100 && tries < 5000) {
-    tries++; const x = (-1300 + R() * 2650) * K, z = (-560 + R() * 1080) * K; if (!lmAt(x, z) || lmAt(x, z) === "jambatan") continue;
+  while (n < 110 && tries < 30000) {
+    tries++; const x = WB.x0 + R() * WB.w, z = WB.z0 + R() * WB.h; if (!lmAt(x, z) || lmAt(x, z) === "jambatan") continue;
     if (avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r)) continue;
     const id = "c" + n; n++; if (got.has(id)) continue;
     const y = lmHRaw(x, z) + 1.6; if (y < 1.5) continue;
@@ -1655,7 +1805,7 @@ function lmNet(g, dt, ts) {
       if (!pr.presence || typeof pr.presence !== "object" || n >= 30) continue;
       const v = pr.presence; if (typeof v.x !== "number" || typeof v.z !== "number") continue;
       n++; seen[pr.peer] = 1;
-      const x = clamp(v.x, -1600 * K, 1800 * K), y = clamp(+v.y || 0, -8, 400), z = clamp(v.z, -800 * K, 800 * K), nm = cleanName(String(v.n || "")) || "Pelajar";
+      const x = clamp(v.x, WB.x0, WB.x0 + WB.w), y = clamp(+v.y || 0, -8, 400), z = clamp(v.z, WB.z0, WB.z0 + WB.h), nm = cleanName(String(v.n || "")) || "Pelajar";
       let e = LM.peers[pr.peer];
       if (e && (e.c !== v.c || e.n !== nm)) { lmAvatarDrop(g, e.av, e); e = null; }
       if (!e) { const av = lmAvatar(v.c, nm, false); g.scene.add(av.g); e = LM.peers[pr.peer] = { id: pr.peer, x: x, y: y, z: z, r: +v.r || 0, av: av, c: v.c, n: nm, en: v.en | 0, cn: v.cn | 0, rn: v.rn | 0 }; } /* emote lama sebelum kita masuk tidak dipaparkan */
@@ -2421,22 +2571,20 @@ function lmSkyPlace(g) {
 }
 
 /* ---------- peta mini dan peta besar ---------- */
-const MX0 = 25, MY0 = 55, MW = 660, MH = 250;
+/* peta 2D: kawasan dunia sebenar yang dipaparkan */
+const MAPB = { x0: -3250, z0: -1180, w: 6550, h: 2320 };
+const lmLabelPt = (k) => { const b = lmRingsBox([lmMainRing(k)]); return { x: b.x0 + b.w / 2, z: b.z0 + b.h / 2 }; };
 function lmMapBase(w, h) {
   const c = document.createElement("canvas"); c.width = w; c.height = h;
-  const x = c.getContext("2d"), s = Math.min(w / MW, h / MH), ox = (w - MW * s) / 2, oy = (h - MH * s) / 2;
+  const x = c.getContext("2d"), s = Math.min(w / MAPB.w, h / MAPB.h), ox = (w - MAPB.w * s) / 2 - MAPB.x0 * s, oy = (h - MAPB.h * s) / 2 - MAPB.z0 * s;
   x.fillStyle = "#0d4f86"; x.fillRect(0, 0, w, h);
-  for (const k of RAST.keys) {
-    x.setTransform(s, 0, 0, s, ox + (-MX0 + (BORNEO[k] ? BX : 0)) * s, oy - MY0 * s);
-    x.fillStyle = STATE_COL[k] || "#8fd16a"; x.strokeStyle = "rgba(30,60,20,.6)"; x.lineWidth = 0.6;
-    x.fill(RAST.paths[k]); x.stroke(RAST.paths[k]);
-  }
-  x.setTransform(s, 0, 0, s, ox - MX0 * s, oy - MY0 * s); x.fillStyle = "#9fd18a";
-  lmIslands().forEach((o) => { x.fill(o.path); x.stroke(o.path); });
+  x.setTransform(s, 0, 0, s, ox, oy); x.lineWidth = 1.2 / s; x.lineJoin = "round";
+  for (const k of RAST.keys) { x.fillStyle = STATE_COL[k] || "#8fd16a"; x.strokeStyle = "rgba(30,60,20,.6)"; x.fill(RAST.paths[k]); x.stroke(RAST.paths[k]); }
+  x.fillStyle = "#9fd18a"; lmIslands().forEach((o) => { x.fill(o.path); x.stroke(o.path); });
   x.setTransform(1, 0, 0, 1, 0, 0);
   return { c: c, s: s, ox: ox, oy: oy };
 }
-function lmMapPt(m, wx, wz) { const s = toS(wx, wz); return [m.ox + (s.x - MX0) * m.s, m.oy + (s.y - MY0) * m.s]; }
+function lmMapPt(m, wx, wz) { return [m.ox + wx * m.s, m.oy + wz * m.s]; }
 function lmMapDraw(cv, m, big) {
   const g = LM.g; if (!g) return;
   const x = cv.getContext("2d"); x.drawImage(m.c, 0, 0);
@@ -2457,15 +2605,15 @@ function lmMapDraw(cv, m, big) {
   }
   if (big) {
     x.font = "800 12px Nunito, sans-serif"; x.fillStyle = "rgba(10,30,20,.85)"; x.textAlign = "center";
-    for (const k of RAST.keys) { const pn = DATA.negeri[k].pins && DATA.negeri[k].pins[0]; if (!pn) continue; const w = toW(k, pn[0], pn[1]), [px, py] = lmMapPt(m, w.x, w.z); x.fillText(DATA.negeri[k].pendek, px, py - 12); }
+    for (const k of RAST.keys) { const w = lmLabelPt(k), [px, py] = lmMapPt(m, w.x, w.z); x.fillText(DATA.negeri[k].pendek, px, py - 12); }
     lmIslands().forEach((o) => { const w = lmIslW(o), [px, py] = lmMapPt(m, w.x, w.z); x.fillText(o.n.replace("Pulau ", "P. "), px, py - 16); });
     x.textAlign = "left";
   }
   if (big && LM.roomKind === "open" && LM.zoneN) {
     for (const z in LM.zoneN) {
-      const n = LM.zoneN[z] - (z === LM.zone ? Object.keys(LM.peers).length : 0), k = ZONE_PIN[z], pn = k && DATA.negeri[k] && DATA.negeri[k].pins && DATA.negeri[k].pins[0];
-      if (n <= 0 || !pn) continue;
-      const w = toW(k, pn[0], pn[1]), [px, py] = lmMapPt(m, w.x, w.z); lmMapTag(x, "👥 " + n + " pemain di zon " + ZONES[z], px, py + 26, "#ffd45a");
+      const n = LM.zoneN[z] - (z === LM.zone ? Object.keys(LM.peers).length : 0), k = ZONE_PIN[z];
+      if (n <= 0 || !k || !DATA.negeri[k]) continue;
+      const w = lmLabelPt(k), [px, py] = lmMapPt(m, w.x, w.z); lmMapTag(x, "👥 " + n + " pemain di zon " + ZONES[z], px, py + 26, "#ffd45a");
     }
   }
   for (const id in LM.peers) {
@@ -2516,7 +2664,7 @@ function lmBigMap() {
     let best = null, bd = 26;
     for (const it of g.items) { const [px, py] = lmMapPt(m, it.x, it.z), d = Math.hypot(px - mx, py - my); if (d < bd) { bd = d; best = it; } }
     if (best) g.wp = { x: best.x, z: best.z, n: best.kind === "tw" ? "Menara " + (best.t.kod || best.t.id) : best.n };
-    else { const sx = (mx - m.ox) / m.s + MX0, sy = (my - m.oy) / m.s + MY0, wx = (sx - OX) * SC, wz = (sy - OZ) * SC; g.wp = { x: wx, z: wz, n: "Titik pilihan" }; }
+    else { const wx = (mx - m.ox) / m.s, wz = (my - m.oy) / m.s; g.wp = { x: wx, z: wz, n: "Titik pilihan" }; }
     lmWpSet(); lmMapDraw(cv, m, true);
   });
 }
@@ -2765,7 +2913,7 @@ function lmLoop(ts) {
     }
     if (g.saveT && (g.saveT -= dt) <= 0) { g.saveT = 0; lmSave(); }
     if (g.sky5 && Date.now() - g.sky5.at > 60000) lmSkyLoad(g);
-    if (g.clouds) for (const c of g.clouds.children) { c.position.x += dt * 3; if (c.position.x > 1600 * K) c.position.x = -1300 * K; }
+    if (g.clouds) for (const c of g.clouds.children) { c.position.x += dt * 3; if (c.position.x > WB.x0 + WB.w) c.position.x = WB.x0; }
     if (g.seaN) { g.seaN.offset.x = (g.T * 0.006) % 1; g.seaN.offset.y = (g.T * 0.0037) % 1; }
     g.renderer.render(g.scene, g.camera);
   } catch (e) { LM.err = String(e && e.stack || e); if (!LM.errShown) { LM.errShown = true; console.error(e); } }
@@ -2773,9 +2921,12 @@ function lmLoop(ts) {
 /* ---------- buka, mula, tutup ---------- */
 function lmOpen(tid) {
   if (!T) { toast("Grafik 3D (WebGL) tidak tersedia pada peranti ini.", "warn"); return; }
-  LM.tid = tid || ""; LM.on = false; lmLoad(); lmRaster();
+  LM.tid = tid || ""; LM.on = false; lmLoad();
   document.body.classList.add("ar-lock");
-  lmSetup();
+  if (!GEOD) {
+    const r = lmRoot(); r.appendChild(el("div", { class: "lm-card" }, el("div", { class: "lm-box" }, el("div", { class: "lm-kick" }, "META GEMPUR"), el("h2", null, "Memuat peta Malaysia sebenar..."), el("p", null, "Sempadan negeri dan ketinggian muka bumi (kali pertama sahaja)."))));
+  }
+  lmGeoLoad().then(() => { lmRaster(); lmSetup(); }).catch(() => { toast("Peta META GEMPUR tidak dapat dimuatkan. Semak sambungan internet dan cuba lagi.", "warn"); lmClose(); });
 }
 function lmStart(code, kind) {
   const r = LM.root; LM.ptsLast = null; LM.roomKind = kind || ""; LM.sh = lmMySh(); LM.zoneN = null; LM.zoneAt = 0; LM.roomCode = ""; LM.openFull = false; LM.openRetry = 0; LM.zone = "";
@@ -2810,5 +2961,5 @@ function lmClose() {
 }
 /* untuk ujian automatik */
 LM._g = (x, z) => lmGround(x, z); LM._fly = (a, d) => lmFlyStart(a, d); LM._ride = (a, b) => lmRide(a, b); LM._rai = () => lmRai(); LM._swim = (x, z) => lmSwimOk(x, z);
-LM._t = { lmAt: lmAt, toW: toW, PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
+LM._t = { lmAt: lmAt, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
 })();
