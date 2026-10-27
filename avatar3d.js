@@ -33,7 +33,10 @@ const okId = (id, s) => { try { const it = zvItem(id); return it && it.s === s ?
 /* kod avatar ringkas untuk bilik multiplayer: g|sk|ou|oc|hd|hc|fc|hn|bk|bd|pt|fr|ef */
 function code(z, e) {
   try { z = z || zvState(); e = e || zvEqAll(z); } catch (x) { return "L|1|ou_sc|oc_gn|hd_no|hc_w"; }
-  return [z.g === "P" ? "P" : "L", Math.max(0, Math.min(5, z.sk | 0))].concat(SLOTS.map((s) => e[s] || "")).join("|");
+  const a = [z.g === "P" ? "P" : "L", Math.max(0, Math.min(5, z.sk | 0))].concat(SLOTS.map((s) => e[s] || ""));
+  /* v18.3: lencana sekolah (singkatan:warna:bentuk) sebagai medan tambahan; klien lama mengabaikannya */
+  if (e.bd === "bd_sk") { try { const sb = zvSb(z); a.push("sb:" + sb.t + ":" + sb.c + ":" + sb.s); } catch (x) { /* abaikan */ } }
+  return a.join("|");
 }
 function parse(c) {
   const a = String(c || "").split("|"), g = a[0] === "P" ? "P" : "L", o = { g: g, sk: Math.max(0, Math.min(5, +a[1] | 0)) };
@@ -41,6 +44,8 @@ function parse(c) {
   SLOTS.forEach((s, i) => { o[s] = okId(a[i + 2], s) || def[s]; });
   if (g === "L" && /^hd_t[dlsw]|^hd_ts/.test(o.hd)) o.hd = "hd_no";
   if (g === "P" && /^hd_(no|sk|kp|sb|tp)$/.test(o.hd)) o.hd = "hd_td";
+  const sb = String(a[SLOTS.length + 2] || "").split(":");
+  if (o.bd === "bd_sk") o.sb = { t: (sb[0] === "sb" && sb[1] ? sb[1] : "SEK").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 7) || "SEK", c: Math.max(0, Math.min(7, +sb[2] | 0)), s: Math.max(0, Math.min(2, +sb[3] | 0)) };
   return o;
 }
 /* bendera Jalur Gemilang kecil (tekstur kanvas) */
@@ -62,6 +67,22 @@ function sparkTex() {
     return new T.CanvasTexture(c);
   });
 }
+/* lencana sekolah: perisai/bulat/segi enam dengan singkatan */
+function badgeTex(sb) {
+  return geo("bdg" + sb.t + "_" + sb.c + "_" + sb.s, () => {
+    const c = document.createElement("canvas"); c.width = c.height = 128; const x = c.getContext("2d");
+    let col = "#1e3a7a"; try { col = ZV_SBC[sb.c] || col; } catch (e) { /* abaikan */ }
+    x.beginPath();
+    if (sb.s === 1) x.arc(64, 64, 56, 0, 6.2832);
+    else if (sb.s === 2) { for (let i = 0; i < 6; i++) { const a = i / 6 * 6.2832 - Math.PI / 2; x.lineTo(64 + Math.cos(a) * 58, 64 + Math.sin(a) * 58); } x.closePath(); }
+    else { x.moveTo(12, 10); x.lineTo(116, 10); x.lineTo(116, 64); x.quadraticCurveTo(116, 108, 64, 122); x.quadraticCurveTo(12, 108, 12, 64); x.closePath(); }
+    x.fillStyle = col; x.fill(); x.lineWidth = 9; x.strokeStyle = "#f0c53c"; x.stroke();
+    x.fillStyle = "#f0c53c"; x.beginPath(); for (let i = 0; i < 10; i++) { const r = i % 2 ? 5 : 12, a = i / 10 * 6.2832 - Math.PI / 2; x.lineTo(64 + Math.cos(a) * r, 36 + Math.sin(a) * r); } x.fill();
+    const fs = Math.min(40, Math.floor(190 / Math.max(2, sb.t.length)));
+    x.fillStyle = "#fff"; x.font = "900 " + fs + "px Nunito, Arial, sans-serif"; x.textAlign = "center"; x.textBaseline = "middle"; x.fillText(sb.t, 64, 76);
+    const t = new T.CanvasTexture(c); t.anisotropy = 4; return t;
+  });
+}
 function ballTex() {
   return geo("balltex", () => {
     const c = document.createElement("canvas"); c.width = 128; c.height = 64; const x = c.getContext("2d");
@@ -75,8 +96,9 @@ function build(c, opt) {
   opt = opt || {};
   const o = typeof c === "string" ? parse(c) : c;
   const sk = ZV_SKIN[o.sk] || "#e9b98f", oc = zvCol(ZV_OCOL, o.oc), hc = zvCol(ZV_HCOL, o.hc);
-  const sch = o.ou === "ou_sc", P = o.g === "P", long = o.ou === "ou_kr" || o.ou === "ou_jb" || (sch && P);
-  const topC = sch ? "#f4f4f0" : oc, botC = sch ? "#27345a" : (o.ou === "ou_tk" ? shade(oc, -0.3) : o.ou === "ou_my" || o.ou === "ou_sm" ? oc : shade(oc, -0.08));
+  let uni = null; try { uni = zvUni(o.ou, o.g); } catch (e) { uni = o.ou === "ou_sc" ? { t: "#f4f4f0", b: "#27345a", tie: "#27345a" } : null; }
+  const sch = !!uni, P = o.g === "P", long = o.ou === "ou_kr" || o.ou === "ou_jb" || (sch && P);
+  const topC = sch ? uni.t : oc, botC = sch ? uni.b : (o.ou === "ou_tk" ? shade(oc, -0.3) : o.ou === "ou_my" || o.ou === "ou_sm" ? oc : shade(oc, -0.08));
   const mSk = mat(sk, { roughness: 0.6 }), mTop = mat(topC), mBot = mat(botC), mShoe = mat(o.ou === "ou_tk" ? "#f1f1f1" : "#23232b", { roughness: 0.45 });
   const root = new T.Group(), body = new T.Group(); root.add(body);
   const pv = (x, y, z) => { const p = new T.Group(); p.position.set(x, y, z || 0); body.add(p); return p; };
@@ -100,7 +122,9 @@ function build(c, opt) {
   }
   if (o.ou === "ou_sm") { const sp = mesh(lathe("sampin", [[0, 1.45], [0.98, 1.45], [0.92, 2.55], [0, 2.55]], 22), mat("#8e2340")); sp.scale.z = 0.7; body.add(sp); const st = mesh(geo("sampst", () => new T.TorusGeometry(0.95, 0.04, 6, 24)), mat("#e0b341", { metalness: 0.6, roughness: 0.35 }), 0, 2.0, 0); st.rotation.x = Math.PI / 2; st.scale.y = 0.7; body.add(st); }
   if (o.ou === "ou_my" || o.ou === "ou_sm") { body.add(mesh(geo("col", () => new T.CylinderGeometry(0.3, 0.32, 0.18, 14)), mat(shade(oc, -0.25)), 0, 4.48, 0)); for (let i = 0; i < 3; i++) body.add(mesh(geo("btn", () => new T.SphereGeometry(0.05, 6, 4)), mat("#e0b341", { metalness: 0.6, roughness: 0.3 }), 0, 4.15 - i * 0.3, 0.62)); }
-  if (sch && !P) { body.add(mesh(geo("tie", () => new T.BoxGeometry(0.2, 1.1, 0.05)), mat("#27345a"), 0, 3.75, 0.62)); body.add(mesh(geo("colw", () => new T.CylinderGeometry(0.3, 0.33, 0.16, 14)), mat("#e9e9e3"), 0, 4.47, 0)); }
+  if (sch && !P) { if (uni.tie) body.add(mesh(geo("tie", () => new T.BoxGeometry(0.2, 1.1, 0.05)), mat(uni.tie), 0, 3.75, 0.62)); body.add(mesh(geo("colw", () => new T.CylinderGeometry(0.3, 0.33, 0.16, 14)), mat(shade(topC, -0.06)), 0, 4.47, 0)); }
+  if (sch && uni.scarf) { const sc = mesh(geo("scarf", () => { const g2 = new T.ConeGeometry(0.42, 0.9, 3); g2.rotateX(Math.PI); return g2; }), mat(uni.scarf), 0, 4.05, P ? 0.82 : 0.62); sc.scale.z = 0.25; body.add(sc); body.add(mesh(geo("scarfr", () => new T.TorusGeometry(0.3, 0.06, 6, 18)), mat(uni.scarf), 0, 4.47, 0.05)); body.children[body.children.length - 1].rotation.x = Math.PI / 2; }
+  if (sch && uni.lan) { const ln = mesh(geo("lany", () => new T.TorusGeometry(0.4, 0.03, 6, 16, Math.PI * 0.8)), mat(uni.lan), -0.62, 4.0, 0.6); ln.rotation.z = Math.PI * 1.05; body.add(ln); }
   if (o.ou === "ou_tk") { body.add(mesh(geo("zip", () => new T.BoxGeometry(0.06, 2.0, 0.04)), mat("#f4f4f0"), 0, 3.3, 0.64)); }
   /* lengan */
   const aL = pv(-1.02, 4.15), aR = pv(1.02, 4.15);
@@ -109,6 +133,7 @@ function build(c, opt) {
     p.add(mesh(capsule(0.25, 1.95), mTop, 0, 0.05, 0));
     p.add(mesh(geo("hand", () => new T.SphereGeometry(0.25, 12, 10)), mSk, 0, -2.05, 0.02));
     if (o.ou === "ou_tk") p.add(mesh(geo("strpa", () => new T.BoxGeometry(0.05, 1.6, 0.06)), mat("#f4f4f0"), i ? 0.24 : -0.24, -0.9, 0));
+    if (sch && uni.arm && !i) p.add(mesh(geo("armb", () => new T.CylinderGeometry(0.27, 0.27, 0.3, 14)), mat(uni.arm), 0, -0.35, 0));
   });
   /* leher dan kepala */
   body.add(mesh(geo("neck", () => new T.CylinderGeometry(0.21, 0.24, 0.35, 12)), mSk, 0, 4.6, 0));
@@ -155,6 +180,7 @@ function build(c, opt) {
   /* lencana di dada */
   const bdz = 0.64, bdy = 3.9;
   if (o.bd === "bd_st") { const s = new T.Shape(); for (let i = 0; i < 10; i++) { const r = i % 2 ? 0.07 : 0.17, a = i / 10 * 6.2832 + 1.57; if (i) s.lineTo(Math.cos(a) * r, Math.sin(a) * r); else s.moveTo(Math.cos(a) * r, Math.sin(a) * r); } body.add(mesh(geo("star", () => new T.ExtrudeGeometry(s, { depth: 0.04, bevelEnabled: false })), mat("#f4c542", { metalness: 0.6, roughness: 0.3 }), -0.42, bdy, bdz)); }
+  else if (o.bd === "bd_sk" && o.sb) { const bz = P ? 0.8 : bdz + 0.01, b = new T.Mesh(geo("bdgp", () => new T.PlaneGeometry(0.52, 0.52)), new T.MeshStandardMaterial({ map: badgeTex(o.sb), transparent: true, roughness: 0.5, metalness: 0.1 })); b.position.set(-0.42, bdy, bz); body.add(b); }
   else if (o.bd === "bd_pf") body.add(mesh(geo("pref", () => new T.BoxGeometry(0.28, 0.34, 0.04)), mat("#2d4fa8"), -0.42, bdy, bdz));
   else if (o.bd === "bd_md") { body.add(mesh(geo("medr", () => new T.BoxGeometry(0.12, 0.3, 0.02)), mat("#cc2236"), -0.42, bdy + 0.12, bdz)); const md = mesh(geo("med", () => new T.CylinderGeometry(0.15, 0.15, 0.04, 18)), mat("#f0c53c", { metalness: 0.75, roughness: 0.25 }), -0.42, bdy - 0.12, bdz + 0.02); md.rotation.x = Math.PI / 2; body.add(md); }
   /* haiwan peliharaan: berjalan di sebelah */
