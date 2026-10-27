@@ -2321,30 +2321,46 @@ function lmPointers(cv) {
     window.addEventListener("blur", lmJsReset); window.addEventListener("orientationchange", lmJsReset);
     document.addEventListener("visibilitychange", () => { if (document.hidden) lmJsReset(); });
   }
-  cv.addEventListener("pointerdown", (e) => {
+  /* pengendali dikongsi: id ialah nombor (pointerId, atau 100000 + identifier bagi Touch Events) */
+  const down = (id, cx, cy, touch) => {
     if (!LM.g || LM.g.ui) return;
     /* sentuhan baharu di kiri sentiasa mengambil alih kayu bedik (elak id lama yang tersangkut) */
-    if (e.pointerType === "touch" && e.clientX < window.innerWidth * 0.42) {
+    if (touch && cx < window.innerWidth * 0.42) {
       if (document.activeElement && document.activeElement.blur && document.activeElement !== document.body) document.activeElement.blur();
-      LM.js.id = e.pointerId; LM.js.cx = e.clientX; LM.js.cy = e.clientY; LM.js.x = LM.js.y = 0;
-      const j = LM.ui.js; j.style.left = (e.clientX - 60) + "px"; j.style.top = (e.clientY - 60) + "px"; j.style.bottom = "auto";
-    } else if (LM.drag.id < 0) { LM.drag.id = e.pointerId; LM.drag.x = e.clientX; LM.drag.y = e.clientY; }
-    try { cv.setPointerCapture(e.pointerId); } catch (x) { /* abaikan */ }
-  });
-  cv.addEventListener("pointermove", (e) => {
-    if (e.pointerId === LM.js.id) {
-      let dx = (e.clientX - LM.js.cx) / 50, dy = (LM.js.cy - e.clientY) / 50; const l = Math.hypot(dx, dy); if (l > 1) { dx /= l; dy /= l; }
+      LM.js.id = id; LM.js.cx = cx; LM.js.cy = cy; LM.js.x = LM.js.y = 0;
+      const j = LM.ui.js; j.style.left = (cx - 60) + "px"; j.style.top = (cy - 60) + "px"; j.style.bottom = "auto";
+    } else if (touch || LM.drag.id < 0) { LM.drag.id = id; LM.drag.x = cx; LM.drag.y = cy; }
+  };
+  const move = (id, cx, cy) => {
+    if (id === LM.js.id) {
+      let dx = (cx - LM.js.cx) / 50, dy = (LM.js.cy - cy) / 50; const l = Math.hypot(dx, dy); if (l > 1) { dx /= l; dy /= l; }
       LM.js.x = dx; LM.js.y = dy; const i = LM.ui.js.firstChild; i.style.transform = "translate(" + dx * 34 + "px," + -dy * 34 + "px)";
-    } else if (e.pointerId === LM.drag.id) {
-      const dx = e.clientX - LM.drag.x, dy = e.clientY - LM.drag.y; LM.drag.x = e.clientX; LM.drag.y = e.clientY;
+    } else if (id === LM.drag.id) {
+      const dx = cx - LM.drag.x, dy = cy - LM.drag.y; LM.drag.x = cx; LM.drag.y = cy;
       LM.camIn = [(LM.camIn ? LM.camIn[0] : 0) + dx * 0.006, (LM.camIn ? LM.camIn[1] : 0) + dy * 0.004];
     }
-  });
-  const up = (e) => {
-    if (e.pointerId === LM.js.id) { LM.js.id = -1; LM.js.x = LM.js.y = 0; const j = LM.ui.js; j.style.left = ""; j.style.top = ""; j.style.bottom = ""; j.firstChild.style.transform = ""; }
-    if (e.pointerId === LM.drag.id) LM.drag.id = -1;
   };
-  cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up); cv.addEventListener("lostpointercapture", up);
+  const end = (id) => {
+    if (id === LM.js.id) { LM.js.id = -1; LM.js.x = LM.js.y = 0; const j = LM.ui.js; j.style.left = ""; j.style.top = ""; j.style.bottom = ""; j.firstChild.style.transform = ""; }
+    if (id === LM.drag.id) LM.drag.id = -1;
+  };
+  /* Peranti sentuh (terutama iPhone Safari): guna Touch Events terus; Pointer Events hanya untuk tetikus/pen */
+  const TE = "ontouchstart" in window;
+  if (TE) {
+    const each = (e, fn) => { for (let i = 0; i < e.changedTouches.length; i++) { const t = e.changedTouches[i]; fn(100000 + t.identifier, t.clientX, t.clientY); } };
+    cv.addEventListener("touchstart", (e) => each(e, (id, x, y) => down(id, x, y, true)), { passive: false });
+    cv.addEventListener("touchmove", (e) => each(e, move), { passive: false });
+    cv.addEventListener("touchend", (e) => { stop(e); each(e, end); }, { passive: false });
+    cv.addEventListener("touchcancel", (e) => each(e, end), { passive: false });
+  }
+  cv.addEventListener("pointerdown", (e) => {
+    if (TE && e.pointerType === "touch") return;
+    down(e.pointerId, e.clientX, e.clientY, e.pointerType === "touch");
+    try { cv.setPointerCapture(e.pointerId); } catch (x) { /* abaikan */ }
+  });
+  cv.addEventListener("pointermove", (e) => { if (!(TE && e.pointerType === "touch")) move(e.pointerId, e.clientX, e.clientY); });
+  const up = (e) => { if (!(TE && e.pointerType === "touch")) end(e.pointerId); };
+  cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
   cv.addEventListener("contextmenu", (e) => e.preventDefault());
   cv.addEventListener("wheel", (e) => { if (LM.g) { LM.g.cam.dist = clamp(LM.g.cam.dist + Math.sign(e.deltaY) * 2, 8, 46); e.preventDefault(); } }, { passive: false });
 }
@@ -2368,7 +2384,7 @@ function lmDayNight(g) {
 function lmLoop(ts) {
   if (!LM.on || !LM.g) return;
   LM.raf = requestAnimationFrame(lmLoop);
-  const g = LM.g, dt = clamp((ts - (g.last || ts)) / 1000, 0, 0.05); g.last = ts; g.T += dt;
+  const g = LM.g, dt = clamp((ts - (g.last || ts)) / 1000, 0, 0.1); g.last = ts; g.T += dt;
   try {
     if (g.ui && !g.flight && !g.sail && !LM.ui.card && !LM.ui.big) g.ui = false; /* tiada panel terbuka: lepaskan kunci pergerakan */
     if (g.flight) lmFlightTick(g, dt); else if (g.sail) lmSailTick(g, dt); else { lmUpdatePlayer(g, dt); lmUpdateCam(g, dt); }
