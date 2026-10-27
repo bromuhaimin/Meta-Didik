@@ -140,7 +140,7 @@ function lmGeoLoad() {
   if (LM.geoP) return LM.geoP;
   const v = typeof APP_VER !== "undefined" ? "?v=" + APP_VER : "";
   LM.geoP = Promise.all([fetch("meta-geo.json" + v).then((r) => { if (!r.ok) throw new Error("geo " + r.status); return r.json(); }), fetch("meta-dem.bin" + v).then((r) => { if (!r.ok) throw new Error("dem " + r.status); return r.arrayBuffer(); })])
-    .then(([gj, buf]) => { gj.demB = new Uint8Array(buf); GEOD = gj; return fetch("meta-sekolah.json" + v).then((r) => (r.ok ? r.json() : null)).catch(() => null).then((sd) => { SKD = sd; return gj; }); }).catch((e) => { LM.geoP = null; throw e; });
+    .then(([gj, buf]) => { gj.demB = new Uint8Array(buf); GEOD = gj; return gj; }).catch((e) => { LM.geoP = null; throw e; });
   return LM.geoP;
 }
 /* ketinggian sebenar (meter) daripada grid DEM; -1 = di luar kawasan data */
@@ -473,7 +473,7 @@ function lmBuildTrees(g, avoid) {
   const rocks = mk(rockG, new T.MeshLambertMaterial({ color: 0x8e877a, flatShading: true }), NR);
   const mt = new T.Matrix4(), q = new T.Quaternion(), sc = new T.Vector3(), pos = new T.Vector3(), col = new T.Color(), up = new T.Vector3(0, 1, 0);
   const fgAt = (x, z) => { const xi = Math.round((x - TER.x0) / TER.cs), zi = Math.round((z - TER.z0) / TER.cs); return xi >= 0 && zi >= 0 && xi < TER.nx && zi < TER.nz && TER.fg[zi * TER.nx + xi]; };
-  const ok = (x, z) => { const k = lmAt(x, z); return ((k && k !== "jambatan" && k !== "wp") || (!k && fgAt(x, z) && R() < 0.35)) && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + 4) && !lmSkNear(g, x, z, 7).length; };
+  const ok = (x, z) => { const k = lmAt(x, z); return ((k && k !== "jambatan" && k !== "wp") || (!k && fgAt(x, z) && R() < 0.35)) && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + 4) ; };
   const put = (m, i, x, y, z, s, sy, rot) => { q.setFromAxisAngle(up, rot); mt.compose(pos.set(x, y, z), q, sc.set(s, sy, s)); m.setMatrixAt(i, mt); };
   let n = 0, np = 0, nr = 0, tries = 0;
   while ((n < NT || np < NP || nr < NR) && tries < 400000) {
@@ -1559,146 +1559,135 @@ function lmRai() {
   return d;
 }
 
-/* ---------- v18.6: Stesen Sekolah (SMK sebenar, koordinat KPM) ----------
-   Setiap SMK menjadi stesen kuiz bagi satu tajuk (diagih sama rata merentas semua tema subjek semasa).
-   Model sekolah dilukis secara berinstans (~2,000 buah); label dan interaksi hanya untuk sekolah berhampiran. */
-let SKD = null;
-const SK_GC = 24, SK_PASS = 3, SK_OWN_N = 8, SK_OWN_PASS = 6;
-const lmNormSek = (s) => String(s || "").toUpperCase().replace(/SEKOLAH MENENGAH KEBANGSAAN/g, "SMK").replace(/[^A-Z0-9]/g, "");
-function lmSkNear(g, x, z, r) {
-  const out = []; if (!g.skGrid) return out;
-  for (let i = Math.floor((x - r) / SK_GC); i <= Math.floor((x + r) / SK_GC); i++) for (let j = Math.floor((z - r) / SK_GC); j <= Math.floor((z + r) / SK_GC); j++) {
-    const L = g.skGrid.get(i + "," + j); if (L) for (const s of L) if (Math.hypot(s.x - x, s.z - z) < r) out.push(s);
-  }
-  return out;
+/* ---------- v18.7: IPTA sebagai Pusat Kuiz ----------
+   20 universiti awam di kampus utama masing-masing. Di setiap IPTA murid memilih tema dan tajuk sendiri;
+   tajuk yang lulus (betul 3/5) dikira untuk IPTA itu: Diploma (3 tajuk), Ijazah (separuh), Sarjana (semua). */
+const IPTA = [
+  ["ip-um", "UM", "Universiti Malaya", "wp", 3.1209, 101.6538, "#1f3f8a"],
+  ["ip-usm", "USM", "Universiti Sains Malaysia", "penang", 5.3560, 100.3020, "#5b2a86"],
+  ["ip-ukm", "UKM", "Universiti Kebangsaan Malaysia", "selangor", 2.9300, 101.7810, "#c8102e"],
+  ["ip-upm", "UPM", "Universiti Putra Malaysia", "selangor", 3.0026, 101.7070, "#a6192e"],
+  ["ip-utm", "UTM", "Universiti Teknologi Malaysia", "johor", 1.5590, 103.6380, "#7a1a2f"],
+  ["ip-uiam", "UIAM", "Universiti Islam Antarabangsa Malaysia", "selangor", 3.2510, 101.7350, "#0a7d6a"],
+  ["ip-uum", "UUM", "Universiti Utara Malaysia", "kedah", 6.4570, 100.5050, "#0b6b3a"],
+  ["ip-unimas", "UNIMAS", "Universiti Malaysia Sarawak", "sarawak", 1.4660, 110.4290, "#1d4f9a"],
+  ["ip-ums", "UMS", "Universiti Malaysia Sabah", "sabah", 6.0330, 116.1220, "#1a5fa8"],
+  ["ip-upsi", "UPSI", "Universiti Pendidikan Sultan Idris", "perak", 3.6870, 101.5240, "#13306b"],
+  ["ip-usim", "USIM", "Universiti Sains Islam Malaysia", "nsembilan", 2.8430, 101.7800, "#0b6b3a"],
+  ["ip-uitm", "UiTM", "Universiti Teknologi MARA", "selangor", 3.0690, 101.4970, "#5f259f"],
+  ["ip-unisza", "UniSZA", "Universiti Sultan Zainal Abidin", "terengganu", 5.3960, 103.0830, "#1b7a3e"],
+  ["ip-uthm", "UTHM", "Universiti Tun Hussein Onn Malaysia", "johor", 1.8580, 103.0850, "#003b7a"],
+  ["ip-utem", "UTeM", "Universiti Teknikal Malaysia Melaka", "melaka", 2.3130, 102.3180, "#0057a3"],
+  ["ip-umpsa", "UMPSA", "Universiti Malaysia Pahang Al-Sultan Abdullah", "pahang", 3.5430, 103.4280, "#00539b"],
+  ["ip-unimap", "UniMAP", "Universiti Malaysia Perlis", "perlis", 6.4590, 100.3500, "#b3242f"],
+  ["ip-umt", "UMT", "Universiti Malaysia Terengganu", "terengganu", 5.4100, 103.0870, "#0b6fa4"],
+  ["ip-umk", "UMK", "Universiti Malaysia Kelantan", "kelantan", 6.1640, 102.2830, "#e07a10"],
+  ["ip-upnm", "UPNM", "Universiti Pertahanan Nasional Malaysia", "wp", 3.0510, 101.7240, "#7a1f2b"]
+];
+/* kampus: dewan utama bermenara jam, dua sayap fakulti, pintu gerbang dan topi graduan */
+function lmCampus(col, sn) {
+  const g = new T.Group(), W = "#f2ede2";
+  g.add(lmMesh(lmCyl(17, 17, 0.25, 32), "#7cc46a", 0, 0.12, 0, { ns: 1 }));
+  g.add(lmMesh(lmBox(16, 7, 8), W, 0, 3.5, -4)); g.add(lmMesh(lmBox(16.6, 0.8, 8.6), col, 0, 7.3, -4));
+  for (let i = 0; i < 6; i++) g.add(lmMesh(lmBox(1.4, 4.4, 0.2), "#2b3440", -6.5 + i * 2.6, 3.4, 0.05));
+  for (const x of [-11.5, 11.5]) { g.add(lmMesh(lmBox(6, 5, 12), W, x, 2.5, -2)); g.add(lmMesh(lmBox(6.4, 0.7, 12.4), col, x, 5.3, -2)); }
+  g.add(lmMesh(lmBox(4, 16, 4), W, 0, 8, -4)); g.add(lmMesh(lmBox(4.4, 1.2, 4.4), col, 0, 16.2, -4));
+  const clock = lmMesh(lmCyl(1.3, 1.3, 0.3, 20), "#fffbe8", 0, 13.2, -1.9); clock.rotation.x = Math.PI / 2; g.add(clock);
+  lmDome(g, 2.2, col, 0, 16.8, -4, false, false);
+  /* topi graduan di puncak menara */
+  g.add(lmMesh(lmBox(4.2, 0.35, 4.2), "#1d1d22", 0, 19.4, -4)); g.add(lmMesh(lmCyl(1.1, 1.3, 0.9, 12), "#1d1d22", 0, 18.9, -4));
+  g.add(lmMesh(lmBox(0.12, 1.6, 0.12), "#e0b341", 1.9, 18.6, -2.2));
+  /* pintu gerbang dengan nama */
+  for (const x of [-5, 5]) g.add(lmMesh(lmBox(1.2, 6, 1.2), col, x, 3, 12));
+  g.add(lmMesh(lmBox(11.4, 1.6, 1.2), col, 0, 6.6, 12));
+  const sign = lmLabel(sn, { fs: 40, k: 0.04, bg: "rgba(0,0,0,0)", fg: "#ffffff" }); sign.position.set(0, 6.6, 12.8); g.add(sign);
+  return { g: g, r: 15 };
 }
-/* tajuk stesen: tetap bagi setiap sekolah dan subjek, hanya tajuk yang mempunyai soalan */
-function lmSkTopic(code) {
-  if (!LM.skTs) { const ts = DATA.topik.filter((t) => (BYTOPIK[t.id] || []).length); LM.skTs = ts.length ? ts : DATA.topik.slice(); }
-  return LM.skTs[Math.abs(hashStr(code + "|" + SUBJ)) % LM.skTs.length];
-}
-const lmSkRec = (s) => ((LM.st.sk || {})[s.id] | 0);
-const lmSkDone = (s) => lmSkRec(s) >= (s.own ? SK_OWN_PASS : SK_PASS);
-/* fasa 1 (sebelum rupa bumi): letak sekolah di lokasi sebenar, anjak sedikit jika bertindih */
-function lmSchoolsPlan(g, avoid) {
-  g.schools = []; g.skGrid = new Map(); LM.skTs = null; if (!SKD || !SKD.s) return;
-  const AG = new Map(), AC = 30;
-  for (const a of avoid) { const r = a.r + 6; for (let i = Math.floor((a.x - r) / AC); i <= Math.floor((a.x + r) / AC); i++) for (let j = Math.floor((a.z - r) / AC); j <= Math.floor((a.z + r) / AC); j++) { const k = i + "," + j; if (!AG.has(k)) AG.set(k, []); AG.get(k).push(a); } }
-  const blocked = (x, z) => { const L = AG.get(Math.floor(x / AC) + "," + Math.floor(z / AC)); return !!L && L.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + 6); };
-  const mine = lmNormSek(P.sekolah);
-  for (const [code, name, k, x0, z0] of SKD.s) {
-    if (!DATA.negeri[k]) continue;
-    const okK = (q) => q === k || (k === "wp" && q === "selangor") || (k === "selangor" && q === "wp");
-    const free = (x, z, sp) => okK(lmAt(x, z)) && !blocked(x, z) && (!sp || !lmSkNear(g, x, z, 12).length);
-    let p = null;
-    for (const sp of [true, false]) {
-      if (free(x0, z0, sp)) { p = { x: x0, z: z0 }; break; }
-      for (let d = 4; d <= 90 && !p; d += 4) for (let i = 0; i < 14; i++) { const a = i / 14 * 6.2832 + d * 0.37, x = x0 + Math.cos(a) * d, z = z0 + Math.sin(a) * d; if (free(x, z, sp)) { p = { x: x, z: z }; break; } }
-      if (p) break;
-    }
-    if (!p) continue;
-    const s = { kind: "sk", id: code, n: name, k: k, x: p.x, z: p.z, r: 3, ir: 7.5, own: !!mine && lmNormSek(name) === mine, rot: (Math.abs(hashStr(code)) % 628) / 100 };
-    g.schools.push(s); const key = Math.floor(p.x / SK_GC) + "," + Math.floor(p.z / SK_GC); if (!g.skGrid.has(key)) g.skGrid.set(key, []); g.skGrid.get(key).push(s);
-    lmPad(g, p.x, p.z, 5);
-  }
-  g.skOwn = g.schools.find((s) => s.own) || null;
-}
-/* fasa 2 (selepas rupa bumi): bangunan sekolah berinstans; warna bumbung menunjukkan status */
-function lmSchoolsBuild(g) {
-  const S = g.schools; if (!S || !S.length) return;
-  const body = new T.InstancedMesh(new T.BoxGeometry(6, 3.2, 2.8), new T.MeshLambertMaterial({ color: 0xffffff }), S.length);
-  const rg = new T.CylinderGeometry(1.95, 1.95, 6.6, 3, 1); rg.rotateZ(Math.PI / 2); rg.scale(1, 0.55, 1);
-  const roof = new T.InstancedMesh(rg, new T.MeshLambertMaterial({ color: 0xffffff }), S.length);
-  const wing = new T.InstancedMesh(new T.BoxGeometry(2.4, 2.6, 4.4), new T.MeshLambertMaterial({ color: 0xffffff }), S.length);
-  const mt = new T.Matrix4(), q = new T.Quaternion(), sc = new T.Vector3(1, 1, 1), ps = new T.Vector3(), up = new T.Vector3(0, 1, 0), col = new T.Color(), off = new T.Vector3();
-  S.forEach((s, i) => {
-    s.y = lmHRaw(s.x, s.z); s.ii = i; q.setFromAxisAngle(up, s.rot);
-    mt.compose(ps.set(s.x, s.y + 1.6, s.z), q, sc); body.setMatrixAt(i, mt);
-    mt.compose(ps.set(s.x, s.y + 3.75, s.z), q, sc); roof.setMatrixAt(i, mt);
-    off.set(-4, 0, 0.9).applyQuaternion(q); mt.compose(ps.set(s.x + off.x, s.y + 1.3, s.z + off.z), q, sc); wing.setMatrixAt(i, mt);
-    col.set(s.own ? "#fff3cf" : "#f1ead8"); body.setColorAt(i, col); wing.setColorAt(i, col);
+function lmIptaBuild(g, used, placed, avoid, gnd) {
+  IPTA.forEach(([id, sn, nama, k, la, lo, col]) => {
+    if (!DATA.negeri[k]) return;
+    const okK = (q) => q === k || (k === "wp" && q === "selangor") || (k === "selangor" && q === "wp"), rr = 18;
+    const free = (x, z) => okK(lmAt(x, z)) && lmLandW(x + rr, z) && lmLandW(x - rr, z) && lmLandW(x, z + rr) && lmLandW(x, z - rr)
+      && !used.some((u) => Math.hypot(u.x - x, u.z - z) < rr + 8) && !placed.some((u) => Math.hypot(u.x - x, u.z - z) < rr + u.r + 6) && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + rr);
+    let w = ll(la, lo);
+    if (!free(w.x, w.z)) { let best = null; for (let d = 5; d <= 90 && !best; d += 5) for (let i = 0; i < 16; i++) { const a = i * 0.3927 + d * 0.11, x = w.x + Math.cos(a) * d, z = w.z + Math.sin(a) * d; if (free(x, z)) { best = { x: x, z: z }; break; } } if (best) w = best; }
+    const md = lmCampus(col, sn), rot = (Math.abs(hashStr(id)) % 628) / 100;
+    md.g.position.set(w.x, 0, w.z); md.g.rotation.y = rot; g.scene.add(md.g); gnd.push([md.g, 0]); lmPad(g, w.x, w.z, 17);
+    const lb = lmLabel(sn + " · " + nama, { fs: 30, k: 0.032, bg: "rgba(20,20,40,.82)", bd: col }); lb.position.set(w.x, 24, w.z); g.scene.add(lb); gnd.push([lb, 24]);
+    const fx = Math.sin(rot), fz = Math.cos(rot);
+    const it = { kind: "ip", id: id, k: k, sn: sn, n: nama, col: col, x: w.x + fx * 13, z: w.z + fz * 13, cx: w.x, cz: w.z, r: 0, ir: 12, m: md.g, lb: lb };
+    g.items.push(it); placed.push({ x: w.x, z: w.z, r: rr });
+    const cr = Math.cos(rot), sr = Math.sin(rot), at = (lx, lz) => ({ x: w.x + lx * cr + lz * sr, z: w.z - lx * sr + lz * cr });
+    [[0, -4, 8.5], [-11.5, -2, 6.5], [11.5, -2, 6.5]].forEach(([lx, lz, r]) => { const q = at(lx, lz); g.cols.push({ x: q.x, z: q.z, r: r, h: 20 }); });
+    avoid.push({ x: w.x, z: w.z, r: rr + 2 });
   });
-  [body, roof, wing].forEach((m) => { m.castShadow = !!LM.gq; m.receiveShadow = true; g.scene.add(m); });
-  g.skRoof = roof; S.forEach((s) => lmSkState(g, s, true)); roof.instanceColor.needsUpdate = true; body.instanceColor.needsUpdate = true; wing.instanceColor.needsUpdate = true;
-  /* sekolah murid sendiri: label tetap dan tiang emas */
-  const o = g.skOwn;
-  if (o) {
-    const lb = lmLabel("Sekolah anda: " + o.n, { fs: 30, k: 0.032, bg: "rgba(110,70,0,.88)", bd: "#ffd45a" }); lb.position.set(o.x, o.y + 10, o.z); g.scene.add(lb); o.lb = lb;
-    const bc = new T.Mesh(lmCyl(0.6, 0.6, 60, 8), new T.MeshBasicMaterial({ color: 0xffd45a, transparent: true, opacity: 0.35, depthWrite: false })); bc.position.set(o.x, o.y + 30, o.z); g.scene.add(bc);
-  }
 }
-function lmSkState(g, s, quiet) {
-  if (!g.skRoof) return;
-  g.skRoof.setColorAt(s.ii, new T.Color(s.own ? (lmSkDone(s) ? "#ffd45a" : "#e0a21f") : lmSkDone(s) ? "#3aa55a" : "#2d6fb8"));
-  if (!quiet) g.skRoof.instanceColor.needsUpdate = true;
+/* rekod: LM.st.ip[idIPTA][idTajuk] = markah terbaik */
+const lmIpRec = (it) => ((LM.st.ip || {})[it.id] || {});
+function lmIpLevel(it) {
+  const r = lmIpRec(it), T = DATA.topik.length, n = DATA.topik.filter((t) => (r[t.id] | 0) >= 3).length;
+  const lv = n >= T ? 3 : n >= Math.ceil(T / 2) ? 2 : n >= 3 ? 1 : 0;
+  return { n: ["Pelajar baharu", "Diploma", "Ijazah Sarjana Muda", "Sarjana"][lv], lv: lv, d: n, t: T, next: lv === 0 ? 3 : lv === 1 ? Math.ceil(T / 2) : T };
 }
-/* label nama untuk sekolah berhampiran sahaja (kolam terhad) */
-function lmSkLabels(g) {
-  if (!g.schools || !g.schools.length) return;
-  const near = lmSkNear(g, g.p.x, g.p.z, 70).filter((s) => !s.own).sort((a, b) => Math.hypot(a.x - g.p.x, a.z - g.p.z) - Math.hypot(b.x - g.p.x, b.z - g.p.z)).slice(0, 8);
-  const want = new Set(near.map((s) => s.id + (lmSkDone(s) ? "+" : ""))); g.skL = g.skL || new Map();
-  for (const [id, sp] of g.skL) if (!want.has(id)) { g.scene.remove(sp); sp.material.map.dispose(); sp.material.dispose(); g.skL.delete(id); }
-  for (const s of near) {
-    const id = s.id + (lmSkDone(s) ? "+" : ""); if (g.skL.has(id)) continue;
-    const sp = lmLabel(s.n + (lmSkDone(s) ? " · ditawan" : ""), { fs: 26, k: 0.026, bg: lmSkDone(s) ? "rgba(20,90,45,.85)" : "rgba(10,40,80,.82)", bd: lmSkDone(s) ? "#6fe0a6" : "#7fb7e8" });
-    sp.position.set(s.x, s.y + 7.5, s.z); g.scene.add(sp); g.skL.set(id, sp);
-  }
+function lmIptaOpen(it) {
+  const L = lmIpLevel(it), r = lmIpRec(it);
+  lmCard((b) => {
+    b.append(el("div", { class: "lm-kick" }, "🎓 Pusat Kuiz · " + it.sn + " · " + DATA.negeri[it.k].pendek), el("h2", null, it.n));
+    b.append(el("p", null, "Pilih tema, kemudian tajuk. Jawab 5 soalan dan betul sekurang-kurangnya 3 untuk lulus tajuk itu di " + it.sn + "."));
+    b.append(el("p", { class: "lm-ex" }, "Tahap anda: " + L.n + " · " + L.d + "/" + L.t + " tajuk lulus" + (L.lv < 3 ? " · " + (L.next - L.d) + " lagi untuk " + ["Diploma", "Ijazah Sarjana Muda", "Sarjana"][L.lv] : " · Tahniah, tahap tertinggi!")));
+    const bar = el("div", { class: "lm-bar" }), bi = el("i"); bi.style.width = Math.round(100 * L.d / L.t) + "%"; bar.appendChild(bi); b.appendChild(bar);
+    DATA.tema.forEach((tm) => {
+      const ts = DATA.topik.filter((t) => t.tema === tm.id); if (!ts.length) return;
+      const d = ts.filter((t) => (r[t.id] | 0) >= 3).length;
+      const box = el("div", { class: "lm-tema" + (d === ts.length ? " on" : "") }); box.style.setProperty("--c", (TEMA[tm.id] && TEMA[tm.id].warna) || tm.warna || "#5ad1ff");
+      box.append(el("div", { class: "lm-tema-h" }, el("b", null, tm.nama), el("span", null, d + "/" + ts.length + " lulus")));
+      ts.forEach((t) => {
+        const sc = r[t.id] | 0, ok = sc >= 3, row = el("div", { class: "lm-tp" + (ok ? " ok" : sc ? " try" : " no") });
+        row.append(el("span", { class: "ic" }, ok ? "✔" : sc ? "◐" : "○"), el("span", null, (t.kod || t.id) + " " + t.nama), lmBtn(ok ? "Ulang" : "Jawab", ok ? "" : "pri", () => lmIptaQuiz(it, t)));
+        row.appendChild(el("span", { class: "mt" }, sc ? "Terbaik di " + it.sn + ": " + sc + "/5" : "Belum dijawab di " + it.sn));
+        box.appendChild(row);
+      });
+      b.appendChild(box);
+    });
+    b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "", lmCardClose)));
+  });
 }
-/* perlanggaran ringkas dengan bangunan sekolah */
-function lmSkCollide(g, x, z) {
-  for (const s of lmSkNear(g, x, z, 8)) { const dx = x - s.x, dz = z - s.z, d = Math.hypot(dx, dz), m = 4.2; if (d < m && d > 0.01) { x = s.x + dx / d * m; z = s.z + dz / d * m; } }
-  return [x, z];
-}
-/* kuiz stesen sekolah */
-function lmSkOpen(s) {
-  const t = lmSkTopic(s.id), tm = TEMA[t.tema] || { nama: "" }, best = lmSkRec(s), own = s.own;
-  const ids = own ? DATA.topik.filter((x) => x.tema === t.tema).map((x) => x.id) : [t.id], N = own ? SK_OWN_N : 5, pass = own ? SK_OWN_PASS : SK_PASS;
+function lmIptaQuiz(it, t) {
+  const before = lmIpLevel(it).lv;
   lmQuiz({
-    kick: "Stesen Sekolah · " + DATA.negeri[s.k].pendek, title: own ? "Tema: " + tm.nama : (t.kod || t.id) + " " + t.nama, pass: pass, qs: lmPickQs(ids, N),
-    intro: (b) => {
-      b.append(el("div", { class: "lm-kick" }, (own ? "★ Sekolah anda · " : "Stesen Sekolah · ") + DATA.negeri[s.k].nama), el("h2", null, s.n));
-      b.append(el("p", null, "Tema: " + tm.nama + (own ? " (semua tajuk dalam tema ini)" : " · Tajuk: " + (t.kod || t.id) + " " + t.nama)));
-      if (!own) (t.nota || []).slice(0, 2).forEach((n) => b.appendChild(qSet(el("div", { class: "lm-ex" }), n)));
-      b.append(el("p", null, "Jawab " + N + " soalan. Betul sekurang-kurangnya " + pass + " untuk menawan sekolah ini." + (best ? " Terbaik anda: " + best + "/" + N + "." : "")));
-    },
-    onDone: (ok2, ok, tot) => {
-      const sk = LM.st.sk || (LM.st.sk = {}), first = ok2 && !lmSkDone(s);
-      if (ok > (sk[s.id] | 0)) sk[s.id] = ok;
-      lmSave(); lmSkState(LM.g, s); if (LM.g && LM.g.skL) LM.g.skL.forEach((sp, id) => { if (id.startsWith(s.id)) { LM.g.scene.remove(sp); LM.g.skL.delete(id); } });
-      const xp = lmXp(ok * 2 + (first ? (own ? 20 : 6) : 0)); let coin = 0;
-      if (first) { try { coin = gdCoin(own ? 5 : 1); } catch (e) { coin = 0; } }
-      if (ok2) { lmSnd("win"); lmPop(first ? (own ? "Sekolah anda ditawan!" : "Sekolah ditawan!") : "Tahniah!"); }
-      const n = lmSkCount();
+    kick: "🎓 " + it.sn + " · " + ((TEMA[t.tema] && TEMA[t.tema].nama) || ""), title: (t.kod || t.id) + " " + t.nama, pass: 3, qs: lmPickQs([t.id], 5),
+    onDone: (pass, ok, tot) => {
+      const all = LM.st.ip || (LM.st.ip = {}), r = all[it.id] || (all[it.id] = {}), first = pass && (r[t.id] | 0) < 3;
+      if (ok > (r[t.id] | 0)) r[t.id] = ok;
+      lmSave();
+      const L = lmIpLevel(it), up = L.lv > before;
+      const xp = lmXp(ok * 2 + (first ? 5 : 0) + (up ? 20 * L.lv : 0)); let coin = 0;
+      if (up) { try { coin = gdCoin([0, 3, 8, 15][L.lv]); } catch (e) { coin = 0; } lmSnd("win"); lmPop("🎓 " + L.n + " " + it.sn + "!"); }
+      else if (pass) { lmSnd("win"); lmPop(first ? "Tajuk lulus!" : "Tahniah!"); }
       lmCard((b) => {
-        b.append(el("div", { class: "lm-kick" }, ok2 ? "Sekolah ditawan" : "Cuba lagi"), el("h2", null, ok + "/" + tot + " betul"));
-        b.append(el("p", null, ok2 ? s.n + " kini ditanda hijau pada peta." : "Betul sekurang-kurangnya " + pass + " untuk menawan sekolah ini."));
-        b.append(el("p", { class: "lm-ex" }, "XP +" + xp + (coin ? " · +" + coin + " syiling" : "") + " · Sekolah ditawan: " + n.d + "/" + n.t));
-        b.append(el("div", { class: "lm-row" }, lmBtn("Teruskan jelajah", "pri", lmCardClose), ok2 ? null : lmBtn("Cuba lagi", "", () => lmSkOpen(s))));
+        b.append(el("div", { class: "lm-kick" }, up ? "🎓 Graduasi · " + it.sn : pass ? "Tajuk lulus" : "Cuba lagi"), el("h2", null, up ? L.n + " " + it.n : ok + "/" + tot + " betul"));
+        if (up) b.append(el("p", null, "Tahniah! Anda layak menerima " + L.n + " daripada " + it.n + " (" + L.d + " tajuk lulus)."));
+        b.append(el("p", { class: "lm-ex" }, ok + "/" + tot + " betul · XP +" + xp + (coin ? " · +" + coin + " syiling" : "") + " · " + it.sn + ": " + L.d + "/" + L.t + " tajuk"));
+        b.append(el("div", { class: "lm-row" }, lmBtn("Pilih tajuk lain", "pri", () => lmIptaOpen(it)), pass ? null : lmBtn("Cuba lagi", "", () => lmIptaQuiz(it, t)), lmBtn("Teruskan jelajah", "", lmCardClose)));
       });
     }
   });
 }
-function lmSkCount(k) { const g = LM.g, S = (g && g.schools) || []; let d = 0, t = 0; for (const s of S) { if (k && s.k !== k) continue; t++; if (lmSkDone(s)) d++; } return { d: d, t: t }; }
-/* tab pasport: sekolah mengikut negeri */
-function lmSkPassport(b) {
-  const g = LM.g, all = lmSkCount();
-  b.append(el("p", null, "Setiap SMK di Malaysia ialah stesen kuiz bagi satu tajuk. Jawab 5 soalan (betul 3) untuk menawan sekolah. Sekolah anda menguji keseluruhan satu tema (8 soalan, betul 6)."));
-  b.append(el("p", { class: "lm-ex" }, "Sekolah ditawan: " + all.d + "/" + all.t + " SMK · Data lokasi: Kementerian Pendidikan Malaysia."));
-  const o = g && g.skOwn;
-  if (o) b.append(el("div", { class: "lm-row" }, el("span", null, "★ " + o.n + (lmSkDone(o) ? " · ditawan" : " · belum ditawan")), lmBtn("Pergi ke sekolah saya", "pri", () => { lmCardClose(); lmTeleport(o.x + 9, o.z + 9, "Selamat datang ke " + o.n); })));
-  else b.append(el("p", { class: "lm-ex" }, "Sekolah anda tidak ditemui dalam senarai SMK. Pastikan nama sekolah di profil sama seperti nama rasmi (contoh: SMK Taman Universiti)."));
+/* tab pasport: tahap di setiap IPTA */
+function lmIptaPassport(b) {
+  const g = LM.g, its = g ? g.items.filter((x) => x.kind === "ip") : [];
+  const tot = its.reduce((s, it) => s + (lmIpLevel(it).lv >= 1 ? 1 : 0), 0);
+  b.append(el("p", null, "Setiap IPTA ialah Pusat Kuiz. Pilih tema dan tajuk di sana. Lulus 3 tajuk untuk Diploma, separuh tajuk untuk Ijazah Sarjana Muda, semua tajuk untuk Sarjana."));
+  b.append(el("p", { class: "lm-ex" }, "Diploma ke atas: " + tot + "/" + its.length + " IPTA"));
   const grid = el("div", { class: "lm-grid" });
-  Object.keys(DATA.negeri).forEach((k) => { const c = lmSkCount(k); if (!c.t) return; grid.appendChild(el("div", { class: "lm-stamp" + (c.d && c.d === c.t ? " on" : "") }, el("b", null, DATA.negeri[k].pendek), el("div", null, c.d + "/" + c.t + " sekolah"), el("div", { class: "lm-bar" }, Object.assign(el("i"), { style: "width:" + Math.round(100 * c.d / c.t) + "%" })))); });
+  its.forEach((it) => {
+    const L = lmIpLevel(it), c = el("div", { class: "lm-stamp" + (L.lv ? " on" : "") });
+    const bar = el("div", { class: "lm-bar" }), bi = el("i"); bi.style.width = Math.round(100 * L.d / L.t) + "%"; bar.appendChild(bi);
+    c.append(el("b", null, (L.lv ? "🎓 " : "") + it.sn), el("div", null, it.n), el("div", null, L.n + " · " + L.d + "/" + L.t), bar,
+      lmBtn("Tunjuk arah", "", () => { g.wp = { x: it.x, z: it.z, n: it.sn }; lmWpSet(); lmCardClose(); lmPop("Ikut tiang merah ke " + it.sn); }));
+    grid.appendChild(c);
+  });
   b.appendChild(grid);
-  /* sekolah terdekat yang belum ditawan */
-  if (g) {
-    const near = g.schools.filter((s) => !lmSkDone(s)).map((s) => ({ s: s, d: Math.hypot(s.x - g.p.x, s.z - g.p.z) })).sort((a, b) => a.d - b.d).slice(0, 6);
-    if (near.length) {
-      const L = el("div", { class: "lm-grid" });
-      near.forEach(({ s, d }) => { const t = lmSkTopic(s.id); L.appendChild(el("div", { class: "lm-stamp" }, el("b", null, s.n), el("div", null, (t.kod || t.id) + " " + t.nama), el("div", null, Math.round(d / 3) + " km"), lmBtn("Tunjuk arah", "", () => { g.wp = { x: s.x, z: s.z, n: s.n }; lmWpSet(); lmCardClose(); lmPop("Ikut tiang merah ke " + s.n); }))); });
-      b.append(el("p", { class: "lm-kick", style: "margin-top:12px" }, "Sekolah terdekat belum ditawan"), L);
-    }
-  }
 }
 function lmCoinMesh() {
   if (!GEO.coin) GEO.coin = new T.CylinderGeometry(0.9, 0.9, 0.25, 14);
@@ -1780,17 +1769,17 @@ function lmBuildWorld(g) {
     for (let t = -fit.L; t <= fit.L; t += 14) avoid.push({ x: fit.x + ux * t, z: fit.z + uz * t, r: 12 });
     for (const t of [-18, 0, 18]) avoid.push({ x: fit.x + px * 32 + ux * t, z: fit.z + pz * 32 + uz * t, r: 16 });
   });
+  /* IPTA: Pusat Kuiz */
+  lmIptaBuild(g, used, placed, avoid, gnd);
   /* stesen kereta api ETS dan ECRL */
   lmRailsPlan(g, used, placed, avoid, gnd);
   /* pulau Misi Khas, jeti dan feri */
   lmBuildIslands(g, gnd, avoid);
   /* rupa bumi: ketinggian, tapak rata, kemudian semua objek diletakkan di atas tanah */
-  lmSchoolsPlan(g, avoid);
   lmTerrainBase(g); lmRailsPath(g, avoid); lmBuildTerrain(g);
   for (const [o, dy] of gnd) o.position.y = lmHRaw(o.position.x, o.position.z) + dy;
   for (const c of g.cols) c.h = (c.h || 30) + lmHRaw(c.x, c.z);
   lmRailsBuild(g);
-  lmSchoolsBuild(g);
   lmBuildTrees(g, avoid);
   /* syiling harian bertaburan (deterministik mengikut hari) */
   const R = lmRand("lm-coin-" + dayKey()), got = new Set(LM.st.cd.got);
@@ -1845,7 +1834,6 @@ function lmUpdatePlayer(g, dt) {
     if (il > 0.1 && p.swim && lmAt(nx, nz) === "" && (g.farT || 0) < g.T) { g.farT = g.T + 3; lmPop("Terlalu jauh dari pantai"); }
     if (lmCanGo(nx, p.z)) nz = p.z; else if (lmCanGo(p.x, nz)) nx = p.x; else { nx = p.x; nz = p.z; }
   }
-  if (g.schools) { const q = lmSkCollide(g, nx, nz); nx = q[0]; nz = q[1]; }
   for (const c of g.cols) {
     const ddx = nx - c.x, ddz = nz - c.z, d = Math.hypot(ddx, ddz), m = c.r + 1;
     if (d < m && d > 0.001 && p.y < (c.h || 99)) { nx = c.x + ddx / d * m; nz = c.z + ddz / d * m; }
@@ -2553,15 +2541,15 @@ function lmTeleport(x, z, msg) {
 /* pasport ziarah */
 function lmPassport(tab) {
   if (tab) LM.ppTab = tab;
-  const cur = LM.ppTab === "tajuk" ? "tajuk" : LM.ppTab === "sekolah" ? "sekolah" : "tempat";
+  const cur = LM.ppTab === "tajuk" ? "tajuk" : LM.ppTab === "ipta" ? "ipta" : "tempat";
   lmCard((b) => {
     const s = lmSummary();
     b.append(el("div", { class: "lm-kick" }, "Pasport · " + (cleanName(P.nama) || "Pelajar") + " · " + SUBJS[SUBJ].subjek), el("h2", null, s.pl + "/" + s.plN + " cop tempat · " + s.tw + "/" + s.twN + " tajuk ditawan"));
     const tabs = el("div", { class: "lm-row lm-tabs" });
-    [["tempat", "📘 Tempat dilawati"], ["tajuk", "🏰 Tajuk mengikut tema"], ["sekolah", "🏫 Stesen sekolah"]].forEach(([k, n]) => { const t = lmBtn(n, k === cur ? "pri" : "", () => lmPassport(k)); t.setAttribute("aria-pressed", k === cur ? "true" : "false"); tabs.appendChild(t); });
+    [["tempat", "📘 Tempat dilawati"], ["tajuk", "🏰 Tajuk mengikut tema"], ["ipta", "🎓 IPTA"]].forEach(([k, n]) => { const t = lmBtn(n, k === cur ? "pri" : "", () => lmPassport(k)); t.setAttribute("aria-pressed", k === cur ? "true" : "false"); tabs.appendChild(t); });
     b.appendChild(tabs);
     if (cur === "tajuk") { lmTopicList(b); b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose))); return; }
-    if (cur === "sekolah") { lmSkPassport(b); b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose))); return; }
+    if (cur === "ipta") { lmIptaPassport(b); b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose))); return; }
     if (s.pl >= s.plN) b.append(el("p", null, "Gelaran: Pengembara META GEMPUR! Anda telah menziarahi semua tempat."));
     b.append(el("p", { class: "lm-ex" }, "✈ Penerbangan Gempur Air: " + (LM.st.fl | 0) + " · Lapangan terbang didarati: " + Object.keys(LM.st.ap || {}).length + "/" + AIRPORTS.length));
     const grid = el("div", { class: "lm-grid" });
@@ -2734,8 +2722,6 @@ function lmMapDraw(cv, m, big) {
   const g = LM.g; if (!g) return;
   const x = cv.getContext("2d"); x.drawImage(m.c, 0, 0);
   const r = big ? 5 : 2.2;
-  if (big && g.schools) for (const s of g.schools) { const [px, py] = lmMapPt(m, s.x, s.z), d = lmSkDone(s); x.fillStyle = s.own ? "#ffd45a" : d ? "#3aa55a" : "rgba(255,255,255,.55)"; x.fillRect(px - (s.own ? 2.5 : 1), py - (s.own ? 2.5 : 1), s.own ? 5 : 2, s.own ? 5 : 2); }
-  else if (g.skOwn) { const [px, py] = lmMapPt(m, g.skOwn.x, g.skOwn.z); x.fillStyle = "#ffd45a"; x.fillRect(px - 2, py - 2, 4, 4); }
   if (g.rails) for (const R of g.rails) {
     if (!R.pts) continue;
     x.strokeStyle = R.L.col; x.lineWidth = big ? 3.2 : 1.5; x.beginPath();
@@ -2747,6 +2733,7 @@ function lmMapDraw(cv, m, big) {
     if (it.kind === "pl") { x.fillStyle = LM.st.pl[it.id] ? "#ffd45a" : "#ffffff"; x.beginPath(); x.arc(px, py, r, 0, 6.2832); x.fill(); if (big) { x.strokeStyle = "#5a3a1e"; x.lineWidth = 1.5; x.stroke(); } }
     else if (it.kind === "tw") { x.fillStyle = it.done ? "#ffd45a" : "#7fe3ff"; x.fillRect(px - r * 0.8, py - r * 0.8, r * 1.6, r * 1.6); }
     else if (big && it.kind === "ap") { x.font = "16px sans-serif"; x.fillStyle = "#fff"; x.fillText("✈", px - 7, py + 6); }
+    else if (it.kind === "ip") { x.font = (big ? 18 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("🎓", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
     else if (it.kind === "kh") { x.font = (big ? 20 : 10) + "px sans-serif"; x.fillStyle = it.done ? "#ffd45a" : "#ff7a9a"; x.textAlign = "center"; x.fillText("★", px, py + (big ? 7 : 4)); x.textAlign = "left"; }
     else if (big && it.kind === "jt" && it.k !== it.isl.id) { x.font = "14px sans-serif"; x.fillStyle = "#7fe3ff"; x.fillText("⛴", px - 7, py + 5); }
   }
@@ -2789,7 +2776,7 @@ function lmBigMap() {
   const wrap = el("div", { class: "lm-big" }), m = lmMapBase(1240, 500), cv = el("canvas", { width: 1240, height: 500, "aria-label": "Peta Malaysia" });
   const box = el("div", { style: "display:grid;gap:10px;justify-items:center;padding:12px" });
   const dot = (c, t, sh) => el("span", null, el("i", { style: "background:" + c + (sh ? ";border-radius:2px" : "") }), t);
-  const leg = el("div", { class: "lm-leg" }, el("span", null, "▲ Anda"), dot("#4dff9a", LM.roomKind === "open" ? "Rakan sekolah" : "Rakan"), LM.roomKind === "open" ? dot("#ff7ad9", "Pemain lain") : null, dot("#7fe3ff", "Menara", 1), dot("#3aa55a", "Sekolah ditawan", 1), dot("#1f4fa8", "ETS"), dot("#0e8a6a", "ECRL"), dot("#ffd45a", "Ditawan / diziarahi"), dot("#ffffff", "Tempat menarik"));
+  const leg = el("div", { class: "lm-leg" }, el("span", null, "▲ Anda"), dot("#4dff9a", LM.roomKind === "open" ? "Rakan sekolah" : "Rakan"), LM.roomKind === "open" ? dot("#ff7ad9", "Pemain lain") : null, dot("#7fe3ff", "Menara", 1), el("span", null, "🎓 IPTA"), dot("#1f4fa8", "ETS"), dot("#0e8a6a", "ECRL"), dot("#ffd45a", "Ditawan / diziarahi"), dot("#ffffff", "Tempat menarik"));
   const list = el("div", { class: "lm-who" });
   box.append(el("div", { class: "lm-kick" }, "Peta · ketik tempat atau rakan untuk tetapkan destinasi"), cv, leg, list, el("div", { class: "lm-row" }, lmBtn("Buang destinasi", "", () => { g.wp = null; lmWpSet(); lmMapDraw(cv, m, true); }), lmBtn("Tutup peta", "pri", lmBigMap)));
   wrap.appendChild(box); LM.root.appendChild(wrap); LM.ui.big = wrap;
@@ -2924,14 +2911,13 @@ function lmNearTick(g) {
   for (const it of g.items) { const d = Math.hypot(it.x - g.p.x, it.z - g.p.z); if (d < it.ir && d < bd) { bd = d; best = it; } }
   /* papan kenangan juga boleh dibuka dari hadapannya */
   for (const it of g.items) if (it.kind === "pl") { const d = Math.hypot(it.bx - g.p.x, it.bz - g.p.z); if (d < 7 && d < bd) { bd = d; best = it; } if (d < 60) lmNamesLoad(it); }
-  for (const s of lmSkNear(g, g.p.x, g.p.z, 10)) { const d = Math.hypot(s.x - g.p.x, s.z - g.p.z); if (d < s.ir && d < bd) { bd = d; best = s; } }
   g.near = best;
   const pr = LM.ui.prompt;
   if (!best || g.ui) { pr.hidden = true; return; }
   const key = TOUCH ? "" : "E: ";
   const txt = best.kind === "tw" ? key + "Menara Ilmu " + (best.t.kod || best.t.id) + (best.done ? " ✔" : "") : best.kind === "pl" ? key + "Ziarah " + best.n + (LM.st.pl[best.id] ? " ✔" : "")
     : best.kind === "st" ? key + "Naik " + best.line.L.n + " · " + best.n
-    : best.kind === "sk" ? key + (best.own ? "★ Sekolah anda: " : "Stesen ") + best.n + (lmSkDone(best) ? " ✔" : "")
+    : best.kind === "ip" ? key + "Pusat Kuiz " + best.sn + " · " + lmIpLevel(best).n
     : best.kind === "kh" ? key + "Markas Misi Khas " + best.isl.khas.pendek + (best.done ? " ✔" : "") : best.kind === "jt" ? key + (best.k === best.isl.id ? "Feri pulang ke tanah besar" : "Naik feri ke " + best.isl.n) : key + "Terbang dari " + best.n;
   if (pr.textContent !== txt) pr.textContent = txt;
   pr.hidden = false;
@@ -2940,7 +2926,7 @@ function lmInteract() {
   const g = LM.g; if (!g || g.ui || !g.near) return;
   lmSnd("open");
   const it = g.near;
-  if (it.kind === "tw") lmTowerOpen(it); else if (it.kind === "pl") lmPlaceOpen(it); else if (it.kind === "ap") lmAirportOpen(it); else if (it.kind === "kh") lmKhasOpen(it); else if (it.kind === "jt") lmFerryOpen(it); else if (it.kind === "st") lmRailOpen(it); else if (it.kind === "sk") lmSkOpen(it);
+  if (it.kind === "tw") lmTowerOpen(it); else if (it.kind === "pl") lmPlaceOpen(it); else if (it.kind === "ap") lmAirportOpen(it); else if (it.kind === "kh") lmKhasOpen(it); else if (it.kind === "jt") lmFerryOpen(it); else if (it.kind === "st") lmRailOpen(it); else if (it.kind === "ip") lmIptaOpen(it);
 }
 /* ---------- input ---------- */
 function lmKey(e) {
@@ -3049,7 +3035,7 @@ function lmLoop(ts) {
     if ((g.hudT -= dt) <= 0) { g.hudT = 0.25; lmHudTick(g); }
     if ((g.mmT -= dt) <= 0) { g.mmT = 0.12; lmMapDraw(LM.ui.mm, LM.mmBase, false); }
     if ((g.cullT -= dt) <= 0) {
-      g.cullT = 0.5; lmDayNight(g); lmSkLabels(g);
+      g.cullT = 0.5; lmDayNight(g);
       for (const it of g.items) { const d = Math.hypot(it.x - g.p.x, it.z - g.p.z); if (it.lb) it.lb.visible = d < 260; if (it.m && it.m.isObject3D) it.m.visible = d < 800; }
     }
     for (const it of g.items) if (it.kind === "tw" && it.m.cr.visible !== false) { it.m.cr.rotation.y += dt * 1.4; it.m.cr.position.y = 10.4 + Math.sin(g.T * 2 + it.x) * 0.4; }
