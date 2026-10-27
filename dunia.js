@@ -537,7 +537,16 @@ function lmBuildTrees(g, avoid) {
   const rocks = mk(rockG, new T.MeshLambertMaterial({ color: 0x8e877a, flatShading: true }), NR);
   const mt = new T.Matrix4(), q = new T.Quaternion(), sc = new T.Vector3(), pos = new T.Vector3(), col = new T.Color(), up = new T.Vector3(0, 1, 0);
   const fgAt = (x, z) => { const xi = Math.round((x - TER.x0) / TER.cs), zi = Math.round((z - TER.z0) / TER.cs); return xi >= 0 && zi >= 0 && xi < TER.nx && zi < TER.nz && TER.fg[zi * TER.nx + xi]; };
-  const ok = (x, z) => { const k = lmAt(x, z); return ((k && k !== "jambatan" && k !== "wp") || (!k && fgAt(x, z) && R() < 0.35)) && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + 4) ; };
+  /* grid ruang untuk senarai elak (beribu titik di sepanjang landasan dan lebuh raya) */
+  const GC = 64, grid = new Map(), big = [];
+  for (const a of avoid) { if (a.r + 4 > GC) { big.push(a); continue; } const k = Math.floor(a.x / GC) + "," + Math.floor(a.z / GC); let L = grid.get(k); if (!L) grid.set(k, (L = [])); L.push(a); }
+  const blocked = (x, z) => {
+    if (big.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + 4)) return true;
+    const cx = Math.floor(x / GC), cz = Math.floor(z / GC);
+    for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) { const L = grid.get((cx + i) + "," + (cz + j)); if (L && L.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + 4)) return true; }
+    return false;
+  };
+  const ok = (x, z) => { const k = lmAt(x, z); return ((k && k !== "jambatan" && k !== "wp") || (!k && fgAt(x, z) && R() < 0.35)) && !blocked(x, z); };
   const put = (m, i, x, y, z, s, sy, rot) => { q.setFromAxisAngle(up, rot); mt.compose(pos.set(x, y, z), q, sc.set(s, sy, s)); m.setMatrixAt(i, mt); };
   let n = 0, np = 0, nr = 0, tries = 0;
   while ((n < NT || np < NP || nr < NR) && tries < 700000) {
