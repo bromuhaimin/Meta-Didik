@@ -1114,7 +1114,7 @@ body.vmap #fabDock{bottom:calc(var(--dockh,190px) + 26px + env(safe-area-inset-b
 <div id="rkBanner" role="status" hidden></div>
 <div id="app">
   <header class="top"><div class="top-in">
-    <div class="brand" role="link" tabindex="0" aria-label="Gempur, kembali ke peta">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.95</small></div>
+    <div class="brand" role="link" tabindex="0" aria-label="Gempur, kembali ke peta">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.96</small></div>
     <div class="sjm" id="sjm"><button type="button" aria-haspopup="menu" aria-expanded="false"><span class="sjm-l">Subjek</span><b id="sjmName"></b></button><div class="sjm-pop" role="menu" hidden></div></div>
     <button class="wallet" id="walletBtn" type="button" aria-label="Syiling. Buka Gudang avatar"><span class="wc"></span><b class="walnum">0</b><span class="walpop" aria-hidden="true"></span></button>
     <button class="meb" id="meBtn" type="button" aria-label="Profil anggota">
@@ -1602,7 +1602,7 @@ if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.
 if (SUBJ === "bm") { DATA.tema = DATA_BM.tema; DATA.topik = DATA_BM.topik; DATA.soalan = DATA_BM.soalan; }
 if (SUBJ === "bi") { DATA.tema = DATA_BI.tema; DATA.topik = DATA_BI.topik; DATA.soalan = DATA_BI.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v17.95"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v17.96"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -8923,8 +8923,9 @@ function rkSafe(k) { return String(k || "").replace(/[.$#\[\]\/]/g, "_").slice(0
 function rkAdd(mod, score, tid) {
   score = Math.round(score); if (!(score > 0) || !RK_NM[mod]) return;
   const r = rkLoad(), wk = weekKey(), mo = monthKey(), m = r.m[mod] || (r.m[mod] = { a: 0, b: 0, n: 0, w: wk, ws: 0, o: mo, os: 0, s: {} });
+  const dk = dayKey(); if (m.d !== dk) { m.d = dk; m.ds = 0; }
   if (m.w !== wk) { m.w = wk; m.ws = 0; } if (m.o !== mo) { m.o = mo; m.os = 0; }
-  m.a += score; m.ws += score; m.os += score; m.n++; if (score > m.b) m.b = score;
+  m.a += score; m.ds += score; m.ws += score; m.os += score; m.n++; if (score > m.b) m.b = score;
   const k = rkSafe(tid); if (k && score > (m.s[k] | 0)) m.s[k] = score;
   rkSave(r); clearTimeout(RK.t); RK.t = setTimeout(rkPush, 2500);
 }
@@ -8945,7 +8946,7 @@ async function rkPull() {
   if (typeof UI !== "undefined" && UI.view === "rank" && (UI.boardMode || "rk") === "rk") { try { renderBoard(); } catch (e) { /* abaikan */ } }
 }
 function rkVal(m, mod, per, met, mis) {
-  const one = (x) => { if (!x) return 0; if (mis) return x.s ? x.s[mis] | 0 : 0; if (met === "terbaik") return x.b | 0; if (per === "minggu") return x.w === weekKey() ? x.ws | 0 : 0; if (per === "bulan") return x.o === monthKey() ? x.os | 0 : 0; return x.a | 0; };
+  const one = (x) => { if (!x) return 0; if (mis) return x.s ? x.s[mis] | 0 : 0; if (met === "terbaik") return x.b | 0; if (per === "hari") return x.d === dayKey() ? x.ds | 0 : 0; if (per === "minggu") return x.w === weekKey() ? x.ws | 0 : 0; if (per === "bulan") return x.o === monthKey() ? x.os | 0 : 0; return x.a | 0; };
   if (mod === "all") return met === "terbaik" ? Object.keys(RK_NM).filter((k) => k !== "ak").reduce((s, k) => s + one(m[k]), 0) : one(m.ak); /* Keseluruhan = mata aktiviti semua permainan */
   return one(m[mod]);
 }
@@ -8967,13 +8968,13 @@ function renderRk(box) {
   if (!RK.at || Date.now() - RK.at > 60000) rkPull();
   const dbOk = !!(Net.db && Net.uid), met = RK.per === "terbaik" ? "terbaik" : "jumlah", per = RK.per === "terbaik" ? "semua" : RK.per, again = () => renderBoard();
   const mis = RK.mod !== "all" && RK.mis ? RK.mis : "";
-  box.appendChild(el("div", { class: "notice" }, RK.mod === "all" ? "Ranking " + SUBJS[SUBJ].nama + ". Keseluruhan: setiap jawapan dalam SEMUA permainan memberi mata (betul 10, cubaan 2, had " + AK_CAP + " sehari). Murid yang aktif setiap hari berada di atas." : "Ranking " + SUBJS[SUBJ].nama + ". Mata dikumpul daripada setiap permainan yang selesai. Pilih mod, tapis skop dan tempoh."));
+  box.appendChild(el("div", { class: "notice" }, RK.mod === "all" ? "Ranking " + SUBJS[SUBJ].nama + ". Keseluruhan: setiap jawapan dalam SEMUA permainan memberi mata (betul 10, cubaan 2, tiada had). Pilih Hari ini untuk melihat juara hari ini." : "Ranking " + SUBJS[SUBJ].nama + ". Mata dikumpul daripada setiap permainan yang selesai. Pilih mod, tapis skop dan tempoh."));
   if (!dbOk) box.appendChild(el("div", { class: "notice warn" }, "Ranking bersama tidak tersedia pada sesi ini. Hanya markah peranti ini dipaparkan."));
   else if (RK.err) box.appendChild(el("div", { class: "notice warn" }, RK.err));
   box.appendChild(segBtns(RK_MODS, RK.mod, (v) => { RK.mod = v; RK.mis = ""; again(); }, "Mod permainan"));
   box.appendChild(segBtns([["pemain", "Pemain"], ["pasukan", "Pasukan"], ["sekolah", "Sekolah"], ["negeri", "Negeri"]], RK.sub, (v) => { RK.sub = v; again(); }, "Jenis papan"));
   box.appendChild(segBtns([["semua", "Semua"], ["negeri", "Negeri saya"], ["sekolah", "Sekolah saya"], ["kelas", "Kelas saya"], ["pasukan", "Pasukan saya"]], RK.skop, (v) => { RK.skop = v; again(); }, "Skop"));
-  if (!mis) box.appendChild(segBtns([["minggu", "Minggu ini"], ["bulan", "Bulan ini"], ["semua", "Sepanjang masa"], ["terbaik", "Skor terbaik"]], RK.per, (v) => { RK.per = v; again(); }, "Tempoh"));
+  if (!mis) box.appendChild(segBtns([["hari", "Hari ini"], ["minggu", "Minggu ini"], ["bulan", "Bulan ini"], ["semua", "Sepanjang masa"], ["terbaik", "Skor terbaik"]], RK.per, (v) => { RK.per = v; again(); }, "Tempoh"));
   if (RK.mod !== "all") {
     const s = el("select", { "aria-label": "Misi", style: "margin:6px 0;max-width:100%" }); s.appendChild(el("option", { value: "" }, "Semua misi"));
     rkMissions().forEach((o) => { const e = el("option", { value: o[0] }, o[1]); if (RK.mis === o[0]) e.selected = true; s.appendChild(e); });
@@ -15365,17 +15366,9 @@ function lrnRec(q, ok, src) {
   } catch (e) { /* abaikan */ }
 }
 /* v17.89: mata aktiviti untuk kedudukan Keseluruhan. Setiap jawapan dalam mana-mana permainan:
-   betul 10 mata, cubaan 2 mata, had harian AK_CAP supaya murid yang aktif setiap hari berada di atas. */
-const AK_CAP = 600;
+   betul 10 mata, cubaan 2 mata. v17.96: tiada had harian; Top 5 META GEMPUR memaparkan mata hari ini. */
 function akAdd(ok, tid) {
-  try {
-    const key = "gt-ak" + (NSUF[SUBJ] || ""), d = dayKey(); let r = null;
-    try { r = JSON.parse(localStorage.getItem(key) || "null"); } catch (e) { r = null; }
-    if (!r || r.d !== d) r = { d: d, n: 0 };
-    const pts = Math.min(ok ? 10 : 2, AK_CAP - (r.n | 0)); if (pts <= 0) return;
-    r.n = (r.n | 0) + pts; localStorage.setItem(key, JSON.stringify(r));
-    rkAdd("ak", pts, tid);
-  } catch (e) { /* abaikan */ }
+  try { rkAdd("ak", ok ? 10 : 2, tid); } catch (e) { /* abaikan */ }
 }
 function lrnKbat(m) { try { const c = lrnC(); if ((m | 0) >= 3) { c.kb = (c.kb | 0) + 1; if (c.kb >= 5) lrnBadge("kbat"); } lrnSaveSoon(); } catch (e) { /* abaikan */ } }
 function lrnEval() {

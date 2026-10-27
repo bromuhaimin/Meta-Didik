@@ -2001,13 +2001,13 @@ function lmRoomPanel() {
   });
 }
 
-/* ---------- Top 5 kedudukan minggu ini di langit (v17.89) ---------- */
+/* ---------- Top 5 kedudukan hari ini di langit (v17.89; harian sejak v17.96) ---------- */
 function lmSkyDraw(sk) {
   return (x, w, h) => {
     x.clearRect(0, 0, w, h);
     const gr = x.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, "rgba(20,40,90,.92)"); gr.addColorStop(1, "rgba(60,20,90,.88)");
     lmRound(x, 8, 8, w - 16, h - 16, 40); x.fillStyle = gr; x.fill(); x.lineWidth = 10; x.strokeStyle = "#ffd45a"; x.stroke();
-    x.textAlign = "center"; x.fillStyle = "#ffd45a"; x.font = "900 64px Fredoka, Nunito, sans-serif"; x.fillText("🏆 TOP 5 MINGGU INI", w / 2, 92);
+    x.textAlign = "center"; x.fillStyle = "#ffd45a"; x.font = "900 64px Fredoka, Nunito, sans-serif"; x.fillText("🏆 TOP 5 HARI INI", w / 2, 92);
     x.fillStyle = "#cde3f3"; x.font = "800 30px Nunito, sans-serif"; x.fillText(SUBJS[SUBJ].subjek + " · mata semua permainan", w / 2, 134);
     const list = sk.list || [];
     if (!list.length) { x.fillStyle = "#fff"; x.font = "800 40px Nunito, sans-serif"; x.fillText(sk.err || (sk.busy ? "Memuatkan kedudukan..." : "Jawab soalan untuk jadi yang pertama di sini!"), w / 2, 330); return; }
@@ -2032,7 +2032,7 @@ async function lmSkyLoad(g) {
   const sk = g.sky5; if (!sk) return; sk.at = Date.now(); sk.busy = true;
   try {
     if (Net.db && Net.uid && (!RK.at || Date.now() - RK.at > 60000)) await rkPull();
-    sk.list = rkAllRows().map((r) => ({ n: r.n, k: r.k, sk: r.sk, me: r.me, v: rkVal(r.m, "all", "minggu", "jumlah", "") })).filter((r) => r.v > 0).sort((a, b) => b.v - a.v).slice(0, 5);
+    sk.list = rkAllRows().map((r) => ({ n: r.n, k: r.k, sk: r.sk, me: r.me, v: rkVal(r.m, "all", "hari", "jumlah", "") })).filter((r) => r.v > 0).sort((a, b) => b.v - a.v).slice(0, 5);
     sk.err = !(Net.db && Net.uid) ? "Kedudukan bersama memerlukan sambungan internet" : "";
   } catch (e) { sk.err = "Kedudukan tidak dapat dimuatkan"; }
   sk.busy = false;
