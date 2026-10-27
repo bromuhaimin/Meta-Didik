@@ -1,4 +1,4 @@
-const V="gt-v18-3";
+const V="gt-v18-4";
 const SHELL=["./","./index.html","./manifest.json","./icon-192.png","./icon-512.png","./three.min.js","./dunia.js","./avatar3d.js",
   "./soalan.json","./soalan_pi.json","./soalan_ba.json","./soalan_p3.json","./soalan_sj.json","./soalan_sc.json","./soalan_mt.json","./soalan_bm.json","./soalan_bi.json",
   "./img/lg-pg.jpg","./img/lg-pb.jpg","./img/lg-ps.jpg","./img/lg-pk.jpg","./img/lg-pd.jpg"];
@@ -11,7 +11,8 @@ self.addEventListener("fetch",e=>{
   const same=u.origin===location.origin, cdn=/cdnjs\.cloudflare\.com|cdn\.jsdelivr\.net|fonts\.(googleapis|gstatic)\.com/.test(u.hostname);
   if(!same&&!cdn)return;
   if(same){ // rangkaian dahulu supaya versi baharu sentiasa dimuatkan, cache jika luar talian
-    e.respondWith(fetch(r).then(res=>{const c=res.clone();caches.open(V).then(x=>x.put(r,c));return res;}).catch(()=>caches.match(r).then(m=>m||caches.match("./index.html"))));
+    /* v18.4: "no-cache" = sentiasa semak pelayan (elak salinan lama dalam cache HTTP Safari) */
+    e.respondWith(fetch(r,{cache:"no-cache"}).then(res=>{if(res.ok){const c=res.clone();caches.open(V).then(x=>x.put(r,c));}return res;}).catch(()=>caches.match(r,{ignoreSearch:true}).then(m=>m||caches.match("./index.html"))));
   } else {
     e.respondWith(caches.match(r).then(m=>m||fetch(r).then(res=>{const c=res.clone();caches.open(V).then(x=>x.put(r,c));return res;})));
   }

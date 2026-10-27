@@ -1115,7 +1115,7 @@ body.vmap #fabDock{bottom:calc(var(--dockh,190px) + 26px + env(safe-area-inset-b
 <div id="rkBanner" role="status" hidden></div>
 <div id="app">
   <header class="top"><div class="top-in">
-    <div class="brand" role="link" tabindex="0" aria-label="Gempur, kembali ke peta">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v18.3</small></div>
+    <div class="brand" role="link" tabindex="0" aria-label="Gempur, kembali ke peta">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v18.4</small></div>
     <div class="sjm" id="sjm"><button type="button" aria-haspopup="menu" aria-expanded="false"><span class="sjm-l">Subjek</span><b id="sjmName"></b></button><div class="sjm-pop" role="menu" hidden></div></div>
     <button class="wallet" id="walletBtn" type="button" aria-label="Syiling. Buka Gudang avatar"><span class="wc"></span><b class="walnum">0</b><span class="walpop" aria-hidden="true"></span></button>
     <button class="meb" id="meBtn" type="button" aria-label="Profil anggota">
@@ -1603,7 +1603,7 @@ if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.
 if (SUBJ === "bm") { DATA.tema = DATA_BM.tema; DATA.topik = DATA_BM.topik; DATA.soalan = DATA_BM.soalan; }
 if (SUBJ === "bi") { DATA.tema = DATA_BI.tema; DATA.topik = DATA_BI.topik; DATA.soalan = DATA_BI.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v18.3"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v18.4"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -8209,11 +8209,13 @@ function lgRoot() {
 /* v17.88: META GEMPUR (dunia maya peta Malaysia untuk semua tajuk subjek semasa).
    Dibuka daripada butang di peta utama; dunia.js dimuat hanya apabila diperlukan. */
 /* v17.91: avatar 3D dikongsi Gudang dan META GEMPUR; dimuat apabila perlu */
+/* v18.4: versi aplikasi untuk memecah cache skrip (Safari/ikon skrin utama iPhone menyimpan salinan lama) */
+const APP_VER = "18.4";
 function av3Load(cb) {
   if (window.AV3) { cb(); return; }
   if (typeof THREE === "undefined") return;
   const q = av3Load.q || (av3Load.q = []); q.push(cb); if (q.length > 1) return;
-  const s = document.createElement("script"); s.src = "avatar3d.js";
+  const s = document.createElement("script"); s.src = "avatar3d.js?v=" + APP_VER;
   s.onload = () => { const l = av3Load.q; av3Load.q = null; if (window.AV3) l.forEach((f) => { try { f(); } catch (e) { /* abaikan */ } }); };
   s.onerror = () => { av3Load.q = null; s.remove(); };
   document.head.appendChild(s);
@@ -8223,7 +8225,7 @@ function lmOpen(tid) {
   if (window.LMX) { window.LMX.open(tid); return; }
   if (!window.AV3) { if (typeof THREE === "undefined") { toast("Grafik 3D tidak tersedia pada peranti ini.", "warn"); return; } av3Load(() => lmOpen(tid)); return; }
   if (lmOpen.busy) return; lmOpen.busy = true;
-  const s = document.createElement("script"); s.src = "dunia.js";
+  const s = document.createElement("script"); s.src = "dunia.js?v=" + APP_VER;
   s.onload = () => { lmOpen.busy = false; if (window.LMX) window.LMX.open(tid); };
   s.onerror = () => { lmOpen.busy = false; s.remove(); toast("META GEMPUR tidak dapat dimuatkan. Semak sambungan internet dan cuba lagi.", "warn"); };
   document.head.appendChild(s);
@@ -21170,5 +21172,13 @@ document.addEventListener("click", (ev) => { const b = ev.target && ev.target.cl
 
 </script>
 
-<script>if("serviceWorker"in navigator&&location.protocol.startsWith("http"))addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
+<script>/* v18.4: semak versi baharu setiap kali dibuka/kembali ke aplikasi; muat semula sekali apabila pekerja baharu aktif (bukan semasa bermain META GEMPUR) */
+if("serviceWorker"in navigator&&location.protocol.startsWith("http"))addEventListener("load",()=>{
+  const had=!!navigator.serviceWorker.controller;let done=false;
+  const reload=()=>{if(done)return;if(window.LMX&&window.LMX.on){window.__swPend=true;return;}done=true;location.reload();};
+  navigator.serviceWorker.addEventListener("controllerchange",()=>{if(had)reload();});
+  navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then((r)=>{const up=()=>{try{r.update();}catch(e){}};up();document.addEventListener("visibilitychange",()=>{if(!document.hidden)up();});}).catch(()=>{});
+});
+/* butang "muat semula versi terkini": buang semua cache dan pekerja servis */
+function appHardReload(){const go=()=>location.replace(location.pathname+"?r="+Date.now());try{Promise.all([("caches"in window)?caches.keys().then((k)=>Promise.all(k.map((x)=>caches.delete(x)))):0,("serviceWorker"in navigator)?navigator.serviceWorker.getRegistrations().then((a)=>Promise.all(a.map((r)=>r.unregister()))):0]).then(go,go);}catch(e){go();}}</script>
 </body></html>
