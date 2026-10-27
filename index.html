@@ -1113,7 +1113,7 @@ body.vmap #fabDock{bottom:calc(var(--dockh,190px) + 26px + env(safe-area-inset-b
 <div id="rkBanner" role="status" hidden></div>
 <div id="app">
   <header class="top"><div class="top-in">
-    <div class="brand" role="link" tabindex="0" aria-label="Gempur, kembali ke peta">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.89</small></div>
+    <div class="brand" role="link" tabindex="0" aria-label="Gempur, kembali ke peta">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.90</small></div>
     <div class="sjm" id="sjm"><button type="button" aria-haspopup="menu" aria-expanded="false"><span class="sjm-l">Subjek</span><b id="sjmName"></b></button><div class="sjm-pop" role="menu" hidden></div></div>
     <button class="wallet" id="walletBtn" type="button" aria-label="Syiling. Buka Gudang avatar"><span class="wc"></span><b class="walnum">0</b><span class="walpop" aria-hidden="true"></span></button>
     <button class="meb" id="meBtn" type="button" aria-label="Profil anggota">
@@ -1601,7 +1601,7 @@ if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.
 if (SUBJ === "bm") { DATA.tema = DATA_BM.tema; DATA.topik = DATA_BM.topik; DATA.soalan = DATA_BM.soalan; }
 if (SUBJ === "bi") { DATA.tema = DATA_BI.tema; DATA.topik = DATA_BI.topik; DATA.soalan = DATA_BI.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v17.89"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v17.90"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;

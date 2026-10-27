@@ -196,90 +196,251 @@ function lmAt(wx, wz) {
 }
 const lmLandW = (wx, wz) => lmAt(wx, wz) !== "";
 
-/* ---------- pembinaan dunia ---------- */
-function lmStudTex() {
-  /* tekstur "stud" gaya blok mainan: grid halus dengan bulatan timbul */
-  const t = lmTex(64, 64, (x, w, h) => {
-    x.fillStyle = "#ffffff"; x.fillRect(0, 0, w, h);
-    x.fillStyle = "rgba(0,0,0,.07)"; x.fillRect(0, 0, w, 2); x.fillRect(0, 0, 2, h);
-    x.beginPath(); x.arc(w / 2, h / 2, 13, 0, 6.2832); x.fillStyle = "rgba(255,255,255,.9)"; x.fill();
-    x.beginPath(); x.arc(w / 2 + 2, h / 2 + 2, 13, 0, 6.2832); x.fillStyle = "rgba(0,0,0,.06)"; x.fill();
-  });
-  t.wrapS = t.wrapT = T.RepeatWrapping; t.repeat.set(1 / 6, 1 / 6);
-  return t;
+/* ---------- rupa bumi 3D (v17.90): bukit, banjaran, pantai dan dasar laut ---------- */
+/* Grid ketinggian meliputi seluruh peta. Daratan diambil daripada peta raster negeri; ketinggian dijana
+   daripada jarak ke pantai, hingar fbm, banjaran (Titiwangsa, Crocker) dan puncak gunung. Tapak rata
+   ("pad") disediakan untuk menara, mercu tanda dan lapangan terbang supaya model duduk elok. */
+const TER = { cs: 4, x0: -1180, z0: -528, nx: 0, nz: 0, h: null, land: null, st: null, dIn: null };
+const STATE_AMP = { perlis: 0.5, kedah: 0.6, penang: 0.8, perak: 1, kelantan: 0.9, terengganu: 0.7, pahang: 1, selangor: 0.5, wp: 0.2, nsembilan: 0.7, melaka: 0.3, johor: 0.5, sarawak: 0.9, sabah: 1 };
+/* banjaran dalam koordinat SVG asal: [negeri rujukan (untuk anjakan Borneo), tinggi, lebar dunia, titik...] */
+const RANGES = [
+  ["perak", 34, 70, [[126, 96], [133, 128], [138, 160], [142, 190], [152, 218], [163, 238]]],
+  ["kelantan", 22, 60, [[150, 120], [170, 150], [185, 170]]],
+  ["sabah", 38, 70, [[505, 150], [520, 125], [532, 105], [545, 88]]],
+  ["sarawak", 26, 90, [[330, 268], [380, 250], [430, 222], [470, 196]]]
+];
+function lmHash(a, b) { let n = (Math.imul(a, 374761393) + Math.imul(b, 668265263)) | 0; n = Math.imul(n ^ (n >>> 13), 1274126177); return ((n ^ (n >>> 16)) >>> 0) / 4294967295; }
+function lmNoise(x, z) {
+  const xi = Math.floor(x), zi = Math.floor(z), xf = x - xi, zf = z - zi, u = xf * xf * (3 - 2 * xf), v = zf * zf * (3 - 2 * zf);
+  const a = lmHash(xi, zi), b = lmHash(xi + 1, zi), c = lmHash(xi, zi + 1), d = lmHash(xi + 1, zi + 1);
+  return (a + (b - a) * u) * (1 - v) + (c + (d - c) * u) * v;
 }
-function lmShapes(k) {
-  const out = [];
-  DATA.negeri[k].d.split("M").filter(Boolean).forEach((sp) => {
-    const n = sp.replace(/Z/g, "").match(/-?[\d.]+/g).map(Number); if (n.length < 6) return;
-    const s = new T.Shape();
-    for (let i = 0; i < n.length; i += 2) { const w = toW(k, n[i], n[i + 1]); if (i === 0) s.moveTo(w.x, w.z); else s.lineTo(w.x, w.z); }
-    out.push(s);
-  });
-  return out;
+function lmFbm(x, z) { let s = 0, a = 0.5, f = 1; for (let i = 0; i < 4; i++) { s += lmNoise(x * f, z * f) * a; f *= 2.03; a *= 0.5; } return s / 0.9375; }
+function lmSegDist(px, pz, ax, az, bx, bz) {
+  const dx = bx - ax, dz = bz - az, l2 = dx * dx + dz * dz || 1, t = clamp(((px - ax) * dx + (pz - az) * dz) / l2, 0, 1);
+  return Math.hypot(px - ax - dx * t, pz - az - dz * t);
 }
-function lmBuildLand(g) {
-  const stud = lmStudTex(), side = lmMat("#e9d29a");
-  for (const k of Object.keys(DATA.negeri)) {
-    const shapes = lmShapes(k); if (!shapes.length) continue;
-    const geo = new T.ExtrudeGeometry(shapes, { depth: 5, bevelEnabled: false, curveSegments: 1 });
-    geo.rotateX(Math.PI / 2);
-    const top = new T.MeshLambertMaterial({ color: STATE_COL[k] || "#8fd16a", map: stud });
-    const m = new T.Mesh(geo, [top, side]); m.receiveShadow = true; m.userData.k = k;
-    g.scene.add(m); g.landM[k] = m;
-    /* garis sempadan negeri */
-    shapes.forEach((s) => {
-      const pts = s.getPoints().map((p) => new T.Vector3(p.x, 0.06, p.y)); pts.push(pts[0].clone());
-      const ln = new T.Line(new T.BufferGeometry().setFromPoints(pts), new T.LineBasicMaterial({ color: 0x3b6b2a, transparent: true, opacity: 0.45 }));
-      g.scene.add(ln);
+/* jarak chamfer (dua laluan) daripada sel bertanda */
+function lmDist(mask, nx, nz, cs) {
+  const INF = 1e9, d = new Float32Array(nx * nz), a = cs, b = cs * 1.4142;
+  for (let i = 0; i < d.length; i++) d[i] = mask[i] ? 0 : INF;
+  for (let z = 0; z < nz; z++) for (let x = 0; x < nx; x++) {
+    const i = z * nx + x; let v = d[i];
+    if (x > 0) v = Math.min(v, d[i - 1] + a);
+    if (z > 0) { v = Math.min(v, d[i - nx] + a); if (x > 0) v = Math.min(v, d[i - nx - 1] + b); if (x < nx - 1) v = Math.min(v, d[i - nx + 1] + b); }
+    d[i] = v;
+  }
+  for (let z = nz - 1; z >= 0; z--) for (let x = nx - 1; x >= 0; x--) {
+    const i = z * nx + x; let v = d[i];
+    if (x < nx - 1) v = Math.min(v, d[i + 1] + a);
+    if (z < nz - 1) { v = Math.min(v, d[i + nx] + a); if (x < nx - 1) v = Math.min(v, d[i + nx + 1] + b); if (x > 0) v = Math.min(v, d[i + nx - 1] + b); }
+    d[i] = v;
+  }
+  return d;
+}
+function lmTerrainBase(g) {
+  const cs = TER.cs = LM.gq ? 4 : 7, nx = TER.nx = Math.floor(2520 / cs) + 1, nz = TER.nz = Math.floor(1040 / cs) + 1, N = nx * nz;
+  const land = TER.land = new Uint8Array(N), st = TER.st = new Uint8Array(N), keys = RAST.keys;
+  for (let z = 0; z < nz; z++) for (let x = 0; x < nx; x++) {
+    const k = lmAt(TER.x0 + x * cs, TER.z0 + z * cs), i = z * nx + x;
+    if (k && k !== "jambatan") { land[i] = 1; st[i] = keys.indexOf(k) + 1; }
+  }
+  const sea = new Uint8Array(N); for (let i = 0; i < N; i++) sea[i] = land[i] ? 0 : 1;
+  const dIn = TER.dIn = lmDist(sea, nx, nz, cs), dOut = lmDist(land, nx, nz, cs);
+  /* amplitud ikut negeri, dilicinkan supaya tiada anak tangga di sempadan */
+  let amp = new Float32Array(N);
+  for (let i = 0; i < N; i++) amp[i] = st[i] ? (STATE_AMP[keys[st[i] - 1]] || 0.6) : 0.4;
+  const blur = (src) => { const out = new Float32Array(N), r = Math.max(2, Math.round(28 / cs)); for (let z = 0; z < nz; z++) { let s = 0, c = 0; for (let x = -r; x <= r; x++) if (x >= 0 && x < nx) { s += src[z * nx + x]; c++; } for (let x = 0; x < nx; x++) { out[z * nx + x] = s / c; const xa = x - r, xb = x + r + 1; if (xa >= 0) { s -= src[z * nx + xa]; c--; } if (xb < nx) { s += src[z * nx + xb]; c++; } } } const o2 = new Float32Array(N); for (let x = 0; x < nx; x++) { let s = 0, c = 0; for (let z = -r; z <= r; z++) if (z >= 0 && z < nz) { s += out[z * nx + x]; c++; } for (let z = 0; z < nz; z++) { o2[z * nx + x] = s / c; const za = z - r, zb = z + r + 1; if (za >= 0) { s -= out[za * nx + x]; c--; } if (zb < nz) { s += out[zb * nx + x]; c++; } } } return o2; };
+  amp = blur(amp);
+  /* banjaran dan puncak dalam koordinat dunia */
+  const ranges = RANGES.map(([k, ht, w, pts]) => ({ ht: ht, w: w, p: pts.map((q) => toW(k, q[0], q[1])) }));
+  const peaks = [];
+  for (const it of g.items) {
+    if (it.kind !== "pl") continue;
+    if (it.type === "gunung") peaks.push({ x: it.x, z: it.z, h: it.id === "sb-kinabalu" ? 92 : it.id === "sw-mulu" ? 58 : 42, r: it.id === "sb-kinabalu" ? 70 : 48 });
+    else if (it.type === "bukit") peaks.push({ x: it.x, z: it.z, h: 22, r: 30 });
+  }
+  const h = TER.h = new Float32Array(N), sm = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+  for (let z = 0; z < nz; z++) for (let x = 0; x < nx; x++) {
+    const i = z * nx + x, wx = TER.x0 + x * cs, wz = TER.z0 + z * cs;
+    if (!land[i]) { h[i] = -1.4 - Math.min(dOut[i], 70) / 70 * 16 + (lmNoise(wx / 40, wz / 40) - 0.5) * 1.5; continue; }
+    const D = dIn[i], inl = sm(14, 150, D), A = amp[i];
+    let v = 0.55 + Math.min(D, 30) * 0.075;
+    v += A * inl * (5 + lmFbm(wx / 230, wz / 230) * 30 + lmFbm(wx / 70 + 7, wz / 70) * 8);
+    let rg = 0; for (const R of ranges) { let md = 1e9; for (let j = 0; j < R.p.length - 1; j++) md = Math.min(md, lmSegDist(wx, wz, R.p[j].x, R.p[j].z, R.p[j + 1].x, R.p[j + 1].z)); if (md < R.w * 2.2) rg = Math.max(rg, R.ht * Math.exp(-(md * md) / (R.w * R.w)) * (0.7 + 0.6 * lmFbm(wx / 60, wz / 60))); }
+    v += rg * sm(4, 40, D);
+    for (const q of peaks) { const d2 = (wx - q.x) * (wx - q.x) + (wz - q.z) * (wz - q.z); if (d2 < q.r * q.r * 6) v = Math.max(v, v * 0.3 + q.h * Math.exp(-d2 / (q.r * q.r)) * sm(2, 20, D)); }
+    h[i] = Math.min(v, 100);
+  }
+}
+function lmPad(g, x, z, r, top) { g.pads.push({ x: x, z: z, r: r, top: !!top }); }
+/* ratakan tapak: puncak dikekalkan pada puncak (top), selainnya ketinggian tengah */
+function lmTerrainPads(g) {
+  const { cs, nx, nz, h, x0, z0 } = TER;
+  for (const p of g.pads) {
+    const hc = Math.max(0.9, lmHRaw(p.x, p.z)), R = p.r + 18;
+    const xa = Math.max(0, Math.floor((p.x - R - x0) / cs)), xb = Math.min(nx - 1, Math.ceil((p.x + R - x0) / cs));
+    const za = Math.max(0, Math.floor((p.z - R - z0) / cs)), zb = Math.min(nz - 1, Math.ceil((p.z + R - z0) / cs));
+    for (let z = za; z <= zb; z++) for (let x = xa; x <= xb; x++) {
+      const i = z * nx + x; if (!TER.land[i]) continue;
+      const d = Math.hypot(x0 + x * cs - p.x, z0 + z * cs - p.z); if (d > R) continue;
+      const t = d <= p.r ? 1 : 1 - (d - p.r) / 18, w = t * t * (3 - 2 * t);
+      h[i] = h[i] + (hc - h[i]) * w;
+    }
+  }
+}
+function lmHRaw(wx, wz) {
+  const { cs, nx, nz, h, x0, z0 } = TER; if (!h) return 0;
+  const fx = clamp((wx - x0) / cs, 0, nx - 1.001), fz = clamp((wz - z0) / cs, 0, nz - 1.001), xi = fx | 0, zi = fz | 0, u = fx - xi, v = fz - zi, i = zi * nx + xi;
+  return (h[i] * (1 - u) + h[i + 1] * u) * (1 - v) + (h[i + nx] * (1 - u) + h[i + nx + 1] * u) * v;
+}
+/* ketinggian tanah di bawah pemain (jambatan Pulau Pinang ada lantai sendiri) */
+function lmGround(wx, wz) { return lmAt(wx, wz) === "jambatan" ? 1.25 : lmHRaw(wx, wz); }
+function lmDetailTex() {
+  const t = lmTex(128, 128, (x, w, h) => {
+    const im = x.createImageData(w, h);
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) { const v = 205 + (lmFbm(i / 9, j / 9) * 50) | 0, o = (j * w + i) * 4; im.data[o] = im.data[o + 1] = im.data[o + 2] = Math.min(255, v); im.data[o + 3] = 255; }
+    x.putImageData(im, 0, 0);
+  });
+  t.wrapS = t.wrapT = T.RepeatWrapping; return t;
+}
+function lmBuildTerrain(g) {
+  lmTerrainPads(g);
+  const { cs, nx, nz, h, x0, z0, land, st, dIn } = TER, N = nx * nz, keys = RAST.keys;
+  const pos = new Float32Array(N * 3), col = new Float32Array(N * 3), uv = new Float32Array(N * 2);
+  const C = (hex) => new T.Color(hex), sand = C(0xe6d39a), wet = C(0xb9a571), grass = C(0x4f8a34), grass2 = C(0x6f9a3c), forest = C(0x24552a), rock = C(0x6f6a5e), snow = C(0xf4f6f8), sea0 = C(0xd8c58e), sea1 = C(0x2b5f6e);
+  const tmp = new T.Color(), tint = {};
+  keys.forEach((k, i) => { tint[i + 1] = new T.Color(STATE_COL[k] || "#8fd16a"); });
+  for (let z = 0; z < nz; z++) for (let x = 0; x < nx; x++) {
+    const i = z * nx + x, wx = x0 + x * cs, wz = z0 + z * cs, y = h[i];
+    pos[i * 3] = wx; pos[i * 3 + 1] = y; pos[i * 3 + 2] = wz; uv[i * 2] = wx / 14; uv[i * 2 + 1] = wz / 14;
+    const sx = (h[i + (x < nx - 1 ? 1 : 0)] - h[i - (x > 0 ? 1 : 0)]) / (2 * cs), sz = (h[i + (z < nz - 1 ? nx : 0)] - h[i - (z > 0 ? nx : 0)]) / (2 * cs), slope = Math.hypot(sx, sz);
+    const n = lmFbm(wx / 50, wz / 50);
+    if (!land[i]) tmp.copy(sea0).lerp(sea1, clamp(-y / 14, 0, 1));
+    else if (y < 1.6 && dIn[i] < 14) tmp.copy(y < 0.9 ? wet : sand);
+    else {
+      tmp.copy(grass).lerp(grass2, n);
+      tmp.lerp(forest, clamp((y - 6) / 22, 0, 0.85) * (0.6 + 0.4 * n));
+      if (y > 42 || slope > 0.85) tmp.lerp(rock, clamp(Math.max((y - 42) / 22, (slope - 0.85) * 1.6), 0, 0.85) * (0.75 + 0.25 * n));
+      if (y > 72) tmp.lerp(snow, clamp((y - 72) / 10, 0, 1));
+      if (st[i] && tint[st[i]]) tmp.lerp(tint[st[i]], 0.1);
+    }
+    col[i * 3] = tmp.r; col[i * 3 + 1] = tmp.g; col[i * 3 + 2] = tmp.b;
+  }
+  /* segi tiga hanya berhampiran daratan (laut dalam dilukis oleh dasar rata) */
+  const idx = [];
+  for (let z = 0; z < nz - 1; z++) for (let x = 0; x < nx - 1; x++) {
+    const a = z * nx + x, b = a + 1, c = a + nx, d = c + 1;
+    if (h[a] < -9 && h[b] < -9 && h[c] < -9 && h[d] < -9) continue;
+    idx.push(a, c, b, b, c, d);
+  }
+  const geo = new T.BufferGeometry();
+  geo.setAttribute("position", new T.BufferAttribute(pos, 3)); geo.setAttribute("color", new T.BufferAttribute(col, 3)); geo.setAttribute("uv", new T.BufferAttribute(uv, 2));
+  geo.setIndex(N > 65535 ? new T.Uint32BufferAttribute(idx, 1) : new T.Uint16BufferAttribute(idx, 1));
+  geo.computeVertexNormals(); geo.computeBoundingSphere();
+  const m = new T.Mesh(geo, new T.MeshLambertMaterial({ vertexColors: true, map: lmDetailTex() }));
+  m.receiveShadow = true; m.frustumCulled = false; g.scene.add(m); g.terrain = m;
+  /* dasar laut dalam */
+  const floor = new T.Mesh(new T.PlaneGeometry(7000, 7000).rotateX(-Math.PI / 2), new T.MeshBasicMaterial({ color: 0x1d4f6a })); floor.position.y = -17; g.scene.add(floor);
+  /* sempadan negeri mengikut permukaan bukit */
+  g.border = {};
+  for (const k of keys) {
+    const grp = new T.Group(), mat = new T.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.35 });
+    DATA.negeri[k].d.split("M").filter(Boolean).forEach((sp) => {
+      const nn = sp.replace(/Z/g, "").match(/-?[\d.]+/g).map(Number), pts = [];
+      for (let j = 0; j < nn.length; j += 2) {
+        const a = toW(k, nn[j], nn[j + 1]), b = toW(k, nn[(j + 2) % nn.length], nn[(j + 3) % nn.length]), seg = Math.max(1, Math.ceil(Math.hypot(b.x - a.x, b.z - a.z) / 6));
+        for (let s = 0; s < seg; s++) { const px = a.x + (b.x - a.x) * s / seg, pz = a.z + (b.z - a.z) * s / seg; pts.push(new T.Vector3(px, Math.max(0.15, lmHRaw(px, pz)) + 0.35, pz)); }
+      }
+      if (pts.length) { pts.push(pts[0].clone()); grp.add(new T.Line(new T.BufferGeometry().setFromPoints(pts), mat)); }
     });
+    g.scene.add(grp); g.border[k] = mat;
   }
   /* jambatan Pulau Pinang */
   const br = RAST.bridge;
   if (br) {
     const a = toW("penang", br[0], br[1]), b = toW("penang", br[2], br[3]), len = Math.hypot(b.x - a.x, b.z - a.z), ang = Math.atan2(b.z - a.z, b.x - a.x);
-    const grp = new T.Group(); grp.position.set((a.x + b.x) / 2, 0, (a.z + b.z) / 2); grp.rotation.y = -ang;
+    const grp = new T.Group(); grp.position.set((a.x + b.x) / 2, 1.25, (a.z + b.z) / 2); grp.rotation.y = -ang;
     grp.add(lmMesh(lmBox(len, 0.6, 6), "#d9d3c4", 0, -0.3, 0));
     for (let i = -1; i <= 1; i += 2) grp.add(lmMesh(lmBox(len, 0.9, 0.35), "#f2efe6", 0, 0.45, i * 2.9));
-    for (let i = 0; i < 4; i++) { const px = -len / 2 + (i + 0.5) * len / 4; grp.add(lmMesh(lmBox(1.2, 6, 1.2), "#bfb8a8", px, -3, 0)); }
-    const pyl = lmMesh(lmBox(1.2, 9, 7.2), "#f2efe6", 0, 4, 0); grp.add(pyl);
+    for (let i = 0; i < 6; i++) { const px = -len / 2 + (i + 0.5) * len / 6; grp.add(lmMesh(lmBox(1.2, 14, 1.2), "#bfb8a8", px, -7.5, 0)); }
+    grp.add(lmMesh(lmBox(1.2, 11, 7.2), "#f2efe6", 0, 5, 0));
     g.scene.add(grp);
   }
 }
-function lmBuildSea(g) {
-  const geo = new T.PlaneGeometry(6000, 6000, 1, 1); geo.rotateX(-Math.PI / 2);
-  const m = new T.Mesh(geo, new T.MeshPhongMaterial({ color: 0x2f8fd0, shininess: 70, specular: 0x9fd7ff, transparent: true, opacity: 0.94 }));
-  m.position.y = -1.6; m.receiveShadow = true; g.scene.add(m); g.sea = m;
-  /* cetek di pesisir: cincin cerah di bawah daratan */
-  const sh = new T.Mesh(geo, new T.MeshBasicMaterial({ color: 0x0d4f86 })); sh.position.y = -4.5; g.scene.add(sh);
+/* ---------- laut: air lut sinar dengan riak bergerak ---------- */
+function lmWaterNormal() {
+  const S = 128, hh = new Float32Array(S * S);
+  for (let j = 0; j < S; j++) for (let i = 0; i < S; i++) { const a = i / S * 6.2832, b = j / S * 6.2832; hh[j * S + i] = Math.sin(a * 3 + Math.sin(b * 2) * 1.5) * 0.5 + Math.sin(b * 4 + a) * 0.35 + Math.sin((a + b) * 7) * 0.15; }
+  const t = lmTex(S, S, (x) => {
+    const im = x.createImageData(S, S);
+    for (let j = 0; j < S; j++) for (let i = 0; i < S; i++) {
+      const dx = hh[j * S + (i + 1) % S] - hh[j * S + (i + S - 1) % S], dz = hh[((j + 1) % S) * S + i] - hh[((j + S - 1) % S) * S + i], o = (j * S + i) * 4;
+      im.data[o] = 128 - dx * 90; im.data[o + 1] = 128 - dz * 90; im.data[o + 2] = 255; im.data[o + 3] = 255;
+    }
+    x.putImageData(im, 0, 0);
+  });
+  t.wrapS = t.wrapT = T.RepeatWrapping; t.repeat.set(160, 160); return t;
 }
-/* pokok berinstans: batang + daun bentuk blok */
+function lmBuildSea(g) {
+  const nm = lmWaterNormal();
+  const m = new T.Mesh(new T.PlaneGeometry(7000, 7000).rotateX(-Math.PI / 2), new T.MeshPhongMaterial({ color: 0x1e88c8, shininess: 110, specular: 0xd8f0ff, transparent: true, opacity: 0.8, normalMap: nm, normalScale: new T.Vector2(0.55, 0.55), depthWrite: false }));
+  m.position.y = 0; m.renderOrder = 1; g.scene.add(m); g.sea = m; g.seaN = nm;
+}
+/* ---------- langit: kubah bergradien, matahari, awan lembut ---------- */
+function lmBuildSky(g) {
+  const geo = new T.SphereGeometry(1250, 32, 16), n = geo.attributes.position.count, cols = new Float32Array(n * 3);
+  geo.setAttribute("color", new T.BufferAttribute(cols, 3));
+  const dome = new T.Mesh(geo, new T.MeshBasicMaterial({ vertexColors: true, side: T.BackSide, fog: false, depthWrite: false }));
+  dome.renderOrder = -10; dome.frustumCulled = false; g.scene.add(dome); g.dome = dome;
+  g.paintSky = (top, hor) => {
+    const p = geo.attributes.position, c = new T.Color();
+    for (let i = 0; i < n; i++) { const yy = p.getY(i) / 1250; c.copy(hor).lerp(top, Math.pow(clamp(yy, 0, 1), 0.6)); cols[i * 3] = c.r; cols[i * 3 + 1] = c.g; cols[i * 3 + 2] = c.b; }
+    geo.attributes.color.needsUpdate = true;
+  };
+  const sunTex = lmTex(128, 128, (x, w) => { const gr = x.createRadialGradient(w / 2, w / 2, 0, w / 2, w / 2, w / 2); gr.addColorStop(0, "rgba(255,255,240,1)"); gr.addColorStop(0.25, "rgba(255,240,190,.9)"); gr.addColorStop(1, "rgba(255,220,150,0)"); x.fillStyle = gr; x.fillRect(0, 0, w, w); });
+  g.sunDisc = new T.Sprite(new T.SpriteMaterial({ map: sunTex, fog: false, depthWrite: false, transparent: true })); g.sunDisc.scale.set(160, 160, 1); g.sunDisc.renderOrder = -9; g.scene.add(g.sunDisc);
+  const puff = lmTex(128, 128, (x, w) => { for (let i = 0; i < 7; i++) { const cx = 30 + Math.random() * 68, cy = 50 + Math.random() * 30, r = 22 + Math.random() * 18, gr = x.createRadialGradient(cx, cy, 0, cx, cy, r); gr.addColorStop(0, "rgba(255,255,255,.95)"); gr.addColorStop(1, "rgba(255,255,255,0)"); x.fillStyle = gr; x.fillRect(0, 0, w, w); } });
+  const clouds = new T.Group(), R = lmRand("lm-cloud"), cm = new T.SpriteMaterial({ map: puff, transparent: true, depthWrite: false, opacity: 0.9 });
+  for (let i = 0; i < (LM.gq ? 70 : 36); i++) { const s = new T.Sprite(cm); const k = 60 + R() * 70; s.scale.set(k * 1.8, k, 1); s.position.set(-1300 + R() * 2900, 130 + R() * 70, -650 + R() * 1250); clouds.add(s); }
+  g.scene.add(clouds); g.clouds = clouds;
+}
+/* ---------- tumbuhan: pokok hutan, pokok kelapa di pantai, batu ---------- */
 function lmBuildTrees(g, avoid) {
-  const N = LM.gq ? 1100 : 600, R = lmRand("lm-trees");
-  const trunkG = new T.BoxGeometry(0.9, 3, 0.9), leafG = new T.BoxGeometry(3.6, 3.2, 3.6), palmG = new T.ConeGeometry(2.6, 1.6, 6);
-  const trunk = new T.InstancedMesh(trunkG, lmMat("#8a5a34"), N), leaf = new T.InstancedMesh(leafG, new T.MeshLambertMaterial({ color: 0xffffff }), N);
-  trunk.castShadow = leaf.castShadow = !!LM.gq; leaf.receiveShadow = true;
-  const mt = new T.Matrix4(), q = new T.Quaternion(), sc = new T.Vector3(), pos = new T.Vector3(), col = new T.Color();
-  const xs = [-1100, 1400], zs = [-560, 520];
-  let n = 0, tries = 0;
-  while (n < N && tries < N * 30) {
+  const NT = LM.gq ? 2600 : 1000, NP = LM.gq ? 700 : 300, NR = LM.gq ? 420 : 150, R = lmRand("lm-trees");
+  const trunkG = new T.CylinderGeometry(0.28, 0.45, 4, 5); trunkG.translate(0, 2, 0);
+  const crownG = new T.IcosahedronGeometry(2.6, 0); crownG.translate(0, 5.2, 0);
+  const crown2G = new T.IcosahedronGeometry(1.9, 0); crown2G.translate(1.3, 6.6, 0.6);
+  const palmT = new T.CylinderGeometry(0.2, 0.32, 7, 5); palmT.translate(0, 3.5, 0);
+  const palmC = new T.ConeGeometry(3.4, 1.5, 7, 1, true); palmC.translate(0, 6.8, 0);
+  const rockG = new T.DodecahedronGeometry(1.4, 0);
+  const leafMat = new T.MeshLambertMaterial({ color: 0xffffff, flatShading: true });
+  const mk = (geo, mat, n) => { const m = new T.InstancedMesh(geo, mat, n); m.castShadow = !!LM.gq; m.receiveShadow = true; m.frustumCulled = false; return m; };
+  const trunk = mk(trunkG, lmMat("#6e4a2c"), NT), crown = mk(crownG, leafMat, NT), crown2 = mk(crown2G, leafMat, NT);
+  const pT = mk(palmT, lmMat("#9b7046"), NP), pC = mk(palmC, new T.MeshLambertMaterial({ color: 0x2f7a35, side: T.DoubleSide, flatShading: true }), NP);
+  const rocks = mk(rockG, new T.MeshLambertMaterial({ color: 0x8e877a, flatShading: true }), NR);
+  const mt = new T.Matrix4(), q = new T.Quaternion(), sc = new T.Vector3(), pos = new T.Vector3(), col = new T.Color(), up = new T.Vector3(0, 1, 0);
+  const ok = (x, z) => { const k = lmAt(x, z); return k && k !== "jambatan" && k !== "wp" && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + 4); };
+  const put = (m, i, x, y, z, s, sy, rot) => { q.setFromAxisAngle(up, rot); mt.compose(pos.set(x, y, z), q, sc.set(s, sy, s)); m.setMatrixAt(i, mt); };
+  let n = 0, np = 0, nr = 0, tries = 0;
+  while ((n < NT || np < NP || nr < NR) && tries < 90000) {
     tries++;
-    const x = xs[0] + R() * (xs[1] - xs[0]), z = zs[0] + R() * (zs[1] - zs[0]), k = lmAt(x, z);
-    if (!k || k === "jambatan" || k === "wp") continue;
-    if (!lmLandW(x + 5, z) || !lmLandW(x - 5, z) || !lmLandW(x, z + 5) || !lmLandW(x, z - 5)) continue;
-    if (avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + 4)) continue;
-    const s = 0.75 + R() * 0.7, h = 3 * s;
-    q.setFromAxisAngle(new T.Vector3(0, 1, 0), R() * 6.28);
-    mt.compose(pos.set(x, h / 2, z), q, sc.set(s, s, s)); trunk.setMatrixAt(n, mt);
-    mt.compose(pos.set(x, h + 1.4 * s, z), q, sc.set(s, s * (0.8 + R() * 0.5), s)); leaf.setMatrixAt(n, mt);
-    col.setHSL(0.27 + R() * 0.08, 0.5 + R() * 0.2, 0.32 + R() * 0.12); leaf.setColorAt(n, col);
-    g.trees.push({ x: x, z: z, r: 1.2 * s });
+    const x = -1150 + R() * 2480, z = -520 + R() * 1020; if (!ok(x, z)) continue;
+    const y = lmHRaw(x, z); if (y < 0.4) continue;
+    const ci = Math.round((z - TER.z0) / TER.cs) * TER.nx + Math.round((x - TER.x0) / TER.cs), D = TER.dIn[ci] || 0;
+    if (D < 22 && y < 4) { if (np < NP && R() < 0.8) { const s = 0.8 + R() * 0.5; put(pT, np, x, y - 0.2, z, s, s * (0.9 + R() * 0.4), R() * 6.28); put(pC, np, x, y - 0.2, z, s, s * (0.9 + R() * 0.4), R() * 6.28); np++; } continue; }
+    if (y > 38) { if (nr < NR) { const s = 0.7 + R() * 1.8; put(rocks, nr, x, y + 0.3 * s, z, s, s * 0.7, R() * 6.28); nr++; } if (y > 62 || R() < 0.6) continue; }
+    if (n >= NT) continue;
+    const dens = clamp(0.25 + (y - 3) / 18, 0.15, 1); if (R() > dens) continue;
+    const s = 0.75 + R() * 0.75, rot = R() * 6.28;
+    put(trunk, n, x, y - 0.3, z, s, s, rot); put(crown, n, x, y - 0.3, z, s, s * (0.85 + R() * 0.35), rot); put(crown2, n, x, y - 0.3, z, s, s, rot);
+    col.setHSL(0.24 + R() * 0.1, 0.35 + R() * 0.22, 0.13 + R() * 0.1); crown.setColorAt(n, col); col.offsetHSL(0.01, 0, 0.04); crown2.setColorAt(n, col);
+    g.trees.push({ x: x, z: z, r: 0.9 * s });
     n++;
   }
-  trunk.count = leaf.count = n; trunk.frustumCulled = leaf.frustumCulled = false;
-  if (leaf.instanceColor) leaf.instanceColor.needsUpdate = true;
-  g.scene.add(trunk); g.scene.add(leaf);
-  void palmG;
+  trunk.count = crown.count = crown2.count = n; pT.count = pC.count = np; rocks.count = nr;
+  [crown, crown2].forEach((m) => { if (m.instanceColor) m.instanceColor.needsUpdate = true; });
+  [trunk, crown, crown2, pT, pC, rocks].forEach((m) => g.scene.add(m));
 }
 /* ---------- mercu tanda prosedural ---------- */
 function lmPalm(grp, x, z, s) {
@@ -315,14 +476,11 @@ function lmModel(type, rnd) {
     case "berkembar":
       for (const sx of [-5, 5]) { for (let i = 0; i < 5; i++) g.add(lmMesh(lmCyl(3.2 - i * 0.45, 3.4 - i * 0.45, 10, 8), "#cfd6de", sx, 5 + i * 10, 0)); g.add(lmMesh(lmCyl(0.15, 0.3, 8, 6), "#e6ebf0", sx, 54, 0)); }
       g.add(lmMesh(lmBox(6, 1.6, 2), "#9aa6b2", 0, 24, 0)); r = 10; break;
-    case "gunung": {
-      const big = rnd() < 0.5 ? 1 : 1.25;
-      g.add(lmMesh(new T.ConeGeometry(26 * big, 34 * big, 7), "#5f8f4a", 0, 17 * big, 0));
-      g.add(lmMesh(new T.ConeGeometry(11 * big, 12 * big, 7), "#8d8d86", 0, 28 * big, 0));
-      g.add(lmMesh(new T.ConeGeometry(5 * big, 5 * big, 7), "#f4f6f8", 0, 32 * big, 0)); r = 24 * big; break; }
-    case "bukit":
-      g.add(lmMesh(new T.ConeGeometry(15, 16, 7), "#6aa84f", 0, 8, 0));
-      g.add(lmMesh(lmBox(4, 3, 4), "#c96f4a", 0, 17.5, 0)); g.add(lmMesh(new T.ConeGeometry(3.4, 2.4, 4), "#7a3a2a", 0, 20.2, 0)); r = 14; break;
+    case "gunung": /* gunung kini puncak rupa bumi yang boleh didaki; di puncak ada tugu dan bendera */
+      g.add(lmMesh(new T.DodecahedronGeometry(1.6, 0), "#8d8576", 0, 0.8, 0)); g.add(lmMesh(new T.DodecahedronGeometry(1.1, 0), "#9a9283", 0.9, 1.9, 0.3));
+      g.add(lmMesh(lmCyl(0.1, 0.1, 6, 6), "#d9d9d9", 0, 3.5, 0)); g.add(lmMesh(lmBox(2.6, 1.6, 0.1), "#d63b3b", 1.3, 5.6, 0)); g.add(lmMesh(lmBox(2.6, 0.8, 0.11), "#f4f4f4", 1.3, 5.2, 0)); r = 0; break;
+    case "bukit": /* bukit rupa bumi; pondok rehat di puncak */
+      g.add(lmMesh(lmBox(4, 3, 4), "#c96f4a", 0, 1.5, 0)); g.add(lmMesh(new T.ConeGeometry(3.4, 2.4, 4), "#7a3a2a", 0, 4.2, 0)); r = 3; break;
     case "gua":
       g.add(lmMesh(new T.DodecahedronGeometry(10, 0), "#9a9a92", 0, 5, 0));
       g.add(lmMesh(new T.DodecahedronGeometry(6, 0), "#8a8a82", 7, 3, -4));
@@ -342,7 +500,7 @@ function lmModel(type, rnd) {
       for (const x of [-7, 7]) g.add(lmMesh(lmCyl(1.8, 1.8, 8, 8), "#b5ab96", x, 4, -6));
       g.add(lmMesh(lmBox(1, 2, 1), "#555", 4, 6.5, -6)); r = 10; break;
     case "pantai":
-      g.add(lmMesh(lmCyl(14, 14, 0.3, 24), "#f2dfa4", 0, 0.15, 0, { ns: 1 }));
+      g.add(lmMesh(lmCyl(14, 14, 0.3, 24), "#d6c08a", 0, 0.15, 0, { ns: 1 }));
       for (let i = 0; i < 3; i++) { const x = -6 + i * 6; g.add(lmMesh(lmCyl(0.15, 0.15, 4, 6), "#eee", x, 2, 3)); g.add(lmMesh(new T.ConeGeometry(2.8, 1.4, 8), pick(["#e85a5a", "#3e9ad6", "#f2c13a"]), x, 4.3, 3)); }
       lmPalm(g, -9, -6); lmPalm(g, 8, -7, 1.2); r = 0; break;
     case "tasik":
@@ -440,7 +598,7 @@ function lmCoinMesh() {
   m.rotation.x = Math.PI / 2; return m;
 }
 function lmBuildWorld(g) {
-  const avoid = [];
+  const avoid = [], gnd = []; /* gnd: [objek, offset] diletakkan di atas tanah selepas rupa bumi siap */
   /* Menara Ilmu: satu bagi setiap tajuk, pada titik yang sama seperti peta operasi (t.xy atau pin negeri) */
   const used = [];
   DATA.topik.forEach((t) => {
@@ -451,8 +609,8 @@ function lmBuildWorld(g) {
       /* dua tajuk pada titik yang sama: anjak sedikit supaya tidak bertindih */
       for (let tr = 0; tr < 14 && used.some((u) => Math.hypot(u.x - x, u.z - z) < 12); tr++) { const a = tr * 1.3, d = 12 + tr * 2; const nx = base.x + Math.cos(a) * d, nz = base.z + Math.sin(a) * d; if (lmAt(nx, nz) === k) { x = nx; z = nz; } }
       used.push({ x: x, z: z });
-      const tw = lmTower(t); tw.g.position.set(x, 0, z); g.scene.add(tw.g);
-      const lb = lmLabel((t.kod || t.id) + " " + t.nama, { fs: 30, k: 0.03, bd: (TEMA[t.tema] && TEMA[t.tema].warna) || "#5ad1ff" }); lb.position.set(x, 14.5, z); g.scene.add(lb);
+      const tw = lmTower(t); tw.g.position.set(x, 0, z); g.scene.add(tw.g); gnd.push([tw.g, 0]); lmPad(g, x, z, 6);
+      const lb = lmLabel((t.kod || t.id) + " " + t.nama, { fs: 30, k: 0.03, bd: (TEMA[t.tema] && TEMA[t.tema].warna) || "#5ad1ff" }); lb.position.set(x, 14.5, z); g.scene.add(lb); gnd.push([lb, 14.5]);
       const o = { kind: "tw", id: t.id, t: t, k: k, x: x, z: z, r: 2.4, ir: 7, m: tw, lb: lb };
       g.items.push(o); g.cols.push({ x: x, z: z, r: 2.4, h: 13 }); avoid.push({ x: x, z: z, r: 6 });
       lmTowerState(o);
@@ -478,7 +636,8 @@ function lmBuildWorld(g) {
       }
     }
     placed.push({ x: w.x, z: w.z, r: Math.max(md.r, 6) });
-    md.g.position.set(w.x, 0, w.z); md.g.rotation.y = rot; g.scene.add(md.g);
+    md.g.position.set(w.x, 0, w.z); md.g.rotation.y = rot; g.scene.add(md.g); gnd.push([md.g, 0]);
+    if (type === "gunung" || type === "bukit") lmPad(g, w.x, w.z, 5, true); else lmPad(g, w.x, w.z, Math.max(md.r, 8) + 3);
     const pl = { kind: "pl", id: id, k: k, n: nama, type: type, fakta: fakta, x: w.x, z: w.z, r: md.r, ir: Math.max(md.r, 6) + 9, m: md.g, names: [] };
     /* papan kenangan di hadapan mercu tanda */
     const bd = lmBoard(pl), bdist = Math.max(md.r, 8) + 5;
@@ -487,9 +646,9 @@ function lmBuildWorld(g) {
       const a = rot + Math.PI / 2 + i * 0.393, bx = w.x + Math.sin(a) * bdist, bz = w.z + Math.cos(a) * bdist;
       if (lmLandW(bx, bz) && lmLandW(bx + Math.sin(a) * 6, bz + Math.cos(a) * 6) && !g.cols.some((c) => Math.hypot(c.x - bx, c.z - bz) < c.r + 3)) { ba = a; break; }
     }
-    bd.position.set(w.x + Math.sin(ba) * bdist, 0, w.z + Math.cos(ba) * bdist); bd.rotation.y = ba; g.scene.add(bd);
+    bd.position.set(w.x + Math.sin(ba) * bdist, 0, w.z + Math.cos(ba) * bdist); bd.rotation.y = ba; g.scene.add(bd); gnd.push([bd, 0]); lmPad(g, bd.position.x, bd.position.z, 4);
     pl.bx = bd.position.x; pl.bz = bd.position.z;
-    const lb = lmLabel(nama, { fs: 30, k: 0.032, bg: "rgba(60,30,8,.78)", bd: "#f5c542" }); lb.position.set(w.x, Math.max(14, md.r * 1.4 + 8), w.z); g.scene.add(lb); pl.lb = lb;
+    const lb = lmLabel(nama, { fs: 30, k: 0.032, bg: "rgba(60,30,8,.78)", bd: "#f5c542" }); lb.position.set(w.x, Math.max(14, md.r * 1.4 + 8), w.z); g.scene.add(lb); pl.lb = lb; gnd.push([lb, lb.position.y]);
     g.items.push(pl);
     if (md.r > 0) { md.g.updateMatrixWorld(true); const bb = new T.Box3().setFromObject(md.g); g.cols.push({ x: w.x, z: w.z, r: md.r * 0.85, h: bb.max.y + 1 }); }
     g.cols.push({ x: bd.position.x, z: bd.position.z, r: 1.2, h: 8 });
@@ -499,11 +658,15 @@ function lmBuildWorld(g) {
   /* lapangan terbang */
   AIRPORTS.forEach((a) => {
     const [id, k, nama, sx, sy] = a; if (!DATA.negeri[k]) return;
-    const w = toW(k, sx, sy), m = lmAirport(a); m.position.set(w.x, 0, w.z); g.scene.add(m);
-    const lb = lmLabel("✈ " + nama, { fs: 28, k: 0.03, bg: "rgba(10,40,80,.8)", bd: "#7fb7e8" }); lb.position.set(w.x, 12, w.z); g.scene.add(lb);
+    const w = toW(k, sx, sy), m = lmAirport(a); m.position.set(w.x, 0, w.z); g.scene.add(m); gnd.push([m, 0]); lmPad(g, w.x, w.z, 16);
+    const lb = lmLabel("✈ " + nama, { fs: 28, k: 0.03, bg: "rgba(10,40,80,.8)", bd: "#7fb7e8" }); lb.position.set(w.x, 12, w.z); g.scene.add(lb); gnd.push([lb, 12]);
     g.items.push({ kind: "ap", id: id, k: k, n: nama, x: w.x, z: w.z, r: 0, ir: 13, lb: lb });
     avoid.push({ x: w.x, z: w.z, r: 16 });
   });
+  /* rupa bumi: ketinggian, tapak rata, kemudian semua objek diletakkan di atas tanah */
+  lmTerrainBase(g); lmBuildTerrain(g);
+  for (const [o, dy] of gnd) o.position.y = lmHRaw(o.position.x, o.position.z) + dy;
+  for (const c of g.cols) c.h = (c.h || 30) + lmHRaw(c.x, c.z);
   lmBuildTrees(g, avoid);
   /* syiling harian bertaburan (deterministik mengikut hari) */
   const R = lmRand("lm-coin-" + dayKey()), got = new Set(LM.st.cd.got);
@@ -512,7 +675,8 @@ function lmBuildWorld(g) {
     tries++; const x = -1100 + R() * 2500, z = -560 + R() * 1080; if (!lmAt(x, z) || lmAt(x, z) === "jambatan") continue;
     if (avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r)) continue;
     const id = "c" + n; n++; if (got.has(id)) continue;
-    const m = lmCoinMesh(); m.position.set(x, 1.6, z); g.scene.add(m); g.coins.push({ id: id, x: x, z: z, m: m });
+    const y = lmHRaw(x, z) + 1.6; if (y < 1.5) continue;
+    const m = lmCoinMesh(); m.position.set(x, y, z); g.scene.add(m); g.coins.push({ id: id, x: x, z: z, y: y, m: m });
   }
 }
 function lmTowerState(o) {
@@ -576,7 +740,7 @@ function lmBubble(av, text) {
 }
 
 /* ---------- pergerakan pemain, perlanggaran dan kamera ---------- */
-function lmCanStand(x, z) { return lmLandW(x, z); }
+function lmCanStand(x, z) { return lmLandW(x, z) && lmGround(x, z) > 0.1; }
 function lmUpdatePlayer(g, dt) {
   const p = g.p, k = LM.keys, run = k.shift || LM.run;
   let ix = 0, iz = 0;
@@ -596,12 +760,16 @@ function lmUpdatePlayer(g, dt) {
     const ddx = nx - c.x, ddz = nz - c.z, d = Math.hypot(ddx, ddz), m = c.r + 1;
     if (d < m && d > 0.001 && p.y < (c.h || 99)) { nx = c.x + ddx / d * m; nz = c.z + ddz / d * m; }
   }
-  if (lmCanStand(nx, nz)) { p.x = nx; p.z = nz; }
+  /* cerun terlalu curam tidak boleh didaki */
+  const g0 = lmGround(p.x, p.z), stepL = Math.hypot(nx - p.x, nz - p.z);
+  if (lmCanStand(nx, nz) && !(stepL > 0.001 && (lmGround(nx, nz) - g0) / stepL > 2.2)) { p.x = nx; p.z = nz; }
   if (il > 0.1) { let da = Math.atan2(p.vx, p.vz) - p.yaw; while (da > Math.PI) da -= 6.2832; while (da < -Math.PI) da += 6.2832; p.yaw += da * Math.min(1, dt * 12); }
   /* lompat dan graviti */
   if ((k[" "] || LM.jump) && p.on && !g.ui) { p.vy = 15; p.on = false; LM.jump = false; lmSnd("jump"); }
   p.vy -= 38 * dt; p.y += p.vy * dt;
-  if (p.y <= 0) { p.y = 0; p.vy = 0; p.on = true; }
+  const gy = lmGround(p.x, p.z);
+  if (p.y <= gy || (p.on && p.vy <= 0 && p.y - gy < 1.4)) { p.y = gy; p.vy = 0; p.on = true; }
+  else if (p.y - gy > 1.4) p.on = false;
   p.moving = Math.hypot(p.vx, p.vz) > 1.5;
   g.me.g.position.set(p.x, p.y, p.z); g.me.g.rotation.y = p.yaw;
   lmAnim(g.me, p.moving, !p.on, dt, run ? 1.4 : 1);
@@ -618,9 +786,11 @@ function lmUpdateCam(g, dt) {
   }
   const want = new T.Vector3(tx + Math.sin(c.yaw) * Math.cos(c.pitch) * d, ty + Math.sin(c.pitch) * d, tz + Math.cos(c.yaw) * Math.cos(c.pitch) * d);
   g.camera.position.lerp(want, Math.min(1, dt * 8));
+  { const cp = g.camera.position, gy = lmGround(cp.x, cp.z) + 1.6; if (cp.y < gy) cp.y = gy; }
   g.camera.lookAt(tx, ty, tz);
+  if (g.dome) g.dome.position.copy(g.camera.position);
   lmSkyPlace(g);
-  if (g.sun) { g.sun.position.set(p.x + 60, 120, p.z + 40); g.sun.target.position.set(p.x, 0, p.z); g.sun.target.updateMatrixWorld(); }
+  if (g.sun) { const sd = g.sunDir || new T.Vector3(0.45, 0.8, 0.3); g.sun.position.set(p.x + sd.x * 150, p.y + sd.y * 150, p.z + sd.z * 150); g.sun.target.position.set(p.x, p.y, p.z); g.sun.target.updateMatrixWorld(); if (g.sunDisc) g.sunDisc.position.set(g.camera.position.x + sd.x * 1100, g.camera.position.y + sd.y * 1100, g.camera.position.z + sd.z * 1100); }
 }
 
 /* ---------- multiplayer (kehadiran bilik; sama seperti Dunia Gempur) ---------- */
@@ -669,7 +839,7 @@ function lmNet(g, dt, ts) {
       if (pr.isMe || !pr.presence || typeof pr.presence !== "object" || n >= 30) continue;
       const v = pr.presence; if (typeof v.x !== "number" || typeof v.z !== "number") continue;
       n++; seen[pr.peer] = 1;
-      const x = clamp(v.x, -1600, 1800), y = clamp(+v.y || 0, 0, 40), z = clamp(v.z, -800, 800), nm = cleanName(String(v.n || "")) || "Pelajar";
+      const x = clamp(v.x, -1600, 1800), y = clamp(+v.y || 0, -5, 130), z = clamp(v.z, -800, 800), nm = cleanName(String(v.n || "")) || "Pelajar";
       let e = LM.peers[pr.peer];
       if (e && (e.c !== v.c || e.n !== nm)) { g.scene.remove(e.av.g); e = null; }
       if (!e) { const av = lmAvatar(v.c, nm, false); g.scene.add(av.g); e = LM.peers[pr.peer] = { x: x, y: y, z: z, r: +v.r || 0, av: av, c: v.c, n: nm, en: v.en | 0 }; } /* emote lama sebelum kita masuk tidak dipaparkan */
@@ -903,7 +1073,7 @@ function lmStateCheck(k) {
   const g = LM.g; if (!g) return;
   const tws = g.items.filter((x) => x.kind === "tw" && x.k === k);
   if (tws.length && tws.every((x) => x.done)) {
-    const m = g.landM[k]; if (m && m.material[0]) { m.material[0].emissive = new T.Color(0x6b5200); m.material[0].emissiveIntensity = 0.35; }
+    const b = g.border && g.border[k]; if (b) { b.color.set(0xffd45a); b.opacity = 0.95; }
     lmPop("Negeri " + DATA.negeri[k].pendek + " dikuasai!");
   }
 }
@@ -985,8 +1155,8 @@ function lmAirportOpen(ap) {
 function lmTeleport(x, z, msg) {
   const f = LM.ui.fade; f.style.opacity = "1";
   setTimeout(() => {
-    const g = LM.g; if (!g) return; g.p.x = x; g.p.z = z; g.p.y = 0; g.p.vx = g.p.vz = 0;
-    g.camera.position.set(x, 30, z + 30); f.style.opacity = "0"; if (msg) lmPop(msg);
+    const g = LM.g; if (!g) return; g.p.x = x; g.p.z = z; g.p.y = lmGround(x, z); g.p.vx = g.p.vz = 0;
+    g.camera.position.set(x, g.p.y + 30, z + 30); f.style.opacity = "0"; if (msg) lmPop(msg);
   }, 380);
 }
 /* pasport ziarah */
@@ -1067,7 +1237,7 @@ function lmSkyInit(g) {
   const sk = g.sky5 = { list: [], busy: true, at: 0, err: "" };
   sk.tex = lmTex(1024, 600, lmSkyDraw(sk));
   sk.sp = new T.Sprite(new T.SpriteMaterial({ map: sk.tex, fog: false, depthWrite: false, depthTest: false, transparent: true }));
-  sk.sp.scale.set(TOUCH ? 170 : 210, TOUCH ? 100 : 123, 1); sk.sp.renderOrder = 20; sk.sp.visible = LM.st.sky !== 0; g.scene.add(sk.sp);
+  sk.sp.scale.set(TOUCH ? 160 : 180, TOUCH ? 94 : 105, 1); sk.sp.renderOrder = 20; sk.sp.visible = LM.st.sky !== 0; g.scene.add(sk.sp);
   lmSkyLoad(g);
 }
 async function lmSkyLoad(g) {
@@ -1156,21 +1326,17 @@ function lmBuildScene() {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, gq ? 1.75 : 1.25));
   renderer.setSize(window.innerWidth, window.innerHeight, false);
   if (gq && renderer.shadowMap) { renderer.shadowMap.enabled = true; renderer.shadowMap.type = T.PCFSoftShadowMap; }
-  const scene = new T.Scene(), sky = new T.Color(0x8fd0ff);
-  scene.background = sky.clone(); scene.fog = new T.Fog(sky.clone(), 260, 950);
-  const camera = new T.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.5, 1600);
-  const hemi = new T.HemisphereLight(0xdff2ff, 0x5d7a3a, 0.75); scene.add(hemi);
-  const sun = new T.DirectionalLight(0xfff1d6, 0.85);
-  if (gq) { sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); const sc = sun.shadow.camera; sc.left = sc.bottom = -90; sc.right = sc.top = 90; sc.near = 10; sc.far = 320; sun.shadow.bias = -0.0006; }
+  const scene = new T.Scene(), sky = new T.Color(0xbfe3ff);
+  scene.background = sky.clone(); scene.fog = new T.Fog(sky.clone(), 320, 1180);
+  const camera = new T.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.5, 1700);
+  const hemi = new T.HemisphereLight(0xe6f4ff, 0x4f6b35, 0.62); scene.add(hemi);
+  const sun = new T.DirectionalLight(0xfff1d6, 0.9);
+  if (gq) { sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); const sc = sun.shadow.camera; sc.left = sc.bottom = -110; sc.right = sc.top = 110; sc.near = 10; sc.far = 420; sun.shadow.bias = -0.0005; sun.shadow.normalBias = 0.4; }
   scene.add(sun); scene.add(sun.target);
-  /* awan blok */
-  const clouds = new T.Group(), cm = new T.MeshLambertMaterial({ color: 0xffffff, transparent: true, opacity: 0.92 }), R = lmRand("lm-cloud");
-  for (let i = 0; i < 46; i++) { const c = new T.Group(); for (let j = 0; j < 3; j++) { const b = new T.Mesh(lmBox(14 + R() * 10, 5, 9 + R() * 6), cm); b.position.set(j * 9 - 9, R() * 2, R() * 4); c.add(b); } c.position.set(-1300 + R() * 2900, 80 + R() * 40, -650 + R() * 1250); clouds.add(c); }
-  scene.add(clouds);
-  const g = { renderer: renderer, scene: scene, camera: camera, sun: sun, hemi: hemi, sky: sky, clouds: clouds, items: [], cols: [], trees: [], coins: [], landM: {},
+  const g = { renderer: renderer, scene: scene, camera: camera, sun: sun, hemi: hemi, sky: sky, clouds: null, items: [], cols: [], trees: [], coins: [], landM: {}, pads: [],
     p: { x: 0, y: 0, z: 0, vx: 0, vz: 0, vy: 0, yaw: 0, on: true, moving: false }, cam: { yaw: 0.4, pitch: 0.3, dist: 18 }, T: 0, ui: false, near: null, nearT: 0, cullT: 0, mmT: 0, hudT: 0, saveT: 0 };
   LM.g = g;
-  lmBuildLand(g); lmBuildSea(g); lmBuildWorld(g);
+  lmBuildSky(g); lmBuildWorld(g); lmBuildSea(g); lmDayNight(g);
   g.myCode = lmMyCode(); g.me = lmAvatar(g.myCode, P.nama, true); scene.add(g.me.g);
   lmSkyInit(g);
   return g;
@@ -1290,10 +1456,14 @@ function lmResize() {
 function lmDayNight(g) {
   /* kitaran 8 minit: siang, senja, malam terang, subuh */
   const t = (g.T / 480) % 1, day = 0.5 + 0.5 * Math.cos(t * 6.2832);
-  const night = new T.Color(0x24406e), dusk = new T.Color(0xf3a86b), noon = new T.Color(0x8fd0ff);
-  const c = day > 0.5 ? dusk.clone().lerp(noon, (day - 0.5) * 2) : night.clone().lerp(dusk, day * 2);
-  g.scene.background.copy(c); g.scene.fog.color.copy(c);
-  g.sun.intensity = 0.25 + 0.65 * day; g.hemi.intensity = 0.45 + 0.35 * day;
+  const C = (h) => new T.Color(h), mix = (a, b, c, d) => (day > 0.5 ? C(b).lerp(C(c), (day - 0.5) * 2) : C(a).lerp(C(b), day * 2)) || d;
+  const top = mix(0x1b2c55, 0x6f86c9, 0x2f7fd8), hor = mix(0x3a5684, 0xf6b27a, 0xcfe9ff);
+  if (g.paintSky) g.paintSky(top, hor);
+  g.scene.background.copy(hor); g.scene.fog.color.copy(hor);
+  g.sun.intensity = 0.25 + 0.75 * day; g.hemi.intensity = 0.42 + 0.38 * day;
+  g.sun.color.copy(C(0xffb070).lerp(C(0xfff4e0), clamp((day - 0.4) * 1.7, 0, 1)));
+  const a = 0.25 + t * 6.2832; g.sunDir = new T.Vector3(Math.cos(a) * 0.55, 0.35 + 0.55 * day, Math.sin(a) * 0.55 + 0.25).normalize();
+  if (g.sunDisc) g.sunDisc.material.opacity = clamp(day * 1.4 - 0.2, 0, 1);
 }
 function lmLoop(ts) {
   if (!LM.on || !LM.g) return;
@@ -1312,15 +1482,15 @@ function lmLoop(ts) {
     for (const it of g.items) if (it.kind === "tw" && it.m.cr.visible !== false) { it.m.cr.rotation.y += dt * 1.4; it.m.cr.position.y = 10.4 + Math.sin(g.T * 2 + it.x) * 0.4; }
     for (let i = g.coins.length - 1; i >= 0; i--) {
       const c = g.coins[i]; c.m.rotation.z += dt * 3;
-      if (Math.abs(c.x - g.p.x) < 2.6 && Math.abs(c.z - g.p.z) < 2.6 && g.p.y < 3) {
+      if (Math.abs(c.x - g.p.x) < 2.6 && Math.abs(c.z - g.p.z) < 2.6 && Math.abs(g.p.y + 1.6 - c.y) < 3) {
         g.scene.remove(c.m); g.coins.splice(i, 1); LM.st.cd.got.push(c.id); g.saveT = 1;
         let n = 0; try { n = gdCoin(1); } catch (e) { n = 0; } lmSnd("coin"); lmPop(n ? "+" + n + " syiling" : "Had syiling hari ini penuh");
       }
     }
     if (g.saveT && (g.saveT -= dt) <= 0) { g.saveT = 0; lmSave(); }
     if (g.sky5 && Date.now() - g.sky5.at > 60000) lmSkyLoad(g);
-    for (const c of g.clouds.children) { c.position.x += dt * 3; if (c.position.x > 1600) c.position.x = -1300; }
-    if (g.sea) g.sea.position.y = -1.6 + Math.sin(g.T * 0.8) * 0.15;
+    if (g.clouds) for (const c of g.clouds.children) { c.position.x += dt * 3; if (c.position.x > 1600) c.position.x = -1300; }
+    if (g.seaN) { g.seaN.offset.x = (g.T * 0.006) % 1; g.seaN.offset.y = (g.T * 0.0037) % 1; }
     g.renderer.render(g.scene, g.camera);
   } catch (e) { LM.err = String(e && e.stack || e); if (!LM.errShown) { LM.errShown = true; console.error(e); } }
 }
@@ -1361,5 +1531,6 @@ function lmClose() {
   document.body.classList.remove("ar-lock");
 }
 /* untuk ujian automatik */
+LM._g = (x, z) => lmGround(x, z);
 LM._t = { lmAt: lmAt, toW: toW, PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
 })();
