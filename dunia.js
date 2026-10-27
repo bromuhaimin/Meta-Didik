@@ -2013,6 +2013,84 @@ function lmFoodOpen(it) {
     b.append(el("div", { class: "lm-row" }, buy, lmBtn("Tutup", "", lmCardClose)));
   });
 }
+/* ---------- v18.11: situasi akhlak dalam peta ----------
+   Sekali-sekala, ketika murid berjalan, satu situasi muncul berhampiran. Murid memilih tindakan; pilihan yang
+   berakhlak diberi ganjaran dan setiap pilihan disertakan dalil. Situasi hilang jika tidak dilayan. */
+const AKH_NPC = { pakcik: "L|1|ou_my|oc_gn|hd_kp|hc_w", makcik: "P|1|ou_kr|oc_gn|hd_td|hc_w", budak: "L|1|ou_sc|oc_gn|hd_no|hc_w", kawan: "L|1|ou_tk|oc_gn|hd_no|hc_w", kawanP: "P|1|ou_sc|oc_gn|hd_td|hc_w" };
+const AKH = [
+  { id: "buta", n: "Orang buta hendak melintas", npc: [["pakcik", 0, 0]], prop: "zebra", sc: "Seorang pakcik yang buta berdiri di tepi lintasan pejalan kaki dengan tongkat putihnya. Kenderaan lalu-lalang dan dia kelihatan ragu-ragu untuk melintas.", ch: [["Beri salam, tawarkan bantuan dan pimpin pakcik itu melintas dengan selamat", 1, "Tahniah! Anda memimpin pakcik itu melintas dengan selamat. Dia mendoakan kebaikan untuk anda."], ["Biarkan sahaja, tentu dia sudah biasa melintas sendiri", 0, "Dia mungkin berada dalam bahaya. Muslim yang baik tidak membiarkan orang lain dalam kesusahan."], ["Jerit dari jauh supaya dia cepat melintas", 0, "Menjerit boleh mengejutkan dan membahayakannya. Bantulah dengan cara yang sopan."]], dl: "Sabda Nabi SAW: Sesiapa yang melepaskan seorang mukmin daripada satu kesusahan dunia, Allah akan melepaskannya daripada satu kesusahan pada hari kiamat (riwayat Muslim)." },
+  { id: "barang", n: "Makcik membawa barang berat", npc: [["makcik", 0, 0]], prop: "beg", sc: "Seorang makcik yang sudah berusia membawa beberapa beg barang dapur yang berat. Dia berhenti berehat kerana penat.", ch: [["Beri salam dan tolong angkat barang makcik hingga ke kenderaannya", 1, "Makcik itu tersenyum lega dan mengucapkan terima kasih. Anda telah menghormati orang tua."], ["Ambil gambar untuk dimuat naik ke media sosial", 0, "Merakam kesusahan orang lain tanpa membantu tidak menunjukkan akhlak yang baik."], ["Teruskan perjalanan kerana tergesa-gesa", 0, "Membantu hanya mengambil masa sebentar tetapi ganjarannya besar."]], dl: "Sabda Nabi SAW: Bukan daripada golongan kami orang yang tidak mengasihi yang muda dan tidak menghormati yang tua (riwayat at-Tirmizi)." },
+  { id: "kucing", n: "Anak kucing jatuh ke dalam parit", prop: "parit", sc: "Anda terdengar bunyi mengiau. Seekor anak kucing terjatuh ke dalam parit dan tidak dapat memanjat keluar.", ch: [["Angkat anak kucing itu perlahan-lahan, keringkan dan letak di tempat selamat", 1, "Anak kucing itu selamat! Berbuat baik kepada haiwan juga satu ibadah."], ["Baling batu supaya kucing itu terkejut dan melompat keluar", 0, "Menyakiti haiwan dilarang dalam Islam."], ["Biarkan, nanti ibunya datang", 0, "Anak kucing itu mungkin lemas jika hujan turun. Bantulah jika mampu."]], dl: "Sabda Nabi SAW: Seorang lelaki diampunkan dosanya kerana memberi minum seekor anjing yang kehausan. Pada setiap makhluk yang bernyawa ada pahala (riwayat al-Bukhari dan Muslim)." },
+  { id: "dompet", n: "Dompet tercicir di tepi jalan", prop: "dompet", sc: "Anda menjumpai sebuah dompet di tepi jalan. Di dalamnya ada wang, kad pengenalan dan gambar keluarga pemiliknya.", ch: [["Serahkan dompet kepada pemiliknya, pengawal keselamatan atau balai polis berdekatan", 1, "Pemilik dompet sangat bersyukur. Anda telah menunaikan amanah."], ["Ambil wangnya dan buang dompet itu", 0, "Itu mengambil hak orang lain dan berdosa."], ["Tinggalkan dompet di situ", 0, "Dompet itu mungkin diambil orang yang tidak amanah. Sebaiknya serahkan kepada pihak berkuasa."]], dl: "Firman Allah SWT: Sesungguhnya Allah menyuruh kamu menyampaikan amanah kepada yang berhak menerimanya (an-Nisa': 58)." },
+  { id: "sampah", n: "Sampah bertaburan", prop: "sampah", sc: "Kawasan rekreasi ini dipenuhi sampah plastik dan tin minuman yang ditinggalkan pengunjung. Tong sampah ada berdekatan.", ch: [["Kutip sampah dan buang ke dalam tong sampah", 1, "Kawasan itu kembali bersih. Menjaga kebersihan ialah tanda iman."], ["Tambah sampah sendiri kerana sudah kotor", 0, "Mengotorkan tempat awam menyusahkan orang lain dan merosakkan alam."], ["Salahkan orang lain dan berlalu pergi", 0, "Menyalahkan orang tidak menyelesaikan masalah. Mulakan dengan diri sendiri."]], dl: "Sabda Nabi SAW: Iman mempunyai lebih tujuh puluh cabang... dan yang paling rendah ialah membuang gangguan daripada jalan (riwayat Muslim)." },
+  { id: "basikal", n: "Kanak-kanak jatuh basikal", npc: [["budak", 0, 0, 0.7]], prop: "basikal", sc: "Seorang kanak-kanak terjatuh dari basikalnya dan menangis. Lututnya luka sedikit.", ch: [["Bantu dia bangun, tanya keadaannya dan bawa kepada ibu bapanya", 1, "Kanak-kanak itu berhenti menangis dan ibunya mengucapkan terima kasih."], ["Ketawakan dia kerana jatuh", 0, "Mengejek orang yang ditimpa musibah tidak berakhlak."], ["Ambil basikalnya dan tunggang", 0, "Mengambil barang orang tanpa izin dilarang."]], dl: "Sabda Nabi SAW: Orang yang penyayang akan disayangi oleh Allah Yang Maha Penyayang. Sayangilah yang di bumi, nescaya kamu disayangi oleh yang di langit (riwayat at-Tirmizi)." },
+  { id: "sesat", n: "Pakcik sesat jalan", npc: [["pakcik", 0, 0]], prop: "peta", sc: "Seorang pakcik dari luar bandar memegang sekeping peta dan kelihatan keliru mencari masjid berdekatan.", ch: [["Tunjukkan arah dengan sabar dan sopan, atau temankan dia jika dekat", 1, "Pakcik itu tiba di masjid tepat pada waktunya dan mendoakan anda."], ["Beri arah yang salah untuk bergurau", 0, "Menipu orang yang memerlukan bantuan adalah perbuatan keji."], ["Pura-pura tidak dengar", 0, "Menunjukkan jalan ialah sedekah yang mudah."]], dl: "Sabda Nabi SAW: Senyumanmu kepada saudaramu ialah sedekah... dan menunjukkan jalan kepada orang yang sesat juga sedekah (riwayat at-Tirmizi)." },
+  { id: "ejek", n: "Kawan baharu diejek", npc: [["kawan", -2.2, 0, 0.85], ["kawan", 2.2, 0, 0.85], ["kawanP", 0, 2.4, 0.8]], prop: null, sc: "Sekumpulan murid mengejek seorang kawan baharu kerana loghat percakapannya berbeza. Dia kelihatan sedih.", ch: [["Tegur kumpulan itu dengan baik dan ajak kawan baharu menyertai kumpulan anda", 1, "Kawan baharu itu tersenyum. Anda telah menyatukan hati dan mengelakkan buli."], ["Ikut sama mengejek supaya diterima kumpulan", 0, "Mengejek dilarang dalam al-Quran dan boleh menjadi buli."], ["Rakam dan sebarkan video itu", 0, "Menyebarkan aib orang lain menambah kesedihannya."]], dl: "Firman Allah SWT: Wahai orang yang beriman, janganlah suatu kaum memperolok-olokkan kaum yang lain, boleh jadi mereka lebih baik daripada mereka (al-Hujurat: 11)." },
+  { id: "azan", n: "Azan berkumandang ketika bermain", npc: [["kawan", -1.6, 0, 0.85], ["kawan", 1.6, 0.6, 0.85]], prop: "bola", sc: "Anda sedang bermain bola dengan kawan-kawan. Azan berkumandang dari masjid berdekatan, tetapi kawan mengajak terus bermain.", ch: [["Hentikan permainan, jawab azan dan ajak kawan solat berjemaah", 1, "Anda dan kawan-kawan solat berjemaah, kemudian sambung bermain dengan tenang."], ["Teruskan bermain hingga waktu solat hampir habis", 0, "Melewatkan solat tanpa sebab ialah sikap yang tidak baik."], ["Pulang tanpa memberitahu kawan", 0, "Lebih baik mengajak kawan bersama ke arah kebaikan."]], dl: "Firman Allah SWT: Peliharalah segala solat dan solat wusta, dan berdirilah kerana Allah dengan khusyuk (al-Baqarah: 238)." },
+  { id: "lapar", n: "Musafir kelaparan", npc: [["pakcik", 0, 0, 0.95]], prop: "mangkuk", sc: "Seorang musafir duduk di tepi jalan. Dia belum makan sejak pagi dan tidak cukup wang untuk membeli makanan.", ch: [["Kongsi makanan atau bersedekah mengikut kemampuan", 1, "Musafir itu dapat makan dan meneruskan perjalanan. Sedekah tidak mengurangkan harta."], ["Marah dan suruh dia pergi", 0, "Herdikan menyakitkan hati orang yang susah."], ["Abaikan kerana bukan urusan anda", 0, "Membantu orang yang memerlukan ialah tanggungjawab bersama."]], dl: "Sabda Nabi SAW: Tangan yang di atas (memberi) lebih baik daripada tangan yang di bawah (menerima) (riwayat al-Bukhari dan Muslim)." },
+  { id: "burung", n: "Anak burung jatuh dari sarang", prop: "sarang", sc: "Seekor anak burung jatuh bersama sarangnya dari pokok. Ibunya terbang berlegar-legar di atas.", ch: [["Letakkan sarang semula ke dahan dengan berhati-hati", 1, "Ibu burung kembali ke sarangnya. Anda telah berbuat ihsan kepada makhluk Allah."], ["Bawa pulang anak burung untuk dijadikan mainan", 0, "Memisahkan anak burung daripada ibunya menyakiti haiwan itu."], ["Biarkan sahaja di atas tanah", 0, "Anak burung itu mudah dimakan pemangsa. Bantulah jika mampu."]], dl: "Nabi SAW pernah menegur sahabat yang mengambil anak burung daripada ibunya dan menyuruh dikembalikan (riwayat Abu Daud)." }
+];
+function lmAkProp(kind) {
+  const g = new T.Group();
+  if (kind === "zebra") { for (let i = -3; i <= 3; i++) g.add(lmMesh(lmBox(1.2, 0.08, 7), "#f4f4f4", i * 2, 0.06, 3)); const cn = lmMesh(lmBox(0.09, 3, 0.09), "#ffffff", 1.1, 1.4, 0.6); cn.rotation.z = 0.3; g.add(cn); g.add(lmMesh(lmBox(0.1, 0.35, 0.1), "#d63031", 1.53, 0.1, 0.6)); } /* tongkat putih */
+  else if (kind === "beg") for (const [x, z] of [[1.4, 0.6], [1.9, -0.5], [-1.5, 0.4]]) g.add(lmMesh(lmBox(0.9, 1.1, 0.6), "#c8a26a", x, 0.55, z));
+  else if (kind === "parit") { g.add(lmMesh(lmBox(12, 0.25, 2.2), "#4a4f55", 0, 0.12, 0)); g.add(lmMesh(lmBox(12, 0.1, 1.4), "#2a5a6a", 0, 0.26, 0)); g.add(lmMesh(lmBox(0.9, 0.55, 0.45), "#f0a040", 0.4, 0.5, 0)); g.add(lmMesh(lmBox(0.45, 0.45, 0.45), "#f0a040", 0.95, 0.75, 0)); }
+  else if (kind === "dompet") { g.add(lmMesh(lmBox(0.7, 0.12, 0.5), "#5a3a1e", 0, 0.08, 0)); g.add(lmMesh(lmBox(0.25, 0.04, 0.5), "#c8a050", 0.25, 0.16, 0)); }
+  else if (kind === "sampah") { for (let i = 0; i < 9; i++) g.add(lmMesh(lmBox(0.4, 0.3, 0.3), ["#e74c3c", "#3498db", "#ecf0f1", "#f1c40f"][i % 4], Math.cos(i * 1.7) * (1.5 + i * 0.3), 0.15, Math.sin(i * 1.7) * (1.5 + i * 0.3))); const b = new T.Mesh(new T.CylinderGeometry(0.6, 0.55, 1.4, 10), lmMat("#2e7d32")); b.position.set(-3, 0.7, -2); g.add(b); }
+  else if (kind === "basikal") { for (const x of [-0.9, 0.9]) { const w = new T.Mesh(GEO.akW || (GEO.akW = new T.TorusGeometry(0.6, 0.08, 6, 16)), lmMat("#222")); w.position.set(1.8 + x, 0.1, 1); w.rotation.x = Math.PI / 2; g.add(w); } g.add(lmMesh(lmBox(1.8, 0.1, 0.12), "#d64f4f", 1.8, 0.15, 1)); }
+  else if (kind === "peta") g.add(lmMesh(lmBox(0.8, 0.6, 0.05), "#f5ecd0", 0.6, 2.6, 0.6));
+  else if (kind === "bola") { const b = new T.Mesh(new T.SphereGeometry(0.4, 12, 8), lmMat("#f4f4f4")); b.position.set(0, 0.4, 2); g.add(b); }
+  else if (kind === "mangkuk") { const m = new T.Mesh(new T.CylinderGeometry(0.4, 0.25, 0.3, 12), lmMat("#b0b6be")); m.position.set(0.9, 0.15, 0.8); g.add(m); }
+  else if (kind === "sarang") { const n = new T.Mesh(new T.CylinderGeometry(0.6, 0.4, 0.35, 10), lmMat("#7a5a32")); n.position.set(0.6, 0.18, 0.4); g.add(n); g.add(lmMesh(lmBox(0.3, 0.25, 0.4), "#a0907a", 0.6, 0.45, 0.4)); }
+  return g;
+}
+function lmAkSpawn(g) {
+  const p = g.p, S = AKH[Math.floor(Math.random() * AKH.length)], fy = Math.atan2(p.vx, p.vz);
+  for (let tr = 0; tr < 14; tr++) {
+    const a = fy + (Math.random() - 0.5) * 1.4, d = 32 + Math.random() * 16, x = p.x + Math.sin(a) * d, z = p.z + Math.cos(a) * d;
+    if (!lmCanStand(x, z) || !lmCanStand(x + 5, z) || !lmCanStand(x - 5, z) || g.items.some((it) => Math.hypot(it.x - x, it.z - z) < 30)) continue;
+    const grp = new T.Group(), y = lmGround(x, z); grp.position.set(x, y, z); grp.rotation.y = Math.atan2(p.x - x, p.z - z);
+    if (S.prop) grp.add(lmAkProp(S.prop));
+    const npcs = [];
+    (S.npc || []).forEach(([who, ox, oz, sc]) => { try { const av = AV3.build(AKH_NPC[who]); av.g.position.set(ox, 0, oz); if (sc) av.g.scale.setScalar(sc); grp.add(av.g); npcs.push(av); } catch (e) { /* abaikan */ } });
+    const lb = lmLabel("❗ " + S.n, { fs: 30, k: 0.032, bg: "rgba(140,30,30,.88)", bd: "#ffd45a" }); lb.position.set(0, 9, 0); grp.add(lb);
+    g.scene.add(grp);
+    const it = { kind: "ak", id: "ak-" + Date.now(), n: S.n, S: S, x: x, z: z, r: 0, ir: 9, m: grp, npcs: npcs, t: 150 };
+    g.items.push(it); g.ak = it; lmPop("❗ Ada orang memerlukan bantuan berdekatan");
+    return;
+  }
+}
+function lmAkEnd(g, it) {
+  g.scene.remove(it.m); const i = g.items.indexOf(it); if (i >= 0) g.items.splice(i, 1); if (g.ak === it) g.ak = null; g.akT = 0;
+}
+function lmAkTick(g, dt) {
+  if (g.ui || g.flight || g.sail || g.ride || g.p.swim) return;
+  if (g.ak) { if ((g.ak.t -= dt) <= 0 && !g.ak.done) lmAkEnd(g, g.ak); return; }
+  if (Math.hypot(g.p.vx, g.p.vz) > 2) g.akT = (g.akT || 0) + dt;
+  if (g.akT > (g.akN || (g.akN = 70 + Math.random() * 60))) { g.akT = 0; g.akN = 0; lmAkSpawn(g); }
+}
+function lmAkOpen(it) {
+  const S = it.S, ord = shuffle([0, 1, 2]);
+  lmCard((b) => {
+    b.append(el("div", { class: "lm-kick" }, "❗ Situasi akhlak"), el("h2", null, S.n), el("p", null, S.sc), el("p", null, "Apakah tindakan anda?"));
+    const os = el("div", { class: "lm-opts" });
+    ord.forEach((k, j) => { const c = S.ch[k], bt = el("button", { type: "button", class: "lm-opt" }, "ABC"[j] + ". " + c[0]); bt.addEventListener("click", () => lmAkPick(it, c)); os.appendChild(bt); });
+    b.append(os, el("div", { class: "lm-row" }, lmBtn("Nanti dulu", "", lmCardClose)));
+  });
+}
+function lmAkPick(it, c) {
+  const good = !!c[1], S = it.S;
+  if (good && !it.done) {
+    it.done = true; LM.st.ak = (LM.st.ak | 0) + 1; lmSave(); lmSnd("win");
+    let coin = 0; try { coin = gdCoin(2); } catch (e) { coin = 0; } const xp = lmXp(5);
+    (it.npcs || []).forEach((av) => { try { lmBubble({ g: av.g, bub: null }, "Terima kasih!"); } catch (e) { /* abaikan */ } });
+    it.t = 4; setTimeout(() => { if (LM.g && it.m.parent) lmAkEnd(LM.g, it); }, 4000);
+    lmCard((b) => { b.append(el("div", { class: "lm-kick" }, "Akhlak terpuji · +" + coin + " syiling · XP +" + xp), el("h2", null, "MasyaAllah!"), el("p", null, c[2]), el("p", { class: "lm-ex" }, S.dl), el("p", { class: "lm-ex" }, "Jumlah akhlak terpuji anda: " + LM.st.ak)); b.append(el("div", { class: "lm-row" }, lmBtn("Teruskan", "pri", lmCardClose))); });
+  } else {
+    lmSnd("bad");
+    lmCard((b) => { b.append(el("div", { class: "lm-kick" }, "Fikir semula"), el("h2", null, S.n), el("p", null, c[2]), el("p", { class: "lm-ex" }, S.dl)); b.append(el("div", { class: "lm-row" }, lmBtn("Pilih semula", "pri", () => lmAkOpen(it)), lmBtn("Nanti dulu", "", lmCardClose))); });
+  }
+}
 /* v18.11: Gudang dibuka dari sekolah sendiri. Dunia 3D dijeda; avatar dibina semula jika ditukar. */
 function lmGudang() {
   const g = LM.g; if (!g) return;
@@ -3097,6 +3175,7 @@ function lmMapDraw(cv, m, big) {
     else if (it.kind === "tw") { x.fillStyle = it.done ? "#ffd45a" : "#7fe3ff"; x.fillRect(px - r * 0.8, py - r * 0.8, r * 1.6, r * 1.6); }
     else if (big && it.kind === "ap") { x.font = "16px sans-serif"; x.fillStyle = "#fff"; x.fillText("✈", px - 7, py + 6); }
     else if (it.kind === "sk") { x.font = (big ? 18 : 10) + "px sans-serif"; x.textAlign = "center"; x.fillText("🏫", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
+    else if (it.kind === "ak") { x.fillStyle = "#ff4d4d"; x.beginPath(); x.arc(px, py, big ? 6 : 3, 0, 6.2832); x.fill(); if (big) { x.fillStyle = "#fff"; x.font = "bold 11px sans-serif"; x.textAlign = "center"; x.fillText("!", px, py + 4); x.textAlign = "left"; } }
     else if (it.kind === "fd") { if (big) { x.font = "15px sans-serif"; x.textAlign = "center"; x.fillText("🍽", px, py + 5); x.textAlign = "left"; } else { x.fillStyle = "#ff9f43"; x.fillRect(px - 1.2, py - 1.2, 2.4, 2.4); } }
     else if (it.kind === "ip") { x.font = (big ? 18 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("🎓", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
     else if (it.kind === "kh") { x.font = (big ? 20 : 10) + "px sans-serif"; x.fillStyle = it.done ? "#ffd45a" : "#ff7a9a"; x.textAlign = "center"; x.fillText("★", px, py + (big ? 7 : 4)); x.textAlign = "left"; }
@@ -3294,6 +3373,7 @@ function lmNearTick(g) {
     : best.kind === "ip" ? key + best.sn + " · " + (best.t ? (best.t.kod || best.t.id) + " " + best.t.nama : "Pusat Ulangkaji") + (best.done ? " ✔" : "")
     : best.kind === "sk" ? key + "Sekolah anda: " + best.n
     : best.kind === "fd" ? key + "Kedai makan: " + best.n
+    : best.kind === "ak" ? key + "Bantu: " + best.n
     : best.kind === "kh" ? key + "Markas Misi Khas " + best.isl.khas.pendek + (best.done ? " ✔" : "") : best.kind === "jt" ? key + (best.k === best.isl.id ? "Feri pulang ke tanah besar" : "Naik feri ke " + best.isl.n) : key + "Terbang dari " + best.n;
   if (pr.textContent !== txt) pr.textContent = txt;
   pr.hidden = false;
@@ -3302,7 +3382,7 @@ function lmInteract() {
   const g = LM.g; if (!g || g.ui || !g.near) return;
   lmSnd("open");
   const it = g.near;
-  if (it.kind === "tw") lmTowerOpen(it); else if (it.kind === "pl") lmPlaceOpen(it); else if (it.kind === "ap") lmAirportOpen(it); else if (it.kind === "kh") lmKhasOpen(it); else if (it.kind === "jt") lmFerryOpen(it); else if (it.kind === "st") lmRailOpen(it); else if (it.kind === "ip") lmIptaOpen(it); else if (it.kind === "sk") lmOwnSchoolOpen(it); else if (it.kind === "fd") lmFoodOpen(it);
+  if (it.kind === "tw") lmTowerOpen(it); else if (it.kind === "pl") lmPlaceOpen(it); else if (it.kind === "ap") lmAirportOpen(it); else if (it.kind === "kh") lmKhasOpen(it); else if (it.kind === "jt") lmFerryOpen(it); else if (it.kind === "st") lmRailOpen(it); else if (it.kind === "ip") lmIptaOpen(it); else if (it.kind === "sk") lmOwnSchoolOpen(it); else if (it.kind === "fd") lmFoodOpen(it); else if (it.kind === "ak") lmAkOpen(it);
 }
 /* ---------- input ---------- */
 function lmKey(e) {
@@ -3475,7 +3555,7 @@ function lmLoop(ts) {
     if (g.rai && (g.rai.t -= dt) <= 0) g.rai = null;
     if (g.flight) lmFlightTick(g, dt); else if (g.sail) lmSailTick(g, dt); else if (g.ride) lmRideTick(g, dt); else { lmUpdatePlayer(g, dt); lmUpdateCam(g, dt); }
     lmRailTick(g, dt);
-    lmNet(g, dt, ts); lmPuffTick(g, dt); lmTrafficTick(g, dt); lmWxTick(g, dt);
+    lmNet(g, dt, ts); lmPuffTick(g, dt); lmTrafficTick(g, dt); lmWxTick(g, dt); lmAkTick(g, dt);
     if (g.me.bub && (g.me.bubT -= dt) <= 0) lmBubble(g.me, "");
     if ((g.nearT -= dt) <= 0) { g.nearT = 0.15; lmNearTick(g); }
     if ((g.hudT -= dt) <= 0) { g.hudT = 0.25; lmHudTick(g); }
@@ -3543,5 +3623,5 @@ function lmClose() {
 }
 /* untuk ujian automatik */
 LM._g = (x, z) => lmGround(x, z); LM._fly = (a, d) => lmFlyStart(a, d); LM._ride = (a, b) => lmRide(a, b); LM._rai = () => lmRai(); LM._swim = (x, z) => lmSwimOk(x, z);
-LM._t = { lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
+LM._t = { lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
 })();
