@@ -1453,7 +1453,7 @@ function lmRailsPath(g, avoid) {
     const obs = [];
     for (const it of g.items) {
       if (it.kind === "tw" || it.kind === "pl" || it.kind === "kh") obs.push({ x: it.x, z: it.z, c: Math.max(it.r || 0, it.kind === "tw" ? 3 : 6) + 12 });
-      else if ((it.kind === "st" && it.line !== R) || it.kind === "ip" || it.kind === "sk") obs.push({ x: it.x, z: it.z, c: 26 });
+      else if ((it.kind === "st" && it.line !== R) || it.kind === "ip" || it.kind === "sk" || it.kind === "fd") obs.push({ x: it.x, z: it.z, c: 26 });
       else if (it.kind === "ap" && it.rw) { const w = it.rw, ux = Math.cos(w.a), uz = Math.sin(w.a); for (let t = -w.L - 10; t <= w.L + 10; t += 12) obs.push({ x: w.x + ux * t, z: w.z + uz * t, c: 16 }); obs.push({ x: it.x, z: it.z, c: 30 }); }
     }
     const fixed = raw.map((q) => S.some((st) => Math.hypot(st.x - q.x, st.z - q.z) < 20));
@@ -1945,8 +1945,72 @@ function lmOwnSchoolOpen(it) {
     b.append(el("p", { class: "lm-ex" }, "Cop universiti: " + J.d + "/" + J.t + (J.next ? " · Seterusnya: " + J.next.sn + " (" + J.next.n + ")" : " · Perjalanan lengkap!")));
     const row = el("div", { class: "lm-row" });
     if (J.next) row.append(lmBtn("Tunjuk arah ke " + J.next.sn, "pri", () => { LM.g.wp = { x: J.next.x, z: J.next.z, n: J.next.sn }; lmWpSet(); lmCardClose(); lmPop("Ikut tiang merah ke " + J.next.sn); }));
-    row.append(lmBtn("🛍 Gudang", "", lmGudang), lmBtn("Pasport", "", () => lmPassport("ipta")), lmBtn("Tutup", "", lmCardClose));
+    row.append(lmBtn("🍛 Kantin (percuma)", "", () => { if (lmEnergy() >= 100) { toast("Tenaga anda masih penuh.", "ok"); return; } lmCardClose(); lmEat(50, "Makan di kantin sekolah"); }), lmBtn("🛍 Gudang", "", lmGudang), lmBtn("Pasport", "", () => lmPassport("ipta")), lmBtn("Tutup", "", lmCardClose));
     b.append(el("p", { class: "lm-ex" }, "Gudang hanya boleh dibuka di sekolah anda: beli avatar, pakaian seragam, lencana dan cara meraikan."), row);
+  });
+}
+/* ---------- v18.11: kedai makan tradisi setiap negeri dan tenaga (lapar) ----------
+   [negeri, bandar, lat, lon, hidangan, keterangan, harga syiling, tenaga dipulihkan] */
+const FOOD = [
+  ["perlis", "Kuala Perlis", 6.400, 100.130, "Laksa Kuala Perlis", "Laksa berkuah ikan yang pekat, dimakan bersama ulam dan telur rebus. Kuala Perlis terkenal dengan laksanya.", 6, 70],
+  ["kedah", "Alor Setar", 6.121, 100.368, "Laksa Kedah", "Kuah ikan yang masam berempah asam keping, dimakan dengan mi beras dan ulam.", 6, 70],
+  ["penang", "George Town", 5.414, 100.329, "Nasi Kandar", "Nasi berlauk kari campur. Dahulu penjaja mengandar nasi dan lauk dengan kayu di bahu, lalu dinamakan nasi kandar.", 8, 85],
+  ["perak", "Kuala Kangsar", 4.770, 100.940, "Rendang Tok", "Rendang daging kering yang dimasak lama dengan kerisik dan rempah, warisan masakan diraja Perak.", 9, 90],
+  ["selangor", "Kajang", 2.993, 101.788, "Sate Kajang", "Sate daging dan ayam dengan kuah kacang. Kajang dikenali sebagai bandar sate.", 8, 80],
+  ["wp", "Kampung Baru", 3.165, 101.703, "Nasi Lemak", "Nasi dimasak dengan santan dan daun pandan, dihidang bersama sambal, ikan bilis, kacang dan telur. Hidangan kebangsaan Malaysia.", 5, 70],
+  ["nsembilan", "Seremban", 2.726, 101.938, "Masak Lemak Cili Api", "Lauk bersantan pedas berkunyit, masakan tradisi masyarakat Minangkabau di Negeri Sembilan.", 7, 80],
+  ["melaka", "Bandar Melaka", 2.196, 102.248, "Asam Pedas Melaka", "Ikan dimasak dalam kuah asam jawa yang pedas dan masam dengan daun kesum.", 7, 80],
+  ["johor", "Muar", 2.045, 102.568, "Mee Bandung Muar", "Mi kuning dalam kuah pekat berasaskan udang, cili dan daging. Berasal dari bandar Muar.", 6, 75],
+  ["pahang", "Temerloh", 3.450, 102.417, "Ikan Patin Masak Tempoyak", "Ikan patin dimasak dengan tempoyak (isi durian yang diperam). Temerloh dikenali sebagai Bandar Ikan Patin.", 9, 90],
+  ["terengganu", "Kuala Terengganu", 5.330, 103.140, "Nasi Dagang", "Campuran beras pulut dan beras biasa yang dikukus dengan santan, dimakan bersama gulai ikan tongkol. Sarapan tradisi Terengganu.", 6, 80],
+  ["kelantan", "Kota Bharu", 6.130, 102.238, "Nasi Kerabu", "Nasi biru diwarnakan bunga telang, dimakan dengan ulam, kerisik, budu dan ikan bakar.", 6, 80],
+  ["sabah", "Tuaran", 6.180, 116.230, "Mee Tuaran", "Mi telur yang dibuat secara tradisi di Tuaran, digoreng dengan sayur dan daging.", 6, 75],
+  ["sarawak", "Kuching", 1.558, 110.344, "Laksa Sarawak", "Mi hun dalam kuah rempah sambal dan santan, dihidang dengan udang, telur dadar dan ayam.", 7, 80]
+];
+const ADAB_MAKAN = "Adab makan: basuh tangan, baca Bismillah, makan dengan tangan kanan, tidak membazir dan ucap Alhamdulillah selepas makan.";
+function lmStall(col) {
+  const g = new T.Group();
+  g.add(lmMesh(lmBox(10, 0.4, 8), "#d8cbb2", 0, 0.2, 0));
+  g.add(lmMesh(lmBox(10, 4.2, 0.4), "#f2e6cf", 0, 2.3, -3.8)); for (const x of [-4.8, 4.8]) g.add(lmMesh(lmBox(0.4, 4.2, 7.6), "#f2e6cf", x, 2.3, 0));
+  g.add(lmMesh(lmBox(8.4, 1.1, 1.2), "#8a5a34", 0, 0.95, -2.4));                                    /* kaunter */
+  for (let i = 0; i < 6; i++) g.add(lmMesh(lmBox(10.6 / 6, 0.3, 3.2), i % 2 ? "#ffffff" : col, -5.3 + 10.6 / 12 + i * 10.6 / 6, 4.6, 2.6)); /* kanopi berjalur */
+  g.add(lmMesh(lmBox(10.2, 0.3, 8.2), "#a5482f", 0, 4.55, -0.9));
+  for (const x of [-2.4, 2.4]) { g.add(lmMesh(lmBox(1.8, 0.15, 1.8), "#d9b27c", x, 1.3, 1.4)); g.add(lmMesh(lmBox(0.2, 1.2, 0.2), "#6e4a2c", x, 0.7, 1.4)); for (const dz of [-1.3, 1.3]) g.add(lmMesh(lmBox(0.6, 0.7, 0.6), "#c0392b", x, 0.55, 1.4 + dz)); }
+  return g;
+}
+function lmFoodBuild(g, used, placed, avoid, gnd) {
+  FOOD.forEach(([k, town, la, lo, dish, desc, price, en], j) => {
+    if (!DATA.negeri[k]) return;
+    const okK = (q) => q === k || (k === "wp" && q === "selangor"), rr = 9;
+    const free = (x, z) => okK(lmAt(x, z)) && lmLandW(x + rr, z) && lmLandW(x - rr, z) && lmLandW(x, z + rr) && lmLandW(x, z - rr)
+      && !used.some((u) => Math.hypot(u.x - x, u.z - z) < rr + 8) && !placed.some((u) => Math.hypot(u.x - x, u.z - z) < rr + u.r + 14) && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + rr);
+    let w = ll(la, lo);
+    if (!free(w.x, w.z)) { let best = null; for (let d = 5; d <= 90 && !best; d += 5) for (let i = 0; i < 16; i++) { const a = i * 0.3927 + d * 0.11, x = w.x + Math.cos(a) * d, z = w.z + Math.sin(a) * d; if (free(x, z)) { best = { x: x, z: z }; break; } } if (best) w = best; }
+    const md = lmStall(["#e74c3c", "#27ae60", "#2980b9", "#f39c12", "#8e44ad"][j % 5]), rot = (Math.abs(hashStr(k)) % 628) / 100;
+    md.position.set(w.x, 0, w.z); md.rotation.y = rot; g.scene.add(md); gnd.push([md, 0]); lmPad(g, w.x, w.z, 9);
+    const lb = lmLabel("🍽 Kedai Makan · " + dish, { fs: 28, k: 0.03, bg: "rgba(90,30,10,.85)", bd: "#ffb347" }); lb.position.set(w.x, 8.5, w.z); g.scene.add(lb); gnd.push([lb, 8.5]);
+    const fx = Math.sin(rot), fz = Math.cos(rot);
+    g.items.push({ kind: "fd", id: "fd-" + k, k: k, n: dish, town: town, desc: desc, price: price, en: en, x: w.x + fx * 7, z: w.z + fz * 7, r: 0, ir: 8, m: md });
+    placed.push({ x: w.x, z: w.z, r: 8 }); avoid.push({ x: w.x, z: w.z, r: 9 });
+    g.cols.push({ x: w.x - fx * 2.4, z: w.z - fz * 2.4, r: 4.5, h: 5 });
+  });
+}
+function lmEnergy() { const e = LM.st.en; return e == null ? 100 : clamp(e, 0, 100); }
+function lmEat(add, msg) {
+  LM.st.en = clamp(lmEnergy() + add, 0, 100); LM.st.enW = 0; lmSave(); lmSnd("coin"); lmPop(msg + " · Tenaga " + Math.round(LM.st.en) + "%");
+}
+function lmFoodOpen(it) {
+  const e = Math.round(lmEnergy());
+  lmCard((b) => {
+    b.append(el("div", { class: "lm-kick" }, "🍽 Kedai Makan · " + it.town + ", " + DATA.negeri[it.k].pendek), el("h2", null, it.n), el("p", null, it.desc));
+    b.append(el("p", { class: "lm-ex" }, "Tenaga anda: " + e + "%. Hidangan ini memulihkan +" + it.en + "% tenaga. Harga: " + it.price + " syiling (baki anda " + (P.coin | 0) + ")."), el("p", { class: "lm-ex" }, ADAB_MAKAN));
+    const buy = lmBtn("Beli dan makan (" + it.price + " 🪙)", "pri", () => {
+      if ((P.coin | 0) < it.price) { toast("Syiling tidak mencukupi. Kutip syiling atau makan percuma di kantin sekolah anda.", "warn"); return; }
+      P.coin = (P.coin | 0) - it.price; try { saveP(); } catch (x) { /* abaikan */ }
+      LM.st.food = LM.st.food || {}; LM.st.food[it.k] = Date.now(); lmCardClose(); lmEat(it.en, "Bismillah. " + it.n + " sedap!");
+    });
+    if (e >= 100) buy.disabled = true;
+    b.append(el("div", { class: "lm-row" }, buy, lmBtn("Tutup", "", lmCardClose)));
   });
 }
 /* v18.11: Gudang dibuka dari sekolah sendiri. Dunia 3D dijeda; avatar dibina semula jika ditukar. */
@@ -2053,6 +2117,8 @@ function lmBuildWorld(g) {
   });
   /* IPTA: setiap universiti memegang satu tajuk */
   lmIptaBuild(g, used, placed, avoid, gnd); lmIptaAssign(g);
+  /* kedai makan tradisi setiap negeri */
+  lmFoodBuild(g, used, placed, avoid, gnd);
   /* stesen kereta api ETS dan ECRL */
   lmRailsPlan(g, used, placed, avoid, gnd);
   /* pulau Misi Khas, jeti dan feri */
@@ -2114,7 +2180,14 @@ function lmUpdatePlayer(g, dt) {
     if (LM.js.id >= 0) { ix += LM.js.x; iz -= LM.js.y; }
   }
   const il = Math.hypot(ix, iz); if (il > 1) { ix /= il; iz /= il; }
-  const sp = (p.swim ? (run ? 13 : 9) : (run ? 50 : 24)) * Math.min(1, il), cy = Math.cos(g.cam.yaw), sy = Math.sin(g.cam.yaw);
+  const en = lmEnergy(), weak = en <= 0 ? 0.5 : en < 15 ? 0.75 : 1;
+  const sp = (p.swim ? (run ? 13 : 9) : (run ? 50 : 24)) * Math.min(1, il) * weak, cy = Math.cos(g.cam.yaw), sy = Math.sin(g.cam.yaw);
+  if (il > 0.1 && !g.ui) {
+    const ne = Math.max(0, en - dt * (p.swim ? 0.9 : run ? 0.8 : 0.5) * Math.min(1, il)); LM.st.en = ne;
+    const w = ne <= 0 ? 3 : ne < 15 ? 2 : ne < 35 ? 1 : 0;
+    if (w > (LM.st.enW | 0)) { LM.st.enW = w; lmSave(); toast(w === 3 ? "Anda terlalu lapar dan bergerak perlahan. Makan di kedai makan atau kantin sekolah." : w === 2 ? "Perut berkeroncong! Cari kedai makan berdekatan (🍽 pada peta)." : "Anda mula lapar. Kedai makan tradisi ada di setiap negeri.", "warn"); }
+    if ((g.enT = (g.enT || 0) + dt) > 15) { g.enT = 0; lmSave(); }
+  }
   /* arah relatif kamera */
   const dx = (ix * cy + iz * sy) * sp, dz = (-ix * sy + iz * cy) * sp;
   p.vx += (dx - p.vx) * Math.min(1, dt * 10); p.vz += (dz - p.vz) * Math.min(1, dt * 10);
@@ -3024,6 +3097,7 @@ function lmMapDraw(cv, m, big) {
     else if (it.kind === "tw") { x.fillStyle = it.done ? "#ffd45a" : "#7fe3ff"; x.fillRect(px - r * 0.8, py - r * 0.8, r * 1.6, r * 1.6); }
     else if (big && it.kind === "ap") { x.font = "16px sans-serif"; x.fillStyle = "#fff"; x.fillText("✈", px - 7, py + 6); }
     else if (it.kind === "sk") { x.font = (big ? 18 : 10) + "px sans-serif"; x.textAlign = "center"; x.fillText("🏫", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
+    else if (it.kind === "fd") { if (big) { x.font = "15px sans-serif"; x.textAlign = "center"; x.fillText("🍽", px, py + 5); x.textAlign = "left"; } else { x.fillStyle = "#ff9f43"; x.fillRect(px - 1.2, py - 1.2, 2.4, 2.4); } }
     else if (it.kind === "ip") { x.font = (big ? 18 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("🎓", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
     else if (it.kind === "kh") { x.font = (big ? 20 : 10) + "px sans-serif"; x.fillStyle = it.done ? "#ffd45a" : "#ff7a9a"; x.textAlign = "center"; x.fillText("★", px, py + (big ? 7 : 4)); x.textAlign = "left"; }
     else if (big && it.kind === "jt" && it.k !== it.isl.id) { x.font = "14px sans-serif"; x.fillStyle = "#7fe3ff"; x.fillText("⛴", px - 7, py + 5); }
@@ -3067,7 +3141,7 @@ function lmBigMap() {
   const wrap = el("div", { class: "lm-big" }), m = lmMapBase(1240, 500), cv = el("canvas", { width: 1240, height: 500, "aria-label": "Peta Malaysia" });
   const box = el("div", { style: "display:grid;gap:10px;justify-items:center;padding:12px" });
   const dot = (c, t, sh) => el("span", null, el("i", { style: "background:" + c + (sh ? ";border-radius:2px" : "") }), t);
-  const leg = el("div", { class: "lm-leg" }, el("span", null, "▲ Anda"), dot("#4dff9a", LM.roomKind === "open" ? "Rakan sekolah" : "Rakan"), LM.roomKind === "open" ? dot("#ff7ad9", "Pemain lain") : null, dot("#7fe3ff", "Menara", 1), el("span", null, "🎓 IPTA"), dot("#1f4fa8", "ETS"), dot("#0e8a6a", "ECRL"), dot("#f28c28", "PLUS"), dot("#d64f8a", "LPT"), dot("#7a5cd6", "Pan Borneo"), dot("#ffd45a", "Ditawan / diziarahi"), dot("#ffffff", "Tempat menarik"));
+  const leg = el("div", { class: "lm-leg" }, el("span", null, "▲ Anda"), dot("#4dff9a", LM.roomKind === "open" ? "Rakan sekolah" : "Rakan"), LM.roomKind === "open" ? dot("#ff7ad9", "Pemain lain") : null, dot("#7fe3ff", "Menara", 1), el("span", null, "🎓 IPTA"), el("span", null, "🍽 Kedai makan"), dot("#1f4fa8", "ETS"), dot("#0e8a6a", "ECRL"), dot("#f28c28", "PLUS"), dot("#d64f8a", "LPT"), dot("#7a5cd6", "Pan Borneo"), dot("#ffd45a", "Ditawan / diziarahi"), dot("#ffffff", "Tempat menarik"));
   const list = el("div", { class: "lm-who" });
   box.append(el("div", { class: "lm-kick" }, "Peta · ketik tempat atau rakan untuk tetapkan destinasi"), cv, leg, list, el("div", { class: "lm-row" }, lmBtn("Buang destinasi", "", () => { g.wp = null; lmWpSet(); lmMapDraw(cv, m, true); }), lmBtn("Tutup peta", "pri", lmBigMap)));
   wrap.appendChild(box); LM.root.appendChild(wrap); LM.ui.big = wrap;
@@ -3142,7 +3216,8 @@ function lmHud() {
   ui.state = el("div", { class: "lm-pill lm-state" }, "Malaysia");
   ui.coin = el("div", { class: "lm-pill" }); ui.stamp = el("div", { class: "lm-pill" }); ui.tw = el("div", { class: "lm-pill" }); ui.wp = el("div", { class: "lm-pill" }); ui.wp.hidden = true; ui.peers = el("div", { class: "lm-pill" }); ui.peers.hidden = true;
   ui.pts = el("div", { class: "lm-pill", title: "Mata hari ini (betul 10, cubaan 2) dan kedudukan anda" });
-  ui.hud.append(ui.state, ui.pts, ui.coin, ui.stamp, ui.tw, ui.peers, ui.wp); r.appendChild(ui.hud);
+  ui.en = el("div", { class: "lm-pill", title: "Tenaga: berkurang apabila berjalan, berlari atau berenang. Makan di kedai makan atau kantin sekolah." });
+  ui.hud.append(ui.state, ui.pts, ui.coin, ui.en, ui.stamp, ui.tw, ui.peers, ui.wp); r.appendChild(ui.hud);
   ui.quest = el("div", { class: "lm-quest" }); r.appendChild(ui.quest); lmQuestRender();
   ui.mm = el("canvas", { class: "lm-mm", width: 380, height: 192, title: "Buka peta (M)", "aria-label": "Peta mini" }); ui.mm.addEventListener("click", lmBigMap); r.appendChild(ui.mm);
   LM.mmBase = lmMapBase(380, 192);
@@ -3185,6 +3260,7 @@ function lmHudTick(g) {
   if (ui.state.textContent !== nm) { ui.state.textContent = nm; if ((DATA.negeri[k] || ISL_BY[k]) && g.lastK && g.lastK !== k) lmPop(lmPlaceShort(k)); }
   if (DATA.negeri[k] || ISL_BY[k]) g.lastK = k;
   ui.coin.innerHTML = ""; ui.coin.append("🪙 ", el("b", null, String(P.coin | 0)));
+  { const e = Math.round(lmEnergy()), t = (e <= 15 ? "😫" : e <= 35 ? "🍛" : "🍛") + " Tenaga " + e + "%"; if (ui.en.textContent !== t) { ui.en.textContent = t; ui.en.style.color = e <= 15 ? "#ff6b6b" : e <= 35 ? "#ffd166" : ""; } }
   { /* mata hari ini (sama seperti papan Top 5) dan kedudukan */
     let pts = 0; try { pts = rkVal(rkLoad().m, "all", "hari", "jumlah", ""); } catch (e) { pts = 0; }
     if (LM.ptsLast != null && pts > LM.ptsLast) { lmPop("+" + (pts - LM.ptsLast) + " mata"); if (g.sky5 && !g.sky5.busy) lmSkyLoad(g); }
@@ -3214,6 +3290,7 @@ function lmNearTick(g) {
     : best.kind === "st" ? key + (best.line.L.road ? "Naik bas ekspres " + best.line.L.n : "Naik " + best.line.L.n) + " · " + best.n
     : best.kind === "ip" ? key + best.sn + " · " + (best.t ? (best.t.kod || best.t.id) + " " + best.t.nama : "Pusat Ulangkaji") + (best.done ? " ✔" : "")
     : best.kind === "sk" ? key + "Sekolah anda: " + best.n
+    : best.kind === "fd" ? key + "Kedai makan: " + best.n
     : best.kind === "kh" ? key + "Markas Misi Khas " + best.isl.khas.pendek + (best.done ? " ✔" : "") : best.kind === "jt" ? key + (best.k === best.isl.id ? "Feri pulang ke tanah besar" : "Naik feri ke " + best.isl.n) : key + "Terbang dari " + best.n;
   if (pr.textContent !== txt) pr.textContent = txt;
   pr.hidden = false;
@@ -3222,7 +3299,7 @@ function lmInteract() {
   const g = LM.g; if (!g || g.ui || !g.near) return;
   lmSnd("open");
   const it = g.near;
-  if (it.kind === "tw") lmTowerOpen(it); else if (it.kind === "pl") lmPlaceOpen(it); else if (it.kind === "ap") lmAirportOpen(it); else if (it.kind === "kh") lmKhasOpen(it); else if (it.kind === "jt") lmFerryOpen(it); else if (it.kind === "st") lmRailOpen(it); else if (it.kind === "ip") lmIptaOpen(it); else if (it.kind === "sk") lmOwnSchoolOpen(it);
+  if (it.kind === "tw") lmTowerOpen(it); else if (it.kind === "pl") lmPlaceOpen(it); else if (it.kind === "ap") lmAirportOpen(it); else if (it.kind === "kh") lmKhasOpen(it); else if (it.kind === "jt") lmFerryOpen(it); else if (it.kind === "st") lmRailOpen(it); else if (it.kind === "ip") lmIptaOpen(it); else if (it.kind === "sk") lmOwnSchoolOpen(it); else if (it.kind === "fd") lmFoodOpen(it);
 }
 /* ---------- input ---------- */
 function lmKey(e) {
