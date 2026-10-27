@@ -12,9 +12,30 @@ const T = window.THREE;
    Sempadan negeri daripada geoBoundaries (ADM1), ketinggian daripada SRTM (jubin Terrarium). */
 const SC = 6;            /* tinggalan: skala lama bagi saiz objek */
 const K = SC / 4;        /* faktor saiz objek berbanding peta asal */
-const WB = { x0: -3400, z0: -1250, w: 6800, h: 2450 }; /* sempadan dunia (unit) */
+/* v18.9: WS = faktor pembesaran dunia berbanding data meta-geo.json (3 unit/km): 2 -> 6 unit = 1 km,
+   supaya bangunan (saiz tetap) lebih jarang, terutamanya di Lembah Klang */
+const WS = 2;
+const WB = { x0: -3400 * WS, z0: -1250 * WS, w: 6800 * WS, h: 2450 * WS }; /* sempadan dunia (unit) */
 let GEOD = null;
-const ll = (lat, lon) => ({ x: (lon - GEOD.lon0) * GEOD.kx * GEOD.U, z: (GEOD.lat0 - lat) * GEOD.kz * GEOD.U });
+const ll = (lat, lon) => lmWarp((lon - GEOD.lon0) * GEOD.kx * GEOD.U, (GEOD.lat0 - lat) * GEOD.kz * GEOD.U);
+/* zum setempat Lembah Klang: titik dalam jejari KV.R diregang secara jejarian (2.6x di pusat, 1x di tepi)
+   supaya bangunan di KL, PJ, Shah Alam dan Putrajaya tidak berhimpit; sempadan, pantai dan DEM ikut sama */
+const KV = { la: 3.1, lo: 101.62, R: 50 * 3 * WS, a: 1.6, c: null };
+function lmKvC() { if (!KV.c) KV.c = { x: (KV.lo - GEOD.lon0) * GEOD.kx * GEOD.U, z: (GEOD.lat0 - KV.la) * GEOD.kz * GEOD.U }; return KV.c; }
+function lmWarp(x, z) {
+  const c = lmKvC(), dx = x - c.x, dz = z - c.z, d = Math.hypot(dx, dz);
+  if (d >= KV.R || d < 1e-6) return { x: x, z: z };
+  const u = d / KV.R, f = 1 + KV.a * (1 - u) * (1 - u);
+  return { x: c.x + dx * f, z: c.z + dz * f };
+}
+function lmUnwarp(x, z) {
+  const c = lmKvC(), dx = x - c.x, dz = z - c.z, D = Math.hypot(dx, dz);
+  if (D >= KV.R || D < 1e-6) return { x: x, z: z };
+  /* songsangan d -> d(1 + a(1-d/R)^2) dengan pembahagian dua (fungsi monotonik untuk a < 3) */
+  let lo = 0, hi = D;
+  for (let i = 0; i < 30; i++) { const m = (lo + hi) / 2, u = m / KV.R; if (m * (1 + KV.a * (1 - u) * (1 - u)) < D) lo = m; else hi = m; }
+  const k = (lo + hi) / 2 / D; return { x: c.x + dx * k, z: c.z + dz * k };
+}
 const XP_CAP = 80, XP_KEY = "gt-lm-xp";
 const EMOTE = { salam: "Assalamualaikum!", hebat: "Hebat!", jom: "Jom ikut saya!", tahniah: "Tahniah!" };
 
@@ -128,8 +149,10 @@ function toW(k, x, y) {
   return { x: A.w.x0 + (x - A.s.x0) / A.s.w * A.w.w, z: A.w.z0 + (y - A.s.z0) / A.s.h * A.w.h };
 }
 /* titik terdekat yang berada di daratan negeri k */
-function lmSnap(k, w, maxR) {
-  const ok = (x, z) => { const q = lmAt(x, z); return q === k || (k === "wp" && q === "selangor"); };
+function lmSnap(k, w, maxR, strict) {
+  const in1 = (x, z) => { const q = lmAt(x, z); return q === k || (!strict && k === "wp" && q === "selangor"); };
+  /* strict: seluruh tapak (termasuk pintu pagar di +z) mesti dalam negeri yang sama, bukan di garis sempadan */
+  const ok = strict ? (x, z) => in1(x, z) && in1(x, z + 28) && in1(x - 22, z) && in1(x + 22, z) && in1(x, z - 18) && in1(x - 16, z + 14) && in1(x + 16, z + 14) : in1;
   if (ok(w.x, w.z)) return w;
   for (let d = 3; d <= (maxR || 240); d += 3) for (let i = 0; i < 24; i++) { const a = i / 24 * 6.2832, x = w.x + Math.cos(a) * d, z = w.z + Math.sin(a) * d; if (ok(x, z)) return { x: x, z: z }; }
   return w;
@@ -140,11 +163,25 @@ function lmGeoLoad() {
   if (LM.geoP) return LM.geoP;
   const v = typeof APP_VER !== "undefined" ? "?v=" + APP_VER : "";
   LM.geoP = Promise.all([fetch("meta-geo.json" + v).then((r) => { if (!r.ok) throw new Error("geo " + r.status); return r.json(); }), fetch("meta-dem.bin" + v).then((r) => { if (!r.ok) throw new Error("dem " + r.status); return r.arrayBuffer(); })])
-    .then(([gj, buf]) => { gj.demB = new Uint8Array(buf); GEOD = gj; return gj; }).catch((e) => { LM.geoP = null; throw e; });
+    .then(([gj, buf]) => {
+      gj.demB = new Uint8Array(buf);
+      if (WS !== 1) {
+        for (const k in gj.states) gj.states[k] = gj.states[k].map((r) => r.map((q) => [q[0] * WS, q[1] * WS]));
+        (gj.isl || []).forEach((o) => { o.c = [o.c[0] * WS, o.c[1] * WS]; });
+        gj.dem.forEach((r) => { r.x0 *= WS; r.z0 *= WS; }); gj.cs *= WS; gj.U *= WS;
+      }
+      GEOD = gj; KV.c = null;
+      /* zum Lembah Klang pada sempadan negeri (dipadatkan dahulu supaya lengkung pantai kekal licin) */
+      const dense = (r) => { const o = []; for (let i = 0; i < r.length; i++) { const p = r[i], q = r[(i + 1) % r.length], n = Math.max(1, Math.ceil(Math.hypot(q[0] - p[0], q[1] - p[1]) / 8)), c = lmKvC(); if (Math.hypot(p[0] - c.x, p[1] - c.z) > KV.R + 400 && Math.hypot(q[0] - c.x, q[1] - c.z) > KV.R + 400) { o.push(p); continue; } for (let j = 0; j < n; j++) o.push([p[0] + (q[0] - p[0]) * j / n, p[1] + (q[1] - p[1]) * j / n]); } return o; };
+      for (const k in gj.states) gj.states[k] = gj.states[k].map((r) => dense(r).map((q) => { const w = lmWarp(q[0], q[1]); return [w.x, w.z]; }));
+      (gj.isl || []).forEach((o) => { const w = lmWarp(o.c[0], o.c[1]); o.c = [w.x, w.z]; });
+      return gj;
+    }).catch((e) => { LM.geoP = null; throw e; });
   return LM.geoP;
 }
 /* ketinggian sebenar (meter) daripada grid DEM; -1 = di luar kawasan data */
 function lmDem(wx, wz) {
+  if (Math.abs(wx - lmKvC().x) < KV.R && Math.abs(wz - lmKvC().z) < KV.R) { const q = lmUnwarp(wx, wz); wx = q.x; wz = q.z; }
   for (const r of GEOD.dem) {
     const fx = (wx - r.x0) / GEOD.cs, fz = (wz - r.z0) / GEOD.cs;
     if (fx < 0 || fz < 0 || fx >= r.nx - 1 || fz >= r.nz - 1) continue;
@@ -227,7 +264,7 @@ function lmMesh(geo, col, x, y, z, o) {
 }
 
 /* ---------- peta raster: negeri di bawah setiap titik (dunia sebenar, ~1 km sepiksel) ---------- */
-const RS = 0.33, RW = Math.ceil(WB.w * RS), RH = Math.ceil(WB.h * RS);
+const RS = 0.33 / WS, RW = Math.ceil(WB.w * RS), RH = Math.ceil(WB.h * RS);
 const RAST = { keys: [], data: null, paths: {} };
 function lmRaster() {
   if (RAST.data) return;
@@ -293,11 +330,11 @@ function lmDist(mask, nx, nz, cs) {
 /* v18.5: ketinggian daripada DEM sebenar (SRTM). Ketinggian dibesarkan secara tidak linear supaya bukit kelihatan
    (1 km mendatar = 3 unit; 4,095 m Kinabalu ~ 66 unit). Daratan negara jiran (Thailand, Indonesia, Brunei,
    Singapura) dipaparkan tetapi tidak boleh dijejaki. */
-function lmElevY(m) { return 0.55 + 22 * Math.pow(Math.max(0, m) / 1000, 0.95); }
+function lmElevY(m) { return 0.55 + 30 * Math.pow(Math.max(0, m) / 1000, 0.95); }
 /* puncak sebenar (meter): DEM 1.7 km melicinkan puncak, jadi puncak dinaikkan semula di lokasi mercu tanda */
 const PEAK_M = { "sb-kinabalu": 4095, "sw-mulu": 2376, "kd-jerai": 1217, "jh-ledang": 1276, "kn-stong": 1422, "pg-bendera": 833, "ph-genting": 1800, "ph-cameron": 1500, "ph-fraser": 1300 };
 function lmTerrainBase(g) {
-  const cs = TER.cs = LM.gq ? 6 : 12, nx = TER.nx = Math.floor(WB.w / cs) + 1, nz = TER.nz = Math.floor(WB.h / cs) + 1, N = nx * nz;
+  const cs = TER.cs = LM.gq ? 12 : 20, nx = TER.nx = Math.floor(WB.w / cs) + 1, nz = TER.nz = Math.floor(WB.h / cs) + 1, N = nx * nz;
   TER.x0 = WB.x0; TER.z0 = WB.z0;
   const land = TER.land = new Uint8Array(N), st = TER.st = new Uint8Array(N), fg = TER.fg = new Uint8Array(N), dem = new Float32Array(N), keys = RAST.keys;
   for (let z = 0; z < nz; z++) for (let x = 0; x < nx; x++) {
@@ -314,12 +351,12 @@ function lmTerrainBase(g) {
     const D = dIn[i], inl = sm(6, 60, D);
     let v = lmElevY(dem[i]);
     v = Math.min(v, 0.6 + D * 0.35);                         /* pantai landai */
-    if (!fg[i]) v += (lmFbm(wx / 45, wz / 45) - 0.5) * 2.2 * inl * (0.4 + Math.min(1, v / 12)); /* butiran kecil */
-    h[i] = clamp(v, 0.45, 100);
+    if (!fg[i]) v += (lmFbm(wx / 90, wz / 90) - 0.5) * 2.2 * inl * (0.4 + Math.min(1, v / 12)); /* butiran kecil */
+    h[i] = clamp(v, 0.45, 140);
   }
   for (const it of g.items) {
     const pm = it.kind === "pl" && PEAK_M[it.id]; if (!pm) continue;
-    const ty = lmElevY(pm), r = 14 + pm / 160, R2 = r * r, xa = Math.max(0, Math.floor((it.x - r * 3 - TER.x0) / cs)), xb = Math.min(nx - 1, Math.ceil((it.x + r * 3 - TER.x0) / cs)), za = Math.max(0, Math.floor((it.z - r * 3 - TER.z0) / cs)), zb = Math.min(nz - 1, Math.ceil((it.z + r * 3 - TER.z0) / cs));
+    const ty = lmElevY(pm), r = (14 + pm / 160) * WS, R2 = r * r, xa = Math.max(0, Math.floor((it.x - r * 3 - TER.x0) / cs)), xb = Math.min(nx - 1, Math.ceil((it.x + r * 3 - TER.x0) / cs)), za = Math.max(0, Math.floor((it.z - r * 3 - TER.z0) / cs)), zb = Math.min(nz - 1, Math.ceil((it.z + r * 3 - TER.z0) / cs));
     for (let z = za; z <= zb; z++) for (let x = xa; x <= xb; x++) { const i = z * nx + x; if (!land[i]) continue; const d2 = (TER.x0 + x * cs - it.x) ** 2 + (TER.z0 + z * cs - it.z) ** 2, k = Math.exp(-d2 / R2); if (ty * k > h[i]) h[i] = h[i] + (ty * k - h[i]) * Math.min(1, k * 1.6); }
   }
 }
@@ -393,7 +430,7 @@ function lmBuildTerrain(g) {
   const m = new T.Mesh(geo, new T.MeshLambertMaterial({ vertexColors: true, map: lmDetailTex() }));
   m.receiveShadow = true; m.frustumCulled = false; g.scene.add(m); g.terrain = m;
   /* dasar laut dalam */
-  const floor = new T.Mesh(new T.PlaneGeometry(9000, 9000).rotateX(-Math.PI / 2), new T.MeshBasicMaterial({ color: 0x1d4f6a })); floor.position.y = -17; g.scene.add(floor);
+  const floor = new T.Mesh(new T.PlaneGeometry(18000, 18000).rotateX(-Math.PI / 2), new T.MeshBasicMaterial({ color: 0x1d4f6a })); floor.position.y = -17; g.scene.add(floor);
   /* sempadan negeri mengikut permukaan bukit */
   g.border = {};
   for (const k of keys) {
@@ -436,7 +473,7 @@ function lmWaterNormal() {
 }
 function lmBuildSea(g) {
   const nm = lmWaterNormal();
-  const m = new T.Mesh(new T.PlaneGeometry(9000, 9000).rotateX(-Math.PI / 2), new T.MeshPhongMaterial({ color: 0x1e88c8, shininess: 110, specular: 0xd8f0ff, transparent: true, opacity: 0.8, normalMap: nm, normalScale: new T.Vector2(0.55, 0.55), depthWrite: false }));
+  const m = new T.Mesh(new T.PlaneGeometry(18000, 18000).rotateX(-Math.PI / 2), new T.MeshPhongMaterial({ color: 0x1e88c8, shininess: 110, specular: 0xd8f0ff, transparent: true, opacity: 0.8, normalMap: nm, normalScale: new T.Vector2(0.55, 0.55), depthWrite: false }));
   m.position.y = 0; m.renderOrder = 1; g.scene.add(m); g.sea = m; g.seaN = nm;
 }
 /* ---------- langit: kubah bergradien, matahari, awan lembut ---------- */
@@ -459,7 +496,7 @@ function lmBuildSky(g) {
 }
 /* ---------- tumbuhan: pokok hutan, pokok kelapa di pantai, batu ---------- */
 function lmBuildTrees(g, avoid) {
-  const NT = LM.gq ? 4200 : 1600, NP = LM.gq ? 1100 : 480, NR = LM.gq ? 650 : 240, R = lmRand("lm-trees");
+  const NT = LM.gq ? 6500 : 2400, NP = LM.gq ? 1800 : 700, NR = LM.gq ? 900 : 320, R = lmRand("lm-trees");
   const trunkG = new T.CylinderGeometry(0.28, 0.45, 4, 5); trunkG.translate(0, 2, 0);
   const crownG = new T.IcosahedronGeometry(2.6, 0); crownG.translate(0, 5.2, 0);
   const crown2G = new T.IcosahedronGeometry(1.9, 0); crown2G.translate(1.3, 6.6, 0.6);
@@ -476,7 +513,7 @@ function lmBuildTrees(g, avoid) {
   const ok = (x, z) => { const k = lmAt(x, z); return ((k && k !== "jambatan" && k !== "wp") || (!k && fgAt(x, z) && R() < 0.35)) && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + 4) ; };
   const put = (m, i, x, y, z, s, sy, rot) => { q.setFromAxisAngle(up, rot); mt.compose(pos.set(x, y, z), q, sc.set(s, sy, s)); m.setMatrixAt(i, mt); };
   let n = 0, np = 0, nr = 0, tries = 0;
-  while ((n < NT || np < NP || nr < NR) && tries < 400000) {
+  while ((n < NT || np < NP || nr < NR) && tries < 700000) {
     tries++;
     const x = WB.x0 + R() * WB.w, z = WB.z0 + R() * WB.h; if (!ok(x, z)) continue;
     const y = lmHRaw(x, z); if (y < 0.4) continue;
@@ -928,7 +965,7 @@ function lmFlyStart(ap, dst) {
   /* jadual panjang lengkok untuk kelajuan seragam */
   const N = 160, pts = [], len = [0]; for (let i = 0; i <= N; i++) pts.push(lmBezier(P0, P1, P2, P3, i / N));
   for (let i = 1; i <= N; i++) len.push(len[i - 1] + pts[i].distanceTo(pts[i - 1]));
-  const air = clamp(len[N] / 120, 9, 20);
+  const air = clamp(len[N] / 160, 9, 24);
   const plane = lmPlane(); g.scene.add(plane); plane.position.copy(S);
   if (ap.m && ap.m.userData.parked) ap.m.userData.parked.visible = false;
   g.flight = { ap: ap, dst: dst, plane: plane, S: S, P0: P0, P3: P3, E: E, u: u, v: v, pts: pts, len: len, air: air, ph: "board", t: 0, yaw: Math.atan2(-u.z, u.x), pitch: 0, bank: 0, spd: 0, puffT: 0, code: "GA " + (100 + Math.floor(Math.random() * 800)) };
@@ -1043,7 +1080,7 @@ function lmTrafficTick(g, dt) {
 const ISLANDS = [
   { id: "i-lkw", n: "Pulau Langkawi", kh: ["K4", "K3"], from: "kedah", port: "Jeti Kuala Kedah", pll: [6.1067, 100.2878], lm: "helang", sc: 1 },
   { id: "i-tio", n: "Pulau Tioman", kh: ["K5"], from: "johor", port: "Jeti Mersing", pll: [2.4330, 103.8420], lm: "tioman", sc: 1 },
-  { id: "i-pkr", n: "Pulau Pangkor", kh: ["KS"], from: "perak", port: "Jeti Lumut", pll: [4.2335, 100.6300], lm: "kota", sc: 2.4 },
+  { id: "i-pkr", n: "Pulau Pangkor", kh: ["KS"], from: "perak", port: "Jeti Lumut", pll: [4.2335, 100.6300], lm: "kota", sc: 1.5 },
   { id: "i-sip", n: "Pulau Sipadan", kh: ["KR"], from: "sabah", port: "Jeti Semporna", pll: [4.4815, 118.6110], lm: "rumahapi", sc: 1 }
 ];
 const ISL_BY = {};
@@ -1205,7 +1242,7 @@ function lmHorn() { if (LM.mute) return; arBeep(110, 0.9, "sawtooth", 0.05); set
 function lmSail(jt) {
   const g = LM.g; if (!g || g.flight || g.sail) return;
   const a = jt.end, b = jt.other.end, mid = { x: (a.x + b.x) / 2 + jt.dir.z * 40, z: (a.z + b.z) / 2 - jt.dir.x * 40 };
-  const boat = jt.ferry || jt.other.ferry; const dur = clamp(Math.hypot(b.x - a.x, b.z - a.z) / 12, 8, 22);
+  const boat = jt.ferry || jt.other.ferry; const dur = clamp(Math.hypot(b.x - a.x, b.z - a.z) / 18, 8, 24);
   g.sail = { jt: jt, boat: boat, a: a, b: b, c: mid, t: -1.4, dur: dur, wake: 0, home: { p: boat.position.clone(), r: boat.rotation.y } };
   g.ui = true; if (g.sky5) g.sky5.sp.visible = false; lmHorn(); lmPop("Feri akan bertolak");
   lmSailHud(true);
@@ -1311,7 +1348,7 @@ function lmRailsPlan(g, used, placed, avoid, gnd) {
       if (!stop) { via.push({ i: i, w: ll(la, lo) }); return; }
       const okK = (q) => q === k || (k === "wp" && q === "selangor") || (k === "selangor" && q === "wp");
       const free = (x, z) => okK(lmAt(x, z)) && lmLandW(x + 16, z) && lmLandW(x - 16, z) && lmLandW(x, z + 14) && lmLandW(x, z - 14)
-        && !used.some((u) => Math.hypot(u.x - x, u.z - z) < 20) && !placed.some((u) => Math.hypot(u.x - x, u.z - z) < u.r + 22) && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + 14);
+        && !used.some((u) => Math.hypot(u.x - x, u.z - z) < 20) && !placed.some((u) => Math.hypot(u.x - x, u.z - z) < u.r + 30) && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + 14);
       let w = ll(la, lo);
       if (!free(w.x, w.z)) { let best = null; for (let d = 6; d <= 60 && !best; d += 6) for (let j = 0; j < 16; j++) { const a = j * 0.3927 + d * 0.07, x = w.x + Math.cos(a) * d, z = w.z + Math.sin(a) * d; if (free(x, z)) { best = { x: x, z: z }; break; } } if (best) w = best; }
       const m = lmStationModel(L, name); m.position.set(w.x, 0, w.z); g.scene.add(m);
@@ -1492,7 +1529,7 @@ function lmRide(a, b) {
   const g = LM.g; if (!g || g.flight || g.sail || g.ride) return;
   const R = a.line, s0 = R.sS[a.i], s1 = R.sS[b.i], dir = s1 > s0 ? 1 : -1;
   R.dir = dir; R.s = s0; R.wait = 0; lmRailPlace(R);
-  g.ride = { R: R, a: a, b: b, s0: s0, s1: s1, dir: dir, t: -1.6, dur: clamp(Math.abs(s1 - s0) / 95, 7, 24), v: 0 };
+  g.ride = { R: R, a: a, b: b, s0: s0, s1: s1, dir: dir, t: -1.6, dur: clamp(Math.abs(s1 - s0) / 130, 7, 26), v: 0 };
   g.ui = true; g.me.g.visible = false; if (g.sky5) g.sky5.sp.visible = false;
   lmChime(); lmPop("Sila naik ke dalam " + R.L.n); lmRideHud(true);
 }
@@ -1537,7 +1574,7 @@ function lmRideEnd(g) {
 /* ---------- v18.2: berenang di pantai ----------
    Laut berhampiran pantai (dalam SWIM_MAX unit dari darat) boleh direnangi. Avatar terapung di permukaan:
    kuak rangkak semasa bergerak, kayuh air semasa diam. */
-const SWIM_MAX = 42 * K;
+const SWIM_MAX = 42 * K * 1.4;
 function lmSwimOk(x, z) {
   if (lmCanStand(x, z) || lmAt(x, z) === "jambatan" || !TER.dOut) return false;
   const xi = Math.round((x - TER.x0) / TER.cs), zi = Math.round((z - TER.z0) / TER.cs);
@@ -1609,7 +1646,7 @@ function lmIptaBuild(g, used, placed, avoid, gnd) {
     if (!DATA.negeri[k]) return;
     const okK = (q) => q === k || (k === "wp" && q === "selangor") || (k === "selangor" && q === "wp"), rr = 18;
     const free = (x, z) => okK(lmAt(x, z)) && lmLandW(x + rr, z) && lmLandW(x - rr, z) && lmLandW(x, z + rr) && lmLandW(x, z - rr)
-      && !used.some((u) => Math.hypot(u.x - x, u.z - z) < rr + 8) && !placed.some((u) => Math.hypot(u.x - x, u.z - z) < rr + u.r + 6) && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + rr);
+      && !used.some((u) => Math.hypot(u.x - x, u.z - z) < rr + 8) && !placed.some((u) => Math.hypot(u.x - x, u.z - z) < rr + u.r + 22) && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + rr);
     let w = ll(la, lo);
     if (!free(w.x, w.z)) { let best = null; for (let d = 5; d <= 90 && !best; d += 5) for (let i = 0; i < 16; i++) { const a = i * 0.3927 + d * 0.11, x = w.x + Math.cos(a) * d, z = w.z + Math.sin(a) * d; if (free(x, z)) { best = { x: x, z: z }; break; } } if (best) w = best; }
     const md = lmCampus(col, sn), rot = (Math.abs(hashStr(id)) % 628) / 100;
@@ -1742,7 +1779,7 @@ function lmSchoolModel(name) {
 }
 function lmOwnSchoolBuild(g, placed, avoid, gnd) {
   const s = LM.ownSk; g.ownSk = null; if (!s || !DATA.negeri[s.k]) return;
-  const w = lmSnap(s.k, { x: s.x, z: s.z }, 60), md = lmSchoolModel(s.n), rot = 0;
+  const w = lmSnap(s.k, lmWarp(s.x * WS, s.z * WS), 60, true), md = lmSchoolModel(s.n), rot = 0;
   md.g.position.set(w.x, 0, w.z); md.g.rotation.y = rot; g.scene.add(md.g); gnd.push([md.g, 0]); lmPad(g, w.x, w.z, 15);
   const lb = lmLabel("🏫 Sekolah anda: " + s.n, { fs: 30, k: 0.032, bg: "rgba(20,60,120,.88)", bd: "#ffd45a" }); lb.position.set(w.x, 15, w.z); g.scene.add(lb); gnd.push([lb, 15]);
   const it = { kind: "sk", id: "sk-own", k: s.k, n: s.n, x: w.x, z: w.z + 13, sx: w.x, sz: w.z + 16, r: 0, ir: 9, m: md.g, lb: lb };
@@ -1800,7 +1837,7 @@ function lmBuildWorld(g) {
     if (id !== "pg-jambatan") {
       const rr = Math.max(md.r, 6), okK = (q) => q === k || (k === "wp" && q === "selangor");
       const free = (x, z) => okK(lmAt(x, z)) && lmLandW(x + rr, z) && lmLandW(x - rr, z) && lmLandW(x, z + rr) && lmLandW(x, z - rr)
-        && !used.some((u) => Math.hypot(u.x - x, u.z - z) < rr + 8) && !placed.some((u) => Math.hypot(u.x - x, u.z - z) < rr + u.r + 6);
+        && !used.some((u) => Math.hypot(u.x - x, u.z - z) < rr + 8) && !placed.some((u) => Math.hypot(u.x - x, u.z - z) < rr + u.r + 22);
       if (!free(w.x, w.z)) {
         let best = null;
         for (let d = 4; d <= 120 && !best; d += 4) for (let i = 0; i < 16; i++) { const a = i * 0.3927 + d * 0.1, x = w.x + Math.cos(a) * d, z = w.z + Math.sin(a) * d; if (free(x, z)) { best = { x: x, z: z }; break; } }
@@ -1859,7 +1896,7 @@ function lmBuildWorld(g) {
   /* syiling harian bertaburan (deterministik mengikut hari) */
   const R = lmRand("lm-coin-" + dayKey()), got = new Set(LM.st.cd.got);
   let n = 0, tries = 0;
-  while (n < 110 && tries < 30000) {
+  while (n < 200 && tries < 60000) {
     tries++; const x = WB.x0 + R() * WB.w, z = WB.z0 + R() * WB.h; if (!lmAt(x, z) || lmAt(x, z) === "jambatan") continue;
     if (avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r)) continue;
     const id = "c" + n; n++; if (got.has(id)) continue;
@@ -1899,7 +1936,7 @@ function lmUpdatePlayer(g, dt) {
     if (LM.js.id >= 0) { ix += LM.js.x; iz -= LM.js.y; }
   }
   const il = Math.hypot(ix, iz); if (il > 1) { ix /= il; iz /= il; }
-  const sp = (p.swim ? (run ? 13 : 9) : (run ? 38 : 20)) * Math.min(1, il), cy = Math.cos(g.cam.yaw), sy = Math.sin(g.cam.yaw);
+  const sp = (p.swim ? (run ? 13 : 9) : (run ? 50 : 24)) * Math.min(1, il), cy = Math.cos(g.cam.yaw), sy = Math.sin(g.cam.yaw);
   /* arah relatif kamera */
   const dx = (ix * cy + iz * sy) * sp, dz = (-ix * sy + iz * cy) * sp;
   p.vx += (dx - p.vx) * Math.min(1, dt * 10); p.vz += (dz - p.vz) * Math.min(1, dt * 10);
@@ -2780,7 +2817,7 @@ function lmSkyPlace(g) {
 
 /* ---------- peta mini dan peta besar ---------- */
 /* peta 2D: kawasan dunia sebenar yang dipaparkan */
-const MAPB = { x0: -3250, z0: -1180, w: 6550, h: 2320 };
+const MAPB = { x0: -3250 * WS, z0: -1180 * WS, w: 6550 * WS, h: 2320 * WS };
 const lmLabelPt = (k) => { const b = lmRingsBox([lmMainRing(k)]); return { x: b.x0 + b.w / 2, z: b.z0 + b.h / 2 }; };
 function lmMapBase(w, h) {
   const c = document.createElement("canvas"); c.width = w; c.height = h;
