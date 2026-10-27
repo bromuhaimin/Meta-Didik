@@ -1945,9 +1945,28 @@ function lmOwnSchoolOpen(it) {
     b.append(el("p", { class: "lm-ex" }, "Cop universiti: " + J.d + "/" + J.t + (J.next ? " · Seterusnya: " + J.next.sn + " (" + J.next.n + ")" : " · Perjalanan lengkap!")));
     const row = el("div", { class: "lm-row" });
     if (J.next) row.append(lmBtn("Tunjuk arah ke " + J.next.sn, "pri", () => { LM.g.wp = { x: J.next.x, z: J.next.z, n: J.next.sn }; lmWpSet(); lmCardClose(); lmPop("Ikut tiang merah ke " + J.next.sn); }));
-    row.append(lmBtn("Pasport", "", () => lmPassport("ipta")), lmBtn("Tutup", "", lmCardClose));
-    b.append(row);
+    row.append(lmBtn("🛍 Gudang", "", lmGudang), lmBtn("Pasport", "", () => lmPassport("ipta")), lmBtn("Tutup", "", lmCardClose));
+    b.append(el("p", { class: "lm-ex" }, "Gudang hanya boleh dibuka di sekolah anda: beli avatar, pakaian seragam, lencana dan cara meraikan."), row);
   });
+}
+/* v18.11: Gudang dibuka dari sekolah sendiri. Dunia 3D dijeda; avatar dibina semula jika ditukar. */
+function lmGudang() {
+  const g = LM.g; if (!g) return;
+  lmCardClose(); LM.gd = { view: typeof UI !== "undefined" ? UI.view : "map" }; LM.pause = true; g.ui = true; for (const k in LM.keys) LM.keys[k] = false;
+  LM.root.hidden = true; document.body.classList.remove("ar-lock");
+  setView("gudang"); try { window.scrollTo(0, 0); } catch (e) { /* abaikan */ }
+  const b = el("button", { type: "button", id: "lmGdBack", class: "btn" }, "⬅ Kembali ke sekolah (META GEMPUR)");
+  b.style.cssText = "position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:90;box-shadow:0 8px 20px rgba(0,0,0,.4)";
+  b.addEventListener("click", lmGudangBack); document.body.appendChild(b);
+}
+function lmGudangBack() {
+  const b = document.getElementById("lmGdBack"); if (b) b.remove();
+  if (!LM.g || !LM.pause) return;
+  setView(LM.gd && LM.gd.view && LM.gd.view !== "gudang" ? LM.gd.view : "map");
+  LM.root.hidden = false; document.body.classList.add("ar-lock"); LM.pause = false;
+  const g = LM.g, code = lmMyCode();
+  if (code !== g.myCode) { const old = g.me, nm = lmAvatar(code, P.nama, true); nm.g.position.copy(old.g.position); nm.g.rotation.y = old.g.rotation.y; g.scene.remove(old.g); g.me = nm; g.myCode = code; g.scene.add(nm.g); }
+  g.ui = false; lmPop("Kembali ke sekolah");
 }
 function lmCoinMesh() {
   if (!GEO.coin) GEO.coin = new T.CylinderGeometry(0.9, 0.9, 0.25, 14);
@@ -3207,7 +3226,7 @@ function lmInteract() {
 }
 /* ---------- input ---------- */
 function lmKey(e) {
-  if (!LM.on || !LM.g) return;
+  if (!LM.on || !LM.g || LM.pause) return;
   const t = e.target; if (t && (t.nodeName === "INPUT" || t.nodeName === "TEXTAREA")) return;
   const k = String(e.key || "").toLowerCase(), dn = e.type === "keydown", g = LM.g;
   if (dn && k === "escape") { e.preventDefault(); if (LM.ui.big) lmBigMap(); else if (LM.ui.card) lmCardClose(); else if (confirm("Keluar dari META GEMPUR?")) lmClose(); return; }
@@ -3300,6 +3319,7 @@ function lmDayNight(g) {
 function lmLoop(ts) {
   if (!LM.on || !LM.g) return;
   LM.raf = requestAnimationFrame(lmLoop);
+  if (LM.pause) { LM.g.last = 0; return; } /* Gudang dibuka */
   const g = LM.g, dt = clamp((ts - (g.last || ts)) / 1000, 0, 0.1); g.last = ts; g.T += dt;
   try {
     if (g.ui && !g.flight && !g.sail && !g.ride && !LM.ui.card && !LM.ui.big) g.ui = false; /* tiada panel terbuka: lepaskan kunci pergerakan */
@@ -3358,6 +3378,7 @@ function lmStart(code, kind) {
   }, 30);
 }
 function lmClose() {
+  { const b = document.getElementById("lmGdBack"); if (b) b.remove(); } LM.pause = false;
   LM.on = false; cancelAnimationFrame(LM.raf); lmoStop(); lmNetLeave(); lmEngine(0); LM.roomKind = "";
   window.removeEventListener("keydown", lmKey, true); window.removeEventListener("keyup", lmKey, true); window.removeEventListener("resize", lmResize);
   const g = LM.g;
