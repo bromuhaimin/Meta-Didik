@@ -273,12 +273,13 @@ function lmTerrainBase(g) {
     h[i] = Math.min(v, 100);
   }
 }
-function lmPad(g, x, z, r, top) { g.pads.push({ x: x, z: z, r: r, top: !!top }); }
+function lmPad(g, x, z, r, top, sh) { g.pads.push({ x: x, z: z, r: r, top: !!top, sh: sh || null }); }
 /* ratakan tapak: puncak dikekalkan pada puncak (top), selainnya ketinggian tengah */
 function lmTerrainPads(g) {
   const { cs, nx, nz, h, x0, z0 } = TER;
   for (const p of g.pads) {
-    const hc = Math.max(0.9, lmHRaw(p.x, p.z)), R = p.r + 18;
+    if (p.sh && p.sh.h == null) p.sh.h = Math.max(0.9, lmHRaw(p.sh.x, p.sh.z));
+    const hc = p.sh ? p.sh.h : Math.max(0.9, lmHRaw(p.x, p.z)), R = p.r + 18;
     const xa = Math.max(0, Math.floor((p.x - R - x0) / cs)), xb = Math.min(nx - 1, Math.ceil((p.x + R - x0) / cs));
     const za = Math.max(0, Math.floor((p.z - R - z0) / cs)), zb = Math.min(nz - 1, Math.ceil((p.z + R - z0) / cs));
     for (let z = za; z <= zb; z++) for (let x = xa; x <= xb; x++) {
@@ -581,16 +582,294 @@ function lmTower(t) {
   const flag = lmMesh(lmBox(2.4, 1.4, 0.1), "#9aa3ad", 3.9, 5.2, 0); g.add(flag);
   return { g: g, cr: cr, flag: flag };
 }
-function lmAirport(a) {
-  const g = new T.Group();
-  g.add(lmMesh(lmBox(24, 0.3, 5), "#4a4f57", 0, 0.15, 0, { ns: 1 }));
-  for (let i = -10; i <= 10; i += 4) g.add(lmMesh(lmBox(2, 0.32, 0.4), "#f4f4f4", i, 0.17, 0, { ns: 1 }));
-  g.add(lmMesh(lmBox(8, 4, 6), "#dfe7ef", -4, 2, -7)); g.add(lmMesh(lmCyl(1, 1.2, 9, 8), "#dfe7ef", 6, 4.5, -7)); g.add(lmMesh(lmBox(3, 2, 3), "#7fb7e8", 6, 9.5, -7));
-  const pl = new T.Group(); pl.position.set(-2, 1.4, 0);
-  pl.add(lmMesh(lmCyl(0.9, 0.9, 9, 10), "#f6f7f9", 0, 0, 0)); pl.children[0].rotation.z = Math.PI / 2;
-  pl.add(lmMesh(lmBox(2, 0.25, 11), "#d7dee6", 0.5, 0, 0)); pl.add(lmMesh(lmBox(1.4, 2.4, 0.25), "#d63b3b", -4, 1.2, 0));
-  g.add(pl);
+/* ---------- kapal terbang dan lapangan terbang realistik (v17.92) ---------- */
+/* Pesawat: badan lathe licin, sayap condong, enjin, tingkap, kokpit, roda pendarat, ekor Jalur Gemilang.
+   Livery umum "Gempur Air" (bukan jenama sebenar). Asal kumpulan = bawah roda; hidung ke arah +x. */
+function lmFlagTex() {
+  return GEO.flagT || (GEO.flagT = lmTex(128, 64, (x) => {
+    for (let i = 0; i < 14; i++) { x.fillStyle = i % 2 ? "#ffffff" : "#cc0001"; x.fillRect(0, i * 64 / 14, 128, 64 / 14 + 0.5); }
+    x.fillStyle = "#010066"; x.fillRect(0, 0, 64, 64 * 8 / 14); x.fillStyle = "#ffcc00";
+    x.beginPath(); x.arc(26, 18, 13, 0, 6.2832); x.fill(); x.fillStyle = "#010066"; x.beginPath(); x.arc(31, 18, 11, 0, 6.2832); x.fill();
+    x.fillStyle = "#ffcc00"; x.beginPath(); for (let i = 0; i < 28; i++) { const r = i % 2 ? 4 : 10, a = i / 28 * 6.2832 - 1.57; x.lineTo(46 + Math.cos(a) * r, 18 + Math.sin(a) * r); } x.fill();
+  }));
+}
+function lmWinTex() {
+  return GEO.winT || (GEO.winT = lmTex(1024, 64, (x, w, h) => {
+    x.clearRect(0, 0, w, h);
+    x.fillStyle = "#c8102e"; x.fillRect(40, 44, w - 120, 8); x.fillStyle = "#1d3c8f"; x.fillRect(40, 54, w - 120, 6);
+    x.fillStyle = "#1b2633"; for (let i = 0; i < 30; i++) { lmRound(x, 120 + i * 27, 18, 15, 19, 7); x.fill(); }
+    lmRound(x, 70, 10, 20, 32, 5); x.fill(); lmRound(x, w - 150, 10, 20, 32, 5); x.fill();
+    x.fillStyle = "#1d3c8f"; x.font = "900 26px Nunito, sans-serif"; x.fillText("GEMPUR AIR", w - 420, 40);
+  }));
+}
+function lmPlane(opt) {
+  opt = opt || {};
+  const g = new T.Group(), body = new T.Group(); g.add(body); body.position.y = 3.1;
+  const white = GEO.pW || (GEO.pW = new T.MeshStandardMaterial({ color: 0xf4f6f9, roughness: 0.38, metalness: 0.25 }));
+  const grey = GEO.pG || (GEO.pG = new T.MeshStandardMaterial({ color: 0xc7ced8, roughness: 0.45, metalness: 0.45 }));
+  const dark = GEO.pD || (GEO.pD = new T.MeshStandardMaterial({ color: 0x2a3038, roughness: 0.6, metalness: 0.3 }));
+  const red = GEO.pR || (GEO.pR = new T.MeshStandardMaterial({ color: 0xc8102e, roughness: 0.45, metalness: 0.2 }));
+  const sh = (m) => { m.castShadow = true; m.receiveShadow = true; return m; };
+  /* badan */
+  const fus = GEO.fus || (GEO.fus = (() => { const pts = [[0, -15.5], [0.35, -15.3], [0.9, -14.2], [1.45, -12], [1.85, -8.5], [1.95, -2], [1.95, 9], [1.8, 11.6], [1.4, 13.6], [0.8, 14.8], [0.2, 15.4], [0, 15.5]].map((p) => new T.Vector2(p[0], p[1])); const l = new T.LatheGeometry(pts, 22); l.rotateZ(-Math.PI / 2); return l; })());
+  body.add(sh(new T.Mesh(fus, white)));
+  /* tingkap dan jalur warna di kedua-dua sisi */
+  const strip = new T.MeshBasicMaterial({ map: lmWinTex(), transparent: true, depthWrite: false });
+  [-1, 1].forEach((s) => { const m = new T.Mesh(GEO.wst || (GEO.wst = new T.PlaneGeometry(27, 1.7)), strip); m.position.set(0.5, 0.15, s * 1.97); if (s < 0) m.rotation.y = Math.PI; body.add(m); });
+  /* kokpit */
+  const ck = new T.Mesh(GEO.ck || (GEO.ck = new T.SphereGeometry(1.2, 14, 8, 0, Math.PI * 2, 0, Math.PI * 0.32)), dark); ck.rotation.z = -1.05; ck.position.set(12.6, 0.55, 0); body.add(ck);
+  /* sayap condong */
+  const wingG = GEO.wing || (GEO.wing = (() => { const s = new T.Shape(); s.moveTo(3.2, 0); s.lineTo(-3.4, 14); s.lineTo(-5.4, 14); s.lineTo(-4.6, 0); s.closePath(); const e = new T.ExtrudeGeometry(s, { depth: 0.38, bevelEnabled: true, bevelThickness: 0.08, bevelSize: 0.12, bevelSegments: 1 }); e.rotateX(Math.PI / 2); return e; })());
+  [-1, 1].forEach((s) => {
+    const w = sh(new T.Mesh(wingG, grey)); w.position.set(0.5, -0.9, 0); w.scale.z = s; w.rotation.x = s * -0.05; body.add(w);
+    const wl = sh(new T.Mesh(GEO.wlet || (GEO.wlet = new T.BoxGeometry(1.6, 1.6, 0.15)), red)); wl.position.set(-4.6, -0.2, s * 14.05); wl.rotation.z = 0.35; body.add(wl);
+    /* enjin bawah sayap */
+    const ng = new T.Group(); ng.position.set(1.6, -2.1, s * 5.4); body.add(ng);
+    const nac = sh(new T.Mesh(GEO.nac || (GEO.nac = new T.CylinderGeometry(1.05, 0.85, 4.2, 18).rotateZ(Math.PI / 2)), grey)); ng.add(nac);
+    const intake = new T.Mesh(GEO.intk || (GEO.intk = new T.CircleGeometry(0.95, 18).rotateY(Math.PI / 2)), dark); intake.position.x = 2.11; ng.add(intake);
+    const fan = new T.Mesh(GEO.fan || (GEO.fan = new T.BoxGeometry(0.05, 1.7, 0.18)), grey); fan.position.x = 2.0; ng.add(fan); ng.userData.fan = fan;
+    const pyl = sh(new T.Mesh(GEO.pyl || (GEO.pyl = new T.BoxGeometry(2.4, 1.0, 0.3)), grey)); pyl.position.set(-0.2, 0.9, 0); ng.add(pyl);
+    (g.userData.eng || (g.userData.eng = [])).push(ng);
+  });
+  /* ekor: penstabil mendatar dan sirip bendera */
+  const hst = GEO.hst || (GEO.hst = (() => { const s = new T.Shape(); s.moveTo(1.2, 0); s.lineTo(-1.4, 5.6); s.lineTo(-2.6, 5.6); s.lineTo(-2.2, 0); s.closePath(); const e = new T.ExtrudeGeometry(s, { depth: 0.22, bevelEnabled: false }); e.rotateX(Math.PI / 2); return e; })());
+  [-1, 1].forEach((s) => { const m = sh(new T.Mesh(hst, grey)); m.position.set(-12.4, 0.6, 0); m.scale.z = s; body.add(m); });
+  const fin = GEO.fin || (GEO.fin = (() => { const s = new T.Shape(); s.moveTo(-9.8, 1.2); s.lineTo(-14.4, 7.6); s.lineTo(-16.4, 7.6); s.lineTo(-15.6, 1.2); s.closePath(); return new T.ExtrudeGeometry(s, { depth: 0.3, bevelEnabled: false }).translate(0, 0, -0.15); })());
+  body.add(sh(new T.Mesh(fin, red)));
+  const fl = new T.MeshBasicMaterial({ map: lmFlagTex() });
+  [-1, 1].forEach((s) => { const m = new T.Mesh(GEO.finf || (GEO.finf = new T.PlaneGeometry(3.6, 1.8)), fl); m.position.set(-14.1, 5.4, s * 0.17); if (s < 0) m.rotation.y = Math.PI; body.add(m); });
+  /* roda pendarat */
+  const gear = new T.Group(); body.add(gear); g.userData.gear = gear;
+  const wheel = GEO.whl || (GEO.whl = new T.CylinderGeometry(0.55, 0.55, 0.5, 14).rotateX(Math.PI / 2));
+  [[9.5, 0], [-1, -2.1], [-1, 2.1]].forEach(([x, z]) => { const st = new T.Mesh(GEO.strut || (GEO.strut = new T.CylinderGeometry(0.12, 0.12, 2.2, 6)), grey); st.position.set(x, -1.9, z); gear.add(st); const w = new T.Mesh(wheel, dark); w.position.set(x, -2.55, z); gear.add(w); });
+  /* lampu kilat di hujung sayap */
+  const beacon = new T.Mesh(GEO.bcn || (GEO.bcn = new T.SphereGeometry(0.22, 8, 6)), new T.MeshBasicMaterial({ color: 0xff3040 })); beacon.position.set(-2, 2.1, 0); body.add(beacon); g.userData.beacon = beacon;
+  g.userData.body = body;
+  if (opt.scale) g.scale.setScalar(opt.scale);
   return g;
+}
+/* tekstur landasan: garisan tengah, tepi, jalur ambang di kedua-dua hujung */
+function lmRunwayTex(len) {
+  return lmTex(1024, 128, (x, w, h) => {
+    x.fillStyle = "#3b4048"; x.fillRect(0, 0, w, h);
+    for (let i = 0; i < 300; i++) { x.fillStyle = "rgba(255,255,255," + (Math.random() * 0.04) + ")"; x.fillRect(Math.random() * w, Math.random() * h, 3, 2); }
+    x.fillStyle = "#f2f2ea"; x.fillRect(0, 6, w, 4); x.fillRect(0, h - 10, w, 4);
+    for (let i = 70; i < w - 70; i += 44) x.fillRect(i, h / 2 - 2, 24, 4);
+    for (const e of [10, w - 46]) for (let j = 0; j < 8; j++) x.fillRect(e, 18 + j * 12, 36, 7);
+    x.font = "900 26px sans-serif"; x.save(); x.translate(70, h / 2); x.rotate(Math.PI / 2); x.textAlign = "center"; x.fillText("09", 0, -6); x.restore();
+    x.save(); x.translate(w - 70, h / 2); x.rotate(-Math.PI / 2); x.textAlign = "center"; x.fillText("27", 0, -6); x.restore();
+  });
+}
+/* lapangan terbang lengkap dalam koordinat tempatan: landasan sepanjang paksi x, terminal di +z */
+function lmAirport(L) {
+  const g = new T.Group();
+  const rw = new T.Mesh(new T.PlaneGeometry(L * 2, 10).rotateX(-Math.PI / 2), new T.MeshLambertMaterial({ map: lmRunwayTex(L) })); rw.position.y = 0.12; rw.receiveShadow = true; g.add(rw);
+  const conc = lmMat("#b9b5ab");
+  g.add(lmMesh(lmBox(5, 0.18, 14), conc, 0, 0.09, 11, { ns: 1 }));
+  g.add(lmMesh(lmBox(46, 0.2, 18), conc, 0, 0.1, 25, { ns: 1 }));
+  /* terminal kaca */
+  g.add(lmMesh(lmBox(30, 3.2, 9), "#e5e2dc", 0, 1.6, 38));
+  const glass = GEO.glass || (GEO.glass = new T.MeshStandardMaterial({ color: 0x6fb6e6, roughness: 0.12, metalness: 0.6, transparent: true, opacity: 0.85 }));
+  const gl = new T.Mesh(lmBox(29, 3.8, 8.6), glass); gl.position.set(0, 5.1, 38); gl.castShadow = true; g.add(gl);
+  const roof = lmMesh(lmBox(33, 0.6, 12), "#f4f4f2", 0, 7.3, 38); roof.rotation.x = -0.06; g.add(roof);
+  /* jambatan penumpang ke pesawat diparkir */
+  g.add(lmMesh(lmBox(2.4, 2.4, 7), "#d4d8de", 6, 4.2, 30.4));
+  /* menara kawalan */
+  g.add(lmMesh(lmCyl(1.2, 1.6, 18, 12), "#e5e2dc", 21, 9, 34));
+  const cab = new T.Mesh(lmCyl(3, 2.4, 3, 12), glass); cab.position.set(21, 19.4, 34); g.add(cab);
+  g.add(lmMesh(lmCyl(3.4, 3.4, 0.6, 12), "#f4f4f2", 21, 21.2, 34));
+  /* stoking angin */
+  g.add(lmMesh(lmCyl(0.08, 0.08, 5, 6), "#cfcfcf", -L + 8, 2.5, -9));
+  const sock = lmMesh(new T.ConeGeometry(0.6, 2.4, 10, 1, true), "#ff7a1a", -L + 9.2, 4.6, -9); sock.rotation.z = Math.PI / 2; g.add(sock);
+  /* lampu tepi landasan */
+  const n = Math.floor(L * 2 / 8) + 1, lights = new T.InstancedMesh(GEO.rl || (GEO.rl = new T.SphereGeometry(0.28, 6, 4)), new T.MeshBasicMaterial({ color: 0xfff2b0 }), n * 2), mt = new T.Matrix4();
+  for (let i = 0; i < n; i++) for (const s of [-1, 1]) { mt.makeTranslation(-L + i * 8, 0.35, s * 5.4); lights.setMatrixAt(i * 2 + (s > 0 ? 1 : 0), mt); }
+  g.add(lights); g.userData.lights = lights;
+  /* pesawat diparkir di pintu berlepas */
+  const pl = lmPlane(); pl.position.set(-4, 0.2, 23); pl.rotation.y = Math.PI; g.add(pl); g.userData.parked = pl;
+  return g;
+}
+/* cari arah landasan yang muat di atas daratan dan tidak melanggar menara atau mercu tanda */
+function lmRunwayFit(cx, cz, blocked, state) {
+  for (const pass of state ? [1, 0] : [0]) for (const L of [46, 40, 34, 28]) {
+    for (let r = 0; r <= 48; r += 8) for (let ai = 0; ai < (r ? 12 : 1); ai++) {
+      const ox = cx + Math.cos(ai * 0.5236) * r, oz = cz + Math.sin(ai * 0.5236) * r;
+      for (let k = 0; k < 12; k++) {
+        const a = k * Math.PI / 12, ux = Math.cos(a), uz = Math.sin(a), px = -uz, pz = ux;
+        let ok = true;
+        for (let t = -L - 4; t <= L + 4 && ok; t += 6) for (const w of [-7, 0, 7]) { const x = ox + ux * t + px * w, z = oz + uz * t + pz * w, kk = lmAt(x, z); if (!kk || kk === "jambatan") ok = false; }
+        for (const off of [14, 25, 38, 45]) for (const t of [-22, 0, 22]) { if (!ok) break; const x = ox + px * off + ux * t, z = oz + pz * off + uz * t, kk = lmAt(x, z); if (!kk || kk === "jambatan") ok = false; }
+        if (ok && blocked.some((b) => lmSegDist(b.x, b.z, ox - ux * (L + 6), oz - uz * (L + 6), ox + ux * (L + 6), oz + uz * (L + 6)) < b.r + 10 || Math.hypot(b.x - (ox + px * 34), b.z - (oz + pz * 34)) < b.r + 26)) ok = false;
+        if (ok && pass && lmAt(ox, oz) !== state && lmAt(ox + px * 49, oz + pz * 49) !== state) ok = false;
+        if (ok) return { x: ox, z: oz, a: a, L: L };
+      }
+    }
+  }
+  return { x: cx, z: cz, a: 0, L: 26 };
+}
+
+/* ---------- kepulan wap / asap (kolam sprite) ---------- */
+function lmPuffs(g) {
+  if (g.puffs) return g.puffs;
+  const tex = lmTex(64, 64, (x) => { const gr = x.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, "rgba(255,255,255,.9)"); gr.addColorStop(1, "rgba(255,255,255,0)"); x.fillStyle = gr; x.fillRect(0, 0, 64, 64); });
+  const pool = [];
+  for (let i = 0; i < 140; i++) { const s = new T.Sprite(new T.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, opacity: 0 })); s.visible = false; g.scene.add(s); pool.push({ s: s, life: 0, max: 1, grow: 1 }); }
+  g.puffs = { pool: pool, i: 0 };
+  return g.puffs;
+}
+function lmPuff(g, x, y, z, size, life, grow, op) {
+  const P = lmPuffs(g), p = P.pool[P.i]; P.i = (P.i + 1) % P.pool.length;
+  p.s.position.set(x, y, z); p.s.scale.set(size, size, 1); p.s.visible = true; p.life = p.max = life; p.grow = grow; p.op = op == null ? 0.7 : op; p.s.material.opacity = p.op;
+}
+function lmPuffTick(g, dt) {
+  if (!g.puffs) return;
+  for (const p of g.puffs.pool) { if (p.life <= 0) continue; p.life -= dt; const k = p.life / p.max; p.s.material.opacity = Math.max(0, p.op * k); const sc = p.s.scale.x + p.grow * dt; p.s.scale.set(sc, sc, 1); if (p.life <= 0) p.s.visible = false; }
+}
+/* ---------- bunyi enjin (hingar bertapis) ---------- */
+function lmEngine(level) {
+  try {
+    if (LM.mute) level = 0;
+    if (!LM.eng) {
+      if (!level) return;
+      const C = window.AudioContext || window.webkitAudioContext; if (!C) return;
+      const ac = (typeof AR !== "undefined" && AR.ctx) || (LM.ac = LM.ac || new C()); if (ac.state === "suspended") ac.resume();
+      const buf = ac.createBuffer(1, ac.sampleRate * 2, ac.sampleRate), d = buf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      const src = ac.createBufferSource(); src.buffer = buf; src.loop = true;
+      const lp = ac.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 300;
+      const hum = ac.createOscillator(); hum.type = "sawtooth"; hum.frequency.value = 70; const hg = ac.createGain(); hg.gain.value = 0.15;
+      const gain = ac.createGain(); gain.gain.value = 0;
+      src.connect(lp); hum.connect(hg); hg.connect(lp); lp.connect(gain); gain.connect(ac.destination); src.start(); hum.start();
+      LM.eng = { ac: ac, src: src, hum: hum, lp: lp, gain: gain };
+    }
+    const e = LM.eng, t = e.ac.currentTime, vol = (typeof SET !== "undefined" && SET.sfx != null ? SET.sfx : 0.8) * 0.2;
+    e.gain.gain.setTargetAtTime(level * vol, t, 0.3); e.lp.frequency.setTargetAtTime(250 + level * 1400, t, 0.4); e.hum.frequency.setTargetAtTime(60 + level * 90, t, 0.4);
+    if (!level) { const x = e; LM.eng = null; setTimeout(() => { try { x.src.stop(); x.hum.stop(); x.gain.disconnect(); } catch (er) { /* abaikan */ } }, 1500); }
+  } catch (e) { /* abaikan */ }
+}
+function lmChime() { if (LM.mute) return; arBeep(880, 0.35, "sine", 0.05); setTimeout(() => arBeep(660, 0.5, "sine", 0.05), 260); }
+
+/* ---------- penerbangan sinematik ---------- */
+function lmBezier(a, b, c, d, t) { const u = 1 - t; return new T.Vector3(u * u * u * a.x + 3 * u * u * t * b.x + 3 * u * t * t * c.x + t * t * t * d.x, u * u * u * a.y + 3 * u * u * t * b.y + 3 * u * t * t * c.y + t * t * t * d.y, u * u * u * a.z + 3 * u * u * t * b.z + 3 * u * t * t * c.z + t * t * t * d.z); }
+function lmFlyStart(ap, dst) {
+  const g = LM.g; if (!g || g.flight) return;
+  const A = ap.rw, B = dst.rw, ab = new T.Vector3(B.x - A.x, 0, B.z - A.z).normalize();
+  let u = new T.Vector3(Math.cos(A.a), 0, Math.sin(A.a)); if (u.dot(ab) < 0) u.negate();
+  let v = new T.Vector3(Math.cos(B.a), 0, Math.sin(B.a)); if (v.dot(ab) < 0) v.negate();
+  const gyA = lmHRaw(A.x, A.z) + 0.2, gyB = lmHRaw(B.x, B.z) + 0.2;
+  const S = new T.Vector3(A.x - u.x * (A.L - 6), gyA, A.z - u.z * (A.L - 6)), P0 = new T.Vector3(A.x + u.x * A.L * 0.55, gyA, A.z + u.z * A.L * 0.55);
+  const P3 = new T.Vector3(B.x - v.x * (B.L - 8), gyB, B.z - v.z * (B.L - 8)), E = new T.Vector3(B.x + v.x * B.L * 0.45, gyB, B.z + v.z * B.L * 0.45);
+  const P1 = P0.clone().addScaledVector(u, 240).add(new T.Vector3(0, 150, 0)), P2 = P3.clone().addScaledVector(v, -460).add(new T.Vector3(0, 120, 0));
+  /* jadual panjang lengkok untuk kelajuan seragam */
+  const N = 160, pts = [], len = [0]; for (let i = 0; i <= N; i++) pts.push(lmBezier(P0, P1, P2, P3, i / N));
+  for (let i = 1; i <= N; i++) len.push(len[i - 1] + pts[i].distanceTo(pts[i - 1]));
+  const air = clamp(len[N] / 120, 9, 20);
+  const plane = lmPlane(); g.scene.add(plane); plane.position.copy(S);
+  if (ap.m && ap.m.userData.parked) ap.m.userData.parked.visible = false;
+  g.flight = { ap: ap, dst: dst, plane: plane, S: S, P0: P0, P3: P3, E: E, u: u, v: v, pts: pts, len: len, air: air, ph: "board", t: 0, yaw: Math.atan2(-u.z, u.x), pitch: 0, bank: 0, spd: 0, puffT: 0, code: "GA " + (100 + Math.floor(Math.random() * 800)) };
+  g.me.g.visible = false; g.ui = true; lmCardClose(); g.ui = true;
+  if (g.sky5) g.sky5.sp.visible = false;
+  lmFlightHud(true); lmPop("Sila pasang tali pinggang keledar"); lmChime();
+}
+function lmFlightHud(on) {
+  const r = LM.root; let h = LM.ui.fl;
+  if (!on) { if (h) h.remove(); LM.ui.fl = null; return; }
+  if (!h) {
+    h = el("div", { class: "lm-fl" }); LM.ui.fl = h; r.appendChild(h);
+    const f = LM.g.flight;
+    h.append(el("b", null, "✈ " + f.code + " · " + f.ap.n.replace("Lapangan Terbang ", "") + " → " + f.dst.n.replace("Lapangan Terbang ", "")), el("span", { class: "lm-fl-st" }, "Menaiki pesawat..."), el("div", { class: "lm-bar" }, el("i")));
+    const sk = lmBtn("Langkau ke pendaratan", "", () => { const g = LM.g; if (g && g.flight && g.flight.ph === "air") g.flight.t = g.flight.air * 0.86; else if (g && g.flight && (g.flight.ph === "roll" || g.flight.ph === "board")) { g.flight.ph = "air"; g.flight.t = g.flight.air * 0.86; } });
+    h.appendChild(sk);
+  }
+}
+function lmFlightTick(g, dt) {
+  const f = g.flight, pl = f.plane, cam = g.camera; f.t += dt;
+  const gear = pl.userData.gear, body = pl.userData.body;
+  let pos = pl.position, fwd = new T.Vector3(Math.cos(f.yaw), 0, -Math.sin(f.yaw)), st = "", prog = 0;
+  if (f.ending) return;
+  if (f.ph === "board") { st = "Menaiki pesawat..."; if (f.t > 1.6) { f.ph = "roll"; f.t = 0; lmEngine(0.55); } }
+  else if (f.ph === "roll") {
+    /* memecut di landasan */
+    const T0 = 4.2, k = Math.min(1, f.t / T0), d = f.S.distanceTo(f.P0) * k * k; pos.copy(f.S).addScaledVector(f.u, d); pos.y = f.S.y;
+    f.spd = 2 * f.S.distanceTo(f.P0) * k / T0; f.pitch = k > 0.8 ? (k - 0.8) * 0.5 : 0; st = "Memecut di landasan · " + Math.round(f.spd * 9) + " km/j";
+    lmEngine(0.55 + 0.45 * k);
+    if (Math.random() < dt * 20) lmPuff(g, pos.x - f.u.x * 4, pos.y + 0.5, pos.z - f.u.z * 4, 2, 0.8, 4, 0.35);
+    if (k >= 1) { f.ph = "air"; f.t = 0; lmPop("Berlepas!"); }
+  } else if (f.ph === "air") {
+    const k = Math.min(1, f.t / f.air), s = k * f.len[f.len.length - 1];
+    let i = 1; while (i < f.len.length - 1 && f.len[i] < s) i++;
+    const a = f.pts[i - 1], b = f.pts[i], fr = (s - f.len[i - 1]) / Math.max(0.001, f.len[i] - f.len[i - 1]);
+    const np = a.clone().lerp(b, fr);
+    if (k < 0.85) np.y = Math.max(np.y, lmHRaw(np.x, np.z) + 26 * Math.min(1, k * 8));
+    const dir = b.clone().sub(a).normalize(), nyaw = Math.atan2(-dir.z, dir.x);
+    let dy = nyaw - f.yaw; while (dy > Math.PI) dy -= 6.2832; while (dy < -Math.PI) dy += 6.2832;
+    f.bank += (clamp(-dy / Math.max(dt, 0.001) * 0.35, -0.6, 0.6) - f.bank) * Math.min(1, dt * 2);
+    f.yaw = nyaw; f.pitch += (Math.asin(clamp(dir.y, -1, 1)) - f.pitch) * Math.min(1, dt * 3);
+    pos.copy(np); f.spd = f.len[f.len.length - 1] / f.air;
+    gear.visible = k < 0.08 || k > 0.82; prog = k;
+    st = k > 0.8 ? "Menghampiri " + f.dst.n.replace("Lapangan Terbang ", "") : "Ketinggian " + Math.round(pos.y * 110).toLocaleString("ms-MY") + " kaki · " + Math.round(f.spd * 7) + " km/j";
+    lmEngine(k > 0.8 ? 0.45 : 0.75);
+    f.puffT -= dt;
+    if (f.puffT <= 0 && pos.y > 40) { f.puffT = 0.05; const side = new T.Vector3(-dir.z, 0, dir.x).normalize(); for (const s2 of [-5.4, 5.4]) lmPuff(g, pos.x - dir.x * 5 + side.x * s2, pos.y + 1, pos.z - dir.z * 5 + side.z * s2, 1.6, 2.6, 2.5, 0.55); }
+    if (k >= 1) { f.ph = "land"; f.t = 0; lmChime(); for (let j = 0; j < 10; j++) lmPuff(g, pos.x + (Math.random() - 0.5) * 6, pos.y + 0.6, pos.z + (Math.random() - 0.5) * 6, 2.5, 1.4, 5, 0.7); lmPop("Mendarat!"); }
+  } else if (f.ph === "land") {
+    /* larian selepas mendarat, perlahan hingga berhenti */
+    const T1 = 3.6, k = Math.min(1, f.t / T1), d = f.P3.distanceTo(f.E) * (1 - (1 - k) * (1 - k)); pos.copy(f.P3).addScaledVector(f.v, d); pos.y = f.P3.y;
+    f.yaw = Math.atan2(-f.v.z, f.v.x); f.pitch *= 0.9; f.bank *= 0.85; gear.visible = true; prog = 1; st = "Selamat mendarat · " + Math.round((1 - k) * 230) + " km/j";
+    lmEngine(0.35 * (1 - k));
+    if (k >= 1) { lmFlyEnd(g); return; }
+  }
+  pl.rotation.set(0, f.yaw, 0); body.rotation.set(f.bank, 0, f.pitch, "YXZ");
+  for (const e of pl.userData.eng || []) e.userData.fan.rotation.x += dt * 30;
+  pl.userData.beacon.material.color.setHex((g.T * 2) % 1 < 0.15 ? 0xff3040 : 0x401010);
+  /* kamera mengekori */
+  fwd = new T.Vector3(Math.cos(f.yaw), 0, -Math.sin(f.yaw));
+  const back = f.ph === "air" ? 46 : 34, up = f.ph === "air" ? 15 : 9, side = f.ph === "board" ? 22 : 0;
+  const want = pos.clone().addScaledVector(fwd, -back).add(new T.Vector3(-fwd.z * side, up + 3, fwd.x * side));
+  want.y = Math.max(want.y, lmGround(want.x, want.z) + 3);
+  cam.position.lerp(want, Math.min(1, dt * (f.ph === "air" ? 2.2 : 3)));
+  cam.lookAt(pos.x + fwd.x * 12, pos.y + 4, pos.z + fwd.z * 12);
+  if (g.dome) g.dome.position.copy(cam.position);
+  lmSkyPlace(g);
+  if (g.sun) { const sd = g.sunDir || new T.Vector3(0.45, 0.8, 0.3); g.sun.position.set(pos.x + sd.x * 150, pos.y + sd.y * 150, pos.z + sd.z * 150); g.sun.target.position.copy(pos); g.sun.target.updateMatrixWorld(); if (g.sunDisc) g.sunDisc.position.set(cam.position.x + sd.x * 1100, cam.position.y + sd.y * 1100, cam.position.z + sd.z * 1100); }
+  /* pemain ikut pesawat (untuk peta mini dan rakan) */
+  g.p.x = pos.x; g.p.z = pos.z; g.p.y = pos.y; g.p.yaw = Math.atan2(fwd.x, fwd.z);
+  const h = LM.ui.fl; if (h) { const s = h.querySelector(".lm-fl-st"); if (s && s.textContent !== st) s.textContent = st; const bi = h.querySelector(".lm-bar i"); if (bi) bi.style.width = Math.round(prog * 100) + "%"; }
+}
+function lmFlyEnd(g) {
+  const f = g.flight; if (!f || f.ending) return; f.ending = true;
+  const fade = LM.ui.fade; if (fade) fade.style.opacity = "1";
+  setTimeout(() => {
+    if (!LM.g) return;
+    g.scene.remove(f.plane); if (f.ap.m && f.ap.m.userData.parked) f.ap.m.userData.parked.visible = true;
+    g.flight = null; g.me.g.visible = true; g.ui = false; lmFlightHud(false); lmEngine(0);
+    if (g.sky5) g.sky5.sp.visible = LM.st.sky !== 0;
+    const d = f.dst; g.p.x = d.x; g.p.z = d.z; g.p.y = lmGround(d.x, d.z); g.p.vx = g.p.vz = 0; g.p.vy = 0;
+    g.cam.yaw = Math.atan2(d.x - d.rw.x, d.z - d.rw.z); g.camera.position.set(d.x + Math.sin(g.cam.yaw) * 18, g.p.y + 8, d.z + Math.cos(g.cam.yaw) * 18);
+    if (fade) fade.style.opacity = "0";
+    LM.st.fl = (LM.st.fl | 0) + 1; if (!LM.st.ap || typeof LM.st.ap !== "object") LM.st.ap = {};
+    let msg = "Selamat datang ke " + DATA.negeri[d.k].pendek + "!";
+    if (!LM.st.ap[d.id]) { LM.st.ap[d.id] = Date.now(); let n = 0; try { n = gdCoin(5); } catch (e) { n = 0; } if (n) msg += " Cop lapangan terbang +" + n + " syiling"; }
+    lmSave(); lmPop(msg);
+  }, 450);
+}
+/* ---------- lalu lintas udara: pesawat lain melintas di langit ---------- */
+function lmTrafficInit(g) {
+  const aps = g.items.filter((x) => x.kind === "ap"); if (aps.length < 2) return;
+  g.traffic = [];
+  for (let i = 0; i < (LM.gq ? 3 : 2); i++) { const p = lmPlane(); g.scene.add(p); const t = { p: p, a: null, b: null, k: 1 + Math.random(), sp: 85 + Math.random() * 30, y: 175 + i * 18 }; g.traffic.push(t); }
+}
+function lmTrafficTick(g, dt) {
+  if (!g.traffic) return;
+  const aps = g.items.filter((x) => x.kind === "ap");
+  for (const t of g.traffic) {
+    if (t.k >= 1) { t.a = pick(aps); do { t.b = pick(aps); } while (t.b === t.a); t.k = 0; t.d = Math.hypot(t.b.x - t.a.x, t.b.z - t.a.z); }
+    t.k += dt * t.sp / Math.max(1, t.d);
+    const x = t.a.x + (t.b.x - t.a.x) * t.k, z = t.a.z + (t.b.z - t.a.z) * t.k;
+    t.p.position.set(x, t.y, z); t.p.rotation.y = Math.atan2(-(t.b.z - t.a.z), t.b.x - t.a.x);
+    t.p.userData.gear.visible = false;
+    t.pt = (t.pt || 0) - dt;
+    if (t.pt <= 0 && Math.hypot(x - g.p.x, z - g.p.z) < 900) { t.pt = 0.12; const dx = (t.b.x - t.a.x) / t.d, dz = (t.b.z - t.a.z) / t.d; lmPuff(g, x - dx * 6, t.y + 2.5, z - dz * 6, 2, 3.5, 2.2, 0.5); }
+  }
 }
 function lmCoinMesh() {
   if (!GEO.coin) GEO.coin = new T.CylinderGeometry(0.9, 0.9, 0.25, 14);
@@ -655,13 +934,21 @@ function lmBuildWorld(g) {
     avoid.push({ x: w.x, z: w.z, r: Math.max(md.r, 14) }, { x: pl.bx, z: pl.bz, r: 6 });
     lmBoardRefresh(pl);
   });
-  /* lapangan terbang */
+  /* lapangan terbang lengkap: landasan dipilih supaya muat di darat dan jauh daripada menara serta mercu tanda */
   AIRPORTS.forEach((a) => {
     const [id, k, nama, sx, sy] = a; if (!DATA.negeri[k]) return;
-    const w = toW(k, sx, sy), m = lmAirport(a); m.position.set(w.x, 0, w.z); g.scene.add(m); gnd.push([m, 0]); lmPad(g, w.x, w.z, 16);
-    const lb = lmLabel("✈ " + nama, { fs: 28, k: 0.03, bg: "rgba(10,40,80,.8)", bd: "#7fb7e8" }); lb.position.set(w.x, 12, w.z); g.scene.add(lb); gnd.push([lb, 12]);
-    g.items.push({ kind: "ap", id: id, k: k, n: nama, x: w.x, z: w.z, r: 0, ir: 13, lb: lb });
-    avoid.push({ x: w.x, z: w.z, r: 16 });
+    const c = toW(k, sx, sy), blocked = used.map((u) => ({ x: u.x, z: u.z, r: 8 })).concat(placed.map((q) => ({ x: q.x, z: q.z, r: q.r })));
+    const fit = lmRunwayFit(c.x, c.z, blocked, k), ux = Math.cos(fit.a), uz = Math.sin(fit.a), px = -uz, pz = ux, sh = { x: fit.x, z: fit.z, h: null };
+    const m = lmAirport(fit.L); m.position.set(fit.x, 0, fit.z); m.rotation.y = -fit.a; g.scene.add(m); gnd.push([m, 0]);
+    for (let t = -fit.L - 6; t <= fit.L + 6; t += 8) lmPad(g, fit.x + ux * t, fit.z + uz * t, 9, false, sh);
+    for (const t of [-20, 0, 20]) for (const off of [14, 24, 34, 44]) lmPad(g, fit.x + px * off + ux * t, fit.z + pz * off + uz * t, 9, false, sh);
+    const ex = fit.x + px * 49, ez = fit.z + pz * 49;
+    const lb = lmLabel("✈ " + nama, { fs: 28, k: 0.03, bg: "rgba(10,40,80,.8)", bd: "#7fb7e8" }); lb.position.set(fit.x + px * 38, 13, fit.z + pz * 38); g.scene.add(lb); gnd.push([lb, 13]);
+    g.items.push({ kind: "ap", id: id, k: k, n: nama, x: ex, z: ez, r: 0, ir: 11, lb: lb, m: m, rw: { x: fit.x, z: fit.z, a: fit.a, L: fit.L } });
+    for (const t of [-11, 0, 11]) g.cols.push({ x: fit.x + px * 38 + ux * t, z: fit.z + pz * 38 + uz * t, r: 5.5, h: 8 });
+    g.cols.push({ x: fit.x + ux * 21 + px * 34, z: fit.z + uz * 21 + pz * 34, r: 2.4, h: 22 });
+    for (let t = -fit.L; t <= fit.L; t += 14) avoid.push({ x: fit.x + ux * t, z: fit.z + uz * t, r: 12 });
+    for (const t of [-18, 0, 18]) avoid.push({ x: fit.x + px * 32 + ux * t, z: fit.z + pz * 32 + uz * t, r: 16 });
   });
   /* rupa bumi: ketinggian, tapak rata, kemudian semua objek diletakkan di atas tanah */
   lmTerrainBase(g); lmBuildTerrain(g);
@@ -694,7 +981,7 @@ function lmAvatar(code, name, me) {
   return av;
 }
 function lmAnim(av, moving, air, dt, speed) { AV3.anim(av, moving, air, dt, speed, LM.g && LM.g.scene); }
-function lmAvatarDrop(g, av) { g.scene.remove(av.g); try { AV3.dispose(av, g.scene); } catch (e) { /* abaikan */ } }
+function lmAvatarDrop(g, av, e) { g.scene.remove(av.g); try { AV3.dispose(av, g.scene); } catch (x) { /* abaikan */ } if (e && e.plane) g.scene.remove(e.plane); }
 function lmBubble(av, text) {
   if (av.bub) { av.g.remove(av.bub); av.bub = null; }
   if (!text) return;
@@ -768,7 +1055,7 @@ async function lmNetJoin(code, kind) {
 }
 function lmNetLeave() {
   LM.tok++; const r = LM.room; LM.room = null;
-  const g = LM.g; if (g) for (const id in LM.peers) lmAvatarDrop(g, LM.peers[id].av);
+  const g = LM.g; if (g) for (const id in LM.peers) lmAvatarDrop(g, LM.peers[id].av, LM.peers[id]);
   LM.peers = {};
   if (r) { try { const x = r.leave(); if (x && x.catch) x.catch(() => {}); } catch (e) { /* abaikan */ } }
 }
@@ -783,15 +1070,17 @@ function lmNet(g, dt, ts) {
     const e = LM.peers[id], k = Math.min(1, dt * 9);
     e.x += (e.tx - e.x) * k; e.y += (e.ty - e.y) * k; e.z += (e.tz - e.z) * k;
     let da = e.tr - e.r; while (da > Math.PI) da -= 6.2832; while (da < -Math.PI) da += 6.2832; e.r += da * k;
-    e.av.g.position.set(e.x, e.y, e.z); e.av.g.rotation.y = e.r; lmAnim(e.av, e.m, e.a, dt, 1);
+    e.av.g.position.set(e.x, e.y, e.z); e.av.g.rotation.y = e.r; e.av.g.visible = !e.pl; if (!e.pl) lmAnim(e.av, e.m, e.a, dt, 1);
+    if (e.pl && !e.plane) { e.plane = lmPlane(); g.scene.add(e.plane); }
+    if (e.plane) { e.plane.visible = e.pl; if (e.pl) { e.plane.position.set(e.x, e.y, e.z); e.plane.rotation.y = Math.atan2(-Math.cos(e.r), Math.sin(e.r)); e.plane.userData.body.rotation.set(e.pb, 0, e.pp, "YXZ"); } }
     if (e.av.bub && (e.av.bubT -= dt) <= 0) lmBubble(e.av, "");
   }
   const r = LM.room; if (!r) return;
   const p = g.p;
   if (ts - LM.sent > 200) {
     LM.sent = ts;
-    const o = { x: +p.x.toFixed(1), y: +p.y.toFixed(1), z: +p.z.toFixed(1), r: +p.yaw.toFixed(2), m: p.moving ? 1 : 0, a: p.on ? 0 : 1, n: cleanName(P.nama) || "Pelajar", c: g.myCode, st: lmStamps() };
-    const sig = [o.x, o.y, o.z, o.r, o.m, o.a, o.st].join(",");
+    const o = { x: +p.x.toFixed(1), y: +p.y.toFixed(1), z: +p.z.toFixed(1), r: +p.yaw.toFixed(2), m: p.moving ? 1 : 0, a: p.on ? 0 : 1, n: cleanName(P.nama) || "Pelajar", c: g.myCode, st: lmStamps(), pl: g.flight ? 1 : 0, pp: g.flight ? +g.flight.pitch.toFixed(2) : 0, pb: g.flight ? +g.flight.bank.toFixed(2) : 0 };
+    const sig = [o.x, o.y, o.z, o.r, o.m, o.a, o.st, o.pl, o.pp, o.pb].join(",");
     if (sig !== LM.lastSig) { LM.lastSig = sig; try { const x = r.presence(o); if (x && x.catch) x.catch(() => {}); } catch (e) { /* abaikan */ } }
   }
   if (ts - LM.pollT > 220) {
@@ -801,14 +1090,14 @@ function lmNet(g, dt, ts) {
       if (pr.isMe || !pr.presence || typeof pr.presence !== "object" || n >= 30) continue;
       const v = pr.presence; if (typeof v.x !== "number" || typeof v.z !== "number") continue;
       n++; seen[pr.peer] = 1;
-      const x = clamp(v.x, -1600, 1800), y = clamp(+v.y || 0, -5, 130), z = clamp(v.z, -800, 800), nm = cleanName(String(v.n || "")) || "Pelajar";
+      const x = clamp(v.x, -1600, 1800), y = clamp(+v.y || 0, -5, 400), z = clamp(v.z, -800, 800), nm = cleanName(String(v.n || "")) || "Pelajar";
       let e = LM.peers[pr.peer];
-      if (e && (e.c !== v.c || e.n !== nm)) { lmAvatarDrop(g, e.av); e = null; }
+      if (e && (e.c !== v.c || e.n !== nm)) { lmAvatarDrop(g, e.av, e); e = null; }
       if (!e) { const av = lmAvatar(v.c, nm, false); g.scene.add(av.g); e = LM.peers[pr.peer] = { x: x, y: y, z: z, r: +v.r || 0, av: av, c: v.c, n: nm, en: v.en | 0 }; } /* emote lama sebelum kita masuk tidak dipaparkan */
-      e.tx = x; e.ty = y; e.tz = z; e.tr = +v.r || 0; e.m = !!v.m; e.a = !!v.a; e.st = clamp(v.st | 0, 0, 999);
+      e.tx = x; e.ty = y; e.tz = z; e.tr = +v.r || 0; e.m = !!v.m; e.a = !!v.a; e.st = clamp(v.st | 0, 0, 999); e.pl = !!v.pl; e.pp = clamp(+v.pp || 0, -1, 1); e.pb = clamp(+v.pb || 0, -1, 1);
       if (typeof v.e === "string" && EMOTE[v.e] && (v.en | 0) !== e.en) { lmBubble(e.av, EMOTE[v.e]); e.en = v.en | 0; }
     }
-    for (const id in LM.peers) if (!seen[id]) { lmAvatarDrop(g, LM.peers[id].av); delete LM.peers[id]; }
+    for (const id in LM.peers) if (!seen[id]) { lmAvatarDrop(g, LM.peers[id].av, LM.peers[id]); delete LM.peers[id]; }
   }
 }
 function lmFriendsNear(g, r) {
@@ -892,6 +1181,8 @@ const LM_CSS = `
 #lmOv input.lm-in{font:800 18px Nunito,sans-serif;text-transform:uppercase;letter-spacing:.2em;width:9em;padding:8px 10px;border-radius:10px;border:2px solid #2a5a82;background:#0a2034;color:#fff}
 #lmOv .lm-big{position:absolute;inset:0;z-index:3;background:rgba(3,12,22,.8);display:grid;place-items:center}
 #lmOv .lm-big canvas{max-width:96vw;max-height:80vh;border-radius:16px;border:2px solid rgba(255,255,255,.3);background:#0d4f86;cursor:crosshair}
+#lmOv .lm-fl{position:absolute;left:50%;top:calc(max(10px,env(safe-area-inset-top)) + 56px);transform:translateX(-50%);width:min(480px,92vw);background:rgba(8,24,40,.82);border:1px solid rgba(255,255,255,.25);border-radius:16px;padding:10px 14px;display:grid;gap:6px;z-index:2;text-align:center}
+#lmOv .lm-fl b{font:900 16px Fredoka,Nunito,sans-serif;color:#ffd45a}#lmOv .lm-fl .lm-fl-st{font-size:14px;color:#d4e2ee}#lmOv .lm-fl button{justify-self:center;font-size:13px;padding:6px 12px}
 #lmOv .lm-fade{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .35s;z-index:4}
 #lmOv .lm-toast{position:absolute;left:50%;top:22%;transform:translateX(-50%);font:900 22px Fredoka,Nunito,sans-serif;color:#ffd45a;text-shadow:0 2px 0 #6b4a00,0 4px 18px rgba(0,0,0,.6);pointer-events:none;animation:lmUp 1.6s ease-out forwards;z-index:2;white-space:nowrap}
 @keyframes lmUp{0%{opacity:0;transform:translate(-50%,10px) scale(.8)}15%{opacity:1;transform:translate(-50%,0) scale(1.1)}100%{opacity:0;transform:translate(-50%,-40px)}}
@@ -1100,14 +1391,14 @@ function lmQuestRender() {
 function lmAirportOpen(ap) {
   const g = LM.g;
   lmCard((b) => {
-    b.append(el("div", { class: "lm-kick" }, "Lapangan terbang"), el("h2", null, ap.n), el("p", null, "Pilih destinasi. Jawab satu soalan pas masuk dengan betul untuk terbang."));
+    b.append(el("div", { class: "lm-kick" }, "Lapangan terbang · Gempur Air"), el("h2", null, ap.n), el("p", null, "Pilih destinasi. Jawab satu soalan pas masuk dengan betul, kemudian naik pesawat dan nikmati penerbangan. Pendaratan pertama di setiap lapangan terbang memberi syiling."));
     const grid = el("div", { class: "lm-grid" });
     g.items.filter((x) => x.kind === "ap" && x.id !== ap.id).forEach((d) => {
       grid.appendChild(lmBtn("✈ " + d.n + " (" + DATA.negeri[d.k].pendek + ")", "", () => {
         const tids = DATA.topik.filter((t) => t.negeri === d.k).map((t) => t.id);
         lmQuiz({ kick: "Pas masuk", title: "Ke " + d.n, pass: 1, qs: lmPickQs(tids, 1), onDone: (pass) => {
           if (!pass) { lmCard((b2) => { b2.append(el("h2", null, "Pas masuk ditolak"), el("p", null, "Jawapan belum tepat. Cuba lagi.")); b2.append(el("div", { class: "lm-row" }, lmBtn("Cuba lagi", "pri", () => lmAirportOpen(ap)), lmBtn("Tutup", "", lmCardClose))); }); return; }
-          lmCardClose(); lmTeleport(d.x + 14, d.z + 8, "Selamat datang ke " + DATA.negeri[d.k].pendek + "!");
+          lmCardClose(); lmFlyStart(ap, d);
         } });
       }));
     });
@@ -1127,6 +1418,7 @@ function lmPassport() {
     const s = lmSummary();
     b.append(el("div", { class: "lm-kick" }, "Pasport Ziarah · " + (cleanName(P.nama) || "Pelajar")), el("h2", null, s.pl + "/" + s.plN + " cop · " + s.tw + "/" + s.twN + " menara"));
     if (s.pl >= s.plN) b.append(el("p", null, "Gelaran: Pengembara META GEMPUR! Anda telah menziarahi semua tempat."));
+    b.append(el("p", { class: "lm-ex" }, "✈ Penerbangan Gempur Air: " + (LM.st.fl | 0) + " · Lapangan terbang didarati: " + Object.keys(LM.st.ap || {}).length + "/" + AIRPORTS.length));
     const grid = el("div", { class: "lm-grid" });
     Object.keys(DATA.negeri).forEach((k) => {
       const pls = PLACES.filter((p) => p[1] === k), tws = DATA.topik.filter((t) => t.negeri === k);
@@ -1213,7 +1505,7 @@ async function lmSkyLoad(g) {
   const c = sk.tex.userData.c; sk.tex.userData.draw(c.getContext("2d"), c.width, c.height); sk.tex.needsUpdate = true;
 }
 function lmSkyPlace(g) {
-  const sk = g.sky5; if (!sk || !sk.sp.visible) return;
+  const sk = g.sky5; if (!sk || !sk.sp.visible || g.flight) return;
   /* sentiasa terapung di langit di hadapan kamera, berhampiran bahagian atas skrin */
   const c = g.cam, cp = g.camera.position, D = 430, el = 0.5236 - c.pitch - (TOUCH ? 0.19 : 0.23);
   sk.sp.position.set(cp.x - Math.sin(c.yaw) * D, cp.y + Math.tan(el) * D, cp.z - Math.cos(c.yaw) * D);
@@ -1300,7 +1592,7 @@ function lmBuildScene() {
   LM.g = g;
   lmBuildSky(g); lmBuildWorld(g); lmBuildSea(g); lmDayNight(g);
   g.myCode = lmMyCode(); g.me = lmAvatar(g.myCode, P.nama, true); scene.add(g.me.g);
-  lmSkyInit(g);
+  lmSkyInit(g); lmTrafficInit(g);
   return g;
 }
 function lmSpawn(g) {
@@ -1340,7 +1632,7 @@ function lmHud() {
 }
 function lmHudTick(g) {
   const ui = LM.ui, k = lmAt(g.p.x, g.p.z), s = lmSummary();
-  const nm = k === "jambatan" ? "Jambatan Pulau Pinang" : (DATA.negeri[k] ? DATA.negeri[k].nama : "Laut");
+  const nm = g.flight && g.flight.ph === "air" ? "Di udara ✈ " + (DATA.negeri[k] ? DATA.negeri[k].pendek : "Laut China Selatan") : k === "jambatan" ? "Jambatan Pulau Pinang" : (DATA.negeri[k] ? DATA.negeri[k].nama : "Laut");
   if (ui.state.textContent !== nm) { ui.state.textContent = nm; if (DATA.negeri[k] && g.lastK && g.lastK !== k) lmPop(DATA.negeri[k].pendek); }
   if (DATA.negeri[k]) g.lastK = k;
   ui.coin.innerHTML = ""; ui.coin.append("🪙 ", el("b", null, String(P.coin | 0)));
@@ -1432,7 +1724,8 @@ function lmLoop(ts) {
   LM.raf = requestAnimationFrame(lmLoop);
   const g = LM.g, dt = clamp((ts - (g.last || ts)) / 1000, 0, 0.05); g.last = ts; g.T += dt;
   try {
-    lmUpdatePlayer(g, dt); lmUpdateCam(g, dt); lmNet(g, dt, ts);
+    if (g.flight) lmFlightTick(g, dt); else { lmUpdatePlayer(g, dt); lmUpdateCam(g, dt); }
+    lmNet(g, dt, ts); lmPuffTick(g, dt); lmTrafficTick(g, dt);
     if (g.me.bub && (g.me.bubT -= dt) <= 0) lmBubble(g.me, "");
     if ((g.nearT -= dt) <= 0) { g.nearT = 0.15; lmNearTick(g); }
     if ((g.hudT -= dt) <= 0) { g.hudT = 0.25; lmHudTick(g); }
@@ -1480,7 +1773,7 @@ function lmStart(code, kind) {
   }, 30);
 }
 function lmClose() {
-  LM.on = false; cancelAnimationFrame(LM.raf); lmNetLeave();
+  LM.on = false; cancelAnimationFrame(LM.raf); lmNetLeave(); lmEngine(0);
   window.removeEventListener("keydown", lmKey, true); window.removeEventListener("keyup", lmKey, true); window.removeEventListener("resize", lmResize);
   const g = LM.g;
   if (g) {
@@ -1493,6 +1786,6 @@ function lmClose() {
   document.body.classList.remove("ar-lock");
 }
 /* untuk ujian automatik */
-LM._g = (x, z) => lmGround(x, z);
+LM._g = (x, z) => lmGround(x, z); LM._fly = (a, d) => lmFlyStart(a, d);
 LM._t = { lmAt: lmAt, toW: toW, PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
 })();
