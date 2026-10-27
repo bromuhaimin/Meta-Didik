@@ -1476,7 +1476,7 @@ function lmRailsPath(g, avoid) {
 /* dipanggil oleh lmBuildTerrain selepas tapak rata: potong bukit / tambak rendah di sepanjang landasan */
 function lmRailCarve(g) {
   if (!g.rails) return;
-  const { cs, nx, nz, h, x0, z0, land } = TER, W0 = 4.5, W1 = 18, best = new Float32Array(nx * nz).fill(1e9), tgt = new Float32Array(nx * nz);
+  const { cs, nx, nz, h, x0, z0, land } = TER, W0 = 4.5, W1 = 18, best = new Float32Array(nx * nz).fill(1e9), raw = new Float32Array(nx * nz).fill(1e9), tgt = new Float32Array(nx * nz);
   for (const R of g.rails) {
     if (!R.pts) continue;
     const Wr = R.L.road ? 8 : 0;
@@ -1484,7 +1484,8 @@ function lmRailCarve(g) {
       if (p.tun) continue;
       const W2 = W1 + Wr, xa = Math.max(0, Math.floor((p.x - W2 - x0) / cs)), xb = Math.min(nx - 1, Math.ceil((p.x + W2 - x0) / cs));
       const za = Math.max(0, Math.floor((p.z - W2 - z0) / cs)), zb = Math.min(nz - 1, Math.ceil((p.z + W2 - z0) / cs));
-      for (let z = za; z <= zb; z++) for (let x = xa; x <= xb; x++) { const i = z * nx + x, d = Math.max(0, Math.hypot(x0 + x * cs - p.x, z0 + z * cs - p.z) - Wr); if (d < best[i]) { best[i] = d; tgt[i] = p.y - (Wr ? 0.2 : 0.75); } }
+      /* keutamaan ikut jarak sebenar ke garisan (landasan dan lebuh raya yang berdekatan tidak saling menimbus); lebar rata lebuh raya disimpan berasingan */
+      for (let z = za; z <= zb; z++) for (let x = xa; x <= xb; x++) { const i = z * nx + x, d0 = Math.hypot(x0 + x * cs - p.x, z0 + z * cs - p.z); if (d0 < raw[i]) { raw[i] = d0; best[i] = Math.max(0, d0 - Wr); tgt[i] = p.y - (Wr ? 0.2 : 0.75); } }
     }
   }
   for (let i = 0; i < best.length; i++) {
