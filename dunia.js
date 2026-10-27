@@ -482,7 +482,7 @@ function lmModel(type, rnd) {
       g.add(lmMesh(lmBox(6, 1.6, 2), "#9aa6b2", 0, 24, 0)); r = 10; break;
     case "gunung": /* gunung kini puncak rupa bumi yang boleh didaki; di puncak ada tugu dan bendera */
       g.add(lmMesh(new T.DodecahedronGeometry(1.6, 0), "#8d8576", 0, 0.8, 0)); g.add(lmMesh(new T.DodecahedronGeometry(1.1, 0), "#9a9283", 0.9, 1.9, 0.3));
-      g.add(lmMesh(lmCyl(0.1, 0.1, 6, 6), "#d9d9d9", 0, 3.5, 0)); g.add(lmMesh(lmBox(2.6, 1.6, 0.1), "#d63b3b", 1.3, 5.6, 0)); g.add(lmMesh(lmBox(2.6, 0.8, 0.11), "#f4f4f4", 1.3, 5.2, 0)); r = 0; break;
+      g.add(lmMesh(lmCyl(0.1, 0.1, 6, 6), "#d9d9d9", 0, 3.5, 0)); { const jg = new T.Mesh(GEO.pflag || (GEO.pflag = new T.PlaneGeometry(2.8, 1.4)), new T.MeshBasicMaterial({ map: lmFlagTex(), side: T.DoubleSide })); jg.position.set(1.45, 5.7, 0); g.add(jg); } r = 0; break; /* Jalur Gemilang */
     case "bukit": /* bukit rupa bumi; pondok rehat di puncak */
       g.add(lmMesh(lmBox(4, 3, 4), "#c96f4a", 0, 1.5, 0)); g.add(lmMesh(new T.ConeGeometry(3.4, 2.4, 4), "#7a3a2a", 0, 4.2, 0)); r = 3; break;
     case "gua":
@@ -1304,7 +1304,7 @@ function lmNet(g, dt, ts) {
   if (LM.vc && ts - (LM.vcT || 0) > 700) { LM.vcT = ts; lmVoiceTick(g); }
   if (ts - LM.sent > (LM.roomKind === "open" ? 500 : 200)) {
     LM.sent = ts;
-    const o = { x: +p.x.toFixed(1), y: +p.y.toFixed(1), z: +p.z.toFixed(1), r: +p.yaw.toFixed(2), m: p.moving ? 1 : 0, a: p.on ? 0 : 1, n: lmMyName(), c: g.myCode, st: lmStamps(), fy: g.sail ? 1 : 0, pl: g.flight ? 1 : 0, pp: g.flight ? +g.flight.pitch.toFixed(2) : 0, pb: g.flight ? +g.flight.bank.toFixed(2) : 0 };
+    const o = { x: +p.x.toFixed(1), y: +p.y.toFixed(1), z: +p.z.toFixed(1), r: +p.yaw.toFixed(2), m: p.moving ? 1 : 0, a: p.on ? 0 : 1, n: lmMyName(), sh: LM.sh || "", c: g.myCode, st: lmStamps(), fy: g.sail ? 1 : 0, pl: g.flight ? 1 : 0, pp: g.flight ? +g.flight.pitch.toFixed(2) : 0, pb: g.flight ? +g.flight.bank.toFixed(2) : 0 };
     const sig = [o.x, o.y, o.z, o.r, o.m, o.a, o.st, o.pl, o.pp, o.pb, o.fy].join(",");
     if (sig !== LM.lastSig) { LM.lastSig = sig; try { const x = r.presence(o); if (x && x.catch) x.catch(() => {}); } catch (e) { /* abaikan */ } }
   }
@@ -1323,6 +1323,7 @@ function lmNet(g, dt, ts) {
       e.tx = x; e.ty = y; e.tz = z; e.tr = +v.r || 0; e.m = !!v.m; e.a = !!v.a; e.st = clamp(v.st | 0, 0, 999); e.pl = !!v.pl; e.fy = !!v.fy; e.pp = clamp(+v.pp || 0, -1, 1); e.pb = clamp(+v.pb || 0, -1, 1);
       if (typeof v.e === "string" && EMOTE[v.e] && (v.en | 0) !== e.en) { if (!lmMuted(pr.peer)) lmBubble(e.av, EMOTE[v.e]); e.en = v.en | 0; }
       if (typeof v.ct === "string" && (v.cn | 0) !== e.cn) { e.cn = v.cn | 0; lmChatGot(e, v.ct); }
+      e.sh = typeof v.sh === "string" ? v.sh.slice(0, 8) : "";
       e.vo = !!v.vo && LM.roomKind !== "open"; e.tk = e.vo && !!v.tk && !lmMuted(pr.peer); e.vs = v.vs && typeof v.vs === "object" ? v.vs : null;
     }
     for (const id in LM.peers) if (!seen[id]) { lmAvatarDrop(g, LM.peers[id].av, LM.peers[id]); delete LM.peers[id]; }
@@ -1399,6 +1400,24 @@ function lmShortName(s) {
   const w = cleanName(s).split(" ").filter(Boolean);
   const pk = w.find((x) => !NM_SKIP[x.toLowerCase()]) || w[0] || "";
   return pk.slice(0, 12) || "Pelajar";
+}
+/* rakan = semua pemain dalam bilik sekolah/kod, atau pemain sekolah yang sama di Dunia Terbuka (cincangan sekolah sahaja dihantar) */
+function lmMySh() { const sid = typeof mySid === "function" ? mySid() : ""; return sid ? String(hashStr("sk:" + sid)).slice(0, 6) : ""; }
+function lmFriend(e) { return LM.roomKind !== "open" || (!!e.sh && e.sh === LM.sh); }
+function lmGoPeer(id) {
+  const g = LM.g, e = LM.peers[id]; if (!g || !e) return;
+  g.wp = { x: e.x, z: e.z, n: e.n, pid: id }; lmWpSet(); lmPop("Ikut tiang merah ke " + e.n);
+}
+/* bilangan pemain Dunia Terbuka di zon lain (daripada daftar lmo; dibaca apabila peta besar dibuka) */
+async function lmZoneCounts() {
+  if (LM.roomKind !== "open" || !FB.url || Date.now() - (LM.zoneAt || 0) < 20000) return;
+  LM.zoneAt = Date.now();
+  try {
+    const all = (await FB.req("GET", "lmo")) || {}, me = FB.getUid(), out = {}; let now = 0;
+    for (const k in all) if (all[k] && typeof all[k].t === "number") now = Math.max(now, all[k].t);
+    for (const k in all) { const v = all[k]; if (k === me || !v || typeof v.t !== "number" || now - v.t > LMO.TTL || typeof v.c !== "string") continue; const z = v.c.split("-")[0]; if (ZONES[z]) out[z] = (out[z] | 0) + 1; }
+    LM.zoneN = out;
+  } catch (e) { /* abaikan */ }
 }
 function lmMyName() { return LM.roomKind === "open" ? lmShortName(P.nama) : (cleanName(P.nama) || "Pelajar"); }
 
@@ -1656,6 +1675,9 @@ const LM_CSS = `
 #lmOv .lm-ptt{position:absolute;right:calc(16px + env(safe-area-inset-right));bottom:calc(16px + env(safe-area-inset-bottom));padding:12px 16px;border-radius:16px;font-size:15px}
 #lmOv.touch .lm-ptt{bottom:calc(112px + env(safe-area-inset-bottom));border-radius:50%;width:72px;height:72px;padding:0;font-size:12px}
 #lmOv .lm-ptt.ok{background:#d6453d;border-color:#ffb4ad}
+#lmOv .lm-leg{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;font:800 13px Nunito,sans-serif;color:#d4e2ee}
+#lmOv .lm-leg span{display:flex;align-items:center;gap:6px}#lmOv .lm-leg i{width:11px;height:11px;border-radius:50%;border:1.5px solid #0b2a44;display:inline-block}
+#lmOv .lm-who{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;max-width:96vw;font-size:13px}#lmOv .lm-who button{font-size:13px;padding:5px 10px}#lmOv .lm-who .muted{color:#b9cde0}
 #lmOv .lm-pl{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}#lmOv .lm-pl button{font-size:12px;padding:4px 8px}
 @media (max-height:500px){#lmOv .lm-top{flex-direction:row;flex-wrap:wrap;justify-content:flex-end;max-width:62vw;top:calc(max(10px,env(safe-area-inset-top)) + 84px)}#lmOv .lm-top button{padding:6px 9px;font-size:12px}#lmOv .lm-mm{width:150px;height:76px}#lmOv .lm-quest{font-size:12px;max-width:220px}}
 @media (max-width:640px){#lmOv .lm-mm{width:140px;height:72px}#lmOv .lm-top{top:calc(max(10px,env(safe-area-inset-top)) + 80px)}#lmOv .lm-hud{max-width:calc(100% - 160px)}#lmOv .lm-emo{display:none}#lmOv .lm-quest{display:none}}
@@ -1993,7 +2015,7 @@ function lmRoomPanel() {
     Object.keys(LM.peers).forEach((id) => {
       const e = LM.peers[id], mu = lmMuted(id);
       const mb = lmBtn(mu ? "Nyahsenyap" : "Senyap", "", () => { lmMuteSet(id, !mu); lmRoomPanel(); });
-      list.appendChild(el("div", { class: "lm-stamp" }, el("b", null, e.n + (e.vo ? " 🎙" : "") + (mu ? " 🔇" : "")), el("div", null, (e.st | 0) + " cop pasport"), el("div", { class: "lm-pl" }, mb, lmBtn("Lapor", "", () => { if (confirm("Laporkan " + e.n + " kerana mengganggu?")) { lmReport(id); lmRoomPanel(); } }))));
+      list.appendChild(el("div", { class: "lm-stamp" }, el("b", null, (lmFriend(e) ? "🟢 " : "") + e.n + (e.vo ? " 🎙" : "") + (mu ? " 🔇" : "")), el("div", null, (e.st | 0) + " cop pasport · " + Math.round(Math.hypot(e.x - LM.g.p.x, e.z - LM.g.p.z)) + " m"), el("div", { class: "lm-pl" }, lmBtn("Tunjuk arah", "", () => { lmGoPeer(id); lmCardClose(); }), mb, lmBtn("Lapor", "", () => { if (confirm("Laporkan " + e.n + " kerana mengganggu?")) { lmReport(id); lmRoomPanel(); } }))));
     });
     b.appendChild(list);
     if (!LM.room && !op) b.append(el("p", { class: "lm-ex" }, "Untuk main bersama, keluar ke skrin mula dan pilih Dunia Terbuka, Cipta bilik rakan atau Masuk kod."));
@@ -2014,10 +2036,11 @@ function lmSkyDraw(sk) {
     const med = ["#ffd45a", "#d9e2ec", "#e0975a", "#9fd3ff", "#9fd3ff"];
     list.forEach((r, i) => {
       const y = 170 + i * 82; lmRound(x, 40, y, w - 80, 70, 22); x.fillStyle = r.me ? "rgba(255,212,90,.32)" : "rgba(255,255,255,.1)"; x.fill();
-      x.fillStyle = med[i]; x.font = "900 48px Fredoka, Nunito, sans-serif"; x.textAlign = "left"; x.fillText((i === 0 ? "👑" : "#" + (i + 1)), 62, y + 52);
+      const rk = r.rank || i + 1, mc = med[Math.min(rk, 5) - 1];
+      x.fillStyle = mc; x.font = "900 48px Fredoka, Nunito, sans-serif"; x.textAlign = "left"; x.fillText((rk === 1 ? "👑" : "#" + rk), 62, y + 52);
       x.fillStyle = "#fff"; x.font = "900 40px Nunito, sans-serif"; x.fillText(String(r.n || "").slice(0, 16) + (r.me ? " (anda)" : ""), 170, y + 40);
       x.fillStyle = "#b9cde0"; x.font = "700 24px Nunito, sans-serif"; x.fillText([r.k, String(r.sk || "").slice(0, 30)].filter(Boolean).join(" · "), 170, y + 64);
-      x.textAlign = "right"; x.fillStyle = med[i]; x.font = "900 42px Fredoka, Nunito, sans-serif"; x.fillText(String(r.v), w - 66, y + 50);
+      x.textAlign = "right"; x.fillStyle = mc; x.font = "900 42px Fredoka, Nunito, sans-serif"; x.fillText(String(r.v), w - 66, y + 50);
     });
   };
 }
@@ -2032,7 +2055,12 @@ async function lmSkyLoad(g) {
   const sk = g.sky5; if (!sk) return; sk.at = Date.now(); sk.busy = true;
   try {
     if (Net.db && Net.uid && (!RK.at || Date.now() - RK.at > 60000)) await rkPull();
-    sk.list = rkAllRows().map((r) => ({ n: r.n, k: r.k, sk: r.sk, me: r.me, v: rkVal(r.m, "all", "hari", "jumlah", "") })).filter((r) => r.v > 0).sort((a, b) => b.v - a.v).slice(0, 5);
+    const all = rkAllRows().map((r) => ({ n: r.n, k: r.k, sk: r.sk, me: r.me, v: rkVal(r.m, "all", "hari", "jumlah", "") })).filter((r) => r.v > 0).sort((a, b) => b.v - a.v);
+    all.forEach((r, i) => (r.rank = i + 1));
+    const mi = all.findIndex((r) => r.me);
+    /* murid di luar Top 5 tetap nampak kedudukannya sendiri pada baris terakhir */
+    sk.list = mi >= 5 ? all.slice(0, 4).concat([all[mi]]) : all.slice(0, 5);
+    sk.myRank = mi >= 0 ? mi + 1 : 0; sk.total = all.length;
     sk.err = !(Net.db && Net.uid) ? "Kedudukan bersama memerlukan sambungan internet" : "";
   } catch (e) { sk.err = "Kedudukan tidak dapat dimuatkan"; }
   sk.busy = false;
@@ -2080,11 +2108,31 @@ function lmMapDraw(cv, m, big) {
     lmIslands().forEach((o) => { const w = lmIslW(o), [px, py] = lmMapPt(m, w.x, w.z); x.fillText(o.n.replace("Pulau ", "P. "), px, py - 16); });
     x.textAlign = "left";
   }
-  for (const id in LM.peers) { const e = LM.peers[id], [px, py] = lmMapPt(m, e.x, e.z); x.fillStyle = "#ff7ad9"; x.beginPath(); x.arc(px, py, big ? 6 : 3, 0, 6.2832); x.fill(); }
+  if (big && LM.roomKind === "open" && LM.zoneN) {
+    for (const z in LM.zoneN) {
+      const n = LM.zoneN[z] - (z === LM.zone ? Object.keys(LM.peers).length : 0), k = ZONE_PIN[z], pn = k && DATA.negeri[k] && DATA.negeri[k].pins && DATA.negeri[k].pins[0];
+      if (n <= 0 || !pn) continue;
+      const w = toW(k, pn[0], pn[1]), [px, py] = lmMapPt(m, w.x, w.z); lmMapTag(x, "👥 " + n + " pemain di zon " + ZONES[z], px, py + 26, "#ffd45a");
+    }
+  }
+  for (const id in LM.peers) {
+    const e = LM.peers[id], [px, py] = lmMapPt(m, e.x, e.z), fr = lmFriend(e), col = fr ? "#4dff9a" : "#ff7ad9";
+    x.fillStyle = col; x.strokeStyle = "#0b2a44"; x.lineWidth = big ? 2 : 1;
+    if (e.pl) { x.font = (big ? 20 : 11) + "px sans-serif"; x.textAlign = "center"; x.fillText("✈", px, py + (big ? 7 : 4)); x.textAlign = "left"; }
+    else { x.beginPath(); x.arc(px, py, big ? 6.5 : 3.4, 0, 6.2832); x.fill(); x.stroke(); }
+    if (big) lmMapTag(x, e.n + (e.fy ? " ⛴" : ""), px, py - 12, col);
+  }
   if (g.wp) { const [px, py] = lmMapPt(m, g.wp.x, g.wp.z); x.strokeStyle = "#ff4d4d"; x.lineWidth = 2; x.beginPath(); x.arc(px, py, big ? 9 : 4, 0, 6.2832); x.stroke(); }
   const [px, py] = lmMapPt(m, g.p.x, g.p.z), a = g.p.yaw, R = big ? 10 : 5;
   x.fillStyle = "#ffffff"; x.strokeStyle = "#0b2a44"; x.lineWidth = 1.5; x.beginPath();
   x.moveTo(px + Math.sin(a) * R, py + Math.cos(a) * R); x.lineTo(px + Math.sin(a + 2.5) * R * 0.7, py + Math.cos(a + 2.5) * R * 0.7); x.lineTo(px + Math.sin(a - 2.5) * R * 0.7, py + Math.cos(a - 2.5) * R * 0.7); x.closePath(); x.fill(); x.stroke();
+  if (big) lmMapTag(x, "Anda", px, py - 15, "#ffffff");
+}
+const ZONE_PIN = { utara: "kedah", tengah: "selangor", timur: "pahang", selatan: "johor", borneo: "sarawak" };
+function lmMapTag(x, text, px, py, col) {
+  x.font = "800 13px Nunito, sans-serif"; const w = x.measureText(text).width + 12;
+  x.fillStyle = "rgba(8,24,40,.85)"; lmRound(x, px - w / 2, py - 15, w, 18, 9); x.fill();
+  x.fillStyle = col; x.textAlign = "center"; x.fillText(text, px, py - 2); x.textAlign = "left";
 }
 function lmBigMap() {
   const g = LM.g; if (!g) return;
@@ -2092,11 +2140,26 @@ function lmBigMap() {
   g.ui = true;
   const wrap = el("div", { class: "lm-big" }), m = lmMapBase(1240, 500), cv = el("canvas", { width: 1240, height: 500, "aria-label": "Peta Malaysia" });
   const box = el("div", { style: "display:grid;gap:10px;justify-items:center;padding:12px" });
-  box.append(el("div", { class: "lm-kick" }, "Peta · ketik tempat untuk tetapkan destinasi"), cv, el("div", { class: "lm-row" }, lmBtn("Buang destinasi", "", () => { g.wp = null; lmWpSet(); lmMapDraw(cv, m, true); }), lmBtn("Tutup peta", "pri", lmBigMap)));
+  const dot = (c, t, sh) => el("span", null, el("i", { style: "background:" + c + (sh ? ";border-radius:2px" : "") }), t);
+  const leg = el("div", { class: "lm-leg" }, el("span", null, "▲ Anda"), dot("#4dff9a", LM.roomKind === "open" ? "Rakan sekolah" : "Rakan"), LM.roomKind === "open" ? dot("#ff7ad9", "Pemain lain") : null, dot("#7fe3ff", "Menara", 1), dot("#ffd45a", "Ditawan / diziarahi"), dot("#ffffff", "Tempat menarik"));
+  const list = el("div", { class: "lm-who" });
+  box.append(el("div", { class: "lm-kick" }, "Peta · ketik tempat atau rakan untuk tetapkan destinasi"), cv, leg, list, el("div", { class: "lm-row" }, lmBtn("Buang destinasi", "", () => { g.wp = null; lmWpSet(); lmMapDraw(cv, m, true); }), lmBtn("Tutup peta", "pri", lmBigMap)));
   wrap.appendChild(box); LM.root.appendChild(wrap); LM.ui.big = wrap;
-  lmMapDraw(cv, m, true);
+  const who = () => {
+    const ids = Object.keys(LM.peers).sort((a, b) => (lmFriend(LM.peers[b]) - lmFriend(LM.peers[a])) || (Math.hypot(LM.peers[a].x - g.p.x, LM.peers[a].z - g.p.z) - Math.hypot(LM.peers[b].x - g.p.x, LM.peers[b].z - g.p.z)));
+    const sig = ids.map((id) => id + ":" + Math.round(Math.hypot(LM.peers[id].x - g.p.x, LM.peers[id].z - g.p.z) / 10)).join(",");
+    if (list.dataset.sig === sig) return; list.dataset.sig = sig; list.textContent = "";
+    if (!LM.room) { list.append(el("span", { class: "muted" }, LM.roomKind === "open" ? (LM.openFull ? "Dunia Terbuka penuh: anda bermain solo buat sementara." : "Menyambung ke Dunia Terbuka...") : "Main solo: tiada pemain lain. Pilih Dunia Terbuka atau bilik rakan di skrin mula.")); return; }
+    if (!ids.length) { list.append(el("span", { class: "muted" }, "Belum ada pemain lain di " + (LM.roomKind === "open" ? "zon " + ZONES[LM.zone] : "bilik ini") + ".")); return; }
+    list.append(el("b", null, "Dalam talian (" + ids.length + "):"));
+    ids.slice(0, 14).forEach((id) => { const e = LM.peers[id], d = Math.round(Math.hypot(e.x - g.p.x, e.z - g.p.z)); const bt = lmBtn((lmFriend(e) ? "🟢 " : "🟣 ") + e.n + " · " + d + " m", "", () => { lmGoPeer(id); lmBigMap(); }); bt.title = "Tunjuk arah ke " + e.n; list.append(bt); });
+  };
+  const draw = () => { if (LM.ui.big !== wrap) { clearInterval(LM.bigT); return; } lmMapDraw(cv, m, true); who(); };
+  clearInterval(LM.bigT); LM.bigT = setInterval(draw, 400); draw();
+  lmZoneCounts();
   cv.addEventListener("click", (e) => {
     const rc = cv.getBoundingClientRect(), mx = (e.clientX - rc.left) * cv.width / rc.width, my = (e.clientY - rc.top) * cv.height / rc.height;
+    for (const id in LM.peers) { const e = LM.peers[id], [px, py] = lmMapPt(m, e.x, e.z); if (Math.hypot(px - mx, py - my) < 16) { lmGoPeer(id); lmMapDraw(cv, m, true); return; } }
     let best = null, bd = 26;
     for (const it of g.items) { const [px, py] = lmMapPt(m, it.x, it.z), d = Math.hypot(px - mx, py - my); if (d < bd) { bd = d; best = it; } }
     if (best) g.wp = { x: best.x, z: best.z, n: best.kind === "tw" ? "Menara " + (best.t.kod || best.t.id) : best.n };
@@ -2148,7 +2211,8 @@ function lmHud() {
   ui.hud = el("div", { class: "lm-hud" });
   ui.state = el("div", { class: "lm-pill lm-state" }, "Malaysia");
   ui.coin = el("div", { class: "lm-pill" }); ui.stamp = el("div", { class: "lm-pill" }); ui.tw = el("div", { class: "lm-pill" }); ui.wp = el("div", { class: "lm-pill" }); ui.wp.hidden = true; ui.peers = el("div", { class: "lm-pill" }); ui.peers.hidden = true;
-  ui.hud.append(ui.state, ui.coin, ui.stamp, ui.tw, ui.peers, ui.wp); r.appendChild(ui.hud);
+  ui.pts = el("div", { class: "lm-pill", title: "Mata hari ini (betul 10, cubaan 2) dan kedudukan anda" });
+  ui.hud.append(ui.state, ui.pts, ui.coin, ui.stamp, ui.tw, ui.peers, ui.wp); r.appendChild(ui.hud);
   ui.quest = el("div", { class: "lm-quest" }); r.appendChild(ui.quest); lmQuestRender();
   ui.mm = el("canvas", { class: "lm-mm", width: 380, height: 192, title: "Buka peta (M)", "aria-label": "Peta mini" }); ui.mm.addEventListener("click", lmBigMap); r.appendChild(ui.mm);
   LM.mmBase = lmMapBase(380, 192);
@@ -2190,10 +2254,18 @@ function lmHudTick(g) {
   if (ui.state.textContent !== nm) { ui.state.textContent = nm; if ((DATA.negeri[k] || ISL_BY[k]) && g.lastK && g.lastK !== k) lmPop(lmPlaceShort(k)); }
   if (DATA.negeri[k] || ISL_BY[k]) g.lastK = k;
   ui.coin.innerHTML = ""; ui.coin.append("🪙 ", el("b", null, String(P.coin | 0)));
+  { /* mata hari ini (sama seperti papan Top 5) dan kedudukan */
+    let pts = 0; try { pts = rkVal(rkLoad().m, "all", "hari", "jumlah", ""); } catch (e) { pts = 0; }
+    if (LM.ptsLast != null && pts > LM.ptsLast) { lmPop("+" + (pts - LM.ptsLast) + " mata"); if (g.sky5 && !g.sky5.busy) lmSkyLoad(g); }
+    LM.ptsLast = pts;
+    const rk = g.sky5 && g.sky5.myRank, t = "⭐ " + pts + " mata hari ini" + (rk ? " · #" + rk + (g.sky5.total ? "/" + g.sky5.total : "") : "");
+    if (ui.pts.textContent !== t) ui.pts.textContent = t;
+  }
   ui.stamp.textContent = "📘 Cop " + s.pl + "/" + s.plN; ui.tw.textContent = "🏰 Menara " + s.tw + "/" + s.twN;
   const np = Object.keys(LM.peers).length, op = LM.roomKind === "open"; ui.peers.hidden = !LM.room && !op;
   ui.peers.textContent = op ? (LM.room ? "🌏 " + (np + 1) + " · " + (ZONES[LM.zone] || "") : LM.openFull ? "🌏 Penuh · main solo" : "🌏 Menyambung...") : "👥 " + (np + 1) + (LM.roomKind === "sekolah" ? " · sekolah" : LM.roomCode ? " · " + LM.roomCode : "");
   ui.chat.hidden = !LM.room; if (!ui.vcB.hidden !== lmVoiceOk()) lmVoiceUi();
+  if (g.wp && g.wp.pid) { const e = LM.peers[g.wp.pid]; if (!e) { g.wp = null; lmWpSet(); lmPop("Rakan sudah keluar"); } else { g.wp.x = e.x; g.wp.z = e.z; lmWpSet(); } }
   if (g.wp) { ui.wp.hidden = false; const d = Math.round(Math.hypot(g.wp.x - g.p.x, g.wp.z - g.p.z)); ui.wp.textContent = "📍 " + g.wp.n + " · " + d + " m"; if (d < 12) { g.wp = null; lmWpSet(); } }
   else ui.wp.hidden = true;
 }
@@ -2317,7 +2389,7 @@ function lmOpen(tid) {
   lmSetup();
 }
 function lmStart(code, kind) {
-  const r = LM.root; LM.roomKind = kind || ""; LM.roomCode = ""; LM.openFull = false; LM.openRetry = 0; LM.zone = "";
+  const r = LM.root; LM.ptsLast = null; LM.roomKind = kind || ""; LM.sh = lmMySh(); LM.zoneN = null; LM.zoneAt = 0; LM.roomCode = ""; LM.openFull = false; LM.openRetry = 0; LM.zone = "";
   lmCardClose(); r.textContent = "";
   const ld = el("div", { class: "lm-card" }, el("div", { class: "lm-box" }, el("div", { class: "lm-kick" }, "META GEMPUR"), el("h2", null, "Membina peta Malaysia..."), el("p", null, "Menyusun negeri, menara ilmu dan tempat pelancongan.")));
   r.appendChild(ld);
