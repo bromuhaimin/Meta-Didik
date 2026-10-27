@@ -1601,14 +1601,14 @@ function lmRideEnd(g) {
 /* ---------- v18.2: berenang di pantai ----------
    Laut berhampiran pantai (dalam SWIM_MAX unit dari darat) boleh direnangi. Avatar terapung di permukaan:
    kuak rangkak semasa bergerak, kayuh air semasa diam. */
-const SWIM_MAX = 42 * K * 1.4;
+const SWIM_MAX = 40; /* ~6.5 km dari pantai (6 unit = 1 km) */
 function lmSwimOk(x, z) {
   if (lmCanStand(x, z) || lmAt(x, z) === "jambatan" || !TER.dOut) return false;
   const xi = Math.round((x - TER.x0) / TER.cs), zi = Math.round((z - TER.z0) / TER.cs);
   if (xi < 0 || zi < 0 || xi >= TER.nx || zi >= TER.nz) return false;
   const ci = zi * TER.nx + xi; if (!TER.land[ci]) return TER.dOut[ci] < SWIM_MAX;
-  /* muara/sungai lebih sempit daripada grid: dasar di bawah paras air dan raster menandakan air */
-  return !TER.fg[ci] && lmAt(x, z) === "" && lmHRaw(x, z) < -0.2;
+  /* gigi air, muara dan sungai lebih sempit daripada grid: permukaan tanah di bawah paras berdiri = air */
+  return !TER.fg[ci] && lmHRaw(x, z) <= 0.1;
 }
 const lmCanGo = (x, z) => lmCanStand(x, z) || lmSwimOk(x, z);
 
