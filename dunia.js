@@ -1601,9 +1601,9 @@ async function lmNameHang(pl) {
 
 /* ---------- antara muka ---------- */
 const LM_CSS = `
-#lmOv{position:fixed;inset:0;z-index:120;background:#0b2a44;color:#f3f7fb;font-family:Nunito,system-ui,sans-serif;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+#lmOv{position:fixed;inset:0;z-index:120;background:#0b2a44;color:#f3f7fb;font-family:Nunito,system-ui,sans-serif;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
 #lmOv[hidden]{display:none}
-#lmOv canvas.lm-cv{position:absolute;inset:0;width:100%;height:100%;display:block}
+#lmOv canvas.lm-cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 #lmOv .lm-hud{position:absolute;left:max(10px,env(safe-area-inset-left));top:max(10px,env(safe-area-inset-top));display:flex;flex-wrap:wrap;gap:6px;max-width:calc(100% - 200px);pointer-events:none}
 #lmOv .lm-pill{background:rgba(8,24,40,.78);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:6px 12px;font:800 14px Nunito,sans-serif;display:flex;gap:6px;align-items:center;backdrop-filter:blur(4px)}
 #lmOv .lm-pill b{color:#ffd45a}
@@ -2308,10 +2308,24 @@ function lmKey(e) {
   else if (k === "t") lmPassport("tajuk");
   else if (k >= "1" && k <= "4") lmEmote(Object.keys(EMOTE)[+k - 1]);
 }
+function lmJsReset() {
+  LM.js.id = -1; LM.js.x = LM.js.y = 0; LM.drag.id = -1;
+  const j = LM.ui.js; if (j) { j.style.left = ""; j.style.top = ""; j.style.bottom = ""; if (j.firstChild) j.firstChild.style.transform = ""; }
+}
 function lmPointers(cv) {
+  /* iOS/Android: halang tatal, zum dan menu tekan lama supaya sentuhan kayu bedik tidak dibatalkan (pointercancel) */
+  const stop = (e) => { if (e.cancelable) e.preventDefault(); };
+  cv.addEventListener("touchstart", stop, { passive: false }); cv.addEventListener("touchmove", stop, { passive: false });
+  if (!LM.jsWin) {
+    LM.jsWin = true;
+    window.addEventListener("blur", lmJsReset); window.addEventListener("orientationchange", lmJsReset);
+    document.addEventListener("visibilitychange", () => { if (document.hidden) lmJsReset(); });
+  }
   cv.addEventListener("pointerdown", (e) => {
     if (!LM.g || LM.g.ui) return;
-    if (e.pointerType === "touch" && e.clientX < window.innerWidth * 0.42 && LM.js.id < 0) {
+    /* sentuhan baharu di kiri sentiasa mengambil alih kayu bedik (elak id lama yang tersangkut) */
+    if (e.pointerType === "touch" && e.clientX < window.innerWidth * 0.42) {
+      if (document.activeElement && document.activeElement.blur && document.activeElement !== document.body) document.activeElement.blur();
       LM.js.id = e.pointerId; LM.js.cx = e.clientX; LM.js.cy = e.clientY; LM.js.x = LM.js.y = 0;
       const j = LM.ui.js; j.style.left = (e.clientX - 60) + "px"; j.style.top = (e.clientY - 60) + "px"; j.style.bottom = "auto";
     } else if (LM.drag.id < 0) { LM.drag.id = e.pointerId; LM.drag.x = e.clientX; LM.drag.y = e.clientY; }
@@ -2330,7 +2344,7 @@ function lmPointers(cv) {
     if (e.pointerId === LM.js.id) { LM.js.id = -1; LM.js.x = LM.js.y = 0; const j = LM.ui.js; j.style.left = ""; j.style.top = ""; j.style.bottom = ""; j.firstChild.style.transform = ""; }
     if (e.pointerId === LM.drag.id) LM.drag.id = -1;
   };
-  cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
+  cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up); cv.addEventListener("lostpointercapture", up);
   cv.addEventListener("contextmenu", (e) => e.preventDefault());
   cv.addEventListener("wheel", (e) => { if (LM.g) { LM.g.cam.dist = clamp(LM.g.cam.dist + Math.sign(e.deltaY) * 2, 8, 46); e.preventDefault(); } }, { passive: false });
 }
@@ -2356,6 +2370,7 @@ function lmLoop(ts) {
   LM.raf = requestAnimationFrame(lmLoop);
   const g = LM.g, dt = clamp((ts - (g.last || ts)) / 1000, 0, 0.05); g.last = ts; g.T += dt;
   try {
+    if (g.ui && !g.flight && !g.sail && !LM.ui.card && !LM.ui.big) g.ui = false; /* tiada panel terbuka: lepaskan kunci pergerakan */
     if (g.flight) lmFlightTick(g, dt); else if (g.sail) lmSailTick(g, dt); else { lmUpdatePlayer(g, dt); lmUpdateCam(g, dt); }
     lmNet(g, dt, ts); lmPuffTick(g, dt); lmTrafficTick(g, dt);
     if (g.me.bub && (g.me.bubT -= dt) <= 0) lmBubble(g.me, "");
