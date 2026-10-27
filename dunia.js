@@ -685,58 +685,20 @@ function lmTowerState(o) {
   o.done = done;
 }
 
-/* ---------- avatar blok (ikut pakaian Gudang avatar 2D: menutup aurat, wajah tanpa ciri) ---------- */
-function lmMyCode() {
-  try {
-    const z = zvState(), e = zvEqAll(z);
-    return [z.g === "P" ? "P" : "L", clamp(z.sk | 0, 0, 5), e.ou, e.oc, e.hd, e.hc].join("|");
-  } catch (e) { return "L|1|ou_sc|oc_gn|hd_no|hc_w"; }
-}
-function lmParse(code) {
-  const a = String(code || "").split("|"), ok = (id, s) => { const it = typeof zvItem === "function" ? zvItem(id) : null; return it && it.s === s ? id : ""; };
-  const g = a[0] === "P" ? "P" : "L";
-  return { g: g, sk: clamp(+a[1] | 0, 0, 5), ou: ok(a[2], "ou") || "ou_sc", oc: ok(a[3], "oc") || "oc_gn", hd: ok(a[4], "hd") || (g === "P" ? "hd_td" : "hd_no"), hc: ok(a[5], "hc") || "hc_w" };
-}
+/* ---------- avatar 3D (avatar3d.js): semua pakaian dan aksesori Gudang, menutup aurat, wajah tanpa ciri ---------- */
+function lmMyCode() { return window.AV3 ? AV3.code() : "L|1|ou_sc|oc_gn|hd_no|hc_w"; }
 function lmAvatar(code, name, me) {
-  const c = lmParse(code), sk = ZV_SKIN[c.sk] || "#e9b98f", oc = zvCol(ZV_OCOL, c.oc), hc = zvCol(ZV_HCOL, c.hc);
-  const sch = c.ou === "ou_sc", long = c.ou === "ou_kr" || c.ou === "ou_jb" || (sch && c.g === "P");
-  const top = sch ? "#f4f4f0" : oc, bot = sch ? "#27345a" : (c.ou === "ou_tk" ? zvShade(oc, -0.28) : oc), shoe = c.ou === "ou_tk" ? "#f1f1f1" : "#2a2a33";
-  const g = new T.Group(), body = new T.Group(); g.add(body);
-  const pv = (x, y) => { const p = new T.Group(); p.position.set(x, y, 0); body.add(p); return p; };
-  const lL = pv(-0.5, 2.05), lR = pv(0.5, 2.05), aL = pv(-1.42, 3.9), aR = pv(1.42, 3.9);
-  for (const [p] of [[lL], [lR]]) { p.add(lmMesh(lmBox(0.92, 1.7, 0.92), bot, 0, -0.85, 0)); p.add(lmMesh(lmBox(0.96, 0.4, 1.1), shoe, 0, -1.85, 0.08)); }
-  for (const [p] of [[aL], [aR]]) { p.add(lmMesh(lmBox(0.86, 1.75, 0.86), top, 0, -0.85, 0)); p.add(lmMesh(lmBox(0.8, 0.36, 0.8), sk, 0, -1.9, 0)); }
-  body.add(lmMesh(lmBox(1.98, 2, 1), top, 0, 3.05, 0));
-  if (sch && c.g === "L") body.add(lmMesh(lmBox(0.32, 1.3, 0.05), "#27345a", 0, 3.25, 0.53));
-  if (long) { body.add(lmMesh(lmBox(2.1, 1.75, 1.15), long && sch ? bot : oc, 0, 1.25, 0)); }
-  if (c.ou === "ou_sm") body.add(lmMesh(lmBox(2.06, 0.9, 1.08), "#7a3b2e", 0, 2.25, 0));
-  const head = new T.Group(); head.position.y = 4.65; body.add(head);
-  head.add(lmMesh(lmBox(1.2, 1.2, 1.2), sk, 0, 0, 0));
-  const hd = c.hd;
-  if (hd === "hd_td" || hd === "hd_sw" || hd === "hd_tl" || hd === "hd_ts") {
-    head.add(lmMesh(lmBox(1.36, 1.36, 1.3), hc, 0, 0.06, -0.08));
-    head.add(lmMesh(lmBox(0.9, 0.86, 0.06), sk, 0, -0.06, 0.6));
-    const drape = hd === "hd_tl" ? 1.25 : 0.65;
-    body.add(lmMesh(lmBox(2.1, drape, 1.14), hc, 0, 4.1 - drape / 2 + 0.02, 0));
-  } else if (hd === "hd_sk") head.add(lmMesh(lmBox(1.24, 0.5, 1.24), "#1d1d22", 0, 0.82, 0));
-  else if (hd === "hd_kp") head.add(lmMesh(lmBox(1.24, 0.32, 1.24), hc, 0, 0.74, 0));
-  else if (hd === "hd_sb") { head.add(lmMesh(lmBox(1.4, 0.62, 1.4), "#f4f4f0", 0, 0.82, 0)); }
-  else if (hd === "hd_tp") { head.add(lmMesh(lmBox(1.26, 0.4, 1.26), hc, 0, 0.78, 0)); head.add(lmMesh(lmBox(1.2, 0.12, 0.7), hc, 0, 0.62, 0.9)); }
+  const av = AV3.build(code);
   const tag = lmLabel(cleanName(name) || "Pemain", { fs: 32, k: 0.028, bd: me ? "#f5c542" : null, dt: false });
-  tag.position.y = 6.6; g.add(tag);
-  return { g: g, body: body, lL: lL, lR: lR, aL: aL, aR: aR, tag: tag, code: code, ph: Math.random() * 6 };
+  tag.position.y = 7.3; av.g.add(tag); av.tag = tag; av.code = code;
+  return av;
 }
-function lmAnim(av, moving, air, dt, speed) {
-  av.ph += dt * (moving ? 9 * (speed || 1) : 2);
-  const s = air ? 0.9 : moving ? Math.sin(av.ph) * 0.75 : 0;
-  av.lL.rotation.x = air ? -0.5 : s; av.lR.rotation.x = air ? 0.4 : -s;
-  av.aL.rotation.x = air ? -2.4 : -s * 0.9; av.aR.rotation.x = air ? -2.4 : s * 0.9;
-  av.body.position.y = moving && !air ? Math.abs(Math.cos(av.ph)) * 0.15 : 0;
-}
+function lmAnim(av, moving, air, dt, speed) { AV3.anim(av, moving, air, dt, speed, LM.g && LM.g.scene); }
+function lmAvatarDrop(g, av) { g.scene.remove(av.g); try { AV3.dispose(av, g.scene); } catch (e) { /* abaikan */ } }
 function lmBubble(av, text) {
   if (av.bub) { av.g.remove(av.bub); av.bub = null; }
   if (!text) return;
-  av.bub = lmLabel(text, { fs: 30, k: 0.03, bg: "rgba(255,255,255,.95)", fg: "#1b2a3a", dt: false }); av.bub.position.y = 8.2; av.g.add(av.bub); av.bubT = 3;
+  av.bub = lmLabel(text, { fs: 30, k: 0.03, bg: "rgba(255,255,255,.95)", fg: "#1b2a3a", dt: false }); av.bub.position.y = 8.9; av.g.add(av.bub); av.bubT = 3;
 }
 
 /* ---------- pergerakan pemain, perlanggaran dan kamera ---------- */
@@ -806,7 +768,7 @@ async function lmNetJoin(code, kind) {
 }
 function lmNetLeave() {
   LM.tok++; const r = LM.room; LM.room = null;
-  const g = LM.g; if (g) for (const id in LM.peers) g.scene.remove(LM.peers[id].av.g);
+  const g = LM.g; if (g) for (const id in LM.peers) lmAvatarDrop(g, LM.peers[id].av);
   LM.peers = {};
   if (r) { try { const x = r.leave(); if (x && x.catch) x.catch(() => {}); } catch (e) { /* abaikan */ } }
 }
@@ -841,12 +803,12 @@ function lmNet(g, dt, ts) {
       n++; seen[pr.peer] = 1;
       const x = clamp(v.x, -1600, 1800), y = clamp(+v.y || 0, -5, 130), z = clamp(v.z, -800, 800), nm = cleanName(String(v.n || "")) || "Pelajar";
       let e = LM.peers[pr.peer];
-      if (e && (e.c !== v.c || e.n !== nm)) { g.scene.remove(e.av.g); e = null; }
+      if (e && (e.c !== v.c || e.n !== nm)) { lmAvatarDrop(g, e.av); e = null; }
       if (!e) { const av = lmAvatar(v.c, nm, false); g.scene.add(av.g); e = LM.peers[pr.peer] = { x: x, y: y, z: z, r: +v.r || 0, av: av, c: v.c, n: nm, en: v.en | 0 }; } /* emote lama sebelum kita masuk tidak dipaparkan */
       e.tx = x; e.ty = y; e.tz = z; e.tr = +v.r || 0; e.m = !!v.m; e.a = !!v.a; e.st = clamp(v.st | 0, 0, 999);
       if (typeof v.e === "string" && EMOTE[v.e] && (v.en | 0) !== e.en) { lmBubble(e.av, EMOTE[v.e]); e.en = v.en | 0; }
     }
-    for (const id in LM.peers) if (!seen[id]) { g.scene.remove(LM.peers[id].av.g); delete LM.peers[id]; }
+    for (const id in LM.peers) if (!seen[id]) { lmAvatarDrop(g, LM.peers[id].av); delete LM.peers[id]; }
   }
 }
 function lmFriendsNear(g, r) {

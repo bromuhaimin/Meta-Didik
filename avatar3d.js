@@ -1,0 +1,256 @@
+/* =====================================================================
+   AVATAR 3D (v17.91): avatar realistik yang dikongsi oleh Gudang (pratonton berputar) dan META GEMPUR.
+   Memaparkan semua barang Gudang (pakaian, warna, penutup kepala, cermin mata, pegangan, beg,
+   lencana, haiwan, bingkai) dan kesan khas 3D. Pakaian menutup aurat; wajah sengaja tanpa ciri.
+   Bergantung pada global index.html: THREE, ZV_SKIN, ZV_OCOL, ZV_HCOL, zvCol, zvShade, zvItem, zvState, zvEqAll.
+   ===================================================================== */
+(function () {
+"use strict";
+const T = window.THREE; if (!T) return;
+const SLOTS = ["ou", "oc", "hd", "hc", "fc", "hn", "bk", "bd", "pt", "fr", "ef"];
+const MAT = {}, GEO = {};
+function mat(c, o) {
+  const k = c + "|" + (o ? JSON.stringify(o) : "");
+  if (!MAT[k]) MAT[k] = new T.MeshStandardMaterial(Object.assign({ color: c, roughness: 0.82, metalness: 0 }, o || {}));
+  return MAT[k];
+}
+function geo(k, f) { return GEO[k] || (GEO[k] = f()); }
+function mesh(g, m, x, y, z) { const o = new T.Mesh(g, m); o.position.set(x || 0, y || 0, z || 0); o.castShadow = true; o.receiveShadow = true; return o; }
+/* kapsul licin (r128 belum ada CapsuleGeometry): profil lathe separuh bulatan + garis lurus */
+function capsule(r, len, n) {
+  return geo("cap" + r + "," + len + "," + (n || 12), () => {
+    const pts = [];
+    for (let i = 0; i <= 6; i++) { const a = -Math.PI / 2 + (i / 6) * Math.PI / 2; pts.push(new T.Vector2(Math.cos(a) * r, -len + Math.sin(a) * r + r)); }
+    for (let i = 0; i <= 6; i++) { const a = (i / 6) * Math.PI / 2; pts.push(new T.Vector2(Math.cos(a) * r, -r + Math.sin(a) * r)); }
+    return new T.LatheGeometry(pts, n || 12);
+  });
+}
+function lathe(key, prof, n) { return geo(key, () => new T.LatheGeometry(prof.map((p) => new T.Vector2(p[0], p[1])), n || 18)); }
+function rbox(w, h, d) { return geo("rb" + w + "," + h + "," + d, () => { const b = new T.BoxGeometry(w, h, d, 2, 2, 2), p = b.attributes.position, v = new T.Vector3(); for (let i = 0; i < p.count; i++) { v.fromBufferAttribute(p, i); const k = 0.82 + 0.18 * (1 - Math.max(Math.abs(v.x) / (w / 2), Math.abs(v.y) / (h / 2), Math.abs(v.z) / (d / 2))); p.setXYZ(i, v.x * (0.9 + 0.1 * k), v.y, v.z * (0.9 + 0.1 * k)); } b.computeVertexNormals(); return b; }); }
+const shade = (h, k) => { try { return zvShade(h, k); } catch (e) { return h; } };
+const okId = (id, s) => { try { const it = zvItem(id); return it && it.s === s ? id : ""; } catch (e) { return ""; } };
+
+/* kod avatar ringkas untuk bilik multiplayer: g|sk|ou|oc|hd|hc|fc|hn|bk|bd|pt|fr|ef */
+function code(z, e) {
+  try { z = z || zvState(); e = e || zvEqAll(z); } catch (x) { return "L|1|ou_sc|oc_gn|hd_no|hc_w"; }
+  return [z.g === "P" ? "P" : "L", Math.max(0, Math.min(5, z.sk | 0))].concat(SLOTS.map((s) => e[s] || "")).join("|");
+}
+function parse(c) {
+  const a = String(c || "").split("|"), g = a[0] === "P" ? "P" : "L", o = { g: g, sk: Math.max(0, Math.min(5, +a[1] | 0)) };
+  const def = { ou: "ou_sc", oc: "oc_gn", hd: g === "P" ? "hd_td" : "hd_no", hc: "hc_w", fc: "fc_no", hn: "hn_no", bk: "bk_no", bd: "bd_no", pt: "pt_no", fr: "fr_no", ef: "ef_no" };
+  SLOTS.forEach((s, i) => { o[s] = okId(a[i + 2], s) || def[s]; });
+  if (g === "L" && /^hd_t[dlsw]|^hd_ts/.test(o.hd)) o.hd = "hd_no";
+  if (g === "P" && /^hd_(no|sk|kp|sb|tp)$/.test(o.hd)) o.hd = "hd_td";
+  return o;
+}
+/* bendera Jalur Gemilang kecil (tekstur kanvas) */
+function flagTex() {
+  return geo("flagtex", () => {
+    const c = document.createElement("canvas"); c.width = 128; c.height = 64; const x = c.getContext("2d");
+    for (let i = 0; i < 14; i++) { x.fillStyle = i % 2 ? "#ffffff" : "#cc0001"; x.fillRect(0, i * 64 / 14, 128, 64 / 14 + 0.5); }
+    x.fillStyle = "#010066"; x.fillRect(0, 0, 64, 64 * 8 / 14);
+    x.fillStyle = "#ffcc00"; x.beginPath(); x.arc(26, 18, 13, 0, 6.2832); x.fill(); x.fillStyle = "#010066"; x.beginPath(); x.arc(31, 18, 11, 0, 6.2832); x.fill();
+    x.fillStyle = "#ffcc00"; x.beginPath(); for (let i = 0; i < 28; i++) { const r = i % 2 ? 4 : 10, a = i / 28 * 6.2832 - 1.57; x.lineTo(46 + Math.cos(a) * r, 18 + Math.sin(a) * r); } x.fill();
+    const t = new T.CanvasTexture(c); return t;
+  });
+}
+function sparkTex() {
+  return geo("sparktex", () => {
+    const c = document.createElement("canvas"); c.width = c.height = 64; const x = c.getContext("2d"), g = x.createRadialGradient(32, 32, 0, 32, 32, 32);
+    g.addColorStop(0, "rgba(255,255,255,1)"); g.addColorStop(0.25, "rgba(255,240,170,.9)"); g.addColorStop(1, "rgba(255,220,120,0)"); x.fillStyle = g; x.fillRect(0, 0, 64, 64);
+    x.fillStyle = "rgba(255,255,255,.9)"; x.fillRect(30, 4, 4, 56); x.fillRect(4, 30, 56, 4);
+    return new T.CanvasTexture(c);
+  });
+}
+function ballTex() {
+  return geo("balltex", () => {
+    const c = document.createElement("canvas"); c.width = 128; c.height = 64; const x = c.getContext("2d");
+    x.fillStyle = "#f6f6f2"; x.fillRect(0, 0, 128, 64); x.fillStyle = "#22222a";
+    for (let i = 0; i < 6; i++) { const cx = 10 + i * 22, cy = i % 2 ? 22 : 44; x.beginPath(); for (let j = 0; j < 5; j++) { const a = j / 5 * 6.2832; x.lineTo(cx + Math.cos(a) * 8, cy + Math.sin(a) * 8); } x.fill(); }
+    return new T.CanvasTexture(c);
+  });
+}
+/* ---------- pembina avatar ---------- */
+function build(c, opt) {
+  opt = opt || {};
+  const o = typeof c === "string" ? parse(c) : c;
+  const sk = ZV_SKIN[o.sk] || "#e9b98f", oc = zvCol(ZV_OCOL, o.oc), hc = zvCol(ZV_HCOL, o.hc);
+  const sch = o.ou === "ou_sc", P = o.g === "P", long = o.ou === "ou_kr" || o.ou === "ou_jb" || (sch && P);
+  const topC = sch ? "#f4f4f0" : oc, botC = sch ? "#27345a" : (o.ou === "ou_tk" ? shade(oc, -0.3) : o.ou === "ou_my" || o.ou === "ou_sm" ? oc : shade(oc, -0.08));
+  const mSk = mat(sk, { roughness: 0.6 }), mTop = mat(topC), mBot = mat(botC), mShoe = mat(o.ou === "ou_tk" ? "#f1f1f1" : "#23232b", { roughness: 0.45 });
+  const root = new T.Group(), body = new T.Group(); root.add(body);
+  const pv = (x, y, z) => { const p = new T.Group(); p.position.set(x, y, z || 0); body.add(p); return p; };
+  /* kaki */
+  const lL = pv(-0.36, 2.3), lR = pv(0.36, 2.3);
+  [lL, lR].forEach((p, i) => {
+    p.add(mesh(capsule(0.3, 2.05), mBot, 0, -0.05, 0));
+    p.add(mesh(rbox(0.46, 0.3, 0.82), mShoe, 0, -2.17, 0.12));
+    if (o.ou === "ou_tk") p.add(mesh(geo("strp", () => new T.BoxGeometry(0.05, 1.7, 0.08)), mat("#f4f4f0"), i ? 0.29 : -0.29, -1.0, 0));
+  });
+  /* badan */
+  const torsoLen = long ? 0 : (o.ou === "ou_my" || o.ou === "ou_sm" ? 0.45 : 0.15);
+  const torso = mesh(lathe("torso" + torsoLen, [[0, 2.15 - torsoLen], [0.8, 2.15 - torsoLen], [0.86, 2.6], [0.95, 3.3], [1.02, 3.95], [0.95, 4.25], [0.55, 4.42], [0.22, 4.5], [0, 4.5]], 22), mTop);
+  torso.scale.z = 0.62; body.add(torso);
+  if (long) {
+    const skirtC = sch ? botC : (o.ou === "ou_kr" ? shade(oc, -0.1) : oc);
+    const sk1 = mesh(lathe("skirt", [[0, 0.22], [1.1, 0.22], [1.02, 1.0], [0.9, 2.2], [0.84, 2.75], [0, 2.75]], 22), mat(skirtC));
+    sk1.scale.z = 0.72; body.add(sk1);
+    if (!sch || P) { const top2 = mesh(lathe("kurtop", [[0, 1.75], [1.06, 1.75], [1.02, 2.4], [0.98, 3.3], [0, 3.3]], 22), mTop); top2.scale.z = 0.66; if (o.ou !== "ou_jb") body.add(top2); }
+    if (o.ou === "ou_jb") for (let i = 0; i < 6; i++) body.add(mesh(geo("btn", () => new T.SphereGeometry(0.05, 6, 4)), mat("#e0b341", { metalness: 0.6, roughness: 0.3 }), 0, 4.1 - i * 0.42, 0.66));
+  }
+  if (o.ou === "ou_sm") { const sp = mesh(lathe("sampin", [[0, 1.45], [0.98, 1.45], [0.92, 2.55], [0, 2.55]], 22), mat("#8e2340")); sp.scale.z = 0.7; body.add(sp); const st = mesh(geo("sampst", () => new T.TorusGeometry(0.95, 0.04, 6, 24)), mat("#e0b341", { metalness: 0.6, roughness: 0.35 }), 0, 2.0, 0); st.rotation.x = Math.PI / 2; st.scale.y = 0.7; body.add(st); }
+  if (o.ou === "ou_my" || o.ou === "ou_sm") { body.add(mesh(geo("col", () => new T.CylinderGeometry(0.3, 0.32, 0.18, 14)), mat(shade(oc, -0.25)), 0, 4.48, 0)); for (let i = 0; i < 3; i++) body.add(mesh(geo("btn", () => new T.SphereGeometry(0.05, 6, 4)), mat("#e0b341", { metalness: 0.6, roughness: 0.3 }), 0, 4.15 - i * 0.3, 0.62)); }
+  if (sch && !P) { body.add(mesh(geo("tie", () => new T.BoxGeometry(0.2, 1.1, 0.05)), mat("#27345a"), 0, 3.75, 0.62)); body.add(mesh(geo("colw", () => new T.CylinderGeometry(0.3, 0.33, 0.16, 14)), mat("#e9e9e3"), 0, 4.47, 0)); }
+  if (o.ou === "ou_tk") { body.add(mesh(geo("zip", () => new T.BoxGeometry(0.06, 2.0, 0.04)), mat("#f4f4f0"), 0, 3.3, 0.64)); }
+  /* lengan */
+  const aL = pv(-1.02, 4.15), aR = pv(1.02, 4.15);
+  [aL, aR].forEach((p, i) => {
+    p.rotation.z = i ? 0.09 : -0.09;
+    p.add(mesh(capsule(0.25, 1.95), mTop, 0, 0.05, 0));
+    p.add(mesh(geo("hand", () => new T.SphereGeometry(0.25, 12, 10)), mSk, 0, -2.05, 0.02));
+    if (o.ou === "ou_tk") p.add(mesh(geo("strpa", () => new T.BoxGeometry(0.05, 1.6, 0.06)), mat("#f4f4f0"), i ? 0.24 : -0.24, -0.9, 0));
+  });
+  /* leher dan kepala */
+  body.add(mesh(geo("neck", () => new T.CylinderGeometry(0.21, 0.24, 0.35, 12)), mSk, 0, 4.6, 0));
+  const head = new T.Group(); head.position.y = 5.22; body.add(head);
+  const hs = mesh(geo("head", () => new T.SphereGeometry(0.62, 24, 18)), mSk, 0, 0, 0); hs.scale.set(1, 1.12, 1.02); head.add(hs);
+  const hd = o.hd, mH = mat(hc);
+  if (P) {
+    /* tudung: tempurung dengan bukaan wajah + labuhan menutup leher dan dada */
+    const open = hd === "hd_ts" ? 1.35 : 1.5;
+    const shell = mesh(geo("tud" + open, () => new T.SphereGeometry(0.75, 26, 18, Math.PI / 2 + open / 2, Math.PI * 2 - open, 0, Math.PI * 0.78)), mat(hc, { side: T.DoubleSide }), 0, 0.04, -0.02);
+    shell.scale.set(1, 1.12, 1.04); shell.receiveShadow = false; head.add(shell);
+    const brow = mesh(geo("tudb" + open, () => new T.SphereGeometry(0.75, 12, 8, Math.PI / 2 - open / 2, open, 0, Math.PI * 0.34)), mat(hc, { side: T.DoubleSide }), 0, 0.04, -0.02);
+    brow.scale.set(1, 1.12, 1.04); brow.receiveShadow = false; head.add(brow);
+    const drapeY = { hd_td: 3.55, hd_sw: 3.95, hd_tl: 2.75, hd_ts: 4.15 }[hd] || 3.55, drapeR = { hd_td: 1.12, hd_sw: 0.95, hd_tl: 1.22, hd_ts: 0.82 }[hd] || 1.1;
+    const dr = mesh(lathe("drape" + hd, [[0, drapeY], [drapeR * 0.98, drapeY], [drapeR, drapeY + 0.1], [0.9, 4.3], [0.62, 4.62], [0.45, 4.9], [0, 4.9]], 22), mH);
+    dr.scale.z = 0.72; body.add(dr);
+    if (hd === "hd_sw") { const vis = mesh(geo("visor", () => new T.TorusGeometry(0.62, 0.06, 6, 20, Math.PI)), mat(shade(hc, -0.2)), 0, 0.42, 0.18); vis.rotation.x = -0.5; head.add(vis); }
+  } else {
+    const hair = mesh(geo("hair", () => new T.SphereGeometry(0.66, 22, 14, 0, Math.PI * 2, 0, Math.PI * 0.5)), mat("#1f1f26", { roughness: 0.9 }), 0, 0.06, -0.04); hair.scale.set(1, 1.08, 1.04); head.add(hair);
+    if (hd === "hd_sk") head.add(mesh(geo("songkok", () => new T.CylinderGeometry(0.6, 0.64, 0.5, 26)), mat("#15151a", { roughness: 0.95 }), 0, 0.6, -0.02));
+    else if (hd === "hd_kp") { const kp = mesh(geo("kopiah", () => new T.SphereGeometry(0.66, 22, 10, 0, Math.PI * 2, 0, Math.PI * 0.35)), mH, 0, 0.18, -0.02); kp.scale.y = 1.2; head.add(kp); }
+    else if (hd === "hd_sb") { for (let i = 0; i < 3; i++) { const t = mesh(geo("serb" + i, () => new T.TorusGeometry(0.6 - i * 0.12, 0.17, 10, 24)), mat("#f4f4f0"), 0, 0.42 + i * 0.17, -0.03); t.rotation.x = Math.PI / 2 + (i - 1) * 0.12; head.add(t); } head.add(mesh(geo("serbt", () => new T.SphereGeometry(0.3, 12, 8)), mat("#f4f4f0"), 0, 0.82, -0.04)); }
+    else if (hd === "hd_tp") { const cp = mesh(geo("cap", () => new T.SphereGeometry(0.68, 22, 10, 0, Math.PI * 2, 0, Math.PI * 0.45)), mH, 0, 0.12, -0.03); head.add(cp); const br = mesh(geo("brim", () => new T.CylinderGeometry(0.42, 0.42, 0.05, 18, 1, false, 0, Math.PI)), mat(shade(hc, -0.2)), 0, 0.38, 0.5); br.rotation.y = Math.PI / 2; br.scale.x = 1.3; head.add(br); }
+  }
+  /* cermin mata */
+  if (o.fc !== "fc_no") {
+    const fm = mat(o.fc === "fc_sg" ? "#111116" : "#2a2a33", { roughness: 0.4, metalness: 0.3 }), lens = mat(o.fc === "fc_sg" ? "#111116" : "#bfe6ff", { transparent: true, opacity: o.fc === "fc_sg" ? 0.92 : 0.35, roughness: 0.1, metalness: 0.2 });
+    [-0.23, 0.23].forEach((x) => {
+      if (o.fc === "fc_cm") { head.add(mesh(geo("rimc", () => new T.TorusGeometry(0.15, 0.025, 6, 16)), fm, x, 0.08, 0.6)); head.add(mesh(geo("lenc", () => new T.CircleGeometry(0.15, 16)), lens, x, 0.08, 0.6)); }
+      else { head.add(mesh(geo("rims", () => new T.BoxGeometry(0.32, 0.22, 0.03)), fm, x, 0.08, 0.6)); head.add(mesh(geo("lens", () => new T.PlaneGeometry(0.27, 0.17)), lens, x, 0.08, 0.618)); }
+    });
+    head.add(mesh(geo("brg", () => new T.BoxGeometry(0.16, 0.03, 0.03)), fm, 0, 0.1, 0.62));
+  }
+  /* pegangan di tangan kanan */
+  const hand = new T.Group(); hand.position.set(0, -2.1, 0.22); aR.add(hand);
+  if (o.hn === "hn_bk") { hand.add(mesh(geo("book", () => new T.BoxGeometry(0.6, 0.78, 0.16)), mat("#3f7fd9"), 0, 0, 0.05)); hand.add(mesh(geo("pages", () => new T.BoxGeometry(0.06, 0.72, 0.13)), mat("#f4f4f0"), 0.3, 0, 0.05)); }
+  else if (o.hn === "hn_qr") { hand.add(mesh(geo("mus", () => new T.BoxGeometry(0.58, 0.76, 0.17)), mat("#1f7a4d"), 0, 0, 0.05)); hand.add(mesh(geo("musg", () => new T.BoxGeometry(0.36, 0.5, 0.02)), mat("#e0b341", { metalness: 0.6, roughness: 0.3 }), 0, 0, 0.14)); }
+  else if (o.hn === "hn_ts") { const ts = mesh(geo("tasb", () => new T.TorusGeometry(0.28, 0.05, 6, 28)), mat("#2fa57a", { roughness: 0.4 }), 0, -0.25, 0); hand.add(ts); hand.add(mesh(geo("tasbt", () => new T.CylinderGeometry(0.03, 0.05, 0.3, 6)), mat("#e0b341"), 0, -0.65, 0)); }
+  else if (o.hn === "hn_jg") { hand.add(mesh(geo("pole", () => new T.CylinderGeometry(0.035, 0.035, 2.6, 6)), mat("#8a6a3a"), 0, 0.9, 0)); const fl = mesh(geo("flag", () => new T.PlaneGeometry(1.3, 0.65, 8, 1)), new T.MeshStandardMaterial({ map: flagTex(), side: T.DoubleSide, roughness: 0.9 }), 0.68, 1.85, 0); fl.castShadow = false; hand.add(fl); hand.userData.flag = fl; }
+  else if (o.hn === "hn_bl") { const b = mesh(geo("ball", () => new T.SphereGeometry(0.38, 18, 12)), new T.MeshStandardMaterial({ map: ballTex(), roughness: 0.55 }), 0, -0.1, 0.18); hand.add(b); hand.userData.ball = b; }
+  else if (o.hn === "hn_tr") { hand.add(mesh(lathe("troph", [[0, 0], [0.22, 0], [0.22, 0.08], [0.07, 0.15], [0.07, 0.35], [0.32, 0.55], [0.36, 0.9], [0, 0.9]], 18), mat("#f0c53c", { metalness: 0.75, roughness: 0.25 }), 0, -0.05, 0.12)); }
+  /* beg */
+  if (o.bk === "bk_bg") { body.add(mesh(rbox(1.2, 1.35, 0.5), mat("#e0674a"), 0, 3.45, -0.78)); body.add(mesh(rbox(0.9, 0.5, 0.2), mat("#c9553a"), 0, 3.05, -1.06)); }
+  /* lencana di dada */
+  const bdz = 0.64, bdy = 3.9;
+  if (o.bd === "bd_st") { const s = new T.Shape(); for (let i = 0; i < 10; i++) { const r = i % 2 ? 0.07 : 0.17, a = i / 10 * 6.2832 + 1.57; if (i) s.lineTo(Math.cos(a) * r, Math.sin(a) * r); else s.moveTo(Math.cos(a) * r, Math.sin(a) * r); } body.add(mesh(geo("star", () => new T.ExtrudeGeometry(s, { depth: 0.04, bevelEnabled: false })), mat("#f4c542", { metalness: 0.6, roughness: 0.3 }), -0.42, bdy, bdz)); }
+  else if (o.bd === "bd_pf") body.add(mesh(geo("pref", () => new T.BoxGeometry(0.28, 0.34, 0.04)), mat("#2d4fa8"), -0.42, bdy, bdz));
+  else if (o.bd === "bd_md") { body.add(mesh(geo("medr", () => new T.BoxGeometry(0.12, 0.3, 0.02)), mat("#cc2236"), -0.42, bdy + 0.12, bdz)); const md = mesh(geo("med", () => new T.CylinderGeometry(0.15, 0.15, 0.04, 18)), mat("#f0c53c", { metalness: 0.75, roughness: 0.25 }), -0.42, bdy - 0.12, bdz + 0.02); md.rotation.x = Math.PI / 2; body.add(md); }
+  /* haiwan peliharaan: berjalan di sebelah */
+  let pet = null;
+  if (o.pt !== "pt_no") {
+    pet = new T.Group(); pet.position.set(1.9, 0, 0.6); root.add(pet);
+    if (o.pt === "pt_ct") { const m = mat("#e0a050"); const cb = mesh(capsule(0.32, 1.0, 10), m, 0, 0.62, 0.5); cb.rotation.x = Math.PI / 2; pet.add(cb); pet.add(mesh(geo("cath", () => new T.SphereGeometry(0.36, 14, 10)), m, 0, 0.95, 0.62)); [-0.17, 0.17].forEach((x) => pet.add(mesh(geo("catear", () => new T.ConeGeometry(0.11, 0.24, 4)), m, x, 1.3, 0.6))); const tl = mesh(capsule(0.07, 0.9, 6), m, 0, 0.9, -0.55); tl.rotation.x = -0.6; pet.add(tl); }
+    else if (o.pt === "pt_ar") { const m = mat("#f1f1ee"); pet.add(mesh(geo("rab", () => new T.SphereGeometry(0.42, 14, 10)), m, 0, 0.42, 0)); pet.add(mesh(geo("rabh", () => new T.SphereGeometry(0.28, 12, 10)), m, 0, 0.8, 0.28)); [-0.1, 0.1].forEach((x) => { const e = mesh(capsule(0.07, 0.5, 6), m, x, 1.38, 0.24); pet.add(e); }); }
+    else if (o.pt === "pt_bd") { const m = mat("#f4d03a"); pet.add(mesh(geo("bird", () => new T.SphereGeometry(0.28, 12, 10)), m, 0, 0, 0)); pet.add(mesh(geo("birdh", () => new T.SphereGeometry(0.18, 10, 8)), m, 0, 0.22, 0.2)); const bk = mesh(geo("beak", () => new T.ConeGeometry(0.06, 0.16, 6)), mat("#f08a2a"), 0, 0.2, 0.4); bk.rotation.x = Math.PI / 2; pet.add(bk); pet.position.set(1.4, 5.6, 0.2); pet.userData.fly = 1; }
+  }
+  /* bingkai menjadi aura di kaki */
+  let aura = null;
+  if (o.fr !== "fr_no") {
+    const fc = { fr_bz: "#b7793a", fr_sv: "#c9d2dc", fr_gd: "#f0c53c", fr_ne: "#29e6ff" }[o.fr] || "#f0c53c";
+    aura = new T.Mesh(geo("aura", () => new T.TorusGeometry(1.35, 0.07, 8, 40)), new T.MeshBasicMaterial({ color: fc, transparent: true, opacity: 0.85 }));
+    aura.rotation.x = Math.PI / 2; aura.position.y = 0.06; root.add(aura);
+    const disc = new T.Mesh(geo("aurad", () => new T.CircleGeometry(1.3, 32)), new T.MeshBasicMaterial({ color: fc, transparent: true, opacity: 0.18, depthWrite: false })); disc.rotation.x = -Math.PI / 2; disc.position.y = 0.05; root.add(disc); aura.userData.disc = disc;
+  }
+  /* kesan khas 3D */
+  let fx = null;
+  if (o.ef === "ef_bt") {
+    const n = 26, pos = new Float32Array(n * 3); for (let i = 0; i < n; i++) { pos[i * 3] = 0; pos[i * 3 + 1] = Math.random() * 6; pos[i * 3 + 2] = 0; }
+    const gg = new T.BufferGeometry(); gg.setAttribute("position", new T.BufferAttribute(pos, 3));
+    fx = new T.Points(gg, new T.PointsMaterial({ color: 0xfff1a0, size: 0.38, map: sparkTex(), transparent: true, opacity: 0.95, depthWrite: false, blending: T.AdditiveBlending })); fx.userData.kind = "bt"; fx.userData.ph = Array.from({ length: n }, () => Math.random() * 6.28); root.add(fx);
+  } else if (o.ef === "ef_jp") {
+    fx = new T.Group(); fx.userData.kind = "jp";
+    [-0.32, 0.32].forEach((x) => { fx.add(mesh(geo("jpt", () => new T.CylinderGeometry(0.24, 0.24, 1.2, 12)), mat("#c9d2dc", { metalness: 0.7, roughness: 0.3 }), x, 3.5, -0.85)); const fl = new T.Mesh(geo("jpf", () => new T.ConeGeometry(0.2, 0.9, 10)), new T.MeshBasicMaterial({ color: 0xff8a1f, transparent: true, opacity: 0.85 })); fl.rotation.x = Math.PI; fl.position.set(x, 2.5, -0.85); fl.visible = false; fx.add(fl); });
+    body.add(fx);
+  } else if (o.ef === "ef_pl") { fx = { userData: { kind: "pl" } }; }
+  return { g: root, body: body, lL: lL, lR: lR, aL: aL, aR: aR, head: head, hand: hand, pet: pet, aura: aura, fx: fx, o: o, ph: Math.random() * 6, t: 0, trail: [] };
+}
+/* ---------- animasi ---------- */
+function anim(av, moving, air, dt, speed, scene) {
+  av.t += dt; av.ph += dt * (moving ? 8.5 * (speed || 1) : 2);
+  const s = air ? 0.9 : moving ? Math.sin(av.ph) * 0.7 : 0;
+  av.lL.rotation.x = air ? -0.55 : s; av.lR.rotation.x = air ? 0.35 : -s;
+  av.aL.rotation.x = air ? -2.3 : -s * 0.85; av.aR.rotation.x = air ? -2.3 : (av.hand.children.length ? Math.min(-0.25, s * 0.5 - 0.25) : s * 0.85);
+  av.body.position.y = moving && !air ? Math.abs(Math.cos(av.ph)) * 0.12 : Math.sin(av.t * 1.6) * 0.015;
+  av.head.rotation.y = moving ? 0 : Math.sin(av.t * 0.5) * 0.18;
+  if (av.hand.userData.flag) av.hand.userData.flag.rotation.y = Math.sin(av.t * 4) * 0.25;
+  if (av.hand.userData.ball) av.hand.userData.ball.rotation.x += dt * (moving ? 6 : 1);
+  if (av.pet) {
+    if (av.pet.userData.fly) { av.pet.position.set(1.4 + Math.sin(av.t * 1.3) * 0.5, 5.4 + Math.sin(av.t * 3) * 0.35, 0.2 + Math.cos(av.t * 1.3) * 0.5); av.pet.rotation.z = Math.sin(av.t * 20) * 0.2; }
+    else { av.pet.position.y = moving ? Math.abs(Math.sin(av.ph * 1.2)) * 0.35 : 0; av.pet.rotation.y = moving ? 0 : Math.sin(av.t * 0.7) * 0.4; }
+  }
+  if (av.aura) { const k = 1 + Math.sin(av.t * 3) * 0.06; av.aura.scale.set(k, k, 1); av.aura.rotation.z += dt * 0.6; if (av.o.fr === "fr_ne") av.aura.material.opacity = 0.6 + Math.sin(av.t * 6) * 0.3; }
+  const fx = av.fx;
+  if (fx && fx.userData.kind === "bt") {
+    const p = fx.geometry.attributes.position, ph = fx.userData.ph;
+    for (let i = 0; i < ph.length; i++) { const a = ph[i] + av.t * (0.8 + (i % 5) * 0.15), r = 1.3 + (i % 3) * 0.3; p.setXYZ(i, Math.cos(a) * r, ((ph[i] * 3 + av.t * 0.9) % 6.2), Math.sin(a) * r); }
+    p.needsUpdate = true; fx.material.opacity = 0.6 + Math.sin(av.t * 8) * 0.35;
+  } else if (fx && fx.userData.kind === "jp") {
+    fx.children.forEach((c, i) => { if (i % 2) { c.visible = air || (moving && speed > 1.2); c.scale.set(1, 0.7 + Math.random() * 0.6, 1); } });
+  } else if (fx && fx.userData.kind === "pl" && scene) {
+    /* jejak pelangi: jalur berwarna di belakang semasa bergerak */
+    av.trT = (av.trT || 0) - dt;
+    if (moving && av.trT <= 0) {
+      av.trT = 0.06; const wp = new T.Vector3(); av.g.getWorldPosition(wp);
+      const m = new T.Mesh(geo("trq", () => new T.PlaneGeometry(1.4, 0.5)), new T.MeshBasicMaterial({ color: new T.Color().setHSL((av.t * 0.6) % 1, 0.9, 0.6), transparent: true, opacity: 0.8, depthWrite: false, side: T.DoubleSide }));
+      m.position.set(wp.x, wp.y + 0.25, wp.z); m.rotation.x = -Math.PI / 2; m.rotation.z = av.g.rotation.y; scene.add(m); av.trail.push(m);
+    }
+    for (let i = av.trail.length - 1; i >= 0; i--) { const m = av.trail[i]; m.material.opacity -= dt * 0.9; if (m.material.opacity <= 0) { scene.remove(m); m.material.dispose(); av.trail.splice(i, 1); } }
+  }
+}
+function dispose(av, scene) { if (av && av.trail && scene) av.trail.forEach((m) => { scene.remove(m); m.material.dispose(); }); }
+
+/* ---------- pratonton berputar untuk Gudang ---------- */
+const PV = { r: null, scene: null, cam: null, av: null, raf: 0, yaw: 0.5, drag: null, code: "", last: 0 };
+function preview(box, c) {
+  if (!PV.r) {
+    try { PV.r = new T.WebGLRenderer({ antialias: true, alpha: true }); } catch (e) { PV.r = null; return false; }
+    PV.r.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); PV.r.shadowMap.enabled = true;
+    PV.scene = new T.Scene(); PV.cam = new T.PerspectiveCamera(32, 0.8, 0.1, 100); PV.cam.position.set(0, 4.2, 15.5); PV.cam.lookAt(0, 3.1, 0);
+    PV.scene.add(new T.HemisphereLight(0xeaf4ff, 0x40506a, 0.85));
+    const key = new T.DirectionalLight(0xffffff, 0.95); key.position.set(4, 9, 7); key.castShadow = true; key.shadow.mapSize.set(1024, 1024); key.shadow.bias = -0.0015; key.shadow.normalBias = 0.03; PV.scene.add(key);
+    const rim = new T.DirectionalLight(0x9fd8ff, 0.5); rim.position.set(-6, 5, -6); PV.scene.add(rim);
+    const fl = new T.Mesh(new T.CircleGeometry(3.2, 40), new T.MeshStandardMaterial({ color: 0x1b3550, roughness: 0.9 })); fl.rotation.x = -Math.PI / 2; fl.receiveShadow = true; PV.scene.add(fl);
+    const cv = PV.r.domElement; cv.className = "zv3d"; cv.setAttribute("aria-label", "Pratonton avatar 3D. Seret untuk memusing.");
+    cv.addEventListener("pointerdown", (e) => { PV.drag = e.clientX; try { cv.setPointerCapture(e.pointerId); } catch (x) { /* abaikan */ } });
+    cv.addEventListener("pointermove", (e) => { if (PV.drag == null) return; PV.yaw += (e.clientX - PV.drag) * 0.012; PV.drag = e.clientX; PV.hold = 2; });
+    const up = () => { PV.drag = null; }; cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
+  }
+  const cv = PV.r.domElement; box.textContent = ""; box.appendChild(cv);
+  const w = box.clientWidth || 190, h = Math.round(w * 1.25); PV.r.setSize(w, h); PV.cam.aspect = w / h; PV.cam.updateProjectionMatrix();
+  if (PV.code !== c || !PV.av) { if (PV.av) PV.scene.remove(PV.av.g); PV.av = build(c); PV.scene.add(PV.av.g); PV.code = c; }
+  if (!PV.raf) { PV.last = performance.now(); PV.raf = requestAnimationFrame(pvLoop); }
+  return true;
+}
+function pvLoop(ts) {
+  const cv = PV.r && PV.r.domElement;
+  if (!cv || !cv.isConnected) { PV.raf = 0; return; }
+  PV.raf = requestAnimationFrame(pvLoop);
+  const dt = Math.min(0.05, (ts - PV.last) / 1000); PV.last = ts;
+  if (PV.drag == null) { if (PV.hold > 0) PV.hold -= dt; else PV.yaw += dt * 0.6; }
+  PV.av.g.rotation.y = PV.yaw; anim(PV.av, false, false, dt, 1, null);
+  PV.r.render(PV.scene, PV.cam);
+}
+window.AV3 = { build: build, anim: anim, code: code, parse: parse, preview: preview, dispose: dispose };
+})();
