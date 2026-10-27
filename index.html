@@ -1047,6 +1047,7 @@ body.vmap #fabDock{bottom:calc(var(--dockh,190px) + 26px + env(safe-area-inset-b
 /* ===== v17.76: Gudang avatar 2D + Kolam Ikan ===== */
 .wallet{pointer-events:auto!important;cursor:pointer!important}
 .wallet:hover{box-shadow:0 0 22px rgba(255,210,61,.5)!important}
+.kelas-chips{display:flex;flex-wrap:wrap;gap:6px}.kelas-chip{min-height:36px;padding:4px 12px;border-radius:999px;border:1px solid var(--line2,#2a5a82);background:rgba(41,230,255,.06);color:inherit;font:700 13px var(--font-body,sans-serif);cursor:pointer}.kelas-chip.on{background:var(--neon,#29e6ff);color:#04121c;border-color:transparent}
 .mnmore button.hot{color:var(--neon);border-color:var(--line2);background:rgba(41,230,255,.1)}
 .mnmore #dmBtn{flex-basis:100%;max-width:420px;min-height:52px;font-size:15px;color:#2b1900;border:0;background:linear-gradient(90deg,#ffd45a,#6fe0a6 55%,#5ad1ff);box-shadow:0 0 0 1px rgba(255,255,255,.25),0 6px 22px rgba(90,209,255,.35);letter-spacing:.06em}
 .mnmore #dmBtn:hover,.mnmore #dmBtn:focus-visible{color:#000;filter:brightness(1.08)}
@@ -1112,7 +1113,7 @@ body.vmap #fabDock{bottom:calc(var(--dockh,190px) + 26px + env(safe-area-inset-b
 <div id="rkBanner" role="status" hidden></div>
 <div id="app">
   <header class="top"><div class="top-in">
-    <div class="brand" role="link" tabindex="0" aria-label="Gempur, kembali ke peta">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.88</small></div>
+    <div class="brand" role="link" tabindex="0" aria-label="Gempur, kembali ke peta">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v17.89</small></div>
     <div class="sjm" id="sjm"><button type="button" aria-haspopup="menu" aria-expanded="false"><span class="sjm-l">Subjek</span><b id="sjmName"></b></button><div class="sjm-pop" role="menu" hidden></div></div>
     <button class="wallet" id="walletBtn" type="button" aria-label="Syiling. Buka Gudang avatar"><span class="wc"></span><b class="walnum">0</b><span class="walpop" aria-hidden="true"></span></button>
     <button class="meb" id="meBtn" type="button" aria-label="Profil anggota">
@@ -1230,7 +1231,7 @@ body.vmap #fabDock{bottom:calc(var(--dockh,190px) + 26px + env(safe-area-inset-b
     <div class="field"><label for="inName">Nama panggilan (dipaparkan dalam permainan, maksimum 16 huruf)</label><input id="inName" maxlength="16" autocomplete="off" placeholder="Contoh: Harimau5"></div>
     <div class="two">
       <div class="field"><label for="inNegeri">Negeri sekolah</label><select id="inNegeri"></select></div>
-      <div class="field"><label for="inKelas">Kelas (pilihan)</label><input id="inKelas" maxlength="12" autocomplete="off" placeholder="Contoh: 5 ALFA"></div>
+      <div class="field"><label for="inKelas">Kelas (pilihan)</label><input id="inKelas" maxlength="16" autocomplete="off" placeholder="Contoh: 5 ALFA"></div>
     </div>
     <div class="field" id="sekHint" hidden style="color:var(--muted);font-size:14px"></div>
     <div class="field" id="sekPick" hidden><label for="selSekolah">Sekolah anda (skrol dan pilih, atau taip untuk cari)</label><input id="cariSek" maxlength="90" autocomplete="off" placeholder="Cari nama sekolah..." aria-label="Cari nama sekolah"><select id="selSekolah" size="7" aria-label="Senarai sekolah"></select></div>
@@ -1600,7 +1601,7 @@ if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.
 if (SUBJ === "bm") { DATA.tema = DATA_BM.tema; DATA.topik = DATA_BM.topik; DATA.soalan = DATA_BM.soalan; }
 if (SUBJ === "bi") { DATA.tema = DATA_BI.tema; DATA.topik = DATA_BI.topik; DATA.soalan = DATA_BI.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v17.88"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v17.89"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -1840,6 +1841,19 @@ function totals() {
   return { st, m };
 }
 function cleanFull(s) { return String(s || "").replace(/[\u0000-\u001f<>]/g, "").replace(/\s+/g, " ").trim().slice(0, 60); }
+/* v17.89: nama kelas seragam supaya "5 Alfa", "5ALFA" dan "5-alfa" dikira satu kelas: "5 ALFA" */
+/* v17.89: reset kedudukan. Guru (kunci moderator) menetapkan tetapan/reset; data sebelum masa itu tidak dikira. */
+function rankStale(t) { return !!(Net.reset > 0) && !((+t || 0) >= Net.reset); }
+function rankResetApply() {
+  if (!(Net.reset > 0) || (+P.rst || 0) >= Net.reset) return;
+  P.xp = 0; P.la = Date.now(); P.ad = 0; P.ld = ""; P.wp = 0; P.mp = 0; P.lz = 0; P.rs = {};
+  Object.keys(SUBJS).forEach((k) => { const sf = NSUF[k] || ""; try { localStorage.removeItem("gt-rk" + sf); localStorage.removeItem("gt-ak" + sf); } catch (e) { /* abaikan */ } });
+  P.rst = Net.reset; Net.noMerge = true; saveP();
+  try { toast("Kedudukan telah dimulakan semula oleh guru. Semua bermula dari kosong, selamat bersaing!", "good"); } catch (e) { /* abaikan */ }
+}
+function kelasNorm(s) {
+  return String(s || "").toUpperCase().replace(/[^A-Z0-9]+/g, " ").replace(/(\d)([A-Z])/g, "$1 $2").replace(/\s+/g, " ").trim().slice(0, 16);
+}
 function cleanName(s) { return String(s || "").replace(/[\u0000-\u001f<>]/g, "").replace(/\s+/g, " ").trim().slice(0, 16); }
 
 
@@ -2029,12 +2043,13 @@ const Net = {
     } else return;
     if (this.user) { try { this.uid = await this.user.id(); } catch (e) { this.uid = null; } }
     if (this.user && this.user.can) { try { this.canWrite = await this.user.can("data.write"); } catch (e) { this.canWrite = null; } }
+    if (this.db) { try { const rs = await this.db.doc("tetapan/reset").get(), v = rs.exists ? Number(rs.data()) : 0; this.reset = v > 0 ? v : 0; } catch (e) { this.reset = 0; } rankResetApply(); }
     if (this.db && this.uid) {
       try {
         const snap = await this.db.doc("pemain/" + nkey(this.uid)).get();
         if (snap.exists) {
           const d = snap.data();
-          if (d && typeof d.xp === "number" && decayXp(d.xp, d.la, d.ad, Date.now()) > curXp()) { P.xp = d.xp; P.la = d.la || P.la; P.ad = Math.max(P.ad | 0, d.ad | 0); if (d.mis) P.prog = mergeProg(d.mis, P.prog); if (d.bd && !Object.keys(P.bd).length) String(d.bd).split(",").forEach((b) => { if (BADGES.some((x) => x.id === b)) P.bd[b] = 1; }); if (d.inv && (P.coin | 0) === 0 && P.avOwn.length <= 1 && !P.accOwn.length) invUnpack(d.inv); if (!P.sq && d.pt) P.sq = { id: sqNorm(d.pt), n: sqClean(d.ptn) }; if (d.kz) khasFromZ(d.kz); if (!P.nama && d.n) P.nama = cleanName(d.n); if (!P.kelas && d.k) P.kelas = String(d.k).slice(0, 12); if (!P.sekolah && d.sk) { P.sekolah = String(d.sk).slice(0, 60); P.negeri = String(d.ng || ""); } try { localStorage.setItem(LS_KEY, JSON.stringify(P)); } catch (e) { /* abaikan */ } }
+          if (d && typeof d.xp === "number" && !rankStale(d.t) && decayXp(d.xp, d.la, d.ad, Date.now()) > curXp()) { P.xp = d.xp; P.la = d.la || P.la; P.ad = Math.max(P.ad | 0, d.ad | 0); if (d.mis) P.prog = mergeProg(d.mis, P.prog); if (d.bd && !Object.keys(P.bd).length) String(d.bd).split(",").forEach((b) => { if (BADGES.some((x) => x.id === b)) P.bd[b] = 1; }); if (d.inv && (P.coin | 0) === 0 && P.avOwn.length <= 1 && !P.accOwn.length) invUnpack(d.inv); if (!P.sq && d.pt) P.sq = { id: sqNorm(d.pt), n: sqClean(d.ptn) }; if (d.kz) khasFromZ(d.kz); if (!P.nama && d.n) P.nama = cleanName(d.n); if (!P.kelas && d.k) P.kelas = String(d.k).slice(0, 12); if (!P.sekolah && d.sk) { P.sekolah = String(d.sk).slice(0, 60); P.negeri = String(d.ng || ""); } try { localStorage.setItem(LS_KEY, JSON.stringify(P)); } catch (e) { /* abaikan */ } }
         }
       } catch (e) { /* tiada akses baca */ }
       this.watchBoard();
@@ -2047,7 +2062,7 @@ const Net = {
     const done = () => { computeStand(); if (this.boardCb) this.boardCb(); };
     try {
       this.unsubs.push(this.db.collection("pemain").orderBy("xp", "desc").limit(100).onSnapshot((snap) => {
-        const nb = snap.docs.filter((d) => docSj(d.id) === SUBJ).map((d) => Object.assign({}, d.data(), { id: docUid(d.id) }));
+        const nb = snap.docs.filter((d) => docSj(d.id) === SUBJ && !rankStale(d.data() && d.data().t)).map((d) => Object.assign({}, d.data(), { id: docUid(d.id), k: kelasNorm(d.data().k) }));
         if (this.board.length) {
           const prev = {}; for (const r of this.board) prev[r.id] = r.p | 0;
           for (const r of nb) {
@@ -2064,7 +2079,7 @@ const Net = {
       }, fail));
       this.unsubs.push(this.db.collection("ringkas").limit(20000).onSnapshot((snap) => {
         const m = {};
-        for (const d of snap.docs) { const v = d.data(); if (v && typeof v === "object" && docSj(d.id) === SUBJ) m[docUid(d.id)] = v; }
+        for (const d of snap.docs) { const v = d.data(); if (v && typeof v === "object" && docSj(d.id) === SUBJ && !rankStale(v.l)) m[docUid(d.id)] = v; }
         this.ring = m; done();
       }, () => { /* ringkas tiada: guna papan 100 teratas sahaja */ }));
       this.unsubs.push(this.db.collection("pas").limit(3000).onSnapshot((snap) => {
@@ -2101,7 +2116,7 @@ const Net = {
         if (d && typeof d === "object") {
           if (d.mis) { P.prog = mergeProg(d.mis, P.prog); srMerge(d.mis); }
           String(d.bd || "").split(",").forEach((b) => { if (BADGES.some((x) => x.id === b)) P.bd[b] = 1; });
-          if ((d.xp | 0) > (P.xp | 0)) { P.xp = d.xp | 0; P.la = Math.max(P.la | 0, d.la | 0); if (d.inv) invUnpack(d.inv); }
+          if ((d.xp | 0) > (P.xp | 0) && !rankStale(d.t)) { P.xp = d.xp | 0; P.la = Math.max(P.la | 0, d.la | 0); if (d.inv) invUnpack(d.inv); }
           P.ad = Math.max(P.ad | 0, d.ad | 0);
           try { localStorage.setItem(LS_KEY, JSON.stringify(P)); } catch (e) { /* abaikan */ }
         }
@@ -8189,7 +8204,7 @@ function lgRoot() {
   const r = el("div", { id: "lgOv", role: "dialog", "aria-modal": "true", "aria-label": "Misi Lagenda" });
   document.body.appendChild(r); LG.root = r; return r;
 }
-/* v17.88: Dunia Gempur Malaysia (dunia maya peta Malaysia untuk semua tajuk subjek semasa).
+/* v17.88: META GEMPUR (dunia maya peta Malaysia untuk semua tajuk subjek semasa).
    Dibuka daripada butang di peta utama; dunia.js dimuat hanya apabila diperlukan. */
 function lmOpen(tid) {
   if (typeof S !== "undefined" && S && S.running) { toast("Selesaikan atau keluar daripada misi dahulu.", "warn"); return; }
@@ -8197,13 +8212,13 @@ function lmOpen(tid) {
   if (lmOpen.busy) return; lmOpen.busy = true;
   const s = document.createElement("script"); s.src = "dunia.js";
   s.onload = () => { lmOpen.busy = false; if (window.LMX) window.LMX.open(tid); };
-  s.onerror = () => { lmOpen.busy = false; s.remove(); toast("Dunia Gempur Malaysia tidak dapat dimuatkan. Semak sambungan internet dan cuba lagi.", "warn"); };
+  s.onerror = () => { lmOpen.busy = false; s.remove(); toast("META GEMPUR tidak dapat dimuatkan. Semak sambungan internet dan cuba lagi.", "warn"); };
   document.head.appendChild(s);
 }
 function lmBtnInit() {
   const row = document.querySelector(".mnmore"); if (!row) return;
   let b = document.getElementById("dmBtn");
-  if (!b) { b = el("button", { type: "button", id: "dmBtn", title: "Dunia maya 3D: jelajah peta Malaysia bersama rakan dan jawab semua tajuk subjek ini" }, "🌏 Dunia Gempur Malaysia"); b.dataset.ok = "1"; b.addEventListener("click", () => lmOpen("")); }
+  if (!b) { b = el("button", { type: "button", id: "dmBtn", title: "Dunia maya 3D: jelajah peta Malaysia bersama rakan dan jawab semua tajuk subjek ini" }, "🌏 META GEMPUR"); b.dataset.ok = "1"; b.addEventListener("click", () => lmOpen("")); }
   if (row.firstChild !== b) row.insertBefore(b, row.firstChild);
 }
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", lmBtnInit); else setTimeout(lmBtnInit, 0);
@@ -8612,12 +8627,12 @@ const BS_AD = {
 };
 function bsGen() { return sqGen(); }
 function bsPres(p) { if (!BS.room) return; try { const x = BS.room.presence(p); if (x && x.catch) x.catch(() => {}); } catch (e) { /* abaikan */ } }
-function bsMeInfo() { return { n: cleanName(P.nama) || "Pemain", k: String(P.kelas || "").trim().toUpperCase().slice(0, 12), sid: mySid() || "", sk: cleanSekolah(P.sekolah).slice(0, 40), ng: P.negeri || "", gn: BS.gn }; }
+function bsMeInfo() { return { n: cleanName(P.nama) || "Pemain", k: kelasNorm(P.kelas), sid: mySid() || "", sk: cleanSekolah(P.sekolah).slice(0, 40), ng: P.negeri || "", gn: BS.gn }; }
 /* kumpulan seorang peserta mengikut jenis sesi */
 function bsGrp(r, cf) {
   if (!cf || cf.tip !== "battle") return { key: "P", label: cf && cf.tn ? cf.tn : "Pasukan" };
   const s = cf.skop;
-  if (s === "kelas") { const k = String(r.k || "").trim().toUpperCase(); return k ? { key: (r.sid || "") + "|" + k, label: k + (r.sk ? " | " + String(r.sk).slice(0, 22) : "") } : { key: "?", label: "Tanpa kelas" }; }
+  if (s === "kelas") { const k = kelasNorm(r.k); return k ? { key: (r.sid || "") + "|" + k, label: k + (r.sk ? " | " + String(r.sk).slice(0, 22) : "") } : { key: "?", label: "Tanpa kelas" }; }
   if (s === "sekolah") return r.sid ? { key: r.sid, label: r.sk || r.sid } : { key: "?", label: "Tanpa sekolah" };
   if (s === "negeri") return r.ng ? { key: r.ng, label: negeriNama(r.ng) || r.ng } : { key: "?", label: "Tanpa negeri" };
   const g = String(r.gn || "").trim(); return g ? { key: "G|" + g.toUpperCase(), label: g.slice(0, 20) } : { key: "?", label: "Tanpa kumpulan" };
@@ -8887,7 +8902,7 @@ function bsFab(mod, root) {
 /* ---------- Ranking baharu (v17.44): keseluruhan dan setiap mod, tapis skop, tempoh, pasukan ---------- */
 const RK = { rows: [], at: 0, busy: false, err: "", mod: "all", per: "minggu", skop: "semua", sub: "pemain", mis: "", t: 0 };
 const RK_MODS = [["all", "Keseluruhan"], ["tm", "Tempur"], ["lg", "Lagenda"], ["bz", "Busana"], ["dw", "Dunia Gempur"], ["jt", "Jentik"]];
-const RK_NM = { tm: "Misi Tempur", lg: "Misi Lagenda", bz: "Misi Busana", dw: "Dunia Gempur", jt: "Misi Jentik" };
+const RK_NM = { tm: "Misi Tempur", lg: "Misi Lagenda", bz: "Misi Busana", dw: "Dunia Gempur", jt: "Misi Jentik", ak: "Semua permainan" };
 function rkKey() { return "gt-rk" + (NSUF[SUBJ] || ""); }
 function rkLoad() { try { const r = JSON.parse(localStorage.getItem(rkKey()) || "null"); if (r && r.m) return r; } catch (e) { /* abaikan */ } return { m: {} }; }
 function rkSave(r) { try { localStorage.setItem(rkKey(), JSON.stringify(r)); } catch (e) { /* abaikan */ } }
@@ -8903,7 +8918,7 @@ function rkAdd(mod, score, tid) {
 }
 async function rkPush() {
   if (!Net.db || !Net.uid || !P.nama) return;
-  const r = rkLoad(), doc = { n: cleanName(P.nama), k: String(P.kelas || "").trim().toUpperCase().slice(0, 12), sk: cleanSekolah(P.sekolah).slice(0, 40), sid: mySid() || "", ng: P.negeri || "", t: (P.sq && P.sq.id) || "", tn: (P.sq && P.sq.n) || "", u: Date.now(), m: r.m };
+  const r = rkLoad(), doc = { n: cleanName(P.nama), k: kelasNorm(P.kelas), sk: cleanSekolah(P.sekolah).slice(0, 40), sid: mySid() || "", ng: P.negeri || "", t: (P.sq && P.sq.id) || "", tn: (P.sq && P.sq.n) || "", u: Date.now(), m: r.m };
   try { await Net.db.doc("rkm_" + SUBJ + "/" + Net.uid).set(doc); } catch (e) { /* abaikan: akan cuba semula pada markah seterusnya */ }
 }
 async function rkPull() {
@@ -8912,26 +8927,26 @@ async function rkPull() {
     let v = null;
     if (Net.fb) v = await FB.req("GET", "rkm_" + SUBJ);
     else if (Net.db) v = await new Promise((res, rej) => { let un = null, done = false; const tm = setTimeout(() => { if (!done) { done = true; rej(new Error("tamat masa")); } }, 9000); un = Net.db.collection("rkm_" + SUBJ).limit(3000).onSnapshot((s) => { if (done) return; done = true; clearTimeout(tm); const o = {}; s.docs.forEach((d) => { o[d.id] = d.data(); }); res(o); setTimeout(() => { try { if (un) un(); } catch (e) { /* abaikan */ } }, 0); }, (e) => { if (!done) { done = true; clearTimeout(tm); rej(e); } }); });
-    RK.rows = Object.keys(v || {}).map((id) => Object.assign({ id: id }, v[id])).filter((x) => x && typeof x === "object" && x.m); RK.err = "";
+    RK.rows = Object.keys(v || {}).map((id) => Object.assign({ id: id }, v[id])).filter((x) => x && typeof x === "object" && x.m && !rankStale(x.u)); RK.err = "";
   } catch (e) { RK.err = "Ranking bersama tidak dapat dimuat (" + ((e && (e.code || e.message)) || "ralat") + ")."; }
   RK.at = Date.now(); RK.busy = false;
   if (typeof UI !== "undefined" && UI.view === "rank" && (UI.boardMode || "rk") === "rk") { try { renderBoard(); } catch (e) { /* abaikan */ } }
 }
 function rkVal(m, mod, per, met, mis) {
   const one = (x) => { if (!x) return 0; if (mis) return x.s ? x.s[mis] | 0 : 0; if (met === "terbaik") return x.b | 0; if (per === "minggu") return x.w === weekKey() ? x.ws | 0 : 0; if (per === "bulan") return x.o === monthKey() ? x.os | 0 : 0; return x.a | 0; };
-  if (mod === "all") return Object.keys(RK_NM).reduce((s, k) => s + one(m[k]), 0);
+  if (mod === "all") return met === "terbaik" ? Object.keys(RK_NM).filter((k) => k !== "ak").reduce((s, k) => s + one(m[k]), 0) : one(m.ak); /* Keseluruhan = mata aktiviti semua permainan */
   return one(m[mod]);
 }
 function rkAllRows() {
-  const rows = RK.rows.filter((r) => r.id !== Net.uid).map((r) => ({ id: r.id, n: cleanName(r.n) || "Pemain", k: r.k || "", sk: r.sk || "", sid: r.sid || "", ng: r.ng || "", t: r.t || "", tn: r.tn || "", m: r.m || {}, me: false }));
-  if (P.nama) rows.push({ id: Net.uid || "me", n: cleanName(P.nama), k: String(P.kelas || "").trim().toUpperCase(), sk: cleanSekolah(P.sekolah), sid: mySid() || "", ng: P.negeri || "", t: (P.sq && P.sq.id) || "", tn: (P.sq && P.sq.n) || "", m: rkLoad().m, me: true });
+  const rows = RK.rows.filter((r) => r.id !== Net.uid).map((r) => ({ id: r.id, n: cleanName(r.n) || "Pemain", k: kelasNorm(r.k), sk: r.sk || "", sid: r.sid || "", ng: r.ng || "", t: r.t || "", tn: r.tn || "", m: r.m || {}, me: false }));
+  if (P.nama) rows.push({ id: Net.uid || "me", n: cleanName(P.nama), k: kelasNorm(P.kelas), sk: cleanSekolah(P.sekolah), sid: mySid() || "", ng: P.negeri || "", t: (P.sq && P.sq.id) || "", tn: (P.sq && P.sq.n) || "", m: rkLoad().m, me: true });
   return rows;
 }
 function rkSkopOk(r) {
   const s = RK.skop; if (s === "semua") return true;
   if (s === "negeri") return !!P.negeri && r.ng === P.negeri;
   if (s === "sekolah") return !!mySid() && r.sid === mySid();
-  if (s === "kelas") { const k = String(P.kelas || "").trim().toUpperCase(); return !!k && r.sid === mySid() && String(r.k || "").toUpperCase() === k; }
+  if (s === "kelas") { const k = kelasNorm(P.kelas); return !!k && r.sid === mySid() && kelasNorm(r.k) === k; }
   if (s === "pasukan") return !!(P.sq && P.sq.id) && r.t === P.sq.id;
   return true;
 }
@@ -8940,7 +8955,7 @@ function renderRk(box) {
   if (!RK.at || Date.now() - RK.at > 60000) rkPull();
   const dbOk = !!(Net.db && Net.uid), met = RK.per === "terbaik" ? "terbaik" : "jumlah", per = RK.per === "terbaik" ? "semua" : RK.per, again = () => renderBoard();
   const mis = RK.mod !== "all" && RK.mis ? RK.mis : "";
-  box.appendChild(el("div", { class: "notice" }, "Ranking " + SUBJS[SUBJ].nama + ". Mata dikumpul daripada setiap permainan yang selesai. Pilih mod, tapis skop dan tempoh."));
+  box.appendChild(el("div", { class: "notice" }, RK.mod === "all" ? "Ranking " + SUBJS[SUBJ].nama + ". Keseluruhan: setiap jawapan dalam SEMUA permainan memberi mata (betul 10, cubaan 2, had " + AK_CAP + " sehari). Murid yang aktif setiap hari berada di atas." : "Ranking " + SUBJS[SUBJ].nama + ". Mata dikumpul daripada setiap permainan yang selesai. Pilih mod, tapis skop dan tempoh."));
   if (!dbOk) box.appendChild(el("div", { class: "notice warn" }, "Ranking bersama tidak tersedia pada sesi ini. Hanya markah peranti ini dipaparkan."));
   else if (RK.err) box.appendChild(el("div", { class: "notice warn" }, RK.err));
   box.appendChild(segBtns(RK_MODS, RK.mod, (v) => { RK.mod = v; RK.mis = ""; again(); }, "Mod permainan"));
@@ -9671,7 +9686,7 @@ function renderBoard() {
 
   const filt = UI.boardFilter === "kelas" || UI.boardFilter === "sekolah" ? UI.boardFilter : "all";
   box.appendChild(segBtns([["all", "Semua pemain"], ["sekolah", "Sekolah saya"], ["kelas", "Kelas saya"]], filt, (v) => { UI.boardFilter = v; renderBoard(); }, "Tapis kedudukan"));
-  const myKelas = (P.kelas || "").trim().toUpperCase();
+  const myKelas = kelasNorm(P.kelas);
   let rows = [];
   if (dbOk && Net.board.length) rows = Net.board.slice();
   else rows = [{ id: "me", n: P.nama || "Anda", k: P.kelas, sk: cleanSekolah(P.sekolah), sid: sid, xp: P.xp, la: P.la, ad: P.ad, st: totals().st, m: totals().m }];
@@ -9682,7 +9697,7 @@ function renderBoard() {
   rows.sort((a, b) => b.xp - a.xp || (String(a.id) < String(b.id) ? -1 : 1));
   rows.forEach((r, i) => { r.p = quotaRank(rankIdx(r.xp), (r.id === Net.uid && Net.stand) ? Net.stand.pos : i + 1, Net.stand ? Net.stand.n : rows.length); });
   if (dbOk && Net.stand && !rows.some((r) => r.id === Net.uid)) { /* di luar 100 teratas */ }
-  if (filt === "kelas") rows = rows.filter((r) => myKelas && sid && r.sid === sid && String(r.k || "").trim().toUpperCase() === myKelas);
+  if (filt === "kelas") rows = rows.filter((r) => myKelas && sid && r.sid === sid && kelasNorm(r.k) === myKelas);
   if (filt === "sekolah") rows = rows.filter((r) => sid && r.sid === sid);
   if (filt === "kelas" && !myKelas) box.appendChild(el("div", { class: "notice" }, "Tetapkan nama kelas dalam profil anda (klik nama anda di bahagian atas) untuk melihat kedudukan kelas."));
   if (Net.stand) box.appendChild(el("p", { class: "muted", style: "margin:8px 0" }, "Kedudukan anda: #" + Net.stand.pos + " daripada " + Net.stand.n + " pemain di seluruh Malaysia."));
@@ -15333,7 +15348,21 @@ function lrnRec(q, ok, src) {
     if (c.r >= 25) lrnBadge("run25");
     if (c.ms >= 10) lrnBadge("lemah10");
     if (Object.keys(c.sj).filter((k) => c.sj[k] >= 20).length >= 3) lrnBadge("jelajah");
+    akAdd(ok, q.t);
     lrnSaveSoon();
+  } catch (e) { /* abaikan */ }
+}
+/* v17.89: mata aktiviti untuk kedudukan Keseluruhan. Setiap jawapan dalam mana-mana permainan:
+   betul 10 mata, cubaan 2 mata, had harian AK_CAP supaya murid yang aktif setiap hari berada di atas. */
+const AK_CAP = 600;
+function akAdd(ok, tid) {
+  try {
+    const key = "gt-ak" + (NSUF[SUBJ] || ""), d = dayKey(); let r = null;
+    try { r = JSON.parse(localStorage.getItem(key) || "null"); } catch (e) { r = null; }
+    if (!r || r.d !== d) r = { d: d, n: 0 };
+    const pts = Math.min(ok ? 10 : 2, AK_CAP - (r.n | 0)); if (pts <= 0) return;
+    r.n = (r.n | 0) + pts; localStorage.setItem(key, JSON.stringify(r));
+    rkAdd("ak", pts, tid);
   } catch (e) { /* abaikan */ }
 }
 function lrnKbat(m) { try { const c = lrnC(); if ((m | 0) >= 3) { c.kb = (c.kb | 0) + 1; if (c.kb >= 5) lrnBadge("kbat"); } lrnSaveSoon(); } catch (e) { /* abaikan */ } }
@@ -17580,20 +17609,20 @@ function kkBattleBox(box) {
   if (!RK.busy && Date.now() - RK.at > 60000) rkPull().then(() => { if (UI.view === "kelas") renderKelas(); });
   const wk = weekKey(), by = {}, sid = mySid();
   RK.rows.filter((x) => x.sid === sid).forEach((x) => {
-    let w = 0; for (const m in (x.m || {})) { const v = x.m[m]; if (v && v.w === wk) w += v.ws | 0; }
-    const k = String(x.k || "").trim().toUpperCase() || "(tiada kelas)", c = by[k] || (by[k] = { k: k, pts: 0, n: 0, act: 0 }); c.n++; if (w > 0) { c.act++; c.pts += w; }
+    let w = 0; { const v = x.m && x.m.ak; if (v && v.w === wk) w = v.ws | 0; }
+    const k = kelasNorm(x.k) || "(tiada kelas)", c = by[k] || (by[k] = { k: k, pts: 0, n: 0, act: 0 }); c.n++; if (w > 0) { c.act++; c.pts += w; }
   });
   const list = Object.values(by).filter((c) => c.act > 0).sort((a, b) => b.pts - a.pts).slice(0, 8);
   if (!list.length) { box.appendChild(el("p", { class: "muted" }, RK.at ? "Belum ada mata kelas minggu ini. Main satu misi untuk menyumbang mata kepada kelas anda!" : "Memuatkan...")); return; }
-  const mx = list[0].pts || 1, me = String(P.kelas || "").trim().toUpperCase(), g = el("div", { class: "lrn-weak" });
+  const mx = list[0].pts || 1, me = kelasNorm(P.kelas), g = el("div", { class: "lrn-weak" });
   list.forEach((c, i) => { const r = el("div", { class: "lrn-wr" + (c.k === me ? " kk-me" : ""), style: "grid-template-columns:36px 1fr auto" }); r.append(el("b", null, String(i + 1)), el("div", { class: "lrn-wn" }, null, el("b", null, c.k + (c.k === me ? " (kelas anda)" : "")), el("span", { class: "gbar" }, null, el("i", { style: "width:" + Math.round(c.pts * 100 / mx) + "%" })), el("span", { class: "muted" }, " " + c.act + " murid aktif")), el("b", { class: "lrn-wp" }, c.pts + " mata")); g.appendChild(r); });
-  box.appendChild(g); box.appendChild(el("p", { class: "muted", style: "font-size:13px" }, "Mata kelas = jumlah mata semua mod yang dimainkan murid kelas itu minggu ini (subjek " + kkSjName(SUBJ) + ")."));
+  box.appendChild(g); box.appendChild(el("p", { class: "muted", style: "font-size:13px" }, "Mata kelas = jumlah mata aktiviti (semua permainan) murid kelas itu minggu ini (subjek " + kkSjName(SUBJ) + ")."));
 }
 /* ----- guru: ringkasan sekolah dan soalan dilaporkan ----- */
 async function kkLaporLoad() { try { const v = (await FB.req("GET", "lapor_soalan")) || {}; KK.lap = Object.keys(v).filter((k) => k.indexOf(SUBJ + "-") === 0).map((k) => ({ id: k.slice(SUBJ.length + 1), n: Object.keys(v[k] || {}).length })).sort((a, b) => b.n - a.n).slice(0, 15); } catch (e) { KK.lap = []; KK.lapErr = true; } renderGuru(); }
 function kkGuruExtras(box) {
   const rows = (GURU.rows || []), now = Date.now(), by = {};
-  rows.forEach((r) => { const k = String(r.k || "").trim().toUpperCase() || "(tiada kelas)", c = by[k] || (by[k] = { k: k, n: 0, act: 0, xp: 0, m: 0, ok: 0, tot: 0 }); c.n++; if (r.t && now - r.t < 7 * 864e5) c.act++; c.xp += r.xp | 0; c.m += r.m | 0; const mis = r.mis || {}; for (const key in mis) { const a = mis[key]; if (Array.isArray(a)) { c.ok += a[3] | 0; c.tot += a[4] | 0; } } });
+  rows.forEach((r) => { const k = kelasNorm(r.k) || "(tiada kelas)", c = by[k] || (by[k] = { k: k, n: 0, act: 0, xp: 0, m: 0, ok: 0, tot: 0 }); c.n++; if (r.t && now - r.t < 7 * 864e5) c.act++; c.xp += r.xp | 0; c.m += r.m | 0; const mis = r.mis || {}; for (const key in mis) { const a = mis[key]; if (Array.isArray(a)) { c.ok += a[3] | 0; c.tot += a[4] | 0; } } });
   const list = Object.values(by).sort((a, b) => a.k.localeCompare(b.k));
   box.appendChild(el("h3", { class: "sec", style: "font-size:22px;margin-top:18px" }, "Ringkasan sekolah mengikut kelas"));
   if (!list.length) box.appendChild(el("p", { class: "muted" }, "Tiada data."));
@@ -19306,7 +19335,7 @@ async function guruLoad() {
     try { v = await FB.req("GET", "pemain", undefined, "orderBy=%22sid%22&equalTo=" + encodeURIComponent(JSON.stringify(sid))); }
     catch (e) { if (e.code === 400) v = await FB.req("GET", "pemain"); else throw e; }
     v = v || {};
-    GURU.rows = Object.keys(v).map((id) => Object.assign({ id: id }, v[id])).filter((r) => r && typeof r === "object" && r.sid === sid && docSj(r.id) === SUBJ).map((r) => Object.assign(r, { id: docUid(r.id) }));
+    GURU.rows = Object.keys(v).map((id) => Object.assign({ id: id }, v[id])).filter((r) => r && typeof r === "object" && r.sid === sid && docSj(r.id) === SUBJ).map((r) => Object.assign(r, { id: docUid(r.id) }, rankStale(r.t) ? { xp: 0, wp: 0, mp: 0 } : {}));
     GURU.at = Date.now();
   } catch (e) { GURU.err = "Tidak dapat memuat data kelas (kod " + (e.code || "rangkaian") + "). Cuba lagi sebentar lagi."; }
   GURU.loading = false; renderGuru();
@@ -19326,7 +19355,7 @@ function guruRowsView() {
   const now = Date.now();
   let rows = (GURU.rows || []).map((r) => {
     const mis = r.mis && typeof r.mis === "object" ? r.mis : {};
-    return { r: r, nama: cleanName(r.n) || "Pemain", kelas: String(r.k || "").trim().toUpperCase().slice(0, 12), xp: Math.round(decayXp(r.xp || 0, r.la, r.ad, now)), pangkat: RANKS[clamp(r.p | 0, 0, RANKS.length - 1)].n, m: r.m | 0, st: r.st | 0, t: r.t || 0, fl: r.fl | 0, mis: mis };
+    return { r: r, nama: cleanName(r.n) || "Pemain", kelas: kelasNorm(r.k), xp: Math.round(decayXp(r.xp || 0, r.la, r.ad, now)), pangkat: RANKS[clamp(r.p | 0, 0, RANKS.length - 1)].n, m: r.m | 0, st: r.st | 0, t: r.t || 0, fl: r.fl | 0, mis: mis };
   });
   if (GURU.kelas) rows = rows.filter((x) => (x.kelas || "(tiada kelas)") === GURU.kelas);
   const s = GURU.sort;
@@ -19356,12 +19385,52 @@ function guruExport(rows) {
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 4000);
 }
+/* v17.89: pentadbir (kunci moderator) memulakan semula kedudukan semua subjek */
+function guruAdminBox(box) {
+  if (!kmAdm()) return;
+  const c = el("details", { class: "card", style: "margin:8px 0" }), out = el("p", { class: "muted", style: "font-size:13px;margin:6px 0" });
+  c.appendChild(el("summary", { style: "cursor:pointer;font-weight:700" }, "Pentadbir: mulakan semula kedudukan"));
+  c.appendChild(el("p", { class: "muted", style: "font-size:13px" }, "Kosongkan XP, pangkat, mata minggu/bulan dan semua mata ranking mod bagi SEMUA murid dan SEMUA subjek. Syiling, barang Gudang, avatar, bintang misi dan lencana tidak dipadam. Peranti murid akan dikosongkan secara automatik apabila aplikasi dibuka. Tindakan ini tidak boleh dibatalkan." + (Net.reset ? " Reset terakhir: " + new Date(Net.reset).toLocaleString("ms-MY") + "." : "")));
+  const b = el("button", { type: "button", class: "btn alt" }, "Mulakan semula kedudukan");
+  b.addEventListener("click", async () => {
+    if (!confirm("Mulakan semula SEMUA kedudukan untuk semua murid dan semua subjek?")) return;
+    if (prompt("Taip RESET untuk mengesahkan.") !== "RESET") { out.textContent = "Dibatalkan."; return; }
+    b.disabled = true;
+    try { await rankResetServer((t) => { out.textContent = t; }); out.textContent = "Selesai. Kedudukan bermula semula sekarang. Minta murid membuka semula aplikasi."; }
+    catch (e) { out.textContent = e.code === 401 || e.code === 403 ? "Kunci moderator tidak sah atau tiada kebenaran (kod " + e.code + ")." : "Gagal: " + (e.message || e) + ". Cuba lagi."; }
+    b.disabled = false;
+  });
+  c.append(b, out); box.appendChild(c);
+}
+async function rankResetServer(say) {
+  const key = kmAdm();
+  const q = async (method, path, body, extra) => {
+    const r = await fetch(FB.url + "/" + path + ".json?auth=" + encodeURIComponent(key) + (extra || "") + (method === "GET" ? "" : "&print=silent"), { method: method, headers: body === undefined ? undefined : { "Content-Type": "application/json" }, body: body === undefined ? undefined : JSON.stringify(body) });
+    if (!r.ok) { const e = new Error("fb " + r.status); e.code = r.status; throw e; }
+    return method === "GET" ? r.json() : null;
+  };
+  say("Menetapkan tanda reset...");
+  await q("PUT", "tetapan/reset", { ".sv": "timestamp" });
+  for (const k of Object.keys(SUBJS)) { say("Memadam ranking mod " + SUBJS[k].subjek + "..."); await q("DELETE", "rkm_" + k); }
+  const zero = async (node, fields) => {
+    const ids = Object.keys((await q("GET", node, undefined, "&shallow=true")) || {});
+    for (let i = 0; i < ids.length; i += 300) {
+      say("Mengosongkan " + node + ": " + Math.min(ids.length, i + 300) + " / " + ids.length + "...");
+      const patch = {}; ids.slice(i, i + 300).forEach((id) => { for (const f in fields) patch[node + "/" + id + "/" + f] = fields[f]; });
+      await q("PATCH", "", patch);
+    }
+  };
+  await zero("pemain", { xp: 0, wp: 0, mp: 0, p: 0, la: 0, ad: 0 });
+  await zero("ringkas", { x: 0, p: 0, mp: 0, l: 0, a: 0, zl: null, z4: null, z5: null, zs: null, zr: null });
+  const v = await q("GET", "tetapan/reset"); Net.reset = Number(v) || Date.now(); rankResetApply();
+}
 function renderGuru() {
   const box = $("guruBody");
   if (!box) return;
   box.textContent = "";
   const sid = mySid();
   if (!(Net.fb && FB.url)) { box.appendChild(el("div", { class: "notice warn" }, "Papan pemuka guru memerlukan sambungan Firebase (versi GitHub Pages). Ia tidak tersedia pada sesi ini.")); return; }
+  guruAdminBox(box);
   if (!sid) { box.appendChild(el("div", { class: "notice warn" }, "Tetapkan sekolah dan negeri anda dalam profil (klik nama anda di bahagian atas) supaya data murid sekolah anda boleh dipaparkan. Murid juga mesti mengisi sekolah yang sama.")); return; }
   const top = el("div", { class: "row", style: "margin:6px 0;gap:10px" });
   const rf = el("button", { type: "button", class: "btn alt sm" }, GURU.loading ? "Memuat..." : "Muat semula data");
@@ -19373,7 +19442,7 @@ function renderGuru() {
   if (!GURU.rows) { if (!GURU.loading && !GURU.err) guruLoad(); return; }
   if (!GURU.rows.length) { box.appendChild(el("p", { class: "muted" }, "Belum ada murid daripada sekolah ini dalam pangkalan data. Minta murid mengisi nama sekolah yang sama dalam profil dan bermain satu misi.")); return; }
   // tapis kelas
-  const ks = {}; GURU.rows.forEach((r) => { const k = String(r.k || "").trim().toUpperCase().slice(0, 12) || "(tiada kelas)"; ks[k] = 1; });
+  const ks = {}; GURU.rows.forEach((r) => { const k = kelasNorm(r.k) || "(tiada kelas)"; ks[k] = 1; });
   const klist = Object.keys(ks).sort();
   box.appendChild(segBtns([["", "Semua kelas"]].concat(klist.map((k) => [k, k])), GURU.kelas, (v) => { GURU.kelas = v; renderGuru(); }, "Tapis kelas"));
   const rows = guruRowsView(), n = rows.length, now = Date.now();
@@ -19539,6 +19608,49 @@ function fillSchoolList() {
   const seen = {};
   for (const sid in Net.schools) { const s = Net.schools[sid]; if (s && s.g === ng && s.n && !seen[s.n]) { seen[s.n] = 1; dl.appendChild(el("option", { value: s.n })); } }
 }
+/* v17.89: senarai kelas yang sudah didaftar di sekolah. Murid pertama menaip kelas; murid lain memilih daripada senarai. */
+const KLS = { sid: "", list: [], at: 0, busy: false, tok: 0 };
+function kelasDist(a, b) {
+  const m = a.length, n = b.length; if (Math.abs(m - n) > 2) return 9;
+  let prev = Array.from({ length: n + 1 }, (_, j) => j);
+  for (let i = 1; i <= m; i++) { const cur = [i]; for (let j = 1; j <= n; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = cur; }
+  return prev[n];
+}
+function kelasNear(k) {
+  const kk = k.replace(/ /g, ""); if (kk.length < 2) return "";
+  return KLS.list.find((x) => x !== k && kelasDist(x.replace(/ /g, ""), kk) <= (kk.length <= 3 ? 1 : 2)) || "";
+}
+function kelasRegSid() { return sekolahSid($("inNegeri").value, cleanSekolah($("inSekolah").value)); }
+async function kelasLoad() {
+  const sid = kelasRegSid();
+  if (!sid || !(Net.fb && FB.url)) { KLS.sid = sid; KLS.list = []; kelasChips(); return; }
+  if (KLS.sid === sid && Date.now() - KLS.at < 120000) { kelasChips(); return; }
+  const tok = ++KLS.tok; KLS.sid = sid; KLS.list = []; KLS.busy = true; kelasChips();
+  let v = null;
+  try { v = await FB.req("GET", "pemain", undefined, "orderBy=%22sid%22&equalTo=" + encodeURIComponent(JSON.stringify(sid))); } catch (e) { v = null; }
+  if (tok !== KLS.tok) return;
+  const seen = {};
+  for (const id in (v || {})) { const r = v[id]; if (!r || typeof r !== "object" || r.sid !== sid) continue; const k = kelasNorm(r.k); if (k) seen[k] = 1; }
+  KLS.list = Object.keys(seen).sort((a, b) => a.localeCompare(b, "ms", { numeric: true })); KLS.at = Date.now(); KLS.busy = false; kelasChips();
+}
+function kelasChips() {
+  const inp = $("inKelas"); if (!inp) return;
+  let box = $("kelasPick");
+  if (!box) { box = el("div", { id: "kelasPick", class: "kelas-pick" }); inp.parentNode.appendChild(box); }
+  box.textContent = "";
+  if (KLS.busy) { box.appendChild(el("p", { class: "muted", style: "font-size:13px;margin:6px 0 0" }, "Memuatkan senarai kelas sekolah...")); return; }
+  if (!KLS.list.length) { box.appendChild(el("p", { class: "muted", style: "font-size:13px;margin:6px 0 0" }, KLS.sid ? "Belum ada kelas didaftar untuk sekolah ini. Anda murid pertama: taip nama kelas dengan betul, contoh 5 ALFA." : "")); return; }
+  const cur = kelasNorm(inp.value);
+  box.appendChild(el("p", { class: "muted", style: "font-size:13px;margin:6px 0 4px" }, "Pilih kelas anda (sudah didaftar oleh rakan sekolah). Taip kelas baharu hanya jika kelas anda tiada dalam senarai."));
+  const row = el("div", { class: "kelas-chips" });
+  KLS.list.forEach((k) => { const b = el("button", { type: "button", class: "kelas-chip" + (k === cur ? " on" : ""), "aria-pressed": k === cur ? "true" : "false" }, k); b.addEventListener("click", () => { inp.value = k; kelasChips(); }); row.appendChild(b); });
+  box.appendChild(row);
+  const near = cur && KLS.list.indexOf(cur) < 0 ? kelasNear(cur) : "";
+  if (near) box.appendChild(el("p", { class: "notice warn", style: "font-size:13px;margin:6px 0 0" }, "Maksud anda " + near + "? Kelas " + cur + " belum didaftar. Tekan " + near + " di atas jika itu kelas anda."));
+}
+$("inKelas").addEventListener("input", () => { clearTimeout(KLS.it); KLS.it = setTimeout(kelasChips, 200); });
+["inNegeri", "inSekolah", "selSekolah"].forEach((id) => { const e = $(id); if (e) e.addEventListener("change", () => setTimeout(kelasLoad, 50)); });
+$("inSekolah").addEventListener("input", () => { clearTimeout(KLS.st); KLS.st = setTimeout(kelasLoad, 700); });
 function openReg(first) {
   if (sekStatus === "" || sekStatus === "gagal") sekMuat();
   const sel = $("inNegeri");
@@ -19549,11 +19661,11 @@ function openReg(first) {
   }
   $("inName").value = P.nama || "";
   gtRoleInit();
-  $("inKelas").value = P.kelas || "";
+  $("inKelas").value = kelasNorm(P.kelas);
   sel.value = P.negeri || "";
   $("inSekolah").value = P.sekolah || "";
   pickedName = cleanSekolah(P.sekolah || ""); $("cariSek").value = P.sekolah ? pickedName : "";
-  fillSchoolList();
+  fillSchoolList(); kelasLoad();
   { const lb = $("linkBox"); lb.hidden = !fbConfigured(); lb.open = !!first && !P.nama; try { $("myCode").value = FB.getUid(); } catch (e) { $("myCode").value = ""; } $("linkMsg").textContent = ""; }
   { const qi = $("qbInfo"); if (qi) qi.textContent = qbankInfo(); }
   $("regCancel").hidden = !!first;
@@ -19571,9 +19683,14 @@ function confirmReg() {
     if (isBad) { $(id).setAttribute("aria-invalid", "true"); if (!bad) bad = id; }
   });
   if (bad) { $(bad).focus(); return; }
+  let kl = kelasNorm($("inKelas").value);
+  if (kl && KLS.sid === sekolahSid(ng, sk) && KLS.list.length && KLS.list.indexOf(kl) < 0) {
+    const near = kelasNear(kl);
+    if (near && confirm("Kelas " + kl + " hampir sama dengan " + near + " yang sudah didaftar di sekolah anda.\n\nTekan OK untuk memilih " + near + ". Tekan Batal jika " + kl + " memang kelas baharu.")) kl = near;
+  }
   const changed = sekolahSid(ng, sk) !== mySid();
   P.nama = n; P.negeri = ng; P.sekolah = sk;
-  P.kelas = String($("inKelas").value || "").replace(/[\u0000-\u001f<>]/g, "").trim().slice(0, 12);
+  P.kelas = kl;
   if (changed) Net.lastSek = "";
   saveP(); gtRoleSave();
   $("reg").hidden = true;
@@ -19639,7 +19756,7 @@ function rankDropNotice() {
 /* ---------- Mula ---------- */
 (function boot() {
   document.body.classList.add("vmap");
-  loadP();
+  loadP(); P.kelas = kelasNorm(P.kelas);
   renderLegend();
   renderMe(); renderMaps(); renderList(); renderPanel();
   if (!P.nama || !P.sekolah) openReg(true);
@@ -19835,7 +19952,7 @@ function nlPetir() {
 }
 function nlPick(k) {
   const g = NL.g; if (!g || g.locked) return; g.locked = true; NL.cur.hov = -1;
-  const it = g.list[g.i], timeout = k < 0, right = !timeout && k === it.ans; g.tot++;
+  const it = g.list[g.i], timeout = k < 0, right = !timeout && k === it.ans; g.tot++; lrnRec(it.q, right);
   try { const seen = JSON.parse(localStorage.getItem("gt-bl-seen" + nlSuf()) || "{}") || {}; seen[it.q.i] = (seen[it.q.i] | 0) + 1; localStorage.setItem("gt-bl-seen" + nlSuf(), JSON.stringify(seen)); } catch (e) { /* abaikan */ }
   let pts = 0;
   if (right) {
@@ -20043,7 +20160,7 @@ function pbdRender() {
   const csv = el("button", { type: "button", class: "btn alt sm" }, "Muat turun CSV"); csv.addEventListener("click", () => pbdCsv(data, guru));
   const prn = el("button", { type: "button", class: "btn alt sm" }, "Cetak / simpan PDF"); prn.addEventListener("click", () => { document.body.classList.add("pbd-print"); try { window.print(); } finally { setTimeout(() => document.body.classList.remove("pbd-print"), 500); } });
   act.append(csv, prn);
-  if (guru) { const ks = {}; (GURU.rows || []).forEach((q) => { const k = String(q.k || "").trim().toUpperCase().slice(0, 12) || "(tiada kelas)"; ks[k] = 1; }); act.append(segBtns([["", "Semua kelas"]].concat(Object.keys(ks).sort().map((k) => [k, k])), GURU.kelas, (v) => { GURU.kelas = v; pbdRender(); }, "Tapis kelas")); }
+  if (guru) { const ks = {}; (GURU.rows || []).forEach((q) => { const k = kelasNorm(q.k) || "(tiada kelas)"; ks[k] = 1; }); act.append(segBtns([["", "Semua kelas"]].concat(Object.keys(ks).sort().map((k) => [k, k])), GURU.kelas, (v) => { GURU.kelas = v; pbdRender(); }, "Tapis kelas")); }
   wrap.append(act);
   if (PBD.tid) pbdDetail(wrap, data, guru); else pbdOverview(wrap, data, guru);
   r.append(x, wrap);
@@ -20469,7 +20586,7 @@ async function klLoad(force) {
     try { v = await FB.req("GET", "pemain", undefined, "orderBy=%22sid%22&equalTo=" + encodeURIComponent(JSON.stringify(sid))); }
     catch (e) { if (e.code === 400) v = await FB.req("GET", "pemain"); else throw e; }
     v = v || {};
-    KL.rows = Object.keys(v).map((id) => Object.assign({ id: id }, v[id])).filter((r) => r && typeof r === "object" && r.sid === sid && docSj(r.id) === SUBJ).map((r) => Object.assign(r, { id: docUid(r.id) }));
+    KL.rows = Object.keys(v).map((id) => Object.assign({ id: id }, v[id])).filter((r) => r && typeof r === "object" && r.sid === sid && docSj(r.id) === SUBJ).map((r) => Object.assign(r, { id: docUid(r.id) }, rankStale(r.t) ? { xp: 0, wp: 0, mp: 0 } : {}));
     KL.err = "";
   } catch (e) { KL.err = "Tidak dapat memuat rakan sekelas (kod " + (e.code || "rangkaian") + ")."; }
   KL.at = Date.now(); KL.busy = false; if (UI.view === "kolam") klBuild();
@@ -20478,15 +20595,15 @@ function klEntries() {
   const now = Date.now(), wk = weekKey(), sid = mySid(), src = (KL.rows && KL.rows.length) ? KL.rows : Net.board, m = {};
   (src || []).forEach((r) => { if (!r || r.id === Net.uid || !sid || r.sid !== sid) return; m[r.id] = r; });
   const arr = Object.keys(m).map((id) => {
-    const r = m[id]; return { id: id, n: cleanName(r.n) || "Murid", k: String(r.k || "").trim().toUpperCase().slice(0, 12), x: Math.round(decayXp(r.xp || 0, r.la, r.ad, now)), w: r.wk === wk ? (r.wp | 0) : 0, s: (() => { const a = r.mis && (r.mis.SL_ALL || r.mis.KR_SELAM); return Array.isArray(a) ? a[1] | 0 : 0; })(), me: false };
+    const r = m[id]; return { id: id, n: cleanName(r.n) || "Murid", k: kelasNorm(r.k), x: Math.round(decayXp(r.xp || 0, r.la, r.ad, now)), w: r.wk === wk ? (r.wp | 0) : 0, s: (() => { const a = r.mis && (r.mis.SL_ALL || r.mis.KR_SELAM); return Array.isArray(a) ? a[1] | 0 : 0; })(), me: false };
   });
-  arr.push({ id: Net.uid || "me", n: cleanName(P.nama) || "Anda", k: String(P.kelas || "").trim().toUpperCase().slice(0, 12), x: Math.round(decayXp(P.xp || 0, P.la, P.ad, now)), w: P.wk === wk ? (P.wp | 0) : 0, s: (typeof srTotal === "function" ? srTotal().hs | 0 : 0), me: true });
+  arr.push({ id: Net.uid || "me", n: cleanName(P.nama) || "Anda", k: kelasNorm(P.kelas), x: Math.round(decayXp(P.xp || 0, P.la, P.ad, now)), w: P.wk === wk ? (P.wp | 0) : 0, s: (typeof srTotal === "function" ? srTotal().hs | 0 : 0), me: true });
   return arr;
 }
 function klView() {
   const all = klEntries(), per = KL.per;
   const classes = [...new Set(all.map((e) => e.k).filter(Boolean))].sort();
-  if (KL.cls === null) KL.cls = (P.kelas || "").trim().toUpperCase() && classes.indexOf((P.kelas || "").trim().toUpperCase()) >= 0 ? (P.kelas || "").trim().toUpperCase() : "";
+  if (KL.cls === null) KL.cls = kelasNorm(P.kelas) && classes.indexOf(kelasNorm(P.kelas)) >= 0 ? kelasNorm(P.kelas) : "";
   let rows = all.filter((e) => !KL.cls || e.k === KL.cls || e.me && false);
   rows.forEach((e) => { e.pts = per === "minggu" ? e.w : per === "selam" ? e.s : e.x; });
   rows.sort((a, b) => b.pts - a.pts || (a.n < b.n ? -1 : 1));
@@ -20742,7 +20859,7 @@ function srNext() {
 }
 function srPick(k) {
   const g = SR.g; if (!g || g.locked) return; g.locked = true;
-  const it = g.list[g.i], right = k === it.ans; g.tot++;
+  const it = g.list[g.i], right = k === it.ans; g.tot++; lrnRec(it.q, right);
   try { const seen = JSON.parse(localStorage.getItem("gt-bl-seen" + nlSuf()) || "{}") || {}; seen[it.q.i] = (seen[it.q.i] | 0) + 1; localStorage.setItem("gt-bl-seen" + nlSuf(), JSON.stringify(seen)); } catch (e) { /* abaikan */ }
   let pts = 0;
   if (right) {

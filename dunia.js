@@ -1,5 +1,5 @@
 /* =====================================================================
-   DUNIA GEMPUR MALAYSIA (v17.88): dunia terbuka gaya blok di atas peta Malaysia.
+   META GEMPUR (v17.88, dinamakan semula v17.89): dunia terbuka gaya blok di atas peta Malaysia.
    Murid berjalan ke setiap negeri, menjawab kuiz di Menara Ilmu (ikut tajuk negeri itu),
    menziarahi tempat pelancongan, menggantung nama pada Papan Kenangan dan bermain bersama rakan.
    Fail ini dimuat hanya apabila butang Dunia Gempur ditekan (lmOpen dalam index.html). Bergantung pada
@@ -619,6 +619,7 @@ function lmUpdateCam(g, dt) {
   const want = new T.Vector3(tx + Math.sin(c.yaw) * Math.cos(c.pitch) * d, ty + Math.sin(c.pitch) * d, tz + Math.cos(c.yaw) * Math.cos(c.pitch) * d);
   g.camera.position.lerp(want, Math.min(1, dt * 8));
   g.camera.lookAt(tx, ty, tz);
+  lmSkyPlace(g);
   if (g.sun) { g.sun.position.set(p.x + 60, 120, p.z + 40); g.sun.target.position.set(p.x, 0, p.z); g.sun.target.updateMatrixWorld(); }
 }
 
@@ -770,7 +771,7 @@ const LM_CSS = `
 function lmRoot() {
   if (!document.getElementById("lmCss")) { const s = document.createElement("style"); s.id = "lmCss"; s.textContent = LM_CSS; document.head.appendChild(s); }
   let r = document.getElementById("lmOv");
-  if (!r) { r = el("div", { id: "lmOv", role: "dialog", "aria-modal": "true", "aria-label": "Dunia Gempur Malaysia" }); document.body.appendChild(r); }
+  if (!r) { r = el("div", { id: "lmOv", role: "dialog", "aria-modal": "true", "aria-label": "META GEMPUR" }); document.body.appendChild(r); }
   r.textContent = ""; r.hidden = false; r.classList.toggle("touch", !!TOUCH);
   LM.root = r; return r;
 }
@@ -798,7 +799,7 @@ function lmSetup() {
   const c = el("div", { class: "lm-card", style: "background:none" }), b = el("div", { class: "lm-box", style: "width:min(720px,100%)" });
   c.appendChild(b); r.appendChild(c);
   const t = lmNextTopic(), ng = t && DATA.negeri[t.negeri], nT = DATA.topik.filter((x) => DATA.negeri[x.negeri]).length;
-  b.append(el("div", { class: "lm-kick" }, "Dunia maya · " + SUBJS[SUBJ].nama), el("h2", null, "Dunia Gempur Malaysia"));
+  b.append(el("div", { class: "lm-kick" }, "Dunia maya · " + SUBJS[SUBJ].nama), el("h2", null, "META GEMPUR"));
   b.append(el("p", null, "Jelajah peta Malaysia 3D bersama rakan. Kesemua " + nT + " tajuk " + SUBJS[SUBJ].subjek + " menjadi Menara Ilmu di negeri masing-masing, sama seperti peta operasi. Tawan setiap menara, ziarahi tempat pelancongan dan gantung nama anda pada Papan Kenangan. Tukar subjek di halaman utama untuk menjelajah tajuk subjek lain."));
   b.append(el("p", { class: "lm-ex" }, (ng ? "Anda bermula di " + ng.pendek + " (" + (t.kod || t.id) + " " + t.nama + ", menara seterusnya yang belum ditawan). " : "") + "Kawalan: W A S D atau anak panah untuk bergerak, Shift lari, Space lompat, E berinteraksi, M peta, P pasport, seret tetikus untuk pusing kamera. Di telefon: kayu bedik kiri dan butang kanan."));
   const solo = lmBtn("Main solo", "pri", () => lmStart(""));
@@ -892,7 +893,7 @@ function lmTowerOpen(o) {
       lmCard((b) => {
         b.append(el("div", { class: "lm-kick" }, pass ? "Menara ditawan" : "Cuba lagi"), el("h2", null, ok + "/" + tot + " betul"));
         b.append(el("p", null, pass ? "Bendera menara " + (t.kod || t.id) + " kini berwarna emas." : "Betul sekurang-kurangnya 3 untuk menawan menara. Baca nota dan cuba lagi."));
-        b.append(el("p", { class: "lm-ex" }, "XP +" + xp + (xp === 0 ? " (kuota XP harian Dunia Gempur Malaysia telah penuh)" : "") + (pass && fr ? " · Bonus rakan: +2 syiling kerana " + fr + " rakan berada berdekatan." : "")));
+        b.append(el("p", { class: "lm-ex" }, "XP +" + xp + (xp === 0 ? " (kuota XP harian META GEMPUR telah penuh)" : "") + (pass && fr ? " · Bonus rakan: +2 syiling kerana " + fr + " rakan berada berdekatan." : "")));
         b.append(el("div", { class: "lm-row" }, lmBtn("Teruskan jelajah", "pri", lmCardClose), pass ? null : lmBtn("Cuba lagi", "", () => lmTowerOpen(o))));
       });
     }
@@ -927,7 +928,7 @@ function lmPlaceOpen(pl) {
       } else xp = lmXp(ok * 2);
       lmCard((b) => {
         b.append(el("div", { class: "lm-kick" }, pass ? "Ziarah berjaya" : "Belum berjaya"), el("h2", null, ok + "/" + tot + " betul"));
-        b.append(el("p", { class: "lm-ex" }, "XP +" + xp + (xp === 0 && ok ? " (kuota XP harian Dunia Gempur Malaysia telah penuh)" : "")));
+        b.append(el("p", { class: "lm-ex" }, "XP +" + xp + (xp === 0 && ok ? " (kuota XP harian META GEMPUR telah penuh)" : "")));
         if (pass) {
           const hung = !!LM.st.nm[pl.id];
           b.append(el("p", null, hung ? "Nama anda sudah tergantung di sini. Anda boleh gantung semula untuk naik ke atas senarai." : "Gantung nama anda pada Papan Kenangan sebagai tanda anda telah menziarahi " + pl.n + "."));
@@ -993,7 +994,7 @@ function lmPassport() {
   lmCard((b) => {
     const s = lmSummary();
     b.append(el("div", { class: "lm-kick" }, "Pasport Ziarah · " + (cleanName(P.nama) || "Pelajar")), el("h2", null, s.pl + "/" + s.plN + " cop · " + s.tw + "/" + s.twN + " menara"));
-    if (s.pl >= s.plN) b.append(el("p", null, "Gelaran: Pengembara Dunia Gempur Malaysia! Anda telah menziarahi semua tempat."));
+    if (s.pl >= s.plN) b.append(el("p", null, "Gelaran: Pengembara META GEMPUR! Anda telah menziarahi semua tempat."));
     const grid = el("div", { class: "lm-grid" });
     Object.keys(DATA.negeri).forEach((k) => {
       const pls = PLACES.filter((p) => p[1] === k), tws = DATA.topik.filter((t) => t.negeri === k);
@@ -1018,11 +1019,11 @@ function lmSelfie(pl) {
     const W = 1080, H = Math.round(W * img.height / img.width) + 150, c = document.createElement("canvas"); c.width = W; c.height = H;
     const x = c.getContext("2d"); x.fillStyle = "#0b2a44"; x.fillRect(0, 0, W, H); x.drawImage(img, 0, 0, W, H - 150);
     x.fillStyle = "#ffd45a"; x.font = "900 46px Nunito, sans-serif"; x.fillText((cleanName(P.nama) || "Saya") + " di " + (pl ? pl.n : DATA.negeri[lmAt(g.p.x, g.p.z)] ? DATA.negeri[lmAt(g.p.x, g.p.z)].pendek : "Malaysia"), 36, H - 86);
-    x.fillStyle = "#cde3f3"; x.font = "700 30px Nunito, sans-serif"; x.fillText("Dunia Gempur Malaysia · " + new Date().toLocaleDateString("ms-MY"), 36, H - 38);
+    x.fillStyle = "#cde3f3"; x.font = "700 30px Nunito, sans-serif"; x.fillText("META GEMPUR · " + new Date().toLocaleDateString("ms-MY"), 36, H - 38);
     lmCard((b) => {
       b.append(el("div", { class: "lm-kick" }, "Swafoto"), el("h2", null, pl ? pl.n : "Kenangan jelajah"));
-      const im = el("img", { src: c.toDataURL("image/jpeg", 0.88), alt: "Swafoto Dunia Gempur Malaysia", style: "width:100%;border-radius:12px;margin:8px 0" }); b.appendChild(im);
-      const a = el("a", { href: im.src, download: "swafoto-dunia-gempur.jpg", style: "display:none" }); b.appendChild(a);
+      const im = el("img", { src: c.toDataURL("image/jpeg", 0.88), alt: "Swafoto META GEMPUR", style: "width:100%;border-radius:12px;margin:8px 0" }); b.appendChild(im);
+      const a = el("a", { href: im.src, download: "swafoto-meta-gempur.jpg", style: "display:none" }); b.appendChild(a);
       b.append(el("div", { class: "lm-row" }, lmBtn("Muat turun", "pri", () => a.click()), lmBtn("Tutup", "", lmCardClose)));
     });
   };
@@ -1040,6 +1041,50 @@ function lmRoomPanel() {
     if (!LM.room) b.append(el("p", { class: "lm-ex" }, "Untuk main bersama, keluar ke skrin mula dan pilih Cipta bilik rakan atau Masuk kod."));
     b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose)));
   });
+}
+
+/* ---------- Top 5 kedudukan minggu ini di langit (v17.89) ---------- */
+function lmSkyDraw(sk) {
+  return (x, w, h) => {
+    x.clearRect(0, 0, w, h);
+    const gr = x.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, "rgba(20,40,90,.92)"); gr.addColorStop(1, "rgba(60,20,90,.88)");
+    lmRound(x, 8, 8, w - 16, h - 16, 40); x.fillStyle = gr; x.fill(); x.lineWidth = 10; x.strokeStyle = "#ffd45a"; x.stroke();
+    x.textAlign = "center"; x.fillStyle = "#ffd45a"; x.font = "900 64px Fredoka, Nunito, sans-serif"; x.fillText("🏆 TOP 5 MINGGU INI", w / 2, 92);
+    x.fillStyle = "#cde3f3"; x.font = "800 30px Nunito, sans-serif"; x.fillText(SUBJS[SUBJ].subjek + " · mata semua permainan", w / 2, 134);
+    const list = sk.list || [];
+    if (!list.length) { x.fillStyle = "#fff"; x.font = "800 40px Nunito, sans-serif"; x.fillText(sk.err || (sk.busy ? "Memuatkan kedudukan..." : "Jawab soalan untuk jadi yang pertama di sini!"), w / 2, 330); return; }
+    const med = ["#ffd45a", "#d9e2ec", "#e0975a", "#9fd3ff", "#9fd3ff"];
+    list.forEach((r, i) => {
+      const y = 170 + i * 82; lmRound(x, 40, y, w - 80, 70, 22); x.fillStyle = r.me ? "rgba(255,212,90,.32)" : "rgba(255,255,255,.1)"; x.fill();
+      x.fillStyle = med[i]; x.font = "900 48px Fredoka, Nunito, sans-serif"; x.textAlign = "left"; x.fillText((i === 0 ? "👑" : "#" + (i + 1)), 62, y + 52);
+      x.fillStyle = "#fff"; x.font = "900 40px Nunito, sans-serif"; x.fillText(String(r.n || "").slice(0, 16) + (r.me ? " (anda)" : ""), 170, y + 40);
+      x.fillStyle = "#b9cde0"; x.font = "700 24px Nunito, sans-serif"; x.fillText([r.k, String(r.sk || "").slice(0, 30)].filter(Boolean).join(" · "), 170, y + 64);
+      x.textAlign = "right"; x.fillStyle = med[i]; x.font = "900 42px Fredoka, Nunito, sans-serif"; x.fillText(String(r.v), w - 66, y + 50);
+    });
+  };
+}
+function lmSkyInit(g) {
+  const sk = g.sky5 = { list: [], busy: true, at: 0, err: "" };
+  sk.tex = lmTex(1024, 600, lmSkyDraw(sk));
+  sk.sp = new T.Sprite(new T.SpriteMaterial({ map: sk.tex, fog: false, depthWrite: false, depthTest: false, transparent: true }));
+  sk.sp.scale.set(TOUCH ? 170 : 210, TOUCH ? 100 : 123, 1); sk.sp.renderOrder = 20; sk.sp.visible = LM.st.sky !== 0; g.scene.add(sk.sp);
+  lmSkyLoad(g);
+}
+async function lmSkyLoad(g) {
+  const sk = g.sky5; if (!sk) return; sk.at = Date.now(); sk.busy = true;
+  try {
+    if (Net.db && Net.uid && (!RK.at || Date.now() - RK.at > 60000)) await rkPull();
+    sk.list = rkAllRows().map((r) => ({ n: r.n, k: r.k, sk: r.sk, me: r.me, v: rkVal(r.m, "all", "minggu", "jumlah", "") })).filter((r) => r.v > 0).sort((a, b) => b.v - a.v).slice(0, 5);
+    sk.err = !(Net.db && Net.uid) ? "Kedudukan bersama memerlukan sambungan internet" : "";
+  } catch (e) { sk.err = "Kedudukan tidak dapat dimuatkan"; }
+  sk.busy = false;
+  const c = sk.tex.userData.c; sk.tex.userData.draw(c.getContext("2d"), c.width, c.height); sk.tex.needsUpdate = true;
+}
+function lmSkyPlace(g) {
+  const sk = g.sky5; if (!sk || !sk.sp.visible) return;
+  /* sentiasa terapung di langit di hadapan kamera, berhampiran bahagian atas skrin */
+  const c = g.cam, cp = g.camera.position, D = 430, el = 0.5236 - c.pitch - (TOUCH ? 0.19 : 0.23);
+  sk.sp.position.set(cp.x - Math.sin(c.yaw) * D, cp.y + Math.tan(el) * D, cp.z - Math.cos(c.yaw) * D);
 }
 
 /* ---------- peta mini dan peta besar ---------- */
@@ -1105,7 +1150,7 @@ function lmWpSet() {
 /* ---------- adegan ---------- */
 function lmBuildScene() {
   const gq = LM.gq, r = LM.root;
-  const cv = el("canvas", { class: "lm-cv", "aria-label": "Dunia Gempur Malaysia, paparan 3D" }); r.appendChild(cv); LM.cv = cv;
+  const cv = el("canvas", { class: "lm-cv", "aria-label": "META GEMPUR, paparan 3D" }); r.appendChild(cv); LM.cv = cv;
   let renderer;
   try { renderer = new T.WebGLRenderer({ canvas: cv, antialias: !!gq, powerPreference: "high-performance" }); } catch (e) { return null; }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, gq ? 1.75 : 1.25));
@@ -1123,10 +1168,11 @@ function lmBuildScene() {
   for (let i = 0; i < 46; i++) { const c = new T.Group(); for (let j = 0; j < 3; j++) { const b = new T.Mesh(lmBox(14 + R() * 10, 5, 9 + R() * 6), cm); b.position.set(j * 9 - 9, R() * 2, R() * 4); c.add(b); } c.position.set(-1300 + R() * 2900, 80 + R() * 40, -650 + R() * 1250); clouds.add(c); }
   scene.add(clouds);
   const g = { renderer: renderer, scene: scene, camera: camera, sun: sun, hemi: hemi, sky: sky, clouds: clouds, items: [], cols: [], trees: [], coins: [], landM: {},
-    p: { x: 0, y: 0, z: 0, vx: 0, vz: 0, vy: 0, yaw: 0, on: true, moving: false }, cam: { yaw: 0.4, pitch: 0.42, dist: 18 }, T: 0, ui: false, near: null, nearT: 0, cullT: 0, mmT: 0, hudT: 0, saveT: 0 };
+    p: { x: 0, y: 0, z: 0, vx: 0, vz: 0, vy: 0, yaw: 0, on: true, moving: false }, cam: { yaw: 0.4, pitch: 0.3, dist: 18 }, T: 0, ui: false, near: null, nearT: 0, cullT: 0, mmT: 0, hudT: 0, saveT: 0 };
   LM.g = g;
   lmBuildLand(g); lmBuildSea(g); lmBuildWorld(g);
   g.myCode = lmMyCode(); g.me = lmAvatar(g.myCode, P.nama, true); scene.add(g.me.g);
+  lmSkyInit(g);
   return g;
 }
 function lmSpawn(g) {
@@ -1148,9 +1194,10 @@ function lmHud() {
   ui.mm = el("canvas", { class: "lm-mm", width: 380, height: 192, title: "Buka peta (M)", "aria-label": "Peta mini" }); ui.mm.addEventListener("click", lmBigMap); r.appendChild(ui.mm);
   LM.mmBase = lmMapBase(380, 192);
   const top = el("div", { class: "lm-top" });
-  top.append(lmBtn("Pasport (P)", "", lmPassport), lmBtn("Bilik", "", lmRoomPanel), lmBtn("Swafoto", "", () => lmSelfie(null)),
+  ui.skyB = lmBtn(LM.st.sky === 0 ? "Top 5: tutup" : "Top 5: buka", "", () => { const g = LM.g; if (!g || !g.sky5) return; const on = !g.sky5.sp.visible; g.sky5.sp.visible = on; LM.st.sky = on ? 1 : 0; lmSave(); ui.skyB.textContent = on ? "Top 5: buka" : "Top 5: tutup"; });
+  top.append(lmBtn("Pasport (P)", "", lmPassport), ui.skyB, lmBtn("Bilik", "", lmRoomPanel), lmBtn("Swafoto", "", () => lmSelfie(null)),
     ui.snd = lmBtn(LM.mute ? "Bunyi: tutup" : "Bunyi: buka", "", () => { LM.mute = !LM.mute; ui.snd.textContent = LM.mute ? "Bunyi: tutup" : "Bunyi: buka"; }),
-    lmBtn("Keluar", "", () => { if (confirm("Keluar dari Dunia Gempur Malaysia? Cop pasport dan menara yang ditawan sudah disimpan.")) lmClose(); }));
+    lmBtn("Keluar", "", () => { if (confirm("Keluar dari META GEMPUR? Cop pasport dan menara yang ditawan sudah disimpan.")) lmClose(); }));
   r.appendChild(top);
   ui.prompt = el("button", { type: "button", class: "pri lm-prompt", hidden: "" }); ui.prompt.addEventListener("click", lmInteract); r.appendChild(ui.prompt);
   const emo = el("div", { class: "lm-emo" });
@@ -1199,7 +1246,7 @@ function lmKey(e) {
   if (!LM.on || !LM.g) return;
   const t = e.target; if (t && (t.nodeName === "INPUT" || t.nodeName === "TEXTAREA")) return;
   const k = String(e.key || "").toLowerCase(), dn = e.type === "keydown", g = LM.g;
-  if (dn && k === "escape") { e.preventDefault(); if (LM.ui.big) lmBigMap(); else if (LM.ui.card) lmCardClose(); else if (confirm("Keluar dari Dunia Gempur Malaysia?")) lmClose(); return; }
+  if (dn && k === "escape") { e.preventDefault(); if (LM.ui.big) lmBigMap(); else if (LM.ui.card) lmCardClose(); else if (confirm("Keluar dari META GEMPUR?")) lmClose(); return; }
   if (g.ui) return;
   if ([" ", "arrowup", "arrowdown", "arrowleft", "arrowright"].indexOf(k) >= 0) e.preventDefault();
   LM.keys[k] = dn;
@@ -1271,6 +1318,7 @@ function lmLoop(ts) {
       }
     }
     if (g.saveT && (g.saveT -= dt) <= 0) { g.saveT = 0; lmSave(); }
+    if (g.sky5 && Date.now() - g.sky5.at > 60000) lmSkyLoad(g);
     for (const c of g.clouds.children) { c.position.x += dt * 3; if (c.position.x > 1600) c.position.x = -1300; }
     if (g.sea) g.sea.position.y = -1.6 + Math.sin(g.T * 0.8) * 0.15;
     g.renderer.render(g.scene, g.camera);
@@ -1286,7 +1334,7 @@ function lmOpen(tid) {
 function lmStart(code, kind) {
   const r = LM.root;
   lmCardClose(); r.textContent = "";
-  const ld = el("div", { class: "lm-card" }, el("div", { class: "lm-box" }, el("div", { class: "lm-kick" }, "Dunia Gempur Malaysia"), el("h2", null, "Membina peta Malaysia..."), el("p", null, "Menyusun negeri, menara ilmu dan tempat pelancongan.")));
+  const ld = el("div", { class: "lm-card" }, el("div", { class: "lm-box" }, el("div", { class: "lm-kick" }, "META GEMPUR"), el("h2", null, "Membina peta Malaysia..."), el("p", null, "Menyusun negeri, menara ilmu dan tempat pelancongan.")));
   r.appendChild(ld);
   setTimeout(async () => {
     const g = lmBuildScene();
