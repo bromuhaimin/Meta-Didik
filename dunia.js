@@ -266,6 +266,8 @@ function lmMesh(geo, col, x, y, z, o) {
 /* ---------- peta raster: negeri di bawah setiap titik (dunia sebenar, ~1 km sepiksel) ---------- */
 const RS = 0.33 / WS, RW = Math.ceil(WB.w * RS), RH = Math.ceil(WB.h * RS);
 const RAST = { keys: [], data: null, paths: {} };
+/* kod semak (biru) bagi setiap indeks negeri: campuran dua negeri di tepi tidak sepadan dengan mana-mana pasangan */
+const RCHK = (n) => (n * 97 + 41) % 200 + 40;
 function lmRaster() {
   if (RAST.data) return;
   const c = document.createElement("canvas"); c.width = RW; c.height = RH;
@@ -274,13 +276,20 @@ function lmRaster() {
   keys.forEach((k, i) => {
     const p = RAST.paths[k] = new Path2D();
     (GEOD.states[k] || []).forEach((r) => { r.forEach((q, j) => (j ? p.lineTo(q[0], q[1]) : p.moveTo(q[0], q[1]))); p.closePath(); });
-    x.fillStyle = x.strokeStyle = "rgb(" + ((i + 1) * 16) + ",0,0)"; x.lineWidth = 2; x.fill(p); x.stroke(p);
+    x.fillStyle = x.strokeStyle = "rgb(" + ((i + 1) * 16) + ",0," + RCHK(i + 1) + ")"; x.lineWidth = 3 * WS; x.fill(p); x.stroke(p);
   });
   /* Jambatan Pulau Pinang (Gelugor - Perai) */
   const a = ll(5.3553, 100.3075), b = ll(5.3580, 100.3780), br = [a.x, a.z, b.x, b.z];
   x.strokeStyle = "rgb(240,0,0)"; x.lineWidth = 5; x.lineCap = "round"; x.beginPath(); x.moveTo(br[0], br[1]); x.lineTo(br[2], br[3]); x.stroke();
   lmRasterIslands(x);
-  RAST.data = x.getImageData(0, 0, RW, RH).data; RAST.bridge = br;
+  const D = RAST.data = x.getImageData(0, 0, RW, RH).data; RAST.bridge = br;
+  /* piksel sempadan negeri dicampur oleh antialias (merah separuh jalan = negeri lain); ambil jiran yang "bersih" */
+  const clean = (o) => { const r = D[o]; if (D[o + 3] < 250) return false; if (r >= 232 || r < 8) return true; const n = Math.round(r / 16); return Math.abs(r - n * 16) <= 2 && Math.abs(D[o + 2] - RCHK(n)) <= 3; };
+  for (let py = 1; py < RH - 1; py++) for (let px = 1; px < RW - 1; px++) {
+    const o = (py * RW + px) * 4; if (D[o + 3] < 110 || clean(o) || D[o] < 8 || D[o] >= 232) continue;
+    let best = -1, bd = 1e9; for (const q of [o - 4, o + 4, o - RW * 4, o + RW * 4, o - RW * 4 - 4, o - RW * 4 + 4, o + RW * 4 - 4, o + RW * 4 + 4]) if (clean(q) && D[q] >= 8 && D[q] < 232) { const dd = Math.abs(D[q] - D[o]); if (dd < bd) { bd = dd; best = q; } }
+    if (best >= 0) { D[o] = D[best]; D[o + 1] = D[best + 1]; D[o + 2] = D[best + 2]; } else if (D[o + 3] < 250) D[o + 3] = 0; /* serpihan tepi pantai tanpa jiran sah = laut */
+  }
 }
 /* pulangkan kunci negeri ("" = laut, "jambatan" = jambatan) bagi koordinat dunia */
 function lmAt(wx, wz) {
@@ -342,6 +351,24 @@ function lmTerrainBase(g) {
     if (k && k !== "jambatan") { land[i] = 1; st[i] = keys.indexOf(k) + 1; dem[i] = Math.max(0, lmDem(wx, wz)); continue; }
     const m = lmDem(wx, wz); if (m > 3 && k !== "jambatan") { const e = lmDemEdge(wx, wz); if (e > 18) { land[i] = 1; fg[i] = 1; dem[i] = m * Math.min(1, (e - 18) / 60); } }
   }
+  /* jurang dalam negara (data sempadan negeri tidak bertemu tepat, tasik) bukan tanah asing: jika ada daratan
+     Malaysia di kedua-dua belah (mendatar, menegak atau pepenjuru) dalam ~7 km, jadikan daratan negeri biasa */
+  const AX = [[1, 0], [0, 1], [1, 1], [1, -1]], RG = Math.ceil(42 / cs);
+  const fix = [];
+  for (let z = 0; z < nz; z++) for (let x = 0; x < nx; x++) {
+    const i = z * nx + x; if (!fg[i]) continue;
+    let k = 0;
+    for (const [dx, dz] of AX) {
+      let a = 0, b = 0;
+      for (let d = 1; d <= RG && !(a && b); d++) {
+        if (!a) { const xx = x - dx * d, zz = z - dz * d; if (xx >= 0 && zz >= 0 && xx < nx && zz < nz && st[zz * nx + xx]) a = st[zz * nx + xx]; }
+        if (!b) { const xx = x + dx * d, zz = z + dz * d; if (xx >= 0 && zz >= 0 && xx < nx && zz < nz && st[zz * nx + xx]) b = st[zz * nx + xx]; }
+      }
+      if (a && b) { k = a; break; }
+    }
+    if (k) fix.push(i, k);
+  }
+  for (let j = 0; j < fix.length; j += 2) { const i = fix[j], x = i % nx, z = (i / nx) | 0; fg[i] = 0; st[i] = fix[j + 1]; dem[i] = Math.max(0, lmDem(TER.x0 + x * cs, TER.z0 + z * cs)); }
   const sea = new Uint8Array(N); for (let i = 0; i < N; i++) sea[i] = land[i] ? 0 : 1;
   const dIn = TER.dIn = lmDist(sea, nx, nz, cs), dOut = TER.dOut = lmDist(land, nx, nz, cs);
   const h = TER.h = new Float32Array(N), sm = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
@@ -1579,7 +1606,9 @@ function lmSwimOk(x, z) {
   if (lmCanStand(x, z) || lmAt(x, z) === "jambatan" || !TER.dOut) return false;
   const xi = Math.round((x - TER.x0) / TER.cs), zi = Math.round((z - TER.z0) / TER.cs);
   if (xi < 0 || zi < 0 || xi >= TER.nx || zi >= TER.nz) return false;
-  const ci = zi * TER.nx + xi; return !TER.land[ci] && TER.dOut[ci] < SWIM_MAX;
+  const ci = zi * TER.nx + xi; if (!TER.land[ci]) return TER.dOut[ci] < SWIM_MAX;
+  /* muara/sungai lebih sempit daripada grid: dasar di bawah paras air dan raster menandakan air */
+  return !TER.fg[ci] && lmAt(x, z) === "" && lmHRaw(x, z) < -0.2;
 }
 const lmCanGo = (x, z) => lmCanStand(x, z) || lmSwimOk(x, z);
 
@@ -1927,7 +1956,15 @@ function lmBubble(av, text) {
 }
 
 /* ---------- pergerakan pemain, perlanggaran dan kamera ---------- */
-function lmCanStand(x, z) { return lmLandW(x, z) && lmGround(x, z) > 0.1; }
+/* sungai/tasik sempit (lebih kecil daripada grid rupa bumi) kelihatan sebagai daratan tetapi raster menandakannya air:
+   benarkan berjalan di atasnya supaya tidak menjadi dinding halimunan di sempadan negeri */
+function lmTerLand(x, z) {
+  if (!TER.land) return false;
+  const xi = Math.round((x - TER.x0) / TER.cs), zi = Math.round((z - TER.z0) / TER.cs);
+  if (xi < 0 || zi < 0 || xi >= TER.nx || zi >= TER.nz) return false;
+  const i = zi * TER.nx + xi; return !!TER.land[i] && !TER.fg[i];
+}
+function lmCanStand(x, z) { return (lmLandW(x, z) || lmTerLand(x, z)) && lmGround(x, z) > 0.1; }
 function lmUpdatePlayer(g, dt) {
   const p = g.p, k = LM.keys, run = k.shift || LM.run;
   let ix = 0, iz = 0;
