@@ -1114,7 +1114,7 @@ body.vmap #fabDock{bottom:calc(var(--dockh,190px) + 26px + env(safe-area-inset-b
 <div id="rkBanner" role="status" hidden></div>
 <div id="app">
   <header class="top"><div class="top-in">
-    <div class="brand" role="link" tabindex="0" aria-label="Gempur, kembali ke peta">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v18.0</small></div>
+    <div class="brand" role="link" tabindex="0" aria-label="Gempur, kembali ke peta">Gempur<small id="verTap">Operasi Tasawwur Islam &middot; v18.2</small></div>
     <div class="sjm" id="sjm"><button type="button" aria-haspopup="menu" aria-expanded="false"><span class="sjm-l">Subjek</span><b id="sjmName"></b></button><div class="sjm-pop" role="menu" hidden></div></div>
     <button class="wallet" id="walletBtn" type="button" aria-label="Syiling. Buka Gudang avatar"><span class="wc"></span><b class="walnum">0</b><span class="walpop" aria-hidden="true"></span></button>
     <button class="meb" id="meBtn" type="button" aria-label="Profil anggota">
@@ -1602,7 +1602,7 @@ if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.
 if (SUBJ === "bm") { DATA.tema = DATA_BM.tema; DATA.topik = DATA_BM.topik; DATA.soalan = DATA_BM.soalan; }
 if (SUBJ === "bi") { DATA.tema = DATA_BI.tema; DATA.topik = DATA_BI.topik; DATA.soalan = DATA_BI.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v18.0"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v18.2"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -20404,9 +20404,11 @@ const ZV_IT = [];
   zi("bd_no", "bd", "Tiada", 0); zi("bd_st", "bd", "Lencana bintang", 50); zi("bd_pf", "bd", "Lencana pengawas", 90); zi("bd_md", "bd", "Pingat emas", 200);
   zi("pt_no", "pt", "Tiada", 0); zi("pt_bd", "pt", "Burung kenari", 180); zi("pt_ar", "pt", "Arnab", 220); zi("pt_ct", "pt", "Kucing", 250);
   zi("ef_no", "ef", "Tiada", 0); zi("ef_bt", "ef", "Percikan bintang", 250); zi("ef_pl", "ef", "Jejak pelangi", 400); zi("ef_jp", "ef", "Jetpack", 600); /* v17.91: kesan khas avatar 3D */
+  /* v18.2: keraian selepas kuiz di META GEMPUR */
+  zi("rc_tp", "rc", "Tepuk tangan", 0); zi("rc_sj", "rc", "Sujud syukur", 0); zi("rc_ab", "rc", "Alhamdulillah (angkat tangan)", 60); zi("rc_lg", "rc", "Lompat gembira", 120); zi("rc_tr", "rc", "Tarian ringkas", 220); zi("rc_si", "rc", "Siuuu!", 350);
   zi("fr_no", "fr", "Tiada", 0); zi("fr_bz", "fr", "Bingkai gangsa", 60); zi("fr_sv", "fr", "Bingkai perak", 150); zi("fr_gd", "fr", "Bingkai emas", 300); zi("fr_ne", "fr", "Bingkai neon", 450);
 })();
-const ZV_SLOTS = [["ou", "Pakaian"], ["oc", "Warna baju"], ["hd", "Penutup kepala"], ["hc", "Warna penutup"], ["fc", "Cermin mata"], ["hn", "Pegangan"], ["bk", "Beg"], ["bd", "Lencana"], ["pt", "Haiwan"], ["fr", "Bingkai"], ["ef", "Kesan khas 3D"]];
+const ZV_SLOTS = [["ou", "Pakaian"], ["oc", "Warna baju"], ["hd", "Penutup kepala"], ["hc", "Warna penutup"], ["fc", "Cermin mata"], ["hn", "Pegangan"], ["bk", "Beg"], ["bd", "Lencana"], ["pt", "Haiwan"], ["fr", "Bingkai"], ["ef", "Kesan khas 3D"], ["rc", "Keraian"]];
 const zvItem = (id) => ZV_IT.find((x) => x.id === id) || null;
 function zvShade(h, k) { const n = parseInt(h.slice(1), 16), f = (c) => Math.max(0, Math.min(255, Math.round(k < 0 ? c * (1 + k) : c + (255 - c) * k))); return "rgb(" + f(n >> 16) + "," + f((n >> 8) & 255) + "," + f(n & 255) + ")"; }
 function zvCol(arr, id) { const k = String(id || "").slice(3), c = arr.find((x) => x[0] === k) || arr[0]; return c[2]; }
@@ -20416,7 +20418,7 @@ function zvState() {
   return z;
 }
 function zvOk(z, it) { return !!it && (it.g === "*" || it.g === z.g) && (it.p === 0 || z.own.indexOf(it.id) >= 0); }
-function zvDef(z, s) { return { ou: "ou_sc", oc: "oc_gn", hd: z.g === "P" ? "hd_td" : "hd_no", hc: "hc_w", fc: "fc_no", hn: "hn_no", bk: "bk_no", bd: "bd_no", pt: "pt_no", fr: "fr_no", ef: "ef_no" }[s]; }
+function zvDef(z, s) { return { ou: "ou_sc", oc: "oc_gn", hd: z.g === "P" ? "hd_td" : "hd_no", hc: "hc_w", fc: "fc_no", hn: "hn_no", bk: "bk_no", bd: "bd_no", pt: "pt_no", fr: "fr_no", ef: "ef_no", rc: "rc_tp" }[s]; }
 function zvEqAll(z) { const e = {}; ZV_SLOTS.forEach(([s]) => { const it = zvItem(z.eq[s]); e[s] = zvOk(z, it) && it.s === s ? it.id : zvDef(z, s); }); return e; }
 function zvInner(z, e, o) {
   o = o || {};
@@ -20545,7 +20547,7 @@ function renderGudangZv() {
   if (tryIt && (tryIt.g === "*" || tryIt.g === z.g)) ev3[tryIt.s] = tryIt.id; else ZVUI.try = "";
   const hero = el("div", { class: "zvhero" }), pv = el("div", { class: "zvpv" });
   pv.innerHTML = zvSvg(z, 190, ZVUI.try ? { eq: ev3 } : undefined);
-  av3Load(() => { if (pv.isConnected) AV3.preview(pv, AV3.code(z, ev3)); });
+  av3Load(() => { if (pv.isConnected) { AV3.preview(pv, AV3.code(z, ev3)); if (tryIt && tryIt.s === "rc" && AV3.previewRai) AV3.previewRai(tryIt.id); } });
   const ctl = el("div", { class: "zvctl" });
   ctl.append(el("div", { class: "tagline" }, "Avatar anda"),
     segBtns([["L", "Lelaki"], ["P", "Perempuan"]], z.g, (v) => { z.g = v; saveP(); renderGudangZv(); renderMaps(); }, "Gaya avatar"),
@@ -20553,7 +20555,7 @@ function renderGudangZv() {
   const sw = el("div", { class: "zvsw", role: "group", "aria-label": "Warna kulit" });
   ZV_SKIN.forEach((c, i) => { const b = el("button", { type: "button", "aria-label": "Warna kulit " + (i + 1), "aria-pressed": (z.sk | 0) === i ? "true" : "false" }); b.style.background = c; b.addEventListener("click", () => { z.sk = i; saveP(); renderGudangZv(); renderMaps(); }); sw.appendChild(b); });
   const wal = el("div", { class: "zvcoin" }); const ci = el("span", { class: "wc" }); ci.innerHTML = coinSvg(); wal.append(ci, el("b", { class: "walnum" }, walFmt(P.coin | 0)), el("span", { class: "muted" }, "syiling"));
-  ctl.append(sw, wal, el("p", { class: "muted", style: "font-size:13px;margin:6px 0 0" }, "Avatar 3D anda dipakai di META GEMPUR dan dilihat oleh rakan. Seret avatar untuk memusing. Kumpul syiling daripada semua permainan."));
+  ctl.append(sw, wal, el("p", { class: "muted", style: "font-size:13px;margin:6px 0 0" }, "Avatar 3D anda dipakai di META GEMPUR dan dilihat oleh rakan. Seret avatar untuk memusing. Pilih Keraian untuk cara avatar meraikan setiap kali selesai kuiz. Kumpul syiling daripada semua permainan."));
   if (tryIt && ZVUI.try) {
     const own = tryIt.p === 0 || z.own.indexOf(tryIt.id) >= 0, nt = el("div", { class: "notice", style: "margin-top:8px" });
     nt.append(el("b", null, "Mencuba: " + tryIt.n + " "));
@@ -20572,6 +20574,7 @@ function renderGudangZv() {
     const ev = Object.assign({}, e); ev[it.s] = it.id;
     const p = el("button", { type: "button", class: "zvmini", title: "Cuba pada avatar 3D", "aria-label": "Cuba " + it.n + " pada avatar 3D" });
     if (it.s === "ef") p.append(el("span", { class: "zvfx" }, { ef_no: "—", ef_bt: "✨", ef_pl: "🌈", ef_jp: "🚀" }[it.id] || "✨"));
+    else if (it.s === "rc") p.append(el("span", { class: "zvfx" }, { rc_tp: "👏", rc_sj: "🤲", rc_ab: "🙌", rc_lg: "🤸", rc_tr: "💃", rc_si: "⚽" }[it.id] || "🎉"));
     else p.innerHTML = zvSvg(z, 78, { eq: ev, noframe: it.s !== "fr" });
     p.addEventListener("click", () => { ZVUI.try = on ? "" : it.id; renderGudangZv(); window.scrollTo({ top: 0, behavior: "smooth" }); });
     const b = el("button", { type: "button", class: "btn sm" + (own ? " alt" : "") }, on ? "Dipakai" : own ? "Pakai" : "Beli " + it.p);
