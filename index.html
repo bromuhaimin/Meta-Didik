@@ -769,6 +769,7 @@ body.vmap .wrap, body.vmap .top-in { max-width: 1600px; }
 .subjbar button[aria-pressed="true"] .si { color: #0b100b; background: rgba(11,16,11,.18); border-color: rgba(11,16,11,.45); }
 .subjbar button[aria-pressed="true"] .sm { color: rgba(11,16,11,.78); }
 .subjbar button[aria-pressed="true"] .sk { display: block; }
+.subjbar button.sj-lock { opacity: .62; filter: grayscale(.55); }
 @media (prefers-reduced-motion: reduce) { .subjbar button, .subjbar button[aria-pressed="true"]::after { transition: none; animation: none; } }
 @media (min-width: 761px) and (max-width: 1100px) { .subjbar { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 760px) { .subjbar { grid-template-columns: minmax(0, 1fr); gap: 8px; } .subjbar button { min-height: 68px; padding: 8px 12px; grid-template-columns: 44px minmax(0, 1fr); } .subjbar button .si { width: 44px; height: 44px; } .subjbar button .sn { font-size: 17px; } }
@@ -1596,7 +1597,11 @@ const SUBJS = {
   bm: { k: "bm", nama: "Operasi Bahasa Melayu", subjek: "Bahasa Melayu", tag: "Latihan kendiri Bahasa Melayu Tingkatan 4 dan 5", fail: "soalan_bm.json", cache: "tw-qbank-bm", ver: "202610251400" },
   bi: { k: "bi", nama: "Operasi Bahasa Inggeris", subjek: "Bahasa Inggeris", tag: "Latihan kendiri Bahasa Inggeris Tingkatan 4 dan 5", fail: "soalan_bi.json", cache: "tw-qbank-bi", ver: "202610251400" }
 };
-const SUBJ = (() => { try { const v = localStorage.getItem("gt-subj"); return v === "pi" || v === "ba" || v === "p3" || v === "sj" || v === "sc" || v === "mt" || v === "bm" || v === "bi" ? v : "tw"; } catch (e) { return "tw"; } })();
+/* v18.11: hanya Tasawwur Islam dan Pendidikan Islam (T3, T4 & T5) dibuka. Subjek lain dikunci sehingga guru memasukkan kod. */
+const SJ_OPEN = { tw: 1, pi: 1, p3: 1 }, SJ_KEY = "gt-sjkey";
+function sjUnlocked() { try { return localStorage.getItem(SJ_KEY) === "6171"; } catch (e) { return false; } }
+function sjLocked(k) { return !SJ_OPEN[k] && !sjUnlocked(); }
+const SUBJ = (() => { try { const v = localStorage.getItem("gt-subj"); if (v && sjLocked(v)) return "tw"; return v === "pi" || v === "ba" || v === "p3" || v === "sj" || v === "sc" || v === "mt" || v === "bm" || v === "bi" ? v : "tw"; } catch (e) { return "tw"; } })();
 const TW_NMIS = DATA.topik.length;
 if (SUBJ === "pi") { DATA.tema = DATA_PI.tema; DATA.topik = DATA_PI.topik; DATA.soalan = DATA_PI.soalan; }
 if (SUBJ === "ba") { DATA.tema = DATA_BA.tema; DATA.topik = DATA_BA.topik; DATA.soalan = DATA_BA.soalan; }
@@ -1611,12 +1616,24 @@ try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.te
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
+  if (sjLocked(k)) { sjAskCode(k); return; }
   if (typeof S !== "undefined" && S && S.running) { toast("Selesaikan atau keluar daripada misi dahulu.", "warn"); return; }
   swapRank(SUBJ, k);
   try { P.t = Date.now(); localStorage.setItem(LS_KEY, JSON.stringify(P)); localStorage.setItem("gt-subj", k); } catch (e) { /* abaikan */ }
   location.reload();
 }
 /* kedudukan berasingan mengikut operasi: medan kedudukan P sentiasa milik operasi semasa; operasi lain disimpan dalam P.rs */
+/* kod buka subjek berkunci (untuk guru) */
+function sjAskCode(k) {
+  const old = document.getElementById("sjKeyOv"); if (old) old.remove();
+  const ov = el("div", { class: "overlay", id: "sjKeyOv", style: "z-index:96" }), w = el("div", { class: "mcard" });
+  const inp = el("input", { type: "password", inputmode: "numeric", autocomplete: "off", maxlength: "8", "aria-label": "Kod guru", style: "width:100%;font-size:22px;letter-spacing:.3em;text-align:center;padding:10px;border-radius:12px" }), msg = el("p", { class: "muted", "aria-live": "polite" }, "");
+  const go = () => { if (inp.value.trim() === "6171") { try { localStorage.setItem(SJ_KEY, "6171"); } catch (e) { /* abaikan */ } ov.remove(); toast("Semua subjek telah dibuka.", "ok"); setSubject(k); } else { msg.textContent = "Kod tidak sah. Minta kod daripada pentadbir GEMPUR."; inp.select(); } };
+  inp.addEventListener("keydown", (e) => { if (e.key === "Enter") go(); if (e.key === "Escape") ov.remove(); });
+  const ok = el("button", { type: "button", class: "btn" }, "Buka subjek"), cl = el("button", { type: "button", class: "btn alt" }, "Batal"); ok.addEventListener("click", go); cl.addEventListener("click", () => ov.remove());
+  w.append(el("h2", null, "🔒 " + SUBJS[k].subjek + " dikunci"), el("p", null, "Buat masa ini GEMPUR dibuka untuk Tasawwur Islam dan Pendidikan Islam (Tingkatan 3, 4 dan 5). Guru yang ingin menggunakan subjek lain perlu memasukkan kod akses."), inp, msg, el("div", { class: "row" }, ok, cl));
+  ov.appendChild(w); ov.addEventListener("click", (e) => { if (e.target === ov) ov.remove(); }); document.body.appendChild(ov); setTimeout(() => inp.focus(), 50);
+}
 const RS_F = ["xp", "la", "ad", "ld", "wk", "wp", "mk", "mp", "kh", "lz"];
 function swapRank(from, to) {
   P.rs = P.rs && typeof P.rs === "object" ? P.rs : {};
@@ -15190,6 +15207,7 @@ function renderSubj() {
     b.style.setProperty("--c", SC[k]);
     const ic = el("span", { class: "si" }); ic.innerHTML = SI[k];
     b.append(ic, el("span", { class: "sn" }, SUBJS[k].nama), el("span", { class: "sm" }, (NM[k] ? NM[k] + " misi \u00b7 " : "") + (k === "p3" ? "Tingkatan 3" : "Tingkatan 4 dan 5")), el("span", { class: "sk" }, "AKTIF"));
+    if (sjLocked(k)) { b.classList.add("sj-lock"); b.querySelector(".sm").textContent = "🔒 Perlu kod guru"; }
     b.addEventListener("click", () => setSubject(k));
     bar.appendChild(b);
   });
@@ -20495,7 +20513,7 @@ function mnSubjMenu() {
   const btn = w.querySelector("button"), pop = w.querySelector(".sjm-pop"), nm = document.getElementById("sjmName");
   if (nm && SUBJS[SUBJ]) nm.textContent = SUBJS[SUBJ].subjek;
   Object.keys(SUBJS).forEach((k) => {
-    const b = el("button", { type: "button", role: "menuitemradio", "aria-checked": k === SUBJ ? "true" : "false" }, SUBJS[k].subjek);
+    const b = el("button", { type: "button", role: "menuitemradio", "aria-checked": k === SUBJ ? "true" : "false" }, (sjLocked(k) ? "🔒 " : "") + SUBJS[k].subjek);
     b.addEventListener("click", () => { pop.hidden = true; btn.setAttribute("aria-expanded", "false"); setSubject(k); });
     pop.appendChild(b);
   });
