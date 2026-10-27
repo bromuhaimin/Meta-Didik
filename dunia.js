@@ -335,7 +335,7 @@ function lmDetailTex() {
   t.wrapS = t.wrapT = T.RepeatWrapping; return t;
 }
 function lmBuildTerrain(g) {
-  lmTerrainPads(g);
+  lmTerrainPads(g); lmRailCarve(g);
   const { cs, nx, nz, h, x0, z0, land, st, dIn } = TER, N = nx * nz, keys = RAST.keys;
   const pos = new Float32Array(N * 3), col = new Float32Array(N * 3), uv = new Float32Array(N * 2);
   const C = (hex) => new T.Color(hex), sand = C(0xe6d39a), wet = C(0xb9a571), grass = C(0x4f8a34), grass2 = C(0x6f9a3c), forest = C(0x24552a), rock = C(0x6f6a5e), snow = C(0xf4f6f8), sea0 = C(0xd8c58e), sea1 = C(0x2b5f6e);
@@ -1178,42 +1178,86 @@ function lmRailsPlan(g, used, placed, avoid, gnd) {
     g.rails.push(R);
   });
 }
-/* fasa 2 (selepas rupa bumi): laluan licin, landasan, tiang elektrik, jambatan dan kereta api */
-function lmRailsBuild(g) {
-  const tex = lmTex(64, 128, (x, w, h) => {
-    x.fillStyle = "#8a8378"; x.fillRect(0, 0, w, h);
-    for (let i = 0; i < 260; i++) { x.fillStyle = "rgba(" + (90 + Math.random() * 60 | 0) + "," + (85 + Math.random() * 55 | 0) + "," + (78 + Math.random() * 50 | 0) + ",.8)"; x.fillRect(Math.random() * w, Math.random() * h, 2, 2); }
-    for (let j = 0; j < 4; j++) { x.fillStyle = "#5b4330"; x.fillRect(4, j * 32 + 10, w - 8, 9); }
-  });
-  tex.wrapS = tex.wrapT = T.RepeatWrapping;
-  const ballM = new T.MeshLambertMaterial({ map: tex }), railM = new T.MeshStandardMaterial({ color: 0xb7bcc4, metalness: 0.7, roughness: 0.35 });
-  const pillars = [], poles = [];
+/* fasa 2a (selepas ketinggian asas, sebelum jejaring rupa bumi): laluan, kecerunan dan kawasan potongan bukit */
+const RAIL_CUT = 16; /* potongan lebih dalam daripada ini menjadi terowong berportal */
+function lmRailsPath(g, avoid) {
   for (const R of g.rails) {
     const S = R.st; if (S.length < 2) continue;
-    /* titik padat antara stesen (lengkung Catmull-Rom ringan) */
     const ctrl = S.map((q) => new T.Vector3(q.x, 0, q.z)), curve = new T.CatmullRomCurve3(ctrl, false, "centripetal", 0.3);
     const tot = curve.getLength(), n = Math.max(20, Math.round(tot / 4)), raw = curve.getSpacedPoints(n);
     /* landasan melencong mengelak menara, mercu tanda, lapangan terbang dan markas (stesen kekal) */
     const obs = [];
     for (const it of g.items) {
-      if (it.kind === "tw" || it.kind === "pl" || it.kind === "kh") obs.push({ x: it.x, z: it.z, c: Math.max(it.r || 0, it.kind === "tw" ? 3 : 6) + 10 });
+      if (it.kind === "tw" || it.kind === "pl" || it.kind === "kh") obs.push({ x: it.x, z: it.z, c: Math.max(it.r || 0, it.kind === "tw" ? 3 : 6) + 12 });
       else if (it.kind === "ap" && it.rw) { const w = it.rw, ux = Math.cos(w.a), uz = Math.sin(w.a); for (let t = -w.L - 10; t <= w.L + 10; t += 12) obs.push({ x: w.x + ux * t, z: w.z + uz * t, c: 16 }); obs.push({ x: it.x, z: it.z, c: 30 }); }
     }
     const fixed = raw.map((q) => S.some((st) => Math.hypot(st.x - q.x, st.z - q.z) < 20));
     const push = () => { raw.forEach((q, i) => { if (fixed[i]) return; for (const o of obs) { const dx = q.x - o.x, dz = q.z - o.z, d = Math.hypot(dx, dz); if (d < o.c) { if (d < 0.01) { q.x += o.c; continue; } const k = (o.c - d) / d; q.x += dx * k; q.z += dz * k; } } }); };
-    for (let it = 0; it < 8; it++) {
-      push();
-      for (let i = 1; i < raw.length - 1; i++) if (!fixed[i]) { raw[i].x = (raw[i - 1].x + raw[i].x * 2 + raw[i + 1].x) / 4; raw[i].z = (raw[i - 1].z + raw[i].z * 2 + raw[i + 1].z) / 4; }
-    }
+    for (let it = 0; it < 8; it++) { push(); for (let i = 1; i < raw.length - 1; i++) if (!fixed[i]) { raw[i].x = (raw[i - 1].x + raw[i].x * 2 + raw[i + 1].x) / 4; raw[i].z = (raw[i - 1].z + raw[i].z * 2 + raw[i + 1].z) / 4; } }
     push();
-    const ys = raw.map((p) => Math.max(1.1, lmHRaw(p.x, p.z) + 0.35));
-    const sm = ys.map((_, i) => { let s = 0, c = 0; for (let j = -9; j <= 9; j++) { const v = ys[i + j]; if (v != null) { s += v; c++; } } return s / c; });
-    /* ikut bonggol kecil supaya landasan tidak tertanam; banjaran tinggi kekal sebagai terowong */
-    const fit = sm.map((v, i) => { const gy = ys[i]; return gy - v < 5 ? Math.max(v, gy) : v; });
-    const fin = fit.map((_, i) => { let s2 = 0, c = 0; for (let j = -3; j <= 3; j++) { const v = fit[i + j]; if (v != null) { s2 += v; c++; } } return Math.max(s2 / c, ys[i] - ((ys[i] - sm[i]) < 5 ? 0 : 99)); });
-    const pts = raw.map((p, i) => ({ x: p.x, y: Math.max(1.1, fin[i]), z: p.z }));
+    /* kecerunan landai: purata bergerak panjang; banjaran tinggi menjadi terowong */
+    const gy = raw.map((p) => lmHRaw(p.x, p.z));
+    const base = gy.map((v) => Math.max(1.4, v + 0.6));
+    const avg = (arr, w) => arr.map((_, i) => { let s = 0, c = 0; for (let j = -w; j <= w; j++) { const v = arr[i + j]; if (v != null) { s += v; c++; } } return s / c; });
+    let grade = avg(avg(base, 14), 8);
+    const pts = raw.map((p, i) => ({ x: p.x, y: Math.max(1.4, grade[i]), z: p.z, tun: gy[i] - grade[i] > RAIL_CUT }));
+    /* terowong pendek (< 3 titik) dijadikan potongan biasa */
+    for (let i = 0; i < pts.length; i++) if (pts[i].tun) { let j = i; while (j < pts.length && pts[j].tun) j++; if (j - i < 3) for (let k = i; k < j; k++) pts[k].tun = false; i = j; }
     const cum = [0]; for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].z - pts[i - 1].z));
     R.pts = pts; R.cum = cum; R.len = cum[cum.length - 1];
+    for (let i = 0; i < pts.length; i += 2) avoid.push({ x: pts[i].x, z: pts[i].z, r: 7 });
+  }
+}
+/* dipanggil oleh lmBuildTerrain selepas tapak rata: potong bukit / tambak rendah di sepanjang landasan */
+function lmRailCarve(g) {
+  if (!g.rails) return;
+  const { cs, nx, nz, h, x0, z0, land } = TER, W0 = 4.5, W1 = 18, best = new Float32Array(nx * nz).fill(1e9), tgt = new Float32Array(nx * nz);
+  for (const R of g.rails) {
+    if (!R.pts) continue;
+    for (const p of R.pts) {
+      if (p.tun) continue;
+      const xa = Math.max(0, Math.floor((p.x - W1 - x0) / cs)), xb = Math.min(nx - 1, Math.ceil((p.x + W1 - x0) / cs));
+      const za = Math.max(0, Math.floor((p.z - W1 - z0) / cs)), zb = Math.min(nz - 1, Math.ceil((p.z + W1 - z0) / cs));
+      for (let z = za; z <= zb; z++) for (let x = xa; x <= xb; x++) { const i = z * nx + x, d = Math.hypot(x0 + x * cs - p.x, z0 + z * cs - p.z); if (d < best[i]) { best[i] = d; tgt[i] = p.y - 0.75; } }
+    }
+  }
+  for (let i = 0; i < best.length; i++) {
+    const d = best[i]; if (d > W1) continue;
+    const t = d <= W0 ? 1 : 1 - (d - W0) / (W1 - W0), w = t * t * (3 - 2 * t), want = tgt[i];
+    if (h[i] > want) h[i] = h[i] + (want - h[i]) * w;               /* potongan bukit */
+    else if (want - h[i] < 7 && land[i]) h[i] = h[i] + (want - h[i]) * w * 0.9; /* tambak rendah; lurah dalam kekal sebagai jambatan */
+  }
+}
+/* sapuan profil 2D di sepanjang laluan (balast, rel) */
+function lmSweep(pts, cum, prof, vScale, skip) {
+  const pos = [], uv = [], idx = [], np = prof.length; let v0 = 0;
+  pts.forEach((p, i) => {
+    const a = pts[Math.max(0, i - 1)], b = pts[Math.min(pts.length - 1, i + 1)], dx = b.x - a.x, dz = b.z - a.z, l = Math.hypot(dx, dz) || 1, nx = -dz / l, nz = dx / l;
+    prof.forEach((q, j) => { pos.push(p.x + nx * q[0], p.y + q[1], p.z + nz * q[0]); uv.push(j / (np - 1), cum[i] / vScale); });
+    if (i && !(skip && skip(i))) { const k0 = (i - 1) * np, k1 = i * np; for (let j = 0; j < np - 1; j++) idx.push(k0 + j, k1 + j, k0 + j + 1, k0 + j + 1, k1 + j, k1 + j + 1); }
+    v0++;
+  });
+  const geo = new T.BufferGeometry(); geo.setAttribute("position", new T.Float32BufferAttribute(pos, 3)); geo.setAttribute("uv", new T.Float32BufferAttribute(uv, 2)); geo.setIndex(idx); geo.computeVertexNormals();
+  return geo;
+}
+/* portal terowong konkrit */
+function lmPortal() {
+  const g = new T.Group(), c = lmMat("#b9b4aa"), d = lmMat("#1b1a19");
+  g.add(lmMesh(lmBox(1.6, 9, 12), c, 0, 4.5, 0)); g.add(lmMesh(lmBox(1.7, 6.2, 6.4), d, 0.05, 3.1, 0));
+  g.add(lmMesh(lmBox(2.4, 1.2, 13), c, 0, 9.4, 0));
+  return g;
+}
+/* fasa 2b (selepas rupa bumi): jejaring landasan, stesen, tiang elektrik, jambatan dan kereta api */
+function lmRailsBuild(g) {
+  const tex = lmTex(64, 64, (x, w, h) => {
+    x.fillStyle = "#8f8a82"; x.fillRect(0, 0, w, h);
+    for (let i = 0; i < 420; i++) { const v = 95 + Math.random() * 80 | 0; x.fillStyle = "rgba(" + v + "," + (v - 6) + "," + (v - 12) + ",.85)"; x.fillRect(Math.random() * w, Math.random() * h, 2 + Math.random() * 2, 2); }
+  });
+  tex.wrapS = tex.wrapT = T.RepeatWrapping;
+  const ballM = new T.MeshLambertMaterial({ map: tex, side: T.DoubleSide }), railM = new T.MeshStandardMaterial({ color: 0xc4c9d0, metalness: 0.75, roughness: 0.3, side: T.DoubleSide }), wireM = new T.LineBasicMaterial({ color: 0x2a2d33 });
+  const pillars = [], sleepers = [], masts = [];
+  for (const R of g.rails) {
+    const S = R.st, pts = R.pts, cum = R.cum; if (!pts) continue;
     /* kedudukan stesen di sepanjang laluan */
     R.sS = S.map((q) => { let bi = 0, bd = 1e9; pts.forEach((p, i) => { const d = Math.hypot(p.x - q.x, p.z - q.z); if (d < bd) { bd = d; bi = i; } }); return cum[bi]; });
     S.forEach((q, i) => {
@@ -1222,53 +1266,46 @@ function lmRailsBuild(g) {
       const px = -a.tz, pz = a.tx; q.x = a.x + px * 6.5; q.z = a.z + pz * 6.5; q.px = px; q.pz = pz; q.tx = a.tx; q.tz = a.tz; q.y = a.y;
       g.cols.push({ x: a.x + px * 10.6, z: a.z + pz * 10.6, r: 4.5, h: a.y + 4 });
     });
-    /* jalur balast dan dua rel */
-    const strip = (half, dy, vScale) => {
-      const pos = [], uv = [], idx = [];
-      pts.forEach((p, i) => {
-        const a = pts[Math.max(0, i - 1)], b = pts[Math.min(pts.length - 1, i + 1)], dx = b.x - a.x, dz = b.z - a.z, l = Math.hypot(dx, dz) || 1, nx = -dz / l, nz = dx / l;
-        pos.push(p.x + nx * half[0], p.y + dy, p.z + nz * half[0], p.x + nx * half[1], p.y + dy, p.z + nz * half[1]);
-        uv.push(0, cum[i] / vScale, 1, cum[i] / vScale);
-        if (i) { const k = i * 2; idx.push(k - 2, k, k - 1, k - 1, k, k + 1); }
-      });
-      const geo = new T.BufferGeometry(); geo.setAttribute("position", new T.Float32BufferAttribute(pos, 3)); geo.setAttribute("uv", new T.Float32BufferAttribute(uv, 2)); geo.setIndex(idx); geo.computeVertexNormals();
-      return geo;
-    };
-    const ball = new T.Mesh(strip([-2, 2], 0, 4), ballM); ball.receiveShadow = true; g.scene.add(ball);
-    for (const o of [-0.78, 0.78]) { const r = new T.Mesh(strip([o - 0.1, o + 0.1], 0.2, 4), railM); g.scene.add(r); }
-    /* tiang jambatan dan tiang elektrik */
-    for (let i = 0; i < pts.length; i += 4) {
-      const p = pts[i], gy = lmHRaw(p.x, p.z);
-      if (p.y - gy > 3) pillars.push({ x: p.x, z: p.z, y0: Math.max(gy, -16), y1: p.y - 0.4 });
-      if (i % 8 === 0) { const a = pts[Math.max(0, i - 1)], b = pts[Math.min(pts.length - 1, i + 1)], dx = b.x - a.x, dz = b.z - a.z, l = Math.hypot(dx, dz) || 1; poles.push({ x: p.x - dz / l * 2.8, z: p.z + dx / l * 2.8, y: p.y }); }
+    const inTun = (i) => pts[i].tun && pts[i - 1].tun;
+    /* balast trapezium, dua rel berprofil */
+    g.scene.add(Object.assign(new T.Mesh(lmSweep(pts, cum, [[-2.9, -0.75], [-1.75, -0.12], [1.75, -0.12], [2.9, -0.75]], 3, inTun), ballM), { receiveShadow: true }));
+    for (const o of [-0.72, 0.72]) g.scene.add(new T.Mesh(lmSweep(pts, cum, [[o - 0.11, 0.02], [o - 0.07, 0.2], [o - 0.09, 0.26], [o + 0.09, 0.26], [o + 0.07, 0.2], [o + 0.11, 0.02]], 4, inTun), railM));
+    /* wayar sesentuh di atas landasan */
+    let wire = [];
+    const flush = () => { if (wire.length > 1) g.scene.add(new T.Line(new T.BufferGeometry().setFromPoints(wire), wireM)); wire = []; };
+    pts.forEach((p, i) => { if (p.tun) { flush(); return; } if (i % 2 === 0) wire.push(new T.Vector3(p.x, p.y + 6, p.z)); }); flush();
+    /* kayu landas konkrit setiap ~1.6 unit, tiang elektrik setiap ~32 unit, tiang jambatan */
+    for (let s = 0; s < R.len; s += 1.6) { const a = lmRailAt(R, s); if (!a.tun) sleepers.push(a); }
+    for (let s = 6; s < R.len; s += 32) { const a = lmRailAt(R, s); if (!a.tun) masts.push(a); }
+    for (let i = 0; i < pts.length; i += 3) { const p = pts[i], gy = lmHRaw(p.x, p.z); if (p.y - gy > 2.4 && !p.tun) pillars.push({ x: p.x, z: p.z, y0: Math.max(gy, -16), y1: p.y - 0.75 }); }
+    /* portal di kedua-dua hujung terowong */
+    for (let i = 1; i < pts.length; i++) if (pts[i].tun !== pts[i - 1].tun) {
+      const j = pts[i].tun ? i - 1 : i, a = lmRailAt(R, cum[j]), po = lmPortal();
+      po.position.set(a.x, a.y - 0.75, a.z); po.rotation.y = Math.atan2(-a.tz, a.tx); g.scene.add(po);
     }
     R.train = lmTrain(R.L); R.train.forEach((c) => g.scene.add(c));
     R.s = R.sS[0]; R.dir = 1; R.next = 1; R.wait = 3;
     lmRailPlace(R);
   }
-  const mt = new T.Matrix4(), q = new T.Quaternion(), sc = new T.Vector3(), ps = new T.Vector3();
-  if (pillars.length) {
-    const im = new T.InstancedMesh(new T.BoxGeometry(2.2, 1, 2.2), lmMat("#b9b2a2"), pillars.length);
-    pillars.forEach((p, i) => { const h = Math.max(0.5, p.y1 - p.y0); mt.compose(ps.set(p.x, p.y0 + h / 2, p.z), q.identity(), sc.set(1, h, 1)); im.setMatrixAt(i, mt); });
-    im.castShadow = !!LM.gq; g.scene.add(im);
-  }
-  if (poles.length) {
-    const im = new T.InstancedMesh((() => { const a = new T.BoxGeometry(0.25, 6, 0.25); a.translate(0, 3, 0); return a; })(), lmMat("#7d8792"), poles.length);
-    poles.forEach((p, i) => { mt.compose(ps.set(p.x, p.y, p.z), q.identity(), sc.set(1, 1, 1)); im.setMatrixAt(i, mt); });
-    g.scene.add(im);
-  }
+  const mt = new T.Matrix4(), q = new T.Quaternion(), sc = new T.Vector3(), ps = new T.Vector3(), up = new T.Vector3(0, 1, 0);
+  const inst = (geo, mat, list, put, shadow) => { if (!list.length) return; const im = new T.InstancedMesh(geo, mat, list.length); list.forEach((a, i) => { put(a); im.setMatrixAt(i, mt); }); im.castShadow = !!(shadow && LM.gq); im.receiveShadow = true; g.scene.add(im); };
+  inst(new T.BoxGeometry(2.7, 0.16, 0.38), lmMat("#7f786d"), sleepers, (a) => { q.setFromAxisAngle(up, Math.atan2(-a.tx, -a.tz)); mt.compose(ps.set(a.x, a.y - 0.04, a.z), q, sc.set(1, 1, 1)); });
+  inst(new T.BoxGeometry(2.4, 1, 2.4), lmMat("#b9b2a2"), pillars, (p) => { const hh = Math.max(0.5, p.y1 - p.y0); mt.compose(ps.set(p.x, p.y0 + hh / 2, p.z), q.identity(), sc.set(1, hh, 1)); }, true);
+  /* tiang elektrik: tiang tegak + lengan julur di atas landasan */
+  const mastG = (() => { const a = new T.BoxGeometry(0.3, 7, 0.3); a.translate(0, 3.5, 0); const b = new T.BoxGeometry(0.16, 0.16, 3.4); b.translate(0, 6.6, -1.6); const m = new T.BufferGeometry(); const ga = a.toNonIndexed(), gb = b.toNonIndexed(); const pa = ga.attributes.position.array, pb = gb.attributes.position.array, na = ga.attributes.normal.array, nb = gb.attributes.normal.array; const P2 = new Float32Array(pa.length + pb.length); P2.set(pa); P2.set(pb, pa.length); const N2 = new Float32Array(na.length + nb.length); N2.set(na); N2.set(nb, na.length); m.setAttribute("position", new T.BufferAttribute(P2, 3)); m.setAttribute("normal", new T.BufferAttribute(N2, 3)); return m; })();
+  inst(mastG, lmMat("#7d8792"), masts, (a) => { q.setFromAxisAngle(up, Math.atan2(-a.tz, a.tx)); mt.compose(ps.set(a.x - a.tz * 3.2, a.y - 0.6, a.z + a.tx * 3.2), q, sc.set(1, 1, 1)); }, true);
 }
 /* kedudukan dan arah pada jarak s di sepanjang laluan */
 function lmRailAt(R, s) {
   const c = R.cum, P = R.pts; s = clamp(s, 0, R.len);
   let lo = 0, hi = c.length - 1; while (hi - lo > 1) { const m = (lo + hi) >> 1; if (c[m] <= s) lo = m; else hi = m; }
   const a = P[lo], b = P[hi], k = c[hi] > c[lo] ? (s - c[lo]) / (c[hi] - c[lo]) : 0, dx = b.x - a.x, dz = b.z - a.z, l = Math.hypot(dx, dz) || 1;
-  return { x: a.x + dx * k, y: a.y + (b.y - a.y) * k, z: a.z + dz * k, tx: dx / l, tz: dz / l, ty: (b.y - a.y) / l };
+  return { x: a.x + dx * k, y: a.y + (b.y - a.y) * k, z: a.z + dz * k, tx: dx / l, tz: dz / l, ty: (b.y - a.y) / l, tun: !!(a.tun && b.tun) };
 }
 function lmRailPlace(R) {
   R.train.forEach((car, i) => {
     const a = lmRailAt(R, R.s - R.dir * i * CAR - R.dir * CAR / 2), yaw = Math.atan2(-a.tz, a.tx) + (R.dir < 0 ? Math.PI : 0) + (car.userData.back ? Math.PI : 0);
-    car.position.set(a.x, a.y + 0.2, a.z); car.rotation.set(0, yaw, 0);
+    car.position.set(a.x, a.y - 0.05, a.z); car.rotation.set(0, yaw, 0);
   });
 }
 /* kereta api bergerak sendiri antara stesen (kecuali ketika dinaiki pemain) */
@@ -1329,7 +1366,7 @@ function lmRideTick(g, dt) {
   if (g.dome) g.dome.position.copy(cam.position);
   if (g.sun) { const sd = g.sunDir || new T.Vector3(0.45, 0.8, 0.3); g.sun.position.set(a.x + sd.x * 150, a.y + sd.y * 150, a.z + sd.z * 150); g.sun.target.position.set(a.x, a.y, a.z); g.sun.target.updateMatrixWorld(); }
   const h = LM.ui.rd;
-  if (h) { const st = h.querySelector(".lm-fl-st"), kmh = Math.round(20 + 140 * Math.sin(k * Math.PI)), txt = r.t < 0 ? "Pintu ditutup..." : k < 1 ? "Kelajuan " + kmh + " km/j" : "Tiba di " + r.b.nm; if (st.textContent !== txt) st.textContent = txt; h.querySelector(".lm-bar i").style.width = Math.round(k * 100) + "%"; }
+  if (h) { const st = h.querySelector(".lm-fl-st"), kmh = Math.round(20 + 140 * Math.sin(k * Math.PI)), txt = r.t < 0 ? "Pintu ditutup..." : k < 1 ? (a.tun ? "Melalui terowong · " : "Kelajuan ") + kmh + " km/j" : "Tiba di " + r.b.nm; if (st.textContent !== txt) st.textContent = txt; h.querySelector(".lm-bar i").style.width = Math.round(k * 100) + "%"; }
   if (k >= 1 && !r.end) { r.end = true; lmChime(); setTimeout(() => lmRideEnd(g), 600); }
 }
 function lmRideEnd(g) {
@@ -1457,7 +1494,7 @@ function lmBuildWorld(g) {
   /* pulau Misi Khas, jeti dan feri */
   lmBuildIslands(g, gnd, avoid);
   /* rupa bumi: ketinggian, tapak rata, kemudian semua objek diletakkan di atas tanah */
-  lmTerrainBase(g); lmBuildTerrain(g);
+  lmTerrainBase(g); lmRailsPath(g, avoid); lmBuildTerrain(g);
   for (const [o, dy] of gnd) o.position.y = lmHRaw(o.position.x, o.position.z) + dy;
   for (const c of g.cols) c.h = (c.h || 30) + lmHRaw(c.x, c.z);
   lmRailsBuild(g);
