@@ -188,6 +188,9 @@ function build(c, opt) {
 }
 /* ---------- animasi ---------- */
 function anim(av, moving, air, dt, speed, scene) {
+  animBase(av, moving, air, dt, speed, scene); poseTick(av, dt);
+}
+function animBase(av, moving, air, dt, speed, scene) {
   av.t += dt; av.ph += dt * (moving ? 8.5 * (speed || 1) : 2);
   const s = air ? 0.9 : moving ? Math.sin(av.ph) * 0.7 : 0;
   av.lL.rotation.x = air ? -0.55 : s; av.lR.rotation.x = air ? 0.35 : -s;
@@ -222,6 +225,55 @@ function anim(av, moving, air, dt, speed, scene) {
 function dispose(av, scene) { if (av && av.trail && scene) av.trail.forEach((m) => { scene.remove(m); m.material.dispose(); }); }
 
 /* ---------- pratonton berputar untuk Gudang ---------- */
+/* ---------- v18.2: pose keraian dan berenang ----------
+   Pose ditentukan oleh parameter: th (condong badan ke depan, berpaksi di kaki), hip (tinggi pinggul),
+   zo (anjakan pinggul ke belakang), sudut kaki dunia (lx/rx) dan sisi (lz/rz), lengan (ax/az kiri, bx/bz kanan),
+   yaw tambahan, lift (lompat) dan sw (goyang sisi badan). */
+const POSE0 = { th: 0, hip: 2.3, zo: 0, lx: 0, rx: 0, lz: 0, rz: 0, ax: 0, az: 0, bx: 0, bz: 0, yaw: 0, lift: 0, sw: 0 };
+const ez = (x) => { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); };
+const mixP = (a, b, k) => { const o = {}; for (const key in POSE0) o[key] = (a[key] != null ? a[key] : POSE0[key]) + ((b[key] != null ? b[key] : POSE0[key]) - (a[key] != null ? a[key] : POSE0[key])) * k; return o; };
+/* keraian: tempoh (s) dan fungsi pose mengikut masa */
+const RAI = {
+  rc_tp: { d: 2.4, f: (t) => { const k = ez(t / 0.3) * ez((2.4 - t) / 0.3), s = (Math.sin(t * 19) + 1) / 2; return mixP(POSE0, { ax: -1.35, bx: -1.35, az: 0.12 + 0.34 * s, bz: -0.12 - 0.34 * s, lift: Math.abs(Math.sin(t * 9.5)) * 0.12 }, k); } },
+  rc_sj: { d: 3.6, f: (t) => { const U = { th: 1.45, hip: 1.05, zo: -0.7, lx: 1.15, rx: 1.15, ax: -2.05, bx: -2.05, az: 0.12, bz: -0.12 }; return mixP(POSE0, U, ez(t / 0.8) * ez((3.6 - t) / 0.8)); } },
+  rc_ab: { d: 2.6, f: (t) => { const k = ez(t / 0.4) * ez((2.6 - t) / 0.4); return mixP(POSE0, { ax: -2.75, bx: -2.75, az: -0.35, bz: 0.35, lift: Math.max(0, Math.sin(t * 5)) * 0.25, th: -0.08 }, k); } },
+  rc_lg: { d: 2.6, f: (t) => { const j = t % 0.85, up = Math.max(0, Math.sin(j / 0.85 * Math.PI)), k = ez(t / 0.2) * ez((2.6 - t) / 0.2); return mixP(POSE0, { lift: up * 2.2, ax: -2.9, bx: -2.9, az: -0.3, bz: 0.3, lx: -0.6 * up, rx: -0.6 * up }, k); } },
+  rc_tr: { d: 3.2, f: (t) => { const s = Math.sin(t * 7.5), k = ez(t / 0.3) * ez((3.2 - t) / 0.3); return mixP(POSE0, { ax: -1.7 + s * 0.9, bx: -1.7 - s * 0.9, az: -0.5, bz: 0.5, sw: s * 0.14, yaw: Math.sin(t * 3.75) * 0.7, lift: Math.abs(Math.sin(t * 7.5)) * 0.35, lx: Math.max(0, s) * -0.5, rx: Math.max(0, -s) * -0.5 }, k); } },
+  rc_si: { d: 2.9, f: (t) => {
+    const crouch = { hip: 1.9, th: 0.25, lx: -0.45, rx: -0.45, ax: 0.5, bx: 0.5 }, land = { th: -0.18, hip: 2.05, lz: -0.32, rz: 0.32, ax: 0.35, bx: 0.35, az: -0.75, bz: 0.75 };
+    if (t < 0.45) return mixP(POSE0, crouch, ez(t / 0.45));
+    if (t < 1.25) { const u = (t - 0.45) / 0.8; return Object.assign(mixP(crouch, { ax: -1.2, bx: -1.2, az: -0.6, bz: 0.6 }, ez(u * 2)), { lift: Math.sin(u * Math.PI) * 2.6, yaw: ez(u) * Math.PI * 2 }); }
+    if (t < 1.45) return mixP({ ax: -1.2, bx: -1.2, az: -0.6, bz: 0.6 }, land, ez((t - 1.25) / 0.2));
+    return mixP(land, POSE0, ez((t - 2.5) / 0.4));
+  } }
+};
+function rai(av, k) { if (!av || !RAI[k]) return 0; av.rai = { k: k, t: 0 }; return RAI[k].d; }
+function swimPose(av) {
+  const t = av.t;
+  if (av.swim === 2) { /* kuak rangkak */
+    const a = (t * 5.5) % 6.2832;
+    return { th: 1.42, hip: 1.25, zo: -1.1, lx: 1.45 + Math.sin(t * 11) * 0.28, rx: 1.45 - Math.sin(t * 11) * 0.28, ax: -1.42 - a, bx: -1.42 - ((a + 3.1416) % 6.2832), az: 0.1, bz: -0.1, yaw: 0, lift: 0, sw: Math.sin(a) * 0.12 };
+  }
+  /* terapung tegak (kayuh air) */
+  const s = Math.sin(t * 3);
+  return { th: 0.18, hip: 2.3, zo: 0, lx: s * 0.35, rx: -s * 0.35, lz: 0, rz: 0, ax: -0.4, bx: -0.4, az: -1.15 + s * 0.3, bz: 1.15 - s * 0.3, yaw: 0, lift: Math.sin(t * 1.5) * 0.12, sw: 0 };
+}
+function poseApply(av, p) {
+  const b = av.body, c = Math.cos(p.th), s = Math.sin(p.th);
+  b.rotation.set(p.th, 0, p.sw || 0); b.position.set(0, p.hip - 2.3 * c + (p.lift || 0), (p.zo || 0) - 2.3 * s);
+  av.lL.rotation.set((p.lx || 0) - p.th, 0, p.lz || 0); av.lR.rotation.set((p.rx || 0) - p.th, 0, p.rz || 0);
+  av.aL.rotation.set(p.ax || 0, 0, p.az || 0); av.aR.rotation.set(p.bx || 0, 0, p.bz || 0);
+  if (p.yaw) av.g.rotation.y += p.yaw;
+  av._pz = true;
+}
+function poseTick(av, dt) {
+  let p = null;
+  if (av.rai) { const R = RAI[av.rai.k]; av.rai.t += dt; if (!R || av.rai.t >= R.d) av.rai = null; else p = R.f(av.rai.t); }
+  if (!p && av.swim) p = swimPose(av);
+  if (p) poseApply(av, p);
+  else if (av._pz) { av._pz = false; av.body.rotation.set(0, 0, 0); av.body.position.z = 0; av.lL.rotation.z = av.lR.rotation.z = 0; av.aL.rotation.z = av.aR.rotation.z = 0; }
+}
+
 const PV = { r: null, scene: null, cam: null, av: null, raf: 0, yaw: 0.5, drag: null, code: "", last: 0 };
 function preview(box, c) {
   if (!PV.r) {
@@ -252,5 +304,7 @@ function pvLoop(ts) {
   PV.av.g.rotation.y = PV.yaw; anim(PV.av, false, false, dt, 1, null);
   PV.r.render(PV.scene, PV.cam);
 }
-window.AV3 = { build: build, anim: anim, code: code, parse: parse, preview: preview, dispose: dispose };
+/* mainkan keraian pada avatar pratonton Gudang */
+function previewRai(k) { if (!PV.av) return 0; const d = rai(PV.av, k); if (d) { PV.yaw = 0; PV.hold = d + 1; } return d; }
+window.AV3 = { build: build, anim: anim, code: code, parse: parse, preview: preview, dispose: dispose, rai: rai, previewRai: previewRai, RAI: Object.keys(RAI) };
 })();
