@@ -2078,9 +2078,11 @@ function lmSetup() {
   const q = LM.st.gq;
   const gq = lmBtn("Grafik: " + (q ? "Tinggi" : "Jimat"), "", () => { LM.st.gq = LM.gq = q ? 0 : 1; lmSave(); lmSetup(); });
   const x = lmBtn("Tutup", "", lmClose);
-  b.append(el("div", { class: "lm-row" }, gq, x));
+  const rf = lmBtn("Muat semula versi terkini", "", () => { if (typeof appHardReload === "function") appHardReload(); else location.reload(); });
+  b.append(el("div", { class: "lm-row" }, gq, rf, x));
   const st = lmSummary();
   b.append(el("p", { class: "lm-ex" }, "Pasport anda: " + st.pl + "/" + st.plN + " tempat diziarahi, " + st.tw + "/" + st.twN + " Menara Ilmu ditawan."));
+  b.append(el("p", { class: "lm-ex", style: "font-size:12px;opacity:.75" }, "META GEMPUR v" + (typeof APP_VER !== "undefined" ? APP_VER : "?") + ". Jika tidak dapat bergerak atau paparan lama, tekan Muat semula versi terkini."));
   if (!TOUCH) solo.focus();
 }
 /* menara seterusnya: tajuk pertama (ikut susunan peta operasi) yang belum ditawan */
@@ -2804,6 +2806,7 @@ function lmClose() {
   LM.g = null; LM.ui = {}; LM.keys = {}; LM.js.id = -1; LM.drag.id = -1; LM.run = false;
   if (LM.root) { LM.root.textContent = ""; LM.root.hidden = true; }
   document.body.classList.remove("ar-lock");
+  if (window.__swPend) setTimeout(() => location.reload(), 300); /* versi baharu tiba semasa bermain */
 }
 /* untuk ujian automatik */
 LM._g = (x, z) => lmGround(x, z); LM._fly = (a, d) => lmFlyStart(a, d); LM._ride = (a, b) => lmRide(a, b); LM._rai = () => lmRai(); LM._swim = (x, z) => lmSwimOk(x, z);
