@@ -2183,7 +2183,7 @@ function lmUpdatePlayer(g, dt) {
   const en = lmEnergy(), weak = en <= 0 ? 0.5 : en < 15 ? 0.75 : 1;
   const sp = (p.swim ? (run ? 13 : 9) : (run ? 50 : 24)) * Math.min(1, il) * weak, cy = Math.cos(g.cam.yaw), sy = Math.sin(g.cam.yaw);
   if (il > 0.1 && !g.ui) {
-    const ne = Math.max(0, en - dt * (p.swim ? 0.9 : run ? 0.8 : 0.5) * Math.min(1, il)); LM.st.en = ne;
+    const ne = Math.max(0, en - dt * (p.swim ? 0.9 : run ? 0.8 : 0.5) * Math.min(1, il) * (g.wx && g.wx.terik ? 1.3 : 1)); LM.st.en = ne;
     const w = ne <= 0 ? 3 : ne < 15 ? 2 : ne < 35 ? 1 : 0;
     if (w > (LM.st.enW | 0)) { LM.st.enW = w; lmSave(); toast(w === 3 ? "Anda terlalu lapar dan bergerak perlahan. Makan di kedai makan atau kantin sekolah." : w === 2 ? "Perut berkeroncong! Cari kedai makan berdekatan (🍽 pada peta)." : "Anda mula lapar. Kedai makan tradisi ada di setiap negeri.", "warn"); }
     if ((g.enT = (g.enT || 0) + dt) > 15) { g.enT = 0; lmSave(); }
@@ -2242,7 +2242,7 @@ function lmUpdateCam(g, dt) {
   if (g.rai) g.camera.lookAt(tx, p.y + 3.2, tz); else g.camera.lookAt(tx, ty, tz);
   if (g.dome) g.dome.position.copy(g.camera.position);
   lmSkyPlace(g);
-  if (g.sun) { const sd = g.sunDir || new T.Vector3(0.45, 0.8, 0.3); g.sun.position.set(p.x + sd.x * 150, p.y + sd.y * 150, p.z + sd.z * 150); g.sun.target.position.set(p.x, p.y, p.z); g.sun.target.updateMatrixWorld(); if (g.sunDisc) g.sunDisc.position.set(g.camera.position.x + sd.x * 1100, g.camera.position.y + sd.y * 1100, g.camera.position.z + sd.z * 1100); }
+  if (g.sun) { const sd = g.sunDir || new T.Vector3(0.45, 0.8, 0.3); g.sun.position.set(p.x + sd.x * 150, p.y + sd.y * 150, p.z + sd.z * 150); g.sun.target.position.set(p.x, p.y, p.z); g.sun.target.updateMatrixWorld(); const sv = g.sunVis || sd; if (g.sunDisc) g.sunDisc.position.set(g.camera.position.x + sv.x * 1100, g.camera.position.y + sv.y * 1100, g.camera.position.z + sv.z * 1100); if (g.wx && g.wx.moon) { g.wx.moon.position.set(g.camera.position.x + sv.x * 1050, g.camera.position.y + sv.y * 1050, g.camera.position.z + sv.z * 1050); g.wx.stars.position.copy(g.camera.position); } }
 }
 
 /* ---------- multiplayer (kehadiran bilik; sama seperti Dunia Gempur) ---------- */
@@ -3216,8 +3216,9 @@ function lmHud() {
   ui.state = el("div", { class: "lm-pill lm-state" }, "Malaysia");
   ui.coin = el("div", { class: "lm-pill" }); ui.stamp = el("div", { class: "lm-pill" }); ui.tw = el("div", { class: "lm-pill" }); ui.wp = el("div", { class: "lm-pill" }); ui.wp.hidden = true; ui.peers = el("div", { class: "lm-pill" }); ui.peers.hidden = true;
   ui.pts = el("div", { class: "lm-pill", title: "Mata hari ini (betul 10, cubaan 2) dan kedudukan anda" });
+  ui.wx = el("div", { class: "lm-pill", title: "Waktu dan cuaca (1 minit = 1 jam permainan)" });
   ui.en = el("div", { class: "lm-pill", title: "Tenaga: berkurang apabila berjalan, berlari atau berenang. Makan di kedai makan atau kantin sekolah." });
-  ui.hud.append(ui.state, ui.pts, ui.coin, ui.en, ui.stamp, ui.tw, ui.peers, ui.wp); r.appendChild(ui.hud);
+  ui.hud.append(ui.state, ui.wx, ui.pts, ui.coin, ui.en, ui.stamp, ui.tw, ui.peers, ui.wp); r.appendChild(ui.hud);
   ui.quest = el("div", { class: "lm-quest" }); r.appendChild(ui.quest); lmQuestRender();
   ui.mm = el("canvas", { class: "lm-mm", width: 380, height: 192, title: "Buka peta (M)", "aria-label": "Peta mini" }); ui.mm.addEventListener("click", lmBigMap); r.appendChild(ui.mm);
   LM.mmBase = lmMapBase(380, 192);
@@ -3260,6 +3261,8 @@ function lmHudTick(g) {
   if (ui.state.textContent !== nm) { ui.state.textContent = nm; if ((DATA.negeri[k] || ISL_BY[k]) && g.lastK && g.lastK !== k) lmPop(lmPlaceShort(k)); }
   if (DATA.negeri[k] || ISL_BY[k]) g.lastK = k;
   ui.coin.innerHTML = ""; ui.coin.append("🪙 ", el("b", null, String(P.coin | 0)));
+  if (g.wx && g.wx.h != null) { const W = g.wx, h = W.h, ic = W.kind === "ribut" ? "⛈" : W.kind === "hujan" ? "🌧" : W.kind === "berawan" ? "⛅" : h < 6.2 || h > 19.4 ? "🌙" : h < 7.6 ? "🌅" : h > 18.4 ? "🌇" : W.terik ? "🥵" : "☀️", t = ic + " " + lmClockTxt(h) + " · " + (W.terik ? "Panas terik" : WXN[W.kind]); if (ui.wx.textContent !== t) ui.wx.textContent = t; }
+  if (ui.quest && ui.hud) { const tp = ui.hud.offsetTop + ui.hud.offsetHeight + 6; if (ui.quest._tp !== tp) { ui.quest._tp = tp; ui.quest.style.top = tp + "px"; } } /* panel misi di bawah HUD (HUD boleh menjadi dua baris) */
   { const e = Math.round(lmEnergy()), t = (e <= 15 ? "😫" : e <= 35 ? "🍛" : "🍛") + " Tenaga " + e + "%"; if (ui.en.textContent !== t) { ui.en.textContent = t; ui.en.style.color = e <= 15 ? "#ff6b6b" : e <= 35 ? "#ffd166" : ""; } }
   { /* mata hari ini (sama seperti papan Top 5) dan kedudukan */
     let pts = 0; try { pts = rkVal(rkLoad().m, "all", "hari", "jumlah", ""); } catch (e) { pts = 0; }
@@ -3381,17 +3384,86 @@ function lmResize() {
   g.renderer.setSize(window.innerWidth, window.innerHeight, false); g.camera.aspect = window.innerWidth / window.innerHeight; g.camera.updateProjectionMatrix();
 }
 /* ---------- gelung ---------- */
+/* ---------- v18.11: masa dan cuaca ----------
+   Jam permainan bermula pada waktu sebenar Malaysia dan bergerak 60 kali lebih pantas (satu hari = 24 minit).
+   Fasa: subuh, matahari terbit, pagi, tengah hari terik, petang, matahari terbenam, malam berbintang.
+   Cuaca bertukar setiap 2 hingga 4 minit: cerah, berawan, hujan dan ribut petir (lebih kerap pada waktu petang). */
+const SKYK = [ /* [jam, langit atas, ufuk, kekuatan matahari, hemisfera, warna cahaya] */
+  [0, 0x0a1430, 0x1a2848, 0.10, 0.30, 0x8aa0ff], [5.4, 0x14244e, 0x3a3a6a, 0.12, 0.32, 0x9aa8ff], [6.4, 0x4a6aae, 0xff9a62, 0.45, 0.50, 0xffa060],
+  [7.6, 0x3f8ee0, 0xcfe4ff, 0.80, 0.70, 0xfff0d8], [12.5, 0x2378e0, 0xeaf6ff, 0.96, 0.76, 0xfff6e6], [16.5, 0x3a86d8, 0xd6ecff, 0.90, 0.78, 0xfff0d8],
+  [18.7, 0x4a5f9e, 0xff8a50, 0.48, 0.55, 0xff8040], [19.5, 0x24305e, 0x5a4a78, 0.18, 0.40, 0xb090ff], [20.5, 0x0e1838, 0x22305a, 0.10, 0.32, 0x8aa0ff], [24, 0x0a1430, 0x1a2848, 0.10, 0.30, 0x8aa0ff]
+];
+const WAKTU = [[5.85, "Subuh"], [13.2, "Zohor"], [16.5, "Asar"], [19.35, "Maghrib"], [20.5, "Isyak"]]; /* anggaran Kuala Lumpur */
+const WXN = { cerah: "Cerah", berawan: "Berawan", hujan: "Hujan", ribut: "Ribut petir" };
+function lmClock() {
+  if (LM.clock0 == null) { let h = 10; try { const d = new Date(Date.now() + 8 * 3600000); h = d.getUTCHours() + d.getUTCMinutes() / 60; } catch (e) { h = 10; } LM.clock0 = h; LM.clockT0 = performance.now(); }
+  return (LM.clock0 + (performance.now() - LM.clockT0) / 60000) % 24; /* 1 minit sebenar = 1 jam permainan */
+}
+function lmClockTxt(h) {
+  const H = Math.floor(h), M = Math.floor((h - H) * 60), h12 = ((H + 11) % 12) + 1, ph = H < 12 ? (H < 6 ? "pagi" : "pagi") : H < 14 ? "tengah hari" : H < 19 ? "petang" : "malam";
+  return h12 + ":" + String(M).padStart(2, "0") + " " + (H < 5 ? "pagi" : ph);
+}
+function lmSkyAt(h) {
+  let i = 0; while (i < SKYK.length - 2 && SKYK[i + 1][0] <= h) i++;
+  const A = SKYK[i], B = SKYK[i + 1], k = clamp((h - A[0]) / (B[0] - A[0]), 0, 1), C = (x) => new T.Color(x);
+  return { top: C(A[1]).lerp(C(B[1]), k), hor: C(A[2]).lerp(C(B[2]), k), sun: A[3] + (B[3] - A[3]) * k, hemi: A[4] + (B[4] - A[4]) * k, col: C(A[5]).lerp(C(B[5]), k) };
+}
+function lmWxInit(g) {
+  const W = g.wx = { kind: "cerah", c: 0, cw: 0, t: 60 + Math.random() * 90, flash: 0, nf: 8 };
+  /* titisan hujan di sekeliling kamera */
+  const N = LM.gq ? 1400 : 600, pos = new Float32Array(N * 6), sp = new Float32Array(N);
+  for (let i = 0; i < N; i++) { const x = (Math.random() - 0.5) * 140, y = Math.random() * 70, z = (Math.random() - 0.5) * 140; pos.set([x, y, z, x + 0.25, y + 2.2, z], i * 6); sp[i] = 55 + Math.random() * 25; }
+  const geo = new T.BufferGeometry(); geo.setAttribute("position", new T.BufferAttribute(pos, 3));
+  W.rain = new T.LineSegments(geo, new T.LineBasicMaterial({ color: 0xc8d6ea, transparent: true, opacity: 0, depthWrite: false })); W.rain.frustumCulled = false; W.rain.visible = false; W.sp = sp; g.scene.add(W.rain);
+  /* bintang dan bulan */
+  const sn = 700, sp2 = new Float32Array(sn * 3); for (let i = 0; i < sn; i++) { const u = Math.random() * 6.2832, v = Math.acos(Math.random() * 0.95); sp2.set([Math.sin(v) * Math.cos(u) * 1150, Math.cos(v) * 1150, Math.sin(v) * Math.sin(u) * 1150], i * 3); }
+  const sg = new T.BufferGeometry(); sg.setAttribute("position", new T.BufferAttribute(sp2, 3));
+  W.stars = new T.Points(sg, new T.PointsMaterial({ color: 0xffffff, size: 2.2, sizeAttenuation: false, transparent: true, opacity: 0, fog: false, depthWrite: false })); W.stars.frustumCulled = false; W.stars.renderOrder = -9; g.scene.add(W.stars);
+  const mt = lmTex(64, 64, (x, w) => { const gr = x.createRadialGradient(w / 2, w / 2, 0, w / 2, w / 2, w / 2); gr.addColorStop(0, "rgba(240,244,255,1)"); gr.addColorStop(0.45, "rgba(220,228,255,.95)"); gr.addColorStop(0.55, "rgba(200,210,255,.2)"); gr.addColorStop(1, "rgba(200,210,255,0)"); x.fillStyle = gr; x.fillRect(0, 0, w, w); });
+  W.moon = new T.Sprite(new T.SpriteMaterial({ map: mt, fog: false, depthWrite: false, transparent: true, opacity: 0 })); W.moon.scale.set(70, 70, 1); W.moon.renderOrder = -9; g.scene.add(W.moon);
+}
+function lmWxPick(h) {
+  const r = Math.random(), pm = h >= 14 && h < 19.5; /* hujan petang lazim di Malaysia */
+  return pm ? (r < 0.3 ? "cerah" : r < 0.5 ? "berawan" : r < 0.8 ? "hujan" : "ribut") : (r < 0.55 ? "cerah" : r < 0.8 ? "berawan" : r < 0.95 ? "hujan" : "ribut");
+}
+/* dipanggil setiap 0.5 s: warna langit, cahaya, kabus dan pertukaran cuaca */
 function lmDayNight(g) {
-  /* kitaran 8 minit: siang, senja, malam terang, subuh */
-  const t = (g.T / 480) % 1, day = 0.5 + 0.5 * Math.cos(t * 6.2832);
-  const C = (h) => new T.Color(h), mix = (a, b, c, d) => (day > 0.5 ? C(b).lerp(C(c), (day - 0.5) * 2) : C(a).lerp(C(b), day * 2)) || d;
-  const top = mix(0x1b2c55, 0x6f86c9, 0x2f7fd8), hor = mix(0x3a5684, 0xf6b27a, 0xcfe9ff);
+  if (!g.wx) lmWxInit(g);
+  const W = g.wx, h = lmClock(), S = lmSkyAt(h);
+  W.t -= 0.5; if (W.t <= 0) { const k = lmWxPick(h); if (k !== W.kind) { W.kind = k; lmPop({ cerah: "☀️ Cuaca kembali cerah", berawan: "⛅ Langit mendung", hujan: "🌧 Hujan mula turun", ribut: "⛈ Ribut petir! Berteduh dahulu" }[k]); } W.t = 120 + Math.random() * 120; }
+  W.cw = { cerah: 0, berawan: 0.45, hujan: 0.8, ribut: 1 }[W.kind]; W.c += (W.cw - W.c) * 0.12;
+  const grey = new T.Color(0x77808e), dark = new T.Color(0x3e4552), cl = W.c;
+  const top = S.top.clone().lerp(grey, cl * 0.75), hor = S.hor.clone().lerp(cl > 0.7 ? dark : grey, cl * 0.7);
   if (g.paintSky) g.paintSky(top, hor);
-  g.scene.background.copy(hor); g.scene.fog.color.copy(hor);
-  g.sun.intensity = 0.25 + 0.75 * day; g.hemi.intensity = 0.42 + 0.38 * day;
-  g.sun.color.copy(C(0xffb070).lerp(C(0xfff4e0), clamp((day - 0.4) * 1.7, 0, 1)));
-  const a = 0.25 + t * 6.2832; g.sunDir = new T.Vector3(Math.cos(a) * 0.55, 0.35 + 0.55 * day, Math.sin(a) * 0.55 + 0.25).normalize();
-  if (g.sunDisc) g.sunDisc.material.opacity = clamp(day * 1.4 - 0.2, 0, 1);
+  g.scene.background.copy(hor); g.scene.fog.color.copy(hor); g.scene.fog.near = 320 - 180 * cl; g.scene.fog.far = 1180 - 640 * cl;
+  g.sun.intensity = S.sun * (1 - 0.6 * cl); g.hemi.intensity = S.hemi * (1 - 0.25 * cl); g.sun.color.copy(S.col);
+  /* arah cahaya: matahari pada siang, bulan pada malam (sentiasa di atas ufuk untuk bayang) */
+  const day = h >= 6.2 && h <= 19.2, f = day ? (h - 6.2) / 13 : ((h + 24 - 19.2) % 24) / 11, az = Math.PI * f, el = Math.sin(Math.PI * f);
+  const vis = new T.Vector3(Math.cos(az) * 0.9, Math.max(-0.2, el), -0.35).normalize(); g.sunVis = vis;
+  g.sunDir = new T.Vector3(vis.x, Math.max(0.3, vis.y), vis.z).normalize();
+  if (g.sunDisc) { g.sunDisc.visible = day; g.sunDisc.material.opacity = clamp(el * 3, 0, 1) * (1 - cl); }
+  if (W.moon) { W.moon.visible = !day; W.moon.material.opacity = clamp(el * 3, 0, 1) * (1 - cl * 0.9); }
+  const night = clamp(1 - S.sun / 0.45, 0, 1); W.stars.material.opacity = night * (1 - cl);
+  if (g.clouds && g.clouds.children[0]) { const m = g.clouds.children[0].material; m.opacity = 0.75 + 0.25 * cl; m.color.setRGB(1 - 0.55 * cl - 0.4 * night, 1 - 0.5 * cl - 0.38 * night, 1 - 0.45 * cl - 0.3 * night); }
+  W.rain.visible = W.c > 0.55 && W.kind !== "berawan"; W.rain.material.opacity = clamp((W.c - 0.55) * 2.2, 0, 0.6);
+  W.terik = h >= 11.5 && h <= 15.5 && W.c < 0.15;
+  /* waktu solat (anggaran KL) */
+  const hp = W.hp == null ? h : W.hp; WAKTU.forEach(([wh, n]) => { if ((hp < wh && h >= wh) || (hp > h && wh <= h)) lmPop("🕌 Masuk waktu solat " + n); }); W.hp = h;
+  W.h = h;
+}
+/* setiap bingkai: hujan jatuh mengikut kamera, kilat */
+function lmWxTick(g, dt) {
+  const W = g.wx; if (!W) return;
+  if (W.rain.visible) {
+    const P = W.rain.geometry.attributes.position, a = P.array, N = W.sp.length, cp = g.camera.position;
+    W.rain.position.set(cp.x, Math.max(0, cp.y - 30), cp.z);
+    for (let i = 0; i < N; i++) { const o = i * 6, d = W.sp[i] * dt; a[o + 1] -= d; a[o + 4] -= d; if (a[o + 1] < 0) { a[o + 1] += 70; a[o + 4] += 70; } }
+    P.needsUpdate = true;
+  }
+  if (W.kind === "ribut" && W.c > 0.8) {
+    if ((W.nf -= dt) <= 0) { W.nf = 5 + Math.random() * 9; W.flash = 0.18; setTimeout(() => { try { if (!LM.mute) arBeep(60, 0.9, "sawtooth", 0.05, -30); } catch (e) { /* abaikan */ } }, 400 + Math.random() * 900); }
+  }
+  if (W.flash > 0) { W.flash -= dt; if (W.flash > 0) g.hemi.intensity = 2.4; else lmDayNight(g); }
 }
 function lmLoop(ts) {
   if (!LM.on || !LM.g) return;
@@ -3403,7 +3475,7 @@ function lmLoop(ts) {
     if (g.rai && (g.rai.t -= dt) <= 0) g.rai = null;
     if (g.flight) lmFlightTick(g, dt); else if (g.sail) lmSailTick(g, dt); else if (g.ride) lmRideTick(g, dt); else { lmUpdatePlayer(g, dt); lmUpdateCam(g, dt); }
     lmRailTick(g, dt);
-    lmNet(g, dt, ts); lmPuffTick(g, dt); lmTrafficTick(g, dt);
+    lmNet(g, dt, ts); lmPuffTick(g, dt); lmTrafficTick(g, dt); lmWxTick(g, dt);
     if (g.me.bub && (g.me.bubT -= dt) <= 0) lmBubble(g.me, "");
     if ((g.nearT -= dt) <= 0) { g.nearT = 0.15; lmNearTick(g); }
     if ((g.hudT -= dt) <= 0) { g.hudT = 0.25; lmHudTick(g); }
