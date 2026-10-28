@@ -73,3 +73,36 @@ Untuk mengaktifkan galeri sesebuah IPT:
 4. Tekan **Simpan profil**.
 
 Pelawat dan minat dikira mengikut peranti unik dan tidak menyimpan nama murid. Ini memudahkan laporan kepada IPT tanpa melanggar privasi.
+
+## Mata wang MD (v18.21): ganjaran inovasi guru
+MD (Meta Didik) ialah mata wang pembelajaran. Murid **memperolehnya dengan belajar** (kuiz, misi, menara,
+Stesen Ilmu) dan **tidak boleh membelinya** dengan wang. MD juga tidak boleh ditukar kepada wang oleh murid.
+
+Aliran:
+1. Guru menetapkan harga guna inovasi (5, 10, 20, 30 atau 50 MD, atau percuma) dalam borang Stesen Inovasi.
+2. Murid menekan **Guna inovasi** di Dataran Inovasi. MD ditolak sekali sehari bagi setiap inovasi.
+   Rekod disimpan di `stesen_guna/<stesen>/<murid>/<tarikh>`.
+3. Selepas bulan tamat, pentadbir membuka **Papan pemuka guru → Pentadbir: tabung dan tuntutan MD**,
+   memilih bulan, mengisi jumlah tabung RM (hasil sewaan tapak, penaja, langganan sekolah) dan menekan
+   **Tetapkan tabung**. Tabung diagihkan ikut bahagian MD setiap guru:
+   `bayaran guru = tabung RM × MD guru ÷ jumlah MD semua guru`.
+4. Guru melihat bayaran dalam **Pendapatan MD inovasi saya** dan menghantar tuntutan (nama, bank, no. akaun).
+5. Pentadbir meluluskan, membayar secara manual (DuitNow / pindahan bank) dan menekan **Tanda dibayar**
+   dengan nombor rujukan.
+
+Nod baharu dalam `docs/firebase-rules-stesen.json` (tambah dalam Rules):
+
+| Nod | Kegunaan |
+|---|---|
+| `stesen_guna` | Rekod murid menggunakan inovasi berbayar. Sekali sehari bagi setiap murid; harga mesti sama dengan harga stesen; guru tidak boleh membayar inovasinya sendiri. |
+| `tabung` | Jumlah tabung bulanan dan kadar RM bagi setiap MD (awam). Hanya pentadbir menulis. |
+| `tabung_by` | MD setiap guru bagi sesuatu bulan. Hanya guru itu boleh membaca. |
+| `tuntutan` | Tuntutan bayaran guru, termasuk butiran bank. Hanya guru itu (dan pentadbir) boleh membaca. |
+
+Kawalan penyalahgunaan:
+- Panel pentadbir menanda inovasi yang penggunaannya berulang luar biasa (⚠). Semak sebelum membayar.
+- Semasa murid masih menggunakan ID tanpa nama, seseorang boleh mencipta banyak ID. Apabila log masuk
+  DELIMa diwajibkan untuk murid, ketatkan `stesen_guna` dengan menambah syarat e-mel DELIMa pada `.write`
+  (sama seperti `stesen`).
+- Penjawat awam bertanggungjawab mendapatkan kebenaran ketua jabatan dan mengisytiharkan pendapatan untuk cukai.
+  Dapatkan nasihat peguam / akauntan sebelum bayaran pertama.
