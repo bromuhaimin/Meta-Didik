@@ -1,4 +1,4 @@
-/* GEMPUR: modul dimuat apabila diperlukan (lihat modLoad dalam app.js). Bergantung pada pemboleh ubah global app.js. */
+/* META DIDIK: modul dimuat apabila diperlukan (lihat modLoad dalam app.js). Bergantung pada pemboleh ubah global app.js. */
 /* ---------- Praktikal (v17.63): simulasi dan latihan amali ---------- */
 const PR_KEY = "gt-pr", PR_XPK = "gt-pr-xp", PR_XP_CAP = 40;
 const PR_MODS = [

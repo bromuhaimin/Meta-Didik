@@ -1,7 +1,7 @@
 # Fasa 1: Persediaan Log Masuk DELIMa dan Stesen Inovasi
 
 Kod untuk Fasa 1 sudah ada dalam versi 18.14, tetapi **ia tidak aktif** sehingga langkah di bawah dibuat dalam Firebase Console.
-Selagi belum aktif, Gempur berfungsi seperti biasa. Papan pemuka guru akan memaparkan
+Selagi belum aktif, Meta Didik berfungsi seperti biasa. Papan pemuka guru akan memaparkan
 "Pengesahan guru (DELIMa) belum diaktifkan".
 
 ## Langkah 1: Hidupkan Firebase Authentication
@@ -10,12 +10,12 @@ Selagi belum aktif, Gempur berfungsi seperti biasa. Papan pemuka guru akan memap
 3. Dalam tab **Sign-in method**, hidupkan:
    - **Anonymous**, untuk semua murid (setiap peranti mendapat ID selamat; tiada maklumat peribadi diminta).
    - **Google**. Isikan *Project support email* dan tekan **Save**.
-4. Dalam tab **Settings → Authorized domains**, tambah domain laman Gempur, contohnya `bromuhaimin.github.io`, serta domain sendiri jika ada.
+4. Dalam tab **Settings → Authorized domains**, tambah domain laman Meta Didik, contohnya `bromuhaimin.github.io`, serta domain sendiri jika ada.
 
 ## Langkah 2: Dapatkan Web API Key
 1. Klik ⚙ **Project settings → General**.
 2. Salin **Web API Key** (bermula dengan `AIza...`).
-   - Jika tiada, klik **Add app → Web (</>)**, beri nama "Gempur", kemudian salin `apiKey`.
+   - Jika tiada, klik **Add app → Web (</>)**, beri nama "Meta Didik", kemudian salin `apiKey`.
    - Kunci ini **bukan rahsia**. Ia memang dimasukkan dalam kod laman web.
 
 ## Langkah 3: Dapatkan Google OAuth Client ID
@@ -50,7 +50,7 @@ Apa yang dikawal oleh peraturan ini:
    - membuka **Papan pemuka guru → Stesen Inovasi saya**,
    - log masuk DELIMa dan menghantar permohonan.
 2. Pentadbir (peranti yang mempunyai kunci moderator) membuka **Pentadbir: semakan Stesen Inovasi**, kemudian memilih tapak dan menekan **Lulus**.
-3. Stesen muncul di **Dataran Inovasi** negeri itu dalam META GEMPUR (3 tapak setiap negeri, 42 kesemuanya).
+3. Stesen muncul di **Dataran Inovasi** negeri itu dalam META DIDIK (3 tapak setiap negeri, 42 kesemuanya).
 
 ## Fasa seterusnya (selepas kebanyakan murid memakai v18.14)
 Setiap peranti akan mempunyai ID tanpa nama, jadi peraturan nod lama (`pemain`, `ringkas`, `komen` dan lain-lain)

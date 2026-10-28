@@ -1,7 +1,7 @@
 {
- "name": "Gempur",
- "short_name": "Gempur",
- "description": "Gempur \u2013 belajar Tasawwur Islam, Pendidikan Islam dan Bahasa Arab SPM",
+ "name": "Meta Didik",
+ "short_name": "Meta Didik",
+ "description": "Meta Didik – dunia pembelajaran maya untuk guru dan murid Malaysia: Tasawwur Islam, Pendidikan Islam dan banyak lagi.",
  "start_url": "./index.html",
  "scope": "./",
  "display": "fullscreen",

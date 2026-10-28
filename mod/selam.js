@@ -1,4 +1,4 @@
-/* GEMPUR: modul dimuat apabila diperlukan (lihat modLoad dalam app.js). Bergantung pada pemboleh ubah global app.js. */
+/* META DIDIK: modul dimuat apabila diperlukan (lihat modLoad dalam app.js). Bergantung pada pemboleh ubah global app.js. */
 function srTo(fn, ms) { const id = setTimeout(fn, ms); SR.timers.push(id); return id; }
 function srClear() { SR.timers.forEach(clearTimeout); SR.timers = []; }
 function srRoot() {

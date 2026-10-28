@@ -1,8 +1,8 @@
 /* =====================================================================
-   META GEMPUR (v17.88, dinamakan semula v17.89): dunia terbuka gaya blok di atas peta Malaysia.
+   META DIDIK (v17.88, dinamakan semula v17.89): dunia terbuka gaya blok di atas peta Malaysia.
    Murid berjalan ke setiap negeri, menjawab kuiz di Menara Ilmu (ikut tajuk negeri itu),
    menziarahi tempat pelancongan, menggantung nama pada Papan Kenangan dan bermain bersama rakan.
-   Fail ini dimuat hanya apabila butang Dunia Gempur ditekan (lmOpen dalam index.html). Bergantung pada
+   Fail ini dimuat hanya apabila butang Dunia Ilmu ditekan (lmOpen dalam index.html). Bergantung pada
    pemboleh ubah global index.html: THREE, DATA, TOPIK, BYTOPIK, QLIST, P, Net, SUBJ, SUBJS dan utiliti.
    ===================================================================== */
 (function () {
@@ -838,7 +838,7 @@ function lmTower(t) {
 }
 /* ---------- kapal terbang dan lapangan terbang realistik (v17.92) ---------- */
 /* Pesawat: badan lathe licin, sayap condong, enjin, tingkap, kokpit, roda pendarat, ekor Jalur Gemilang.
-   Livery umum "Gempur Air" (bukan jenama sebenar). Asal kumpulan = bawah roda; hidung ke arah +x. */
+   Livery umum "Didik Air" (bukan jenama sebenar). Asal kumpulan = bawah roda; hidung ke arah +x. */
 function lmFlagTex() {
   return GEO.flagT || (GEO.flagT = lmTex(128, 64, (x) => {
     for (let i = 0; i < 14; i++) { x.fillStyle = i % 2 ? "#ffffff" : "#cc0001"; x.fillRect(0, i * 64 / 14, 128, 64 / 14 + 0.5); }
@@ -853,7 +853,7 @@ function lmWinTex() {
     x.fillStyle = "#c8102e"; x.fillRect(40, 44, w - 120, 8); x.fillStyle = "#1d3c8f"; x.fillRect(40, 54, w - 120, 6);
     x.fillStyle = "#1b2633"; for (let i = 0; i < 30; i++) { lmRound(x, 120 + i * 27, 18, 15, 19, 7); x.fill(); }
     lmRound(x, 70, 10, 20, 32, 5); x.fill(); lmRound(x, w - 150, 10, 20, 32, 5); x.fill();
-    x.fillStyle = "#1d3c8f"; x.font = "900 26px Nunito, sans-serif"; x.fillText("GEMPUR AIR", w - 420, 40);
+    x.fillStyle = "#1d3c8f"; x.font = "900 26px Nunito, sans-serif"; x.fillText("META DIDIK AIR", w - 420, 40);
   }));
 }
 function lmPlane(opt) {
@@ -2151,7 +2151,7 @@ function lmIlmuTopic(it, t) {
         const row = el("div", { class: "lm-row" });
         if (pass && J.next) row.append(lmBtn("Tunjuk arah ke " + J.next.sn, "pri", () => { LM.g.wp = { x: J.next.x, z: J.next.z, n: J.next.sn }; lmWpSet(); lmCardClose(); }));
         if (!pass) row.append(lmBtn("Cuba lagi", "pri", () => lmIlmuTopic(it, t)));
-        if (fin) row.append(lmBtn("📜 Sijil META GEMPUR", "pri", lmCertGet));
+        if (fin) row.append(lmBtn("📜 Sijil META DIDIK", "pri", lmCertGet));
         row.append(lmBtn("Teruskan jelajah", pass && J.next ? "" : "pri", lmCardClose));
         b.append(row);
       });
@@ -2280,7 +2280,7 @@ function lmOwnSchoolOpen(it) {
     b.append(el("p", null, "Di sinilah perjalanan menuntut ilmu anda bermula. Kembara ke setiap Stesen Ilmu di seluruh Malaysia; setiap stesen di institusi sebenar memegang tajuk " + SUBJS[SUBJ].subjek + " yang berkait dengannya."));
     b.append(el("p", { class: "lm-ex" }, "Cop Stesen Ilmu: " + J.d + "/" + J.t + (J.next ? " · Seterusnya: " + J.next.sn + " (" + DATA.negeri[J.next.k].pendek + ")" : " · Perjalanan lengkap!")));
     const row = el("div", { class: "lm-row" });
-    if (!J.next && J.t) row.append(lmBtn("📜 Terima Sijil META GEMPUR", "pri", lmCertGet), lmBtn("🏅 Lencana", "", () => lmPassport("lencana")));
+    if (!J.next && J.t) row.append(lmBtn("📜 Terima Sijil META DIDIK", "pri", lmCertGet), lmBtn("🏅 Lencana", "", () => lmPassport("lencana")));
     if (J.next) row.append(lmBtn("Tunjuk arah ke " + J.next.sn, "pri", () => { LM.g.wp = { x: J.next.x, z: J.next.z, n: J.next.sn }; lmWpSet(); lmCardClose(); lmPop("Ikut tiang merah ke " + J.next.sn); }));
     row.append(lmBtn("🍛 Kantin (percuma)", "", () => { if (lmEnergy() >= 100) { toast("Tenaga anda masih penuh.", "ok"); return; } lmCardClose(); lmEat(50, "Makan di kantin sekolah"); }), lmBtn("🛍 Gudang", "", lmGudang), lmBtn("Pasport", "", () => lmPassport("ilmu")), lmBtn("Tutup", "", lmCardClose));
     b.append(el("p", { class: "lm-ex" }, "Gudang hanya boleh dibuka di sekolah anda: beli avatar, pakaian seragam, lencana dan cara meraikan."), row);
@@ -2425,7 +2425,7 @@ function lmStnOpen(it) {
     if (d.url && /^https:\/\//.test(d.url)) {
       let host = ""; try { host = new URL(d.url).hostname; } catch (e) { host = ""; }
       row.appendChild(lmBtn("🔗 Lawati " + (host || "pautan"), "", () => {
-        if (!confirm("Anda akan membuka laman luar (" + host + ") yang dikendalikan oleh guru pemilik stesen, bukan Gempur. Teruskan?")) return;
+        if (!confirm("Anda akan membuka laman luar (" + host + ") yang dikendalikan oleh guru pemilik stesen, bukan Meta Didik. Teruskan?")) return;
         FB.req("PUT", "stesen_klik/" + d.id + "/" + gid, true).catch(() => {});
         window.open(d.url, "_blank", "noopener");
       }));
@@ -2715,7 +2715,7 @@ function lmGudang() {
   lmCardClose(); LM.gd = { view: typeof UI !== "undefined" ? UI.view : "map" }; LM.pause = true; g.ui = true; for (const k in LM.keys) LM.keys[k] = false;
   LM.root.hidden = true; document.body.classList.remove("ar-lock");
   setView("gudang"); try { window.scrollTo(0, 0); } catch (e) { /* abaikan */ }
-  const b = el("button", { type: "button", id: "lmGdBack", class: "btn" }, "⬅ Kembali ke sekolah (META GEMPUR)");
+  const b = el("button", { type: "button", id: "lmGdBack", class: "btn" }, "⬅ Kembali ke sekolah (META DIDIK)");
   b.style.cssText = "position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:90;box-shadow:0 8px 20px rgba(0,0,0,.4)";
   b.addEventListener("click", lmGudangBack); document.body.appendChild(b);
 }
@@ -2945,7 +2945,7 @@ function lmUpdateCam(g, dt) {
   if (g.sun) { const sd = g.sunDir || new T.Vector3(0.45, 0.8, 0.3); g.sun.position.set(p.x + sd.x * 150, p.y + sd.y * 150, p.z + sd.z * 150); g.sun.target.position.set(p.x, p.y, p.z); g.sun.target.updateMatrixWorld(); const sv = g.sunVis || sd; if (g.sunDisc) g.sunDisc.position.set(g.camera.position.x + sv.x * 1100, g.camera.position.y + sv.y * 1100, g.camera.position.z + sv.z * 1100); if (g.wx && g.wx.moon) { g.wx.moon.position.set(g.camera.position.x + sv.x * 1050, g.camera.position.y + sv.y * 1050, g.camera.position.z + sv.z * 1050); g.wx.stars.position.copy(g.camera.position); } }
 }
 
-/* ---------- multiplayer (kehadiran bilik; sama seperti Dunia Gempur) ---------- */
+/* ---------- multiplayer (kehadiran bilik; sama seperti Dunia Ilmu) ---------- */
 async function lmNetJoin(code, kind) {
   lmNetLeave(); if (!Net.room) { if (kind === "open") LM.openRetry = performance.now() + 1e9; toast("Bilik bersama memerlukan sambungan pelayan Firebase (versi GitHub Pages).", "warn"); return false; }
   const tok = ++LM.tok; LM.roomCode = code; LM.roomKind = kind;
@@ -3379,7 +3379,7 @@ const LM_CSS = `
 function lmRoot() {
   if (!document.getElementById("lmCss")) { const s = document.createElement("style"); s.id = "lmCss"; s.textContent = LM_CSS; document.head.appendChild(s); }
   let r = document.getElementById("lmOv");
-  if (!r) { r = el("div", { id: "lmOv", role: "dialog", "aria-modal": "true", "aria-label": "META GEMPUR" }); document.body.appendChild(r); }
+  if (!r) { r = el("div", { id: "lmOv", role: "dialog", "aria-modal": "true", "aria-label": "META DIDIK" }); document.body.appendChild(r); }
   r.textContent = ""; r.hidden = false; r.classList.toggle("touch", !!TOUCH);
   LM.root = r; return r;
 }
@@ -3408,7 +3408,7 @@ function lmSetup() {
   const c = el("div", { class: "lm-card", style: "background:none" }), b = el("div", { class: "lm-box", style: "width:min(720px,100%)" });
   c.appendChild(b); r.appendChild(c);
   const t = lmNextTopic(), ng = t && DATA.negeri[t.negeri], nT = DATA.topik.filter((x) => DATA.negeri[x.negeri]).length;
-  b.append(el("div", { class: "lm-kick" }, "Dunia maya · " + SUBJS[SUBJ].nama), el("h2", null, "META GEMPUR"));
+  b.append(el("div", { class: "lm-kick" }, "Dunia maya · " + SUBJS[SUBJ].nama), el("h2", null, "META DIDIK"));
   b.append(el("p", null, "Jelajah peta Malaysia 3D bersama rakan. Kesemua " + nT + " tajuk " + SUBJS[SUBJ].subjek + " dipegang oleh Stesen Ilmu di institusi sebenar seluruh Malaysia (masjid, mahkamah, Parlimen, Bursa Malaysia dan lain-lain). Universiti awam pula menjadi galeri Kembara Kampus."));
   b.append(el("p", { class: "lm-ex" }, (LM.ownSk ? "Perjalanan menuntut ilmu: anda bermula di sekolah anda, " + LM.ownSk.n + ", kemudian kembara ke setiap Stesen Ilmu. Setiap stesen memegang tajuk yang berkait dengan institusi itu. " : "Sekolah anda tidak ditemui; misi bermula di KLIA. Pastikan nama sekolah di profil sama seperti nama rasmi (contoh: SMK Taman Universiti). ") + "Kawalan: W A S D atau anak panah untuk bergerak, Shift lari, Space lompat, E berinteraksi, M peta, P pasport, T senarai tajuk, seret tetikus untuk pusing kamera. Di telefon: kayu bedik kiri dan butang kanan."));
   const solo = lmBtn("Main solo", Net.room ? "" : "pri", () => lmStart(""));
@@ -3434,7 +3434,7 @@ function lmSetup() {
   b.append(el("div", { class: "lm-row" }, gq, rf, x));
   const st = lmSummary();
   b.append(el("p", { class: "lm-ex" }, "Pasport anda: " + st.pl + "/" + st.plN + " tempat diziarahi, " + st.tw + "/" + st.twN + " Menara Ilmu ditawan."));
-  b.append(el("p", { class: "lm-ex", style: "font-size:12px;opacity:.75" }, "META GEMPUR v" + (typeof APP_VER !== "undefined" ? APP_VER : "?") + ". Jika tidak dapat bergerak atau paparan lama, tekan Muat semula versi terkini."));
+  b.append(el("p", { class: "lm-ex", style: "font-size:12px;opacity:.75" }, "META DIDIK v" + (typeof APP_VER !== "undefined" ? APP_VER : "?") + ". Jika tidak dapat bergerak atau paparan lama, tekan Muat semula versi terkini."));
   if (!TOUCH) solo.focus();
 }
 /* menara seterusnya: tajuk pertama (ikut susunan peta operasi) yang belum ditawan */
@@ -3448,12 +3448,12 @@ function lmSummary() {
   return { pl: PLACES.filter((p) => LM.st.pl[p[0]]).length, plN: PLACES.length, tw: tws.filter((t) => (LM.st.tw[t.id] | 0) >= 3).length, twN: tws.length };
 }
 
-/* ---------- v18.13: lencana META GEMPUR ----------
+/* ---------- v18.13: lencana META DIDIK ----------
    [id, ikon, nama, syarat, fungsi kemajuan -> [capai, sasaran]]; disimpan dalam LM.st.lc (id -> masa) */
 const LCN = [
   ["ipta1", "📖", "Langkah Pertama", "Dapatkan cop Stesen Ilmu pertama", () => { const J = lmJourney(); return [J.d, 1]; }],
   ["ipta5", "📚", "Pencinta Ilmu", "Dapatkan cop 5 Stesen Ilmu", () => { const J = lmJourney(); return [J.d, Math.min(5, J.t || 5)]; }],
-  ["iptaAll", "🏛", "Graduan META GEMPUR", "Lengkapkan semua Stesen Ilmu", () => { const J = lmJourney(); return [J.d, J.t || 1]; }],
+  ["iptaAll", "🏛", "Graduan META DIDIK", "Lengkapkan semua Stesen Ilmu", () => { const J = lmJourney(); return [J.d, J.t || 1]; }],
   ["tw10", "🏰", "Penawan Tajuk", "Tawan 10 tajuk (betul 3/5 atau lebih)", () => [lmSummary().tw, 10]],
   ["pl10", "📘", "Pengembara", "Ziarahi 10 tempat bersejarah", () => [lmSummary().pl, 10]],
   ["plAll", "🗺", "Pengembara Agung", "Ziarahi semua tempat dalam peta", () => { const s = lmSummary(); return [s.pl, s.plN]; }],
@@ -3466,7 +3466,7 @@ const LCN = [
   ["kampus5", "🎓", "Kembara Kampus", "Lawati galeri 5 kampus IPT", () => [Object.keys(LM.st.kp || {}).length, 5]],
   ["metro", "🚇", "Warga Kota", "Naik MRT, LRT atau Monorel", () => [LM.st.rm | 0, 1]],
   ["bus", "🚌", "Kembara Lebuh Raya", "Naik bas ekspres di lebuh raya", () => [LM.st.rb | 0, 1]],
-  ["fly", "✈", "Juruterbang Muda", "Terbang dengan Gempur Air", () => [LM.st.fl | 0, 1]],
+  ["fly", "✈", "Juruterbang Muda", "Terbang dengan Didik Air", () => [LM.st.fl | 0, 1]],
   ["ap5", "🛬", "Pelancong Udara", "Mendarat di 5 lapangan terbang", () => [Object.keys(LM.st.ap || {}).length, 5]],
   ["borneo", "🌴", "Jambatan Malaysia", "Jejakkan kaki di Semenanjung dan Borneo", () => [[2, 4].filter((m) => LM.st.bo & m).length, 2]],
   ["swim", "🏊", "Perenang Pantai", "Berenang di tepi pantai", () => [LM.st.sw | 0, 1]],
@@ -3483,7 +3483,7 @@ function lmLcCheck(g) {
   LCN.forEach((L) => { if (lc[L[0]]) return; const p = lmLcProg(L); if (p[0] >= p[1]) { lc[L[0]] = Date.now(); add.push(L); } });
   if (!add.length) { if (first) lmSave(); return; }
   lmSave();
-  if (first) { lmPop("🏅 " + add.length + " lencana META GEMPUR telah direkodkan"); return; }
+  if (first) { lmPop("🏅 " + add.length + " lencana META DIDIK telah direkodkan"); return; }
   const xp = lmXp(10 * add.length);
   add.forEach((L, i) => setTimeout(() => lmLcShow(L, i ? 0 : xp), i * 3800));
 }
@@ -3504,12 +3504,12 @@ function lmLcPassport(b) {
     grid.appendChild(c);
   });
   const sj = el("div", { class: "lm-stamp" + (J.t && J.d >= J.t ? " on" : ""), style: "margin:10px 0" });
-  sj.append(el("b", null, "📜 Sijil Khas META GEMPUR · " + SUBJS[SUBJ].subjek));
+  sj.append(el("b", null, "📜 Sijil Khas META DIDIK · " + SUBJS[SUBJ].subjek));
   if (J.t && J.d >= J.t) sj.append(el("div", null, "Tahniah! Anda layak menerima sijil kerana telah menamatkan perjalanan menuntut ilmu."), lmBtn("Muat turun sijil (PDF)", "pri", lmCertGet));
   else sj.append(el("div", null, "Lengkapkan semua Stesen Ilmu untuk membuka sijil (" + J.d + "/" + J.t + ")." + (J.next ? " Seterusnya: " + J.next.sn + "." : "")));
   b.append(sj, grid);
 }
-/* sijil khas META GEMPUR (guna pembantu sijil dalam app.js) */
+/* sijil khas META DIDIK (guna pembantu sijil dalam app.js) */
 function lmCertOk() { const J = lmJourney(); return !!(J.t && J.d >= J.t); }
 async function lmCertGet() {
   if (!lmCertOk()) { toast("Lengkapkan semua Stesen Ilmu dahulu untuk menerima sijil.", "warn"); return; }
@@ -3520,9 +3520,9 @@ async function lmCertGet() {
     try { const c = await lmCertCanvas(sc); const bl = await new Promise((r) => c.toBlob(r, "image/jpeg", 0.93)); if (bl) { jpg = new Uint8Array(await bl.arrayBuffer()); scale = sc; break; } } catch (e) { /* cuba saiz lebih kecil */ }
   }
   if (!jpg) { toast("Sijil gagal dijana. Cuba lagi.", "warn"); return; }
-  const nm = "Sijil-META-GEMPUR-" + cleanFull(P.penuh || P.nama).replace(/[^A-Za-z0-9]+/g, "-").replace(/^-+|-+$/g, "") + ".pdf";
+  const nm = "Sijil-META-META DIDIK-" + cleanFull(P.penuh || P.nama).replace(/[^A-Za-z0-9]+/g, "-").replace(/^-+|-+$/g, "") + ".pdf";
   const r = await saveFile(certPdf(jpg, 1754 * scale, 1240 * scale), nm);
-  if (r === "ok") { LM.st.sj = LM.st.sj || Date.now(); lmSave(); toast("Sijil META GEMPUR telah dimuat turun.", "ok"); }
+  if (r === "ok") { LM.st.sj = LM.st.sj || Date.now(); lmSave(); toast("Sijil META DIDIK telah dimuat turun.", "ok"); }
 }
 async function lmCertCanvas(scale) {
   await certLoadFonts();
@@ -3556,7 +3556,7 @@ async function lmCertCanvas(scale) {
   g.strokeStyle = GOLD2; g.lineWidth = 2.5; g.beginPath(); g.arc(ex, ey, 30, 0, Math.PI * 2); g.stroke();
   g.beginPath(); g.ellipse(ex, ey, 13, 30, 0, 0, Math.PI * 2); g.stroke();
   g.beginPath(); g.moveTo(ex - 30, ey); g.lineTo(ex + 30, ey); g.moveTo(ex - 26, ey - 15); g.lineTo(ex + 26, ey - 15); g.moveTo(ex - 26, ey + 15); g.lineTo(ex + 26, ey + 15); g.stroke();
-  certText(g, "META GEMPUR · " + sub.toUpperCase(), W / 2, 250, "600 26px " + CAPS, TEAL, "center", 7, 1200);
+  certText(g, "META DIDIK · " + sub.toUpperCase(), W / 2, 250, "600 26px " + CAPS, TEAL, "center", 7, 1200);
   certText(g, "SIJIL KHAS", W / 2, 338, "700 88px " + CAPS, TEAL, "center", 8);
   certText(g, "PERJALANAN MENUNTUT ILMU", W / 2, 396, "700 32px " + CAPS, RED, "center", 8);
   g.font = "700 32px " + CAPS; try { g.letterSpacing = "8px"; } catch (e) { /* abaikan */ }
@@ -3567,7 +3567,7 @@ async function lmCertCanvas(scale) {
   g.strokeStyle = GOLD; g.lineWidth = 2; g.beginPath(); g.moveTo(W / 2 - 330, 576); g.lineTo(W / 2 + 330, 576); g.stroke();
   const asal = [cleanSekolah(P.sekolah), negeriNama(P.negeri)].filter(Boolean).join(", ") + (P.kelas ? " | " + P.kelas : "");
   certText(g, asal, W / 2, 624, "600 30px " + SANS, INK, "center", 1.5, 1350);
-  certText(g, "telah menamatkan perjalanan menuntut ilmu dalam dunia maya META GEMPUR,", W / 2, 688, "italic 500 34px " + SERIF, INK, "center", 0, 1400);
+  certText(g, "telah menamatkan perjalanan menuntut ilmu dalam dunia maya META DIDIK,", W / 2, 688, "italic 500 34px " + SERIF, INK, "center", 0, 1400);
   certText(g, "mengembara ke " + J.t + " Stesen Ilmu di seluruh Malaysia dan lulus setiap tajuk " + sub + ".", W / 2, 730, "italic 500 34px " + SERIF, INK, "center", 0, 1400);
   const stats = [[J.d + " / " + J.t, "Stesen Ilmu"], [s.tw + " / " + s.twN, "Tajuk ditawan"], [lmLcCount() + " / " + LCN.length, "Lencana"], [String(LM.st.ak | 0), "Akhlak terpuji"], [s.pl + " / " + s.plN, "Tempat diziarahi"]];
   const bw = 270, gap = 22, x0 = W / 2 - (bw * 5 + gap * 4) / 2, by = 778;
@@ -3595,7 +3595,7 @@ async function lmCertCanvas(scale) {
   g.fillStyle = GOLD2; certStar(g, sx, sy - 8, 26, 11); g.fill();
   certText(g, "GRADUAN", sx, sy + 38, "700 12px " + CAPS, GOLD2, "center", 2.5);
   certText(g, "No. sijil: " + certNo(now).replace(/^GT-/, "MG-"), W / 2, 1136, "500 17px " + SANS, MUTE, "center", 2);
-  certText(g, "Sijil ini dikeluarkan oleh sistemguru.my melalui META GEMPUR dan bukan sijil rasmi Kementerian Pendidikan Malaysia.", W / 2, 1156, "500 14px " + SANS, MUTE, "center", 0.5);
+  certText(g, "Sijil ini dikeluarkan oleh sistemguru.my melalui META DIDIK dan bukan sijil rasmi Kementerian Pendidikan Malaysia.", W / 2, 1156, "500 14px " + SANS, MUTE, "center", 0.5);
   return c;
 }
 
@@ -3667,7 +3667,7 @@ function lmTowerOpen(o) {
       lmCard((b) => {
         b.append(el("div", { class: "lm-kick" }, pass ? "Menara ditawan" : "Cuba lagi"), el("h2", null, ok + "/" + tot + " betul"));
         b.append(el("p", null, pass ? "Bendera menara " + (t.kod || t.id) + " kini berwarna emas." : "Betul sekurang-kurangnya 3 untuk menawan menara. Baca nota dan cuba lagi."));
-        b.append(el("p", { class: "lm-ex" }, "XP +" + xp + (xp === 0 ? " (kuota XP harian META GEMPUR telah penuh)" : "") + (pass && fr ? " · Bonus rakan: +2 syiling kerana " + fr + " rakan berada berdekatan." : "")));
+        b.append(el("p", { class: "lm-ex" }, "XP +" + xp + (xp === 0 ? " (kuota XP harian META DIDIK telah penuh)" : "") + (pass && fr ? " · Bonus rakan: +2 syiling kerana " + fr + " rakan berada berdekatan." : "")));
         b.append(el("div", { class: "lm-row" }, lmBtn("Teruskan jelajah", "pri", lmCardClose), pass ? null : lmBtn("Cuba lagi", "", () => lmTowerOpen(o))));
       });
     }
@@ -3702,7 +3702,7 @@ function lmPlaceOpen(pl) {
       } else xp = lmXp(ok * 2);
       lmCard((b) => {
         b.append(el("div", { class: "lm-kick" }, pass ? "Ziarah berjaya" : "Belum berjaya"), el("h2", null, ok + "/" + tot + " betul"));
-        b.append(el("p", { class: "lm-ex" }, "XP +" + xp + (xp === 0 && ok ? " (kuota XP harian META GEMPUR telah penuh)" : "")));
+        b.append(el("p", { class: "lm-ex" }, "XP +" + xp + (xp === 0 && ok ? " (kuota XP harian META DIDIK telah penuh)" : "")));
         if (pass) {
           const hung = !!LM.st.nm[pl.id];
           b.append(el("p", null, hung ? "Nama anda sudah tergantung di sini. Anda boleh gantung semula untuk naik ke atas senarai." : "Gantung nama anda pada Papan Kenangan sebagai tanda anda telah menziarahi " + pl.n + "."));
@@ -3742,7 +3742,7 @@ function lmQuestRender() {
 function lmAirportOpen(ap) {
   const g = LM.g;
   lmCard((b) => {
-    b.append(el("div", { class: "lm-kick" }, "Lapangan terbang · Gempur Air"), el("h2", null, ap.n), el("p", null, "Pilih destinasi. Jawab satu soalan pas masuk dengan betul, kemudian naik pesawat dan nikmati penerbangan. Pendaratan pertama di setiap lapangan terbang memberi syiling."));
+    b.append(el("div", { class: "lm-kick" }, "Lapangan terbang · Didik Air"), el("h2", null, ap.n), el("p", null, "Pilih destinasi. Jawab satu soalan pas masuk dengan betul, kemudian naik pesawat dan nikmati penerbangan. Pendaratan pertama di setiap lapangan terbang memberi syiling."));
     const grid = el("div", { class: "lm-grid" });
     g.items.filter((x) => x.kind === "ap" && x.id !== ap.id).forEach((d) => {
       grid.appendChild(lmBtn("✈ " + d.n + " (" + DATA.negeri[d.k].pendek + ")", "", () => {
@@ -3777,8 +3777,8 @@ function lmPassport(tab) {
     if (cur === "lencana") { lmLcPassport(b); b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose))); return; }
     if (cur === "kampus") { lmKampusPassport(b); b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose))); return; }
     if (cur === "ilmu") { lmIlmuPassport(b); b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose))); return; }
-    if (s.pl >= s.plN) b.append(el("p", null, "Gelaran: Pengembara META GEMPUR! Anda telah menziarahi semua tempat."));
-    b.append(el("p", { class: "lm-ex" }, "✈ Penerbangan Gempur Air: " + (LM.st.fl | 0) + " · Lapangan terbang didarati: " + Object.keys(LM.st.ap || {}).length + "/" + AIRPORTS.length));
+    if (s.pl >= s.plN) b.append(el("p", null, "Gelaran: Pengembara META DIDIK! Anda telah menziarahi semua tempat."));
+    b.append(el("p", { class: "lm-ex" }, "✈ Penerbangan Didik Air: " + (LM.st.fl | 0) + " · Lapangan terbang didarati: " + Object.keys(LM.st.ap || {}).length + "/" + AIRPORTS.length));
     const grid = el("div", { class: "lm-grid" });
     Object.keys(DATA.negeri).forEach((k) => {
       const pls = PLACES.filter((p) => p[1] === k), tws = [];
@@ -3849,10 +3849,10 @@ function lmSelfie(pl) {
     const W = 1080, H = Math.round(W * img.height / img.width) + 150, c = document.createElement("canvas"); c.width = W; c.height = H;
     const x = c.getContext("2d"); x.fillStyle = "#0b2a44"; x.fillRect(0, 0, W, H); x.drawImage(img, 0, 0, W, H - 150);
     x.fillStyle = "#ffd45a"; x.font = "900 46px Nunito, sans-serif"; x.fillText((cleanName(P.nama) || "Saya") + " di " + (pl ? pl.n : DATA.negeri[lmAt(g.p.x, g.p.z)] ? DATA.negeri[lmAt(g.p.x, g.p.z)].pendek : "Malaysia"), 36, H - 86);
-    x.fillStyle = "#cde3f3"; x.font = "700 30px Nunito, sans-serif"; x.fillText("META GEMPUR · " + new Date().toLocaleDateString("ms-MY"), 36, H - 38);
+    x.fillStyle = "#cde3f3"; x.font = "700 30px Nunito, sans-serif"; x.fillText("META DIDIK · " + new Date().toLocaleDateString("ms-MY"), 36, H - 38);
     lmCard((b) => {
       b.append(el("div", { class: "lm-kick" }, "Swafoto"), el("h2", null, pl ? pl.n : "Kenangan jelajah"));
-      const im = el("img", { src: c.toDataURL("image/jpeg", 0.88), alt: "Swafoto META GEMPUR", style: "width:100%;border-radius:12px;margin:8px 0" }); b.appendChild(im);
+      const im = el("img", { src: c.toDataURL("image/jpeg", 0.88), alt: "Swafoto META DIDIK", style: "width:100%;border-radius:12px;margin:8px 0" }); b.appendChild(im);
       const a = el("a", { href: im.src, download: "swafoto-meta-gempur.jpg", style: "display:none" }); b.appendChild(a);
       b.append(el("div", { class: "lm-row" }, lmBtn("Muat turun", "pri", () => a.click()), lmBtn("Tutup", "", lmCardClose)));
     });
@@ -3866,7 +3866,7 @@ function lmRoomPanel() {
     b.append(el("div", { class: "lm-kick" }, op ? "Dunia Terbuka" : "Bilik bersama"), el("h2", null, op ? "Zon " + (ZONES[LM.zone] || "") + (LM.room ? " · saluran " + String(LM.roomCode).split("-")[1] : "") : LM.room ? (LM.roomKind === "sekolah" ? "Bilik sekolah" : "Kod bilik: " + LM.roomCode) : "Main solo"));
     if (op) b.append(el("p", null, LM.room ? "Anda melihat pemain dalam zon yang sama (maksimum " + LMO.CH + " sesaluran). Saluran bertukar sendiri apabila anda bergerak ke zon lain." : LM.openFull ? "Dunia Terbuka penuh (" + LMO.MAX + " pemain serentak). Anda bermain solo dan akan dimasukkan semula secara automatik apabila ada tempat." : "Menyambung ke Dunia Terbuka..."),
       el("p", { class: "lm-ex" }, "Jaga adab: kata kesat ditapis, pautan dan nombor telefon disekat. Tekan Senyap atau Lapor pada pemain yang mengganggu. Mic hanya ada dalam bilik sekolah atau bilik kod rakan."));
-    if (LM.room && LM.roomKind === "rakan") b.append(el("p", null, "Kongsi kod " + LM.roomCode + " dengan rakan. Mereka pilih Dunia Gempur, tekan Masuk kod dan taip kod ini."));
+    if (LM.room && LM.roomKind === "rakan") b.append(el("p", null, "Kongsi kod " + LM.roomCode + " dengan rakan. Mereka pilih Dunia Ilmu, tekan Masuk kod dan taip kod ini."));
     const list = el("div", { class: "lm-grid" });
     list.appendChild(el("div", { class: "lm-stamp on" }, el("b", null, (cleanName(P.nama) || "Saya") + " (anda)"), el("div", null, lmStamps() + " cop pasport")));
     Object.keys(LM.peers).forEach((id) => {
@@ -4043,7 +4043,7 @@ function lmWpSet() {
 /* ---------- adegan ---------- */
 function lmBuildScene() {
   const gq = LM.gq, r = LM.root;
-  const cv = el("canvas", { class: "lm-cv", "aria-label": "META GEMPUR, paparan 3D" }); r.appendChild(cv); LM.cv = cv;
+  const cv = el("canvas", { class: "lm-cv", "aria-label": "META DIDIK, paparan 3D" }); r.appendChild(cv); LM.cv = cv;
   let renderer;
   try { renderer = new T.WebGLRenderer({ canvas: cv, antialias: !!gq, powerPreference: "high-performance" }); } catch (e) { return null; }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, gq ? 1.75 : 1.25));
@@ -4094,7 +4094,7 @@ function lmHud() {
   ui.skyB = lmBtn(LM.st.sky === 0 ? "Top 5: tutup" : "Top 5: buka", "", () => { const g = LM.g; if (!g || !g.sky5) return; const on = !g.sky5.sp.visible; g.sky5.sp.visible = on; LM.st.sky = on ? 1 : 0; lmSave(); ui.skyB.textContent = on ? "Top 5: buka" : "Top 5: tutup"; });
   top.append(lmBtn("Pasport (P)", "", () => lmPassport()), lmBtn("Tajuk (T)", "", () => lmPassport("tajuk")), ui.skyB, lmBtn("Bilik", "", lmRoomPanel), lmBtn("Swafoto", "", () => lmSelfie(null)),
     ui.snd = lmBtn(LM.mute ? "Bunyi: tutup" : "Bunyi: buka", "", () => { LM.mute = !LM.mute; ui.snd.textContent = LM.mute ? "Bunyi: tutup" : "Bunyi: buka"; }),
-    lmBtn("Keluar", "", () => { if (confirm("Keluar dari META GEMPUR? Cop pasport dan menara yang ditawan sudah disimpan.")) lmClose(); }));
+    lmBtn("Keluar", "", () => { if (confirm("Keluar dari META DIDIK? Cop pasport dan menara yang ditawan sudah disimpan.")) lmClose(); }));
   ui.vcB = lmBtn("🎙 Suara: tutup", "", () => { if (LM.vc) lmVoiceOff(); else lmVoiceOn(); }); ui.vcB.hidden = true; top.insertBefore(ui.vcB, top.children[4]);
   r.appendChild(top);
   ui.ptt = el("button", { type: "button", class: "lm-ptt", hidden: "" }, TOUCH ? "Tekan & cakap" : "Tahan V untuk cakap");
@@ -4191,7 +4191,7 @@ function lmKey(e) {
   if (!LM.on || !LM.g || LM.pause) return;
   const t = e.target; if (t && (t.nodeName === "INPUT" || t.nodeName === "TEXTAREA")) return;
   const k = String(e.key || "").toLowerCase(), dn = e.type === "keydown", g = LM.g;
-  if (dn && k === "escape") { e.preventDefault(); if (LM.ui.big) lmBigMap(); else if (LM.ui.card) lmCardClose(); else if (confirm("Keluar dari META GEMPUR?")) lmClose(); return; }
+  if (dn && k === "escape") { e.preventDefault(); if (LM.ui.big) lmBigMap(); else if (LM.ui.card) lmCardClose(); else if (confirm("Keluar dari META DIDIK?")) lmClose(); return; }
   if (g.ui) return;
   if ([" ", "arrowup", "arrowdown", "arrowleft", "arrowright"].indexOf(k) >= 0) e.preventDefault();
   if (k === "v") { lmTalk(dn); return; }
@@ -4387,14 +4387,14 @@ function lmOpen(tid) {
   LM.tid = tid || ""; LM.on = false; lmLoad();
   document.body.classList.add("ar-lock");
   if (!GEOD) {
-    const r = lmRoot(); r.appendChild(el("div", { class: "lm-card" }, el("div", { class: "lm-box" }, el("div", { class: "lm-kick" }, "META GEMPUR"), el("h2", null, "Memuat peta Malaysia sebenar..."), el("p", null, "Sempadan negeri dan ketinggian muka bumi (kali pertama sahaja)."))));
+    const r = lmRoot(); r.appendChild(el("div", { class: "lm-card" }, el("div", { class: "lm-box" }, el("div", { class: "lm-kick" }, "META DIDIK"), el("h2", null, "Memuat peta Malaysia sebenar..."), el("p", null, "Sempadan negeri dan ketinggian muka bumi (kali pertama sahaja)."))));
   }
-  lmGeoLoad().then(() => lmOwnSchool()).then((sk) => { LM.ownSk = sk; lmRaster(); lmSetup(); }).catch(() => { toast("Peta META GEMPUR tidak dapat dimuatkan. Semak sambungan internet dan cuba lagi.", "warn"); lmClose(); });
+  lmGeoLoad().then(() => lmOwnSchool()).then((sk) => { LM.ownSk = sk; lmRaster(); lmSetup(); }).catch(() => { toast("Peta META DIDIK tidak dapat dimuatkan. Semak sambungan internet dan cuba lagi.", "warn"); lmClose(); });
 }
 function lmStart(code, kind) {
   const r = LM.root; LM.ptsLast = null; LM.roomKind = kind || ""; LM.sh = lmMySh(); LM.zoneN = null; LM.zoneAt = 0; LM.roomCode = ""; LM.openFull = false; LM.openRetry = 0; LM.zone = "";
   lmCardClose(); r.textContent = "";
-  const ld = el("div", { class: "lm-card" }, el("div", { class: "lm-box" }, el("div", { class: "lm-kick" }, "META GEMPUR"), el("h2", null, "Membina peta Malaysia..."), el("p", null, "Menyusun negeri, menara ilmu dan tempat pelancongan.")));
+  const ld = el("div", { class: "lm-card" }, el("div", { class: "lm-box" }, el("div", { class: "lm-kick" }, "META DIDIK"), el("h2", null, "Membina peta Malaysia..."), el("p", null, "Menyusun negeri, menara ilmu dan tempat pelancongan.")));
   r.appendChild(ld);
   setTimeout(async () => {
     const g = lmBuildScene();

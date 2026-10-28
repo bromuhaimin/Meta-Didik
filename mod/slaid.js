@@ -1,4 +1,4 @@
-/* GEMPUR: modul dimuat apabila diperlukan (lihat modLoad dalam app.js). Bergantung pada pemboleh ubah global app.js. */
+/* META DIDIK: modul dimuat apabila diperlukan (lihat modLoad dalam app.js). Bergantung pada pemboleh ubah global app.js. */
 /* ---------- Slaid PdPc (v17.47): slaid pembentangan interaktif untuk setiap tajuk, dengan aktiviti PAK21 dan soalan KBAT ---------- */
 const SL = { open: false, tid: "", slides: [], i: 0, root: null, notes: false, tmr: 0, mode: "view" };
 const SL_ACT = [
