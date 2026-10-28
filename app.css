@@ -926,3 +926,7 @@ body.vmap #fabDock{bottom:calc(var(--dockh,190px) + 26px + env(safe-area-inset-b
 .panel .starrow{justify-content:center}
 @media(max-width:700px){.panel .btn.mode{width:auto!important;min-width:0!important;flex:0 0 auto!important;min-height:42px!important;font-size:12px!important;padding:4px 12px 4px 4px!important}.panel .btn.mode .mi{width:28px;height:28px}.panel .modegrid,.panel .mgrow{gap:6px!important}}
 @media(max-width:700px),(max-height:560px){.dock{max-height:46vh;overflow-y:auto;border-radius:22px}}
+.gtable tr.gclick { cursor: pointer; }
+.gtable tr.gclick:hover td, .gtable tr.gclick:focus td { background: var(--bg2); }
+.gtable tr.gdet td { background: var(--panel); font-size: 14px; line-height: 1.5; }
+.gtable tr.gdet td div { margin: 3px 0; }

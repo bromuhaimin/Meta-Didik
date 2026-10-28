@@ -803,7 +803,7 @@ const Net = {
     for (const k in P.prog) mis[k.replace(/\./g, "_")] = [P.prog[k].b || 0, P.prog[k].hs || 0, P.prog[k].n || 0, P.prog[k].ok | 0, P.prog[k].tot | 0];
     if (!srNo() && srTotal().hs > 0) { const q = srTotal(); mis.SL_ALL = [q.b, q.hs, q.n, q.ok, q.tot]; }
     try {
-      await srPemainSet(this, { n: P.nama, k: P.kelas || "", sk: cleanSekolah(P.sekolah), ng: P.negeri || "", sid: sid, xp: Math.round(P.xp), la: P.la || 0, ad: P.ad | 0, p: myRank(), st: tt.st, m: tt.m, t: Date.now(), mis: mis, inv: invPack(), bd: Object.keys(P.bd).join(","), fl: streakNow(), wk: P.wk || "", wp: P.wp | 0, mk: P.mk || "", mp: P.mp | 0, pt: P.sq ? P.sq.id : "", ptn: P.sq ? P.sq.n : "", kz: khasZStr() });
+      await srPemainSet(this, { n: P.nama, k: P.kelas || "", sk: cleanSekolah(P.sekolah), ng: P.negeri || "", sid: sid, xp: Math.round(P.xp), la: P.la || 0, ad: P.ad | 0, p: myRank(), st: tt.st, m: tt.m, t: Date.now(), mis: mis, inv: invPack(), bd: Object.keys(P.bd).join(","), fl: streakNow(), mg: mgPack(), wk: P.wk || "", wp: P.wp | 0, mk: P.mk || "", mp: P.mp | 0, pt: P.sq ? P.sq.id : "", ptn: P.sq ? P.sq.n : "", kz: khasZStr() });
       this.canWrite = true;
       try {
         const rg = { x: Math.round(P.xp), l: P.la || 0, a: P.ad | 0, s: sid, w: P.wk || "", p: P.wp | 0, mk: P.mk || "", mp: P.mp | 0 }; if (P.sq && P.sq.id) rg.t = P.sq.id; khasRg(rg); if ((P.lz | 0) > 0 && !lgNoZl()) rg.zl = Math.min(2000, P.lz | 0); if (rg.t || rg.zs || rg.z4 || rg.z5 || rg.zl) rg.n = cleanName(P.nama).slice(0, 12);
@@ -17000,6 +17000,18 @@ function exitToHub(view) {
 
 
 /* ---------- Papan pemuka guru ---------- */
+/* v18.13: ringkasan META GEMPUR subjek semasa untuk guru: "universiti,jumlah,lencana,akhlak,tempat,sijil,masa(s)" */
+function mgPack() {
+  try {
+    const s = JSON.parse(localStorage.getItem("gt-lm-" + SUBJ) || "null");
+    if (!s || !Array.isArray(s.ms)) return "";
+    return s.ms.slice(0, 5).map((n) => Math.max(0, n | 0)).concat([s.sj ? 1 : 0, Math.round((s.lt || 0) / 1000)]).join(",");
+  } catch (e) { return ""; }
+}
+function mgParse(v) {
+  const a = String(v || "").split(",").map((n) => parseInt(n, 10) || 0);
+  return a.length >= 7 ? { u: a[0], ut: a[1], lc: a[2], ak: a[3], pl: a[4], sj: a[5], t: a[6] * 1000 } : null;
+}
 const GURU = { rows: null, loading: false, err: "", kelas: "", sort: "xp", at: 0 };
 async function guruLoad() {
   const sid = mySid();
@@ -17030,11 +17042,12 @@ function guruRowsView() {
   const now = Date.now();
   let rows = (GURU.rows || []).map((r) => {
     const mis = r.mis && typeof r.mis === "object" ? r.mis : {};
-    return { r: r, nama: cleanName(r.n) || "Pemain", kelas: kelasNorm(r.k), xp: Math.round(decayXp(r.xp || 0, r.la, r.ad, now)), pangkat: RANKS[clamp(r.p | 0, 0, RANKS.length - 1)].n, m: r.m | 0, st: r.st | 0, t: r.t || 0, fl: r.fl | 0, mis: mis };
+    return { r: r, nama: cleanName(r.n) || "Pemain", kelas: kelasNorm(r.k), xp: Math.round(decayXp(r.xp || 0, r.la, r.ad, now)), pangkat: RANKS[clamp(r.p | 0, 0, RANKS.length - 1)].n, m: r.m | 0, st: r.st | 0, t: r.t || 0, fl: r.fl | 0, mis: mis, mg: mgParse(r.mg) };
   });
   if (GURU.kelas) rows = rows.filter((x) => (x.kelas || "(tiada kelas)") === GURU.kelas);
   const s = GURU.sort;
-  rows.sort((a, b) => s === "nama" ? a.nama.localeCompare(b.nama) : s === "aktif" ? a.t - b.t : s === "misi" ? b.m - a.m || b.xp - a.xp : b.xp - a.xp);
+  const mu = (x) => x.mg ? x.mg.u : -1;
+  rows.sort((a, b) => s === "nama" ? a.nama.localeCompare(b.nama) : s === "aktif" ? a.t - b.t : s === "misi" ? b.m - a.m || b.xp - a.xp : s === "meta" ? mu(b) - mu(a) || b.xp - a.xp : b.xp - a.xp);
   return rows;
 }
 function guruTopics(rows) {
@@ -17050,10 +17063,10 @@ function guruTopics(rows) {
   });
 }
 function guruExport(rows) {
-  const head = ["Nama", "Kelas", "Pangkat", "XP", "Misi selesai", "Bintang", "Aktif terakhir", "Streak"].concat(DATA.topik.map((t) => "Bintang " + guruLab(t)));
+  const head = ["Nama", "Kelas", "Pangkat", "XP", "Misi selesai", "Bintang", "Aktif terakhir", "Streak", "META universiti", "META lencana", "META akhlak", "META tempat", "META sijil"].concat(DATA.topik.map((t) => "Bintang " + guruLab(t)), DATA.topik.map((t) => "Ketepatan % " + guruLab(t)));
   const lines = [head.map(guruCsvCell).join(",")];
   for (const x of rows) {
-    lines.push([x.nama, x.kelas, x.pangkat, x.xp, x.m, x.st, x.t ? new Date(x.t).toISOString().slice(0, 10) : "", x.fl].concat(DATA.topik.map((t) => { const a = x.mis[t.id.replace(/\./g, "_")]; return Array.isArray(a) ? a[0] | 0 : 0; })).map(guruCsvCell).join(","));
+    lines.push([x.nama, x.kelas, x.pangkat, x.xp, x.m, x.st, x.t ? new Date(x.t).toISOString().slice(0, 10) : "", x.fl].concat(x.mg ? [x.mg.u + "/" + x.mg.ut, x.mg.lc, x.mg.ak, x.mg.pl, x.mg.sj ? "Ya" : "Belum"] : ["", "", "", "", ""], DATA.topik.map((t) => { const a = x.mis[t.id.replace(/\./g, "_")]; return Array.isArray(a) ? a[0] | 0 : 0; }), DATA.topik.map((t) => { const a = x.mis[t.id.replace(/\./g, "_")]; return Array.isArray(a) && (a[4] | 0) ? Math.round(100 * (a[3] | 0) / a[4]) : ""; })).map(guruCsvCell).join(","));
   }
   const blob = new Blob(["﻿" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
   const a = el("a", { href: URL.createObjectURL(blob), download: "gempur-" + (GURU.kelas || "semua-kelas").replace(/[^A-Za-z0-9]+/g, "-") + "-" + dayKey() + ".csv" });
@@ -17099,6 +17112,45 @@ async function rankResetServer(say) {
   await zero("ringkas", { x: 0, p: 0, mp: 0, l: 0, a: 0, zl: null, z4: null, z5: null, zs: null, zr: null });
   const v = await q("GET", "tetapan/reset"); Net.reset = Number(v) || Date.now(); rankResetApply();
 }
+/* v18.13: senarai tindakan guru: murid belum mula dan murid tidak aktif */
+function guruTindakan(box, rows, now) {
+  const me = Net.uid ? String(Net.uid) : "", belum = rows.filter((x) => !x.m && !x.mg && String(x.r.id) !== me), lama = rows.filter((x) => (x.m || x.mg) && (!x.t || now - x.t >= 14 * 864e5));
+  if (!belum.length && !lama.length) return;
+  box.appendChild(el("h3", { class: "sec", style: "font-size:22px;margin-top:16px" }, "Perlu tindakan guru"));
+  const w = el("div", { class: "gweak" });
+  if (belum.length) w.appendChild(el("div", null, "Belum mula (" + belum.length + "): " + belum.map((x) => x.nama + (x.kelas ? " (" + x.kelas + ")" : "")).join(", ")));
+  if (lama.length) w.appendChild(el("div", { style: "border-color:var(--amber)" }, "Tidak aktif 14 hari atau lebih (" + lama.length + "): " + lama.map((x) => x.nama + " · " + guruAgo(x.t)).join(", ")));
+  box.appendChild(w);
+}
+/* v18.13: kemajuan META GEMPUR (perjalanan universiti, lencana, akhlak) */
+function guruMeta(box, rows) {
+  box.appendChild(el("h3", { class: "sec", style: "font-size:22px;margin-top:16px" }, "META GEMPUR"));
+  const ms = rows.filter((x) => x.mg).sort((a, b) => b.mg.u - a.mg.u || b.mg.lc - a.mg.lc);
+  if (!ms.length) { box.appendChild(el("p", { class: "muted" }, "Belum ada murid yang bermain META GEMPUR (atau mereka belum menggunakan versi terkini). Data muncul selepas murid menjawab kuiz di universiti dalam META GEMPUR.")); return; }
+  const w = el("div", { class: "gwrap" }), t = el("table", { class: "gtable" });
+  t.appendChild(el("thead", null, null, (() => { const r = el("tr"); ["Nama", "Kelas", "Universiti", "Lencana", "Akhlak", "Tempat", "Sijil", "Main terakhir"].forEach((h, i) => r.appendChild(el("th", i > 1 && i < 6 ? { class: "num" } : null, h))); return r; })()));
+  const tb = el("tbody");
+  ms.forEach((x) => {
+    const g = x.mg, pct = g.ut ? g.u / g.ut : 0, bar = el("span", { class: "gbar" + (pct < 0.4 ? " low" : "") }, null, el("i", { style: "width:" + Math.round(pct * 100) + "%" }));
+    const r = el("tr");
+    r.append(el("td", null, x.nama), el("td", null, x.kelas || "-"), el("td", { class: "num" }, null, bar, document.createTextNode(g.u + "/" + g.ut)), el("td", { class: "num" }, String(g.lc)), el("td", { class: "num" }, String(g.ak)), el("td", { class: "num" }, String(g.pl)), el("td", null, g.ut && g.u >= g.ut ? (g.sj ? "📜 Diterima" : "Layak") : "-"), el("td", null, guruAgo(g.t)));
+    tb.appendChild(r);
+  });
+  t.appendChild(tb); w.appendChild(t); box.appendChild(w);
+  box.appendChild(el("p", { class: "muted", style: "font-size:13px" }, "Universiti: tajuk yang lulus di universiti META GEMPUR. Akhlak: situasi akhlak yang diselesaikan (bantu orang buta, angkat barang dan lain-lain)."));
+}
+/* v18.13: butiran seorang murid: tajuk lemah, belum dicuba dan META GEMPUR */
+function guruMurid(td, x) {
+  const tp = DATA.topik.map((t) => { const a = x.mis[t.id.replace(/\./g, "_")]; return { t: t, b: Array.isArray(a) ? a[0] | 0 : 0, ok: Array.isArray(a) ? a[3] | 0 : 0, tot: Array.isArray(a) ? a[4] | 0 : 0 }; });
+  const lemah = tp.filter((y) => y.tot >= 5 && y.ok / y.tot < 0.6).sort((a, b) => a.ok / a.tot - b.ok / b.tot);
+  const belum = tp.filter((y) => !y.b && !y.tot), kuat = tp.filter((y) => y.b >= 3);
+  const lab = (y) => guruLab(y.t) + " " + y.t.nama;
+  td.append(
+    el("div", null, el("b", null, "Tajuk lemah (ketepatan < 60%): "), lemah.length ? lemah.map((y) => lab(y) + " (" + Math.round(100 * y.ok / y.tot) + "%)").join("; ") : "Tiada"),
+    el("div", null, el("b", null, "Belum dicuba (" + belum.length + "): "), belum.length ? belum.map(lab).join("; ") : "Semua tajuk telah dicuba"),
+    el("div", null, el("b", null, "Dikuasai 3 bintang: "), kuat.length + " daripada " + tp.length + " tajuk"),
+    el("div", null, el("b", null, "META GEMPUR: "), x.mg ? x.mg.u + "/" + x.mg.ut + " universiti · " + x.mg.lc + " lencana · " + x.mg.ak + " akhlak terpuji · " + x.mg.pl + " tempat" + (x.mg.ut && x.mg.u >= x.mg.ut ? " · layak sijil" : "") : "Belum bermain"));
+}
 function renderGuru() {
   const box = $("guruBody");
   if (!box) return;
@@ -17125,7 +17177,8 @@ function renderGuru() {
   const avgXp = n ? Math.round(rows.reduce((s, x) => s + x.xp, 0) / n) : 0;
   const avgM = n ? (rows.reduce((s, x) => s + x.m, 0) / n) : 0;
   const stats = el("div", { class: "gstats" });
-  [[n, "Murid"], [act + " (" + (n ? Math.round(act * 100 / n) : 0) + "%)", "Aktif 7 hari"], [avgXp, "Purata XP"], [avgM.toFixed(1) + "/" + DATA.topik.length, "Purata misi selesai"]].forEach((p) => stats.appendChild(el("div", { class: "gstat" }, null, el("b", null, String(p[0])), el("span", null, p[1]))));
+  const mgN = rows.filter((x) => x.mg).length, mgF = rows.filter((x) => x.mg && x.mg.ut && x.mg.u >= x.mg.ut).length;
+  [[n, "Murid"], [act + " (" + (n ? Math.round(act * 100 / n) : 0) + "%)", "Aktif 7 hari"], [avgXp, "Purata XP"], [avgM.toFixed(1) + "/" + DATA.topik.length, "Purata misi selesai"], [mgN + " / " + n, "Main META GEMPUR"], [mgF, "Tamat META (sijil)"]].forEach((p) => stats.appendChild(el("div", { class: "gstat" }, null, el("b", null, String(p[0])), el("span", null, p[1]))));
   box.appendChild(stats);
   // topik lemah
   const tp = guruTopics(rows);
@@ -17137,6 +17190,8 @@ function renderGuru() {
   if (!weak.length) wk.appendChild(el("div", { style: "border-color:var(--line)" }, "Tiada topik dengan ketepatan di bawah 70% buat masa ini."));
   box.appendChild(wk);
   if (!withAcc.length) box.appendChild(el("p", { class: "muted", style: "font-size:13px" }, "Data ketepatan jawapan akan muncul apabila murid memainkan versi terkini."));
+  guruTindakan(box, rows, now);
+  guruMeta(box, rows);
   // jadual topik
   const tw = el("div", { class: "gwrap" }), tt = el("table", { class: "gtable" });
   tt.appendChild(el("thead", null, null, (() => { const r = el("tr"); ["Topik", "Selesai", "Ketepatan"].forEach((h, i) => r.appendChild(el("th", i ? { class: "num" } : null, h))); return r; })()));
@@ -17153,7 +17208,7 @@ function renderGuru() {
   // jadual murid
   box.appendChild(el("h3", { class: "sec", style: "font-size:22px;margin-top:16px" }, "Senarai murid"));
   const ctl = el("div", { class: "row", style: "gap:10px;margin:6px 0" });
-  ctl.appendChild(segBtns([["xp", "XP"], ["misi", "Misi"], ["aktif", "Kurang aktif"], ["nama", "Nama"]], GURU.sort, (v) => { GURU.sort = v; renderGuru(); }, "Susun murid"));
+  ctl.appendChild(segBtns([["xp", "XP"], ["misi", "Misi"], ["meta", "META"], ["aktif", "Kurang aktif"], ["nama", "Nama"]], GURU.sort, (v) => { GURU.sort = v; renderGuru(); }, "Susun murid"));
   const ex = el("button", { type: "button", class: "btn sm" }, "Muat turun CSV");
   ex.addEventListener("click", () => guruExport(rows));
   ctl.appendChild(ex);
@@ -17162,13 +17217,16 @@ function renderGuru() {
   ctl.appendChild(kp);
   box.appendChild(ctl);
   const sw = el("div", { class: "gwrap" }), st = el("table", { class: "gtable" });
-  st.appendChild(el("thead", null, null, (() => { const r = el("tr"); ["Nama", "Kelas", "Pangkat", "XP", "Misi", "Aktif", "Streak"].forEach((h, i) => r.appendChild(el("th", i > 2 && h !== "Aktif" ? { class: "num" } : null, h))); return r; })()));
+  st.appendChild(el("thead", null, null, (() => { const r = el("tr"); ["Nama", "Kelas", "Pangkat", "XP", "Misi", "META", "Aktif", "Streak"].forEach((h, i) => r.appendChild(el("th", i > 2 && h !== "Aktif" ? { class: "num" } : null, h))); return r; })()));
   const sb = el("tbody");
   rows.forEach((x) => {
     const idle = !x.t || now - x.t >= 7 * 864e5;
-    const r = el("tr", idle ? { class: "idle" } : null);
-    r.append(el("td", null, x.nama), el("td", null, x.kelas || "-"), el("td", null, x.pangkat), el("td", { class: "num" }, String(x.xp)), el("td", { class: "num" }, x.m + "/" + DATA.topik.length), el("td", null, guruAgo(x.t)), el("td", { class: "num" }, String(x.fl)));
+    const r = el("tr", { class: "gclick" + (idle ? " idle" : ""), tabindex: "0", title: "Klik untuk butiran murid" });
+    r.append(el("td", null, "▸ " + x.nama), el("td", null, x.kelas || "-"), el("td", null, x.pangkat), el("td", { class: "num" }, String(x.xp)), el("td", { class: "num" }, x.m + "/" + DATA.topik.length), el("td", { class: "num" }, x.mg ? x.mg.u + "/" + x.mg.ut : "-"), el("td", null, guruAgo(x.t)), el("td", { class: "num" }, String(x.fl)));
     sb.appendChild(r);
+    let det = null;
+    const tog = () => { if (det) { det.remove(); det = null; r.firstChild.textContent = "▸ " + x.nama; return; } det = el("tr", { class: "gdet" }); const td = el("td", { colspan: "8" }); guruMurid(td, x); det.appendChild(td); r.after(det); r.firstChild.textContent = "▾ " + x.nama; };
+    r.addEventListener("click", tog); r.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tog(); } });
   });
   st.appendChild(sb); sw.appendChild(st);
   box.appendChild(sw);

@@ -193,6 +193,8 @@ function lmDem(wx, wz) {
 /* jarak ke tepi kawasan DEM (untuk melandaikan daratan negara jiran ke laut) */
 function lmDemEdge(wx, wz) { let best = 0; for (const r of GEOD.dem) { const d = Math.min(wx - r.x0, wz - r.z0, r.x0 + (r.nx - 1) * GEOD.cs - wx, r.z0 + (r.nz - 1) * GEOD.cs - wz); if (d > best) best = d; } return best; }
 function lmSave() {
+  /* v18.13: ringkasan untuk papan pemuka guru: [universiti selesai, jumlah, lencana, akhlak, tempat] */
+  try { if (LM.g && LM.g.ipta && LM.st) { const J = lmJourney(); LM.st.ms = [J.d, J.t, lmLcCount(), LM.st.ak | 0, Object.keys(LM.st.pl || {}).length]; LM.st.lt = Date.now(); } } catch (e) { /* abaikan */ }
   try { localStorage.setItem("gt-lm-" + SUBJ, JSON.stringify(LM.st)); } catch (e) { /* abaikan */ }
 }
 function lmLoad() {
