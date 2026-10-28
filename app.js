@@ -346,7 +346,7 @@ if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.
 if (SUBJ === "bm") { DATA.tema = DATA_BM.tema; DATA.topik = DATA_BM.topik; DATA.soalan = DATA_BM.soalan; }
 if (SUBJ === "bi") { DATA.tema = DATA_BI.tema; DATA.topik = DATA_BI.topik; DATA.soalan = DATA_BI.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v18.23"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v18.24"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -6965,7 +6965,7 @@ function lgRoot() {
    Dibuka daripada butang di peta utama; dunia.js dimuat hanya apabila diperlukan. */
 /* v17.91: avatar 3D dikongsi Gudang dan META DIDIK; dimuat apabila perlu */
 /* v18.4: versi aplikasi untuk memecah cache skrip (Safari/ikon skrin utama iPhone menyimpan salinan lama) */
-const APP_VER = "18.23";
+const APP_VER = "18.24";
 function av3Load(cb) {
   if (window.AV3) { cb(); return; }
   if (typeof THREE === "undefined") return;
@@ -17095,7 +17095,7 @@ function stnUrlOk(u) { try { const x = new URL(u); return x.protocol === "https:
 function stnClean(s, n) { return String(s || "").replace(/[\u0000-\u001f<>]/g, " ").replace(/\s+/g, " ").trim().slice(0, n); }
 async function stnCount(node, id) { try { const v = await FB.req("GET", node + "/" + id, undefined, "shallow=true"); return v && typeof v === "object" ? Object.keys(v).length : 0; } catch (e) { return 0; } }
 async function stnStats(id) { const r = await Promise.all(["stesen_lawat", "stesen_suka", "stesen_klik"].map((n) => stnCount(n, id))); return { lawat: r[0], suka: r[1], klik: r[2] }; }
-/* v18.23: mod percubaan (sebelum log masuk DELIMa diwajibkan di metadidik.com): tanpa Firebase Auth,
+/* v18.24: mod percubaan (sebelum log masuk DELIMa diwajibkan di metadidik.com): tanpa Firebase Auth,
    identiti guru dan murid ialah ID peranti; e-mel DELIMa guru diisi sendiri dan disemak pentadbir. */
 function stnTrial() { return !AUTH.on(); }
 function stnGuru() {
@@ -17209,7 +17209,7 @@ function stnAdminBox(box) {
   });
 }
 
-/* ---------- v18.23: MD (Meta Didik), mata wang pembelajaran ----------
+/* ---------- v18.24: MD (Meta Didik), mata wang pembelajaran ----------
    Murid memperoleh MD dengan belajar (kuiz, misi, menara) dan tidak boleh membelinya dengan wang.
    Murid membelanjakan MD untuk menggunakan inovasi guru: stesen_guna/<stesen>/<pembayar>/<YYYYMMDD> = { h: harga, t: masa pelayan }.
    Setiap bulan pentadbir menetapkan tabung RM (sewaan tapak, penaja, langganan sekolah) dan mengagihkannya ikut bahagian MD:
@@ -19067,7 +19067,7 @@ function rlDraw() {
   feed.focus({ preventScroll: true });
 }
 function rlInit() {
-  return; /* v18.23: butang Reels dibuang daripada menu utama */
+  return; /* v18.24: butang Reels dibuang daripada menu utama */
   const row = document.querySelector(".mnmore"); if (!row || document.getElementById("rlBtn")) return;
   const b = el("button", { type: "button", id: "rlBtn" }, "Reels"); b.addEventListener("click", rlOpen); row.insertBefore(b, row.firstChild);
 }
@@ -19095,6 +19095,6 @@ const RL_CSS = `
 @media(max-height:560px){.rl-vid{max-height:50vh}}
 `;
 
-/* v18.23: Gudang hanya di sekolah sendiri dalam Meta Didik: dompet membuka Meta Didik */
+/* v18.24: Gudang hanya di sekolah sendiri dalam Meta Didik: dompet membuka Meta Didik */
 document.addEventListener("click", (ev) => { const b = ev.target && ev.target.closest && ev.target.closest("#walletBtn"); if (b && !(typeof S !== "undefined" && S && S.running)) { toast("Belanja MD di Gudang sekolah anda dalam Meta Didik.", "ok"); if (!(window.LMX && window.LMX.on)) lmOpen(""); } });
 
