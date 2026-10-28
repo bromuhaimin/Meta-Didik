@@ -3398,8 +3398,16 @@ const LM_CSS = `
 #lmOv .lm-stamp.on{border-style:solid;border-color:#ffd45a;background:rgba(255,212,90,.12)}
 #lmOv .lm-stamp b{display:block;font-size:14px}
 #lmOv input.lm-in{font:800 18px Nunito,sans-serif;text-transform:uppercase;letter-spacing:.2em;width:9em;padding:8px 10px;border-radius:10px;border:2px solid #2a5a82;background:#0a2034;color:#fff}
-#lmOv .lm-big{position:absolute;inset:0;z-index:3;background:rgba(3,12,22,.8);display:grid;place-items:center}
-#lmOv .lm-big canvas{max-width:96vw;max-height:80vh;border-radius:16px;border:2px solid rgba(255,255,255,.3);background:#0d4f86;cursor:crosshair}
+#lmOv .lm-big{position:absolute;inset:0;z-index:3;background:rgba(3,12,22,.92);display:flex;flex-direction:column;gap:6px;padding:max(8px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))}
+#lmOv .lm-big-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+#lmOv .lm-big-top .lm-kick{flex:1 1 180px;min-width:0;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#lmOv .lm-big-top button{padding:6px 10px;font-size:13px;margin:0}
+#lmOv .lm-big-top button[aria-pressed="true"]{background:#ffd45a;color:#0b2a44}
+#lmOv .lm-big-x{width:42px;height:42px;padding:0!important;border-radius:50%;font-size:20px!important;font-weight:900;background:#ff5d5d!important;color:#fff!important;border:2px solid #fff!important;flex:none}
+#lmOv .lm-big-map{position:relative;flex:1;min-height:0;border-radius:14px;overflow:hidden;border:2px solid rgba(255,255,255,.25);background:#06182a;display:grid;place-items:center;touch-action:none}
+#lmOv .lm-big-map canvas{display:block;cursor:crosshair;touch-action:none}
+#lmOv .lm-big-dr{max-height:34vh;overflow:auto;display:grid;gap:8px;padding:4px}
+#lmOv .lm-big-dr[hidden]{display:none}
 #lmOv .lm-fl{position:absolute;left:50%;top:calc(max(10px,env(safe-area-inset-top)) + 56px);transform:translateX(-50%);width:min(480px,92vw);background:rgba(8,24,40,.82);border:1px solid rgba(255,255,255,.25);border-radius:16px;padding:10px 14px;display:grid;gap:6px;z-index:2;text-align:center}
 #lmOv .lm-fl b{font:900 16px Fredoka,Nunito,sans-serif;color:#ffd45a}#lmOv .lm-fl .lm-fl-st{font-size:14px;color:#d4e2ee}#lmOv .lm-fl button{justify-self:center;font-size:13px;padding:6px 12px}
 #lmOv .lm-tabs button[aria-pressed="false"]{opacity:.8}
@@ -4086,17 +4094,55 @@ function lmMapTag(x, text, px, py, col) {
   x.fillStyle = "rgba(8,24,40,.85)"; lmRound(x, px - w / 2, py - 15, w, 18, 9); x.fill();
   x.fillStyle = col; x.textAlign = "center"; x.fillText(text, px, py - 2); x.textAlign = "left";
 }
+/* peta besar: skrin penuh, butang ✕ sentiasa kelihatan (telefon landskap), petunjuk dalam laci */
 function lmBigMap() {
   const g = LM.g; if (!g) return;
-  if (LM.ui.big) { LM.ui.big.remove(); LM.ui.big = null; g.ui = false; return; }
+  if (LM.ui.big) { const w = LM.ui.big; if (w._off) w._off(); LM.ui.big = null; LM.map3 = null; w.remove(); g.ui = false; return; }
   g.ui = true;
-  const wrap = el("div", { class: "lm-big" }), m = lmMapBase(1240, 500), cv = el("canvas", { width: 1240, height: 500, "aria-label": "Peta Malaysia" });
-  const box = el("div", { style: "display:grid;gap:10px;justify-items:center;padding:12px" });
+  let p3 = true; try { p3 = localStorage.getItem("gt-lm-map3") !== "0"; } catch (e) { p3 = true; }
+  const wrap = el("div", { class: "lm-big" }), area = el("div", { class: "lm-big-map" });
   const dot = (c, t, sh) => el("span", null, el("i", { style: "background:" + c + (sh ? ";border-radius:2px" : "") }), t);
   const leg = el("div", { class: "lm-leg" }, el("span", null, "▲ Anda"), dot("#4dff9a", LM.roomKind === "open" ? "Rakan sekolah" : "Rakan"), LM.roomKind === "open" ? dot("#ff7ad9", "Pemain lain") : null, dot("#7fe3ff", "Menara", 1), el("span", null, "📖 Stesen Ilmu"), el("span", null, "🎓 Kampus IPT"), el("span", null, "🎖 Kem Tempur"), el("span", null, "🍽 Kedai makan"), dot("#1f4fa8", "ETS"), dot("#0e8a6a", "ECRL"), dot("#f28c28", "PLUS"), dot("#d64f8a", "LPT"), dot("#7a5cd6", "Pan Borneo"), dot("#1d5fbf", "KTM Komuter"), dot("#e0245e", "LRT"), dot("#0f8a3d", "MRT"), dot("#7cc242", "Monorel"), dot("#ffd45a", "Ditawan / diziarahi"), dot("#ffffff", "Tempat menarik"));
-  const list = el("div", { class: "lm-who" });
-  box.append(el("div", { class: "lm-kick" }, "Peta · ketik tempat atau rakan untuk tetapkan destinasi"), cv, leg, list, el("div", { class: "lm-row" }, lmBtn("Buang destinasi", "", () => { g.wp = null; lmWpSet(); lmMapDraw(cv, m, true); }), lmBtn("Tutup peta", "pri", lmBigMap)));
-  wrap.appendChild(box); LM.root.appendChild(wrap); LM.ui.big = wrap;
+  const list = el("div", { class: "lm-who" }), dr = el("div", { class: "lm-big-dr", hidden: "" }, list, leg);
+  const mode = lmBtn("", "", () => { p3 = !p3; try { localStorage.setItem("gt-lm-map3", p3 ? "1" : "0"); } catch (e) { /* abaikan */ } show(); });
+  const me = lmBtn("📍 Saya", "", () => { if (LM.map3) LM.map3.home(); });
+  const info = lmBtn("☰ Petunjuk", "", () => { dr.hidden = !dr.hidden; info.setAttribute("aria-pressed", String(!dr.hidden)); setTimeout(fit, 0); });
+  const x = el("button", { type: "button", class: "lm-big-x", title: "Tutup peta (M / Esc)", "aria-label": "Tutup peta" }, "✕"); x.addEventListener("click", lmBigMap);
+  const top = el("div", { class: "lm-big-top" }, el("div", { class: "lm-kick" }, "Peta · ketik tempat atau rakan untuk tetapkan destinasi"), mode, me, lmBtn("Buang destinasi", "", () => { g.wp = null; lmWpSet(); redraw(); }), info, x);
+  wrap.append(top, area, dr); LM.root.appendChild(wrap); LM.ui.big = wrap;
+  /* klik pada peta (2D atau 3D) */
+  const pick = (peer, it, wx, wz) => {
+    if (peer) lmGoPeer(peer);
+    else if (it) g.wp = { x: it.x, z: it.z, n: it.kind === "tw" ? "Menara " + (it.t.kod || it.t.id) : it.n };
+    else g.wp = { x: wx, z: wz, n: "Titik pilihan" };
+    if (!peer) lmWpSet(); redraw();
+  };
+  let m2 = null, cv2 = null;
+  const redraw = () => { if (LM.map3) LM.map3.tick(); else if (cv2) lmMapDraw(cv2, m2, true); };
+  const fit = () => {
+    if (LM.map3) { LM.map3.fit(); return; }
+    if (!cv2) return;
+    const W = area.clientWidth, H = area.clientHeight, s = Math.min(W / cv2.width, H / cv2.height);
+    cv2.style.width = Math.floor(cv2.width * s) + "px"; cv2.style.height = Math.floor(cv2.height * s) + "px";
+  };
+  const show = () => {
+    if (LM.map3) { LM.map3.dispose(); LM.map3 = null; }
+    area.textContent = ""; cv2 = null;
+    if (p3) LM.map3 = lmMap3(area, pick);
+    if (!LM.map3) {
+      p3 = false; m2 = m2 || lmMapBase(1240, 500);
+      cv2 = el("canvas", { width: 1240, height: 500, "aria-label": "Peta Malaysia" }); area.appendChild(cv2);
+      cv2.addEventListener("click", (e) => {
+        const rc = cv2.getBoundingClientRect(), mx = (e.clientX - rc.left) * cv2.width / rc.width, my = (e.clientY - rc.top) * cv2.height / rc.height;
+        for (const id in LM.peers) { const q = LM.peers[id], [px, py] = lmMapPt(m2, q.x, q.z); if (Math.hypot(px - mx, py - my) < 16) { pick(id); return; } }
+        let best = null, bd = 26;
+        for (const it of g.items) { const [px, py] = lmMapPt(m2, it.x, it.z), d = Math.hypot(px - mx, py - my); if (d < bd) { bd = d; best = it; } }
+        pick(null, best, (mx - m2.ox) / m2.s, (my - m2.oy) / m2.s);
+      });
+    }
+    mode.textContent = p3 ? "🗺 2D" : "⛰ 3D"; mode.title = p3 ? "Tukar ke peta rata" : "Tukar ke peta 3D"; me.hidden = !p3;
+    fit(); redraw();
+  };
   const who = () => {
     const ids = Object.keys(LM.peers).sort((a, b) => (lmFriend(LM.peers[b]) - lmFriend(LM.peers[a])) || (Math.hypot(LM.peers[a].x - g.p.x, LM.peers[a].z - g.p.z) - Math.hypot(LM.peers[b].x - g.p.x, LM.peers[b].z - g.p.z)));
     const sig = ids.map((id) => id + ":" + Math.round(Math.hypot(LM.peers[id].x - g.p.x, LM.peers[id].z - g.p.z) / 10)).join(",");
@@ -4106,18 +4152,171 @@ function lmBigMap() {
     list.append(el("b", null, "Dalam talian (" + ids.length + "):"));
     ids.slice(0, 14).forEach((id) => { const e = LM.peers[id], d = Math.round(Math.hypot(e.x - g.p.x, e.z - g.p.z)); const bt = lmBtn((lmFriend(e) ? "🟢 " : "🟣 ") + e.n + " · " + d + " m", "", () => { lmGoPeer(id); lmBigMap(); }); bt.title = "Tunjuk arah ke " + e.n; list.append(bt); });
   };
-  const draw = () => { if (LM.ui.big !== wrap) { clearInterval(LM.bigT); return; } lmMapDraw(cv, m, true); who(); };
+  const draw = () => { if (LM.ui.big !== wrap) { clearInterval(LM.bigT); return; } redraw(); who(); };
+  window.addEventListener("resize", fit);
+  wrap._off = () => { clearInterval(LM.bigT); window.removeEventListener("resize", fit); if (LM.map3) { LM.map3.dispose(); LM.map3 = null; } };
+  show();
   clearInterval(LM.bigT); LM.bigT = setInterval(draw, 400); draw();
   lmZoneCounts();
-  cv.addEventListener("click", (e) => {
-    const rc = cv.getBoundingClientRect(), mx = (e.clientX - rc.left) * cv.width / rc.width, my = (e.clientY - rc.top) * cv.height / rc.height;
-    for (const id in LM.peers) { const e = LM.peers[id], [px, py] = lmMapPt(m, e.x, e.z); if (Math.hypot(px - mx, py - my) < 16) { lmGoPeer(id); lmMapDraw(cv, m, true); return; } }
-    let best = null, bd = 26;
-    for (const it of g.items) { const [px, py] = lmMapPt(m, it.x, it.z), d = Math.hypot(px - mx, py - my); if (d < bd) { bd = d; best = it; } }
-    if (best) g.wp = { x: best.x, z: best.z, n: best.kind === "tw" ? "Menara " + (best.t.kod || best.t.id) : best.n };
-    else { const wx = (mx - m.ox) / m.s, wz = (my - m.oy) / m.s; g.wp = { x: wx, z: wz, n: "Titik pilihan" }; }
-    lmWpSet(); lmMapDraw(cv, m, true);
-  });
+}
+
+/* ---------- peta 3D: muka bumi sebenar (DEM) dengan sempadan negeri, rel dan lebuh raya sebagai tekstur ---------- */
+function lmMap3(area, onPick) {
+  const g = LM.g, cv = el("canvas", { "aria-label": "Peta 3D Malaysia" }); area.appendChild(cv);
+  let r; try { r = new T.WebGLRenderer({ canvas: cv, antialias: true, powerPreference: "high-performance" }); } catch (e) { cv.remove(); return null; }
+  r.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.6));
+  const S = 100 / MAPB.w, cx = MAPB.x0 + MAPB.w / 2, cz = MAPB.z0 + MAPB.h / 2, EX = 3.2;
+  const P = (wx, wz, y) => new T.Vector3((wx - cx) * S, y || 0, (wz - cz) * S);
+  const hAt = (wx, wz) => { const h = lmHRaw(wx, wz); return h > 0.4 ? h * S * EX : -0.04; };
+  const scene = new T.Scene(); scene.background = new T.Color(0x0a3358); scene.fog = new T.Fog(0x0a3358, 120, 260);
+  const cam = new T.PerspectiveCamera(42, 1, 0.1, 600);
+  scene.add(new T.HemisphereLight(0xdcefff, 0x2a3a2a, 0.75));
+  const sun = new T.DirectionalLight(0xfff2d8, 0.85); sun.position.set(-40, 60, -30); scene.add(sun);
+  /* tekstur: peta 2D asas + laluan rel/jalan */
+  const TW = 2048, TH = Math.round(TW * MAPB.h / MAPB.w), base = lmMapBase(TW, TH), tc = document.createElement("canvas"); tc.width = TW; tc.height = TH;
+  const tx = tc.getContext("2d"); tx.drawImage(base.c, 0, 0);
+  if (g.rails) for (const R of g.rails) {
+    if (!R.pts) continue;
+    tx.strokeStyle = R.L.col; tx.lineWidth = 3.5; tx.lineJoin = "round"; tx.beginPath();
+    R.pts.forEach((q, i) => { if (i % 2 && i !== R.pts.length - 1) return; const [px, py] = lmMapPt(base, q.x, q.z); if (!i) tx.moveTo(px, py); else tx.lineTo(px, py); }); tx.stroke();
+    for (const s of R.st) { const [px, py] = lmMapPt(base, s.x, s.z); tx.fillStyle = "#fff"; tx.strokeStyle = R.L.col; tx.lineWidth = 2; tx.beginPath(); tx.arc(px, py, 3.5, 0, 6.2832); tx.fill(); tx.stroke(); }
+  }
+  const tex = new T.CanvasTexture(tc); tex.anisotropy = Math.min(8, r.capabilities.getMaxAnisotropy ? r.capabilities.getMaxAnisotropy() : 1);
+  const PW = 100, PH = 100 * MAPB.h / MAPB.w, NX = 300, NZ = Math.round(NX * PH / PW);
+  const geo = new T.PlaneGeometry(PW, PH, NX, NZ); geo.rotateX(-Math.PI / 2);
+  const pos = geo.attributes.position;
+  for (let i = 0; i < pos.count; i++) pos.setY(i, hAt(pos.getX(i) / S + cx, pos.getZ(i) / S + cz));
+  geo.computeVertexNormals();
+  const land = new T.Mesh(geo, new T.MeshLambertMaterial({ map: tex })); scene.add(land);
+  const sea = new T.Mesh(new T.PlaneGeometry(900, 900), new T.MeshLambertMaterial({ color: 0x0d4f86 })); sea.rotation.x = -Math.PI / 2; sea.position.y = -0.08; scene.add(sea);
+  /* ikon: sprite saiz tetap pada skrin (dikongsi ikut jenis) */
+  const icoC = new Map(), dispose = [geo, land.material, tex, sea.geometry, sea.material];
+  const ico = (key, paint) => {
+    if (icoC.has(key)) return icoC.get(key);
+    const c = document.createElement("canvas"); c.width = c.height = 64; const x = c.getContext("2d"); paint(x);
+    const t = new T.CanvasTexture(c), mt = new T.SpriteMaterial({ map: t, depthTest: false, transparent: true, sizeAttenuation: false }); dispose.push(t, mt); icoC.set(key, mt); return mt;
+  };
+  const emo = (ch, col) => ico("e" + ch + (col || ""), (x) => { x.font = "46px sans-serif"; x.textAlign = "center"; x.textBaseline = "middle"; if (col) x.fillStyle = col; x.shadowColor = "rgba(0,0,0,.6)"; x.shadowBlur = 6; x.fillText(ch, 32, 36); });
+  const dotM = (col, sq) => ico("d" + col + (sq ? "s" : ""), (x) => { x.fillStyle = col; x.strokeStyle = "#0b2a44"; x.lineWidth = 6; x.beginPath(); if (sq) x.rect(16, 16, 32, 32); else x.arc(32, 32, 18, 0, 6.2832); x.fill(); x.stroke(); });
+  const look = (it) => {
+    switch (it.kind) {
+      case "pl": return [dotM(LM.st.pl[it.id] ? "#ffd45a" : "#ffffff"), 13];
+      case "tw": return [dotM(it.done ? "#ffd45a" : "#7fe3ff", 1), 13];
+      case "ap": return [emo("✈", "#fff"), 22];
+      case "sk": return [emo("🏫"), 24];
+      case "ak": return [emo("❗"), 20];
+      case "sn": return it.sl.slice(-2) === "-2" ? [emo("🏛"), 22] : null;
+      case "fd": return [emo("🍽"), 20];
+      case "km": return [emo("🎖"), 22];
+      case "si": return [emo("📖"), 22];
+      case "ip": return [emo("🎓"), 24];
+      case "kh": return [emo("★", it.done ? "#ffd45a" : "#ff7a9a"), 26];
+      case "jt": return it.k !== it.isl.id ? [emo("⛴", "#7fe3ff"), 20] : null;
+      default: return null;
+    }
+  };
+  const sprites = [];
+  const sp = (mt, px, wx, wz, lift) => { const s = new T.Sprite(mt); s.position.copy(P(wx, wz, hAt(wx, wz) + (lift || 0.25))); s.userData.px = px; s.renderOrder = 2; scene.add(s); sprites.push(s); return s; };
+  const its = [];
+  for (const it of g.items) { const L = look(it); if (!L) continue; const s = sp(L[0], L[1], it.x, it.z); s.userData.it = it; its.push(s); }
+  /* label teks */
+  const txt = (t, col, bg) => {
+    const c = document.createElement("canvas"), x = c.getContext("2d"); x.font = "800 30px Nunito, sans-serif";
+    const w = Math.ceil(x.measureText(t).width) + 24; c.width = w; c.height = 44; x.font = "800 30px Nunito, sans-serif";
+    if (bg) { x.fillStyle = bg; lmRound(x, 0, 0, w, 44, 22); x.fill(); }
+    x.fillStyle = col; x.textAlign = "center"; x.textBaseline = "middle"; if (!bg) { x.strokeStyle = "rgba(255,255,255,.7)"; x.lineWidth = 5; x.strokeText(t, w / 2, 23); } x.fillText(t, w / 2, 23);
+    const tt = new T.CanvasTexture(c), mt = new T.SpriteMaterial({ map: tt, depthTest: false, transparent: true, sizeAttenuation: false }); dispose.push(tt, mt);
+    const s = new T.Sprite(mt); s.userData.px = 17; s.userData.ar = w / 44; s.renderOrder = 3; return s;
+  };
+  const putTxt = (s, wx, wz, lift) => { s.position.copy(P(wx, wz, hAt(wx, wz) + lift)); scene.add(s); sprites.push(s); return s; };
+  for (const k of RAST.keys) { const w = lmLabelPt(k); putTxt(txt(DATA.negeri[k].pendek, "#0a2a14"), w.x, w.z, 1.2); }
+  lmIslands().forEach((o) => { const w = lmIslW(o); putTxt(txt(o.n.replace("Pulau ", "P. "), "#0a2a14"), w.x, w.z, 1.2); });
+  /* pemain: anak panah 3D + label; destinasi: tiang merah */
+  const arrS = new T.Shape(); arrS.moveTo(0, 1); arrS.lineTo(0.7, -0.7); arrS.lineTo(0, -0.3); arrS.lineTo(-0.7, -0.7); arrS.closePath();
+  const arrG = new T.ShapeGeometry(arrS); arrG.rotateX(-Math.PI / 2);
+  const arr = new T.Mesh(arrG, new T.MeshBasicMaterial({ color: 0xffffff, depthTest: false, side: T.DoubleSide })); arr.renderOrder = 4; scene.add(arr);
+  const ring = new T.Mesh(new T.RingGeometry(0.8, 1, 32), new T.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.6, depthTest: false, side: T.DoubleSide })); ring.rotation.x = -Math.PI / 2; ring.renderOrder = 4; scene.add(ring);
+  const meLb = txt("Anda", "#ffffff", "rgba(8,24,40,.85)"); scene.add(meLb); sprites.push(meLb);
+  const wpM = new T.Mesh(new T.CylinderGeometry(0.12, 0.12, 6, 8), new T.MeshBasicMaterial({ color: 0xff4d4d, transparent: true, opacity: 0.8 })); scene.add(wpM);
+  dispose.push(arrG, arr.material, ring.geometry, ring.material, wpM.geometry, wpM.material);
+  const peers = new Map();
+  /* kamera: seret = alih, cubit/roda = zum */
+  const C = { x: 0, z: 0, d: 120, pitch: 0.95, yaw: 0 };
+  const home = () => { const q = P(g.p.x, g.p.z); C.x = q.x; C.z = q.z; C.d = 20; };
+  const all = () => { const hf = Math.atan(Math.tan(cam.fov * Math.PI / 360) * cam.aspect); C.x = 0; C.z = 3; C.d = clamp(PW * 0.55 / Math.tan(hf), 40, 160); };
+  const place = () => {
+    C.d = clamp(C.d, 6, 160); C.x = clamp(C.x, -PW / 2, PW / 2); C.z = clamp(C.z, -PH / 2, PH / 2);
+    const ty = C.d < 40 ? hAt(C.x / S + cx, C.z / S + cz) : 0;
+    cam.position.set(C.x + Math.sin(C.yaw) * Math.cos(C.pitch) * C.d, ty + Math.sin(C.pitch) * C.d, C.z + Math.cos(C.yaw) * Math.cos(C.pitch) * C.d);
+    cam.lookAt(C.x, ty, C.z);
+  };
+  let W = 1, H = 1;
+  const fit = () => { W = Math.max(1, area.clientWidth); H = Math.max(1, area.clientHeight); r.setSize(W, H, false); cv.style.width = W + "px"; cv.style.height = H + "px"; cam.aspect = W / H; cam.updateProjectionMatrix(); };
+  const pxK = () => 2 * Math.tan(cam.fov * Math.PI / 360) / H;
+  const pts = new Map(); let drag = null, pinch = 0;
+  const down = (e) => { cv.setPointerCapture && cv.setPointerCapture(e.pointerId); pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (pts.size === 1) drag = { x: e.clientX, y: e.clientY, x0: e.clientX, y0: e.clientY, t: performance.now(), mv: 0 }; else { drag && (drag.mv = 99); pinch = 0; } };
+  const move = (e) => {
+    if (!pts.has(e.pointerId)) return; pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pts.size >= 2) { const [a, b] = [...pts.values()], d = Math.hypot(a.x - b.x, a.y - b.y); if (pinch) C.d *= pinch / d; pinch = d; return; }
+    if (!drag) return;
+    const k = C.d * pxK(), dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY; drag.mv += Math.abs(dx) + Math.abs(dy);
+    C.x -= (dx * Math.cos(C.yaw) + dy * Math.sin(C.yaw)) * k; C.z -= (dy * Math.cos(C.yaw) - dx * Math.sin(C.yaw)) * k / Math.sin(C.pitch);
+  };
+  const up = (e) => {
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = 0;
+    if (drag && !pts.size) { if (drag.mv < 8 && performance.now() - drag.t < 600) click(e.clientX, e.clientY); drag = null; }
+  };
+  const wheel = (e) => { e.preventDefault(); C.d *= Math.exp(e.deltaY * 0.0012); };
+  cv.addEventListener("pointerdown", down); cv.addEventListener("pointermove", move); cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up); cv.addEventListener("wheel", wheel, { passive: false });
+  const v = new T.Vector3(), scr = (o) => { v.copy(o.position).project(cam); return [(v.x + 1) / 2 * W, (1 - v.y) / 2 * H, v.z]; };
+  const click = (ex, ey) => {
+    const rc = cv.getBoundingClientRect(), mx = ex - rc.left, my = ey - rc.top;
+    for (const [id, o] of peers) { const [px, py] = scr(o.s); if (Math.hypot(px - mx, py - my) < 20) { onPick(id); return; } }
+    let best = null, bd = 24;
+    for (const s of its) { if (!s.visible) continue; const [px, py, z] = scr(s); if (z > 1) continue; const d = Math.hypot(px - mx, py - my); if (d < bd) { bd = d; best = s.userData.it; } }
+    if (best) { onPick(null, best); return; }
+    const rc2 = new T.Raycaster(); rc2.setFromCamera(new T.Vector2(mx / W * 2 - 1, 1 - my / H * 2), cam);
+    const hit = rc2.intersectObject(land)[0]; if (hit) onPick(null, null, hit.point.x / S + cx, hit.point.z / S + cz);
+  };
+  /* kemas kini penanda dinamik (pemain, rakan, destinasi, status ikon) */
+  const tick = () => {
+    for (const s of its) { const L = look(s.userData.it); if (L && s.material !== L[0]) s.material = L[0]; }
+    const seen = new Set();
+    for (const id in LM.peers) {
+      const e = LM.peers[id], fr = lmFriend(e), key = (fr ? "f" : "o") + (e.pl ? "p" : "") + e.n + (e.fy ? "⛴" : ""); seen.add(id);
+      let o = peers.get(id);
+      if (!o || o.key !== key) {
+        if (o) { scene.remove(o.s, o.l); sprites.splice(sprites.indexOf(o.s), 1); sprites.splice(sprites.indexOf(o.l), 1); }
+        const col = fr ? "#4dff9a" : "#ff7ad9", s = new T.Sprite(e.pl ? emo("✈", col) : dotM(col)); s.userData.px = e.pl ? 24 : 16; s.renderOrder = 3;
+        const l = txt(e.n + (e.fy ? " ⛴" : ""), col, "rgba(8,24,40,.85)"); scene.add(s, l); sprites.push(s, l); o = { s: s, l: l, key: key }; peers.set(id, o);
+      }
+      o.s.position.copy(P(e.x, e.z, hAt(e.x, e.z) + 0.3)); o.l.position.copy(o.s.position); o.l.userData.dy = 20;
+    }
+    for (const [id, o] of peers) if (!seen.has(id)) { scene.remove(o.s, o.l); sprites.splice(sprites.indexOf(o.s), 1); sprites.splice(sprites.indexOf(o.l), 1); peers.delete(id); }
+    wpM.visible = !!g.wp; if (g.wp) wpM.position.copy(P(g.wp.x, g.wp.z, hAt(g.wp.x, g.wp.z) + 3));
+  };
+  let raf = 0, t0 = performance.now();
+  const frame = (ts) => {
+    raf = requestAnimationFrame(frame); place();
+    const q = P(g.p.x, g.p.z, hAt(g.p.x, g.p.z) + 0.15), sc = C.d * 0.022, k = pxK();
+    arr.position.copy(q); arr.scale.setScalar(sc); arr.rotation.y = g.p.yaw;
+    const ph = ((ts - t0) / 1400) % 1; ring.position.copy(q); ring.scale.setScalar(sc * (0.8 + ph * 2.2)); ring.material.opacity = 0.7 * (1 - ph);
+    meLb.position.copy(q); meLb.userData.dy = 20;
+    if (wpM.visible) { wpM.scale.set(sc * 1.5, sc * 0.5, sc * 1.5); wpM.position.y = hAt(g.wp.x, g.wp.z) + sc * 1.5; }
+    for (const s of sprites) {
+      const px = s.userData.px * k * (s.userData.ar ? 1 : 0.85), ar = s.userData.ar || 1; s.scale.set(px * ar, px, 1);
+      /* angkat label ke atas penanda (piksel skrin) */
+      s.center.set(0.5, s.userData.dy ? -s.userData.dy / s.userData.px + 0.5 : 0.5);
+    }
+    /* sembunyi ikon kecil bila zum jauh supaya tidak bersepah */
+    const far = C.d > 60; for (const s of its) { const kd = s.userData.it.kind; s.visible = !far || kd === "kh" || kd === "ip" || kd === "si" || kd === "km" || kd === "ap" || kd === "sk"; }
+    r.render(scene, cam);
+  };
+  fit(); all(); tick(); raf = requestAnimationFrame(frame);
+  return {
+    fit: fit, tick: tick, home: home, all: all, C: C, cam: cam,
+    dispose: () => { cancelAnimationFrame(raf); for (const d of dispose) d.dispose(); r.dispose(); if (r.forceContextLoss) r.forceContextLoss(); cv.remove(); }
+  };
 }
 function lmWpSet() {
   const g = LM.g; if (!g) return;
@@ -4467,7 +4666,7 @@ function lmLoop(ts) {
     if (g.sky5 && Date.now() - g.sky5.at > 60000) lmSkyLoad(g);
     if (g.clouds) for (const c of g.clouds.children) { c.position.x += dt * 3; if (c.position.x > WB.x0 + WB.w) c.position.x = WB.x0; }
     if (g.seaN) { g.seaN.offset.x = (g.T * 0.006) % 1; g.seaN.offset.y = (g.T * 0.0037) % 1; }
-    g.renderer.render(g.scene, g.camera);
+    if (!LM.map3) g.renderer.render(g.scene, g.camera); /* peta 3D terbuka: jimat GPU */
   } catch (e) { LM.err = String(e && e.stack || e); if (!LM.errShown) { LM.errShown = true; console.error(e); } }
 }
 /* ---------- buka, mula, tutup ---------- */
@@ -4499,6 +4698,7 @@ function lmStart(code, kind) {
 }
 function lmClose() {
   { const b = document.getElementById("lmGdBack"); if (b) b.remove(); } LM.pause = false;
+  if (LM.ui.big && LM.ui.big._off) { LM.ui.big._off(); LM.ui.big = null; }
   LM.on = false; cancelAnimationFrame(LM.raf); lmoStop(); lmNetLeave(); lmEngine(0); LM.roomKind = "";
   window.removeEventListener("keydown", lmKey, true); window.removeEventListener("keyup", lmKey, true); window.removeEventListener("resize", lmResize);
   const g = LM.g;
