@@ -3440,6 +3440,29 @@ const LM_CSS = `
 #lmOv .lm-pl{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}#lmOv .lm-pl button{font-size:12px;padding:4px 8px}
 @media (max-height:500px){#lmOv .lm-top{flex-direction:row;flex-wrap:wrap;justify-content:flex-end;max-width:62vw;top:calc(max(10px,env(safe-area-inset-top)) + 84px)}#lmOv .lm-top button{padding:6px 9px;font-size:12px}#lmOv .lm-mm{width:150px;height:76px}#lmOv .lm-quest{font-size:12px;max-width:220px}}
 @media (max-width:640px){#lmOv .lm-mm{width:140px;height:72px}#lmOv .lm-top{top:calc(max(10px,env(safe-area-inset-top)) + 80px)}#lmOv .lm-hud{max-width:calc(100% - 160px)}#lmOv .lm-emo{display:none}#lmOv .lm-quest{display:none}#lmOv .lm-guide{font-size:12px;width:min(260px,calc(100vw - 170px));padding:6px 9px}}
+/* telefon (sentuh, skrin kecil): paparan minimal - tempat & waktu sahaja, selebihnya dalam "☰ Menu" */
+#lmOv .lm-mb,#lmOv .lm-cb{display:none}
+@media (max-height:600px),(max-width:760px){
+#lmOv.touch .lm-pill{padding:4px 10px;font-size:12px}
+#lmOv.touch .lm-pill[data-m]{display:none}#lmOv.touch .lm-pill[data-m].warn{display:flex}
+#lmOv.touch.menu .lm-pill[data-m]:not([hidden]){display:flex}
+#lmOv.touch .lm-mm{width:128px;height:65px;border-width:1.5px}
+#lmOv.touch .lm-top{top:calc(max(10px,env(safe-area-inset-top)) + 72px);flex-direction:row;flex-wrap:wrap;justify-content:flex-end;align-items:center;max-width:min(330px,48vw)}
+#lmOv.touch.menu .lm-top{background:rgba(8,24,40,.85);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:8px}
+#lmOv.touch .lm-top button{display:none;padding:6px 11px;font-size:12px}
+#lmOv.touch .lm-top .lm-mb{display:block;order:-1;flex-basis:100%;text-align:center}
+#lmOv.touch.menu .lm-top button:not([hidden]){display:block}
+#lmOv.touch .lm-quest{display:none}
+#lmOv.touch.menu .lm-quest{display:block;top:auto!important;bottom:calc(150px + env(safe-area-inset-bottom));height:auto;min-height:0}
+#lmOv.touch .lm-guide{width:min(250px,calc(100vw - 180px));padding:5px 9px;font-size:12px;border-width:1.5px;top:calc(max(10px,env(safe-area-inset-top)) + 34px)}
+#lmOv.touch .lm-guide .gs,#lmOv.touch .lm-guide .gr,#lmOv.touch .lm-guide .gx,#lmOv.touch .lm-guide .gt{display:none}
+#lmOv.touch .lm-guide .gh{margin:0;font-size:11px}#lmOv.touch .lm-guide .gm{font-size:13px;white-space:nowrap;overflow:hidden}#lmOv.touch .lm-guide .gm b{overflow:hidden;text-overflow:ellipsis;min-width:0}#lmOv.touch .lm-guide .gm span{flex:none}
+#lmOv.touch .lm-chat{display:none}#lmOv.touch.chat .lm-chat:not([hidden]){display:flex;bottom:calc(96px + env(safe-area-inset-bottom))}
+#lmOv.touch .lm-tc{gap:8px}#lmOv.touch .lm-tc button{width:52px;height:52px;font-size:12px}#lmOv.touch .lm-tc button.big{width:64px;height:64px}
+#lmOv.touch .lm-tc .lm-cb:not([hidden]){display:block;font-size:20px}
+#lmOv.touch .lm-prompt{font-size:15px;padding:9px 18px;bottom:calc(96px + env(safe-area-inset-bottom))}
+#lmOv.touch .lm-js{left:calc(18px + env(safe-area-inset-left));bottom:calc(16px + env(safe-area-inset-bottom));opacity:.8}
+}
 @media (prefers-reduced-motion:reduce){#lmOv .lm-prompt,#lmOv .lm-box,#lmOv .lm-toast{animation:none}}
 `;
 function lmRoot() {
@@ -4368,16 +4391,19 @@ function lmHud() {
   const r = LM.root, ui = LM.ui;
   ui.hud = el("div", { class: "lm-hud" });
   ui.state = el("div", { class: "lm-pill lm-state" }, "Malaysia");
-  ui.coin = el("div", { class: "lm-pill" }); ui.stamp = el("div", { class: "lm-pill" }); ui.tw = el("div", { class: "lm-pill" }); ui.wp = el("div", { class: "lm-pill" }); ui.wp.hidden = true; ui.peers = el("div", { class: "lm-pill" }); ui.peers.hidden = true;
-  ui.pts = el("div", { class: "lm-pill", title: "Mata hari ini (betul 10, cubaan 2) dan kedudukan anda" });
+  ui.coin = el("div", { class: "lm-pill", "data-m": "" }); ui.stamp = el("div", { class: "lm-pill", "data-m": "" }); ui.tw = el("div", { class: "lm-pill", "data-m": "" }); ui.wp = el("div", { class: "lm-pill", "data-m": "" }); ui.wp.hidden = true; ui.peers = el("div", { class: "lm-pill" }); ui.peers.hidden = true;
+  ui.pts = el("div", { class: "lm-pill", "data-m": "", title: "Mata hari ini (betul 10, cubaan 2) dan kedudukan anda" });
   ui.wx = el("div", { class: "lm-pill", title: "Waktu dan cuaca (1 minit = 1 jam permainan)" });
-  ui.en = el("div", { class: "lm-pill", title: "Tenaga: berkurang apabila berjalan, berlari atau berenang. Makan di kedai makan atau kantin sekolah." });
+  ui.en = el("div", { class: "lm-pill", "data-m": "", title: "Tenaga: berkurang apabila berjalan, berlari atau berenang. Makan di kedai makan atau kantin sekolah." });
   ui.hud.append(ui.state, ui.wx, ui.pts, ui.coin, ui.en, ui.stamp, ui.tw, ui.peers, ui.wp); r.appendChild(ui.hud);
   ui.guide = el("div", { class: "lm-guide", role: "status", title: "Ketik untuk melihat pasport Stesen Ilmu" }); ui.guide.addEventListener("click", () => lmPassport(lmCertOk() ? "lencana" : "ilmu")); r.appendChild(ui.guide);
   ui.quest = el("div", { class: "lm-quest" }); r.appendChild(ui.quest); lmQuestRender();
   ui.mm = el("canvas", { class: "lm-mm", width: 380, height: 192, title: "Buka peta (M)", "aria-label": "Peta mini" }); ui.mm.addEventListener("click", lmBigMap); r.appendChild(ui.mm);
   LM.mmBase = lmMapBase(380, 192);
   const top = el("div", { class: "lm-top" });
+  /* telefon: semua butang dan statistik di bawah satu butang menu */
+  ui.menuB = lmBtn("☰ Menu", "lm-mb", () => { const on = !r.classList.contains("menu"); r.classList.toggle("menu", on); ui.menuB.textContent = on ? "✕ Tutup" : "☰ Menu"; });
+  top.append(ui.menuB);
   ui.skyB = lmBtn(LM.st.sky === 0 ? "Top 5: tutup" : "Top 5: buka", "", () => { const g = LM.g; if (!g || !g.sky5) return; const on = !g.sky5.sp.visible; g.sky5.sp.visible = on; LM.st.sky = on ? 1 : 0; lmSave(); ui.skyB.textContent = on ? "Top 5: buka" : "Top 5: tutup"; });
   top.append(lmBtn("Pasport (P)", "", () => lmPassport()), lmBtn("Tajuk (T)", "", () => lmPassport("tajuk")), ui.skyB, lmBtn("Bilik", "", lmRoomPanel), lmBtn("Swafoto", "", () => lmSelfie(null)),
     ui.snd = lmBtn(LM.mute ? "Bunyi: tutup" : "Bunyi: buka", "", () => { LM.mute = !LM.mute; ui.snd.textContent = LM.mute ? "Bunyi: tutup" : "Bunyi: buka"; }),
@@ -4406,7 +4432,9 @@ function lmHud() {
   ui.js = el("div", { class: "lm-js" }, el("i")); r.appendChild(ui.js);
   const tc = el("div", { class: "lm-tc" });
   ui.run = lmBtn("Lari", "", () => { LM.run = !LM.run; ui.run.classList.toggle("ok", LM.run); });
-  tc.append(lmBtn("Raikan", "", lmRai), ui.run, lmBtn("Lompat", "big pri", () => { LM.jump = true; }));
+  ui.chatB = lmBtn("💬", "lm-cb", () => { r.classList.add("chat"); ui.chatIn.focus(); }); ui.chatB.title = "Chat";
+  ui.chatIn.addEventListener("blur", () => setTimeout(() => { if (document.activeElement !== ui.chatIn) r.classList.remove("chat"); }, 200));
+  tc.append(ui.chatB, lmBtn("Raikan", "", lmRai), ui.run, lmBtn("Lompat", "big pri", () => { LM.jump = true; }));
   r.appendChild(tc);
   ui.fade = el("div", { class: "lm-fade" }); r.appendChild(ui.fade);
 }
@@ -4423,7 +4451,7 @@ function lmHudTick(g) {
     const t1 = ui.hud.offsetTop + ui.hud.offsetHeight + 6; if (ui.guide && ui.guide._tp !== t1) { ui.guide._tp = t1; ui.guide.style.top = t1 + "px"; }
     const t2 = ui.guide ? ui.guide.offsetTop + ui.guide.offsetHeight + 6 : t1; if (ui.quest && ui.quest._tp !== t2) { ui.quest._tp = t2; ui.quest.style.top = t2 + "px"; }
   }
-  { const e = Math.round(lmEnergy()), t = (e <= 15 ? "😫" : e <= 35 ? "🍛" : "🍛") + " Tenaga " + e + "%"; if (ui.en.textContent !== t) { ui.en.textContent = t; ui.en.style.color = e <= 15 ? "#ff6b6b" : e <= 35 ? "#ffd166" : ""; } }
+  { const e = Math.round(lmEnergy()), t = (e <= 15 ? "😫" : e <= 35 ? "🍛" : "🍛") + " Tenaga " + e + "%"; if (ui.en.textContent !== t) { ui.en.textContent = t; ui.en.style.color = e <= 15 ? "#ff6b6b" : e <= 35 ? "#ffd166" : ""; ui.en.classList.toggle("warn", e <= 35); } }
   { /* mata hari ini (sama seperti papan Top 5) dan kedudukan */
     let pts = 0; try { pts = rkVal(rkLoad().m, "all", "hari", "jumlah", ""); } catch (e) { pts = 0; }
     if (LM.ptsLast != null && pts > LM.ptsLast) { lmPop("+" + (pts - LM.ptsLast) + " mata"); if (g.sky5 && !g.sky5.busy) lmSkyLoad(g); }
@@ -4434,7 +4462,7 @@ function lmHudTick(g) {
   ui.stamp.textContent = "📘 Cop " + s.pl + "/" + s.plN; { const J = lmJourney(); ui.tw.textContent = "📖 Stesen Ilmu " + J.d + "/" + J.t; }
   const np = Object.keys(LM.peers).length, op = LM.roomKind === "open"; ui.peers.hidden = !LM.room && !op;
   ui.peers.textContent = op ? (LM.room ? "🌏 " + (np + 1) + " · " + (ZONES[LM.zone] || "") : LM.openFull ? "🌏 Penuh · main solo" : "🌏 Menyambung...") : "👥 " + (np + 1) + (LM.roomKind === "sekolah" ? " · sekolah" : LM.roomCode ? " · " + LM.roomCode : "");
-  ui.chat.hidden = !LM.room; if (!ui.vcB.hidden !== lmVoiceOk()) lmVoiceUi();
+  ui.chat.hidden = !LM.room; ui.chatB.hidden = !LM.room; if (!ui.vcB.hidden !== lmVoiceOk()) lmVoiceUi();
   if (g.wp && g.wp.pid) { const e = LM.peers[g.wp.pid]; if (!e) { g.wp = null; lmWpSet(); lmPop("Rakan sudah keluar"); } else { g.wp.x = e.x; g.wp.z = e.z; lmWpSet(); } }
   if (g.wp) { ui.wp.hidden = false; const km = lmKmAB(g.p.x, g.p.z, g.wp.x, g.wp.z); ui.wp.textContent = "📍 " + g.wp.n + " · " + (km < 1 ? Math.round(km * 1000) + " m" : Math.round(km) + " km"); if (d < 12) { g.wp = null; lmWpSet(); } }
   else ui.wp.hidden = true;
