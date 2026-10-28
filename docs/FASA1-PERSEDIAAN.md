@@ -56,3 +56,20 @@ Apa yang dikawal oleh peraturan ini:
 Setiap peranti akan mempunyai ID tanpa nama, jadi peraturan nod lama (`pemain`, `ringkas`, `komen` dan lain-lain)
 boleh diketatkan supaya setiap murid hanya boleh menulis datanya sendiri. Ini dibuat secara berperingkat
 supaya peranti versi lama tidak terputus.
+
+## Kembara Kampus (v18.17): sewaan galeri IPT
+Peraturan dalam `docs/firebase-rules-stesen.json` kini juga mengandungi tiga nod berikut. Tambahkan ketiga-tiganya dalam Rules seperti di atas.
+
+| Nod | Kegunaan |
+|---|---|
+| `ipt` | Profil IPT. Hanya pentadbir (kunci moderator) boleh menulis. |
+| `ipt_lawat` | Kiraan pelawat kampus. |
+| `ipt_minat` | Kiraan murid yang menekan "Saya berminat". Hanya dibenarkan bagi IPT yang ada pakej aktif. |
+
+Untuk mengaktifkan galeri sesebuah IPT:
+1. Buka **Papan pemuka guru → Pentadbir: Kembara Kampus**.
+2. Pilih IPT dan tetapkan **Pakej** (Asas atau Premium).
+3. Isi huraian, program pengajian, video YouTube, laman rasmi dan tarikh tamat sewaan.
+4. Tekan **Simpan profil**.
+
+Pelawat dan minat dikira mengikut peranti unik dan tidak menyimpan nama murid. Ini memudahkan laporan kepada IPT tanpa melanggar privasi.

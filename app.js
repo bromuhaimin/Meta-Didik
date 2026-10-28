@@ -346,7 +346,7 @@ if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.
 if (SUBJ === "bm") { DATA.tema = DATA_BM.tema; DATA.topik = DATA_BM.topik; DATA.soalan = DATA_BM.soalan; }
 if (SUBJ === "bi") { DATA.tema = DATA_BI.tema; DATA.topik = DATA_BI.topik; DATA.soalan = DATA_BI.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v18.16"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v18.17"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -6965,7 +6965,7 @@ function lgRoot() {
    Dibuka daripada butang di peta utama; dunia.js dimuat hanya apabila diperlukan. */
 /* v17.91: avatar 3D dikongsi Gudang dan META GEMPUR; dimuat apabila perlu */
 /* v18.4: versi aplikasi untuk memecah cache skrip (Safari/ikon skrin utama iPhone menyimpan salinan lama) */
-const APP_VER = "18.16";
+const APP_VER = "18.17";
 function av3Load(cb) {
   if (window.AV3) { cb(); return; }
   if (typeof THREE === "undefined") return;
@@ -17185,8 +17185,55 @@ function stnAdminBox(box) {
   });
 }
 
+/* ---------- v18.17: Kembara Kampus: profil IPT yang menyewa ruang pameran (pentadbir) ----------
+   ipt/<id>: { pk: "asas" | "premium", ds, pg, yt, url, tm (tamat sewaan YYYY-MM-DD) }. Tanpa pk, kampus dipaparkan ringkas. */
+const IPT_LIST = [["ip-um", "UM"], ["ip-usm", "USM"], ["ip-ukm", "UKM"], ["ip-upm", "UPM"], ["ip-utm", "UTM"], ["ip-uiam", "UIAM"], ["ip-uum", "UUM"], ["ip-unimas", "UNIMAS"], ["ip-ums", "UMS"], ["ip-upsi", "UPSI"], ["ip-usim", "USIM"], ["ip-uitm", "UiTM"], ["ip-unisza", "UniSZA"], ["ip-uthm", "UTHM"], ["ip-utem", "UTeM"], ["ip-umpsa", "UMPSA"], ["ip-unimap", "UniMAP"], ["ip-umt", "UMT"], ["ip-umk", "UMK"], ["ip-upnm", "UPNM"]];
+const IPTA_ADM = { d: null, busy: false, open: "" };
+async function iptAdmLoad() {
+  IPTA_ADM.busy = true;
+  try {
+    const [d, lw, mn] = await Promise.all([kmAdmReq("GET", "ipt"), kmAdmReq("GET", "ipt_lawat"), kmAdmReq("GET", "ipt_minat")]);
+    const cnt = (o, id) => (o && o[id] && typeof o[id] === "object" ? Object.keys(o[id]).length : 0);
+    IPTA_ADM.d = {}; IPT_LIST.forEach(([id]) => { IPTA_ADM.d[id] = Object.assign({ lawat: cnt(lw, id), minat: cnt(mn, id) }, (d || {})[id] || {}); });
+  } catch (e) { IPTA_ADM.d = null; toast("Gagal memuat profil IPT (kod " + (e.code || "rangkaian") + ").", "bad"); }
+  IPTA_ADM.busy = false;
+}
+function iptAdminBox(box) {
+  if (!kmAdm()) return;
+  const c = el("details", { class: "card", style: "margin:8px 0" }); c.open = !!IPTA_ADM.d;
+  c.appendChild(el("summary", { style: "cursor:pointer;font-weight:700" }, "Pentadbir: Kembara Kampus (sewaan galeri IPT)"));
+  box.appendChild(c);
+  if (!IPTA_ADM.d) { const b = el("button", { type: "button", class: "btn alt sm" }, IPTA_ADM.busy ? "Memuat..." : "Muat profil IPT"); b.addEventListener("click", async () => { b.disabled = true; await iptAdmLoad(); renderGuru(); }); c.appendChild(b); return; }
+  c.appendChild(el("p", { class: "muted", style: "font-size:13px" }, "IPT dengan pakej aktif dipaparkan sebagai galeri penuh (huraian, program, video, laman rasmi, butang Saya berminat). Pelawat dan minat dikira mengikut peranti unik."));
+  const t = el("table", { class: "gtable" }), tb = el("tbody");
+  t.appendChild(el("thead", null, null, (() => { const r = el("tr"); ["IPT", "Pakej", "Tamat", "Pelawat", "Minat", ""].forEach((h, i) => r.appendChild(el("th", i > 2 && i < 5 ? { class: "num" } : null, h))); return r; })()));
+  IPT_LIST.forEach(([id, sn]) => {
+    const x = IPTA_ADM.d[id] || {}, r = el("tr"), ed = el("button", { type: "button", class: "btn alt sm" }, IPTA_ADM.open === id ? "Tutup" : "Sunting");
+    ed.addEventListener("click", () => { IPTA_ADM.open = IPTA_ADM.open === id ? "" : id; renderGuru(); });
+    r.append(el("td", null, sn), el("td", null, x.pk || "-"), el("td", null, x.tm || "-"), el("td", { class: "num" }, String(x.lawat | 0)), el("td", { class: "num" }, String(x.minat | 0)), el("td", null, null, ed));
+    tb.appendChild(r);
+    if (IPTA_ADM.open !== id) return;
+    const fr = el("tr"), td = el("td", { colspan: "6" }), f = el("div", { class: "card", style: "gap:8px" });
+    const pk = el("select", { "aria-label": "Pakej" }); [["", "Tiada (paparan ringkas)"], ["asas", "Asas"], ["premium", "Premium"]].forEach(([v, n]) => pk.appendChild(el("option", { value: v }, n))); pk.value = x.pk || "";
+    const inp = (v, ph, ml) => { const i = el("input", { maxlength: String(ml), placeholder: ph }); i.value = v || ""; return i; };
+    const ds = el("textarea", { rows: "3", maxlength: "600", placeholder: "Huraian ringkas institusi", style: "background:#0b100b;color:var(--ink);border:1px solid var(--line2);padding:8px;font:inherit;width:100%" }); ds.value = x.ds || "";
+    const pg = inp(x.pg, "Program pengajian (dipisah koma)", 400), yt = inp(x.yt ? "https://youtu.be/" + x.yt : "", "Pautan video YouTube", 200), url = inp(x.url, "https://laman rasmi atau borang minat", 300), tm = inp(x.tm, "Tamat sewaan (YYYY-MM-DD)", 10);
+    const sv = el("button", { type: "button", class: "btn sm" }, "Simpan profil");
+    sv.addEventListener("click", async () => {
+      const u = url.value.trim(), y = rlId(yt.value || "");
+      if (u && !/^https:\/\/[^\s]+\.[^\s]+/.test(u)) { toast("Pautan mesti bermula dengan https://", "warn"); return; }
+      if (yt.value.trim() && !y) { toast("Pautan YouTube tidak sah.", "warn"); return; }
+      const doc = { pk: pk.value, ds: ds.value.replace(/[\u0000-\u001f<>]/g, " ").trim().slice(0, 600), pg: pg.value.replace(/[<>]/g, "").trim().slice(0, 400), yt: y, url: u, tm: tm.value.trim().slice(0, 10), tu: Date.now() };
+      Object.keys(doc).forEach((k) => { if (doc[k] === "") delete doc[k]; });
+      sv.disabled = true;
+      try { await kmAdmPut("ipt/" + id, doc); toast("Profil " + sn + " disimpan.", "ok"); await iptAdmLoad(); IPTA_ADM.open = ""; renderGuru(); } catch (e) { toast("Gagal menyimpan (kod " + (e.code || "rangkaian") + ").", "bad"); sv.disabled = false; }
+    });
+    f.append(pk, ds, pg, yt, url, tm, sv); td.appendChild(f); fr.appendChild(td); tb.appendChild(fr);
+  });
+  t.appendChild(tb); const w = el("div", { class: "gwrap" }); w.appendChild(t); c.appendChild(w);
+}
 /* ---------- Papan pemuka guru ---------- */
-/* v18.13: ringkasan META GEMPUR subjek semasa untuk guru: "universiti,jumlah,lencana,akhlak,tempat,sijil,masa(s)" */
+/* v18.13: ringkasan META GEMPUR subjek semasa untuk guru: "Stesen Ilmu selesai,jumlah,lencana,akhlak,tempat,sijil,masa(s)" */
 function mgPack() {
   try {
     const s = JSON.parse(localStorage.getItem("gt-lm-" + SUBJ) || "null");
@@ -17249,7 +17296,7 @@ function guruTopics(rows) {
   });
 }
 function guruExport(rows) {
-  const head = ["Nama", "Kelas", "Pangkat", "XP", "Misi selesai", "Bintang", "Aktif terakhir", "Streak", "META universiti", "META lencana", "META akhlak", "META tempat", "META sijil"].concat(DATA.topik.map((t) => "Bintang " + guruLab(t)), DATA.topik.map((t) => "Ketepatan % " + guruLab(t)));
+  const head = ["Nama", "Kelas", "Pangkat", "XP", "Misi selesai", "Bintang", "Aktif terakhir", "Streak", "META Stesen Ilmu", "META lencana", "META akhlak", "META tempat", "META sijil"].concat(DATA.topik.map((t) => "Bintang " + guruLab(t)), DATA.topik.map((t) => "Ketepatan % " + guruLab(t)));
   const lines = [head.map(guruCsvCell).join(",")];
   for (const x of rows) {
     lines.push([x.nama, x.kelas, x.pangkat, x.xp, x.m, x.st, x.t ? new Date(x.t).toISOString().slice(0, 10) : "", x.fl].concat(x.mg ? [x.mg.u + "/" + x.mg.ut, x.mg.lc, x.mg.ak, x.mg.pl, x.mg.sj ? "Ya" : "Belum"] : ["", "", "", "", ""], DATA.topik.map((t) => { const a = x.mis[t.id.replace(/\./g, "_")]; return Array.isArray(a) ? a[0] | 0 : 0; }), DATA.topik.map((t) => { const a = x.mis[t.id.replace(/\./g, "_")]; return Array.isArray(a) && (a[4] | 0) ? Math.round(100 * (a[3] | 0) / a[4]) : ""; })).map(guruCsvCell).join(","));
@@ -17308,13 +17355,13 @@ function guruTindakan(box, rows, now) {
   if (lama.length) w.appendChild(el("div", { style: "border-color:var(--amber)" }, "Tidak aktif 14 hari atau lebih (" + lama.length + "): " + lama.map((x) => x.nama + " · " + guruAgo(x.t)).join(", ")));
   box.appendChild(w);
 }
-/* v18.13: kemajuan META GEMPUR (perjalanan universiti, lencana, akhlak) */
+/* v18.13: kemajuan META GEMPUR (perjalanan Stesen Ilmu, lencana, akhlak) */
 function guruMeta(box, rows) {
   box.appendChild(el("h3", { class: "sec", style: "font-size:22px;margin-top:16px" }, "META GEMPUR"));
   const ms = rows.filter((x) => x.mg).sort((a, b) => b.mg.u - a.mg.u || b.mg.lc - a.mg.lc);
-  if (!ms.length) { box.appendChild(el("p", { class: "muted" }, "Belum ada murid yang bermain META GEMPUR (atau mereka belum menggunakan versi terkini). Data muncul selepas murid menjawab kuiz di universiti dalam META GEMPUR.")); return; }
+  if (!ms.length) { box.appendChild(el("p", { class: "muted" }, "Belum ada murid yang bermain META GEMPUR (atau mereka belum menggunakan versi terkini). Data muncul selepas murid menjawab kuiz di Stesen Ilmu dalam META GEMPUR.")); return; }
   const w = el("div", { class: "gwrap" }), t = el("table", { class: "gtable" });
-  t.appendChild(el("thead", null, null, (() => { const r = el("tr"); ["Nama", "Kelas", "Universiti", "Lencana", "Akhlak", "Tempat", "Sijil", "Main terakhir"].forEach((h, i) => r.appendChild(el("th", i > 1 && i < 6 ? { class: "num" } : null, h))); return r; })()));
+  t.appendChild(el("thead", null, null, (() => { const r = el("tr"); ["Nama", "Kelas", "Stesen Ilmu", "Lencana", "Akhlak", "Tempat", "Sijil", "Main terakhir"].forEach((h, i) => r.appendChild(el("th", i > 1 && i < 6 ? { class: "num" } : null, h))); return r; })()));
   const tb = el("tbody");
   ms.forEach((x) => {
     const g = x.mg, pct = g.ut ? g.u / g.ut : 0, bar = el("span", { class: "gbar" + (pct < 0.4 ? " low" : "") }, null, el("i", { style: "width:" + Math.round(pct * 100) + "%" }));
@@ -17323,7 +17370,7 @@ function guruMeta(box, rows) {
     tb.appendChild(r);
   });
   t.appendChild(tb); w.appendChild(t); box.appendChild(w);
-  box.appendChild(el("p", { class: "muted", style: "font-size:13px" }, "Universiti: tajuk yang lulus di universiti META GEMPUR. Akhlak: situasi akhlak yang diselesaikan (bantu orang buta, angkat barang dan lain-lain)."));
+  box.appendChild(el("p", { class: "muted", style: "font-size:13px" }, "Stesen Ilmu: tajuk yang lulus di Stesen Ilmu META GEMPUR (masjid, mahkamah, Parlimen dan institusi lain). Akhlak: situasi akhlak yang diselesaikan (bantu orang buta, angkat barang dan lain-lain)."));
 }
 /* v18.13: butiran seorang murid: tajuk lemah, belum dicuba dan META GEMPUR */
 function guruMurid(td, x) {
@@ -17335,7 +17382,7 @@ function guruMurid(td, x) {
     el("div", null, el("b", null, "Tajuk lemah (ketepatan < 60%): "), lemah.length ? lemah.map((y) => lab(y) + " (" + Math.round(100 * y.ok / y.tot) + "%)").join("; ") : "Tiada"),
     el("div", null, el("b", null, "Belum dicuba (" + belum.length + "): "), belum.length ? belum.map(lab).join("; ") : "Semua tajuk telah dicuba"),
     el("div", null, el("b", null, "Dikuasai 3 bintang: "), kuat.length + " daripada " + tp.length + " tajuk"),
-    el("div", null, el("b", null, "META GEMPUR: "), x.mg ? x.mg.u + "/" + x.mg.ut + " universiti · " + x.mg.lc + " lencana · " + x.mg.ak + " akhlak terpuji · " + x.mg.pl + " tempat" + (x.mg.ut && x.mg.u >= x.mg.ut ? " · layak sijil" : "") : "Belum bermain"));
+    el("div", null, el("b", null, "META GEMPUR: "), x.mg ? x.mg.u + "/" + x.mg.ut + " Stesen Ilmu · " + x.mg.lc + " lencana · " + x.mg.ak + " akhlak terpuji · " + x.mg.pl + " tempat" + (x.mg.ut && x.mg.u >= x.mg.ut ? " · layak sijil" : "") : "Belum bermain"));
 }
 function renderGuru() {
   const box = $("guruBody");
@@ -17344,7 +17391,7 @@ function renderGuru() {
   const sid = mySid();
   if (!(Net.fb && FB.url)) { box.appendChild(el("div", { class: "notice warn" }, "Papan pemuka guru memerlukan sambungan Firebase (versi GitHub Pages). Ia tidak tersedia pada sesi ini.")); return; }
   guruAdminBox(box);
-  try { stnAdminBox(box); stnGuruBox(box); } catch (e) { /* abaikan */ }
+  try { stnAdminBox(box); iptAdminBox(box); stnGuruBox(box); } catch (e) { /* abaikan */ }
   if (!sid) { box.appendChild(el("div", { class: "notice warn" }, "Tetapkan sekolah dan negeri anda dalam profil (klik nama anda di bahagian atas) supaya data murid sekolah anda boleh dipaparkan. Murid juga mesti mengisi sekolah yang sama.")); return; }
   const top = el("div", { class: "row", style: "margin:6px 0;gap:10px" });
   const rf = el("button", { type: "button", class: "btn alt sm" }, GURU.loading ? "Memuat..." : "Muat semula data");
