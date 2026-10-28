@@ -2176,6 +2176,84 @@ function lmAkOpen(it) {
   lmAkFx(it, s.fx); lmSnd("ok"); it.st++;
   if (it.st >= it.S.steps.length) lmAkDone(LM.g, it); else lmAkStep(it);
 }
+/* ---------- v18.13: Panduan "Apa seterusnya" ----------
+   Sentiasa menunjukkan universiti terdekat yang belum selesai, tajuknya, jarak dan arah. Jika jauh, panduan
+   mencadangkan pengangkutan (ETS, ECRL, bas ekspres atau kapal terbang) dan tiang penunjuk dihalakan ke tempat naik. */
+const KM = (u) => u / (3 * WS);
+const lmBorneo = (k) => k === "sabah" || k === "sarawak" || (ISL_BY[k] && (ISL_BY[k].from === "sabah" || ISL_BY[k].from === "sarawak"));
+function lmGuideRoute(g, P, T) {
+  const dir = Math.hypot(T.x - P.x, T.z - P.z), kP = lmAt(P.x, P.z) || g.lastK, kT = lmAt(T.x, T.z) || T.k, cross = lmBorneo(kP) !== lmBorneo(kT);
+  if (!cross && dir < 450) return null;
+  let best = null;
+  const near = (list, q) => { let b = null, bd = 1e9; list.forEach((x) => { const d = Math.hypot(x.x - q.x, x.z - q.z); if (d < bd) { bd = d; b = x; } }); return b; };
+  for (const R of g.rails || []) {
+    if (!R.sS || R.st.length < 2) continue;
+    const a = near(R.st, P), b = near(R.st, T); if (!a || !b || a === b) continue;
+    const cost = Math.hypot(a.x - P.x, a.z - P.z) + Math.hypot(b.x - T.x, b.z - T.z) + 0.12 * Math.abs(R.sS[a.i] - R.sS[b.i]);
+    if (!best || cost < best.cost) best = { m: R.L.road ? "bas" : "kereta", L: R.L, a: a, b: b, cost: cost };
+  }
+  const aps = g.items.filter((x) => x.kind === "ap");
+  if (aps.length > 1) { const a = near(aps, P), b = near(aps, T); if (a && b && a !== b) { const cost = Math.hypot(a.x - P.x, a.z - P.z) + Math.hypot(b.x - T.x, b.z - T.z) + 160; if (!best || cost < best.cost || cross) { if (cross || !best || cost < best.cost) best = { m: "terbang", a: a, b: b, cost: cost }; } } }
+  if (!best) return null;
+  if (!cross && best.cost > dir * 0.75) return null;
+  if (cross && best.m !== "terbang") { const a = near(aps, P), b = near(aps, T); if (a && b && a !== b) best = { m: "terbang", a: a, b: b, cost: 0 }; }
+  return best;
+}
+function lmGuidePick(g) {
+  const its = (g.ipta || []).filter((it) => it.tids.length && !it.done), P = g.p;
+  if (!its.length) return null;
+  let best = null, bd = 1e9;
+  its.forEach((it) => { let d = Math.hypot(it.x - P.x, it.z - P.z); if (lmBorneo(it.k) !== lmBorneo(lmAt(P.x, P.z) || g.lastK)) d += 4000; if (d < bd) { bd = d; best = it; } });
+  return best;
+}
+function lmGuideTick(g) {
+  const ui = LM.ui, box = ui.guide; if (!box) return;
+  const P = g.p, J = lmJourney(), it = lmGuidePick(g), st = LM.st;
+  let head = "🎯 Seterusnya", main = "", sub = "", route = "", extra = [], tgt = null, goal = null;
+  if (g.flight || g.sail || g.ride) { main = g.ride ? "Dalam perjalanan ke " + g.ride.b.nm : g.flight ? "Dalam penerbangan" : "Menaiki feri"; }
+  else if (!it) {
+    head = "🎓 Semua universiti selesai!"; main = "Pulang ke sekolah anda untuk menerima sijil"; if (g.ownSk) goal = tgt = { x: g.ownSk.x, z: g.ownSk.z, n: "Sekolah anda" };
+  } else {
+    const tid = it.tids.find((t) => !lmTopicDone(t)) || it.tids[0], t = TOPIK[tid], d = Math.hypot(it.x - P.x, it.z - P.z);
+    main = "Ke " + it.sn + ", " + (DATA.negeri[it.k] ? DATA.negeri[it.k].pendek : ""); sub = "Tajuk " + (t.kod || t.id) + ": " + t.nama;
+    tgt = { x: it.x, z: it.z, n: it.sn }; goal = tgt;
+    if (d < 26) { route = "👉 Tekan E di pintu " + it.sn + " untuk menjawab kuiz tajuk ini"; tgt = null; }
+    else {
+      const R = lmGuideRoute(g, P, it);
+      if (R) {
+        const da = Math.hypot(R.a.x - P.x, R.a.z - P.z), ic = R.m === "terbang" ? "✈" : R.m === "bas" ? "🚌" : "🚆";
+        const naik = R.m === "terbang" ? "Terbang dari " + R.a.n + " ke " + R.b.n : (R.m === "bas" ? "Naik bas " + R.L.n + " di " : "Naik " + R.L.n + " di ") + R.a.n + ", turun di " + R.b.nm;
+        route = ic + " Cadangan: " + naik + (da > 26 ? " (" + Math.max(1, Math.round(KM(da))) + " km ke sana)" : ". Tekan E untuk naik");
+        if (da > 26) tgt = { x: R.a.x, z: R.a.z, n: R.m === "terbang" ? R.a.n : R.a.n };
+      }
+    }
+  }
+  if (g.ak && !g.ak.done) extra.push("❗ " + g.ak.n + ": " + (g.ak.act || "ikut tanda kuning"));
+  if (lmEnergy() < 35) { let f = null, fd = 1e9; g.items.forEach((x) => { if (x.kind !== "fd") return; const d = Math.hypot(x.x - P.x, x.z - P.z); if (d < fd) { fd = d; f = x; } }); if (f) extra.push("🍛 Lapar: " + f.n + ", " + f.town + " (" + Math.max(1, Math.round(KM(fd))) + " km) atau kantin sekolah"); }
+  /* tiang penunjuk automatik (tidak mengganggu destinasi yang dipilih sendiri) */
+  if (g.guideAuto !== false && !g.flight && !g.sail && !g.ride) {
+    if (tgt && Math.hypot(tgt.x - P.x, tgt.z - P.z) > 14) { if (!g.wp || g.wp.auto) { if (!g.wp || Math.hypot(g.wp.x - tgt.x, g.wp.z - tgt.z) > 1) { g.wp = { x: tgt.x, z: tgt.z, n: tgt.n, auto: true }; lmWpSet(); } } }
+    else if (g.wp && g.wp.auto) { g.wp = null; lmWpSet(); }
+  }
+  const aim = g.wp || tgt, dist = aim ? Math.hypot(aim.x - P.x, aim.z - P.z) : 0, gd = goal ? Math.hypot(goal.x - P.x, goal.z - P.z) : 0;
+  const key = head + main + sub + route + extra.join() + (goal ? Math.round(KM(gd)) : "") + (g.guideAuto === false);
+  if (box._k !== key) {
+    box._k = key; box.textContent = "";
+    const hd = el("div", { class: "gh" }, el("b", null, head), el("span", null, "🎓 " + J.d + "/" + J.t));
+    const tg = el("button", { type: "button", class: "gt" }, g.guideAuto === false ? "Penunjuk: tutup" : "Penunjuk: auto");
+    tg.addEventListener("click", (e) => { e.stopPropagation(); g.guideAuto = g.guideAuto === false; if (g.guideAuto === false && g.wp && g.wp.auto) { g.wp = null; lmWpSet(); } box._k = ""; lmGuideTick(g); });
+    hd.appendChild(tg); box.appendChild(hd);
+    const row = el("div", { class: "gm" }); ui.gArrow = el("span", { class: "ga", "aria-hidden": "true" }, "➤"); row.append(ui.gArrow, el("b", null, main), goal ? el("span", null, " · " + Math.max(0, Math.round(KM(gd))) + " km") : null); box.appendChild(row);
+    if (sub) box.appendChild(el("div", { class: "gs" }, sub));
+    if (route) box.appendChild(el("div", { class: "gr" }, route));
+    extra.forEach((x) => box.appendChild(el("div", { class: "gx" }, x)));
+  }
+  /* anak panah relatif kepada arah kamera */
+  if (ui.gArrow) {
+    if (!aim || dist < 6) ui.gArrow.style.visibility = "hidden";
+    else { const cy = Math.cos(g.cam.yaw), sy = Math.sin(g.cam.yaw), vx = aim.x - P.x, vz = aim.z - P.z, fw = -vx * sy - vz * cy, rt = vx * cy - vz * sy; ui.gArrow.style.visibility = ""; ui.gArrow.style.transform = "rotate(" + (Math.atan2(rt, fw) - Math.PI / 2).toFixed(2) + "rad)"; }
+  }
+}
 /* v18.11: Gudang dibuka dari sekolah sendiri. Dunia 3D dijeda; avatar dibina semula jika ditukar. */
 function lmGudang() {
   const g = LM.g; if (!g) return;
@@ -2767,6 +2845,12 @@ const LM_CSS = `
 @keyframes lmPulse{50%{transform:translateX(-50%) scale(1.05)}}
 #lmOv .lm-quest{position:absolute;left:max(10px,env(safe-area-inset-left));top:calc(max(10px,env(safe-area-inset-top)) + 44px);background:rgba(8,24,40,.72);border-radius:12px;padding:8px 12px;font-size:13px;max-width:260px;pointer-events:none}
 #lmOv .lm-quest b{color:#ffd45a}
+#lmOv .lm-guide{position:absolute;left:max(10px,env(safe-area-inset-left));top:calc(max(10px,env(safe-area-inset-top)) + 44px);width:min(330px,calc(100vw - 180px));background:rgba(10,30,52,.86);border:2px solid #ffd45a;border-radius:14px;padding:8px 12px;font-size:13px;line-height:1.35;color:#fff;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.35)}
+#lmOv .lm-guide .gh{display:flex;align-items:center;gap:8px;margin-bottom:3px}#lmOv .lm-guide .gh b{color:#ffd45a;flex:1}#lmOv .lm-guide .gh span{font-size:12px;opacity:.85}
+#lmOv .lm-guide .gt{border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;border-radius:99px;font-size:11px;padding:3px 8px;cursor:pointer}
+#lmOv .lm-guide .gm{display:flex;align-items:center;gap:6px;font-size:14px}#lmOv .lm-guide .ga{display:inline-block;color:#ffd45a;font-size:18px;transition:transform .2s}
+#lmOv .lm-guide .gs{opacity:.9;margin-top:2px}#lmOv .lm-guide .gr{margin-top:4px;padding:4px 8px;border-radius:8px;background:rgba(80,160,255,.18);color:#cfe6ff}
+#lmOv .lm-guide .gx{margin-top:4px;color:#ffd166}
 #lmOv .lm-akdone{position:absolute;left:50%;top:22%;transform:translateX(-50%);width:min(560px,92vw);display:grid;gap:6px;padding:14px 16px;border-radius:14px;background:rgba(10,60,40,.92);border:2px solid #ffd45a;color:#fff;font-size:14px;line-height:1.45;text-align:center;pointer-events:none;animation:lmPopIn .3s ease-out}#lmOv .lm-akdone b{color:#ffd45a;font-size:16px}#lmOv .lm-akdone small{opacity:.8}@keyframes lmPopIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translateX(-50%)}}
 #lmOv .lm-quest .dn{text-decoration:line-through;opacity:.6}
 #lmOv .lm-emo{position:absolute;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:6px}
@@ -2830,7 +2914,7 @@ const LM_CSS = `
 #lmOv .lm-who{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;max-width:96vw;font-size:13px}#lmOv .lm-who button{font-size:13px;padding:5px 10px}#lmOv .lm-who .muted{color:#b9cde0}
 #lmOv .lm-pl{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}#lmOv .lm-pl button{font-size:12px;padding:4px 8px}
 @media (max-height:500px){#lmOv .lm-top{flex-direction:row;flex-wrap:wrap;justify-content:flex-end;max-width:62vw;top:calc(max(10px,env(safe-area-inset-top)) + 84px)}#lmOv .lm-top button{padding:6px 9px;font-size:12px}#lmOv .lm-mm{width:150px;height:76px}#lmOv .lm-quest{font-size:12px;max-width:220px}}
-@media (max-width:640px){#lmOv .lm-mm{width:140px;height:72px}#lmOv .lm-top{top:calc(max(10px,env(safe-area-inset-top)) + 80px)}#lmOv .lm-hud{max-width:calc(100% - 160px)}#lmOv .lm-emo{display:none}#lmOv .lm-quest{display:none}}
+@media (max-width:640px){#lmOv .lm-mm{width:140px;height:72px}#lmOv .lm-top{top:calc(max(10px,env(safe-area-inset-top)) + 80px)}#lmOv .lm-hud{max-width:calc(100% - 160px)}#lmOv .lm-emo{display:none}#lmOv .lm-quest{display:none}#lmOv .lm-guide{font-size:12px;width:min(260px,calc(100vw - 170px));padding:6px 9px}}
 @media (prefers-reduced-motion:reduce){#lmOv .lm-prompt,#lmOv .lm-box,#lmOv .lm-toast{animation:none}}
 `;
 function lmRoot() {
@@ -3384,6 +3468,7 @@ function lmHud() {
   ui.wx = el("div", { class: "lm-pill", title: "Waktu dan cuaca (1 minit = 1 jam permainan)" });
   ui.en = el("div", { class: "lm-pill", title: "Tenaga: berkurang apabila berjalan, berlari atau berenang. Makan di kedai makan atau kantin sekolah." });
   ui.hud.append(ui.state, ui.wx, ui.pts, ui.coin, ui.en, ui.stamp, ui.tw, ui.peers, ui.wp); r.appendChild(ui.hud);
+  ui.guide = el("div", { class: "lm-guide", role: "status", title: "Ketik untuk melihat pasport universiti" }); ui.guide.addEventListener("click", () => lmPassport("ipta")); r.appendChild(ui.guide);
   ui.quest = el("div", { class: "lm-quest" }); r.appendChild(ui.quest); lmQuestRender();
   ui.mm = el("canvas", { class: "lm-mm", width: 380, height: 192, title: "Buka peta (M)", "aria-label": "Peta mini" }); ui.mm.addEventListener("click", lmBigMap); r.appendChild(ui.mm);
   LM.mmBase = lmMapBase(380, 192);
@@ -3427,7 +3512,11 @@ function lmHudTick(g) {
   if (DATA.negeri[k] || ISL_BY[k]) g.lastK = k;
   ui.coin.innerHTML = ""; ui.coin.append("🪙 ", el("b", null, String(P.coin | 0)));
   if (g.wx && g.wx.h != null) { const W = g.wx, h = W.h, ic = W.kind === "ribut" ? "⛈" : W.kind === "hujan" ? "🌧" : W.kind === "berawan" ? "⛅" : h < 6.2 || h > 19.4 ? "🌙" : h < 7.6 ? "🌅" : h > 18.4 ? "🌇" : W.terik ? "🥵" : "☀️", t = ic + " " + lmClockTxt(h) + " · " + (W.terik ? "Panas terik" : WXN[W.kind]); if (ui.wx.textContent !== t) ui.wx.textContent = t; }
-  if (ui.quest && ui.hud) { const tp = ui.hud.offsetTop + ui.hud.offsetHeight + 6; if (ui.quest._tp !== tp) { ui.quest._tp = tp; ui.quest.style.top = tp + "px"; } } /* panel misi di bawah HUD (HUD boleh menjadi dua baris) */
+  lmGuideTick(g);
+  if (ui.hud) { /* panduan dan panel misi di bawah HUD (HUD boleh menjadi dua baris) */
+    const t1 = ui.hud.offsetTop + ui.hud.offsetHeight + 6; if (ui.guide && ui.guide._tp !== t1) { ui.guide._tp = t1; ui.guide.style.top = t1 + "px"; }
+    const t2 = ui.guide ? ui.guide.offsetTop + ui.guide.offsetHeight + 6 : t1; if (ui.quest && ui.quest._tp !== t2) { ui.quest._tp = t2; ui.quest.style.top = t2 + "px"; }
+  }
   { const e = Math.round(lmEnergy()), t = (e <= 15 ? "😫" : e <= 35 ? "🍛" : "🍛") + " Tenaga " + e + "%"; if (ui.en.textContent !== t) { ui.en.textContent = t; ui.en.style.color = e <= 15 ? "#ff6b6b" : e <= 35 ? "#ffd166" : ""; } }
   { /* mata hari ini (sama seperti papan Top 5) dan kedudukan */
     let pts = 0; try { pts = rkVal(rkLoad().m, "all", "hari", "jumlah", ""); } catch (e) { pts = 0; }
@@ -3441,7 +3530,7 @@ function lmHudTick(g) {
   ui.peers.textContent = op ? (LM.room ? "🌏 " + (np + 1) + " · " + (ZONES[LM.zone] || "") : LM.openFull ? "🌏 Penuh · main solo" : "🌏 Menyambung...") : "👥 " + (np + 1) + (LM.roomKind === "sekolah" ? " · sekolah" : LM.roomCode ? " · " + LM.roomCode : "");
   ui.chat.hidden = !LM.room; if (!ui.vcB.hidden !== lmVoiceOk()) lmVoiceUi();
   if (g.wp && g.wp.pid) { const e = LM.peers[g.wp.pid]; if (!e) { g.wp = null; lmWpSet(); lmPop("Rakan sudah keluar"); } else { g.wp.x = e.x; g.wp.z = e.z; lmWpSet(); } }
-  if (g.wp) { ui.wp.hidden = false; const d = Math.round(Math.hypot(g.wp.x - g.p.x, g.wp.z - g.p.z)); ui.wp.textContent = "📍 " + g.wp.n + " · " + d + " m"; if (d < 12) { g.wp = null; lmWpSet(); } }
+  if (g.wp) { ui.wp.hidden = false; const d = Math.round(Math.hypot(g.wp.x - g.p.x, g.wp.z - g.p.z)), km = KM(d); ui.wp.textContent = "📍 " + g.wp.n + " · " + (km < 1 ? Math.round(km * 1000) + " m" : Math.round(km) + " km"); if (d < 12) { g.wp = null; lmWpSet(); } }
   else ui.wp.hidden = true;
 }
 /* ---------- interaksi ---------- */
