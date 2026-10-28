@@ -17064,20 +17064,22 @@ function finalizeResult(res, t) {
   row.appendChild(back);
   if (!res.mp && !res.kind) {
     const again = el("button", { type: "button", class: "btn alt" }, "Ulang misi");
-    again.addEventListener("click", () => { exitToHub("map"); if (res.khas) openBrief(res.khas, "solo", { khas: 1 }); else openBrief(res.topik, "solo"); });
+    again.addEventListener("click", () => { exitToHub("map", true); if (res.khas) openBrief(res.khas, "solo", { khas: 1 }); else openBrief(res.topik, "solo"); });
     row.appendChild(again);
   }
   box.appendChild(row);
   RESULT.shown = true;
   back.focus();
 }
-function exitToHub(view) {
+function exitToHub(view, stay) {
   leaveMission();
   $("end").hidden = true; $("game").hidden = true; $("game").classList.remove("ended");
   document.body.classList.remove("ingame");
   if (Net.nroom) Net.setPres({ st: "lobi", done: 0, inm: null, mis: null, gid: null, op: null, h: null, sh: null });
   renderAll();
   setView(view);
+  /* v18.18: misi Tempur dari kem dalam META DIDIK: kembali ke kem itu */
+  if (!stay && window.LMX && window.LMX.resume) setTimeout(() => lmOpen(""), 80);
 }
 
 

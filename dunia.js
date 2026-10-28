@@ -1563,10 +1563,10 @@ function lmRailsPath(g, avoid) {
     const tot = curve.getLength(), n = Math.max(20, Math.round(tot / 4)), raw = curve.getSpacedPoints(n);
     /* landasan melencong mengelak menara, mercu tanda, lapangan terbang dan markas (stesen kekal) */
     const obs = [], met = !!R.L.metro;
-    if (met) { for (const it of g.items) if (it.kind === "tw" || it.kind === "pl" || it.kind === "ip" || it.kind === "si" || it.kind === "sn") obs.push({ x: it.x, z: it.z, c: 10 }); }
+    if (met) { for (const it of g.items) if (it.kind === "tw" || it.kind === "pl" || it.kind === "ip" || it.kind === "si" || it.kind === "km" || it.kind === "sn") obs.push({ x: it.x, z: it.z, c: 10 }); }
     else for (const it of g.items) {
       if (it.kind === "tw" || it.kind === "pl" || it.kind === "kh") obs.push({ x: it.x, z: it.z, c: Math.max(it.r || 0, it.kind === "tw" ? 3 : 6) + 12 });
-      else if ((it.kind === "st" && it.line !== R) || it.kind === "ip" || it.kind === "si" || it.kind === "sk" || it.kind === "fd" || it.kind === "sn") obs.push({ x: it.x, z: it.z, c: 26 });
+      else if ((it.kind === "st" && it.line !== R) || it.kind === "ip" || it.kind === "si" || it.kind === "km" || it.kind === "sk" || it.kind === "fd" || it.kind === "sn") obs.push({ x: it.x, z: it.z, c: 26 });
       else if (it.kind === "ap" && it.rw) { const w = it.rw, ux = Math.cos(w.a), uz = Math.sin(w.a); for (let t = -w.L - 10; t <= w.L + 10; t += 12) obs.push({ x: w.x + ux * t, z: w.z + uz * t, c: 16 }); obs.push({ x: it.x, z: it.z, c: 30 }); }
     }
     const fixed = raw.map((q) => S.some((st) => Math.hypot(st.x - q.x, st.z - q.z) < (met ? 8 : 20)));
@@ -2229,6 +2229,63 @@ function lmKampusPassport(b) {
   });
   b.appendChild(grid);
 }
+/* ---------- v18.18: KEM TEMPUR ----------
+   Kem tentera sebenar di beberapa negeri. Tekan E untuk masuk permainan Tempur (misi menembak sambil menjawab soalan
+   tajuk); selepas misi, pemain kembali ke META DIDIK di kem yang sama (LM.resume). [id, negeri, nama, lat, lon] */
+const KEM = [
+  ["km-sgbesi", "wp", "Kem Sungai Besi", 3.0600, 101.7080],
+  ["km-ipoh", "perak", "Kem Syed Putra, Ipoh", 4.5880, 101.1130],
+  ["km-terendak", "melaka", "Kem Terendak", 2.2930, 102.0930],
+  ["km-gemas", "nsembilan", "Kem Syed Sirajuddin, Gemas", 2.5850, 102.6100],
+  ["km-kuantan", "pahang", "Kem Batu 10, Kuantan", 3.8460, 103.2000],
+  ["km-majidee", "johor", "Kem Majidee, Johor Bahru", 1.4980, 103.7700],
+  ["km-penrissen", "sarawak", "Kem Penrissen, Kuching", 1.4700, 110.3300],
+  ["km-lokkawi", "sabah", "Kem Lok Kawi", 5.8870, 116.0490]
+];
+function lmKemModel() {
+  const g = new T.Group(), OL = "#4b5a2e", KH = "#8a7f5a";
+  g.add(lmMesh(lmBox(30, 0.2, 24), "#b8ad8a", 0, 0.1, 0, { ns: 1 }));                       /* padang kawad */
+  for (const [x, z, w, d] of [[0, -12, 30, 0.6], [-15, 0, 0.6, 24], [15, 0, 0.6, 24], [-9.5, 12, 11, 0.6], [9.5, 12, 11, 0.6]]) g.add(lmMesh(lmBox(w, 1.6, d), KH, x, 0.8, z)); /* pagar */
+  for (const x of [-4, 4]) g.add(lmMesh(lmBox(0.9, 6, 0.9), OL, x, 3, 12)); g.add(lmMesh(lmBox(9.4, 1.4, 1), OL, 0, 6.4, 12)); /* pintu gerbang */
+  for (const [x, z] of [[-9, -6], [0, -7], [9, -6]]) { g.add(lmMesh(lmBox(7, 3.2, 4), "#d9d3c0", x, 1.6, z)); g.add(lmMesh(lmBox(7.6, 0.5, 4.6), OL, x, 3.4, z)); } /* berek */
+  g.add(lmMesh(lmBox(0.5, 9, 0.5), "#6d5b3c", 11, 4.5, 8)); g.add(lmMesh(lmBox(3, 0.4, 3), "#6d5b3c", 11, 9, 8)); g.add(lmMesh(lmBox(3.2, 1.2, 3.2), OL, 11, 10, 8)); /* menara kawalan */
+  g.add(lmMesh(lmCyl(0.12, 0.12, 9, 6), "#cfcfcf", -11, 4.5, 6));
+  { const fl = new T.Mesh(GEO.pflag || (GEO.pflag = new T.PlaneGeometry(2.8, 1.4)), new T.MeshBasicMaterial({ map: lmFlagTex(), side: T.DoubleSide })); fl.position.set(-9.6, 8.2, 6); g.add(fl); }
+  return g;
+}
+function lmKemBuild(g, used, placed, avoid, gnd) {
+  KEM.forEach(([id, k, nama, la, lo]) => {
+    if (!DATA.negeri[k]) return;
+    const okK = (q) => q === k || (k === "wp" && q === "selangor") || (k === "selangor" && q === "wp"), rr = 18;
+    const free = (x, z) => okK(lmAt(x, z)) && lmLandW(x + rr, z) && lmLandW(x - rr, z) && lmLandW(x, z + rr) && lmLandW(x, z - rr)
+      && !used.some((u) => Math.hypot(u.x - x, u.z - z) < rr + 8) && !placed.some((u) => Math.hypot(u.x - x, u.z - z) < rr + u.r + 8) && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + rr);
+    let w = ll(la, lo);
+    if (!free(w.x, w.z)) { let best = null; for (let d = 6; d <= 140 && !best; d += 6) for (let i = 0; i < 16; i++) { const a = i * 0.3927 + d * 0.17, x = w.x + Math.cos(a) * d, z = w.z + Math.sin(a) * d; if (free(x, z)) { best = { x: x, z: z }; break; } } if (best) w = best; }
+    const md = lmKemModel(), rot = (Math.abs(hashStr(id)) % 628) / 100;
+    md.position.set(w.x, 0, w.z); md.rotation.y = rot; g.scene.add(md); gnd.push([md, 0]); lmPad(g, w.x, w.z, 17);
+    const lb = lmLabel("🎖 " + nama + " · Tempur", { fs: 28, k: 0.03, bg: "rgba(45,55,25,.9)", bd: "#d9c36a" }); lb.position.set(w.x, 14, w.z); g.scene.add(lb); gnd.push([lb, 14]);
+    const fx = Math.sin(rot), fz = Math.cos(rot);
+    g.items.push({ kind: "km", id: id, k: k, n: nama, x: w.x + fx * 15, z: w.z + fz * 15, r: 0, ir: 8, m: md, lb: lb });
+    placed.push({ x: w.x, z: w.z, r: rr }); avoid.push({ x: w.x, z: w.z, r: rr + 2 });
+    const cr = Math.cos(rot), sr = Math.sin(rot), at = (lx, lz) => ({ x: w.x + lx * cr + lz * sr, z: w.z - lx * sr + lz * cr });
+    for (const [lx, lz] of [[-9, -6], [0, -7], [9, -6]]) { const q = at(lx, lz); g.cols.push({ x: q.x, z: q.z, r: 3.6, h: 4 }); }
+  });
+}
+function lmKemOpen(it) {
+  const ts = DATA.topik.filter((t) => DATA.negeri[t.negeri]);
+  lmCard((b) => {
+    b.append(el("div", { class: "lm-kick" }, "🎖 " + it.n + " · " + DATA.negeri[it.k].pendek), el("h2", null, "Tempur"));
+    b.append(el("p", null, "Masuk ke medan latihan Tempur: buka peti bekalan, jawab soalan tajuk untuk mendapat peluru dan perisai, dan tumpaskan sasaran. Selepas misi tamat, anda kembali ke kem ini."));
+    const sel = el("select", { "aria-label": "Tajuk misi", style: "width:100%;padding:8px;border-radius:10px;font:inherit" });
+    ts.forEach((t) => sel.appendChild(el("option", { value: t.id }, (lmTopicDone(t.id) ? "✔ " : "") + (t.kod || t.id) + " " + t.nama)));
+    { const nx = ts.find((t) => !lmTopicDone(t.id)); if (nx) sel.value = nx.id; }
+    b.append(el("p", { class: "lm-ex" }, "Pilih tajuk misi:"), sel);
+    b.append(el("div", { class: "lm-row" }, lmBtn("🎯 Mula Tempur", "pri", () => {
+      const tid = sel.value; LM.resume = { at: it.id }; lmSave(); lmCardClose(); lmClose();
+      setTimeout(() => { try { openBrief(tid, "solo"); } catch (e) { LM.resume = null; toast("Tempur tidak dapat dibuka.", "warn"); } }, 60);
+    }), lmBtn("Nanti dulu", "", lmCardClose)));
+  });
+}
 /* ---------- v18.8: sekolah murid sendiri (titik mula setiap misi) ---------- */
 const SK_STATE = { JHR: "johor", KDH: "kedah", KTN: "kelantan", MLK: "melaka", NSN: "nsembilan", PHG: "pahang", PRK: "perak", PLS: "perlis", PNG: "penang", SBH: "sabah", SWK: "sarawak", SGR: "selangor", TRG: "terengganu", KUL: "wp", LBN: "sabah", PJY: "wp" };
 const SK_ACR = { SMK: 1, SMKA: 1, SBP: 1, MRSM: 1, KV: 1, SM: 1, SMA: 1, SABK: 1, SMJK: 1, SMT: 1, SMS: 1, SK: 1, II: 1, III: 1, IV: 1 };
@@ -2813,7 +2870,8 @@ function lmBuildWorld(g) {
   });
   /* IPTA: galeri kampus (Kembara Kampus) */
   lmIptaBuild(g, used, placed, avoid, gnd); setTimeout(() => lmKampusFetch(g), 1500);
-  /* Stesen Ilmu: setiap tajuk di institusi sebenar */
+  /* Stesen Ilmu: setiap tajuk di institusi sebenar; kem Tempur */
+  lmKemBuild(g, used, placed, avoid, gnd);
   lmIlmuBuild(g, used, placed, avoid, gnd); lmIlmuAssign(g);
   /* kedai makan tradisi setiap negeri */
   lmFoodBuild(g, used, placed, avoid, gnd);
@@ -3964,6 +4022,7 @@ function lmMapDraw(cv, m, big) {
     else if (it.kind === "ak") { x.fillStyle = "#ff4d4d"; x.beginPath(); x.arc(px, py, big ? 6 : 3, 0, 6.2832); x.fill(); if (big) { x.fillStyle = "#fff"; x.font = "bold 11px sans-serif"; x.textAlign = "center"; x.fillText("!", px, py + 4); x.textAlign = "left"; } }
     else if (it.kind === "sn") { if (big && it.sl.slice(-2) === "-2") { x.font = "15px sans-serif"; x.textAlign = "center"; x.fillText("🏛", px, py + 5); x.textAlign = "left"; } }
     else if (it.kind === "fd") { if (big) { x.font = "15px sans-serif"; x.textAlign = "center"; x.fillText("🍽", px, py + 5); x.textAlign = "left"; } else { x.fillStyle = "#ff9f43"; x.fillRect(px - 1.2, py - 1.2, 2.4, 2.4); } }
+    else if (it.kind === "km") { x.font = (big ? 16 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("🎖", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
     else if (it.kind === "si") { x.font = (big ? 17 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("📖", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
     else if (it.kind === "ip") { x.font = (big ? 18 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("🎓", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
     else if (it.kind === "kh") { x.font = (big ? 20 : 10) + "px sans-serif"; x.fillStyle = it.done ? "#ffd45a" : "#ff7a9a"; x.textAlign = "center"; x.fillText("★", px, py + (big ? 7 : 4)); x.textAlign = "left"; }
@@ -4008,7 +4067,7 @@ function lmBigMap() {
   const wrap = el("div", { class: "lm-big" }), m = lmMapBase(1240, 500), cv = el("canvas", { width: 1240, height: 500, "aria-label": "Peta Malaysia" });
   const box = el("div", { style: "display:grid;gap:10px;justify-items:center;padding:12px" });
   const dot = (c, t, sh) => el("span", null, el("i", { style: "background:" + c + (sh ? ";border-radius:2px" : "") }), t);
-  const leg = el("div", { class: "lm-leg" }, el("span", null, "▲ Anda"), dot("#4dff9a", LM.roomKind === "open" ? "Rakan sekolah" : "Rakan"), LM.roomKind === "open" ? dot("#ff7ad9", "Pemain lain") : null, dot("#7fe3ff", "Menara", 1), el("span", null, "📖 Stesen Ilmu"), el("span", null, "🎓 Kampus IPT"), el("span", null, "🍽 Kedai makan"), dot("#1f4fa8", "ETS"), dot("#0e8a6a", "ECRL"), dot("#f28c28", "PLUS"), dot("#d64f8a", "LPT"), dot("#7a5cd6", "Pan Borneo"), dot("#1d5fbf", "KTM Komuter"), dot("#e0245e", "LRT"), dot("#0f8a3d", "MRT"), dot("#7cc242", "Monorel"), dot("#ffd45a", "Ditawan / diziarahi"), dot("#ffffff", "Tempat menarik"));
+  const leg = el("div", { class: "lm-leg" }, el("span", null, "▲ Anda"), dot("#4dff9a", LM.roomKind === "open" ? "Rakan sekolah" : "Rakan"), LM.roomKind === "open" ? dot("#ff7ad9", "Pemain lain") : null, dot("#7fe3ff", "Menara", 1), el("span", null, "📖 Stesen Ilmu"), el("span", null, "🎓 Kampus IPT"), el("span", null, "🎖 Kem Tempur"), el("span", null, "🍽 Kedai makan"), dot("#1f4fa8", "ETS"), dot("#0e8a6a", "ECRL"), dot("#f28c28", "PLUS"), dot("#d64f8a", "LPT"), dot("#7a5cd6", "Pan Borneo"), dot("#1d5fbf", "KTM Komuter"), dot("#e0245e", "LRT"), dot("#0f8a3d", "MRT"), dot("#7cc242", "Monorel"), dot("#ffd45a", "Ditawan / diziarahi"), dot("#ffffff", "Tempat menarik"));
   const list = el("div", { class: "lm-who" });
   box.append(el("div", { class: "lm-kick" }, "Peta · ketik tempat atau rakan untuk tetapkan destinasi"), cv, leg, list, el("div", { class: "lm-row" }, lmBtn("Buang destinasi", "", () => { g.wp = null; lmWpSet(); lmMapDraw(cv, m, true); }), lmBtn("Tutup peta", "pri", lmBigMap)));
   wrap.appendChild(box); LM.root.appendChild(wrap); LM.ui.big = wrap;
@@ -4065,6 +4124,9 @@ function lmBuildScene() {
   return g;
 }
 function lmSpawn(g) {
+  { const rs = LM.resume; LM.resume = null; /* v18.18: kembali dari Tempur atau Tanah Suci */
+    const it = rs && rs.at && g.items.find((x) => x.id === rs.at);
+    if (it) { g.p.x = it.x; g.p.z = it.z; g.p.yaw = 0; g.cam.yaw = 0; g.camera.position.set(it.x, 30, it.z + 30); setTimeout(() => lmPop(rs.msg || "Selamat kembali ke " + (it.n || it.sn || "Meta Didik")), 600); return; } }
   if (g.ownSk) { /* setiap misi bermula di hadapan pintu pagar sekolah sendiri */
     const o = g.ownSk; g.p.x = o.x; g.p.z = o.z + 3; g.p.yaw = Math.PI; g.cam.yaw = 0;
     g.camera.position.set(o.x, 30, o.z + 30); return;
@@ -4171,6 +4233,7 @@ function lmNearTick(g) {
   const txt = best.kind === "tw" ? key + "Menara Ilmu " + (best.t.kod || best.t.id) + (best.done ? " ✔" : "") : best.kind === "pl" ? key + "Ziarah " + best.n + (LM.st.pl[best.id] ? " ✔" : "")
     : best.kind === "st" ? key + (best.hub && best.hub.lines.length > 1 ? "🔀 " + best.n + " · " + [...new Set(best.hub.lines.map((q) => q.line.L.n))].join(", ") : best.line.L.road ? "Naik bas ekspres " + best.line.L.n + " · " + best.n : "Naik " + best.line.L.n + " · " + best.n)
     : best.kind === "si" ? key + "📖 " + best.sn + " · " + (best.t ? (best.t.kod || best.t.id) + " " + best.t.nama + (best.tids.length > 1 ? " (+" + (best.tids.length - 1) + ")" : "") : "Pusat Ulangkaji") + (best.done ? " ✔" : "")
+    : best.kind === "km" ? key + "🎖 " + best.n + " · Masuk Tempur"
     : best.kind === "ip" ? key + "🎓 " + best.sn + " · Galeri kampus" + ((LM.st.kp || {})[best.id] ? " ✔" : "")
     : best.kind === "sk" ? key + "Sekolah anda: " + best.n
     : best.kind === "fd" ? key + "Kedai makan: " + best.n
@@ -4184,7 +4247,7 @@ function lmInteract() {
   const g = LM.g; if (!g || g.ui || !g.near) return;
   lmSnd("open");
   const it = g.near;
-  if (it.kind === "sn") lmStnOpen(it); else if (it.kind === "tw") lmTowerOpen(it); else if (it.kind === "pl") lmPlaceOpen(it); else if (it.kind === "ap") lmAirportOpen(it); else if (it.kind === "kh") lmKhasOpen(it); else if (it.kind === "jt") lmFerryOpen(it); else if (it.kind === "st") lmRailOpen(it); else if (it.kind === "si") lmIlmuOpen(it); else if (it.kind === "ip") lmKampusOpen(it); else if (it.kind === "sk") lmOwnSchoolOpen(it); else if (it.kind === "fd") lmFoodOpen(it); else if (it.kind === "ak") lmAkOpen(it);
+  if (it.kind === "sn") lmStnOpen(it); else if (it.kind === "tw") lmTowerOpen(it); else if (it.kind === "pl") lmPlaceOpen(it); else if (it.kind === "ap") lmAirportOpen(it); else if (it.kind === "kh") lmKhasOpen(it); else if (it.kind === "jt") lmFerryOpen(it); else if (it.kind === "st") lmRailOpen(it); else if (it.kind === "si") lmIlmuOpen(it); else if (it.kind === "km") lmKemOpen(it); else if (it.kind === "ip") lmKampusOpen(it); else if (it.kind === "sk") lmOwnSchoolOpen(it); else if (it.kind === "fd") lmFoodOpen(it); else if (it.kind === "ak") lmAkOpen(it);
 }
 /* ---------- input ---------- */
 function lmKey(e) {
@@ -4389,7 +4452,7 @@ function lmOpen(tid) {
   if (!GEOD) {
     const r = lmRoot(); r.appendChild(el("div", { class: "lm-card" }, el("div", { class: "lm-box" }, el("div", { class: "lm-kick" }, "META DIDIK"), el("h2", null, "Memuat peta Malaysia sebenar..."), el("p", null, "Sempadan negeri dan ketinggian muka bumi (kali pertama sahaja)."))));
   }
-  lmGeoLoad().then(() => lmOwnSchool()).then((sk) => { LM.ownSk = sk; lmRaster(); lmSetup(); }).catch(() => { toast("Peta META DIDIK tidak dapat dimuatkan. Semak sambungan internet dan cuba lagi.", "warn"); lmClose(); });
+  lmGeoLoad().then(() => lmOwnSchool()).then((sk) => { LM.ownSk = sk; lmRaster(); if (LM.resume) lmStart("", ""); else lmSetup(); }).catch(() => { toast("Peta META DIDIK tidak dapat dimuatkan. Semak sambungan internet dan cuba lagi.", "warn"); lmClose(); });
 }
 function lmStart(code, kind) {
   const r = LM.root; LM.ptsLast = null; LM.roomKind = kind || ""; LM.sh = lmMySh(); LM.zoneN = null; LM.zoneAt = 0; LM.roomCode = ""; LM.openFull = false; LM.openRetry = 0; LM.zone = "";
@@ -4425,5 +4488,5 @@ function lmClose() {
 }
 /* untuk ujian automatik */
 LM._g = (x, z) => lmGround(x, z); LM._fly = (a, d) => lmFlyStart(a, d); LM._ride = (a, b) => lmRide(a, b); LM._rai = () => lmRai(); LM._swim = (x, z) => lmSwimOk(x, z);
-LM._t = { lmKampusOpen: lmKampusOpen, lmIlmuOpen: lmIlmuOpen, lmKampusFetch: lmKampusFetch, lmRailOpen: lmRailOpen, lmRide: lmRide, lmStnFetch: lmStnFetch, lmStnOpen: lmStnOpen, lmCertCanvas: lmCertCanvas, lmLcCheck: lmLcCheck, LCN: LCN, lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
+LM._t = { lmKemOpen: lmKemOpen, lmKampusOpen: lmKampusOpen, lmIlmuOpen: lmIlmuOpen, lmKampusFetch: lmKampusFetch, lmRailOpen: lmRailOpen, lmRide: lmRide, lmStnFetch: lmStnFetch, lmStnOpen: lmStnOpen, lmCertCanvas: lmCertCanvas, lmLcCheck: lmLcCheck, LCN: LCN, lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
 })();
