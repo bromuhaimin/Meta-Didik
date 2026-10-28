@@ -236,11 +236,120 @@ function lmSnd(k) {
   if (LM.mute) return;
   if (k === "ok") { arBeep(784, 0.12, "triangle", 0.06); setTimeout(() => arBeep(1046, 0.18, "triangle", 0.06), 90); }
   else if (k === "bad") arBeep(220, 0.3, "sawtooth", 0.04, -60);
-  else if (k === "coin") { arBeep(1318, 0.07, "square", 0.03); setTimeout(() => arBeep(1760, 0.1, "square", 0.03), 60); }
-  else if (k === "jump") arBeep(420, 0.12, "sine", 0.04, 260);
+  else if (k === "coin") lmAudFx("coin");
+  else if (k === "jump") lmAudFx("jump");
   else if (k === "win") [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => arBeep(f, 0.25, "triangle", 0.06), i * 120));
   else if (k === "open") arBeep(660, 0.1, "sine", 0.05, 200);
 }
+/* ---------- v18.23: bunyi persekitaran realistik (Web Audio, dijana tanpa fail) ----------
+   Lapisan berterusan: angin, ombak pantai, hujan, trafik, deruan rel, cengkerik malam.
+   Peristiwa: tapak kaki (rumput / keras), kayuhan renang, lompat dan mendarat, kicauan burung siang,
+   guruh, keretapi lalu ("ka-tum"), denting MD. Kelantangan ikut tetapan bunyi dan butang Bunyi. */
+const LAUD = { ac: null, m: null, L: null, nb: null, t: 0, step: 0, swim: 0, bird: 2, crick: 0, clack: 0, wasOn: true, last: null };
+function lmAudCtx() {
+  if (LAUD.ac) { if (LAUD.ac.state === "suspended") LAUD.ac.resume().catch(() => {}); return LAUD.ac; }
+  const C = window.AudioContext || window.webkitAudioContext; if (!C) return null;
+  try { LAUD.ac = (typeof AR !== "undefined" && AR.ctx) || new C(); } catch (e) { return null; }
+  const ac = LAUD.ac, comp = ac.createDynamicsCompressor(); LAUD.m = ac.createGain(); LAUD.m.gain.value = 0; LAUD.m.connect(comp); comp.connect(ac.destination);
+  /* hingar putih, merah jambu dan perang (4 s, berulang) */
+  const mk = (f) => { const n = ac.sampleRate * 4, b = ac.createBuffer(1, n, ac.sampleRate), d = b.getChannelData(0); f(d); return b; };
+  LAUD.nb = {
+    w: mk((d) => { for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }),
+    p: mk((d) => { let b0 = 0, b1 = 0, b2 = 0; for (let i = 0; i < d.length; i++) { const w = Math.random() * 2 - 1; b0 = 0.997 * b0 + w * 0.029591; b1 = 0.985 * b1 + w * 0.032534; b2 = 0.95 * b2 + w * 0.048056; d[i] = (b0 + b1 + b2 + w * 0.05) * 2.2; } }),
+    b: mk((d) => { let l = 0; for (let i = 0; i < d.length; i++) { l = (l + 0.02 * (Math.random() * 2 - 1)) / 1.02; d[i] = l * 3.5; } })
+  };
+  const loop = (buf, chain) => { const s = ac.createBufferSource(); s.buffer = buf; s.loop = true; s.loopStart = Math.random(); let n = s; chain.forEach((x) => { n.connect(x); n = x; }); const g = ac.createGain(); g.gain.value = 0; n.connect(g); g.connect(LAUD.m); s.start(0, Math.random() * 3); return { g: g, f: chain[0] }; };
+  const F = (type, f, q) => { const x = ac.createBiquadFilter(); x.type = type; x.frequency.value = f; if (q) x.Q.value = q; return x; };
+  LAUD.L = {
+    wind: loop(LAUD.nb.b, [F("lowpass", 420, 0.6)]),
+    wave: loop(LAUD.nb.p, [F("lowpass", 900, 0.5), F("highpass", 80)]),
+    rain: loop(LAUD.nb.w, [F("highpass", 1400), F("lowpass", 8500)]),
+    traf: loop(LAUD.nb.b, [F("lowpass", 260, 0.8)]),
+    tyre: loop(LAUD.nb.p, [F("bandpass", 1100, 1.4)]),
+    rail: loop(LAUD.nb.b, [F("lowpass", 150, 1.2)])
+  };
+  /* cengkerik: pembawa ~4.6 kHz dimodulasi 30 Hz, letusan pendek dijadualkan */
+  const car = ac.createOscillator(); car.frequency.value = 4600; const lfo = ac.createOscillator(); lfo.type = "square"; lfo.frequency.value = 30;
+  const am = ac.createGain(); am.gain.value = 0.5; const lg = ac.createGain(); lg.gain.value = 0.5; lfo.connect(lg); lg.connect(am.gain);
+  const burst = ac.createGain(); burst.gain.value = 0; const cg = ac.createGain(); cg.gain.value = 0; car.connect(am); am.connect(burst); burst.connect(cg); cg.connect(LAUD.m); car.start(); lfo.start();
+  LAUD.L.crk = { g: cg, burst: burst, car: car };
+  return ac;
+}
+function lmAudSet(k, v, tc) { const L = LAUD.L && LAUD.L[k]; if (L) L.g.gain.setTargetAtTime(Math.max(0, v), LAUD.ac.currentTime, tc || 0.5); }
+/* letusan hingar berpenapis dengan sampul (tapak kaki, percikan, guruh) */
+function lmAudHit(buf, type, f, q, vol, att, dec, when, f2, pan) {
+  const ac = LAUD.ac; if (!ac || !LAUD.m) return;
+  const t = ac.currentTime + (when || 0), s = ac.createBufferSource(); s.buffer = LAUD.nb[buf];
+  const fl = ac.createBiquadFilter(); fl.type = type; fl.frequency.setValueAtTime(f, t); if (f2) fl.frequency.exponentialRampToValueAtTime(f2, t + att + dec); fl.Q.value = q || 0.8;
+  const g = ac.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + att); g.gain.exponentialRampToValueAtTime(0.0001, t + att + dec);
+  let n = g; if (pan && ac.createStereoPanner) { const p = ac.createStereoPanner(); p.pan.value = pan; g.connect(p); n = p; }
+  s.connect(fl); fl.connect(g); n.connect(LAUD.m); s.start(t, Math.random() * 3, att + dec + 0.05);
+}
+function lmAudTone(f, f2, vol, dur, when, type, pan) {
+  const ac = LAUD.ac; if (!ac || !LAUD.m) return;
+  const t = ac.currentTime + (when || 0), o = ac.createOscillator(); o.type = type || "sine"; o.frequency.setValueAtTime(f, t); if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + dur);
+  const g = ac.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + Math.min(0.02, dur / 4)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  let n = g; if (pan && ac.createStereoPanner) { const p = ac.createStereoPanner(); p.pan.value = pan; g.connect(p); n = p; }
+  o.connect(g); n.connect(LAUD.m); o.start(t); o.stop(t + dur + 0.05);
+}
+/* bunyi peristiwa */
+function lmAudFx(k, a) {
+  if (LM.mute || !lmAudCtx()) return;
+  if (k === "step") { const hard = a === "keras"; lmAudHit("w", hard ? "bandpass" : "lowpass", hard ? 1900 : 650, hard ? 1.3 : 0.7, hard ? 0.32 : 0.42, 0.004, hard ? 0.07 : 0.11); if (!hard) lmAudHit("p", "highpass", 2600, 0.5, 0.06, 0.01, 0.09, 0.02); }
+  else if (k === "swim") { lmAudHit("w", "bandpass", 700, 0.7, 0.35, 0.06, 0.35, 0, 1600); lmAudHit("p", "highpass", 3000, 0.6, 0.08, 0.05, 0.3, 0.08); }
+  else if (k === "jump") lmAudHit("p", "bandpass", 380, 1.2, 0.22, 0.03, 0.22, 0, 1500);
+  else if (k === "land") { lmAudHit("b", "lowpass", 160, 0.8, 0.9, 0.005, 0.18); lmAudHit("w", "lowpass", 900, 0.8, 0.25, 0.003, 0.06); }
+  else if (k === "splash") { lmAudHit("w", "bandpass", 900, 0.6, 0.6, 0.01, 0.6, 0, 400); }
+  else if (k === "coin") { [[2093, 0.14], [2093 * 2.76, 0.05], [3136, 0.09]].forEach(([f, v], i) => lmAudTone(f, 0, v, 0.55 - i * 0.1, i ? 0.07 : 0)); }
+  else if (k === "thunder") { const w = 0.4 + Math.random() * 0.9; lmAudHit("w", "highpass", 1800, 0.5, 0.18, 0.004, 0.25, w); lmAudHit("b", "lowpass", 220, 0.7, 1.2, 0.08, 3.2, w + 0.05, 70); lmAudHit("b", "lowpass", 120, 0.6, 0.9, 0.3, 2.4, w + 0.6); }
+  else if (k === "clack") { lmAudHit("w", "bandpass", 1500, 2, 0.22 * (a || 1), 0.002, 0.05); lmAudHit("b", "lowpass", 220, 1, 0.35 * (a || 1), 0.003, 0.12); lmAudHit("w", "bandpass", 1300, 2, 0.2 * (a || 1), 0.002, 0.05, 0.11); lmAudHit("b", "lowpass", 200, 1, 0.3 * (a || 1), 0.003, 0.12, 0.11); }
+  else if (k === "bird") {
+    /* satu rangkap: 2-6 nota, sapuan frekuensi pantas */
+    const n = 2 + (Math.random() * 5 | 0), base = 2600 + Math.random() * 2200, pan = Math.random() * 1.6 - 0.8, sp = 0.07 + Math.random() * 0.08, v = 0.025 + Math.random() * 0.035;
+    for (let i = 0; i < n; i++) { const f = base * (0.85 + Math.random() * 0.4), up = Math.random() < 0.5; lmAudTone(f, f * (up ? 1.35 : 0.7), v, 0.06 + Math.random() * 0.08, i * sp, "sine", pan); }
+  }
+}
+function lmCoast(x, z) {
+  const { cs, nx, nz, x0, z0, land, dIn } = TER; if (!dIn) return 999;
+  const i = clamp(Math.round((z - z0) / cs), 0, nz - 1) * nx + clamp(Math.round((x - x0) / cs), 0, nx - 1);
+  return land[i] ? dIn[i] : 0;
+}
+/* setiap bingkai: tapak kaki ikut kelajuan; lapisan dikemas kini 5 kali sesaat */
+function lmAudTick(g, dt) {
+  if (LM.mute) { if (LAUD.m && LAUD.on !== false) { LAUD.m.gain.setTargetAtTime(0, LAUD.ac.currentTime, 0.1); LAUD.on = false; } return; }
+  if (!lmAudCtx()) return;
+  const vol = (typeof SET !== "undefined" && SET.sfx != null ? SET.sfx : 0.8);
+  if (LAUD.on !== true || LAUD.vol !== vol) { LAUD.m.gain.setTargetAtTime(vol * 0.9, LAUD.ac.currentTime, 0.4); LAUD.on = true; LAUD.vol = vol; }
+  const p = g.p, free = !g.flight && !g.sail && !g.ride && !LM.pause, sp = Math.hypot(p.vx, p.vz);
+  /* tapak kaki dan renang */
+  if (free && p.moving && p.on && !p.swim) { LAUD.step -= dt * sp; if (LAUD.step <= 0) { LAUD.step = 10.5; lmAudFx("step", lmAt(p.x, p.z) === "jambatan" || (g.pads || []).some((q) => Math.hypot(q.x - p.x, q.z - p.z) < q.r) ? "keras" : "rumput"); } }
+  else LAUD.step = Math.min(LAUD.step, 3);
+  if (free && p.swim && p.moving && (LAUD.swim -= dt) <= 0) { LAUD.swim = 0.75; lmAudFx("swim"); }
+  if (free && !p.swim) { if (p.on && !LAUD.wasOn) lmAudFx("land"); LAUD.wasOn = p.on; } else LAUD.wasOn = true;
+  if (p.swim && !LAUD.wasSwim) lmAudFx("splash"); LAUD.wasSwim = p.swim;
+  if ((LAUD.t -= dt) > 0) return; LAUD.t = 0.2;
+  const W = g.wx || { c: 0, kind: "cerah" }, h = W.h == null ? 12 : W.h, day = h >= 6 && h < 19, rain = W.c > 0.55 && W.kind !== "berawan" ? clamp((W.c - 0.55) * 2.2, 0, 1) : 0;
+  const ax = g.flight || g.sail || g.ride ? g.camera.position : p, coast = lmCoast(ax.x, ax.z), alt = Math.max(0, (ax.y || 0) - 20);
+  /* kenderaan terdekat: keretapi / LRT / MRT (deruan) dan bas (trafik) */
+  let dRail = 1e9, dBus = 1e9;
+  for (const R of g.rails || []) { if (!R.train || !R.train[0] || (g.ride && g.ride.R === R)) continue; const c = R.train[0].position, d = Math.hypot(c.x - ax.x, c.z - ax.z); if (R.L.road) dBus = Math.min(dBus, d); else dRail = Math.min(dRail, d); }
+  const near = (d, r) => { const k = clamp(1 - d / r, 0, 1); return k * k; };
+  const ride = g.ride ? (g.ride.R.L.road ? "bas" : "rel") : "";
+  const swell = 0.55 + 0.45 * Math.pow(Math.sin(performance.now() / 1000 * Math.PI / 6.5), 2);
+  lmAudSet("wind", (g.flight ? 0.05 : 0.07 + alt * 0.004 + W.c * 0.12 + (coast < 40 ? 0.05 : 0)) * (LM.pause ? 0 : 1), 1.2);
+  lmAudSet("wave", (g.sail ? 0.55 : near(coast, 90) * 0.5) * swell * (LM.pause ? 0 : 1), 0.8);
+  lmAudSet("rain", rain * (g.flight ? 0.15 : 0.32), 1);
+  lmAudSet("traf", (ride === "bas" ? 0.5 : near(dBus, 120) * 0.45) + (g.sail ? 0.35 : 0), 0.6);
+  lmAudSet("tyre", (ride === "bas" ? 0.08 : near(dBus, 90) * 0.12), 0.6);
+  lmAudSet("rail", ride === "rel" ? 0.7 : near(dRail, 220) * 0.9, 0.6);
+  if ((ride === "rel" || dRail < 160) && (LAUD.clack -= 0.2) <= 0) { LAUD.clack = ride === "rel" ? 0.85 + Math.random() * 0.15 : 0.5; lmAudFx("clack", ride === "rel" ? 0.8 : near(dRail, 160) * 1.6); }
+  /* hidupan: burung siang (luar bandar, tidak hujan), cengkerik malam */
+  const wild = free && !rain && coast > 15 && dBus > 140 && !LM.pause;
+  if (wild && day && (LAUD.bird -= 0.2) <= 0) { LAUD.bird = 1.5 + Math.random() * 4.5; lmAudFx("bird"); }
+  const ck = wild && !day ? 0.05 : 0; lmAudSet("crk", ck, 1.5);
+  if (ck && (LAUD.crick -= 0.2) <= 0) { LAUD.crick = 0.4 + Math.random() * 0.5; const t = LAUD.ac.currentTime, b = LAUD.L.crk.burst.gain; LAUD.L.crk.car.frequency.setValueAtTime(4300 + Math.random() * 600, t); b.setValueAtTime(0, t); b.linearRampToValueAtTime(1, t + 0.02); b.setValueAtTime(1, t + 0.18); b.linearRampToValueAtTime(0, t + 0.22); }
+}
+function lmAudStop() { if (LAUD.m && LAUD.ac) { LAUD.m.gain.setTargetAtTime(0, LAUD.ac.currentTime, 0.2); LAUD.on = false; } }
 function lmTex(w, h, draw) {
   const c = document.createElement("canvas"); c.width = w; c.height = h; draw(c.getContext("2d"), w, h);
   const t = new T.CanvasTexture(c); t.anisotropy = 4; t.userData = { c: c, draw: draw }; return t;
@@ -4409,7 +4518,13 @@ function lmHud() {
   ui.menuB = lmBtn("☰ Menu", "lm-mb", () => { const on = !r.classList.contains("menu"); r.classList.toggle("menu", on); ui.menuB.textContent = on ? "✕ Tutup" : "☰ Menu"; });
   top.append(ui.menuB);
   ui.skyB = lmBtn(LM.st.sky === 0 ? "Top 5: tutup" : "Top 5: buka", "", () => { const g = LM.g; if (!g || !g.sky5) return; const on = !g.sky5.sp.visible; g.sky5.sp.visible = on; LM.st.sky = on ? 1 : 0; lmSave(); ui.skyB.textContent = on ? "Top 5: buka" : "Top 5: tutup"; });
-  top.append(lmBtn("Pasport (P)", "", () => lmPassport()), lmBtn("Tajuk (T)", "", () => lmPassport("tajuk")), ui.skyB, lmBtn("Bilik", "", lmRoomPanel), lmBtn("Swafoto", "", () => lmSelfie(null)),
+  const smTxt = () => ({ siang: "☀️ Suasana: siang", malam: "🌙 Suasana: malam" })[LM.st.sm] || "🕒 Suasana: ikut masa";
+  ui.smB = lmBtn(smTxt(), "", () => {
+    const o = ["", "siang", "malam"], n = o[(o.indexOf(LM.st.sm || "") + 1) % 3]; if (n) LM.st.sm = n; else delete LM.st.sm; lmSave();
+    ui.smB.textContent = smTxt(); const g = LM.g; if (g && g.wx) { g.wx.hp = null; lmDayNight(g); }
+    lmPop(n === "siang" ? "☀️ Suasana siang" : n === "malam" ? "🌙 Suasana malam" : "🕒 Suasana ikut masa sebenar (1 minit = 1 jam)");
+  });
+  top.append(ui.smB, lmBtn("Pasport (P)", "", () => lmPassport()), lmBtn("Tajuk (T)", "", () => lmPassport("tajuk")), ui.skyB, lmBtn("Bilik", "", lmRoomPanel), lmBtn("Swafoto", "", () => lmSelfie(null)),
     ui.snd = lmBtn(LM.mute ? "Bunyi: tutup" : "Bunyi: buka", "", () => { LM.mute = !LM.mute; ui.snd.textContent = LM.mute ? "Bunyi: tutup" : "Bunyi: buka"; }),
     lmBtn("Keluar", "", () => { if (confirm("Keluar dari META DIDIK? Cop pasport dan menara yang ditawan sudah disimpan.")) lmClose(); }));
   ui.vcB = lmBtn("🎙 Suara: tutup", "", () => { if (LM.vc) lmVoiceOff(); else lmVoiceOn(); }); ui.vcB.hidden = true; top.insertBefore(ui.vcB, top.children[4]);
@@ -4598,6 +4713,8 @@ const SKYK = [ /* [jam, langit atas, ufuk, kekuatan matahari, hemisfera, warna c
 const WAKTU = [[5.85, "Subuh"], [13.2, "Zohor"], [16.5, "Asar"], [19.35, "Maghrib"], [20.5, "Isyak"]]; /* anggaran Kuala Lumpur */
 const WXN = { cerah: "Cerah", berawan: "Berawan", hujan: "Hujan", ribut: "Ribut petir" };
 function lmClock() {
+  /* v18.23: pemain boleh memilih suasana tetap (siang / malam) atau ikut masa sebenar */
+  const sm = LM.st && LM.st.sm; if (sm === "siang") return 10.5; if (sm === "malam") return 21.5;
   if (LM.clock0 == null) { let h = 10; try { const d = new Date(Date.now() + 8 * 3600000); h = d.getUTCHours() + d.getUTCMinutes() / 60; } catch (e) { h = 10; } LM.clock0 = h; LM.clockT0 = performance.now(); }
   return (LM.clock0 + (performance.now() - LM.clockT0) / 60000) % 24; /* 1 minit sebenar = 1 jam permainan */
 }
@@ -4663,21 +4780,21 @@ function lmWxTick(g, dt) {
     P.needsUpdate = true;
   }
   if (W.kind === "ribut" && W.c > 0.8) {
-    if ((W.nf -= dt) <= 0) { W.nf = 5 + Math.random() * 9; W.flash = 0.18; setTimeout(() => { try { if (!LM.mute) arBeep(60, 0.9, "sawtooth", 0.05, -30); } catch (e) { /* abaikan */ } }, 400 + Math.random() * 900); }
+    if ((W.nf -= dt) <= 0) { W.nf = 5 + Math.random() * 9; W.flash = 0.18; lmAudFx("thunder"); }
   }
   if (W.flash > 0) { W.flash -= dt; if (W.flash > 0) g.hemi.intensity = 2.4; else lmDayNight(g); }
 }
 function lmLoop(ts) {
   if (!LM.on || !LM.g) return;
   LM.raf = requestAnimationFrame(lmLoop);
-  if (LM.pause) { LM.g.last = 0; return; } /* Gudang dibuka */
+  if (LM.pause) { LM.g.last = 0; if (LAUD.on) lmAudStop(); return; } /* Gudang dibuka */
   const g = LM.g, dt = clamp((ts - (g.last || ts)) / 1000, 0, 0.1); g.last = ts; g.T += dt;
   try {
     if (g.ui && !g.flight && !g.sail && !g.ride && !LM.ui.card && !LM.ui.big) g.ui = false; /* tiada panel terbuka: lepaskan kunci pergerakan */
     if (g.rai && (g.rai.t -= dt) <= 0) g.rai = null;
     if (g.flight) lmFlightTick(g, dt); else if (g.sail) lmSailTick(g, dt); else if (g.ride) lmRideTick(g, dt); else { lmUpdatePlayer(g, dt); lmUpdateCam(g, dt); }
     lmRailTick(g, dt);
-    lmNet(g, dt, ts); lmPuffTick(g, dt); lmTrafficTick(g, dt); lmWxTick(g, dt); lmAkTick(g, dt);
+    lmNet(g, dt, ts); lmPuffTick(g, dt); lmTrafficTick(g, dt); lmWxTick(g, dt); lmAkTick(g, dt); lmAudTick(g, dt);
     if (g.me.bub && (g.me.bubT -= dt) <= 0) lmBubble(g.me, "");
     if ((g.nearT -= dt) <= 0) { g.nearT = 0.15; lmNearTick(g); }
     if ((g.hudT -= dt) <= 0) { g.hudT = 0.25; lmHudTick(g); }
@@ -4731,7 +4848,7 @@ function lmStart(code, kind) {
 function lmClose() {
   { const b = document.getElementById("lmGdBack"); if (b) b.remove(); } LM.pause = false;
   if (LM.ui.big && LM.ui.big._off) { LM.ui.big._off(); LM.ui.big = null; }
-  LM.on = false; cancelAnimationFrame(LM.raf); lmoStop(); lmNetLeave(); lmEngine(0); LM.roomKind = "";
+  LM.on = false; cancelAnimationFrame(LM.raf); lmAudStop(); lmoStop(); lmNetLeave(); lmEngine(0); LM.roomKind = "";
   window.removeEventListener("keydown", lmKey, true); window.removeEventListener("keyup", lmKey, true); window.removeEventListener("resize", lmResize);
   const g = LM.g;
   if (g) {
@@ -4746,5 +4863,5 @@ function lmClose() {
 }
 /* untuk ujian automatik */
 LM._g = (x, z) => lmGround(x, z); LM._fly = (a, d) => lmFlyStart(a, d); LM._ride = (a, b) => lmRide(a, b); LM._rai = () => lmRai(); LM._swim = (x, z) => lmSwimOk(x, z);
-LM._t = { lmTanahGo: lmTanahGo, lmAirportOpen: lmAirportOpen, lmKemOpen: lmKemOpen, lmKampusOpen: lmKampusOpen, lmIlmuOpen: lmIlmuOpen, lmKampusFetch: lmKampusFetch, lmRailOpen: lmRailOpen, lmRide: lmRide, lmStnFetch: lmStnFetch, lmStnOpen: lmStnOpen, lmCertCanvas: lmCertCanvas, lmLcCheck: lmLcCheck, LCN: LCN, lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
+LM._t = { LAUD: LAUD, lmTanahGo: lmTanahGo, lmAirportOpen: lmAirportOpen, lmKemOpen: lmKemOpen, lmKampusOpen: lmKampusOpen, lmIlmuOpen: lmIlmuOpen, lmKampusFetch: lmKampusFetch, lmRailOpen: lmRailOpen, lmRide: lmRide, lmStnFetch: lmStnFetch, lmStnOpen: lmStnOpen, lmCertCanvas: lmCertCanvas, lmLcCheck: lmLcCheck, LCN: LCN, lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
 })();
