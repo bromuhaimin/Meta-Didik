@@ -1,5 +1,5 @@
 {
- "versi": "202610281200",
+ "versi": 202610281800,
  "dikemas": "2026-10-28T12:00:00",
  "nota": "Fail ini diurus melalui bank.html. Jangan ubah nama medan. a = indeks jawapan betul (0=A, 1=B, 2=C, 3=D). d = aras (1 mudah, 2 sederhana, 3 sukar). status: aktif atau gantung.",
  "topik": [
@@ -12935,6 +12935,3622 @@
    "a": 3,
    "e": "Hadis Jibril menghimpunkan ketiga-tiganya.",
    "s": "Buku Teks Tasawwur Islam Tingkatan 4",
+   "status": "aktif"
+  },
+  {
+   "id": 802,
+   "t": "T5-1.1",
+   "d": 1,
+   "q": "Ilmu yang digunakan oleh manusia bagi memenuhi keperluan ekonomi individu dan masyarakat berteraskan aturan syariat Islam serta mencegah ketidakadilan dalam pemerolehan dan penggunaan sumber alam ialah ...",
+   "o": [
+    "Ekonomi Islam",
+    "Ekonomi konvensional",
+    "Ekonomi campuran",
+    "Ekonomi kapitalis"
+   ],
+   "a": 0,
+   "e": "Definisi ekonomi Islam: ilmu memenuhi keperluan ekonomi individu dan masyarakat berteraskan syariat serta mencegah ketidakadilan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 3",
+   "status": "aktif"
+  },
+  {
+   "id": 803,
+   "t": "T5-1.1",
+   "d": 1,
+   "q": "Antara berikut, yang manakah BUKAN asas sistem ekonomi Islam?",
+   "o": [
+    "Mengagihkan harta dalam kalangan masyarakat dengan adil",
+    "Mengelola harta yang dimiliki menurut syarak",
+    "Mengiktiraf pemilikan harta individu",
+    "Menghapuskan pemilikan harta individu"
+   ],
+   "a": 3,
+   "e": "Asas sistem ekonomi Islam: mengiktiraf pemilikan individu, mengelola harta menurut syarak dan mengagihkan harta dengan adil. Menghapuskan pemilikan individu ialah ciri komunis.",
+   "s": "Buku Teks TI T5 (2020) hlm. 3",
+   "status": "aktif"
+  },
+  {
+   "id": 804,
+   "t": "T5-1.1",
+   "d": 1,
+   "q": "Susunan sumber utama sistem ekonomi Islam yang betul ialah ...",
+   "o": [
+    "Al-Hadis, al-Quran, al-Qias, al-Ijmak",
+    "Al-Quran, al-Hadis, al-Ijmak, al-Qias",
+    "Al-Ijmak, al-Qias, al-Quran, al-Hadis",
+    "Al-Quran, al-Ijmak, al-Hadis, al-Qias"
+   ],
+   "a": 1,
+   "e": "Sumber utama sistem ekonomi Islam ialah al-Quran, al-Hadis, al-Ijmak dan al-Qias.",
+   "s": "Buku Teks TI T5 (2020) hlm. 3",
+   "status": "aktif"
+  },
+  {
+   "id": 805,
+   "t": "T5-1.1",
+   "d": 2,
+   "q": "Firman Allah SWT dalam Surah al-Jathiyah ayat 12-13 menjelaskan bahawa laut dan segala yang ada di langit dan bumi dimudahkan untuk manusia. Apakah kaitan ayat ini dengan ekonomi Islam?",
+   "o": [
+    "Sumber alam ialah rahmat Allah untuk dimanfaatkan sambil mencari rezeki dan bersyukur",
+    "Manusia boleh menggunakan sumber alam sesuka hati",
+    "Sumber alam hanya untuk golongan pemodal",
+    "Manusia tidak perlu berusaha kerana semua telah disediakan"
+   ],
+   "a": 0,
+   "e": "Ayat itu menegaskan alam dimudahkan sebagai rahmat agar manusia mencari rezeki daripada kurniaan-Nya dan bersyukur.",
+   "s": "Buku Teks TI T5 (2020) hlm. 3",
+   "status": "aktif"
+  },
+  {
+   "id": 806,
+   "t": "T5-1.1",
+   "d": 1,
+   "q": "Prinsip asas ekonomi Islam yang menegaskan bahawa Allah SWT ialah pemilik segalanya manakala manusia ialah pemegang amanah ialah ...",
+   "o": [
+    "Keuntungan dan kerugian",
+    "Keadilan sosial",
+    "Manusia sebagai khalifah",
+    "Pekerjaan dan ganjaran"
+   ],
+   "a": 2,
+   "e": "Prinsip manusia sebagai khalifah: Allah pemilik segalanya, manusia pemegang amanah memakmurkan kegiatan ekonomi.",
+   "s": "Buku Teks TI T5 (2020) hlm. 4",
+   "status": "aktif"
+  },
+  {
+   "id": 807,
+   "t": "T5-1.1",
+   "d": 2,
+   "q": "Mekanisme mudarabah dan musyarakah digalakkan dalam Islam bagi memenuhi prinsip ...",
+   "o": [
+    "Keadilan sosial",
+    "Larangan kerosakan dan kezaliman",
+    "Keuntungan dan kerugian",
+    "Manusia sebagai khalifah"
+   ],
+   "a": 2,
+   "e": "Keuntungan dan kerugian ialah perkara lumrah; mudarabah dan musyarakah digalakkan bagi memenuhi prinsip ini.",
+   "s": "Buku Teks TI T5 (2020) hlm. 4",
+   "status": "aktif"
+  },
+  {
+   "id": 808,
+   "t": "T5-1.1",
+   "d": 2,
+   "q": "Islam mengharamkan penindasan, penipuan, eksploitasi, pencemaran alam sekitar dan pembaziran dalam kegiatan ekonomi. Kenyataan ini berkaitan dengan prinsip ...",
+   "o": [
+    "Pekerjaan dan ganjaran",
+    "Akidah sebagai teras",
+    "Larangan kerosakan dan kezaliman",
+    "Keuntungan dan kerugian"
+   ],
+   "a": 2,
+   "e": "Prinsip larangan kerosakan dan kezaliman: segala kerosakan kepada manusia dan alam hendaklah dielakkan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 4",
+   "status": "aktif"
+  },
+  {
+   "id": 809,
+   "t": "T5-1.1",
+   "d": 2,
+   "q": "Kegiatan ekonomi mesti membawa keadilan kepada segenap lapisan rakyat dan keperluan asasi seperti makanan serta tempat tinggal dijaga. Prinsip ini ialah ...",
+   "o": [
+    "Keuntungan dan kerugian",
+    "Pekerjaan dan ganjaran",
+    "Manusia sebagai khalifah",
+    "Keadilan sosial"
+   ],
+   "a": 3,
+   "e": "Prinsip keadilan sosial menuntut keperluan hidup asasi individu dijaga dan terpelihara.",
+   "s": "Buku Teks TI T5 (2020) hlm. 4",
+   "status": "aktif"
+  },
+  {
+   "id": 810,
+   "t": "T5-1.1",
+   "d": 1,
+   "q": "Pemilikan harta yang dikurniakan oleh Allah SWT kepada hamba-Nya untuk dimiliki dan dimanfaatkan menurut kehendak syarak seperti tanah, rumah dan kenderaan dinamakan ...",
+   "o": [
+    "Pemilikan harta",
+    "Pelaburan harta",
+    "Pembekuan harta",
+    "Pengagihan harta"
+   ],
+   "a": 0,
+   "e": "Pemilikan harta dalam Islam ialah sesuatu yang dikurniakan Allah untuk dimiliki dan dimanfaatkan menurut syarak.",
+   "s": "Buku Teks TI T5 (2020) hlm. 5",
+   "status": "aktif"
+  },
+  {
+   "id": 811,
+   "t": "T5-1.1",
+   "d": 2,
+   "q": "Antara berikut, yang manakah cara pemilikan harta yang sah sebagaimana ditetapkan oleh Allah SWT?",
+   "o": [
+    "Rasuah dan hadiah haram",
+    "Penipuan dalam timbangan",
+    "Jual beli dan wasiat",
+    "Riba dan judi"
+   ],
+   "a": 2,
+   "e": "Allah menetapkan cara pemilikan yang sah seperti jual beli dan wasiat serta mengharamkan riba.",
+   "s": "Buku Teks TI T5 (2020) hlm. 5",
+   "status": "aktif"
+  },
+  {
+   "id": 812,
+   "t": "T5-1.1",
+   "d": 1,
+   "q": "Laut, sungai dan udara ialah contoh harta ...",
+   "o": [
+    "Hak milik negara",
+    "Hak milik individu",
+    "Hak milik syarikat",
+    "Hak milik umum"
+   ],
+   "a": 3,
+   "e": "Hak milik umum ialah pemilikan bersama anggota masyarakat seperti laut, sungai dan udara.",
+   "s": "Buku Teks TI T5 (2020) hlm. 6",
+   "status": "aktif"
+  },
+  {
+   "id": 813,
+   "t": "T5-1.1",
+   "d": 1,
+   "q": "Hasil hutan dan galian yang diuruskan oleh kerajaan untuk kepentingan awam ialah contoh ...",
+   "o": [
+    "Hak milik individu",
+    "Hak milik negara",
+    "Harta wakaf khas",
+    "Hak milik umum"
+   ],
+   "a": 1,
+   "e": "Hak milik negara: harta hak milik umum yang diuruskan kerajaan untuk kepentingan awam seperti hasil hutan dan galian.",
+   "s": "Buku Teks TI T5 (2020) hlm. 6",
+   "status": "aktif"
+  },
+  {
+   "id": 814,
+   "t": "T5-1.1",
+   "d": 2,
+   "q": "Antara berikut, yang manakah matlamat pemilikan harta dalam Islam?\nI Mendapat keberkatan dan rahmat Allah SWT\nII Menjamin keselamatan hidup di dunia dan di akhirat\nIII Membangunkan ekonomi umat Islam\nIV Mengumpul kekayaan untuk berbangga",
+   "o": [
+    "I, III dan IV",
+    "I, II dan III",
+    "I, II dan IV",
+    "II, III dan IV"
+   ],
+   "a": 1,
+   "e": "Matlamat pemilikan harta: keberkatan Allah, keselamatan dunia akhirat, membangunkan ekonomi umat dan mengelakkan penindasan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 6",
+   "status": "aktif"
+  },
+  {
+   "id": 815,
+   "t": "T5-1.1",
+   "d": 1,
+   "q": "Pekerjaan menurut Islam ialah ...",
+   "o": [
+    "Kegiatan yang hanya diwajibkan kepada lelaki",
+    "Kegiatan untuk mengisi masa lapang",
+    "Kegiatan untuk mengumpul harta sebanyak mungkin",
+    "Kegiatan untuk mendapatkan sumber pendapatan dan memiliki harta dengan cara yang halal"
+   ],
+   "a": 3,
+   "e": "Pekerjaan ialah kegiatan bagi mendapatkan sumber pendapatan dan memiliki harta dengan cara yang halal.",
+   "s": "Buku Teks TI T5 (2020) hlm. 7",
+   "status": "aktif"
+  },
+  {
+   "id": 816,
+   "t": "T5-1.1",
+   "d": 2,
+   "q": "Sabda Rasulullah SAW: \"Tidak ada sesuatu yang dimakan oleh seseorang yang lebih baik daripada apa-apa yang dimakan daripada usaha tangannya sendiri.\" Nabi yang disebut makan daripada usaha tangannya sendiri dalam hadis ini ialah ...",
+   "o": [
+    "Nabi Daud a.s.",
+    "Nabi Musa a.s.",
+    "Nabi Yusuf a.s.",
+    "Nabi Sulaiman a.s."
+   ],
+   "a": 0,
+   "e": "Hadis riwayat al-Bukhari menyebut Nabi Daud a.s. makan daripada usaha tangannya sendiri.",
+   "s": "Buku Teks TI T5 (2020) hlm. 7",
+   "status": "aktif"
+  },
+  {
+   "id": 817,
+   "t": "T5-1.1",
+   "d": 1,
+   "q": "Antara berikut, yang manakah peranan pekerjaan?",
+   "o": [
+    "Mengurangkan masa beribadah",
+    "Mengelak daripada membayar zakat",
+    "Menunjukkan kemewahan",
+    "Memenuhi tuntutan ibadah kepada Allah SWT"
+   ],
+   "a": 3,
+   "e": "Peranan pekerjaan: memenuhi tuntutan ibadah, menunaikan tanggungjawab, meningkatkan taraf sosioekonomi dan pembangunan negara.",
+   "s": "Buku Teks TI T5 (2020) hlm. 7",
+   "status": "aktif"
+  },
+  {
+   "id": 818,
+   "t": "T5-1.1",
+   "d": 2,
+   "q": "Akur terhadap arahan ketua selagi tidak bertentangan dengan syarak termasuk dalam ...",
+   "o": [
+    "Kebaikan bekerja",
+    "Ciri-ciri pekerjaan",
+    "Etika kerja Islam",
+    "Sebab Islam menuntut umatnya bekerja"
+   ],
+   "a": 2,
+   "e": "Etika kerja Islam: ikhlas, amanah, tekun, akur arahan ketua selagi tidak bertentangan syarak, bekerjasama, berdisiplin.",
+   "s": "Buku Teks TI T5 (2020) hlm. 8",
+   "status": "aktif"
+  },
+  {
+   "id": 819,
+   "t": "T5-1.1",
+   "d": 2,
+   "q": "Seorang pekerja datang awal dan menyiapkan tugasan sebelum tarikh akhir. Etika kerja Islam yang diamalkannya ialah ...",
+   "o": [
+    "Berdisiplin dan menepati masa",
+    "Akur terhadap arahan",
+    "Bekerjasama",
+    "Ikhlas kerana Allah"
+   ],
+   "a": 0,
+   "e": "Berdisiplin dan menepati masa supaya kerja siap pada masa yang ditetapkan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 8",
+   "status": "aktif"
+  },
+  {
+   "id": 820,
+   "t": "T5-1.1",
+   "d": 2,
+   "q": "Antara berikut, yang manakah kesan pekerjaan yang haram kepada masyarakat?",
+   "o": [
+    "Masyarakat huru-hara dan mundur kerana kegiatan ekonomi dicemari unsur negatif",
+    "Negara menjadi contoh kepada negara lain",
+    "Dihormati masyarakat",
+    "Masyarakat sejahtera kerana diberkati Allah"
+   ],
+   "a": 0,
+   "e": "Kesan pekerjaan haram kepada masyarakat: huru-hara kerana dilaknat Allah dan mundur kerana ekonomi dicemari unsur negatif.",
+   "s": "Buku Teks TI T5 (2020) hlm. 9",
+   "status": "aktif"
+  },
+  {
+   "id": 821,
+   "t": "T5-1.1",
+   "d": 2,
+   "q": "Budaya melepak dan jenayah seperti mencuri merupakan implikasi hidup tanpa pekerjaan kepada ...",
+   "o": [
+    "Individu",
+    "Masyarakat",
+    "Negara",
+    "Majikan"
+   ],
+   "a": 1,
+   "e": "Implikasi hidup tanpa pekerjaan kepada masyarakat: masalah sosial seperti melepak dan jenayah seperti mencuri.",
+   "s": "Buku Teks TI T5 (2020) hlm. 9",
+   "status": "aktif"
+  },
+  {
+   "id": 822,
+   "t": "T5-1.1",
+   "d": 2,
+   "q": "Sistem ekonomi Islam memberi keutamaan kepada pengeluaran barangan asas dan keperluan berbanding barangan mewah. Barangan mewah dalam istilah maqasid disebut ...",
+   "o": [
+    "Kamaliyyat",
+    "Tahsiniyyat",
+    "Hajiyyat",
+    "Daruriyyat"
+   ],
+   "a": 1,
+   "e": "Keutamaan: daruriyyat (asas) dan hajiyyat (keperluan) berbanding tahsiniyyat (mewah).",
+   "s": "Buku Teks TI T5 (2020) hlm. 10",
+   "status": "aktif"
+  },
+  {
+   "id": 823,
+   "t": "T5-1.1",
+   "d": 2,
+   "q": "Antara berikut, yang manakah kesan pengabaian sistem ekonomi Islam?",
+   "o": [
+    "Pengagihan harta adil kepada semua",
+    "Keharmonian masyarakat terpelihara",
+    "Amalan riba berleluasa menyebabkan golongan pemodal semakin kaya dan golongan miskin tertindas",
+    "Nilai moral bertambah baik"
+   ],
+   "a": 2,
+   "e": "Pengabaian ekonomi Islam menyebabkan riba berleluasa, jurang kaya miskin melebar dan rasuah meningkat.",
+   "s": "Buku Teks TI T5 (2020) hlm. 10",
+   "status": "aktif"
+  },
+  {
+   "id": 824,
+   "t": "T5-1.1",
+   "d": 2,
+   "q": "Sistem ekonomi yang berpaksikan akal fikiran manusia semata-mata dan berasaskan kebebasan mutlak individu (laissez faire) ialah ...",
+   "o": [
+    "Campuran",
+    "Komunis",
+    "Kapitalis",
+    "Sosialis"
+   ],
+   "a": 2,
+   "e": "Kapitalis berpaksikan akal manusia semata-mata, berasaskan kebebasan mutlak individu dan riba.",
+   "s": "Buku Teks TI T5 (2020) hlm. 11",
+   "status": "aktif"
+  },
+  {
+   "id": 825,
+   "t": "T5-1.1",
+   "d": 2,
+   "q": "Sistem ekonomi yang menghapuskan pemilikan individu atas faktor pengeluaran dan semua keputusan ekonomi dibuat oleh pemerintah ialah ...",
+   "o": [
+    "Kapitalis",
+    "Komunis",
+    "Islam",
+    "Campuran"
+   ],
+   "a": 1,
+   "e": "Komunis: keputusan ekonomi dibuat pemerintah dan pemilikan individu atas faktor pengeluaran dihapuskan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 11",
+   "status": "aktif"
+  },
+  {
+   "id": 826,
+   "t": "T5-1.1",
+   "d": 3,
+   "q": "Sistem ekonomi yang dibangunkan bersama-sama antara pihak pemerintah dengan pihak swasta, dengan pemerintah melakukan pengawasan, dinamakan sistem ekonomi ...",
+   "o": [
+    "Sosialis",
+    "Kapitalis",
+    "Campuran",
+    "Komunis"
+   ],
+   "a": 2,
+   "e": "Sistem campuran: gabungan kebebasan dan sosialis; dibangunkan bersama pemerintah dan swasta di bawah pengawasan kerajaan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 11",
+   "status": "aktif"
+  },
+  {
+   "id": 827,
+   "t": "T5-1.1",
+   "d": 3,
+   "q": "Ketika membeli-belah, Aina mendapati pemilik kedai menipu sukatan dan timbangan. Tindakan yang paling sesuai ialah ...",
+   "o": [
+    "Menegur pemilik kedai secara bersopan bahawa perbuatan itu salah di sisi Islam",
+    "Berdiam diri kerana bukan urusannya",
+    "Turut menipu ketika menjual barang",
+    "Menyebarkan video pemilik kedai di media sosial"
+   ],
+   "a": 0,
+   "e": "Menegur secara bersopan kerana menipu sukatan dan timbangan dicela Allah SWT.",
+   "s": "Buku Teks TI T5 (2020) hlm. 13",
+   "status": "aktif"
+  },
+  {
+   "id": 828,
+   "t": "T5-1.1",
+   "d": 3,
+   "q": "Antara berikut, yang manakah bentuk ketidakadilan yang wajib dielakkan dalam ekonomi Islam?\nI Mengamalkan riba dalam memberi pinjaman\nII Memberi dan menerima rasuah\nIII Melanggar hak cipta\nIV Bersedekah kepada fakir miskin",
+   "o": [
+    "II, III dan IV",
+    "I, II dan IV",
+    "I, II dan III",
+    "I, III dan IV"
+   ],
+   "a": 2,
+   "e": "Riba, rasuah, menipu sukatan, menganggur dan melanggar hak cipta ialah ketidakadilan yang wajib dielakkan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 12",
+   "status": "aktif"
+  },
+  {
+   "id": 829,
+   "t": "T5-1.2",
+   "d": 1,
+   "q": "Hubungan antara manusia dengan manusia lain dalam segenap segi kehidupan yang merangkumi kekeluargaan, ekonomi, politik, pemerintahan dan jenayah dinamakan ...",
+   "o": [
+    "Jinayah",
+    "Muamalat",
+    "Ibadah",
+    "Munakahat"
+   ],
+   "a": 1,
+   "e": "Muamalat bermaksud hubungan antara manusia dengan manusia lain dalam segenap segi kehidupan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 17",
+   "status": "aktif"
+  },
+  {
+   "id": 830,
+   "t": "T5-1.2",
+   "d": 2,
+   "q": "Firman Allah SWT dalam Surah al-Nisa' ayat 29 melarang memakan harta sesama manusia dengan jalan batil kecuali melalui ...",
+   "o": [
+    "Perjudian yang dipersetujui",
+    "Pinjaman berfaedah",
+    "Hadiah daripada pemerintah",
+    "Perniagaan yang dilakukan secara saling meredai"
+   ],
+   "a": 3,
+   "e": "Ayat itu membenarkan perniagaan yang dilakukan secara saling meredai antara kedua-dua pihak.",
+   "s": "Buku Teks TI T5 (2020) hlm. 17",
+   "status": "aktif"
+  },
+  {
+   "id": 831,
+   "t": "T5-1.2",
+   "d": 1,
+   "q": "Ketidakpastian dalam sesuatu akad jual beli dari segi kuantiti, kualiti, harga atau waktu penyerahan dinamakan ...",
+   "o": [
+    "Maisir",
+    "Gharar",
+    "Riba",
+    "Ihtikar"
+   ],
+   "a": 1,
+   "e": "Gharar ialah ketidakpastian dalam sesuatu akad atau kontrak jual beli.",
+   "s": "Buku Teks TI T5 (2020) hlm. 17",
+   "status": "aktif"
+  },
+  {
+   "id": 832,
+   "t": "T5-1.2",
+   "d": 2,
+   "q": "Antara berikut, yang manakah prinsip muamalat Islam?\nI Kerelaan dalam berurus niaga\nII Tidak mengandungi elemen riba, gharar dan perjudian\nIII Urus niaga tidak merosakkan struktur ekonomi dan sosial\nIV Keuntungan maksimum walaupun menindas",
+   "o": [
+    "I, II dan III",
+    "II, III dan IV",
+    "I, II dan IV",
+    "I, III dan IV"
+   ],
+   "a": 0,
+   "e": "Prinsip muamalat: kerelaan, bebas riba, gharar dan judi, serta tidak merosakkan struktur ekonomi dan sosial.",
+   "s": "Buku Teks TI T5 (2020) hlm. 17",
+   "status": "aktif"
+  },
+  {
+   "id": 833,
+   "t": "T5-1.2",
+   "d": 1,
+   "q": "Mewakilkan sesuatu barangan atau harta kepada pihak lain untuk disimpan dinamakan ...",
+   "o": [
+    "Al-Rahnu",
+    "Al-Ijarah",
+    "Al-Mudarabah",
+    "Al-Wadi'ah"
+   ],
+   "a": 3,
+   "e": "Al-Wadi'ah (simpanan): mewakilkan barangan atau harta kepada pihak lain untuk disimpan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 18",
+   "status": "aktif"
+  },
+  {
+   "id": 834,
+   "t": "T5-1.2",
+   "d": 2,
+   "q": "Pelabur memberi modal kepada pengusaha untuk diperniagakan dan keuntungan dibahagikan mengikut perjanjian. Kontrak ini ialah ...",
+   "o": [
+    "Al-Musyarakah",
+    "Al-Mudarabah",
+    "Al-Wadi'ah",
+    "Al-Murabahah"
+   ],
+   "a": 1,
+   "e": "Al-Mudarabah (pelaburan): pemodal memberi modal, pengusaha mengusahakan, untung dibahagi mengikut perjanjian.",
+   "s": "Buku Teks TI T5 (2020) hlm. 18",
+   "status": "aktif"
+  },
+  {
+   "id": 835,
+   "t": "T5-1.2",
+   "d": 2,
+   "q": "Jual beli sesuatu barangan dengan makluman harga kos bersama-sama tambahan margin keuntungan dinamakan ...",
+   "o": [
+    "Al-Murabahah",
+    "Al-Ijarah",
+    "Al-Bai' Bithaman Ajil",
+    "Al-Rahnu"
+   ],
+   "a": 0,
+   "e": "Al-Murabahah ialah jualan penambahan untung dengan makluman harga kos.",
+   "s": "Buku Teks TI T5 (2020) hlm. 18",
+   "status": "aktif"
+  },
+  {
+   "id": 836,
+   "t": "T5-1.2",
+   "d": 2,
+   "q": "Akad antara dua orang atau lebih untuk berkongsi modal dan keuntungan dalam sesuatu perniagaan ialah ...",
+   "o": [
+    "Al-Musyarakah",
+    "Takaful",
+    "Al-Wadi'ah",
+    "Al-Mudarabah"
+   ],
+   "a": 0,
+   "e": "Al-Musyarakah (syarikat): berkongsi modal dan keuntungan; kerugian ditanggung mengikut modal.",
+   "s": "Buku Teks TI T5 (2020) hlm. 18",
+   "status": "aktif"
+  },
+  {
+   "id": 837,
+   "t": "T5-1.2",
+   "d": 1,
+   "q": "Proses menyerahkan harta sebagai cagaran untuk mendapatkan hutang dinamakan ...",
+   "o": [
+    "Al-Wadi'ah",
+    "Al-Mudarabah",
+    "Al-Ijarah",
+    "Al-Rahnu"
+   ],
+   "a": 3,
+   "e": "Al-Rahnu (gadaian): menyerahkan harta sebagai cagaran untuk mendapatkan hutang.",
+   "s": "Buku Teks TI T5 (2020) hlm. 18",
+   "status": "aktif"
+  },
+  {
+   "id": 838,
+   "t": "T5-1.2",
+   "d": 2,
+   "q": "Umar menyewakan rumahnya kepada Abu Bakar selama setahun dengan kadar RM500 sebulan. Jenis muamalat ini ialah ...",
+   "o": [
+    "Al-Murabahah",
+    "Al-Rahnu",
+    "Al-Musyarakah",
+    "Al-Ijarah"
+   ],
+   "a": 3,
+   "e": "Al-Ijarah (sewa-menyewa): mengambil manfaat daripada milik orang lain dengan bayaran tertentu.",
+   "s": "Buku Teks TI T5 (2020) hlm. 19",
+   "status": "aktif"
+  },
+  {
+   "id": 839,
+   "t": "T5-1.2",
+   "d": 3,
+   "q": "Adnin membeli kereta melalui pembiayaan bank. Bank membeli kereta itu RM50 000 lalu menjualnya kepada Adnin dengan harga tertangguh RM64 800 yang dibayar ansuran selama sembilan tahun. Kontrak ini ialah ...",
+   "o": [
+    "Al-Rahnu",
+    "Al-Bai' Bithaman Ajil",
+    "Al-Mudarabah",
+    "Al-Wadi'ah"
+   ],
+   "a": 1,
+   "e": "Al-Bai' Bithaman Ajil: jualan dengan bayaran tertangguh secara ansuran mengikut tempoh ditetapkan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 20",
+   "status": "aktif"
+  },
+  {
+   "id": 840,
+   "t": "T5-1.2",
+   "d": 2,
+   "q": "Dalam skim takaful, peserta mendermakan sebahagian wang sumbangan yang dibayar. Konsep ini dinamakan ...",
+   "o": [
+    "Ta'awun",
+    "Ujrah",
+    "Tabarru'",
+    "Wakalah"
+   ],
+   "a": 2,
+   "e": "Tabarru' ialah peserta mendermakan sebahagian atau keseluruhan sumbangan; ta'awun ialah tolong-menolong.",
+   "s": "Buku Teks TI T5 (2020) hlm. 18",
+   "status": "aktif"
+  },
+  {
+   "id": 841,
+   "t": "T5-1.2",
+   "d": 2,
+   "q": "Persamaan antara al-Rahnu dengan al-Ijarah ialah kedua-duanya ...",
+   "o": [
+    "Dijamin tanpa sebarang keuntungan",
+    "Kontrak jual beli",
+    "Membantu orang yang memerlukan pembiayaan tunai segera atau perkhidmatan",
+    "Simpanan dan pelaburan"
+   ],
+   "a": 2,
+   "e": "Al-Rahnu dan al-Ijarah sama-sama membantu orang yang memerlukan pembiayaan tunai segera atau perkhidmatan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 20",
+   "status": "aktif"
+  },
+  {
+   "id": 842,
+   "t": "T5-1.2",
+   "d": 2,
+   "q": "Akaun simpanan yang simpanan pemiliknya dijamin dan tiada sebarang keuntungan dijanjikan ialah akaun ...",
+   "o": [
+    "Al-Musyarakah",
+    "Al-Mudarabah",
+    "Al-Wadi'ah",
+    "Al-Murabahah"
+   ],
+   "a": 2,
+   "e": "Al-Wadi'ah: simpanan pemilik dijamin dan tiada keuntungan dijanjikan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 20",
+   "status": "aktif"
+  },
+  {
+   "id": 843,
+   "t": "T5-1.2",
+   "d": 1,
+   "q": "Institusi yang ditubuhkan pada zaman Rasulullah SAW untuk mengumpul harta negara seperti zakat, jizyah, ghanimah dan fai' ialah ...",
+   "o": [
+    "Bank Islam",
+    "Tabung Haji",
+    "Takaful",
+    "Baitulmal"
+   ],
+   "a": 3,
+   "e": "Baitulmal ditubuhkan pada zaman Rasulullah SAW untuk mengumpul harta negara lalu diagihkan kepada yang memerlukan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 21",
+   "status": "aktif"
+  },
+  {
+   "id": 844,
+   "t": "T5-1.2",
+   "d": 1,
+   "q": "Cukai yang dikenakan kepada orang bukan Islam yang menetap dan berlindung dalam sebuah negara Islam dinamakan ...",
+   "o": [
+    "Kharaj",
+    "Usyur",
+    "Jizyah",
+    "Fai'"
+   ],
+   "a": 2,
+   "e": "Jizyah ialah cukai ke atas orang bukan Islam yang menetap dan berlindung dalam negara Islam.",
+   "s": "Buku Teks TI T5 (2020) hlm. 21",
+   "status": "aktif"
+  },
+  {
+   "id": 845,
+   "t": "T5-1.2",
+   "d": 2,
+   "q": "Harta yang dikuasai daripada orang bukan Islam tanpa melalui jalan perang dinamakan ...",
+   "o": [
+    "Wakaf",
+    "Ghanimah",
+    "Fai'",
+    "Jizyah"
+   ],
+   "a": 2,
+   "e": "Fai' ialah harta dikuasai daripada orang bukan Islam tanpa peperangan; ghanimah ialah harta rampasan perang.",
+   "s": "Buku Teks TI T5 (2020) hlm. 21",
+   "status": "aktif"
+  },
+  {
+   "id": 846,
+   "t": "T5-1.2",
+   "d": 2,
+   "q": "Pemegang tunggal semua harta wakaf di Malaysia ialah ...",
+   "o": [
+    "Jabatan Zakat",
+    "Bank Negara Malaysia",
+    "Majlis Agama Islam Negeri",
+    "Tabung Haji"
+   ],
+   "a": 2,
+   "e": "Pengurusan wakaf diletakkan di bawah Majlis Agama Islam setiap negeri, pemegang tunggal harta wakaf.",
+   "s": "Buku Teks TI T5 (2020) hlm. 22",
+   "status": "aktif"
+  },
+  {
+   "id": 847,
+   "t": "T5-1.2",
+   "d": 2,
+   "q": "Antara berikut, yang manakah peranan institusi zakat?",
+   "o": [
+    "Menyimpan wang untuk menunaikan haji",
+    "Menyediakan pembiayaan perumahan",
+    "Menyediakan perlindungan insurans",
+    "Mengutip zakat dan mengagihkannya secara efisien dan adil kepada asnaf"
+   ],
+   "a": 3,
+   "e": "Institusi zakat mengutip zakat daripada pembayar dan mengagihkannya kepada asnaf secara efisien dan adil.",
+   "s": "Buku Teks TI T5 (2020) hlm. 22",
+   "status": "aktif"
+  },
+  {
+   "id": 848,
+   "t": "T5-1.2",
+   "d": 3,
+   "q": "Rakan anda menggadaikan barang kemas kepada syarikat gadaian yang tidak patuh syariah kerana mahu wang segera. Nasihat terbaik ialah ...",
+   "o": [
+    "Jual semua harta",
+    "Pinjam daripada along",
+    "Gunakan perkhidmatan al-Rahnu yang patuh syariah bagi mengelakkan riba",
+    "Teruskan kerana wang lebih penting"
+   ],
+   "a": 2,
+   "e": "Al-Rahnu menyediakan pembiayaan dengan cagaran secara patuh syariah tanpa riba.",
+   "s": "Buku Teks TI T5 (2020) hlm. 26",
+   "status": "aktif"
+  },
+  {
+   "id": 849,
+   "t": "T5-1.2",
+   "d": 2,
+   "q": "Antara berikut, yang manakah keburukan tidak bermuamalat dengan muamalat Islam kepada negara?",
+   "o": [
+    "Masyarakat saling mengenali",
+    "Negara terjebak dalam krisis hutang tinggi akibat sistem riba",
+    "Ekonomi diredai Allah SWT",
+    "Pendapatan negara diagih secara efisien"
+   ],
+   "a": 1,
+   "e": "Keburukan kepada negara: ekonomi merosot, jurang kaya miskin, krisis hutang akibat riba, pelabur kurang yakin.",
+   "s": "Buku Teks TI T5 (2020) hlm. 23",
+   "status": "aktif"
+  },
+  {
+   "id": 850,
+   "t": "T5-1.2",
+   "d": 2,
+   "q": "Langkah menggalakkan masyarakat bermuamalat dengan muamalat Islam termasuklah ...",
+   "o": [
+    "Mengenakan faedah yang lebih tinggi",
+    "Menutup institusi zakat",
+    "Memberikan penerangan melalui media massa tentang kebaikan muamalat Islam",
+    "Menghadkan bilangan bank Islam"
+   ],
+   "a": 2,
+   "e": "Antaranya didikan agama, penerangan media massa, mengembangkan perbankan Islam dan mengemaskinikan sistem muamalat.",
+   "s": "Buku Teks TI T5 (2020) hlm. 25",
+   "status": "aktif"
+  },
+  {
+   "id": 851,
+   "t": "T5-2.1",
+   "d": 1,
+   "q": "Hukum-hukum yang ditetapkan oleh Allah SWT kepada manusia dalam pelbagai aspek kehidupan seperti akidah, ibadat, akhlak, muamalat, munakahat dan jenayah demi kebahagiaan di dunia dan di akhirat dinamakan ...",
+   "o": [
+    "Perundangan Islam",
+    "Pentadbiran Islam",
+    "Kehakiman Islam",
+    "Siasah syar'iyyah"
+   ],
+   "a": 0,
+   "e": "Definisi perundangan Islam menurut buku teks.",
+   "s": "Buku Teks TI T5 (2020) hlm. 31",
+   "status": "aktif"
+  },
+  {
+   "id": 852,
+   "t": "T5-2.1",
+   "d": 2,
+   "q": "Firman Allah SWT: \"Kemudian Kami jadikan kamu menjalankan syariat daripada hukum agama; maka turutlah ia, dan janganlah diturut hawa nafsu orang yang tidak mengetahui.\" Ayat ini terdapat dalam ...",
+   "o": [
+    "Surah al-Nur ayat 2",
+    "Surah al-Jathiyah ayat 18",
+    "Surah al-Nisa' ayat 58",
+    "Surah al-Maidah ayat 38"
+   ],
+   "a": 1,
+   "e": "Ayat tentang menjalankan syariat ialah Surah al-Jathiyah 45:18.",
+   "s": "Buku Teks TI T5 (2020) hlm. 31",
+   "status": "aktif"
+  },
+  {
+   "id": 853,
+   "t": "T5-2.1",
+   "d": 2,
+   "q": "Asas sistem perundangan Islam yang bertujuan mendidik pesalah supaya insaf dan mengubah diri supaya taat kepada ajaran agama ialah ...",
+   "o": [
+    "Pemulihan",
+    "Pembalasan",
+    "Pengampunan",
+    "Pencegahan"
+   ],
+   "a": 0,
+   "e": "Asas perundangan: pencegahan, pembalasan dan pemulihan. Pemulihan mendidik pesalah supaya insaf.",
+   "s": "Buku Teks TI T5 (2020) hlm. 31",
+   "status": "aktif"
+  },
+  {
+   "id": 854,
+   "t": "T5-2.1",
+   "d": 2,
+   "q": "Asas pembalasan dalam sistem perundangan Islam bertujuan ...",
+   "o": [
+    "Memberi amaran kepada orang yang berniat jahat",
+    "Menghapuskan semua jenis hukuman",
+    "Membalas perbuatan jahat dengan hukuman yang adil dan mengelakkan perasaan dendam",
+    "Mendidik pesalah supaya insaf"
+   ],
+   "a": 2,
+   "e": "Pembalasan: membalas perbuatan jahat dengan hukuman adil dan mengelak wujudnya dendam.",
+   "s": "Buku Teks TI T5 (2020) hlm. 31",
+   "status": "aktif"
+  },
+  {
+   "id": 855,
+   "t": "T5-2.1",
+   "d": 1,
+   "q": "Antara berikut, yang manakah keunggulan sistem perundangan Islam?",
+   "o": [
+    "Hanya sesuai untuk zaman Rasulullah SAW",
+    "Dicipta oleh cendekiawan",
+    "Boleh diubah mengikut kehendak majoriti",
+    "Hukuman yang adil tanpa mengira pangkat dan keturunan"
+   ],
+   "a": 3,
+   "e": "Keunggulan: ciptaan Allah, lengkap, adil tanpa mengira pangkat, sesuai semua manusia, kekal, memberi pengajaran dan mendidik jiwa.",
+   "s": "Buku Teks TI T5 (2020) hlm. 32",
+   "status": "aktif"
+  },
+  {
+   "id": 856,
+   "t": "T5-2.1",
+   "d": 2,
+   "q": "Perundangan Islam bersifat tetap dan kekal sehingga hari kiamat. Hal ini kerana ...",
+   "o": [
+    "Ia tidak pernah dilaksanakan",
+    "Ia digubal oleh para sahabat",
+    "Ia diputuskan oleh parlimen",
+    "Ia ciptaan Allah SWT yang bersih daripada kelemahan dan hawa nafsu"
+   ],
+   "a": 3,
+   "e": "Undang-undang ciptaan Allah bersih daripada kelemahan, kekurangan dan dorongan hawa nafsu, maka tetap dan kekal.",
+   "s": "Buku Teks TI T5 (2020) hlm. 32",
+   "status": "aktif"
+  },
+  {
+   "id": 857,
+   "t": "T5-2.1",
+   "d": 1,
+   "q": "Matlamat sistem perundangan Islam ialah memelihara lima perkara, iaitu ...",
+   "o": [
+    "Agama, ilmu, akal, pangkat dan harta",
+    "Agama, nyawa, akal, keturunan dan harta",
+    "Agama, nyawa, bangsa, negara dan harta",
+    "Nyawa, kuasa, akal, keturunan dan harta"
+   ],
+   "a": 1,
+   "e": "Lima matlamat (maqasid syariah): memelihara agama, nyawa, akal, keturunan dan harta.",
+   "s": "Buku Teks TI T5 (2020) hlm. 33",
+   "status": "aktif"
+  },
+  {
+   "id": 858,
+   "t": "T5-2.1",
+   "d": 2,
+   "q": "Islam mensyariatkan hukuman qisas kepada pembunuh. Hukuman ini bertujuan memelihara ...",
+   "o": [
+    "Nyawa",
+    "Agama",
+    "Akal",
+    "Harta"
+   ],
+   "a": 0,
+   "e": "Hukuman qisas kepada pembunuh supaya wujud keadilan dan nyawa terpelihara.",
+   "s": "Buku Teks TI T5 (2020) hlm. 33",
+   "status": "aktif"
+  },
+  {
+   "id": 859,
+   "t": "T5-2.1",
+   "d": 2,
+   "q": "Hukuman sebat 40 kali kepada peminum arak disyariatkan bertujuan memelihara ...",
+   "o": [
+    "Agama",
+    "Akal",
+    "Harta",
+    "Keturunan"
+   ],
+   "a": 1,
+   "e": "Arak merosakkan akal; hukuman sebat 40 kali supaya timbul keinsafan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 33",
+   "status": "aktif"
+  },
+  {
+   "id": 860,
+   "t": "T5-2.1",
+   "d": 2,
+   "q": "Hukuman potong pergelangan tangan kepada pencuri disyariatkan untuk memelihara ...",
+   "o": [
+    "Akal",
+    "Harta",
+    "Nyawa",
+    "Keturunan"
+   ],
+   "a": 1,
+   "e": "Cara memelihara harta: hukuman potong tangan supaya masyarakat takut mencuri.",
+   "s": "Buku Teks TI T5 (2020) hlm. 34",
+   "status": "aktif"
+  },
+  {
+   "id": 861,
+   "t": "T5-2.1",
+   "d": 2,
+   "q": "Hukuman sebat 100 kali disyariatkan bagi penzina yang ...",
+   "o": [
+    "Sudah berkahwin",
+    "Belum berkahwin",
+    "Kanak-kanak",
+    "Dipaksa"
+   ],
+   "a": 1,
+   "e": "Penzina belum berkahwin disebat 100 kali; yang sudah berkahwin direjam.",
+   "s": "Buku Teks TI T5 (2020) hlm. 34",
+   "status": "aktif"
+  },
+  {
+   "id": 862,
+   "t": "T5-2.1",
+   "d": 2,
+   "q": "Islam menetapkan golongan wanita yang haram dikahwini seperti ibu dan adik-beradik perempuan. Ketetapan ini bertujuan memelihara ...",
+   "o": [
+    "Keturunan",
+    "Akal",
+    "Harta",
+    "Nyawa"
+   ],
+   "a": 0,
+   "e": "Cara memelihara keturunan: perkahwinan sah dan menetapkan golongan haram dikahwini.",
+   "s": "Buku Teks TI T5 (2020) hlm. 34",
+   "status": "aktif"
+  },
+  {
+   "id": 863,
+   "t": "T5-2.1",
+   "d": 1,
+   "q": "Perbuatan menyekutukan Allah SWT dalam sebarang bentuk sama ada melalui perbuatan, perkataan atau iktikad dinamakan ...",
+   "o": [
+    "Nifak",
+    "Kufur",
+    "Syirik",
+    "Fasik"
+   ],
+   "a": 2,
+   "e": "Syirik: menyekutukan Allah SWT dalam sebarang bentuk.",
+   "s": "Buku Teks TI T5 (2020) hlm. 33",
+   "status": "aktif"
+  },
+  {
+   "id": 864,
+   "t": "T5-2.1",
+   "d": 3,
+   "q": "Ali menolak ajakan kawannya untuk melayari laman sesawang pornografi. Matlamat perundangan Islam yang paling berkaitan ialah memelihara ...",
+   "o": [
+    "Agama sahaja",
+    "Harta",
+    "Nyawa",
+    "Akal"
+   ],
+   "a": 3,
+   "e": "Islam melarang perkara yang merosakkan akal seperti bahan lucah.",
+   "s": "Buku Teks TI T5 (2020) hlm. 33",
+   "status": "aktif"
+  },
+  {
+   "id": 865,
+   "t": "T5-2.1",
+   "d": 3,
+   "q": "Azman membeli kereta menggunakan kaedah al-Bai' Bithaman Ajil kerana tidak mahu terlibat dengan riba. Tindakan ini memenuhi matlamat memelihara ...",
+   "o": [
+    "Nyawa",
+    "Harta",
+    "Akal",
+    "Keturunan"
+   ],
+   "a": 1,
+   "e": "Menawarkan muamalat Islam dan melarang riba ialah cara memelihara harta.",
+   "s": "Buku Teks TI T5 (2020) hlm. 37",
+   "status": "aktif"
+  },
+  {
+   "id": 866,
+   "t": "T5-2.1",
+   "d": 2,
+   "q": "Antara berikut, yang manakah kesan pengabaian pelaksanaan sistem perundangan Islam?",
+   "o": [
+    "Akidah terpelihara",
+    "Akal terpelihara",
+    "Harta diperoleh secara halal",
+    "Kelahiran anak luar nikah"
+   ],
+   "a": 3,
+   "e": "Kesan pengabaian: akidah rosak, nyawa terancam, akal rosak, keturunan rosak (anak luar nikah), ekonomi haram.",
+   "s": "Buku Teks TI T5 (2020) hlm. 35",
+   "status": "aktif"
+  },
+  {
+   "id": 867,
+   "t": "T5-2.1",
+   "d": 2,
+   "q": "Mematuhi undang-undang jalan raya ketika menaiki motosikal merupakan tindakan pematuhan perundangan Islam yang bertujuan ...",
+   "o": [
+    "Menunjukkan kemewahan",
+    "Menjaga keselamatan dan mengelakkan kecederaan parah",
+    "Mengelak cukai",
+    "Mendapat hadiah"
+   ],
+   "a": 1,
+   "e": "Mematuhi undang-undang jalan raya menjaga keselamatan nyawa.",
+   "s": "Buku Teks TI T5 (2020) hlm. 36",
+   "status": "aktif"
+  },
+  {
+   "id": 868,
+   "t": "T5-2.2",
+   "d": 1,
+   "q": "Kehakiman dari segi bahasa disebut ...",
+   "o": [
+    "Al-Syura",
+    "Al-Qadha'",
+    "Al-Hisbah",
+    "Al-Wizarah"
+   ],
+   "a": 1,
+   "e": "Kehakiman atau al-Qadha' bermaksud menghukum, menyelesaikan, menetapkan, memutuskan dan mencegah.",
+   "s": "Buku Teks TI T5 (2020) hlm. 41",
+   "status": "aktif"
+  },
+  {
+   "id": 869,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Dari sudut syarak, kehakiman bermaksud ...",
+   "o": [
+    "Menggubal undang-undang baharu",
+    "Memungut cukai",
+    "Mentadbir negeri",
+    "Menyelesaikan pertikaian antara dua pihak atau lebih melalui proses undang-undang berdasarkan hukum syarak"
+   ],
+   "a": 3,
+   "e": "Kehakiman: menyelesaikan pertikaian atau tuntutan melalui proses undang-undang berdasarkan hukum syarak.",
+   "s": "Buku Teks TI T5 (2020) hlm. 41",
+   "status": "aktif"
+  },
+  {
+   "id": 870,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Firman Allah SWT dalam Surah al-Nisa' ayat 58 memerintahkan supaya apabila menetapkan hukum antara manusia hendaklah ...",
+   "o": [
+    "Mengikut kehendak pemerintah",
+    "Menetapkannya dengan adil",
+    "Menangguhkannya",
+    "Mengikut majoriti"
+   ],
+   "a": 1,
+   "e": "Allah menyuruh menunaikan amanah dan menetapkan hukum dengan adil.",
+   "s": "Buku Teks TI T5 (2020) hlm. 41",
+   "status": "aktif"
+  },
+  {
+   "id": 871,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Sahabat yang dihantar oleh Rasulullah SAW ke Yaman sebagai hakim ialah ...",
+   "o": [
+    "Abu Bakar r.a. dan Umar r.a.",
+    "Ali bin Abi Talib r.a. dan Muaz bin Jabal r.a.",
+    "Khalid al-Walid r.a. dan Abu Ubaidah r.a.",
+    "Uthman r.a. dan Zaid r.a."
+   ],
+   "a": 1,
+   "e": "Rasulullah SAW menghantar Ali bin Abi Talib r.a. dan Muaz bin Jabal r.a. ke Yaman sebagai hakim.",
+   "s": "Buku Teks TI T5 (2020) hlm. 41",
+   "status": "aktif"
+  },
+  {
+   "id": 872,
+   "t": "T5-2.2",
+   "d": 3,
+   "q": "Khalifah yang mengasingkan kuasa kehakiman daripada kuasa pemerintahan ialah ...",
+   "o": [
+    "Sayidina Ali bin Abi Talib r.a.",
+    "Sayidina Abu Bakar al-Siddiq r.a.",
+    "Sayidina Uthman bin Affan r.a.",
+    "Sayidina Umar bin al-Khattab r.a."
+   ],
+   "a": 3,
+   "e": "Semasa pemerintahan Umar r.a., badan khas kehakiman ditubuhkan dan kuasa kehakiman diasingkan daripada pemerintahan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 41",
+   "status": "aktif"
+  },
+  {
+   "id": 873,
+   "t": "T5-2.2",
+   "d": 3,
+   "q": "Khalifah yang memberi saraan kepada hakim daripada simpanan baitulmal ialah ...",
+   "o": [
+    "Sayidina Abu Bakar r.a.",
+    "Sayidina Ali r.a.",
+    "Sayidina Uthman bin Affan r.a.",
+    "Sayidina Umar r.a."
+   ],
+   "a": 2,
+   "e": "Uthman r.a. memberi saraan kepada hakim dengan hasil daripada simpanan baitulmal.",
+   "s": "Buku Teks TI T5 (2020) hlm. 41",
+   "status": "aktif"
+  },
+  {
+   "id": 874,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Antara berikut, yang manakah prinsip kehakiman Islam?\nI Merujuk kepada wahyu rabbani\nII Menegakkan keadilan dan menentang kezaliman\nIII Menyeru kebaikan serta mencegah kemungkaran\nIV Keputusan mengikut kehendak pihak yang berkuasa",
+   "o": [
+    "I, II dan III",
+    "I, III dan IV",
+    "II, III dan IV",
+    "I, II dan IV"
+   ],
+   "a": 0,
+   "e": "Prinsip kehakiman: merujuk wahyu, menegakkan keadilan, amar makruf nahi mungkar dan mengamalkan adab serta akhlak Islam.",
+   "s": "Buku Teks TI T5 (2020) hlm. 42",
+   "status": "aktif"
+  },
+  {
+   "id": 875,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Keadilan yang dianjurkan dalam sistem kehakiman Islam ialah ...",
+   "o": [
+    "Keadilan mengikut pangkat",
+    "Keadilan mengikut majoriti",
+    "Keadilan sejagat tanpa mengira darjat, pangkat, keturunan dan agama",
+    "Keadilan untuk orang Islam sahaja"
+   ],
+   "a": 2,
+   "e": "Matlamat menegakkan keadilan: keadilan sejagat tanpa mengira darjat, pangkat, keturunan dan agama.",
+   "s": "Buku Teks TI T5 (2020) hlm. 43",
+   "status": "aktif"
+  },
+  {
+   "id": 876,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Sabda Rasulullah SAW: \"Tolonglah saudaramu yang berbuat zalim atau yang dizalimi.\" Hadis ini berkaitan dengan matlamat kehakiman Islam iaitu ...",
+   "o": [
+    "Melantik hakim",
+    "Mengumpul harta",
+    "Menggubal undang-undang",
+    "Membela orang yang dizalimi"
+   ],
+   "a": 3,
+   "e": "Kehakiman Islam membela orang yang dizalimi supaya maruah, harta dan nyawa mereka dikembalikan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 43",
+   "status": "aktif"
+  },
+  {
+   "id": 877,
+   "t": "T5-2.2",
+   "d": 1,
+   "q": "Kesalahan dan hukuman mengikut ketetapan syarak yang wajib dilaksanakan sebagai menunaikan hak Allah SWT dinamakan ...",
+   "o": [
+    "Hudud",
+    "Takzir",
+    "Diat",
+    "Qisas"
+   ],
+   "a": 0,
+   "e": "Hudud ialah hukuman ketetapan syarak sebagai hak Allah SWT; manusia tiada hak menambah atau mengurangkannya.",
+   "s": "Buku Teks TI T5 (2020) hlm. 44",
+   "status": "aktif"
+  },
+  {
+   "id": 878,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Hukuman bagi kesalahan qazaf ialah ...",
+   "o": [
+    "Dipenjara",
+    "Disebat 80 kali",
+    "Disebat 40 kali",
+    "Disebat 100 kali"
+   ],
+   "a": 1,
+   "e": "Qazaf (menuduh orang baik berzina tanpa empat saksi) dihukum sebat 80 kali.",
+   "s": "Buku Teks TI T5 (2020) hlm. 44",
+   "status": "aktif"
+  },
+  {
+   "id": 879,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Menuduh seseorang yang baik melakukan zina tanpa membawa empat orang saksi dinamakan ...",
+   "o": [
+    "Riddah",
+    "Qazaf",
+    "Syurb",
+    "Hirabah"
+   ],
+   "a": 1,
+   "e": "Qazaf: menuduh orang baik berzina tanpa empat saksi.",
+   "s": "Buku Teks TI T5 (2020) hlm. 44",
+   "status": "aktif"
+  },
+  {
+   "id": 880,
+   "t": "T5-2.2",
+   "d": 3,
+   "q": "Perompak yang merampas harta tanpa membunuh dikenakan hukuman ...",
+   "o": [
+    "Disebat 80 kali",
+    "Dibunuh dan dipalang",
+    "Tangan dan kaki dipotong secara bersilang",
+    "Dipenjara sahaja"
+   ],
+   "a": 2,
+   "e": "Merampas harta tanpa membunuh: tangan dan kaki dipotong bersilang; merampas dan membunuh: dibunuh dan dipalang.",
+   "s": "Buku Teks TI T5 (2020) hlm. 44",
+   "status": "aktif"
+  },
+  {
+   "id": 881,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Kesalahan dan hukuman yang wajib dilaksanakan bagi menunaikan hak manusia yang dizalimi secara fizikal seperti membunuh dengan sengaja ialah ...",
+   "o": [
+    "Kafarah",
+    "Qisas",
+    "Takzir",
+    "Hudud"
+   ],
+   "a": 1,
+   "e": "Qisas: hak manusia yang dizalimi secara fizikal; boleh diganti diat jika dimaafkan pihak yang menuntut bela.",
+   "s": "Buku Teks TI T5 (2020) hlm. 45",
+   "status": "aktif"
+  },
+  {
+   "id": 882,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Kesalahan dan hukuman yang tidak ditetapkan oleh syarak dan diserahkan kepada budi bicara hakim ialah ...",
+   "o": [
+    "Qisas",
+    "Takzir",
+    "Hudud",
+    "Diat"
+   ],
+   "a": 1,
+   "e": "Takzir: hukuman diserahkan kepada budi bicara hakim seperti nasihat, denda, sebat, buang daerah dan penjara.",
+   "s": "Buku Teks TI T5 (2020) hlm. 45",
+   "status": "aktif"
+  },
+  {
+   "id": 883,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Seseorang yang melakukan rasuah dan kesalahan jalan raya boleh dikenakan hukuman ...",
+   "o": [
+    "Qisas",
+    "Hudud",
+    "Takzir",
+    "Diat"
+   ],
+   "a": 2,
+   "e": "Perbuatan mengganggu ketenteraman awam seperti menipu, rasuah, berjudi dan kesalahan jalan raya termasuk takzir.",
+   "s": "Buku Teks TI T5 (2020) hlm. 45",
+   "status": "aktif"
+  },
+  {
+   "id": 884,
+   "t": "T5-2.2",
+   "d": 3,
+   "q": "Nisab jenayah mencuri, iaitu kadar minimum harta curian yang boleh dijatuhkan hukuman potong tangan, ialah ...",
+   "o": [
+    "85 gram emas",
+    "1/4 dinar bersamaan 1.06 gram emas",
+    "10 dirham",
+    "1 dinar bersamaan 4.25 gram emas"
+   ],
+   "a": 1,
+   "e": "Nisab mencuri ialah 1/4 dinar bersamaan 1.06 gram emas.",
+   "s": "Buku Teks TI T5 (2020) hlm. 45",
+   "status": "aktif"
+  },
+  {
+   "id": 885,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Harta yang wajib diberikan kepada waris orang yang dibunuh sebagai ganti hukuman qisas yang tidak dapat dilaksanakan dinamakan ...",
+   "o": [
+    "Kafarah",
+    "Jizyah",
+    "Diat",
+    "Fidyah"
+   ],
+   "a": 2,
+   "e": "Diat: harta wajib diberikan kepada waris mangsa sebagai ganti qisas.",
+   "s": "Buku Teks TI T5 (2020) hlm. 46",
+   "status": "aktif"
+  },
+  {
+   "id": 886,
+   "t": "T5-2.2",
+   "d": 3,
+   "q": "Seorang pemburu tertembak orang lain yang disangka seekor rusa. Jenis diat yang dikenakan ialah ...",
+   "o": [
+    "Diat ringan",
+    "Diat berat yang dibayar beransur",
+    "Tiada diat",
+    "Diat berat yang dibayar segera"
+   ],
+   "a": 0,
+   "e": "Membunuh dengan tidak sengaja dikenakan diat ringan, 100 ekor unta ditanggung waris pembunuh secara beransur tiga tahun.",
+   "s": "Buku Teks TI T5 (2020) hlm. 46",
+   "status": "aktif"
+  },
+  {
+   "id": 887,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Kadar diat bagi pembunuhan ialah ...",
+   "o": [
+    "50 ekor unta",
+    "100 ekor unta",
+    "200 ekor kambing",
+    "1 000 dinar sahaja"
+   ],
+   "a": 1,
+   "e": "Kadar diat ialah 100 ekor unta; kini ditentukan mengikut nilai semasa seratus ekor unta.",
+   "s": "Buku Teks TI T5 (2020) hlm. 46",
+   "status": "aktif"
+  },
+  {
+   "id": 888,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Bilangan saksi bagi kes perzinaan ialah ...",
+   "o": [
+    "Dua orang lelaki",
+    "Tiga orang lelaki",
+    "Empat orang lelaki",
+    "Seorang lelaki dan dua orang perempuan"
+   ],
+   "a": 2,
+   "e": "Saksi bagi kes zina ialah empat orang lelaki.",
+   "s": "Buku Teks TI T5 (2020) hlm. 47",
+   "status": "aktif"
+  },
+  {
+   "id": 889,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Ujian DNA, senjata dan kesan jari merupakan prosedur keterangan untuk mensabitkan kesalahan melalui ...",
+   "o": [
+    "Pengakuan",
+    "Pembuktian",
+    "Sumpah",
+    "Kesaksian"
+   ],
+   "a": 1,
+   "e": "Pembuktian melalui bahan atau alat tertentu seperti DNA, senjata dan kesan jari.",
+   "s": "Buku Teks TI T5 (2020) hlm. 47",
+   "status": "aktif"
+  },
+  {
+   "id": 890,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Antara berikut, yang manakah syarat pelantikan hakim?",
+   "o": [
+    "Berumur lebih 60 tahun",
+    "Islam, baligh dan berakal, adil, berilmu serta sempurna pancaindera",
+    "Berketurunan bangsawan",
+    "Kaya dan berpengaruh"
+   ],
+   "a": 1,
+   "e": "Syarat hakim: Islam dan beriman, baligh dan berakal, adil, berilmu dan bijaksana, sempurna pancaindera.",
+   "s": "Buku Teks TI T5 (2020) hlm. 48",
+   "status": "aktif"
+  },
+  {
+   "id": 891,
+   "t": "T5-2.2",
+   "d": 1,
+   "q": "Usaha untuk mendapatkan sesuatu kesimpulan baharu melalui kajian berdasarkan sumber dan kaedah yang sah dinamakan ...",
+   "o": [
+    "Ijtihad",
+    "Ijmak",
+    "Taklid",
+    "Qias"
+   ],
+   "a": 0,
+   "e": "Ijtihad ialah usaha mendapatkan kesimpulan baharu melalui kajian berdasarkan sumber dan kaedah yang sah.",
+   "s": "Buku Teks TI T5 (2020) hlm. 48",
+   "status": "aktif"
+  },
+  {
+   "id": 892,
+   "t": "T5-2.2",
+   "d": 3,
+   "q": "Seorang hakim menarik diri daripada mengendalikan perbicaraan kes yang melibatkan abang kandungnya. Etika yang dipatuhinya ialah ...",
+   "o": [
+    "Menghukum ketika marah",
+    "Dilarang menghakimi orang yang ada kepentingan dengannya",
+    "Menyebelahi pihak pendakwa",
+    "Menerima rasuah"
+   ],
+   "a": 1,
+   "e": "Hakim dilarang menghakimi orang yang ada kepentingan seperti keluarga dan rakan supaya keputusan tepat.",
+   "s": "Buku Teks TI T5 (2020) hlm. 49",
+   "status": "aktif"
+  },
+  {
+   "id": 893,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Hakim tidak boleh menjatuhkan hukuman dalam keadaan marah supaya ...",
+   "o": [
+    "Tidak tersalah membuat keputusan",
+    "Pesalah takut",
+    "Hukuman lebih berat",
+    "Perbicaraan cepat selesai"
+   ],
+   "a": 0,
+   "e": "Peranan hakim: menjatuhkan hukuman dalam keadaan tenang supaya tidak tersalah membuat keputusan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 49",
+   "status": "aktif"
+  },
+  {
+   "id": 894,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Hakim mesti membebaskan tertuduh jika ...",
+   "o": [
+    "Tertuduh orang kaya",
+    "Terdapat keraguan dari segi bukti dan hujah",
+    "Saksi terlalu ramai",
+    "Tertuduh merayu"
+   ],
+   "a": 1,
+   "e": "Hakim membebaskan tertuduh jika ada keraguan bukti dan hujah supaya tiada penganiayaan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 49",
+   "status": "aktif"
+  },
+  {
+   "id": 895,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Antara berikut, yang manakah kepentingan melaksanakan sistem kehakiman Islam?",
+   "o": [
+    "Memperkaya hakim",
+    "Mengembalikan hak kepada orang yang dizalimi",
+    "Menambah jenayah",
+    "Melambatkan perbicaraan"
+   ],
+   "a": 1,
+   "e": "Kepentingan: menyelesaikan masalah secara menyeluruh, keamanan, amar makruf, membendung jenayah, keadilan sejagat, mengembalikan hak dan memberi pengajaran.",
+   "s": "Buku Teks TI T5 (2020) hlm. 50",
+   "status": "aktif"
+  },
+  {
+   "id": 896,
+   "t": "T5-2.2",
+   "d": 2,
+   "q": "Mengadakan lawatan sambil belajar ke mahkamah syariah merupakan tindakan ...",
+   "o": [
+    "Menyebarkan fitnah",
+    "Menyokong institusi perundangan",
+    "Mempersendakan hakim",
+    "Mengganggu perbicaraan"
+   ],
+   "a": 1,
+   "e": "Antara tindakan menyokong institusi perundangan: lawatan ke mahkamah syariah untuk memahami bidang kuasa dan prosedur.",
+   "s": "Buku Teks TI T5 (2020) hlm. 53",
+   "status": "aktif"
+  },
+  {
+   "id": 897,
+   "t": "T5-3.1",
+   "d": 1,
+   "q": "Menyelaraskan tenaga manusia agar mengikut satu perancangan untuk mencapai sesuatu objektif yang ditetapkan dinamakan ...",
+   "o": [
+    "Perundangan",
+    "Pemerintahan",
+    "Pengurusan",
+    "Pentadbiran"
+   ],
+   "a": 3,
+   "e": "Pentadbiran: menyelaraskan tenaga manusia mengikut perancangan untuk mencapai objektif.",
+   "s": "Buku Teks TI T5 (2020) hlm. 59",
+   "status": "aktif"
+  },
+  {
+   "id": 898,
+   "t": "T5-3.1",
+   "d": 1,
+   "q": "Menggunakan serta menyelenggara sumber manusia dan sumber alam untuk kebajikan manusia dinamakan ...",
+   "o": [
+    "Pemerintahan",
+    "Pentadbiran",
+    "Pengurusan",
+    "Kehakiman"
+   ],
+   "a": 2,
+   "e": "Pengurusan: menggunakan dan menyelenggara sumber manusia dan alam untuk kebajikan manusia.",
+   "s": "Buku Teks TI T5 (2020) hlm. 59",
+   "status": "aktif"
+  },
+  {
+   "id": 899,
+   "t": "T5-3.1",
+   "d": 2,
+   "q": "Pernyataan yang BETUL tentang hubungan pentadbiran dan pengurusan ialah ...",
+   "o": [
+    "Pengurusan sebahagian daripada pentadbiran",
+    "Kedua-duanya tiada kaitan",
+    "Pentadbiran sebahagian daripada pengurusan; pengurusan lebih umum",
+    "Pentadbiran lebih umum daripada pengurusan"
+   ],
+   "a": 2,
+   "e": "Pentadbiran merupakan sebahagian daripada pengurusan; pengurusan bersifat lebih umum.",
+   "s": "Buku Teks TI T5 (2020) hlm. 59",
+   "status": "aktif"
+  },
+  {
+   "id": 900,
+   "t": "T5-3.1",
+   "d": 2,
+   "q": "Firman Allah SWT: \"Dialah yang menjadikan kamu daripada bumi serta menjadikan kamu memakmurkannya.\" Ayat ini terdapat dalam ...",
+   "o": [
+    "Surah al-Anfal ayat 27",
+    "Surah al-Nisa' ayat 58",
+    "Surah Hud ayat 61",
+    "Surah al-Syura ayat 38"
+   ],
+   "a": 2,
+   "e": "Ayat tentang memakmurkan bumi ialah Surah Hud 11:61.",
+   "s": "Buku Teks TI T5 (2020) hlm. 59",
+   "status": "aktif"
+  },
+  {
+   "id": 901,
+   "t": "T5-3.1",
+   "d": 2,
+   "q": "Perlembagaan pentadbiran dan pengurusan pada zaman Rasulullah SAW ialah ...",
+   "o": [
+    "Baiah Aqabah",
+    "Piagam Madinah",
+    "Khutbah Wida'",
+    "Perjanjian Hudaibiyah"
+   ],
+   "a": 1,
+   "e": "Piagam Madinah dijadikan perlembagaan pentadbiran dan pengurusan zaman Rasulullah SAW.",
+   "s": "Buku Teks TI T5 (2020) hlm. 60",
+   "status": "aktif"
+  },
+  {
+   "id": 902,
+   "t": "T5-3.1",
+   "d": 2,
+   "q": "Rasulullah SAW menjadikan akidah islamiah sebagai pegangan dalam pentadbiran bagi menggantikan semangat ...",
+   "o": [
+    "Jihad",
+    "'Asabiyyah",
+    "Syura",
+    "Ukhuwah"
+   ],
+   "a": 1,
+   "e": "'Asabiyyah ialah perasaan taasub perkauman yang digantikan dengan akidah islamiah.",
+   "s": "Buku Teks TI T5 (2020) hlm. 60",
+   "status": "aktif"
+  },
+  {
+   "id": 903,
+   "t": "T5-3.1",
+   "d": 2,
+   "q": "Pada zaman Khulafa ar-Rasyidin, pegawai cukai dikenali sebagai ...",
+   "o": [
+    "Sahib al-Syurtah",
+    "Kadi",
+    "Bait al-Mal",
+    "Sahib al-Kharaj"
+   ],
+   "a": 3,
+   "e": "Sahib al-Kharaj ialah pegawai cukai; Sahib al-Syurtah pegawai polis; Bait al-Mal perbendaharaan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 60",
+   "status": "aktif"
+  },
+  {
+   "id": 904,
+   "t": "T5-3.1",
+   "d": 2,
+   "q": "Sahib al-Syurtah pada zaman Khulafa ar-Rasyidin bertanggungjawab sebagai ...",
+   "o": [
+    "Pegawai cukai",
+    "Gabenor",
+    "Hakim",
+    "Pegawai polis"
+   ],
+   "a": 3,
+   "e": "Sahib al-Syurtah ialah pegawai polis.",
+   "s": "Buku Teks TI T5 (2020) hlm. 60",
+   "status": "aktif"
+  },
+  {
+   "id": 905,
+   "t": "T5-3.1",
+   "d": 2,
+   "q": "Majlis Syura ditubuhkan secara rasmi dan berfungsi secara formal pada zaman pemerintahan ...",
+   "o": [
+    "Sayidina Uthman r.a.",
+    "Sayidina Umar bin al-Khattab r.a.",
+    "Sayidina Abu Bakar r.a.",
+    "Sayidina Ali r.a."
+   ],
+   "a": 1,
+   "e": "Majlis Syura ditubuhkan secara rasmi semasa pemerintahan Umar bin al-Khattab r.a.",
+   "s": "Buku Teks TI T5 (2020) hlm. 61",
+   "status": "aktif"
+  },
+  {
+   "id": 906,
+   "t": "T5-3.1",
+   "d": 1,
+   "q": "Mesyuarat yang dijalankan bagi melakukan pertimbangan secara kolektif dan membuat keputusan paling berkualiti berdasarkan keimanan dan ketakwaan dinamakan ...",
+   "o": [
+    "Syura",
+    "Hisbah",
+    "Baiah",
+    "Ijmak"
+   ],
+   "a": 0,
+   "e": "Syura ialah mesyuarat untuk pertimbangan kolektif dan keputusan berkualiti.",
+   "s": "Buku Teks TI T5 (2020) hlm. 62",
+   "status": "aktif"
+  },
+  {
+   "id": 907,
+   "t": "T5-3.1",
+   "d": 2,
+   "q": "Antara berikut, yang manakah prinsip tadbir urus dalam Islam?\nI Bersumberkan al-Quran dan al-Hadis\nII Pentadbir sebagai pemegang amanah\nIII Urusan dijalankan berdasarkan syura\nIV Kuasa mutlak di tangan pentadbir",
+   "o": [
+    "I, II dan III",
+    "II, III dan IV",
+    "I, II dan IV",
+    "I, III dan IV"
+   ],
+   "a": 0,
+   "e": "Kuasa mutlak yang sebenar hanyalah milik Allah SWT; kuasa pemimpin terhad.",
+   "s": "Buku Teks TI T5 (2020) hlm. 61",
+   "status": "aktif"
+  },
+  {
+   "id": 908,
+   "t": "T5-3.1",
+   "d": 2,
+   "q": "Etika tadbir urus Islam yang bermaksud menjalankan tugas dengan penuh tanggungjawab dan tidak menggunakan kedudukan untuk kepentingan sendiri ialah ...",
+   "o": [
+    "Inovatif",
+    "Integriti",
+    "Efektif",
+    "Sistematik"
+   ],
+   "a": 1,
+   "e": "Integriti: tugas dijalankan penuh tanggungjawab tanpa salah guna kedudukan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 63",
+   "status": "aktif"
+  },
+  {
+   "id": 909,
+   "t": "T5-3.1",
+   "d": 2,
+   "q": "Etika tadbir urus 'sistematik' bermaksud ...",
+   "o": [
+    "Membuat perancangan dan pemantauan yang berterusan",
+    "Tidak menggunakan kedudukan untuk diri sendiri",
+    "Efisien dan konsisten",
+    "Membudayakan nilai murni"
+   ],
+   "a": 0,
+   "e": "Sistematik: membuat perancangan dan pemantauan berterusan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 63",
+   "status": "aktif"
+  },
+  {
+   "id": 910,
+   "t": "T5-3.1",
+   "d": 2,
+   "q": "Pentadbir yang berfikiran terbuka terhadap perubahan, cadangan, teguran dan nasihat mempunyai ciri ...",
+   "o": [
+    "Dinamik",
+    "Positif",
+    "Berwawasan",
+    "Inovatif"
+   ],
+   "a": 1,
+   "e": "Positif: berfikiran terbuka terhadap perubahan, cadangan, teguran dan nasihat.",
+   "s": "Buku Teks TI T5 (2020) hlm. 64",
+   "status": "aktif"
+  },
+  {
+   "id": 911,
+   "t": "T5-3.1",
+   "d": 2,
+   "q": "Pentadbir yang berupaya menyesuaikan diri dengan pelbagai situasi untuk melaksanakan pembaharuan mempunyai ciri ...",
+   "o": [
+    "Ikhlas",
+    "Amanah",
+    "Beriman",
+    "Dinamik"
+   ],
+   "a": 3,
+   "e": "Dinamik: berupaya menyesuaikan diri untuk pembaharuan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 64",
+   "status": "aktif"
+  },
+  {
+   "id": 912,
+   "t": "T5-3.1",
+   "d": 1,
+   "q": "Individu, organisasi atau mesin yang boleh menjalankan tugas dengan cekap tanpa pembaziran waktu dan tenaga disebut ...",
+   "o": [
+    "Produktif",
+    "Efektif",
+    "Proaktif",
+    "Efisien"
+   ],
+   "a": 3,
+   "e": "Efisien: menjalankan tugas dengan cekap tanpa pembaziran waktu dan tenaga.",
+   "s": "Buku Teks TI T5 (2020) hlm. 65",
+   "status": "aktif"
+  },
+  {
+   "id": 913,
+   "t": "T5-3.1",
+   "d": 2,
+   "q": "Antara berikut, yang manakah kesan mentadbir dan mengurus TIDAK mengikut syariat?",
+   "o": [
+    "Mendapat ketaatan orang bawahan",
+    "Memajukan organisasi",
+    "Hilang sokongan daripada orang bawahan dan berlaku pertelingkahan",
+    "Mewujudkan persefahaman"
+   ],
+   "a": 2,
+   "e": "Kesan tidak mengikut syariat: abai amanah, hilang sokongan, pertelingkahan dan kemunduran.",
+   "s": "Buku Teks TI T5 (2020) hlm. 66",
+   "status": "aktif"
+  },
+  {
+   "id": 914,
+   "t": "T5-3.1",
+   "d": 3,
+   "q": "Encik Irham, seorang pengarah, mendapati pekerjanya menunjukkan prestasi cemerlang. Tindakan yang menepati tadbir urus Islam ialah ...",
+   "o": [
+    "Memberi penghargaan kepada staf cemerlang",
+    "Mengabaikannya",
+    "Memindahkannya",
+    "Menambah beban kerjanya tanpa ganjaran"
+   ],
+   "a": 0,
+   "e": "Antara tindakan merealisasikan tadbir urus Islam: memberi penghargaan kepada staf cemerlang.",
+   "s": "Buku Teks TI T5 (2020) hlm. 67",
+   "status": "aktif"
+  },
+  {
+   "id": 915,
+   "t": "T5-3.2",
+   "d": 1,
+   "q": "Satu kaedah pemerintahan sebuah negara yang ditadbir berdasarkan ajaran agama Islam serta melaksanakan syariat Islam dinamakan ...",
+   "o": [
+    "Sistem pemerintahan Islam",
+    "Sistem republik",
+    "Sistem demokrasi",
+    "Sistem beraja"
+   ],
+   "a": 0,
+   "e": "Definisi sistem pemerintahan Islam.",
+   "s": "Buku Teks TI T5 (2020) hlm. 72",
+   "status": "aktif"
+  },
+  {
+   "id": 916,
+   "t": "T5-3.2",
+   "d": 2,
+   "q": "Firman Allah SWT: \"Dan Dialah yang menjadikan kamu khalifah-khalifah di bumi ...\" terdapat dalam ...",
+   "o": [
+    "Surah Hud ayat 61",
+    "Surah al-Nisa' ayat 59",
+    "Surah al-Baqarah ayat 30",
+    "Surah al-An'am ayat 165"
+   ],
+   "a": 3,
+   "e": "Ayat tersebut ialah Surah al-An'am 6:165.",
+   "s": "Buku Teks TI T5 (2020) hlm. 72",
+   "status": "aktif"
+  },
+  {
+   "id": 917,
+   "t": "T5-3.2",
+   "d": 2,
+   "q": "Dalam sistem pemerintahan Islam, pemegang kuasa yang mutlak ialah ...",
+   "o": [
+    "Allah SWT",
+    "Majlis Syura",
+    "Khalifah",
+    "Rakyat"
+   ],
+   "a": 0,
+   "e": "Ciri pemerintahan Islam: Allah SWT pemegang kuasa mutlak, manusia sebagai khalifah hanya pemegang amanah.",
+   "s": "Buku Teks TI T5 (2020) hlm. 72",
+   "status": "aktif"
+  },
+  {
+   "id": 918,
+   "t": "T5-3.2",
+   "d": 2,
+   "q": "Sebelum Perang Uhud, Rasulullah SAW menerima pendapat majoriti sahabat supaya peperangan dilakukan di luar kota Madinah. Peristiwa ini menunjukkan amalan ...",
+   "o": [
+    "Baiah",
+    "Ijtihad peribadi",
+    "Syura",
+    "Hisbah"
+   ],
+   "a": 2,
+   "e": "Rasulullah SAW bermesyuarat dan menerima pandangan majoriti: amalan syura.",
+   "s": "Buku Teks TI T5 (2020) hlm. 73",
+   "status": "aktif"
+  },
+  {
+   "id": 919,
+   "t": "T5-3.2",
+   "d": 2,
+   "q": "Sahabat yang mencadangkan supaya parit digali di sekeliling Madinah sebelum Perang Ahzab ialah ...",
+   "o": [
+    "Umar al-Khattab",
+    "Abu Bakar al-Siddiq",
+    "Khalid al-Walid",
+    "Salman al-Farisi"
+   ],
+   "a": 3,
+   "e": "Salman al-Farisi mencadangkan menggali parit dan Rasulullah SAW menerimanya.",
+   "s": "Buku Teks TI T5 (2020) hlm. 73",
+   "status": "aktif"
+  },
+  {
+   "id": 920,
+   "t": "T5-3.2",
+   "d": 1,
+   "q": "Piagam Madinah juga dikenali sebagai ...",
+   "o": [
+    "Baiah al-Ridwan",
+    "Sahifah al-Madinah",
+    "Khutbah al-Wida'",
+    "Sulh al-Hudaibiyah"
+   ],
+   "a": 1,
+   "e": "Piagam Madinah dikenali sebagai Sahifah al-Madinah, perlembagaan bertulis pertama di dunia.",
+   "s": "Buku Teks TI T5 (2020) hlm. 74",
+   "status": "aktif"
+  },
+  {
+   "id": 921,
+   "t": "T5-3.2",
+   "d": 2,
+   "q": "Piagam Madinah diasaskan oleh Nabi Muhammad SAW pada tahun ...",
+   "o": [
+    "622 Masihi",
+    "630 Masihi",
+    "610 Masihi",
+    "632 Masihi"
+   ],
+   "a": 0,
+   "e": "Piagam Madinah diasaskan pada 622 Masihi bersamaan tahun pertama Hijrah.",
+   "s": "Buku Teks TI T5 (2020) hlm. 75",
+   "status": "aktif"
+  },
+  {
+   "id": 922,
+   "t": "T5-3.2",
+   "d": 3,
+   "q": "Piagam Madinah mengandungi ... fasal.",
+   "o": [
+    "24",
+    "47",
+    "50",
+    "23"
+   ],
+   "a": 1,
+   "e": "Piagam Madinah mengandungi 47 fasal: 23 berkaitan sesama umat Islam dan 24 berkenaan hubungan dengan bukan Islam.",
+   "s": "Buku Teks TI T5 (2020) hlm. 75",
+   "status": "aktif"
+  },
+  {
+   "id": 923,
+   "t": "T5-3.2",
+   "d": 2,
+   "q": "Aspek Piagam Madinah yang memberi setiap kaum hak masing-masing dari segi ekonomi, politik dan sosial ialah ...",
+   "o": [
+    "Perpaduan",
+    "Keselamatan",
+    "Pengiktirafan kepelbagaian kaum",
+    "Hubungan luar"
+   ],
+   "a": 2,
+   "e": "Pengiktirafan kepelbagaian kaum: setiap kaum diberi hak ekonomi, politik dan sosial.",
+   "s": "Buku Teks TI T5 (2020) hlm. 74",
+   "status": "aktif"
+  },
+  {
+   "id": 924,
+   "t": "T5-3.2",
+   "d": 1,
+   "q": "Sistem pemerintahan Islam yang dinaungi oleh seorang pemimpin Islam yang adil, taat dan patuh kepada syariat Allah SWT dinamakan ...",
+   "o": [
+    "Khilafah",
+    "Imarah",
+    "Khalifah",
+    "Wilayah"
+   ],
+   "a": 0,
+   "e": "Khilafah ialah sistem pemerintahan; khalifah ialah individu yang diamanahkan mentadbir.",
+   "s": "Buku Teks TI T5 (2020) hlm. 76",
+   "status": "aktif"
+  },
+  {
+   "id": 925,
+   "t": "T5-3.2",
+   "d": 2,
+   "q": "Antara berikut, yang manakah syarat menjadi khalifah?",
+   "o": [
+    "Seorang Muslim yang mukmin, lelaki, berilmu, adil dan berkemampuan",
+    "Berumur paling tua",
+    "Dipilih oleh negara asing",
+    "Kaya dan berpengaruh sahaja"
+   ],
+   "a": 0,
+   "e": "Syarat khalifah: Muslim mukmin, lelaki, berilmu, adil, berkemampuan mental dan fizikal, keturunan baik, berakhlak mulia dan berani.",
+   "s": "Buku Teks TI T5 (2020) hlm. 77",
+   "status": "aktif"
+  },
+  {
+   "id": 926,
+   "t": "T5-3.2",
+   "d": 2,
+   "q": "Antara berikut, yang manakah tanggungjawab rakyat terhadap khalifah?",
+   "o": [
+    "Menentang semua arahan",
+    "Memberikan taat setia dan menasihati khalifah ke arah kebaikan",
+    "Menyembunyikan kemungkaran",
+    "Mengabaikan keselamatan negara"
+   ],
+   "a": 1,
+   "e": "Tanggungjawab rakyat: taat setia, membanteras kemungkaran, mempertahankan negara, menasihati khalifah dan menjaga keamanan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 77",
+   "status": "aktif"
+  },
+  {
+   "id": 927,
+   "t": "T5-3.2",
+   "d": 2,
+   "q": "Firman Allah SWT dalam Surah al-Nisa' ayat 59 memerintahkan orang beriman supaya mentaati Allah, Rasul dan ...",
+   "o": [
+    "Orang tua",
+    "Orang kaya",
+    "Para pemimpin",
+    "Ahli keluarga sahaja"
+   ],
+   "a": 2,
+   "e": "Hak khalifah: mendapat ketaatan rakyat selagi tidak bercanggah dengan akidah, syarak dan akhlak (al-Nisa' 4:59).",
+   "s": "Buku Teks TI T5 (2020) hlm. 78",
+   "status": "aktif"
+  },
+  {
+   "id": 928,
+   "t": "T5-3.2",
+   "d": 2,
+   "q": "Khilafah Umaiyah memerintah dari tahun ...",
+   "o": [
+    "661-750 Masihi",
+    "750-1258 Masihi",
+    "1299-1924 Masihi",
+    "632-661 Masihi"
+   ],
+   "a": 0,
+   "e": "Khulafa ar-Rasyidin 632-661, Umaiyah 661-750, Abbasiyah 750-1258 Masihi.",
+   "s": "Buku Teks TI T5 (2020) hlm. 78",
+   "status": "aktif"
+  },
+  {
+   "id": 929,
+   "t": "T5-3.2",
+   "d": 3,
+   "q": "Khilafah Abbasiyah diperintah oleh Bani Abbasiyah yang berasal daripada keturunan ...",
+   "o": [
+    "Bani Umaiyah",
+    "Bani Tamim",
+    "Bani Hasyim",
+    "Bani Makhzum"
+   ],
+   "a": 2,
+   "e": "Bani Abbasiyah berasal daripada keturunan Bani Hasyim.",
+   "s": "Buku Teks TI T5 (2020) hlm. 78",
+   "status": "aktif"
+  },
+  {
+   "id": 930,
+   "t": "T5-3.2",
+   "d": 2,
+   "q": "Prinsip negara Islam yang bermaksud setiap individu dilayan dan dihormati tanpa mengira pangkat atau kedudukan ialah ...",
+   "o": [
+    "Al-Syura",
+    "Al-'Adalah",
+    "Al-Musawah",
+    "Al-Hurriyyah"
+   ],
+   "a": 2,
+   "e": "Al-Musawah (persamaan); al-Hurriyyah (kebebasan); al-'Adalah (keadilan); al-Syura (musyawarah).",
+   "s": "Buku Teks TI T5 (2020) hlm. 79",
+   "status": "aktif"
+  },
+  {
+   "id": 931,
+   "t": "T5-3.2",
+   "d": 2,
+   "q": "Prinsip negara Islam yang mewajibkan khalifah melindungi hak dan kebebasan individu yang tidak bercanggah dengan syariat ialah ...",
+   "o": [
+    "Al-Musawah",
+    "Al-Syura",
+    "Al-Hurriyyah",
+    "Al-'Adalah"
+   ],
+   "a": 2,
+   "e": "Al-Hurriyyah ialah prinsip kebebasan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 79",
+   "status": "aktif"
+  },
+  {
+   "id": 932,
+   "t": "T5-3.2",
+   "d": 2,
+   "q": "Lembaga mesyuarat tertinggi negara yang ahlinya terdiri daripada khalifah, ulama dan individu pakar ialah ...",
+   "o": [
+    "Baitulmal",
+    "Wilayah",
+    "Majlis Syura",
+    "Badan Kehakiman"
+   ],
+   "a": 2,
+   "e": "Majlis Syura ialah lembaga mesyuarat tertinggi dalam elemen pembentukan negara Islam.",
+   "s": "Buku Teks TI T5 (2020) hlm. 80",
+   "status": "aktif"
+  },
+  {
+   "id": 933,
+   "t": "T5-3.2",
+   "d": 2,
+   "q": "Antara berikut, yang manakah perbezaan negara Islam dengan negara bukan Islam?",
+   "o": [
+    "Negara Islam menggunakan undang-undang ciptaan manusia sahaja",
+    "Negara Islam meletakkan pendapat majoriti sebagai asas pemerintahan",
+    "Negara Islam mengabaikan syarat keimanan pemimpin",
+    "Negara Islam meletakkan Allah SWT sebagai kuasa tertinggi negara"
+   ],
+   "a": 3,
+   "e": "Negara Islam: Allah kuasa tertinggi, iman dan takwa ciri utama, undang-undang Allah sebagai undang-undang negara.",
+   "s": "Buku Teks TI T5 (2020) hlm. 81",
+   "status": "aktif"
+  },
+  {
+   "id": 934,
+   "t": "T5-3.2",
+   "d": 1,
+   "q": "Perintah supaya mengerjakan perbuatan atau amalan yang baik dinamakan ...",
+   "o": [
+    "Amar makruf",
+    "Adil",
+    "Syura",
+    "Nahi mungkar"
+   ],
+   "a": 0,
+   "e": "Amar makruf: perintah mengerjakan kebaikan; nahi mungkar: melarang kejahatan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 81",
+   "status": "aktif"
+  },
+  {
+   "id": 935,
+   "t": "T5-3.2",
+   "d": 2,
+   "q": "Antara berikut, yang manakah kesan pengabaian tanggungjawab rakyat?",
+   "o": [
+    "Negara aman dan stabil",
+    "Hilang rasa taat setia kepada khalifah dan keselamatan negara terancam",
+    "Perpaduan kukuh",
+    "Keadilan untuk semua"
+   ],
+   "a": 1,
+   "e": "Kesan pengabaian tanggungjawab rakyat: hilang taat setia, keselamatan terancam, perbalahan dan kemungkaran berleluasa.",
+   "s": "Buku Teks TI T5 (2020) hlm. 82",
+   "status": "aktif"
+  },
+  {
+   "id": 936,
+   "t": "T5-3.2",
+   "d": 3,
+   "q": "Sabda Rasulullah SAW: \"Sebaik-baik pemimpin kamu ialah yang kamu cintai dan mereka pun mencintai kamu ...\" Nilai yang ditekankan ialah ...",
+   "o": [
+    "Pemimpin dipilih berdasarkan kekayaan",
+    "Rakyat tidak boleh menegur",
+    "Pemimpin dan rakyat saling menyayangi, menghormati dan mendoakan",
+    "Pemimpin perlu ditakuti"
+   ],
+   "a": 2,
+   "e": "Keharmonian negara dicapai apabila pemimpin dan rakyat saling menyayangi, menghormati dan mendoakan.",
+   "s": "Buku Teks TI T5 (2020) hlm. 79",
+   "status": "aktif"
+  },
+  {
+   "id": 937,
+   "t": "T5-3.2",
+   "d": 2,
+   "q": "Mengundi dalam pilihan raya dan mentaati arahan pemerintah yang tidak menyalahi syariat merupakan tindakan ...",
+   "o": [
+    "Menentang kerajaan",
+    "Kepentingan diri",
+    "Mengabaikan syariat",
+    "Melaksanakan tanggungjawab hidup bernegara"
+   ],
+   "a": 3,
+   "e": "Tindakan individu dalam kehidupan bernegara termasuk mentaati arahan pemerintah yang tidak menyalahi syariat.",
+   "s": "Buku Teks TI T5 (2020) hlm. 83",
+   "status": "aktif"
+  },
+  {
+   "id": 938,
+   "t": "T4-1.1",
+   "d": 1,
+   "q": "Islam sebagai al-Din bermaksud Islam ialah ...",
+   "o": [
+    "Budaya masyarakat Arab",
+    "Agama yang hanya mengatur ibadat khusus",
+    "Cara hidup yang lengkap merangkumi seluruh aspek kehidupan",
+    "Sistem politik semata-mata"
+   ],
+   "a": 2,
+   "e": "Al-Din bermaksud cara hidup lengkap yang meliputi akidah, syariah dan akhlak dalam semua aspek kehidupan.",
+   "s": "DSKP TI T4 (2018) SP 1.1.1",
+   "status": "aktif"
+  },
+  {
+   "id": 939,
+   "t": "T4-1.1",
+   "d": 2,
+   "q": "Firman Allah SWT: \"Sesungguhnya agama (yang benar dan diredai) di sisi Allah ialah Islam.\" Ayat ini terdapat dalam ...",
+   "o": [
+    "Surah al-Ikhlas ayat 1",
+    "Surah al-Baqarah ayat 2",
+    "Surah Ali 'Imran ayat 19",
+    "Surah al-Maidah ayat 3"
+   ],
+   "a": 2,
+   "e": "Surah Ali 'Imran 3:19 menegaskan agama di sisi Allah ialah Islam.",
+   "s": "DSKP TI T4 (2018) SP 1.1.1",
+   "status": "aktif"
+  },
+  {
+   "id": 940,
+   "t": "T4-1.1",
+   "d": 1,
+   "q": "Dari segi bahasa, Islam bermaksud ...",
+   "o": [
+    "Percaya dan yakin",
+    "Takut kepada Allah",
+    "Berbuat baik",
+    "Tunduk, patuh, selamat dan sejahtera"
+   ],
+   "a": 3,
+   "e": "Islam dari segi bahasa bermaksud tunduk, patuh, menyerah diri, selamat dan sejahtera.",
+   "s": "DSKP TI T4 (2018) SP 1.1.2",
+   "status": "aktif"
+  },
+  {
+   "id": 941,
+   "t": "T4-1.1",
+   "d": 1,
+   "q": "Iman dari segi bahasa bermaksud ...",
+   "o": [
+    "Berpuasa",
+    "Melakukan kebaikan",
+    "Membenarkan atau percaya",
+    "Berserah diri"
+   ],
+   "a": 2,
+   "e": "Iman bermaksud membenarkan (tasdiq) dengan hati, diikrarkan dengan lidah dan dibuktikan dengan perbuatan.",
+   "s": "DSKP TI T4 (2018) SP 1.1.2",
+   "status": "aktif"
+  },
+  {
+   "id": 942,
+   "t": "T4-1.1",
+   "d": 2,
+   "q": "Ihsan ialah engkau menyembah Allah seolah-olah engkau melihat-Nya; jika engkau tidak melihat-Nya, maka sesungguhnya ...",
+   "o": [
+    "Dia menguji kamu",
+    "Dia melihatmu",
+    "Dia mengampunimu",
+    "Dia memberi rezeki"
+   ],
+   "a": 1,
+   "e": "Definisi ihsan dalam hadis Jibril: jika engkau tidak melihat-Nya, sesungguhnya Dia melihatmu.",
+   "s": "DSKP TI T4 (2018) SP 1.1.2",
+   "status": "aktif"
+  },
+  {
+   "id": 943,
+   "t": "T4-1.1",
+   "d": 1,
+   "q": "Rukun Islam yang kedua ialah ...",
+   "o": [
+    "Berpuasa",
+    "Mendirikan solat",
+    "Mengeluarkan zakat",
+    "Mengucap dua kalimah syahadah"
+   ],
+   "a": 1,
+   "e": "Rukun Islam: syahadah, solat, zakat, puasa dan haji.",
+   "s": "DSKP TI T4 (2018) SP 1.1.3",
+   "status": "aktif"
+  },
+  {
+   "id": 944,
+   "t": "T4-1.1",
+   "d": 1,
+   "q": "Rukun Iman yang keenam ialah beriman kepada ...",
+   "o": [
+    "Kitab-kitab",
+    "Rasul-rasul",
+    "Hari akhirat",
+    "Qada' dan qadar"
+   ],
+   "a": 3,
+   "e": "Rukun Iman: Allah, malaikat, kitab, rasul, hari akhirat, qada' dan qadar.",
+   "s": "DSKP TI T4 (2018) SP 1.1.3",
+   "status": "aktif"
+  },
+  {
+   "id": 945,
+   "t": "T4-1.1",
+   "d": 2,
+   "q": "Hadis yang menghuraikan Islam, Iman dan Ihsan diriwayatkan ketika malaikat ... datang dalam rupa seorang lelaki.",
+   "o": [
+    "Israfil",
+    "Izrail",
+    "Mikail",
+    "Jibril"
+   ],
+   "a": 3,
+   "e": "Hadis Jibril (riwayat Muslim) menghuraikan Islam, Iman, Ihsan dan tanda kiamat.",
+   "s": "DSKP TI T4 (2018) SP 1.1.3",
+   "status": "aktif"
+  },
+  {
+   "id": 946,
+   "t": "T4-1.1",
+   "d": 2,
+   "q": "Antara kepentingan mengamalkan Rukun Iman dalam kehidupan ialah ...",
+   "o": [
+    "Melahirkan jiwa yang tenang dan yakin kepada ketentuan Allah",
+    "Menjadikan seseorang terkenal",
+    "Menambah kekayaan",
+    "Mengelak tanggungjawab"
+   ],
+   "a": 0,
+   "e": "Rukun Iman yang dihayati melahirkan jiwa tenang, reda dan yakin.",
+   "s": "DSKP TI T4 (2018) SP 1.1.4",
+   "status": "aktif"
+  },
+  {
+   "id": 947,
+   "t": "T4-1.1",
+   "d": 3,
+   "q": "Seorang murid sentiasa menjaga solat, jujur dalam peperiksaan dan menghormati jiran berlainan agama. Ini menunjukkan dia mengamalkan Islam sebagai ...",
+   "o": [
+    "Ideologi politik",
+    "Al-Din yang syumul",
+    "Budaya warisan",
+    "Ritual semata-mata"
+   ],
+   "a": 1,
+   "e": "Islam sebagai al-Din diamalkan secara syumul dalam ibadah, akhlak dan muamalat.",
+   "s": "DSKP TI T4 (2018) SP 1.1.5",
+   "status": "aktif"
+  },
+  {
+   "id": 948,
+   "t": "T4-1.2",
+   "d": 1,
+   "q": "Akidah dari segi bahasa bermaksud ...",
+   "o": [
+    "Budi pekerti",
+    "Simpulan atau ikatan",
+    "Pengabdian",
+    "Peraturan"
+   ],
+   "a": 1,
+   "e": "Akidah bermaksud simpulan atau ikatan; dari segi istilah, kepercayaan yang teguh kepada Allah.",
+   "s": "DSKP TI T4 (2018) SP 1.2.1",
+   "status": "aktif"
+  },
+  {
+   "id": 949,
+   "t": "T4-1.2",
+   "d": 2,
+   "q": "Tauhid yang mengesakan Allah sebagai pencipta, pemilik dan pentadbir alam dinamakan tauhid ...",
+   "o": [
+    "Uluhiyyah",
+    "Mulkiyyah",
+    "Rububiyyah",
+    "Asma' wa al-Sifat"
+   ],
+   "a": 2,
+   "e": "Tauhid rububiyyah: Allah Pencipta, Pemilik dan Pentadbir; uluhiyyah: hanya Allah yang disembah.",
+   "s": "DSKP TI T4 (2018) SP 1.2.1",
+   "status": "aktif"
+  },
+  {
+   "id": 950,
+   "t": "T4-1.2",
+   "d": 2,
+   "q": "Tauhid yang mengesakan Allah SWT sebagai satu-satunya Tuhan yang berhak disembah dinamakan tauhid ...",
+   "o": [
+    "Asma' wa al-Sifat",
+    "Zat",
+    "Rububiyyah",
+    "Uluhiyyah"
+   ],
+   "a": 3,
+   "e": "Tauhid uluhiyyah: hanya Allah yang berhak disembah.",
+   "s": "DSKP TI T4 (2018) SP 1.2.1",
+   "status": "aktif"
+  },
+  {
+   "id": 951,
+   "t": "T4-1.2",
+   "d": 2,
+   "q": "Antara berikut, yang manakah perkara yang boleh merosakkan akidah?",
+   "o": [
+    "Menuntut ilmu",
+    "Mempercayai tangkal dan azimat boleh memberi manfaat",
+    "Membaca al-Quran",
+    "Berzikir"
+   ],
+   "a": 1,
+   "e": "Mempercayai tangkal boleh memberi manfaat atau mudarat selain Allah ialah syirik.",
+   "s": "DSKP TI T4 (2018) SP 1.2.2",
+   "status": "aktif"
+  },
+  {
+   "id": 952,
+   "t": "T4-1.2",
+   "d": 2,
+   "q": "Perbuatan meninggalkan agama Islam sama ada melalui perkataan, perbuatan atau iktikad dinamakan ...",
+   "o": [
+    "Bidaah",
+    "Murtad",
+    "Munafik",
+    "Fasik"
+   ],
+   "a": 1,
+   "e": "Murtad ialah keluar daripada agama Islam.",
+   "s": "DSKP TI T4 (2018) SP 1.2.2",
+   "status": "aktif"
+  },
+  {
+   "id": 953,
+   "t": "T4-1.2",
+   "d": 2,
+   "q": "Kepentingan memelihara akidah yang mantap ialah ...",
+   "o": [
+    "Menjadi benteng daripada perbuatan syirik dan maksiat",
+    "Mendapat pujian manusia",
+    "Menambah harta",
+    "Mengelakkan kerja"
+   ],
+   "a": 0,
+   "e": "Akidah mantap menjadi benteng diri daripada syirik dan maksiat.",
+   "s": "DSKP TI T4 (2018) SP 1.2.3",
+   "status": "aktif"
+  },
+  {
+   "id": 954,
+   "t": "T4-1.2",
+   "d": 3,
+   "q": "Rakan anda mengajak berjumpa bomoh untuk mendapatkan 'ilmu pelaris' bagi perniagaannya. Tindakan yang menepati akidah ialah ...",
+   "o": [
+    "Ikut sahaja kerana untuk niaga",
+    "Menyokongnya",
+    "Menasihatinya bahawa rezeki daripada Allah dan amalan itu boleh membawa syirik",
+    "Berdiam diri"
+   ],
+   "a": 2,
+   "e": "Memelihara akidah daripada perkara khurafat dan syirik.",
+   "s": "DSKP TI T4 (2018) SP 1.2.4",
+   "status": "aktif"
+  },
+  {
+   "id": 955,
+   "t": "T4-1.3",
+   "d": 1,
+   "q": "Ibadah dari segi bahasa bermaksud ...",
+   "o": [
+    "Berbuat baik",
+    "Percaya",
+    "Taat, tunduk dan patuh",
+    "Bersih"
+   ],
+   "a": 2,
+   "e": "Ibadah bermaksud taat, tunduk, patuh dan merendah diri kepada Allah SWT.",
+   "s": "DSKP TI T4 (2018) SP 1.3.1",
+   "status": "aktif"
+  },
+  {
+   "id": 956,
+   "t": "T4-1.3",
+   "d": 2,
+   "q": "Ibadah yang cara pelaksanaannya telah ditetapkan oleh syarak seperti solat dan puasa dinamakan ibadah ...",
+   "o": [
+    "Khusus",
+    "Sunat",
+    "Umum",
+    "Muamalat"
+   ],
+   "a": 0,
+   "e": "Ibadah khusus mempunyai tatacara yang ditetapkan syarak; ibadah umum ialah semua perbuatan baik yang memenuhi syarat.",
+   "s": "DSKP TI T4 (2018) SP 1.3.1",
+   "status": "aktif"
+  },
+  {
+   "id": 957,
+   "t": "T4-1.3",
+   "d": 2,
+   "q": "Antara syarat amalan harian dikira sebagai ibadah umum ialah ...",
+   "o": [
+    "Dilakukan pada bulan Ramadan sahaja",
+    "Niat kerana Allah dan perkara itu diharuskan syarak",
+    "Dilakukan di masjid sahaja",
+    "Dilakukan secara berjemaah"
+   ],
+   "a": 1,
+   "e": "Syarat ibadah umum: niat ikhlas kerana Allah, perkara diharuskan syarak, dilakukan dengan sebaik-baiknya dan tidak mengabaikan ibadah khusus.",
+   "s": "DSKP TI T4 (2018) SP 1.3.2",
+   "status": "aktif"
+  },
+  {
+   "id": 958,
+   "t": "T4-1.3",
+   "d": 3,
+   "q": "Seorang pelajar mengulang kaji pelajaran dengan niat menuntut ilmu kerana Allah tanpa meninggalkan solat. Perbuatan ini ialah ...",
+   "o": [
+    "Ibadah khusus",
+    "Bidaah",
+    "Ibadah umum",
+    "Perbuatan sia-sia"
+   ],
+   "a": 2,
+   "e": "Belajar dengan niat kerana Allah dan tidak mengabaikan ibadah khusus menjadi ibadah umum.",
+   "s": "DSKP TI T4 (2018) SP 1.3.2",
+   "status": "aktif"
+  },
+  {
+   "id": 959,
+   "t": "T4-1.3",
+   "d": 2,
+   "q": "Firman Allah SWT: \"Dan (ingatlah) Aku tidak menciptakan jin dan manusia melainkan untuk mereka menyembah-Ku.\" Ayat ini terdapat dalam ...",
+   "o": [
+    "Surah al-Zariyat ayat 56",
+    "Surah al-'Asr ayat 1",
+    "Surah al-Mulk ayat 2",
+    "Surah al-Baqarah ayat 30"
+   ],
+   "a": 0,
+   "e": "Surah al-Zariyat 51:56 menjelaskan tujuan penciptaan jin dan manusia ialah beribadah.",
+   "s": "DSKP TI T4 (2018) SP 1.3.3",
+   "status": "aktif"
+  },
+  {
+   "id": 960,
+   "t": "T4-1.3",
+   "d": 2,
+   "q": "Ibadah yang wajib dilaksanakan oleh setiap individu Muslim yang mukalaf dinamakan ...",
+   "o": [
+    "Fardu kifayah",
+    "Sunat muakkad",
+    "Harus",
+    "Fardu ain"
+   ],
+   "a": 3,
+   "e": "Fardu ain wajib ke atas setiap mukalaf seperti solat lima waktu.",
+   "s": "DSKP TI T4 (2018) SP 1.3.4",
+   "status": "aktif"
+  },
+  {
+   "id": 961,
+   "t": "T4-1.4",
+   "d": 1,
+   "q": "Akhlak dari segi bahasa bermaksud ...",
+   "o": [
+    "Pegangan hidup",
+    "Peraturan negara",
+    "Ilmu pengetahuan",
+    "Tabiat, perangai dan budi pekerti"
+   ],
+   "a": 3,
+   "e": "Akhlak berasal daripada kalimah khuluq: tabiat, perangai, budi pekerti.",
+   "s": "DSKP TI T4 (2018) SP 1.4.1",
+   "status": "aktif"
+  },
+  {
+   "id": 962,
+   "t": "T4-1.4",
+   "d": 2,
+   "q": "Akhlak yang terpuji disebut ...",
+   "o": [
+    "Mahmudah",
+    "Makruh",
+    "Mubah",
+    "Mazmumah"
+   ],
+   "a": 0,
+   "e": "Akhlak mahmudah terpuji; akhlak mazmumah tercela.",
+   "s": "DSKP TI T4 (2018) SP 1.4.1",
+   "status": "aktif"
+  },
+  {
+   "id": 963,
+   "t": "T4-1.4",
+   "d": 2,
+   "q": "Sabda Rasulullah SAW: \"Sesungguhnya aku diutus untuk menyempurnakan ...\"",
+   "o": [
+    "Kekuatan tentera",
+    "Ilmu sains",
+    "Kemuliaan akhlak",
+    "Kekayaan umat"
+   ],
+   "a": 2,
+   "e": "Hadis: Aku diutus untuk menyempurnakan akhlak yang mulia (riwayat Ahmad dan al-Baihaqi).",
+   "s": "DSKP TI T4 (2018) SP 1.4.2",
+   "status": "aktif"
+  },
+  {
+   "id": 964,
+   "t": "T4-1.4",
+   "d": 2,
+   "q": "Antara contoh akhlak terhadap Allah SWT ialah ...",
+   "o": [
+    "Menjaga kebersihan",
+    "Menyayangi haiwan",
+    "Bersyukur atas nikmat-Nya",
+    "Menghormati jiran"
+   ],
+   "a": 2,
+   "e": "Akhlak terhadap Allah: bersyukur, bertakwa, reda, tawakal dan sebagainya.",
+   "s": "DSKP TI T4 (2018) SP 1.4.2",
+   "status": "aktif"
+  },
+  {
+   "id": 965,
+   "t": "T4-1.4",
+   "d": 2,
+   "q": "Kepentingan mengamalkan akhlak mahmudah kepada masyarakat ialah ...",
+   "o": [
+    "Mengurangkan kerjasama",
+    "Menambah persaingan",
+    "Mewujudkan masyarakat yang harmoni dan saling menghormati",
+    "Menimbulkan prasangka"
+   ],
+   "a": 2,
+   "e": "Akhlak mulia melahirkan masyarakat harmoni.",
+   "s": "DSKP TI T4 (2018) SP 1.4.3",
+   "status": "aktif"
+  },
+  {
+   "id": 966,
+   "t": "T4-1.4",
+   "d": 3,
+   "q": "Melihat rakan dibuli, tindakan berakhlak yang paling sesuai ialah ...",
+   "o": [
+    "Ketawa bersama",
+    "Pergi tanpa berbuat apa-apa",
+    "Merakam video untuk tular",
+    "Menegah dengan berhemah dan melaporkan kepada guru"
+   ],
+   "a": 3,
+   "e": "Akhlak mulia: mencegah kemungkaran dengan berhemah.",
+   "s": "DSKP TI T4 (2018) SP 1.4.4",
+   "status": "aktif"
+  },
+  {
+   "id": 967,
+   "t": "T4-1.5",
+   "d": 1,
+   "q": "Prinsip pandangan hidup Islam yang bermaksud bersumberkan Allah SWT dan bertujuan mencapai keredaan-Nya ialah ...",
+   "o": [
+    "Rabbaniyyah",
+    "Murunah",
+    "Syumuliyyah",
+    "Waqi'iyyah"
+   ],
+   "a": 0,
+   "e": "Rabbaniyyah: sumber dan matlamat daripada dan kepada Allah SWT.",
+   "s": "DSKP TI T4 (2018) SP 1.5.1",
+   "status": "aktif"
+  },
+  {
+   "id": 968,
+   "t": "T4-1.5",
+   "d": 1,
+   "q": "Prinsip pandangan hidup Islam yang bermaksud lengkap dan menyeluruh meliputi semua aspek kehidupan ialah ...",
+   "o": [
+    "'Alamiyyah",
+    "Murunah",
+    "Thabat",
+    "Syumuliyyah"
+   ],
+   "a": 3,
+   "e": "Syumuliyyah: lengkap dan menyeluruh.",
+   "s": "DSKP TI T4 (2018) SP 1.5.1",
+   "status": "aktif"
+  },
+  {
+   "id": 969,
+   "t": "T4-1.5",
+   "d": 2,
+   "q": "Prinsip pandangan hidup Islam yang bermaksud realistik dan sesuai dengan fitrah serta kemampuan manusia ialah ...",
+   "o": [
+    "'Alamiyyah",
+    "Rabbaniyyah",
+    "Waqi'iyyah",
+    "Thabat"
+   ],
+   "a": 2,
+   "e": "Waqi'iyyah: realistik, praktikal dan sesuai dengan kemampuan manusia.",
+   "s": "DSKP TI T4 (2018) SP 1.5.1",
+   "status": "aktif"
+  },
+  {
+   "id": 970,
+   "t": "T4-1.5",
+   "d": 2,
+   "q": "Prinsip 'alamiyyah bermaksud ajaran Islam ...",
+   "o": [
+    "Hanya untuk bangsa Arab",
+    "Hanya untuk ibadat",
+    "Sejagat dan sesuai untuk seluruh manusia",
+    "Berubah mengikut zaman"
+   ],
+   "a": 2,
+   "e": "'Alamiyyah: universal untuk seluruh manusia sepanjang zaman.",
+   "s": "DSKP TI T4 (2018) SP 1.5.1",
+   "status": "aktif"
+  },
+  {
+   "id": 971,
+   "t": "T4-1.5",
+   "d": 2,
+   "q": "Prinsip thabat dan murunah bermaksud ...",
+   "o": [
+    "Berubah sepenuhnya mengikut masa",
+    "Tetap pada perkara asas dan anjal pada perkara cabang",
+    "Hanya mengikut adat",
+    "Tegar dalam semua perkara"
+   ],
+   "a": 1,
+   "e": "Thabat: tetap pada usul (akidah, ibadah asas); murunah: anjal pada furu' dan wasilah.",
+   "s": "DSKP TI T4 (2018) SP 1.5.2",
+   "status": "aktif"
+  },
+  {
+   "id": 972,
+   "t": "T4-1.5",
+   "d": 3,
+   "q": "Solat boleh dilakukan secara duduk bagi orang yang sakit. Ini menunjukkan prinsip ...",
+   "o": [
+    "Murunah dan waqi'iyyah",
+    "Syumuliyyah sahaja",
+    "Rabbaniyyah sahaja",
+    "'Alamiyyah"
+   ],
+   "a": 0,
+   "e": "Kelonggaran solat bagi yang uzur menunjukkan Islam anjal dan realistik.",
+   "s": "DSKP TI T4 (2018) SP 1.5.3",
+   "status": "aktif"
+  },
+  {
+   "id": 973,
+   "t": "T4-2.1",
+   "d": 1,
+   "q": "Insan dari segi bahasa berasal daripada kalimah yang bermaksud ...",
+   "o": [
+    "Pandai",
+    "Mulia",
+    "Lupa dan jinak",
+    "Kuat dan gagah"
+   ],
+   "a": 2,
+   "e": "Insan dikaitkan dengan nasiya (lupa) dan uns (jinak/mesra).",
+   "s": "DSKP TI T4 (2018) SP 2.1.1",
+   "status": "aktif"
+  },
+  {
+   "id": 974,
+   "t": "T4-2.1",
+   "d": 2,
+   "q": "Menurut al-Quran, manusia pertama iaitu Nabi Adam a.s. diciptakan daripada ...",
+   "o": [
+    "Tanah",
+    "Api",
+    "Cahaya",
+    "Air"
+   ],
+   "a": 0,
+   "e": "Nabi Adam a.s. diciptakan daripada tanah; jin daripada api dan malaikat daripada cahaya.",
+   "s": "DSKP TI T4 (2018) SP 2.1.2",
+   "status": "aktif"
+  },
+  {
+   "id": 975,
+   "t": "T4-2.1",
+   "d": 2,
+   "q": "Proses kejadian manusia dalam rahim yang bermula daripada setitis air mani diterangkan dalam ...",
+   "o": [
+    "Surah al-Fatihah ayat 1-7",
+    "Surah al-Kauthar ayat 1-3",
+    "Surah al-Mukminun ayat 12-14",
+    "Surah al-Nas ayat 1-6"
+   ],
+   "a": 2,
+   "e": "Surah al-Mukminun 23:12-14 menerangkan peringkat nutfah, 'alaqah, mudghah, tulang dan daging.",
+   "s": "DSKP TI T4 (2018) SP 2.1.2",
+   "status": "aktif"
+  },
+  {
+   "id": 976,
+   "t": "T4-2.1",
+   "d": 3,
+   "q": "Peringkat kejadian manusia selepas 'alaqah (segumpal darah) ialah ...",
+   "o": [
+    "Nutfah (air mani)",
+    "Mudghah (segumpal daging)",
+    "Pembentukan tulang",
+    "Peniupan roh"
+   ],
+   "a": 1,
+   "e": "Urutan: nutfah, 'alaqah, mudghah, tulang, dibalut daging.",
+   "s": "DSKP TI T4 (2018) SP 2.1.2",
+   "status": "aktif"
+  },
+  {
+   "id": 977,
+   "t": "T4-2.1",
+   "d": 2,
+   "q": "Alam yang dilalui manusia selepas mati dan sebelum hari kebangkitan dinamakan alam ...",
+   "o": [
+    "Akhirat",
+    "Rahim",
+    "Dunia",
+    "Barzakh"
+   ],
+   "a": 3,
+   "e": "Peringkat alam: roh, rahim, dunia, barzakh, akhirat.",
+   "s": "DSKP TI T4 (2018) SP 2.1.3",
+   "status": "aktif"
+  },
+  {
+   "id": 978,
+   "t": "T4-2.1",
+   "d": 2,
+   "q": "Keistimewaan utama yang membezakan manusia dengan makhluk lain sehingga layak menjadi khalifah ialah ...",
+   "o": [
+    "Akal",
+    "Kekuatan fizikal",
+    "Kecantikan",
+    "Umur panjang"
+   ],
+   "a": 0,
+   "e": "Akal membolehkan manusia berfikir, menimbang baik buruk dan menerima taklif.",
+   "s": "DSKP TI T4 (2018) SP 2.1.4",
+   "status": "aktif"
+  },
+  {
+   "id": 979,
+   "t": "T4-2.1",
+   "d": 3,
+   "q": "Antara tindakan untuk mengembalikan manusia kepada fitrah yang sebenar ialah ...",
+   "o": [
+    "Mengikut hawa nafsu",
+    "Bertaubat dan kembali menghayati ajaran Islam",
+    "Mengasingkan diri daripada masyarakat",
+    "Meninggalkan ilmu"
+   ],
+   "a": 1,
+   "e": "Fitrah manusia ialah bertuhan; bertaubat mengembalikan diri kepada fitrah.",
+   "s": "DSKP TI T4 (2018) SP 2.1.6",
+   "status": "aktif"
+  },
+  {
+   "id": 980,
+   "t": "T4-2.2",
+   "d": 1,
+   "q": "Hamba Allah bermaksud manusia yang ...",
+   "o": [
+    "Bebas melakukan apa sahaja",
+    "Tunduk, patuh dan mengabdikan diri kepada Allah SWT",
+    "Hanya bekerja",
+    "Memerintah makhluk lain"
+   ],
+   "a": 1,
+   "e": "Konsep hamba: mengabdikan diri sepenuhnya kepada Allah SWT.",
+   "s": "DSKP TI T4 (2018) SP 2.2.1",
+   "status": "aktif"
+  },
+  {
+   "id": 981,
+   "t": "T4-2.2",
+   "d": 2,
+   "q": "Firman Allah SWT: \"Sesungguhnya Aku hendak menjadikan seorang khalifah di bumi.\" Ayat ini terdapat dalam ...",
+   "o": [
+    "Surah al-Baqarah ayat 30",
+    "Surah al-An'am ayat 165",
+    "Surah al-Zariyat ayat 56",
+    "Surah Hud ayat 61"
+   ],
+   "a": 0,
+   "e": "Surah al-Baqarah 2:30 menyebut perlantikan manusia sebagai khalifah.",
+   "s": "DSKP TI T4 (2018) SP 2.2.1",
+   "status": "aktif"
+  },
+  {
+   "id": 982,
+   "t": "T4-2.2",
+   "d": 2,
+   "q": "Tanggungjawab manusia sebagai khalifah ialah ...",
+   "o": [
+    "Mengeksploitasi alam sesuka hati",
+    "Memakmurkan bumi mengikut syariat Allah",
+    "Meninggalkan dunia",
+    "Hidup bersendirian"
+   ],
+   "a": 1,
+   "e": "Khalifah bertanggungjawab memakmurkan dan mentadbir bumi mengikut syariat.",
+   "s": "DSKP TI T4 (2018) SP 2.2.2",
+   "status": "aktif"
+  },
+  {
+   "id": 983,
+   "t": "T4-2.2",
+   "d": 2,
+   "q": "Antara tanggungjawab manusia sebagai hamba Allah ialah ...",
+   "o": [
+    "Mencari populariti",
+    "Melaksanakan suruhan dan meninggalkan larangan-Nya",
+    "Mengumpul harta",
+    "Bersaing secara tidak sihat"
+   ],
+   "a": 1,
+   "e": "Hamba Allah wajib taat kepada perintah dan menjauhi larangan.",
+   "s": "DSKP TI T4 (2018) SP 2.2.2",
+   "status": "aktif"
+  },
+  {
+   "id": 984,
+   "t": "T4-2.2",
+   "d": 2,
+   "q": "Kesan apabila manusia mengabaikan tanggungjawab sebagai khalifah ialah ...",
+   "o": [
+    "Berlaku kerosakan di darat dan di laut",
+    "Masyarakat semakin harmoni",
+    "Alam semakin terpelihara",
+    "Ekonomi menjadi adil"
+   ],
+   "a": 0,
+   "e": "Surah al-Rum 30:41: kerosakan di darat dan laut akibat perbuatan manusia.",
+   "s": "DSKP TI T4 (2018) SP 2.2.3",
+   "status": "aktif"
+  },
+  {
+   "id": 985,
+   "t": "T4-2.2",
+   "d": 3,
+   "q": "Sebagai murid, tindakan menunaikan tanggungjawab sebagai khalifah di sekolah ialah ...",
+   "o": [
+    "Mencoret dinding",
+    "Merosakkan pokok",
+    "Menjaga kebersihan dan harta benda sekolah",
+    "Membazir air"
+   ],
+   "a": 2,
+   "e": "Khalifah memelihara dan memakmurkan persekitaran.",
+   "s": "DSKP TI T4 (2018) SP 2.2.4",
+   "status": "aktif"
+  },
+  {
+   "id": 986,
+   "t": "T4-2.2",
+   "d": 3,
+   "q": "Gabungan tanggungjawab hamba dan khalifah dalam diri seorang doktor Muslim terlihat apabila dia ...",
+   "o": [
+    "Meninggalkan solat kerana sibuk",
+    "Mengenakan caj berlebihan",
+    "Mengutamakan pesakit kaya",
+    "Merawat pesakit dengan ikhlas dan tetap menjaga solat"
+   ],
+   "a": 3,
+   "e": "Hamba (ibadah khusus) dan khalifah (khidmat kepada manusia) seimbang.",
+   "s": "DSKP TI T4 (2018) SP 2.2.4",
+   "status": "aktif"
+  },
+  {
+   "id": 987,
+   "t": "T4-2.3",
+   "d": 1,
+   "q": "Wahyu dari segi istilah bermaksud ...",
+   "o": [
+    "Ilmu daripada pengalaman",
+    "Ilham kepada semua orang",
+    "Pemberitahuan Allah SWT kepada nabi-Nya melalui cara tertentu",
+    "Mimpi biasa"
+   ],
+   "a": 2,
+   "e": "Wahyu ialah pemberitahuan Allah kepada nabi dan rasul melalui cara tertentu.",
+   "s": "DSKP TI T4 (2018) SP 2.3.1",
+   "status": "aktif"
+  },
+  {
+   "id": 988,
+   "t": "T4-2.3",
+   "d": 1,
+   "q": "Malaikat yang bertanggungjawab menyampaikan wahyu ialah ...",
+   "o": [
+    "Mikail",
+    "Jibril",
+    "Raqib",
+    "Ridwan"
+   ],
+   "a": 1,
+   "e": "Malaikat Jibril menyampaikan wahyu.",
+   "s": "DSKP TI T4 (2018) SP 2.3.1",
+   "status": "aktif"
+  },
+  {
+   "id": 989,
+   "t": "T4-2.3",
+   "d": 2,
+   "q": "Fungsi akal dalam kehidupan manusia ialah ...",
+   "o": [
+    "Berfikir, memahami dan membezakan antara baik dan buruk",
+    "Menolak semua perkara ghaib",
+    "Menggantikan wahyu",
+    "Menentukan hukum tanpa wahyu"
+   ],
+   "a": 0,
+   "e": "Akal untuk berfikir dan memahami, namun tertakluk kepada panduan wahyu.",
+   "s": "DSKP TI T4 (2018) SP 2.3.2",
+   "status": "aktif"
+  },
+  {
+   "id": 990,
+   "t": "T4-2.3",
+   "d": 2,
+   "q": "Kedudukan akal berbanding wahyu ialah ...",
+   "o": [
+    "Akal dan wahyu bertentangan",
+    "Akal mengatasi wahyu",
+    "Wahyu tunduk kepada akal",
+    "Akal tunduk kepada wahyu"
+   ],
+   "a": 3,
+   "e": "Akal terbatas; wahyu menjadi panduan utama dan akal memahaminya.",
+   "s": "DSKP TI T4 (2018) SP 2.3.3",
+   "status": "aktif"
+  },
+  {
+   "id": 991,
+   "t": "T4-2.3",
+   "d": 2,
+   "q": "Antara perkara yang boleh merosakkan akal ialah ...",
+   "o": [
+    "Tidur secukupnya",
+    "Bersukan",
+    "Arak, dadah dan bahan lucah",
+    "Membaca al-Quran"
+   ],
+   "a": 2,
+   "e": "Arak, dadah dan bahan lucah merosakkan akal.",
+   "s": "DSKP TI T4 (2018) SP 2.3.4",
+   "status": "aktif"
+  },
+  {
+   "id": 992,
+   "t": "T4-2.3",
+   "d": 3,
+   "q": "Seorang saintis Muslim menjalankan kajian sains sambil memastikan hasilnya tidak bercanggah dengan syariat. Ini menunjukkan ...",
+   "o": [
+    "Menolak wahyu",
+    "Penyelarasan peranan wahyu dan akal",
+    "Menolak sains",
+    "Akal mengatasi wahyu"
+   ],
+   "a": 1,
+   "e": "Wahyu dan akal saling melengkapi.",
+   "s": "DSKP TI T4 (2018) SP 2.3.5",
+   "status": "aktif"
+  },
+  {
+   "id": 993,
+   "t": "T4-3.1",
+   "d": 1,
+   "q": "Sistem sosial Islam bermaksud ...",
+   "o": [
+    "Peraturan hidup bermasyarakat berlandaskan syariat Islam",
+    "Peraturan adat semata-mata",
+    "Sistem politik",
+    "Undang-undang antarabangsa"
+   ],
+   "a": 0,
+   "e": "Sistem sosial Islam mengatur hubungan sesama manusia berlandaskan syariat.",
+   "s": "DSKP TI T4 (2018) SP 3.1.1",
+   "status": "aktif"
+  },
+  {
+   "id": 994,
+   "t": "T4-3.1",
+   "d": 2,
+   "q": "Antara adab dan etika dalam sistem sosial Islam ialah ...",
+   "o": [
+    "Menghina orang lain",
+    "Berprasangka buruk",
+    "Memberi salam dan menghormati jiran",
+    "Mengumpat"
+   ],
+   "a": 2,
+   "e": "Adab sosial: memberi salam, menghormati jiran, menziarahi orang sakit dan sebagainya.",
+   "s": "DSKP TI T4 (2018) SP 3.1.2",
+   "status": "aktif"
+  },
+  {
+   "id": 995,
+   "t": "T4-3.1",
+   "d": 2,
+   "q": "Hak asasi manusia yang dijamin dalam Islam termasuklah hak ...",
+   "o": [
+    "Untuk menghina agama lain",
+    "Untuk mencuri",
+    "Untuk menindas orang lain",
+    "Untuk hidup, beragama, memiliki harta dan maruah"
+   ],
+   "a": 3,
+   "e": "Islam menjamin hak hidup, agama, akal, keturunan, harta dan maruah.",
+   "s": "DSKP TI T4 (2018) SP 3.1.3",
+   "status": "aktif"
+  },
+  {
+   "id": 996,
+   "t": "T4-3.1",
+   "d": 2,
+   "q": "Keistimewaan sistem sosial Islam ialah ...",
+   "o": [
+    "Bersumberkan wahyu dan menjamin keadilan untuk semua",
+    "Berubah mengikut kehendak majoriti",
+    "Hanya untuk orang Islam",
+    "Mengutamakan golongan kaya"
+   ],
+   "a": 0,
+   "e": "Sistem sosial Islam bersumberkan wahyu, adil dan sejagat.",
+   "s": "DSKP TI T4 (2018) SP 3.1.4",
+   "status": "aktif"
+  },
+  {
+   "id": 997,
+   "t": "T4-3.1",
+   "d": 3,
+   "q": "Jiran anda yang bukan Islam ditimpa musibah banjir. Tindakan yang menepati sistem sosial Islam ialah ...",
+   "o": [
+    "Membantu dan menziarahinya",
+    "Tidak mempedulikannya kerana berlainan agama",
+    "Mengambil kesempatan",
+    "Menyebarkan berita palsu"
+   ],
+   "a": 0,
+   "e": "Islam menyuruh berbuat baik kepada jiran tanpa mengira agama.",
+   "s": "DSKP TI T4 (2018) SP 3.1.5",
+   "status": "aktif"
+  },
+  {
+   "id": 998,
+   "t": "T4-3.2",
+   "d": 1,
+   "q": "Institusi kekeluargaan dalam Islam bermula dengan ...",
+   "o": [
+    "Kelahiran",
+    "Jual beli",
+    "Perkahwinan yang sah",
+    "Pertunangan"
+   ],
+   "a": 2,
+   "e": "Keluarga Islam dibina melalui akad nikah yang sah.",
+   "s": "DSKP TI T4 (2018) SP 3.2.1",
+   "status": "aktif"
+  },
+  {
+   "id": 999,
+   "t": "T4-3.2",
+   "d": 2,
+   "q": "Matlamat perkahwinan dalam Islam yang disebut dalam Surah al-Rum ayat 21 ialah ...",
+   "o": [
+    "Mengikut adat",
+    "Mengumpul harta",
+    "Menaikkan status",
+    "Mendapat ketenangan (sakinah), kasih sayang dan rahmat"
+   ],
+   "a": 3,
+   "e": "Surah al-Rum 30:21: sakinah, mawaddah dan rahmah.",
+   "s": "DSKP TI T4 (2018) SP 3.2.1",
+   "status": "aktif"
+  },
+  {
+   "id": 1000,
+   "t": "T4-3.2",
+   "d": 2,
+   "q": "Tanggungjawab utama suami dalam keluarga ialah ...",
+   "o": [
+    "Mengabaikan anak",
+    "Memberi nafkah dan memimpin keluarga",
+    "Menyerahkan semua tanggungjawab kepada isteri",
+    "Hanya bekerja tanpa mendidik"
+   ],
+   "a": 1,
+   "e": "Suami sebagai ketua keluarga wajib memberi nafkah dan bimbingan.",
+   "s": "DSKP TI T4 (2018) SP 3.2.2",
+   "status": "aktif"
+  },
+  {
+   "id": 1001,
+   "t": "T4-3.2",
+   "d": 2,
+   "q": "Antara tanggungjawab anak terhadap ibu bapa ialah ...",
+   "o": [
+    "Meninggikan suara",
+    "Membebankan mereka",
+    "Taat, berbuat baik dan mendoakan mereka",
+    "Mengabaikan mereka ketika tua"
+   ],
+   "a": 2,
+   "e": "Birrul walidain: taat, berbuat baik dan mendoakan ibu bapa.",
+   "s": "DSKP TI T4 (2018) SP 3.2.2",
+   "status": "aktif"
+  },
+  {
+   "id": 1002,
+   "t": "T4-3.2",
+   "d": 2,
+   "q": "Kepentingan membina keluarga berasaskan tuntutan syarak ialah ...",
+   "o": [
+    "Menjauhkan kasih sayang",
+    "Melahirkan zuriat yang sah dan masyarakat yang sejahtera",
+    "Mengurangkan tanggungjawab",
+    "Menambah konflik"
+   ],
+   "a": 1,
+   "e": "Keluarga mengikut syarak melahirkan zuriat sah dan masyarakat sejahtera.",
+   "s": "DSKP TI T4 (2018) SP 3.2.3",
+   "status": "aktif"
+  },
+  {
+   "id": 1003,
+   "t": "T4-3.2",
+   "d": 3,
+   "q": "Ibu bapa Hana sibuk bekerja. Tindakan terbaik Hana sebagai anak ialah ...",
+   "o": [
+    "Meminta wang berlebihan",
+    "Membantu kerja rumah dan menjaga adik-adik",
+    "Mengabaikan pelajaran",
+    "Keluar rumah tanpa izin"
+   ],
+   "a": 1,
+   "e": "Anak bertanggungjawab membantu dan meringankan beban keluarga.",
+   "s": "DSKP TI T4 (2018) SP 3.2.4",
+   "status": "aktif"
+  },
+  {
+   "id": 1004,
+   "t": "T4-3.3",
+   "d": 1,
+   "q": "Pergaulan dalam Islam bermaksud ...",
+   "o": [
+    "Hanya dengan rakan sejantina",
+    "Bebas tanpa batas",
+    "Hubungan sesama manusia yang dibatasi oleh syariat",
+    "Hanya dengan ahli keluarga"
+   ],
+   "a": 2,
+   "e": "Pergaulan Islam ialah interaksi sosial yang mematuhi batas syariat.",
+   "s": "DSKP TI T4 (2018) SP 3.3.1",
+   "status": "aktif"
+  },
+  {
+   "id": 1005,
+   "t": "T4-3.3",
+   "d": 2,
+   "q": "Antara adab pergaulan antara lelaki dan perempuan bukan mahram ialah ...",
+   "o": [
+    "Berdua-duaan di tempat sunyi",
+    "Bergurau secara melampau",
+    "Bersentuhan",
+    "Menutup aurat dan menundukkan pandangan"
+   ],
+   "a": 3,
+   "e": "Adab: menutup aurat, menundukkan pandangan, tidak berkhalwat dan tidak bersentuhan.",
+   "s": "DSKP TI T4 (2018) SP 3.3.2",
+   "status": "aktif"
+  },
+  {
+   "id": 1006,
+   "t": "T4-3.3",
+   "d": 2,
+   "q": "Berdua-duaan antara lelaki dan perempuan bukan mahram di tempat sunyi dinamakan ...",
+   "o": [
+    "Ikhtilat",
+    "Khalwat",
+    "Ghibah",
+    "Tabarruj"
+   ],
+   "a": 1,
+   "e": "Khalwat ialah berdua-duaan bukan mahram di tempat sunyi yang boleh membawa fitnah.",
+   "s": "DSKP TI T4 (2018) SP 3.3.2",
+   "status": "aktif"
+  },
+  {
+   "id": 1007,
+   "t": "T4-3.3",
+   "d": 2,
+   "q": "Sifat mahmudah dalam pergaulan termasuklah ...",
+   "o": [
+    "Mengumpat",
+    "Sombong",
+    "Dengki dan khianat",
+    "Amanah, jujur, pemaaf dan tolong-menolong"
+   ],
+   "a": 3,
+   "e": "Sifat terpuji dalam pergaulan: amanah, jujur, pemaaf, tolong-menolong.",
+   "s": "DSKP TI T4 (2018) SP 3.3.3",
+   "status": "aktif"
+  },
+  {
+   "id": 1008,
+   "t": "T4-3.3",
+   "d": 2,
+   "q": "Menceritakan keburukan orang lain yang benar tanpa pengetahuannya dinamakan ...",
+   "o": [
+    "Fitnah",
+    "Mengumpat (ghibah)",
+    "Riyak",
+    "Namimah"
+   ],
+   "a": 1,
+   "e": "Ghibah ialah menyebut keburukan saudara yang benar di belakangnya; jika tidak benar ia fitnah.",
+   "s": "DSKP TI T4 (2018) SP 3.3.3",
+   "status": "aktif"
+  },
+  {
+   "id": 1009,
+   "t": "T4-3.3",
+   "d": 2,
+   "q": "Kepentingan mengamalkan prinsip pergaulan Islam ialah ...",
+   "o": [
+    "Menjaga maruah diri dan mengelak gejala sosial",
+    "Menambah gejala sosial",
+    "Membebaskan pergaulan",
+    "Mengurangkan hubungan silaturahim"
+   ],
+   "a": 0,
+   "e": "Prinsip pergaulan Islam menjaga maruah dan mengelak gejala sosial.",
+   "s": "DSKP TI T4 (2018) SP 3.3.4",
+   "status": "aktif"
+  },
+  {
+   "id": 1010,
+   "t": "T4-3.3",
+   "d": 3,
+   "q": "Dalam kerja berkumpulan yang melibatkan lelaki dan perempuan, tindakan yang menepati prinsip pergaulan Islam ialah ...",
+   "o": [
+    "Bergurau senda melampau",
+    "Bersentuhan ketika berbincang",
+    "Berbincang di tempat terbuka, menjaga aurat dan batas perbualan",
+    "Berjumpa berdua di tempat sunyi"
+   ],
+   "a": 2,
+   "e": "Pergaulan yang menjaga batas syarak.",
+   "s": "DSKP TI T4 (2018) SP 3.3.5",
+   "status": "aktif"
+  },
+  {
+   "id": 1011,
+   "t": "T4-3.4",
+   "d": 1,
+   "q": "Hiburan menurut Islam ialah ...",
+   "o": [
+    "Hanya muzik",
+    "Aktiviti yang haram",
+    "Aktiviti yang menyeronokkan dan menenangkan jiwa selagi tidak bercanggah dengan syarak",
+    "Semua aktiviti yang menyeronokkan tanpa batas"
+   ],
+   "a": 2,
+   "e": "Hiburan diharuskan selagi tidak melanggar syariat.",
+   "s": "DSKP TI T4 (2018) SP 3.4.1",
+   "status": "aktif"
+  },
+  {
+   "id": 1012,
+   "t": "T4-3.4",
+   "d": 2,
+   "q": "Hukum asal hiburan dalam Islam ialah ...",
+   "o": [
+    "Harus",
+    "Makruh",
+    "Wajib",
+    "Haram"
+   ],
+   "a": 0,
+   "e": "Hukum asal hiburan adalah harus dengan syarat menepati batas syarak.",
+   "s": "DSKP TI T4 (2018) SP 3.4.1",
+   "status": "aktif"
+  },
+  {
+   "id": 1013,
+   "t": "T4-3.4",
+   "d": 2,
+   "q": "Antara adab berhibur menurut Islam ialah ...",
+   "o": [
+    "Tidak melalaikan daripada kewajipan seperti solat",
+    "Bercampur bebas lelaki dan perempuan",
+    "Mengandungi unsur maksiat",
+    "Mendedahkan aurat"
+   ],
+   "a": 0,
+   "e": "Hiburan tidak boleh melalaikan, tiada unsur maksiat, menutup aurat dan tidak bercampur bebas.",
+   "s": "DSKP TI T4 (2018) SP 3.4.2",
+   "status": "aktif"
+  },
+  {
+   "id": 1014,
+   "t": "T4-3.4",
+   "d": 2,
+   "q": "Hiburan yang melampaui batas dan melalaikan hukumnya menjadi ...",
+   "o": [
+    "Haram",
+    "Sunat",
+    "Wajib",
+    "Harus"
+   ],
+   "a": 0,
+   "e": "Hiburan yang melalaikan dan mengandungi maksiat menjadi haram.",
+   "s": "DSKP TI T4 (2018) SP 3.4.2",
+   "status": "aktif"
+  },
+  {
+   "id": 1015,
+   "t": "T4-3.4",
+   "d": 2,
+   "q": "Kepentingan berhibur mengikut adab Islam ialah ...",
+   "o": [
+    "Menenangkan jiwa tanpa melanggar syariat",
+    "Menimbulkan fitnah",
+    "Melalaikan diri",
+    "Membazir masa"
+   ],
+   "a": 0,
+   "e": "Hiburan berlandaskan Islam menenangkan jiwa dan mengekalkan nilai.",
+   "s": "DSKP TI T4 (2018) SP 3.4.3",
+   "status": "aktif"
+  },
+  {
+   "id": 1016,
+   "t": "T4-3.4",
+   "d": 3,
+   "q": "Rakan mengajak anda ke konsert yang bercampur bebas dan berlangsung hingga waktu solat Subuh. Tindakan yang sesuai ialah ...",
+   "o": [
+    "Pergi kerana sekali sekala",
+    "Pergi dan meninggalkan solat",
+    "Menolak dengan baik dan mencadangkan aktiviti yang bermanfaat",
+    "Memaksa rakan lain ikut"
+   ],
+   "a": 2,
+   "e": "Mengelak hiburan yang melalaikan dan bercampur bebas.",
+   "s": "DSKP TI T4 (2018) SP 3.4.4",
+   "status": "aktif"
+  },
+  {
+   "id": 1017,
+   "t": "T4-3.4",
+   "d": 2,
+   "q": "Contoh hiburan yang bertepatan dengan perspektif Islam ialah ...",
+   "o": [
+    "Lagu yang memuja maksiat",
+    "Nasyid yang liriknya mengandungi nilai murni",
+    "Permainan judi",
+    "Parti yang bercampur bebas"
+   ],
+   "a": 1,
+   "e": "Hiburan yang membawa nilai murni dan tidak bercanggah syarak.",
+   "s": "DSKP TI T4 (2018) SP 3.4.5",
+   "status": "aktif"
+  },
+  {
+   "id": 1018,
+   "t": "T4-3.4",
+   "d": 3,
+   "q": "Bermain permainan video sehingga lewat malam dan terlepas solat Subuh menunjukkan hiburan itu ...",
+   "o": [
+    "Melalaikan dan bertentangan dengan adab berhibur",
+    "Wajib dilakukan",
+    "Ibadah umum",
+    "Menepati adab berhibur"
+   ],
+   "a": 0,
+   "e": "Hiburan yang melalaikan daripada kewajipan bertentangan dengan Islam.",
+   "s": "DSKP TI T4 (2018) SP 3.4.5",
+   "status": "aktif"
+  },
+  {
+   "id": 1019,
+   "t": "T4-3.5",
+   "d": 1,
+   "q": "Kesenian menurut Islam ialah ...",
+   "o": [
+    "Hanya seni bina masjid",
+    "Patung untuk disembah",
+    "Penghasilan karya yang indah yang tidak bercanggah dengan syariat",
+    "Semua karya tanpa batas"
+   ],
+   "a": 2,
+   "e": "Kesenian Islam menghasilkan keindahan selaras dengan syariat.",
+   "s": "DSKP TI T4 (2018) SP 3.5.1",
+   "status": "aktif"
+  },
+  {
+   "id": 1020,
+   "t": "T4-3.5",
+   "d": 2,
+   "q": "Sabda Rasulullah SAW: \"Sesungguhnya Allah itu indah dan Dia menyukai ...\"",
+   "o": [
+    "Kekuatan",
+    "Kekayaan",
+    "Kemasyhuran",
+    "Keindahan"
+   ],
+   "a": 3,
+   "e": "Hadis riwayat Muslim: Allah itu indah dan menyukai keindahan.",
+   "s": "DSKP TI T4 (2018) SP 3.5.1",
+   "status": "aktif"
+  },
+  {
+   "id": 1021,
+   "t": "T4-3.5",
+   "d": 2,
+   "q": "Antara contoh seni dalam tamadun Islam ialah ...",
+   "o": [
+    "Tarian yang mendedahkan aurat",
+    "Lukisan lucah",
+    "Patung berhala",
+    "Seni khat dan seni bina masjid"
+   ],
+   "a": 3,
+   "e": "Seni khat, seni bina, ukiran dan corak geometri ialah warisan seni Islam.",
+   "s": "DSKP TI T4 (2018) SP 3.5.2",
+   "status": "aktif"
+  },
+  {
+   "id": 1022,
+   "t": "T4-3.5",
+   "d": 2,
+   "q": "Seni tulisan indah huruf Arab seperti nasakh, thuluth dan diwani dinamakan seni ...",
+   "o": [
+    "Ukiran",
+    "Tenunan",
+    "Khat",
+    "Arabes"
+   ],
+   "a": 2,
+   "e": "Seni khat ialah seni tulisan indah huruf Arab.",
+   "s": "DSKP TI T4 (2018) SP 3.5.2",
+   "status": "aktif"
+  },
+  {
+   "id": 1023,
+   "t": "T4-3.5",
+   "d": 2,
+   "q": "Antara adab dan etika kesenian menurut Islam ialah ...",
+   "o": [
+    "Mendedahkan aurat",
+    "Tidak menghasilkan patung atau objek untuk disembah",
+    "Mengandungi unsur syirik",
+    "Melalaikan daripada ibadah"
+   ],
+   "a": 1,
+   "e": "Karya seni tidak boleh bercanggah dengan akidah, aurat dan akhlak.",
+   "s": "DSKP TI T4 (2018) SP 3.5.2",
+   "status": "aktif"
+  },
+  {
+   "id": 1024,
+   "t": "T4-3.5",
+   "d": 2,
+   "q": "Kepentingan mengamalkan adab kesenian menurut Islam ialah ...",
+   "o": [
+    "Mempromosi maksiat",
+    "Menghasilkan karya yang mendekatkan diri kepada Allah",
+    "Melalaikan masyarakat",
+    "Menimbulkan unsur syirik"
+   ],
+   "a": 1,
+   "e": "Kesenian Islam membawa nilai dan mengingatkan kepada Allah.",
+   "s": "DSKP TI T4 (2018) SP 3.5.3",
+   "status": "aktif"
+  },
+  {
+   "id": 1025,
+   "t": "T4-3.5",
+   "d": 3,
+   "q": "Seorang pereka grafik Muslim diminta mereka iklan yang menonjolkan aurat wanita. Tindakan terbaik ialah ...",
+   "o": [
+    "Mengabaikan etika",
+    "Menukar agama",
+    "Terima kerana bayaran tinggi",
+    "Mencadangkan reka bentuk lain yang menepati etika Islam"
+   ],
+   "a": 3,
+   "e": "Kesenian mesti selari dengan etika Islam.",
+   "s": "DSKP TI T4 (2018) SP 3.5.4",
+   "status": "aktif"
+  },
+  {
+   "id": 1026,
+   "t": "T4-3.5",
+   "d": 2,
+   "q": "Corak hiasan tumbuh-tumbuhan dan geometri yang berulang dalam seni Islam dikenali sebagai ...",
+   "o": [
+    "Arabes",
+    "Mozek",
+    "Kaligrafi",
+    "Batik"
+   ],
+   "a": 0,
+   "e": "Arabes ialah corak hiasan flora dan geometri berulang dalam seni Islam.",
+   "s": "DSKP TI T4 (2018) SP 3.5.5",
+   "status": "aktif"
+  },
+  {
+   "id": 1027,
+   "t": "T4-3.5",
+   "d": 3,
+   "q": "Masjid Kristal dan Masjid Putra merupakan contoh pengaplikasian kesenian Islam dalam bidang ...",
+   "o": [
+    "Seni bina",
+    "Seni lakon",
+    "Seni muzik",
+    "Seni tari"
+   ],
+   "a": 0,
+   "e": "Seni bina masjid ialah contoh kesenian Islam.",
+   "s": "DSKP TI T4 (2018) SP 3.5.5",
    "status": "aktif"
   }
  ]
