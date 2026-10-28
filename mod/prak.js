@@ -1,4 +1,4 @@
-/* GEMPUR: modul dimuat apabila diperlukan (lihat modLoad dalam app.js). Bergantung pada pemboleh ubah global app.js. */
+/* META DIDIK: modul dimuat apabila diperlukan (lihat modLoad dalam app.js). Bergantung pada pemboleh ubah global app.js. */
 /* ---------- Praktikal (v17.63): simulasi dan latihan amali ---------- */
 const PR_KEY = "gt-pr", PR_XPK = "gt-pr-xp", PR_XP_CAP = 40;
 const PR_MODS = [
@@ -273,11 +273,13 @@ function hjPanel(build) {
 }
 function hjPanelClose() { const u = HJ.ui; if (u.pan) { u.pan.hidden = true; u.pan.textContent = ""; } if (HJ.g) HJ.g.modal = false; }
 function hjToast(t) { const e = HJ.ui.toast; if (!e) return; e.textContent = t; e.classList.remove("show"); void e.offsetWidth; e.classList.add("show"); }
-function hjOpen(k) {
-  if (HJ.open) return; HJ.mode = HJ_MODES[k || "hajj"] || HJ_MODES.hajj; HJ.open = true; try { HJ.toon = localStorage.getItem("gt-hj-toon") !== "0"; } catch (e) { HJ.toon = true; } document.body.classList.add("ar-lock"); const r = hjRoot(); r.hidden = false; r.textContent = "";
+/* v18.18: opt = { stage: id peringkat, done(ok, n, selesai) } menjalankan SATU peringkat sahaja (dipanggil dari Tanah Suci) */
+function hjOpen(k, opt) {
+  if (HJ.open) return; HJ.mode = HJ_MODES[k || "hajj"] || HJ_MODES.hajj; HJ.only = opt && opt.stage ? opt : null; HJ.open = true; try { HJ.toon = localStorage.getItem("gt-hj-toon") !== "0"; } catch (e) { HJ.toon = true; } document.body.classList.add("ar-lock"); const r = hjRoot(); r.hidden = false; r.textContent = "";
   window.addEventListener("keydown", hjKey, true); window.addEventListener("keyup", hjKey, true); hjMenu();
 }
 function hjClose() {
+  const only = HJ.only; HJ.only = null; if (only && only.done && !only.fired) { only.fired = true; setTimeout(() => only.done(0, 0, false), 0); }
   HJ.open = false; cancelAnimationFrame(HJ.raf); HJ.raf = 0; HJ.g = null; window.removeEventListener("keydown", hjKey, true); window.removeEventListener("keyup", hjKey, true);
   try { if (document.fullscreenElement) document.exitFullscreen(); } catch (e) { /* abaikan */ }
   if (HJ.root) { HJ.root.remove(); HJ.root = null; } HJ.cv = null; HJ.ui = {}; document.body.classList.remove("ar-lock"); if (typeof renderPrak === "function") renderPrak();
@@ -286,7 +288,7 @@ function hjMenu() {
   cancelAnimationFrame(HJ.raf); HJ.raf = 0; HJ.g = null; const r = hjRoot(); r.textContent = ""; const cl = el("button", { type: "button", class: "hj-x" }, "Tutup"); cl.addEventListener("click", hjClose);
   const mark = (seg, vals, cur) => [].forEach.call(seg.children, (b, i) => b.setAttribute("aria-pressed", String(vals[i] === cur))); let sexB = null, skB = null;
   sexB = segBtns([["m", "Lelaki"], ["f", "Perempuan"]], HJ.sex, (v) => { HJ.sex = v; mark(sexB, ["m", "f"], v); }, "Jantina jemaah"); skB = segBtns([[0, "Cerah"], [1, "Sawo matang"], [2, "Sederhana"], [3, "Gelap"]], HJ.skin, (v) => { HJ.skin = +v; mark(skB, [0, 1, 2, 3], +v); }, "Warna kulit");
-  const go = el("button", { type: "button", class: "hj-go" }, HJ.mode.go); go.addEventListener("click", () => hjStart());
+  const go = el("button", { type: "button", class: "hj-go" }, HJ.only ? "Mula: " + ((hjSt().find((S) => S.id === HJ.only.stage) || {}).n || "peringkat") : HJ.mode.go); go.addEventListener("click", () => hjStart());
   setTimeout(() => { const m = r.querySelector(".hj-menu"); if (!m || !HJ.mode.toon || m.querySelector(".hj-toon")) return; const tb = segBtns([["1", "Kartun 3D"], ["0", "Biasa"]], HJ.toon ? "1" : "0", (v) => { HJ.toon = v === "1"; try { localStorage.setItem("gt-hj-toon", v); } catch (e) { /* abaikan */ } mark(tb, ["1", "0"], v); }, "Gaya paparan"); tb.classList.add("hj-toon"); m.insertBefore(el("label", { class: "hj-lb" }, "Gaya paparan"), go); m.insertBefore(tb, go); }, 0);
   r.append(cl, el("div", { class: "hj-menu" }, null, el("div", { class: "hj-k" }, "PRAKTIKAL · SIMULASI 3D"), el("h1", null, HJ.mode.title), el("p", null, HJ.mode.desc), HJ.mode.note ? el("p", { class: "hj-note" }, null, el("b", null, "Perbezaan utama: "), el("span", null, HJ.mode.note)) : el("span"),
     el("div", { class: "hj-lst" }, null, ...(HJ.mode.lk ? HJ.mode.lk.map((L, i) => el("span", null, (i + 1) + ". " + L[0])) : hjSt().map((s, i) => el("span", null, (i + 1) + ". " + s.n)))), el("label", { class: "hj-lb" }, "Jemaah"), sexB, el("label", { class: "hj-lb" }, "Warna kulit"), skB, go, el("small", null, "Kawalan: W A S D atau anak panah untuk berjalan, seret tetikus untuk kamera, E untuk bertindak. Telefon: kayu bedik kiri dan butang Tindakan.")));
@@ -303,7 +305,8 @@ function hjStart() {
   const u = HJ.ui; u.hud = el("div", { class: "hj-hud" }); u.obj = el("div", { class: "hj-obj" }); u.toast = el("div", { class: "hj-toast", "aria-live": "polite" }); u.pan = el("div", { class: "hj-pan", hidden: "" });
   u.act = el("button", { type: "button", class: "hj-act", hidden: "" }); u.act.addEventListener("click", hjAct); const ex = el("button", { type: "button", class: "hj-x" }, "Keluar"); ex.addEventListener("click", () => hjMenu());
   r.append(cv, u.hud, u.obj, u.toast, u.act, ex, u.pan); hjPtr(cv);
-  HJ.g = { st: 0, sc: [], T: 0, modal: false, p: null, cam: null, W: null, mk: [], near: null, pts: [], tot: 0, ok: 0 }; hjLoadStage(0); hjFit(); window.addEventListener("resize", hjFit);
+  HJ.g = { st: 0, sc: [], T: 0, modal: false, p: null, cam: null, W: null, mk: [], near: null, pts: [], tot: 0, ok: 0 };
+  { let i0 = 0; if (HJ.only) { i0 = hjSt().findIndex((S) => S.id === HJ.only.stage); if (i0 < 0) i0 = 0; } hjLoadStage(i0); } hjFit(); window.addEventListener("resize", hjFit);
   HJ.last = performance.now(); HJ.raf = requestAnimationFrame(hjLoop);
 }
 function hjFit() { const cv = HJ.cv; if (!cv) return; const d = Math.min(2, window.devicePixelRatio || 1), W = Math.max(320, window.innerWidth), H = Math.max(280, window.innerHeight); HJ.dpr = d; HJ.W = W; HJ.H = H; cv.width = Math.round(W * d); cv.height = Math.round(H * d); cv.style.width = W + "px"; cv.style.height = H + "px"; }
@@ -338,6 +341,7 @@ function hjQuiz(id, done) {
 }
 function hjStageDone(ok, n) {
   const g = HJ.g; ok += g.so; n += g.sn; hjProgSave(HJ.mode.key, g.st + 1); g.sc.push({ id: hjSt()[g.st].id, ok: ok, n: n }); try { beep(880, 0.15, "triangle", 0.07); } catch (e) { /* abaikan */ }
+  if (HJ.only) { const o = HJ.only; return hjPanel((p) => { const b = el("button", { type: "button", class: "hj-go" }, "Kembali ke Tanah Suci"); b.addEventListener("click", () => { o.fired = true; hjClose(); o.done(ok, n, true); }); p.append(el("div", { class: "hj-k" }, "PERINGKAT SELESAI"), el("h2", null, hjSt()[g.st].n + " selesai"), el("p", { class: "hj-score" }, ok + " / " + n + " soalan betul"), b); }); }
   if (g.st + 1 >= hjSt().length) return hjEnd();
   hjPanel((p) => { const b = el("button", { type: "button", class: "hj-go" }, "Ke peringkat seterusnya: " + hjSt()[g.st + 1].n); b.addEventListener("click", () => { hjPanelClose(); hjLoadStage(g.st + 1); }); p.append(el("div", { class: "hj-k" }, "PERINGKAT SELESAI"), el("h2", null, hjSt()[g.st].n + " selesai"), el("p", { class: "hj-score" }, ok + " / " + n + " soalan betul"), b); });
 }

@@ -1,5 +1,5 @@
 /* =====================================================================
-   AVATAR 3D (v17.91): avatar realistik yang dikongsi oleh Gudang (pratonton berputar) dan META GEMPUR.
+   AVATAR 3D (v17.91): avatar realistik yang dikongsi oleh Gudang (pratonton berputar) dan META DIDIK.
    Memaparkan semua barang Gudang (pakaian, warna, penutup kepala, cermin mata, pegangan, beg,
    lencana, haiwan, bingkai) dan kesan khas 3D. Pakaian menutup aurat; wajah sengaja tanpa ciri.
    Bergantung pada global index.html: THREE, ZV_SKIN, ZV_OCOL, ZV_HCOL, zvCol, zvShade, zvItem, zvState, zvEqAll.
