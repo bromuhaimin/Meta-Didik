@@ -216,7 +216,7 @@ function lmLoad() {
   if (!s.tw || typeof s.tw !== "object") s.tw = {};   /* menara: id topik -> markah terbaik */
   if (!s.pl || typeof s.pl !== "object") s.pl = {};   /* tempat diziarahi: id -> masa */
   if (!s.nm || typeof s.nm !== "object") s.nm = {};   /* nama digantung: id -> masa */
-  if (!s.cd || s.cd.d !== dayKey()) s.cd = { d: dayKey(), got: [] }; /* syiling dikutip hari ini */
+  if (!s.cd || s.cd.d !== dayKey()) s.cd = { d: dayKey(), got: [] }; /* MD dikutip hari ini */
   if (!s.dq || s.dq.d !== dayKey()) s.dq = { d: dayKey(), done: 0, v: [] }; /* misi pelancong harian */
   if (s.gq == null) s.gq = TOUCH ? 0 : 1;
   LM.st = s; LM.gq = s.gq;
@@ -1102,7 +1102,7 @@ function lmFlyEnd(g) {
     if (fade) fade.style.opacity = "0";
     LM.st.fl = (LM.st.fl | 0) + 1; if (!LM.st.ap || typeof LM.st.ap !== "object") LM.st.ap = {};
     let msg = "Selamat datang ke " + DATA.negeri[d.k].pendek + "!";
-    if (!LM.st.ap[d.id]) { LM.st.ap[d.id] = Date.now(); let n = 0; try { n = gdCoin(5); } catch (e) { n = 0; } if (n) msg += " Cop lapangan terbang +" + n + " syiling"; }
+    if (!LM.st.ap[d.id]) { LM.st.ap[d.id] = Date.now(); let n = 0; try { n = gdCoin(5); } catch (e) { n = 0; } if (n) msg += " Cop lapangan terbang +" + n + " MD"; }
     lmSave(); lmPop(msg);
   }, 450);
 }
@@ -1274,7 +1274,7 @@ function lmKhasOpen(it) {
       lmCard((b) => {
         b.append(el("div", { class: "lm-kick" }, pass ? "Pulau ditawan" : "Cuba lagi"), el("h2", null, ok + "/" + tot + " betul"));
         b.append(el("p", null, pass ? "Bendera markas " + it.n + " kini berwarna emas." : "Betul sekurang-kurangnya 7 untuk menawan pulau. Semak senarai tajuk dan cuba lagi."));
-        b.append(el("p", { class: "lm-ex" }, "XP +" + xp + (coin ? " · +" + coin + " syiling" : "")));
+        b.append(el("p", { class: "lm-ex" }, "XP +" + xp + (coin ? " · +" + coin + " MD" : "")));
         b.append(el("div", { class: "lm-row" }, lmBtn("Teruskan jelajah", "pri", lmCardClose), pass ? null : lmBtn("Cuba lagi", "", () => lmKhasOpen(it))));
       });
     }
@@ -2147,7 +2147,7 @@ function lmIlmuTopic(it, t) {
       lmCard((b) => {
         b.append(el("div", { class: "lm-kick" }, fin ? "🎓 Graduasi" : pass ? "Tajuk lulus · " + it.sn : "Cuba lagi"), el("h2", null, fin ? "Tahniah, anda telah menamatkan perjalanan menuntut ilmu!" : ok + "/" + tot + " betul"));
         b.append(el("p", null, pass ? "Pasport misi: " + J.d + "/" + J.t + " Stesen Ilmu." + (J.next ? " Stesen seterusnya: " + J.next.sn + " (" + DATA.negeri[J.next.k].pendek + ")." : "") : "Betul sekurang-kurangnya 3 untuk lulus. Baca nota dan cuba lagi."));
-        b.append(el("p", { class: "lm-ex" }, "XP +" + xp + (coin ? " · +" + coin + " syiling" : "")));
+        b.append(el("p", { class: "lm-ex" }, "XP +" + xp + (coin ? " · +" + coin + " MD" : "")));
         const row = el("div", { class: "lm-row" });
         if (pass && J.next) row.append(lmBtn("Tunjuk arah ke " + J.next.sn, "pri", () => { LM.g.wp = { x: J.next.x, z: J.next.z, n: J.next.sn }; lmWpSet(); lmCardClose(); }));
         if (!pass) row.append(lmBtn("Cuba lagi", "pri", () => lmIlmuTopic(it, t)));
@@ -2344,7 +2344,7 @@ function lmOwnSchoolOpen(it) {
   });
 }
 /* ---------- v18.11: kedai makan tradisi setiap negeri dan tenaga (lapar) ----------
-   [negeri, bandar, lat, lon, hidangan, keterangan, harga syiling, tenaga dipulihkan] */
+   [negeri, bandar, lat, lon, hidangan, keterangan, harga MD, tenaga dipulihkan] */
 const FOOD = [
   ["perlis", "Kuala Perlis", 6.400, 100.130, "Laksa Kuala Perlis", "Laksa berkuah ikan yang pekat, dimakan bersama ulam dan telur rebus. Kuala Perlis terkenal dengan laksanya.", 6, 70],
   ["kedah", "Alor Setar", 6.121, 100.368, "Laksa Kedah", "Kuah ikan yang masam berempah asam keping, dimakan dengan mi beras dan ulam.", 6, 70],
@@ -2466,7 +2466,7 @@ function lmStnOpen(it) {
       b.append(el("p", null, "Tapak ini disediakan untuk guru mempamerkan inovasi pengajaran kepada guru dan murid seluruh Malaysia."), el("p", { class: "lm-ex" }, "Guru: buka Papan pemuka guru → Stesen Inovasi saya, sahkan akaun DELIMa dan hantar permohonan."), el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose)));
       return;
     }
-    b.append(el("p", { class: "lm-ex" }, "Oleh " + d.n + (d.sk ? " · " + d.sk : "")), el("p", null, d.ds));
+    b.append(el("p", { class: "lm-ex" }, "Oleh " + d.n + (d.sk ? " · " + d.sk : "") + ((d.hg | 0) ? " · Harga guna: " + d.hg + " MD sehari (MD anda: " + (P.coin | 0) + ")" : " · Percuma")), el("p", null, d.ds));
     if (d.yt && /^[\w-]{11}$/.test(d.yt)) { const f = el("iframe", { src: "https://www.youtube-nocookie.com/embed/" + d.yt + "?rel=0", title: "Video inovasi", allow: "encrypted-media; picture-in-picture", allowfullscreen: "", loading: "lazy", style: "width:100%;aspect-ratio:16/9;border:0;border-radius:10px;background:#000" }); b.appendChild(f); }
     const st = el("p", { class: "lm-ex" }, "Memuat statistik...");
     b.appendChild(st);
@@ -2477,23 +2477,27 @@ function lmStnOpen(it) {
       try { await FB.req(liked ? "PUT" : "DELETE", "stesen_suka/" + d.id + "/" + gid, liked ? true : undefined); } catch (e) { liked = !liked; nLike += liked ? 1 : -1; draw(); }
       like.disabled = false;
     });
-    const draw = () => { st.textContent = "👁 " + nVis + " pelawat · 👍 " + nLike + " suka"; like.textContent = liked ? "👍 Disukai" : "👍 Suka"; like.className = liked ? "pri" : ""; };
+    let nUse = 0;
+    const draw = () => { st.textContent = "👁 " + nVis + " pelawat · 👍 " + nLike + " suka" + (nUse ? " · 🎒 " + nUse + " murid guna" : ""); like.textContent = liked ? "👍 Disukai" : "👍 Suka"; like.className = liked ? "pri" : ""; };
     row.appendChild(like);
     if (d.url && /^https:\/\//.test(d.url)) {
       let host = ""; try { host = new URL(d.url).hostname; } catch (e) { host = ""; }
-      row.appendChild(lmBtn("🔗 Lawati " + (host || "pautan"), "", () => {
+      const hg = d.hg | 0, go = () => {
         if (!confirm("Anda akan membuka laman luar (" + host + ") yang dikendalikan oleh guru pemilik stesen, bukan Meta Didik. Teruskan?")) return;
         FB.req("PUT", "stesen_klik/" + d.id + "/" + gid, true).catch(() => {});
         window.open(d.url, "_blank", "noopener");
-      }));
+      };
+      /* inovasi berbayar: murid membelanjakan MD (sekali sehari) dan MD itu menjadi pendapatan guru */
+      const gb = lmBtn(hg ? "🔓 Guna inovasi · " + hg + " MD" : "🔗 Guna inovasi (percuma)", "pri", () => { if (typeof mdGuna !== "function") { go(); return; } gb.disabled = true; mdGuna(d, (ok) => { gb.disabled = false; if (ok) go(); }); });
+      gb.title = "Buka " + (host || "pautan"); row.appendChild(gb);
     }
     row.appendChild(lmBtn("Tutup", "", lmCardClose));
     b.append(row, el("p", { class: "lm-ex", style: "opacity:.75" }, "Kandungan stesen disediakan oleh guru dan disemak pentadbir. Laporkan kandungan tidak sesuai kepada pentadbir melalui ruangan komen."));
     (async () => {
       try { await FB.req("PUT", "stesen_lawat/" + d.id + "/" + gid, true); } catch (e) { /* abaikan */ }
       const cnt = async (n) => { try { const v = await FB.req("GET", n + "/" + d.id, undefined, "shallow=true"); return v && typeof v === "object" ? v : {}; } catch (e) { return {}; } };
-      const [vs, lk] = await Promise.all([cnt("stesen_lawat"), cnt("stesen_suka")]);
-      nVis = Object.keys(vs).length; nLike = Object.keys(lk).length; liked = !!lk[gid]; draw();
+      const [vs, lk, gu] = await Promise.all([cnt("stesen_lawat"), cnt("stesen_suka"), (d.hg | 0) ? cnt("stesen_guna") : {}]);
+      nVis = Object.keys(vs).length; nLike = Object.keys(lk).length; nUse = Object.keys(gu).length; liked = !!lk[gid]; draw();
     })();
   });
 }
@@ -2506,9 +2510,9 @@ function lmFoodOpen(it) {
   const e = Math.round(lmEnergy());
   lmCard((b) => {
     b.append(el("div", { class: "lm-kick" }, "🍽 Kedai Makan · " + it.town + ", " + DATA.negeri[it.k].pendek), el("h2", null, it.n), el("p", null, it.desc));
-    b.append(el("p", { class: "lm-ex" }, "Tenaga anda: " + e + "%. Hidangan ini memulihkan +" + it.en + "% tenaga. Harga: " + it.price + " syiling (baki anda " + (P.coin | 0) + ")."), el("p", { class: "lm-ex" }, ADAB_MAKAN));
+    b.append(el("p", { class: "lm-ex" }, "Tenaga anda: " + e + "%. Hidangan ini memulihkan +" + it.en + "% tenaga. Harga: " + it.price + " MD (baki anda " + (P.coin | 0) + ")."), el("p", { class: "lm-ex" }, ADAB_MAKAN));
     const buy = lmBtn("Beli dan makan (" + it.price + " 🪙)", "pri", () => {
-      if ((P.coin | 0) < it.price) { toast("Syiling tidak mencukupi. Kutip syiling atau makan percuma di kantin sekolah anda.", "warn"); return; }
+      if ((P.coin | 0) < it.price) { toast("MD tidak mencukupi. Kutip MD atau makan percuma di kantin sekolah anda.", "warn"); return; }
       P.coin = (P.coin | 0) - it.price; try { saveP(); } catch (x) { /* abaikan */ }
       LM.st.food = LM.st.food || {}; LM.st.food[it.k] = Date.now(); lmCardClose(); lmEat(it.en, "Bismillah. " + it.n + " sedap!");
     });
@@ -2631,14 +2635,14 @@ function lmAkFx(it, fx) {
     else if (k === "bike") { const bk = it.P.basikal; if (bk) { bk.rotation.x = Math.PI / 2; bk.position.y = 0.7; } } /* roda tegak semula */
     else if (k === "away") v.split(",").forEach((i) => { const av = it.npcs[+i]; if (av) { const ry = it.m.rotation.y + Math.PI; g.scene.attach(av.g); av.g.rotation.set(0, ry, 0); av.away = 3; it.gone = (it.gone || []).concat([av]); } });
     else if (k === "hide") { if (it.P[v]) it.P[v].visible = false; }
-    else if (k === "buy") { if ((P.coin | 0) >= 2) { P.coin = (P.coin | 0) - 2; try { saveP(); } catch (e) { /* abaikan */ } lmPop("Beli nasi bungkus (-2 syiling)"); } else lmPop("Penjual gerai memberi sebungkus nasi percuma untuk musafir itu"); }
+    else if (k === "buy") { if ((P.coin | 0) >= 2) { P.coin = (P.coin | 0) - 2; try { saveP(); } catch (e) { /* abaikan */ } lmPop("Beli nasi bungkus (-2 MD)"); } else lmPop("Penjual gerai memberi sebungkus nasi percuma untuk musafir itu"); }
   });
 }
 function lmAkDone(g, it) {
   it.done = true; it.ring.visible = false; LM.st.ak = (LM.st.ak | 0) + 1; (LM.st.akT || (LM.st.akT = {}))[it.S.id] = 1; lmSave(); lmSnd("win");
   let coin = 0; try { coin = gdCoin(2); } catch (e) { coin = 0; } const xp = lmXp(5);
   (it.npcs || []).forEach((av) => { try { lmBubble({ g: av.g, bub: null }, "Terima kasih!"); } catch (e) { /* abaikan */ } });
-  lmPop("Akhlak terpuji! +" + coin + " syiling · XP +" + xp);
+  lmPop("Akhlak terpuji! +" + coin + " MD · XP +" + xp);
   const ex = el("div", { class: "lm-akdone" }, el("b", null, "MasyaAllah! " + it.S.ok), el("span", null, it.S.dl), el("small", null, "Akhlak terpuji anda: " + LM.st.ak));
   LM.root.appendChild(ex); setTimeout(() => ex.remove(), 9000);
   setTimeout(() => { if (LM.g && g.ak === it) lmAkEnd(g, it); }, 6000);
@@ -2887,7 +2891,7 @@ function lmBuildWorld(g) {
   for (const c of g.cols) c.h = (c.h || 30) + lmHRaw(c.x, c.z);
   lmRailsBuild(g);
   lmBuildTrees(g, avoid);
-  /* syiling harian bertaburan (deterministik mengikut hari) */
+  /* MD harian bertaburan (deterministik mengikut hari) */
   const R = lmRand("lm-coin-" + dayKey()), got = new Set(LM.st.cd.got);
   let n = 0, tries = 0;
   while (n < 200 && tries < 60000) {
@@ -3757,7 +3761,7 @@ function lmTowerOpen(o) {
       lmCard((b) => {
         b.append(el("div", { class: "lm-kick" }, pass ? "Menara ditawan" : "Cuba lagi"), el("h2", null, ok + "/" + tot + " betul"));
         b.append(el("p", null, pass ? "Bendera menara " + (t.kod || t.id) + " kini berwarna emas." : "Betul sekurang-kurangnya 3 untuk menawan menara. Baca nota dan cuba lagi."));
-        b.append(el("p", { class: "lm-ex" }, "XP +" + xp + (xp === 0 ? " (kuota XP harian META DIDIK telah penuh)" : "") + (pass && fr ? " · Bonus rakan: +2 syiling kerana " + fr + " rakan berada berdekatan." : "")));
+        b.append(el("p", { class: "lm-ex" }, "XP +" + xp + (xp === 0 ? " (kuota XP harian META DIDIK telah penuh)" : "") + (pass && fr ? " · Bonus rakan: +2 MD kerana " + fr + " rakan berada berdekatan." : "")));
         b.append(el("div", { class: "lm-row" }, lmBtn("Teruskan jelajah", "pri", lmCardClose), pass ? null : lmBtn("Cuba lagi", "", () => lmTowerOpen(o))));
       });
     }
@@ -3832,7 +3836,7 @@ function lmQuestRender() {
 function lmAirportOpen(ap) {
   const g = LM.g;
   lmCard((b) => {
-    b.append(el("div", { class: "lm-kick" }, "Lapangan terbang · Didik Air"), el("h2", null, ap.n), el("p", null, "Pilih destinasi. Jawab satu soalan pas masuk dengan betul, kemudian naik pesawat dan nikmati penerbangan. Pendaratan pertama di setiap lapangan terbang memberi syiling."));
+    b.append(el("div", { class: "lm-kick" }, "Lapangan terbang · Didik Air"), el("h2", null, ap.n), el("p", null, "Pilih destinasi. Jawab satu soalan pas masuk dengan betul, kemudian naik pesawat dan nikmati penerbangan. Pendaratan pertama di setiap lapangan terbang memberi MD."));
     const grid = el("div", { class: "lm-grid" });
     g.items.filter((x) => x.kind === "ap" && x.id !== ap.id).forEach((d) => {
       grid.appendChild(lmBtn("✈ " + d.n + " (" + DATA.negeri[d.k].pendek + ")", "", () => {
@@ -4687,7 +4691,7 @@ function lmLoop(ts) {
       const c = g.coins[i]; c.m.rotation.z += dt * 3;
       if (Math.abs(c.x - g.p.x) < 2.6 && Math.abs(c.z - g.p.z) < 2.6 && Math.abs(g.p.y + 1.6 - c.y) < 3) {
         g.scene.remove(c.m); g.coins.splice(i, 1); LM.st.cd.got.push(c.id); g.saveT = 1;
-        let n = 0; try { n = gdCoin(1); } catch (e) { n = 0; } lmSnd("coin"); lmPop(n ? "+" + n + " syiling" : "Had syiling hari ini penuh");
+        let n = 0; try { n = gdCoin(1); } catch (e) { n = 0; } lmSnd("coin"); lmPop(n ? "+" + n + " MD" : "Had MD hari ini penuh");
       }
     }
     if (g.saveT && (g.saveT -= dt) <= 0) { g.saveT = 0; lmSave(); }

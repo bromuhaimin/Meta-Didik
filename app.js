@@ -346,7 +346,7 @@ if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.
 if (SUBJ === "bm") { DATA.tema = DATA_BM.tema; DATA.topik = DATA_BM.topik; DATA.soalan = DATA_BM.soalan; }
 if (SUBJ === "bi") { DATA.tema = DATA_BI.tema; DATA.topik = DATA_BI.topik; DATA.soalan = DATA_BI.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v18.20"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v18.21"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -1437,7 +1437,7 @@ function loginInfo() {
   const n = alive ? (l.n | 0) : 0;
   return { claimed: claimed, n: n, next: claimed ? n : n + 1 };
 }
-function rewText(r) { return r.c + " syiling" + (r.g ? " + " + r.g + " bom" : "") + (r.r ? " + " + r.r + " roket" : ""); }
+function rewText(r) { return r.c + " MD" + (r.g ? " + " + r.g + " bom" : "") + (r.r ? " + " + r.r + " roket" : ""); }
 function claimLogin() {
   const i = loginInfo(); if (i.claimed) return;
   const r = LOGIN_REW[(i.next - 1) % 7];
@@ -1509,7 +1509,7 @@ function seasonTick() {
     P.bd[bid] = Date.now(); P.coin = (P.coin | 0) + t.c; ch = true;
     if (t.a) { const id = "s" + n + t.a; if (P.accOwn.indexOf(id) < 0) P.accOwn.push(id); }
     if (t.rk) P.sr = clamp((P.sr | 0) + 1, 0, ROCK_CAP);
-    (P.ss.nw || (P.ss.nw = [])).push("Lencana Musim " + n + " " + t.n + " (+" + t.c + " syiling" + (t.a ? ", aksesori eksklusif" : "") + (t.rk ? ", +1 roket" : "") + ")");
+    (P.ss.nw || (P.ss.nw = [])).push("Lencana Musim " + n + " " + t.n + " (+" + t.c + " MD" + (t.a ? ", aksesori eksklusif" : "") + (t.rk ? ", +1 roket" : "") + ")");
   });
   if (ch) saveP();
 }
@@ -1522,7 +1522,7 @@ function seasonCard() {
   c.appendChild(el("div", { class: "muted", style: "font-size:14px" }, n0 < 1 ? "Bermula dalam " + Math.ceil((st - now) / 864e5) + " hari (" + fmtTarikh(st) + ")." : "Tamat dalam " + Math.ceil((en - now) / 864e5) + " hari (" + fmtTarikh(en - 864e5) + "). Pangkat tertinggi anda: " + RANKS[best].n + "."));
   SEASON_TIER.forEach((t, i) => {
     const got = !!P.bd["ms" + n + "_" + (i + 1)];
-    const rw = ["lencana", t.c + " syiling"].concat(t.a === "p" ? ["pingat eksklusif"] : t.a === "e" ? ["epaulet eksklusif"] : []).concat(t.rk ? ["1 roket"] : []).join(", ");
+    const rw = ["lencana", t.c + " MD"].concat(t.a === "p" ? ["pingat eksklusif"] : t.a === "e" ? ["epaulet eksklusif"] : []).concat(t.rk ? ["1 roket"] : []).join(", ");
     c.appendChild(el("div", { class: "tierrow" + (got ? " ok" : "") }, (got ? "✓ " : "• ") + RANKS[t.r].n + ": " + rw + (t.r >= 10 ? " (tempat terhad)" : "")));
   });
   const pv = el("div", { class: "row", style: "gap:6px;margin-top:4px" });
@@ -1569,10 +1569,10 @@ function renderChamp() {
     const bar = el("div", { class: "xpbar", style: "margin:3px 0" }); bar.appendChild(el("i", { style: "width:" + clamp(it.v / qd.n, 0, 1) * 100 + "%" }));
     dq.append(bar, el("div", { class: "muted", style: "font-size:13px" }, it.c ? "Selesai" : Math.min(it.v, qd.n) + " / " + qd.n));
   });
-  dq.appendChild(el("div", { class: "muted", style: "font-size:14px;margin-top:6px" }, dqs.all ? "Semua selesai. Bonus " + QUEST_ALL + " syiling diterima." : "Setiap misi: " + QUEST_COIN + " syiling + " + QUEST_XP + " XP. Siapkan ketiga-tiganya untuk bonus " + QUEST_ALL + " syiling."));
+  dq.appendChild(el("div", { class: "muted", style: "font-size:14px;margin-top:6px" }, dqs.all ? "Semua selesai. Bonus " + QUEST_ALL + " MD diterima." : "Setiap misi: " + QUEST_COIN + " MD + " + QUEST_XP + " XP. Siapkan ketiga-tiganya untuk bonus " + QUEST_ALL + " MD."));
   const sk = el("div", { class: "hcard" });
   const lv = STREAK_LV.find((l) => sn >= l[0]);
-  sk.append(el("div", { class: "tagline" }, "Streak"), el("div", { class: "hq flame" }, sn + " hari" + (sn ? " berturut-turut" : "")), el("div", { class: "muted", style: "font-size:14px" }, (lv ? lv[1] + ". " : "") + (P.stk.l === dayKey() ? "Streak hari ini sudah dikira." : "Selesaikan satu misi hari ini untuk " + (sn ? "teruskan streak" : "mulakan streak") + " dan dapat +" + 20 * Math.min(sn + 1, 7) + " syiling.")));
+  sk.append(el("div", { class: "tagline" }, "Streak"), el("div", { class: "hq flame" }, sn + " hari" + (sn ? " berturut-turut" : "")), el("div", { class: "muted", style: "font-size:14px" }, (lv ? lv[1] + ". " : "") + (P.stk.l === dayKey() ? "Streak hari ini sudah dikira." : "Selesaikan satu misi hari ini untuk " + (sn ? "teruskan streak" : "mulakan streak") + " dan dapat +" + 20 * Math.min(sn + 1, 7) + " MD.")));
   const wc = el("div", { class: "hcard" });
   const wb = weeklySchoolBoard(), sid = mySid(), mi = wb.findIndex((r) => r.sid === sid);
   wc.append(el("div", { class: "tagline" }, "Juara minggu ini (" + weekLeftDays() + " hari lagi)"));
@@ -3007,7 +3007,7 @@ function dgHud(g) {
   const h = DG.ui.hud, t = Math.floor(g.t), st = g.stage, n = g.W.gates.length;
   const s = "Pintu " + Math.min(g.W.gates.filter((q) => q.open).length + 1, n) + "/" + n + "|" + g.coins + "|" + t + "|" + g.falls + "|" + g.ok + "/" + g.tot;
   if (h._s === s) return; h._s = s; h.textContent = "";
-  [["Pintu", Math.min(g.W.gates.filter((q) => q.open).length + 1, n) + " / " + n], ["Syiling", String(g.coins)], ["Masa", Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0")], ["Jatuh", String(g.falls)], ["Kuiz", g.ok + " / " + g.tot]].forEach((x) => h.appendChild(el("div", null, null, el("small", null, x[0]), el("b", null, x[1]))));
+  [["Pintu", Math.min(g.W.gates.filter((q) => q.open).length + 1, n) + " / " + n], ["MD", String(g.coins)], ["Masa", Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0")], ["Jatuh", String(g.falls)], ["Kuiz", g.ok + " / " + g.tot]].forEach((x) => h.appendChild(el("div", null, null, el("small", null, x[0]), el("b", null, x[1]))));
 }
 /* --- lukisan --- */
 function dgBlock(c, x, y, w, h, top, side, studs) {
@@ -3091,7 +3091,7 @@ function dgEnd() {
   g.wrong.forEach((w, k) => { const d = el("div", { class: "dg-wq" }); d.append(qSet(el("b"), (k + 1) + ". " + w.q.q), el("div", { class: "a" }, null, "Jawapan betul: ", qSet(el("span"), w.ans)), el("div", { class: "who" }, "Anda memilih: " + w.pick)); if (w.q.e) d.append(qSet(el("div", { class: "e" }), w.q.e)); rev.append(d); });
   const again = el("button", { type: "button", class: "dg-go sm" }, "Main semula"), cfg = el("button", { type: "button", class: "dg-go sm alt" }, "Tukar tetapan"); again.addEventListener("click", dgStart); cfg.addEventListener("click", dgSetup);
   r.append(el("div", { class: "dg-bg" }), x, el("div", { class: "dg-wrap res" }, null, el("div", { class: "dg-kick" }, "DUNIA TAMAT"), el("h1", null, "Piala dicapai!"), st,
-    el("div", { class: "dg-stats" }, null, ...[[score, "skor"], [g.ok + " / " + g.tot, "soalan betul"], [g.coins, "syiling"], [g.falls, "kali jatuh"], [Math.floor(tt / 60) + ":" + String(tt % 60).padStart(2, "0"), "masa"]].map((s) => el("div", null, null, el("b", null, String(s[0])), el("span", null, s[1])))),
+    el("div", { class: "dg-stats" }, null, ...[[score, "skor"], [g.ok + " / " + g.tot, "soalan betul"], [g.coins, "MD"], [g.falls, "kali jatuh"], [Math.floor(tt / 60) + ":" + String(tt % 60).padStart(2, "0"), "masa"]].map((s) => el("div", null, null, el("b", null, String(s[0])), el("span", null, s[1])))),
     el("p", { class: "dg-lead" }, (nb ? "Skor terbaik baharu! " : "") + (xp ? "Profil anda +" + xp + " XP." : why)), rev, el("div", { class: "dg-btns" }, null, again, cfg)));
 }
 const DG_CSS = `
@@ -3502,7 +3502,7 @@ function dwAnswer(i) {
   z.box.querySelectorAll(".dg-opt").forEach((b, k) => { b.disabled = true; if (k === z.ans) b.classList.add("ok"); else if (k === i) b.classList.add("bad"); });
   const fb = el("div", { class: "dg-fb " + (ok ? "ok" : "bad") });
   if (ok) {
-    g.ok++; z.gate.open = true; fb.append(el("b", null, "BETUL! Pintu terbuka. +5 syiling")); dgSnd("good"); setTimeout(() => dgSnd("gate"), 250); g.shake = 0.4; g.coins += 5;
+    g.ok++; z.gate.open = true; fb.append(el("b", null, "BETUL! Pintu terbuka. +5 MD")); dgSnd("good"); setTimeout(() => dgSnd("gate"), 250); g.shake = 0.4; g.coins += 5;
     const q = z.gate; for (let i2 = 0; i2 < 60; i2++) g.pt.push({ x: q.x + (Math.random() - 0.5) * q.w, y: q.y + Math.random() * q.h, z: q.z, vx: (Math.random() - 0.5) * 6, vy: Math.random() * 5, vz: 2 + Math.random() * 5, t: 0, life: 1.1, col: ["#8a8fa0", "#5a5f74", "#e8c860"][i2 % 3], r: 0.18, gv: 18, sq: true });
     dwNetEmote("hebat");
   } else { g.wrong.push({ q: z.q, pick: z.texts[i], ans: z.texts[z.ans] }); fb.append(el("b", null, "Belum tepat. "), document.createTextNode("Jawapan betul: " + z.texts[z.ans] + ".")); dgSnd("bad"); }
@@ -3578,7 +3578,7 @@ function dwHud(g) {
   const h = DW.ui.hud, n = g.W.gates.length, op = g.W.gates.filter((q) => q.open).length, t = Math.floor(g.t), np = Object.keys(DW.peers).length;
   let nx = g.W.gates.find((q) => !q.open), dist = nx ? Math.max(0, Math.round(nx.z - g.p.z)) : 0;
   const s = op + "|" + g.coins + "|" + t + "|" + g.falls + "|" + g.ok + "/" + g.tot + "|" + np + "|" + dist + "|" + DW.wal; if (h._s === s) return; h._s = s; h.textContent = "";
-  [["Pintu", Math.min(op + 1, n) + " / " + n], ["Syiling", String(g.coins)], ["Masa", Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0")], ["Jatuh", String(g.falls)], ["Kuiz", g.ok + " / " + g.tot], ["Pintu seterusnya", nx ? dist + " m" : "Piala!"]].concat(DW.room ? [["Rakan", String(np)]] : []).forEach((x) => h.appendChild(el("div", null, null, el("small", null, x[0]), el("b", null, x[1]))));
+  [["Pintu", Math.min(op + 1, n) + " / " + n], ["MD", String(g.coins)], ["Masa", Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0")], ["Jatuh", String(g.falls)], ["Kuiz", g.ok + " / " + g.tot], ["Pintu seterusnya", nx ? dist + " m" : "Piala!"]].concat(DW.room ? [["Rakan", String(np)]] : []).forEach((x) => h.appendChild(el("div", null, null, el("small", null, x[0]), el("b", null, x[1]))));
 }
 function dwFit() { const cv = DW.cv; if (!cv) return; const dpr = Math.min(2, window.devicePixelRatio || 1), W = Math.max(320, window.innerWidth), H = Math.max(280, window.innerHeight); DW.dpr = dpr; DW.W = W; DW.H = H; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cv.style.width = W + "px"; cv.style.height = H + "px"; }
 function dwKey(e) {
@@ -3662,7 +3662,7 @@ function dwSetup() {
   const nm = el("input", { type: "text", maxlength: "12", value: c.name, "aria-label": "Nama pemain" }); nm.addEventListener("input", () => { c.name = cleanName(nm.value).slice(0, 12) || "Pelajar"; }); nm.addEventListener("change", dwCfgSave);
   const edit = el("button", { type: "button", class: "dg-go sm alt" }, "Ubah avatar dan kedai"); edit.addEventListener("click", () => dwShop(false));
   const mp = el("input", { type: "checkbox" }); mp.checked = !!c.mp; mp.addEventListener("change", () => { c.mp = mp.checked; dwCfgSave(); });
-  const left = el("section", { class: "dg-card dw-left" }, null, el("h3", null, "Avatar anda"), pv, el("div", { class: "dw-coins" }, "Syiling: " + DW.wal), edit, el("label", { class: "dg-lb" }, "Nama pemain"), nm);
+  const left = el("section", { class: "dg-card dw-left" }, null, el("h3", null, "Avatar anda"), pv, el("div", { class: "dw-coins" }, "MD: " + DW.wal), edit, el("label", { class: "dg-lb" }, "Nama pemain"), nm);
   const mid = el("section", { class: "dg-card" }, null, el("h3", null, "Tetapan dunia"),
     el("label", { class: "dg-lb" }, "Panjang laluan"), sel([[4, "Pendek (4 pintu soalan)"], [6, "Sederhana (6 pintu soalan)"], [8, "Panjang (8 pintu soalan)"]], c.len, (v) => { c.len = +v; dwCfgSave(); refresh(); }, "Panjang laluan"),
     el("label", { class: "dg-lb" }, "Tahap cabaran"), sel([[0, "Mudah"], [1, "Biasa"], [2, "Sukar"]], c.diff, (v) => { c.diff = +v; dwCfgSave(); }, "Tahap cabaran"),
@@ -3672,7 +3672,7 @@ function dwSetup() {
   const old = el("button", { type: "button", class: "dg-go sm alt" }, "Mod Obby 2D klasik"); old.addEventListener("click", () => { DW.on = false; dgSetup(); });
   const th = DG_TH[dgHash(DG.tid) % DG_TH.length];
   r.append(el("div", { class: "dg-bg" }), x, el("div", { class: "dg-wrap" }, null, el("div", { class: "dg-kick" }, "MISI " + (t.kod || "")), el("h1", null, "Dunia Ilmu"),
-    el("p", { class: "dg-lead" }, "Dunia blok 3D. Jelajah kampung, kumpul syiling, lalui obby 3D dan buka pintu soalan dengan jawapan yang betul. Alam: " + th.n + ". " + (t.nama || "")),
+    el("p", { class: "dg-lead" }, "Dunia blok 3D. Jelajah kampung, kumpul MD, lalui obby 3D dan buka pintu soalan dengan jawapan yang betul. Alam: " + th.n + ". " + (t.nama || "")),
     el("div", { class: "dg-grid dw-grid" }, null, left, mid, el("section", { class: "dg-card dg-how" }, null, el("h3", null, "Kawalan"),
       el("ul", null, null, el("li", null, "Gerak: W A S D atau anak panah."), el("li", null, "Lompat: Spasi."), el("li", null, "Kamera: seret tetikus, atau Q / R, roda tetikus untuk zum."), el("li", null, "Bercakap dengan Cikgu dan Kedai: tekan E."), el("li", null, "Emosi: kekunci 1 hingga 4."), el("li", null, "Telefon: kayu bedik kiri, seret kanan untuk kamera, butang lompat."), el("li", null, "Bendera ialah checkpoint."))),
     ), el("div", { class: "dg-gow" }, null, go, old, el("div", { class: "dg-small" }, "XP kecil ditambah selepas piala dicapai, dihadkan " + DW_XP_CAP + " sehari."))));
@@ -3712,11 +3712,11 @@ function dwShop(inGame) {
   const coins = el("div", { class: "dw-coins" }), body = el("div", { class: "dw-items" }), tabs = el("div", { class: "dw-tabs" });
   const msg = el("div", { class: "dw-msg" });
   const swatch = (arr, key, label) => { const row = el("div", { class: "dw-sw" }); row.append(el("small", null, label)); const w = el("div", { class: "dw-swr" }); arr.forEach((col, i) => { if (key === "td" && i === 0) { const b = el("button", { type: "button", class: "dw-chip" + (c.td === 0 ? " on" : "") }, "Tiada"); b.addEventListener("click", () => { c.td = 0; save(); }); w.appendChild(b); return; } const b = el("button", { type: "button", class: "dw-sq" + (c[key] === i ? " on" : ""), style: "background:" + col, "aria-label": label + " " + (i + 1) }); b.addEventListener("click", () => { c[key] = i; if (key === "td" && i > 0) c.hat = 0; save(); }); w.appendChild(b); }); row.append(w); return row; };
-  const items = (slot) => { const w = el("div", { class: "dw-cards" }); DW_SHOP.filter((it) => it.slot === slot).forEach((it) => { const own = !!DW.own[it.id], on = c[it.slot] === it.v; const b = el("button", { type: "button", class: "dw-card" + (on ? " on" : "") }, null, el("b", null, it.n), el("span", null, on ? "Dipakai" : own ? "Dimiliki" : it.p + " syiling")); b.addEventListener("click", () => { if (on) { c[it.slot] = 0; save(); return; } if (!own) { if (DW.wal < it.p) { msg.textContent = "Syiling tidak cukup. Kumpul lebih banyak dalam dunia."; dgSnd("bad", 0.6); return; } DW.wal -= it.p; DW.own[it.id] = true; dgSnd("coin"); } c[it.slot] = it.v; if (it.slot === "hat") c.td = 0; save(); }); w.appendChild(b); }); return w; };
+  const items = (slot) => { const w = el("div", { class: "dw-cards" }); DW_SHOP.filter((it) => it.slot === slot).forEach((it) => { const own = !!DW.own[it.id], on = c[it.slot] === it.v; const b = el("button", { type: "button", class: "dw-card" + (on ? " on" : "") }, null, el("b", null, it.n), el("span", null, on ? "Dipakai" : own ? "Dimiliki" : it.p + " MD")); b.addEventListener("click", () => { if (on) { c[it.slot] = 0; save(); return; } if (!own) { if (DW.wal < it.p) { msg.textContent = "MD tidak cukup. Kumpul lebih banyak dalam dunia."; dgSnd("bad", 0.6); return; } DW.wal -= it.p; DW.own[it.id] = true; dgSnd("coin"); } c[it.slot] = it.v; if (it.slot === "hat") c.td = 0; save(); }); w.appendChild(b); }); return w; };
   const noneBtn = (slot, label) => { const b = el("button", { type: "button", class: "dw-chip" + (c[slot] === 0 ? " on" : "") }, label); b.addEventListener("click", () => { c[slot] = 0; save(); }); return b; };
   function save() { dwCfgSave(); msg.textContent = ""; render(); }
   function render() {
-    coins.textContent = "Syiling: " + DW.wal; tabs.textContent = ""; body.textContent = "";
+    coins.textContent = "MD: " + DW.wal; tabs.textContent = ""; body.textContent = "";
     DW_TABS.forEach((t) => { const b = el("button", { type: "button", class: "dw-tab" + (tab === t[0] ? " on" : "") }, t[1]); b.addEventListener("click", () => { tab = t[0]; render(); }); tabs.appendChild(b); });
     if (tab === "badan") body.append(swatch(DW_SKIN, "sk", "Warna kulit"), swatch(DW_COL, "sh", "Warna baju"), swatch(DW_PANT, "pn", "Warna seluar"));
     else if (tab === "tudung") body.append(swatch(DW_TDG, "td", "Tudung"), el("p", { class: "dg-small" }, "Tudung percuma dan boleh dipilih bila-bila masa. Topi tidak dipakai bersama tudung."));
@@ -3749,8 +3749,8 @@ function dwEnd() {
   g.wrong.forEach((w, k) => { const d = el("div", { class: "dg-wq" }); d.append(qSet(el("b"), (k + 1) + ". " + w.q.q), el("div", { class: "a" }, null, "Jawapan betul: ", qSet(el("span"), w.ans)), el("div", { class: "who" }, "Anda memilih: " + w.pick)); if (w.q.e) d.append(qSet(el("div", { class: "e" }), w.q.e)); rev.append(d); });
   const again = el("button", { type: "button", class: "dg-go sm" }, "Main semula"), cfg = el("button", { type: "button", class: "dg-go sm alt" }, "Tukar tetapan dan avatar"); again.addEventListener("click", dwStart); cfg.addEventListener("click", dwSetup);
   r.append(el("div", { class: "dg-bg" }), x, el("div", { class: "dg-wrap res" }, null, el("div", { class: "dg-kick" }, "DUNIA TAMAT"), el("h1", null, "Piala dicapai!"), st,
-    el("div", { class: "dg-stats" }, null, ...[[score, "skor"], [g.ok + " / " + g.tot, "soalan betul"], [earned, "syiling diperoleh"], [g.falls, "kali jatuh"], [Math.floor(tt / 60) + ":" + String(tt % 60).padStart(2, "0"), "masa"]].map((s) => el("div", null, null, el("b", null, String(s[0])), el("span", null, s[1])))),
-    el("p", { class: "dg-lead" }, (nb ? "Skor terbaik baharu! " : "") + (xp ? "Profil anda +" + xp + " XP. " : why + " ") + "Syiling anda: " + DW.wal + ". Belanja di kedai untuk ubah suai avatar."), rev, el("div", { class: "dg-btns" }, null, again, cfg)));
+    el("div", { class: "dg-stats" }, null, ...[[score, "skor"], [g.ok + " / " + g.tot, "soalan betul"], [earned, "MD diperoleh"], [g.falls, "kali jatuh"], [Math.floor(tt / 60) + ":" + String(tt % 60).padStart(2, "0"), "masa"]].map((s) => el("div", null, null, el("b", null, String(s[0])), el("span", null, s[1])))),
+    el("p", { class: "dg-lead" }, (nb ? "Skor terbaik baharu! " : "") + (xp ? "Profil anda +" + xp + " XP. " : why + " ") + "MD anda: " + DW.wal + ". Belanja di kedai untuk ubah suai avatar."), rev, el("div", { class: "dg-btns" }, null, again, cfg)));
 }
 const DW_CSS = `
 #dgOv .dw-grid { grid-template-columns: 1.05fr 1fr 0.8fr; } @media (max-width: 880px) { #dgOv .dw-grid { grid-template-columns: 1fr; } }
@@ -6891,7 +6891,7 @@ function lgEndScreen() {
     again.addEventListener("click", lgStart); cfg.addEventListener("click", lgSetup); cl.addEventListener("click", lgClose);
     inn.append(el("div", { class: "lg-kick" }, win ? "MISI TAMAT" : "MISI GAGAL"), el("h2", null, win ? "Markas musuh runtuh!" : "Markas anda ranap"), stE,
       el("p", null, "Kuiz betul " + g.ok + " daripada " + g.tot + " · Tumbang " + pd + " kali · Masa " + Math.floor(g.t / 60) + ":" + String(Math.floor(g.t % 60)).padStart(2, "0") + " · Markah " + g.score + (xp ? " · Profil +" + xp + " XP" : "")),
-      (() => { const d = el("div", { class: "lg-rw" }); d.append(el("b", null, xp ? "Profil +" + xp + " XP dan +" + xp + " mata papan sekolah (minggu dan bulan)" : "Tiada XP profil kali ini")); d.append(el("small", null, rw.why || ("Baki kuota XP Lagenda hari ini: " + rw.left + " daripada " + LG_XP_CAP))); rw.quests.forEach((q) => d.append(el("div", { class: "lg-rq" }, "Misi harian selesai: " + q.t + " (+" + QUEST_COIN + " syiling, +" + QUEST_XP + " XP)"))); if (rw.all) d.append(el("div", { class: "lg-rq" }, "Semua misi harian selesai! +" + QUEST_ALL + " syiling")); rw.badges.forEach((b) => d.append(el("div", { class: "lg-rq" }, "Gelaran baharu: " + b.n))); if (rw.best) d.append(el("div", { class: "lg-rq" }, "Skor terbaik baharu untuk papan Lagenda: " + g.score)); (rw.notes || []).forEach((n) => d.append(el("div", { class: n.warn ? "lg-rq" : "lg-rq ok" }, n.t))); return d; })(),
+      (() => { const d = el("div", { class: "lg-rw" }); d.append(el("b", null, xp ? "Profil +" + xp + " XP dan +" + xp + " mata papan sekolah (minggu dan bulan)" : "Tiada XP profil kali ini")); d.append(el("small", null, rw.why || ("Baki kuota XP Lagenda hari ini: " + rw.left + " daripada " + LG_XP_CAP))); rw.quests.forEach((q) => d.append(el("div", { class: "lg-rq" }, "Misi harian selesai: " + q.t + " (+" + QUEST_COIN + " MD, +" + QUEST_XP + " XP)"))); if (rw.all) d.append(el("div", { class: "lg-rq" }, "Semua misi harian selesai! +" + QUEST_ALL + " MD")); rw.badges.forEach((b) => d.append(el("div", { class: "lg-rq" }, "Gelaran baharu: " + b.n))); if (rw.best) d.append(el("div", { class: "lg-rq" }, "Skor terbaik baharu untuk papan Lagenda: " + g.score)); (rw.notes || []).forEach((n) => d.append(el("div", { class: n.warn ? "lg-rq" : "lg-rq ok" }, n.t))); return d; })(),
       el("p", { class: "lg-tip" }, win ? (acc < 0.6 ? "Ulang kaji topik ini untuk mendapat lebih bintang." : "Hebat. Cuba tahap lawan yang lebih sukar.") : "Pecahkan perisai menara lebih awal dan runtuhkan menara musuh sebelum pasukan anda ditekan."));
     const sn = Object.keys(g.stu);
     if (sn.length > 1 || (LG.team && LG.team.on)) { const tb = el("table", { class: "lg-wk" }); tb.append(el("tr", null, null, el("th", null, "Murid"), el("th", null, "Betul"), el("th", null, "Ketepatan"))); sn.forEach((n) => { const s = g.stu[n]; tb.append(el("tr", null, null, el("td", null, n), el("td", null, s.ok + "/" + s.tot), el("td", null, Math.round(100 * s.ok / Math.max(1, s.tot)) + "%"))); }); inn.append(tb); }
@@ -6965,7 +6965,7 @@ function lgRoot() {
    Dibuka daripada butang di peta utama; dunia.js dimuat hanya apabila diperlukan. */
 /* v17.91: avatar 3D dikongsi Gudang dan META DIDIK; dimuat apabila perlu */
 /* v18.4: versi aplikasi untuk memecah cache skrip (Safari/ikon skrin utama iPhone menyimpan salinan lama) */
-const APP_VER = "18.20";
+const APP_VER = "18.21";
 function av3Load(cb) {
   if (window.AV3) { cb(); return; }
   if (typeof THREE === "undefined") return;
@@ -8727,7 +8727,7 @@ function cardShare(res, stars, score, rankIdx, btn) {
   } catch (e) { finish(); }
 }
 function avRarity(a) { return a.price >= 2500 ? { k: "lg", n: "Legenda" } : a.price >= 1500 ? { k: "ep", n: "Epik" } : a.price >= 600 ? { k: "rr", n: "Jarang" } : { k: "cm", n: "Biasa" }; }
-/* ---------- Dompet syiling: nombor berputar naik, "+N" terapung dan percikan setiap kali bertambah ---------- */
+/* ---------- Dompet MD: nombor berputar naik, "+N" terapung dan percikan setiap kali bertambah ---------- */
 const WAL = { shown: null, target: 0, raf: 0, boot: Date.now(), ctx: null };
 let _coinSeq = 0;
 function coinSvg() {
@@ -8736,7 +8736,7 @@ function coinSvg() {
 }
 function walFmt(n) { return Math.round(n).toLocaleString("en-US"); }
 function walFill() { document.querySelectorAll(".wc").forEach((e) => { if (!e.firstChild) e.innerHTML = coinSvg(); }); }
-function walSet(v) { WAL.shown = v; const t = walFmt(v); document.querySelectorAll(".walnum").forEach((e) => { e.textContent = t; }); const b = $("walletBtn"); if (b) b.setAttribute("aria-label", "Syiling " + t + ". Buka Gudang avatar"); }
+function walSet(v) { WAL.shown = v; const t = walFmt(v); document.querySelectorAll(".walnum").forEach((e) => { e.textContent = t; }); const b = $("walletBtn"); if (b) b.setAttribute("aria-label", "MD " + t + ". Buka Gudang avatar"); }
 function walPop(txt, cls) {
   document.querySelectorAll(".walpop").forEach((h) => { if (!h.offsetParent) return; const s = el("span", { class: "wp " + cls }, txt); h.appendChild(s); setTimeout(() => s.remove(), 1500); });
 }
@@ -8787,7 +8787,7 @@ setInterval(walTick, 250);
 function renderGudang() {
   const box = $("gudangBody");
   box.textContent = "";
-  const msg = el("div", { class: "walmsg" }, "Setiap tahap avatar memberi +10 perisai pada permulaan misi. Kumpul syiling dengan membuka peti, menumpaskan musuh dan menamatkan misi.");
+  const msg = el("div", { class: "walmsg" }, "Setiap tahap avatar memberi +10 perisai pada permulaan misi. Kumpul MD dengan membuka peti, menumpaskan musuh dan menamatkan misi.");
   { const wh = el("div", { class: "walhero" }), wcn = el("span", { class: "wc" }), wb = el("div", { class: "walbox" }), wn = el("b", { class: "walnum" }, walFmt(WAL.shown == null ? (P.coin | 0) : WAL.shown));
     wcn.innerHTML = coinSvg(); wb.append(el("div", { class: "wl" }, "SYILING ANDA"), wn, el("span", { class: "walpop", "aria-hidden": "true" }), msg); wh.append(wcn, wb); box.appendChild(wh); }
   const say = (t) => { msg.textContent = t; };
@@ -8802,7 +8802,7 @@ function renderGudang() {
       el("span", { class: "avst" }, "★".repeat(lv0) + "☆".repeat(3 - lv0) + "  Tahap " + lv0),
       el("span", { class: "muted" }, "Bonus permulaan misi: +" + (lv0 - 1) * 10 + " perisai" + (lv0 < 3 ? " (naik tahap untuk lebih)" : " (maksimum)")),
       el("span", { class: "avnext" }, "Koleksi avatar: " + nOwn + " / " + AVATARS.length), bar,
-      nx ? el("span", { class: "avnext" }, need > 0 ? "Sasaran seterusnya: " + nx.n + ". Kumpul " + need + " syiling lagi!" : "Anda cukup syiling untuk " + nx.n + "! Beli sekarang.") : el("span", { class: "avnext" }, "Hebat! Semua avatar sudah dimiliki."));
+      nx ? el("span", { class: "avnext" }, need > 0 ? "Sasaran seterusnya: " + nx.n + ". Kumpul " + need + " MD lagi!" : "Anda cukup MD untuk " + nx.n + "! Beli sekarang.") : el("span", { class: "avnext" }, "Hebat! Semua avatar sudah dimiliki."));
     hero.append(hp, info); box.appendChild(hero);
   }
   const grid = el("div", { class: "avgrid" });
@@ -8828,8 +8828,8 @@ function renderGudang() {
       bt.append(p, u);
     }
     c.append(el("span", { class: "rar " + rr.k }, rr.n), pv, el("b", null, a.n),
-      own ? el("span", { class: "avstars" }, "\u2605".repeat(lv) + "\u2606".repeat(3 - lv)) : el("span", { class: "avprice" }, a.rk ? "Buka pada pangkat " + RANKS[a.rk].n : a.price + " syiling"),
-      !own && c.dataset.lack ? el("span", { class: "avlack" }, "Kurang " + c.dataset.lack + " syiling") : el("span", { class: "muted" }, own ? "Tahap " + lv : a.rk ? "Belum dibuka" : "Boleh dibeli"), bt);
+      own ? el("span", { class: "avstars" }, "\u2605".repeat(lv) + "\u2606".repeat(3 - lv)) : el("span", { class: "avprice" }, a.rk ? "Buka pada pangkat " + RANKS[a.rk].n : a.price + " MD"),
+      !own && c.dataset.lack ? el("span", { class: "avlack" }, "Kurang " + c.dataset.lack + " MD") : el("span", { class: "muted" }, own ? "Tahap " + lv : a.rk ? "Belum dibuka" : "Boleh dibeli"), bt);
     grid.appendChild(c);
   });
   box.appendChild(grid);
@@ -8838,7 +8838,7 @@ function renderGudang() {
     const sg = el("div", { class: "shopgrid" });
     const mk = (nama, huraian, stok, cap, harga, qty, key, label) => {
       const c = el("div", { class: "shopcard" });
-      const b = el("button", { type: "button", class: "btn sm" }, "Beli " + qty + " " + label + " (" + harga * qty + " syiling)");
+      const b = el("button", { type: "button", class: "btn sm" }, "Beli " + qty + " " + label + " (" + harga * qty + " MD)");
       if ((P.coin | 0) < harga * qty || stok + qty > cap) b.disabled = true;
       b.addEventListener("click", () => { if ((P.coin | 0) < harga * qty || (P[key] | 0) + qty > cap) return; P.coin -= harga * qty; P[key] = (P[key] | 0) + qty; saveP(); renderGudang(); });
       c.append(el("b", null, nama), el("span", { class: "muted", style: "font-size:14px" }, huraian), el("span", null, "Simpanan: " + stok + " / " + cap), b);
@@ -8867,7 +8867,7 @@ function renderGudang() {
     ag.appendChild(b);
   });
   box.appendChild(ag);
-  box.appendChild(el("p", { class: "muted" }, "Buka peti bekalan dalam misi untuk mendapat syiling, XP dan aksesori. Pemain lain nampak avatar dan aksesori anda dalam multiplayer."));
+  box.appendChild(el("p", { class: "muted" }, "Buka peti bekalan dalam misi untuk mendapat MD, XP dan aksesori. Pemain lain nampak avatar dan aksesori anda dalam multiplayer."));
   try { gdTabs(box); } catch (e) { /* abaikan */ }
 }
 
@@ -10041,7 +10041,7 @@ function damageDrone(d, dmg) {
   d.dead = true; d.vy = 0;
   botParts = botParts.filter((p) => p.userData.owner !== d);
   S.kills++; S.score += 80; S.ammo = Math.min(150, S.ammo + 10); addCoins(8);
-  toast("Dron dimusnahkan  +80 mata  +10 peluru  +8 syiling", "good");
+  toast("Dron dimusnahkan  +80 mata  +10 peluru  +8 MD", "good");
   try { fxBurst(d.x, d.y, d.z); } catch (e) { /* abaikan */ }
   beep(420, 0.2, "sawtooth", 0.07, -60);
 }
@@ -10339,7 +10339,7 @@ function updateSniper(b, dt) {
 function sniperDown(b) {
   if (b.laser) b.laser.visible = false;
   S.score += 60; S.ammo = Math.min(150, S.ammo + 15); addCoins(15);
-  toast("Penembak hendap dilumpuhkan  +120 mata  +25 peluru  +15 syiling", "good");
+  toast("Penembak hendap dilumpuhkan  +120 mata  +25 peluru  +15 MD", "good");
   sniperNext = S.time + 55 * heatMul();
 }
 function updateSnipers() {
@@ -10424,11 +10424,11 @@ function shopItems() {
 }
 function renderShop(msg) {
   const box = $("shopBody"); box.textContent = "";
-  box.append(el("div", { class: "tagline util", style: "color:var(--amber)" }, "Depot Bekalan | Syiling misi " + (S.coins | 0) + " + simpanan " + (P.coin | 0) + " | Nyawa " + Math.ceil(S.hp) + " | Peluru " + S.ammo));
+  box.append(el("div", { class: "tagline util", style: "color:var(--amber)" }, "Depot Bekalan | MD misi " + (S.coins | 0) + " + simpanan " + (P.coin | 0) + " | Nyawa " + Math.ceil(S.hp) + " | Peluru " + S.ammo));
   if (msg) box.append(el("div", { class: "muted", style: "color:var(--khaki)" }, msg));
   for (const it of shopItems()) {
-    const cant = it.no || (S.coins + (P.coin | 0) < it.p ? "Syiling kurang" : "");
-    const b = el("button", { type: "button", class: "btn sm" }, cant ? cant : it.p + " syiling");
+    const cant = it.no || (S.coins + (P.coin | 0) < it.p ? "MD kurang" : "");
+    const b = el("button", { type: "button", class: "btn sm" }, cant ? cant : it.p + " MD");
     if (cant) b.disabled = true;
     b.addEventListener("click", () => {
       if (S.coins + (P.coin | 0) < it.p) return;
@@ -11269,17 +11269,17 @@ function markWeak(q, good) {
 /* ---------- Siri jawapan betul dan kad maklum balas ---------- */
 function streakMul(n) { return n >= 8 ? 2 : n >= 5 ? 1.5 : n >= 3 ? 1.25 : 1; }
 function streakNextText(n) {
-  const m = [[3, "+10 syiling"], [5, "+1 bom tangan"], [8, "kesihatan dan perisai penuh"], [10, "+1 roket RPG"]];
+  const m = [[3, "+10 MD"], [5, "+1 bom tangan"], [8, "kesihatan dan perisai penuh"], [10, "+1 roket RPG"]];
   for (const [k, t] of m) if (n < k) return "Siri " + k + ": " + t;
-  const k = (Math.floor(n / 5) + 1) * 5; return "Siri " + k + ": +40 syiling";
+  const k = (Math.floor(n / 5) + 1) * 5; return "Siri " + k + ": +40 MD";
 }
 function streakReward(n) {
   let t = "";
-  if (n === 3) { addCoins(10); t = "+10 syiling"; }
-  else if (n === 5) { if (S.gren < GREN_CAP) { S.gren++; S.gEarn++; t = "+1 bom tangan"; } else { addCoins(20); t = "+20 syiling"; } }
+  if (n === 3) { addCoins(10); t = "+10 MD"; }
+  else if (n === 5) { if (S.gren < GREN_CAP) { S.gren++; S.gEarn++; t = "+1 bom tangan"; } else { addCoins(20); t = "+20 MD"; } }
   else if (n === 8) { S.hp = 100; S.armor = Math.max(S.armor, 100); t = "Kesihatan dan perisai penuh"; }
-  else if (n === 10) { addCoins(40); if (S.rock < ROCK_CAP) { S.rock++; S.rEarn++; t = "+1 roket RPG, +40 syiling"; } else t = "+40 syiling"; }
-  else if (n > 10 && n % 5 === 0) { addCoins(40); t = "+40 syiling"; }
+  else if (n === 10) { addCoins(40); if (S.rock < ROCK_CAP) { S.rock++; S.rEarn++; t = "+1 roket RPG, +40 MD"; } else t = "+40 MD"; }
+  else if (n > 10 && n % 5 === 0) { addCoins(40); t = "+40 MD"; }
   if (t) toast("Siri " + n + " betul berturut-turut! " + t, "good");
   return t ? "Siri " + n + ": " + t : "";
 }
@@ -11686,9 +11686,9 @@ function khasAll(kh) { if (kh.rahsia) return RLIST.slice(); return QLIST.filter(
 function khasRec(id) { const r = (P.kh || {})[id]; return r && typeof r === "object" ? r : { b: 0, hs: 0, n: 0, ok: 0, tot: 0 }; }
 /* ---------- Tahap misi: Senang, Sederhana, Susah (misi solo biasa) ---------- */
 const DIFFS = {
-  1: { n: "Senang", bots: 4, xp: 0.7, coin: 0.7, dmg: 0.75, tm: 1.4, easy: true, info: "Tiada kereta kebal musuh, penembak tepat, helikopter dan mortar. Musuh lebih sedikit dan tembakan kurang sakit. XP dan syiling \u00d70.7." },
-  2: { n: "Sederhana", bots: 6, xp: 1, coin: 1, dmg: 1, tm: 1, easy: false, info: "Semua jenis musuh seperti biasa. XP dan syiling \u00d71." },
-  3: { n: "Susah", bots: 9, xp: 1.5, coin: 1.6, dmg: 1.25, tm: 0.7, easy: false, info: "Lebih banyak musuh, bantuan datang lebih kerap dan tembakan lebih sakit. XP \u00d71.5 dan syiling \u00d71.6." }
+  1: { n: "Senang", bots: 4, xp: 0.7, coin: 0.7, dmg: 0.75, tm: 1.4, easy: true, info: "Tiada kereta kebal musuh, penembak tepat, helikopter dan mortar. Musuh lebih sedikit dan tembakan kurang sakit. XP dan MD \u00d70.7." },
+  2: { n: "Sederhana", bots: 6, xp: 1, coin: 1, dmg: 1, tm: 1, easy: false, info: "Semua jenis musuh seperti biasa. XP dan MD \u00d71." },
+  3: { n: "Susah", bots: 9, xp: 1.5, coin: 1.6, dmg: 1.25, tm: 0.7, easy: false, info: "Lebih banyak musuh, bantuan datang lebih kerap dan tembakan lebih sakit. XP \u00d71.5 dan MD \u00d71.6." }
 };
 const DIFF = { cur: 2 };
 try { const d = +localStorage.getItem("gt-diff"); if (d === 1 || d === 2 || d === 3) DIFF.cur = d; } catch (e) { /* abaikan */ }
@@ -11790,7 +11790,7 @@ function khasAfter(res, score) {
   else if (r.warn) notes.push({ t: "Pasukan " + r.n + " belum mempunyai " + SQ_MIN + " ahli, jadi liputan soalan belum dikira.", warn: 1 });
   else {
     notes.push({ t: "Cabaran Kumpulan Soalan: pasukan " + r.n + " menambah " + r.added + " soalan baharu yang dijawab betul. " + KLV.map((L) => "Tingkatan " + L + ": " + r.cover["c" + L] + "/" + r.cover["t" + L]).join(". ") + "." });
-    r.fresh.forEach((k) => { P.coin = (P.coin | 0) + 200; P.kcl = P.kcl || {}; P.kcl[r.id + ":" + k] = 1; notes.push({ t: "KHATAM! Pasukan anda telah menjawab betul semua soalan " + (k === "KS" ? "Tingkatan 4 dan 5" : "Tingkatan " + k.slice(1)) + ". +200 syiling." }); });
+    r.fresh.forEach((k) => { P.coin = (P.coin | 0) + 200; P.kcl = P.kcl || {}; P.kcl[r.id + ":" + k] = 1; notes.push({ t: "KHATAM! Pasukan anda telah menjawab betul semua soalan " + (k === "KS" ? "Tingkatan 4 dan 5" : "Tingkatan " + k.slice(1)) + ". +200 MD." }); });
   }
   return notes;
 }
@@ -12002,7 +12002,7 @@ function kbShow(box, r, q) {
     P.xp += xp; P.coin = (P.coin | 0) + coin;
     P.kb = P.kb && typeof P.kb === "object" ? P.kb : {}; const kb = P.kb[SUBJ] || { n: 0, sum: 0 }; kb.n++; kb.sum += r.m; P.kb[SUBJ] = kb;
     saveP(); try { renderMe(); } catch (e) { /* abaikan */ }
-    box.appendChild(el("div", { class: "kbm" }, xp || coin ? "Ganjaran: +" + xp + " mata pangkat dan +" + coin + " syiling." : "Tiada ganjaran kali ini. Cuba perbaiki jawapan dan soalan lain."));
+    box.appendChild(el("div", { class: "kbm" }, xp || coin ? "Ganjaran: +" + xp + " mata pangkat dan +" + coin + " MD." : "Tiada ganjaran kali ini. Cuba perbaiki jawapan dan soalan lain."));
   } else box.appendChild(el("div", { class: "kbm" }, "Ganjaran bagi soalan ini sudah diterima hari ini. Cuba soalan lain."));
   const mm = el("div", { class: "kbm" }, "Markah AI hanyalah panduan latihan dan boleh berbeza sedikit daripada guru."); box.appendChild(mm);
 }
@@ -12107,11 +12107,11 @@ function khasBriefControls(box, kh, id, mode, go) {
 function khasTeamCard(st) {
   const c = el("div", { class: "card", style: "margin-top:12px" });
   c.appendChild(el("div", { class: "tagline" }, "Cabaran kumpulan soalan"));
-  c.appendChild(el("p", { class: "muted", style: "font-size:14px;margin:4px 0" }, "Pasukan mesti menjawab betul semua soalan setiap tingkatan. Setiap soalan yang dijawab betul oleh mana-mana ahli dalam Latihan Khas dikira. Soalan yang pasukan belum jawab betul diutamakan. Khatam satu tingkatan memberi ganjaran syiling."));
+  c.appendChild(el("p", { class: "muted", style: "font-size:14px;margin:4px 0" }, "Pasukan mesti menjawab betul semua soalan setiap tingkatan. Setiap soalan yang dijawab betul oleh mana-mana ahli dalam Latihan Khas dikira. Soalan yang pasukan belum jawab betul diutamakan. Khatam satu tingkatan memberi ganjaran MD."));
   const doc = sqDoc(st.id), cv = khasCover(doc);
   const got = [];
   String((doc && doc.kh) || "").split(",").forEach((k) => { if (!KHAS_BY[k]) return; P.kcl = P.kcl || {}; const key = st.id + ":" + k; if (!P.kcl[key]) { P.kcl[key] = 1; P.coin = (P.coin | 0) + 150; got.push(k); } });
-  if (got.length) { saveP(); c.appendChild(el("div", { class: "notice" }, "Pasukan anda telah mengkhatamkan " + got.map((k) => KHAS_BY[k].pendek).join(", ") + ". Ganjaran +" + 150 * got.length + " syiling diterima.")); }
+  if (got.length) { saveP(); c.appendChild(el("div", { class: "notice" }, "Pasukan anda telah mengkhatamkan " + got.map((k) => KHAS_BY[k].pendek).join(", ") + ". Ganjaran +" + 150 * got.length + " MD diterima.")); }
   KLV.map((L) => ["K" + L, cv["c" + L], cv["t" + L]]).concat(KLV.length === 2 ? [["KS", cv.cs, cv.ts]] : []).forEach(([id, a, t]) => {
     const row = el("div", { class: "cvrow" }), bar = el("div", { class: "cvbar" + (t && a >= t ? " done" : "") });
     const f = el("i"); f.style.width = (t ? Math.round(a / t * 100) : 0) + "%"; bar.appendChild(f);
@@ -12137,7 +12137,7 @@ function renderKhasBoard(box, list) {
   if (!rows.length) box.appendChild(el("p", { class: "muted" }, "Belum ada skor. Jadilah yang pertama."));
 }
 
-/* ---------- Syiling bertambah (dengan kesan) ---------- */
+/* ---------- MD bertambah (dengan kesan) ---------- */
 function addCoins(n) {
   n = n | 0; if (n <= 0) return;
   if (M && M.diff && DIFFS[M.diff]) n = Math.max(1, Math.round(n * DIFFS[M.diff].coin));
@@ -12147,7 +12147,7 @@ function addCoins(n) {
     if (c) { c.textContent = S.coins; c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump"); }
     const host = $("coinPop");
     if (host) {
-      const d = document.createElement("div"); d.className = "cpop"; d.textContent = "+" + n + " syiling";
+      const d = document.createElement("div"); d.className = "cpop"; d.textContent = "+" + n + " MD";
       host.appendChild(d);
       while (host.children.length > 3) host.removeChild(host.firstChild);
       setTimeout(() => { if (d.parentNode) d.parentNode.removeChild(d); }, 1300);
@@ -12198,7 +12198,7 @@ function gudangLoadout(box) {
   for (const k of [6, 1, 7, 2, 3, 8, 9, 4, 11, 10]) {
     const own = (P.wo || []).indexOf(k) >= 0, price = wpnPerm(k);
     const c = el("div", { class: "shopcard" + (own ? " own" : "") });
-    const b = el("button", { type: "button", class: "btn sm" }, own ? "Dimiliki" : "Beli (" + price + " syiling)");
+    const b = el("button", { type: "button", class: "btn sm" }, own ? "Dimiliki" : "Beli (" + price + " MD)");
     if (own || (P.coin | 0) < price) b.disabled = true;
     b.addEventListener("click", () => buy(price, () => { P.wo = (P.wo || []).concat([k]).sort((a, c2) => a - c2); }));
     c.append(el("b", null, WEAPONS[k].n), el("span", { class: "muted", style: "font-size:14px" }, wpnSpec(k)), b);
@@ -12207,7 +12207,7 @@ function gudangLoadout(box) {
   box.appendChild(wg);
   box.appendChild(el("div", { class: "tagline util", style: "color:var(--khaki);margin-top:16px" }, "Peluru permulaan"));
   const ag = el("div", { class: "shopgrid" }), ac = el("div", { class: "shopcard" });
-  const ab = el("button", { type: "button", class: "btn sm" }, "Beli " + AM_PACK + " peluru (" + AM_PRICE + " syiling)");
+  const ab = el("button", { type: "button", class: "btn sm" }, "Beli " + AM_PACK + " peluru (" + AM_PRICE + " MD)");
   if ((P.coin | 0) < AM_PRICE || (P.pa | 0) + AM_PACK > AM_CAP) ab.disabled = true;
   ab.addEventListener("click", () => { if ((P.pa | 0) + AM_PACK > AM_CAP) return; buy(AM_PRICE, () => { P.pa = (P.pa | 0) + AM_PACK; }); });
   ac.append(el("b", null, "Pek peluru"), el("span", { class: "muted", style: "font-size:14px" }, "Ditambah kepada 30 peluru asas ketika misi bermula. Peluru yang tidak habis digunakan disimpan semula."), el("span", null, "Simpanan: " + (P.pa | 0) + " / " + AM_CAP), ab);
@@ -12218,14 +12218,14 @@ function gudangLoadout(box) {
   ARMORS.forEach((a, i) => {
     const own = i < t0, next = i === t0;
     const c = el("div", { class: "shopcard" + (own ? " own" : "") });
-    const b = el("button", { type: "button", class: "btn sm" }, own ? "Dimiliki" : next ? "Beli (" + a.p + " syiling)" : "Beli tahap sebelum ini dahulu");
+    const b = el("button", { type: "button", class: "btn sm" }, own ? "Dimiliki" : next ? "Beli (" + a.p + " MD)" : "Beli tahap sebelum ini dahulu");
     if (own || !next || (P.coin | 0) < a.p) b.disabled = true;
     b.addEventListener("click", () => { if (armorTier() !== i) return; buy(a.p, () => { P.ar = i + 1; }); });
     c.append(el("b", null, "Tahap " + (i + 1) + ": " + a.n), el("span", { class: "muted", style: "font-size:14px" }, "Perisai permulaan " + a.st + ". Menyerap " + Math.round(a.ab * 100) + "% kerosakan sehingga perisai habis."), b);
     pg.appendChild(c);
   });
   { const own = !!P.hm, c = el("div", { class: "shopcard" + (own ? " own" : "") });
-    const b = el("button", { type: "button", class: "btn sm" }, own ? "Dimiliki" : "Beli (" + HELM_PRICE + " syiling)");
+    const b = el("button", { type: "button", class: "btn sm" }, own ? "Dimiliki" : "Beli (" + HELM_PRICE + " MD)");
     if (own || (P.coin | 0) < HELM_PRICE) b.disabled = true;
     b.addEventListener("click", () => buy(HELM_PRICE, () => { P.hm = 1; }));
     c.append(el("b", null, "Topi keledar tempur"), el("span", { class: "muted", style: "font-size:14px" }, "Mengurangkan 15% kerosakan yang sampai kepada nyawa, selepas perisai."), b);
@@ -12237,10 +12237,10 @@ function giveCrateReward(ok) {
   const coins = ok ? 20 + Math.floor(Math.random() * 16) : 6;
   const xp = ok ? 25 : 5;
   addCoins(coins); S.bxp += xp;
-  let t = "Hadiah peti: +" + coins + " syiling, +" + xp + " XP";
+  let t = "Hadiah peti: +" + coins + " MD, +" + xp + " XP";
   if (Math.random() < (ok ? 0.4 : 0.12)) {
     const a = ACC_BASE[Math.floor(Math.random() * ACC_BASE.length)];
-    if (P.accOwn.indexOf(a.id) >= 0 || S.gotAcc.indexOf(a.id) >= 0) { addCoins(25); t += ", aksesori pendua " + a.n + " (+25 syiling)"; }
+    if (P.accOwn.indexOf(a.id) >= 0 || S.gotAcc.indexOf(a.id) >= 0) { addCoins(25); t += ", aksesori pendua " + a.n + " (+25 MD)"; }
     else { S.gotAcc.push(a.id); t += ", aksesori baharu: " + a.n; }
   }
   { const rr = Math.random();
@@ -12618,7 +12618,7 @@ function damageBot(b, d) {
   b.dead = true; b.deadT = 0; if (b.isSniper) sniperDown(b);
   botParts = botParts.filter((p) => p.userData.owner !== b);
   S.kills++; S.score += 60; S.ammo = Math.min(150, S.ammo + 10); addCoins(4);
-  toast("Sasaran dilumpuhkan  +60 mata  +10 peluru  +4 syiling", "good");
+  toast("Sasaran dilumpuhkan  +60 mata  +10 peluru  +4 MD", "good");
   try { fxBurst(b.x, 1, b.z); } catch (e) { /* abaikan */ }
   dropFromBot(b);
   beep(500, 0.12, "triangle", 0.07); setTimeout(() => beep(750, 0.12, "triangle", 0.07), 110);
@@ -12816,7 +12816,7 @@ function damageHeli(h, d) {
   h.dead = true; h.deadT = 0; h.burst = 0;
   botParts = botParts.filter((p) => p.userData.owner !== h);
   S.kills++; S.score += 250; S.ammo = Math.min(150, S.ammo + 40); addCoins(30);
-  toast("Helikopter musuh dijatuhkan  +250 mata  +40 peluru  +30 syiling", "good");
+  toast("Helikopter musuh dijatuhkan  +250 mata  +40 peluru  +30 MD", "good");
   try { fxBurst(h.x, h.y, h.z); } catch (e) { /* abaikan */ }
   beep(500, 0.12, "triangle", 0.07); setTimeout(() => beep(750, 0.12, "triangle", 0.07), 110);
   heliNext = S.time + 80 * heatMul();
@@ -12916,7 +12916,7 @@ function damageApc(a, d, kind) {
   a.dead = true; a.deadT = 0;
   botParts = botParts.filter((p) => p.userData.owner !== a);
   S.kills++; S.score += 400; addCoins(60); S.bxp += 40;
-  let t = "Kereta perisai musnah!  +400 mata  +60 syiling";
+  let t = "Kereta perisai musnah!  +400 mata  +60 MD";
   if (S.rock < ROCK_CAP) { S.rock++; S.rEarn++; t += "  +1 roket"; }
   toast(t, "good");
   try { fxBurst(a.x, 1.5, a.z); fxBurst(a.x + 1.5, 2, a.z); fxBurst(a.x - 1.5, 1.2, a.z + 1); } catch (e) { /* abaikan */ }
@@ -13032,7 +13032,7 @@ function bossKilled(b, killer) {
   const mine = !M.mp || !killer || killer === Net.myPeer;
   b.kb = killer || "";
   S.score += 350 + (mine ? 150 : 0); if (mine) S.kills++; addCoins(80); S.bxp += 60; S.bossDone = true; S.endAt = 2.8;
-  toast(mine ? "Pegawai musuh ditumpaskan!  +500 mata  +80 syiling" : "Pegawai musuh ditumpaskan oleh pasukan!  +350 mata  +80 syiling", "good");
+  toast(mine ? "Pegawai musuh ditumpaskan!  +500 mata  +80 MD" : "Pegawai musuh ditumpaskan oleh pasukan!  +350 mata  +80 MD", "good");
   try { fxBurst(b.x, 1.5, b.z); fxBurst(b.x + 1, 2, b.z); } catch (e) { /* abaikan */ }
   dropFromBot(b);
   beep(500, 0.12, "triangle", 0.07); setTimeout(() => beep(750, 0.12, "triangle", 0.07), 110); setTimeout(() => beep(1000, 0.2, "triangle", 0.07), 230);
@@ -14040,7 +14040,7 @@ function lrnFinish() {
   ov.textContent = "";
   const w = el("div", { class: "lrn-box" });
   w.append(el("div", { class: "lrn-tag" }, cfg.tag || "Latihan"), el("h2", null, "Keputusan"), el("div", { class: "lrn-score" }, ok + " / " + n), el("div", { class: "muted" }, ok === n ? "Cemerlang! Semua betul." : ok >= n * 0.6 ? "Baik. Ulang soalan yang salah untuk menguasainya." : "Teruskan berlatih. Soalan yang salah akan muncul semula dalam ulang kaji berjarak."));
-  if (extra) w.append(el("div", { class: "notice" }, "Cabaran harian selesai. +" + extra.coins + " syiling" + (extra.bonus ? " (termasuk bonus streak " + extra.bonus + ")" : "") + ". Streak cabaran: " + extra.streak + " hari."));
+  if (extra) w.append(el("div", { class: "notice" }, "Cabaran harian selesai. +" + extra.coins + " MD" + (extra.bonus ? " (termasuk bonus streak " + extra.bonus + ")" : "") + ". Streak cabaran: " + extra.streak + " hari."));
   if (cfg.kind === "ulang") { const m = lrnSchedule(); w.append(el("div", { class: "notice" }, "Soalan dikuasai setakat ini: " + m.ms + ". Soalan yang betul diulang selepas 1, 3 dan 7 hari sehingga dikuasai.")); }
   if (LP.wrong.length) {
     w.append(el("h3", { class: "sec", style: "font-size:20px;margin-top:12px" }, "Semak yang salah"));
@@ -14081,7 +14081,7 @@ function renderLatihan() {
   const cd = el("div", { class: "hcard lrn-card" });
   cd.append(el("div", { class: "tagline" }, "Cabaran harian"), el("h3", null, ch.done ? "Selesai hari ini: " + ch.o + " / 5 betul" : "Lima soalan untuk hari ini"));
   const dots = el("div", { class: "lrn-pr" }); for (let k = 0; k < 5; k++) dots.appendChild(el("i", { class: ch.done ? (k < ch.o ? "on" : "off") : "" })); cd.appendChild(dots);
-  cd.appendChild(el("p", { class: "muted" }, ch.done ? "Datang semula esok untuk mengekalkan streak. Streak semasa: " + lrnCsNow() + " hari." : "Ganjaran: 15 syiling + 5 setiap jawapan betul, serta bonus streak sehingga 70 syiling. Ada soalan ulang kaji yang sudah tiba masanya."));
+  cd.appendChild(el("p", { class: "muted" }, ch.done ? "Datang semula esok untuk mengekalkan streak. Streak semasa: " + lrnCsNow() + " hari." : "Ganjaran: 15 MD + 5 setiap jawapan betul, serta bonus streak sehingga 70 MD. Ada soalan ulang kaji yang sudah tiba masanya."));
   const b1 = el("button", { type: "button", class: "btn" }, ch.done ? "Sudah selesai" : "Mula cabaran"); if (ch.done) b1.disabled = true; b1.addEventListener("click", lrnStartChal); cd.appendChild(b1);
   // ulang kaji
   const rv = el("div", { class: "hcard lrn-card" });
@@ -15880,7 +15880,7 @@ function lrnFinish() {
   lrnEval(); ov.textContent = "";
   const w = el("div", { class: "lrn-box" });
   w.append(el("div", { class: "lrn-tag" }, cfg.tag || "Latihan"), el("h2", null, "Keputusan"), el("div", { class: "lrn-score" }, ok + " / " + n), el("div", { class: "muted" }, LP.timeUp ? "Masa tamat. Soalan yang belum dijawab dikira salah." : ok === n ? "Cemerlang! Semua betul." : ok >= n * 0.6 ? "Baik. Ulang soalan yang salah untuk menguasainya." : "Teruskan berlatih. Soalan yang salah akan muncul semula dalam ulang kaji berjarak."));
-  if (extra) w.append(el("div", { class: "notice" }, "Cabaran harian selesai. +" + extra.coins + " syiling" + (extra.bonus ? " (termasuk bonus streak " + extra.bonus + ")" : "") + ". Streak cabaran: " + extra.streak + " hari."));
+  if (extra) w.append(el("div", { class: "notice" }, "Cabaran harian selesai. +" + extra.coins + " MD" + (extra.bonus ? " (termasuk bonus streak " + extra.bonus + ")" : "") + ". Streak cabaran: " + extra.streak + " hari."));
   if (cfg.kind === "ulang") { const m = lrnSchedule(); w.append(el("div", { class: "notice" }, "Soalan dikuasai setakat ini: " + m.ms + ". Soalan yang betul diulang selepas 1, 3 dan 7 hari sehingga dikuasai.")); }
   if (cfg.kind === "tugas") { const so = el("div", { class: "notice" }, "Menghantar keputusan kepada guru..."); w.append(so); kkSubmit(cfg, ok, n, so); }
   if (LP.wrong.length) {
@@ -16218,7 +16218,7 @@ function a11Panel() {
 ["gesturestart", "gesturechange", "gestureend"].forEach((t) => document.addEventListener(t, (e) => { if (document.body.classList.contains("ar-lock") || document.body.classList.contains("ingame")) e.preventDefault(); }, { passive: false }));
 { let lt = 0; document.addEventListener("touchend", (e) => { if (!(document.body.classList.contains("ar-lock") || document.body.classList.contains("ingame"))) return; if (e.target && e.target.closest && e.target.closest("button, a, input, select, label, .sl-card, .sl-node")) { lt = 0; return; } const n = Date.now(); if (n - lt < 320) e.preventDefault(); lt = n; }, { passive: false }); }
 document.addEventListener("touchmove", (e) => { if (e.touches.length > 1 && (document.body.classList.contains("ar-lock") || document.body.classList.contains("ingame")) && e.target && e.target.nodeName !== "CANVAS") e.preventDefault(); }, { passive: false });
-/* ---------- Gudang untuk semua mod (v17.59): syiling merentas mod, barang kuiz, bonus avatar ---------- */
+/* ---------- Gudang untuk semua mod (v17.59): MD merentas mod, barang kuiz, bonus avatar ---------- */
 const GD_ITEMS = [
   { id: "f5", n: "50:50", d: "Buang dua pilihan salah pada satu soalan.", p: 30 },
   { id: "pt", n: "Petunjuk", d: "Papar topik dan rujukan buku teks bagi soalan itu.", p: 20 },
@@ -16232,13 +16232,13 @@ function gdCap() { return 100 + (gdAvLv() - 1) * 30; }
 function gdAvSec() { return gdAvLv() - 1; }
 function gdX2() { return (P.x2t | 0) > Date.now(); }
 function gdToday() { const td = dayKey(); if (!P.gdc || P.gdc.d !== td) P.gdc = { d: td, n: 0 }; return P.gdc; }
-/* syiling sebenar daripada jawapan betul dalam mod selain Tempur (Tempur ada ganjaran misi sendiri) */
+/* MD sebenar daripada jawapan betul dalam mod selain Tempur (Tempur ada ganjaran misi sendiri) */
 function gdCoin(base) {
   try {
     const t = gdToday(); let n = base + (gdAvLv() - 1); if (gdX2()) n *= 2;
     n = Math.min(n, gdCap() - t.n); if (n <= 0) return 0;
     t.n += n; P.coin = (P.coin | 0) + n; GD.pend += n;
-    if (!GD.pop) GD.pop = setTimeout(() => { GD.pop = 0; const k = GD.pend; GD.pend = 0; if (k >= 4) { try { toast("+" + k + " syiling (" + gdToday().n + "/" + gdCap() + " hari ini)" + (gdX2() ? " | 2x aktif" : ""), "good"); } catch (e) { /* abaikan */ } } try { renderMe(); } catch (e) { /* abaikan */ } }, 6000);
+    if (!GD.pop) GD.pop = setTimeout(() => { GD.pop = 0; const k = GD.pend; GD.pend = 0; if (k >= 4) { try { toast("+" + k + " MD (" + gdToday().n + "/" + gdCap() + " hari ini)" + (gdX2() ? " | 2x aktif" : ""), "good"); } catch (e) { /* abaikan */ } } try { renderMe(); } catch (e) { /* abaikan */ } }, 6000);
     return n;
   } catch (e) { return 0; }
 }
@@ -16295,15 +16295,15 @@ function gdPanel() {
   w.appendChild(el("div", { class: "tagline util", style: "color:var(--khaki);margin-top:16px" }, "Barang kuiz (guna dalam mod individu)"));
   w.appendChild(el("p", { class: "muted", style: "font-size:14px" }, "Muncul di bahagian bawah skrin semasa soalan dalam Latihan, Cabaran, Dunia Ilmu, Busana, Lagenda dan Jentik (solo). Tidak boleh digunakan dalam ujian bermasa guru dan mod kumpulan. Maksimum " + GD_USE_DAY + " guna sehari, satu kali bagi setiap barang untuk setiap soalan."));
   const g = el("div", { class: "shopgrid" });
-  GD_ITEMS.forEach((x) => { const c = el("div", { class: "shopcard" }), n = inv[x.id] | 0, b = el("button", { type: "button", class: "btn sm" }, "Beli 1 (" + x.p + " syiling)"); if ((P.coin | 0) < x.p || n >= GD_MAXSTOK) b.disabled = true; b.addEventListener("click", () => gdBuy(x.id, x.p, 1)); c.append(el("b", null, x.n), el("span", { class: "muted", style: "font-size:14px" }, x.d), el("span", null, "Simpanan: " + n + " / " + GD_MAXSTOK), b); g.appendChild(c); });
-  { const c = el("div", { class: "shopcard" }), on = gdX2(), b = el("button", { type: "button", class: "btn sm" }, (on ? "Tambah 15 minit" : "Aktifkan") + " (" + GD_X2.p + " syiling)"); if ((P.coin | 0) < GD_X2.p) b.disabled = true; b.addEventListener("click", () => { if ((P.coin | 0) < GD_X2.p) return; P.coin -= GD_X2.p; P.x2t = Math.max(Date.now(), P.x2t | 0) + GD_X2.min * 60000; saveP(); renderGudang(); toast("Syiling 2x aktif.", "good"); }); c.append(el("b", null, "Syiling 2×"), el("span", { class: "muted", style: "font-size:14px" }, "Gandakan syiling daripada jawapan betul dalam semua mod selama 15 minit."), el("span", null, on ? "Aktif: " + Math.ceil(((P.x2t | 0) - Date.now()) / 60000) + " minit lagi" : "Tidak aktif"), b); g.appendChild(c); }
+  GD_ITEMS.forEach((x) => { const c = el("div", { class: "shopcard" }), n = inv[x.id] | 0, b = el("button", { type: "button", class: "btn sm" }, "Beli 1 (" + x.p + " MD)"); if ((P.coin | 0) < x.p || n >= GD_MAXSTOK) b.disabled = true; b.addEventListener("click", () => gdBuy(x.id, x.p, 1)); c.append(el("b", null, x.n), el("span", { class: "muted", style: "font-size:14px" }, x.d), el("span", null, "Simpanan: " + n + " / " + GD_MAXSTOK), b); g.appendChild(c); });
+  { const c = el("div", { class: "shopcard" }), on = gdX2(), b = el("button", { type: "button", class: "btn sm" }, (on ? "Tambah 15 minit" : "Aktifkan") + " (" + GD_X2.p + " MD)"); if ((P.coin | 0) < GD_X2.p) b.disabled = true; b.addEventListener("click", () => { if ((P.coin | 0) < GD_X2.p) return; P.coin -= GD_X2.p; P.x2t = Math.max(Date.now(), P.x2t | 0) + GD_X2.min * 60000; saveP(); renderGudang(); toast("MD 2x aktif.", "good"); }); c.append(el("b", null, "MD 2×"), el("span", { class: "muted", style: "font-size:14px" }, "Gandakan MD daripada jawapan betul dalam semua mod selama 15 minit."), el("span", null, on ? "Aktif: " + Math.ceil(((P.x2t | 0) - Date.now()) / 60000) + " minit lagi" : "Tidak aktif"), b); g.appendChild(c); }
   w.appendChild(g);
   const lv = gdAvLv();
   w.appendChild(el("div", { class: "tagline util", style: "color:var(--khaki);margin-top:16px" }, "Bonus avatar anda (Tahap " + lv + ")"));
   const ul = el("ul", { class: "muted", style: "font-size:14px;margin:6px 0 0 18px" });
   [
-    "Syiling mod lain: 2 + " + (lv - 1) + " setiap jawapan betul (selain Tempur). Hari ini: " + t.n + " / " + gdCap() + ".",
-    "Cabaran harian: bonus syiling +" + (lv - 1) * 10 + "%.",
+    "MD mod lain: 2 + " + (lv - 1) + " setiap jawapan betul (selain Tempur). Hari ini: " + t.n + " / " + gdCap() + ".",
+    "Cabaran harian: bonus MD +" + (lv - 1) * 10 + "%.",
     "Jentik dan Belon (solo): masa +" + (lv - 1) + " saat setiap soalan.",
     "Tempur: perisai permulaan +" + (lv - 1) * 10 + "."
   ].forEach((x) => ul.appendChild(el("li", null, x)));
@@ -16560,7 +16560,7 @@ function rbLbTick() {
   const sig = rows.map((r) => r.n + r.s + (r.c == null ? "" : r.c)).join("|"); if (box._s === sig) return; box._s = sig; box.textContent = "";
   box.appendChild(el("div", { class: "rb-h" }, "PEMAIN"));
   rows.slice(0, 8).forEach((r) => box.appendChild(el("div", { class: "rb-r" + (r.me ? " me" : "") }, null, el("span", { class: "rb-n" }, r.n), el("b", null, r.s + (r.c == null ? "" : " · " + r.c)))));
-  box.appendChild(el("div", { class: "rb-f" }, "pintu · syiling"));
+  box.appendChild(el("div", { class: "rb-f" }, "pintu · MD"));
 }
 setInterval(rbLbTick, 450);
 
@@ -16851,7 +16851,7 @@ function openBrief(id, mode, go) {
   box.append(el("div", { class: "tagline util", style: "color:var(--khaki)" }, "Taklimat ringkas"), ul);
   const obj = mode === "mp"
     ? "Buka peti bekalan bersama pemain lain, jawab soalan untuk mendapat peluru, perisai dan mata. " + (go.mod === "battle" ? "Battle kumpulan: Kumpulan A lawan Kumpulan B. Tembakan hanya mengenai pemain kumpulan lawan (laser latihan), mata ahli sekumpulan digabungkan dan kumpulan pemenang mendapat mata tambahan." : go.mod === "sekolah" ? "Sekolah lawan sekolah: tembakan hanya mengenai pemain sekolah lain, mata murid dalam satu sekolah digabungkan." : go.mod === "lawan" ? "Anda boleh menumpaskan pemain lain dengan laser latihan." : "Tiada tembakan antara pemain, tetapi sasaran musuh tetap menyerang.") + " Sasaran musuh (bot) turut menyerang anda dalam setiap mod. Misi tamat apabila semua peti soalan dibuka. Anda boleh keluar bila-bila masa dengan butang Keluar. Jika ditumpaskan, anda hidup semula."
-    : "Buka semua peti bekalan dan jawab setiap soalan. Misi tamat hanya apabila semua peti dibuka. Jika ditumpaskan, anda hidup semula selepas 5 saat. Tumpaskan sasaran untuk mata tambahan dan kutip senjata yang mereka jatuhkan. Setiap peti memberi XP, syiling dan kadangkala aksesori.";
+    : "Buka semua peti bekalan dan jawab setiap soalan. Misi tamat hanya apabila semua peti dibuka. Jika ditumpaskan, anda hidup semula selepas 5 saat. Tumpaskan sasaran untuk mata tambahan dan kutip senjata yang mereka jatuhkan. Setiap peti memberi XP, MD dan kadangkala aksesori.";
   box.appendChild(el("p", { class: "muted" }, obj));
   { const sr = el("div", { class: "row", style: "gap:8px;align-items:center;margin:8px 0" }); sr.append(el("span", { class: "muted", style: "font-size:14px" }, "Gaya soalan:"), segBtns([["campur", "Campuran"], ["klasik", "Klasik A-D"]], qStyle(), (v) => { P.qs = v; saveP(); openBrief(id, mode, go); }, "Gaya soalan")); box.appendChild(sr); }
   if (!kh && mode === "solo") {
@@ -16998,18 +16998,18 @@ function finalizeResult(res, t) {
   for (let i = 0; i < 3; i++) sr.appendChild(el("span", i < stars ? null : { class: "off" }, "★"));
   box.appendChild(sr);
   const nums = el("div", { class: "nums" });
-  [[score, "Jumlah mata"], ["+" + gain, "Mata pangkat" + (res.diff && DIFFS[res.diff] && !res.mp && !res.khas ? " (" + DIFFS[res.diff].n + ")" : "")], ["+" + (res.coins | 0), "Syiling"], [res.correct + "/" + res.total, "Jawapan betul"], [res.kills, "Sasaran tumpas"], [fmt(res.time), "Masa"]].forEach(([v, l]) => {
+  [[score, "Jumlah mata"], ["+" + gain, "Mata pangkat" + (res.diff && DIFFS[res.diff] && !res.mp && !res.khas ? " (" + DIFFS[res.diff].n + ")" : "")], ["+" + (res.coins | 0), "MD"], [res.correct + "/" + res.total, "Jawapan betul"], [res.kills, "Sasaran tumpas"], [fmt(res.time), "Masa"]].forEach(([v, l]) => {
     const d = el("div"); d.append(el("b", null, String(v)), el("span", null, l)); nums.appendChild(d);
   });
   box.appendChild(nums);
   kkNotaBox(box, res);
   { const sb = el("button", { type: "button", class: "btn alt", style: "margin:10px 0" }, "Kongsi kad perlawanan"); sb.addEventListener("click", () => cardShare(res, stars, score, newRank, sb)); box.appendChild(sb); }
-  if (sqr && sqr.ok) { box.appendChild(el("div", { class: "notice" }, "Pasukan " + sqr.pasukan + " menyelesaikan Misi " + sqr.kod + "! +50 syiling. " + (sqr.tamat ? "Semua misi telah ditawan. Tahniah!" : "Misi " + sqr.next.kod + " " + sqr.next.nama + " kini dibuka untuk semua ahli."))); }
+  if (sqr && sqr.ok) { box.appendChild(el("div", { class: "notice" }, "Pasukan " + sqr.pasukan + " menyelesaikan Misi " + sqr.kod + "! +50 MD. " + (sqr.tamat ? "Semua misi telah ditawan. Tahniah!" : "Misi " + sqr.next.kod + " " + sqr.next.nama + " kini dibuka untuk semua ahli."))); }
   else if (sqr && sqr.warn) box.appendChild(el("div", { class: "notice warn" }, sqr.warn));
   if (kha) kha.forEach((n) => box.appendChild(el("div", { class: "notice" + (n.warn ? " warn" : "") }, n.t)));
-  if (pg.streakCoins) box.appendChild(el("div", { class: "notice" }, "Streak " + pg.streak + " hari berturut-turut: +" + pg.streakCoins + " syiling."));
-  pg.quests.forEach((qd) => box.appendChild(el("div", { class: "notice" }, "Misi harian selesai: " + qd.t + ". +" + QUEST_COIN + " syiling dan +" + QUEST_XP + " XP.")));
-  if (pg.questAll) box.appendChild(el("div", { class: "notice" }, "Semua misi harian selesai. Bonus +" + QUEST_ALL + " syiling."));
+  if (pg.streakCoins) box.appendChild(el("div", { class: "notice" }, "Streak " + pg.streak + " hari berturut-turut: +" + pg.streakCoins + " MD."));
+  pg.quests.forEach((qd) => box.appendChild(el("div", { class: "notice" }, "Misi harian selesai: " + qd.t + ". +" + QUEST_COIN + " MD dan +" + QUEST_XP + " XP.")));
+  if (pg.questAll) box.appendChild(el("div", { class: "notice" }, "Semua misi harian selesai. Bonus +" + QUEST_ALL + " MD."));
   if (P.ss && P.ss.nw && P.ss.nw.length) P.ss.nw.forEach((t) => box.appendChild(el("div", { class: "notice" }, "Ganjaran musim: " + t)));
   pg.badges.forEach((b) => box.appendChild(el("div", { class: "notice" }, "Lencana baharu: " + b.n + ". " + b.d)));
   if ((res.gotAcc || []).length) box.appendChild(el("div", { class: "notice" }, "Aksesori diperoleh: " + res.gotAcc.map((a) => (acById(a) || {}).n).join(", ") + ". Pakai di tab Gudang."));
@@ -17108,10 +17108,12 @@ async function stnSubmit(f) {
   if (url && !stnUrlOk(url)) throw new Error("Pautan mesti bermula dengan https://");
   if (f.yt && !yt) throw new Error("Pautan YouTube tidak sah.");
   if (!DATA.negeri[f.pn]) throw new Error("Pilih negeri tapak pilihan.");
+  const hg = MD_HARGA.indexOf(+f.hg) >= 0 ? +f.hg : 0;
+  if (hg && !url) throw new Error("Inovasi berbayar MD perlukan pautan produk / maklumat (yang dibuka selepas murid membayar).");
   await AUTH.ensure();
   const old = STN.mine || {};
-  const doc = { u: g.uid, n: stnClean(P.penuh || P.nama || g.gn, 60), sk: cleanSekolah(P.sekolah).slice(0, 80), ng: P.negeri || "", tj: tj, kat: STN_KAT.indexOf(f.kat) >= 0 ? f.kat : "Lain-lain", ds: ds, yt: yt, url: url, pn: f.pn, st: "tunggu", t: old.t || Date.now(), tu: Date.now() };
-  Object.keys(doc).forEach((k) => { if (doc[k] === "") delete doc[k]; }); /* peraturan: medan kosong tidak dihantar */
+  const doc = { u: g.uid, n: stnClean(P.penuh || P.nama || g.gn, 60), sk: cleanSekolah(P.sekolah).slice(0, 80), ng: P.negeri || "", tj: tj, kat: STN_KAT.indexOf(f.kat) >= 0 ? f.kat : "Lain-lain", ds: ds, yt: yt, url: url, pn: f.pn, hg: hg, st: "tunggu", t: old.t || Date.now(), tu: Date.now() };
+  Object.keys(doc).forEach((k) => { if (doc[k] === "" || doc[k] === 0) delete doc[k]; }); /* peraturan: medan kosong tidak dihantar */
   await FB.req("PUT", "stesen/" + g.uid, doc);
   STN.mine = doc;
 }
@@ -17145,13 +17147,14 @@ function stnGuruBox(box) {
   const iDs = el("textarea", { id: "stDs", maxlength: "600", rows: "4", style: "background:#0b100b;color:var(--ink);border:1px solid var(--line2);padding:10px 12px;font:inherit;width:100%" }); iDs.value = m ? m.ds : "";
   const iYt = el("input", { id: "stYt", maxlength: "200", value: m && m.yt ? "https://youtu.be/" + m.yt : "", placeholder: "Pautan video YouTube (pilihan)" });
   const iUrl = el("input", { id: "stUrl", maxlength: "300", value: m ? m.url || "" : "", placeholder: "https://... kedai, borang tempahan atau laman inovasi (pilihan)" });
+  const iHg = el("select", { id: "stHg" }); MD_HARGA.forEach((h) => iHg.appendChild(el("option", { value: String(h) }, h ? h + " MD sehari bagi setiap murid" : "Percuma"))); iHg.value = String(m ? m.hg | 0 : 10);
   const iPn = el("select", { id: "stPn" }); Object.keys(DATA.negeri).forEach((k) => iPn.appendChild(el("option", { value: k }, DATA.negeri[k].nama))); iPn.value = m ? m.pn : (DATA.negeri[lmNegeriKey(P.negeri)] ? lmNegeriKey(P.negeri) : Object.keys(DATA.negeri)[0]);
-  c.append(fld("stTj", "Tajuk inovasi", iTj), fld("stKat", "Kategori", iKat), fld("stDs", "Huraian (apa, untuk siapa, kesan)", iDs), fld("stYt", "Video YouTube", iYt), fld("stUrl", "Pautan produk / maklumat", iUrl), fld("stPn", "Negeri tapak pilihan", iPn));
+  c.append(fld("stTj", "Tajuk inovasi", iTj), fld("stKat", "Kategori", iKat), fld("stDs", "Huraian (apa, untuk siapa, kesan)", iDs), fld("stYt", "Video YouTube", iYt), fld("stUrl", "Pautan produk / maklumat", iUrl), fld("stHg", "Harga guna inovasi (MD)", iHg), fld("stPn", "Negeri tapak pilihan", iPn));
   const out = el("p", { class: "muted", style: "font-size:13px;margin:4px 0" }, STN.msg || "");
   const sb = el("button", { type: "button", class: "btn" }, m ? "Kemas kini dan hantar semula untuk semakan" : "Hantar permohonan stesen");
   sb.addEventListener("click", async () => {
     sb.disabled = true; out.textContent = "Menghantar...";
-    try { await stnSubmit({ tj: iTj.value, kat: iKat.value, ds: iDs.value, yt: iYt.value, url: iUrl.value, pn: iPn.value }); STN.msg = "Permohonan dihantar. Pentadbir akan menyemak dan menetapkan tapak anda."; renderGuru(); }
+    try { await stnSubmit({ tj: iTj.value, kat: iKat.value, ds: iDs.value, yt: iYt.value, url: iUrl.value, pn: iPn.value, hg: iHg.value }); STN.msg = "Permohonan dihantar. Pentadbir akan menyemak dan menetapkan tapak anda."; renderGuru(); }
     catch (e) { out.textContent = e.message || "Gagal dihantar. Cuba lagi."; sb.disabled = false; }
   });
   c.append(sb, out);
@@ -17184,6 +17187,148 @@ function stnAdminBox(box) {
     const no = el("button", { type: "button", class: "btn alt sm" }, x.st === "lulus" ? "Tarik balik" : "Tolak");
     no.addEventListener("click", () => { const why = prompt("Sebab (dipaparkan kepada guru):", ""); if (why === null) return; put({ st: "tolak", sl: null, sb: stnClean(why, 140) }, "Stesen ditolak."); });
     row.append(sel, ok, no); d.appendChild(row); c.appendChild(d);
+  });
+}
+
+/* ---------- v18.21: MD (Meta Didik), mata wang pembelajaran ----------
+   Murid memperoleh MD dengan belajar (kuiz, misi, menara) dan tidak boleh membelinya dengan wang.
+   Murid membelanjakan MD untuk menggunakan inovasi guru: stesen_guna/<stesen>/<pembayar>/<YYYYMMDD> = { h: harga, t: masa pelayan }.
+   Setiap bulan pentadbir menetapkan tabung RM (sewaan tapak, penaja, langganan sekolah) dan mengagihkannya ikut bahagian MD:
+   tabung/<YYYYMM> = { rm, tot, kd (RM bagi 1 MD), t } (awam), tabung_by/<YYYYMM>/<guru> = MD guru (pemilik sahaja).
+   Guru menuntut melalui tuntutan/<YYYYMM>/<guru> (pemilik dan pentadbir sahaja); pentadbir membayar secara manual. */
+const MD_HARGA = [0, 5, 10, 20, 30, 50];
+const MD = { me: undefined, busy: false, adm: null, admBusy: false, admM: "" };
+/* tarikh waktu Malaysia (UTC+8) supaya hari/bulan sama untuk semua peranti */
+function mdDay(t) { return new Date((t == null ? Date.now() : t) + 8 * 3600000).toISOString().slice(0, 10).replace(/-/g, ""); }
+function mdMonth(t) { return mdDay(t).slice(0, 6); }
+function mdMonthName(m) { const b = ["Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"]; return (b[(+m.slice(4, 6) || 1) - 1] || "") + " " + m.slice(0, 4); }
+function mdPrevMonth(m) { let y = +m.slice(0, 4), n = +m.slice(4, 6) - 1; if (n < 1) { n = 12; y--; } return y + pad2(n); }
+function mdRM(v) { return "RM" + (Math.round(v * 100) / 100).toFixed(2); }
+/* satu bayaran dikira bagi setiap pembayar, setiap stesen, setiap hari (ikut masa pelayan) */
+function mdTally(byPayer, month) {
+  let md = 0, n = 0; const who = {};
+  Object.keys(byPayer || {}).forEach((p) => {
+    const seen = {};
+    Object.values(byPayer[p] || {}).forEach((r) => {
+      if (!r || typeof r.t !== "number" || !(r.h > 0)) return;
+      const d = mdDay(r.t); if (month && d.slice(0, 6) !== month) return;
+      if (seen[d]) return; seen[d] = 1; md += r.h; n++; who[p] = 1;
+    });
+  });
+  return { md: md, n: n, murid: Object.keys(who).length };
+}
+/* murid menggunakan inovasi (dipanggil dari Dataran Inovasi). done(true) apabila akses dibuka untuk hari ini. */
+async function mdGuna(d, done) {
+  const hg = d.hg | 0, key = "gt-md-guna", day = mdDay();
+  let opened = {}; try { opened = JSON.parse(localStorage.getItem(key) || "{}"); } catch (e) { opened = {}; }
+  if (!hg || opened[d.id] === day || (AUTH.uid() && AUTH.uid() === d.id)) { done(true); return; }
+  if (!AUTH.on()) { toast("Sistem bayaran MD belum diaktifkan oleh pentadbir sistem.", "warn"); done(false); return; }
+  if ((P.coin | 0) < hg) { toast("MD anda " + (P.coin | 0) + ". Perlu " + hg + " MD: kumpul lagi dengan menjawab kuiz, menawan menara dan menyiapkan misi.", "warn"); done(false); return; }
+  if (!confirm("Guna inovasi \"" + d.tj + "\" hari ini dengan " + hg + " MD?\n\nMD anda: " + (P.coin | 0) + " → " + ((P.coin | 0) - hg) + ".\nMD ini menjadi ganjaran kepada guru pencipta inovasi.")) { done(false); return; }
+  try {
+    await AUTH.ensure(); const me = AUTH.uid();
+    const had = await FB.req("GET", "stesen_guna/" + d.id + "/" + me + "/" + day).catch(() => null);
+    if (!had) await FB.req("PUT", "stesen_guna/" + d.id + "/" + me + "/" + day, { h: hg, t: { ".sv": "timestamp" } });
+    if (!had) { P.coin = Math.max(0, (P.coin | 0) - hg); saveP(); try { renderMe(); } catch (e) { /* abaikan */ } }
+    opened[d.id] = day; Object.keys(opened).forEach((k) => { if (opened[k] !== day) delete opened[k]; });
+    try { localStorage.setItem(key, JSON.stringify(opened)); } catch (e) { /* abaikan */ }
+    toast(had ? "Anda sudah menggunakan inovasi ini hari ini." : "-" + hg + " MD. Terima kasih kerana menyokong inovasi guru!", "good"); done(true);
+  } catch (e) { toast("Bayaran MD gagal (kod " + (e.code || "rangkaian") + "). MD anda tidak ditolak.", "bad"); done(false); }
+}
+async function mdLoadMe() {
+  const uid = AUTH.uid(); if (!uid) { MD.me = null; return; }
+  const m = mdMonth(), pm = mdPrevMonth(m);
+  try {
+    await AUTH.ensure();
+    const [g, tb, tbp, by, byp, tt, ttp] = await Promise.all([FB.req("GET", "stesen_guna/" + uid), FB.req("GET", "tabung/" + m), FB.req("GET", "tabung/" + pm), FB.req("GET", "tabung_by/" + m + "/" + uid).catch(() => null), FB.req("GET", "tabung_by/" + pm + "/" + uid).catch(() => null), FB.req("GET", "tuntutan/" + m + "/" + uid).catch(() => null), FB.req("GET", "tuntutan/" + pm + "/" + uid).catch(() => null)]);
+    MD.me = { m: m, ini: mdTally(g, m), semua: mdTally(g, ""), bln: [{ m: pm, tb: tbp, by: byp, tt: ttp }, { m: m, tb: tb, by: by, tt: tt }] };
+  } catch (e) { MD.me = { err: "Tidak dapat memuat pendapatan MD (kod " + (e.code || "rangkaian") + ")." }; }
+}
+function mdGuruBox(box) {
+  const s = STN.mine; if (!AUTH.guru() || !s || s.st !== "lulus") return;
+  const c = el("details", { class: "card", style: "margin:8px 0" }); c.open = true;
+  c.appendChild(el("summary", { style: "cursor:pointer;font-weight:700" }, "💰 Pendapatan MD inovasi saya"));
+  box.appendChild(c);
+  c.appendChild(el("p", { class: "muted", style: "font-size:13px;margin:4px 0" }, "Murid membelanjakan MD (diperoleh dengan belajar) untuk menggunakan inovasi anda. Setiap bulan, tabung Meta Didik diagihkan kepada guru ikut bahagian MD masing-masing: semakin ramai murid menggunakan inovasi anda, semakin besar bayaran anda. Harga semasa: " + ((s.hg | 0) ? s.hg + " MD sehari bagi setiap murid." : "percuma (tetapkan harga dalam borang di atas untuk mula menerima MD).")));
+  if (MD.me === undefined) { c.appendChild(el("p", { class: "muted" }, "Memuat...")); if (!MD.busy) { MD.busy = true; mdLoadMe().then(() => { MD.busy = false; renderGuru(); }); } return; }
+  if (!MD.me || MD.me.err) { c.appendChild(el("div", { class: "notice warn" }, (MD.me && MD.me.err) || "Log masuk DELIMa dahulu.")); return; }
+  const me = MD.me;
+  c.appendChild(el("div", { class: "gstats" }, el("div", { class: "gstat" }, el("b", null, String(me.ini.md)), el("span", null, "MD " + mdMonthName(me.m))), el("div", { class: "gstat" }, el("b", null, String(me.ini.murid)), el("span", null, "Murid bulan ini")), el("div", { class: "gstat" }, el("b", null, String(me.semua.md)), el("span", null, "Jumlah MD"))));
+  me.bln.forEach((b) => {
+    const row = el("div", { class: "card", style: "padding:10px;gap:6px" });
+    row.appendChild(el("b", null, mdMonthName(b.m)));
+    if (!b.tb || !b.tb.kd) { row.appendChild(el("span", { class: "muted", style: "font-size:13px" }, b.m === me.m ? "Bulan semasa: MD masih dikumpul. Bayaran ditetapkan selepas bulan tamat." : "Tabung bulan ini belum ditetapkan oleh pentadbir.")); c.appendChild(row); return; }
+    const md = +b.by || 0, rm = md * b.tb.kd;
+    row.appendChild(el("span", { style: "font-size:14px" }, "Tabung " + mdRM(b.tb.rm) + " ÷ " + b.tb.tot + " MD = " + mdRM(b.tb.kd) + " bagi setiap MD. Anda: " + md + " MD → " + mdRM(rm) + "."));
+    const t = b.tt;
+    if (t) row.appendChild(el("div", { class: "notice" + (t.st === "tolak" ? " warn" : "") }, ({ tunggu: "⏳ Tuntutan dihantar, menunggu semakan", lulus: "✅ Tuntutan diluluskan, bayaran sedang diproses", bayar: "💸 Telah dibayar" + (t.rj ? " · rujukan " + t.rj : ""), tolak: "❌ Ditolak" + (t.sb ? ": " + t.sb : "") })[t.st] || t.st));
+    if (md > 0 && (!t || t.st === "tolak")) {
+      const fl = (lab, n, ph) => { const i = el("input", { maxlength: String(n), placeholder: ph, "aria-label": lab }); return i; };
+      const nm = fl("Nama penuh pemegang akaun", 80, "Nama penuh seperti dalam akaun bank"), bk = fl("Bank", 40, "Bank (contoh: Maybank) atau DuitNow"), ac = fl("No. akaun", 30, "No. akaun / ID DuitNow");
+      const go = el("button", { type: "button", class: "btn sm" }, "Tuntut " + mdRM(rm)), out = el("span", { class: "muted", style: "font-size:13px" });
+      go.addEventListener("click", async () => {
+        const v = { nm: stnClean(nm.value, 80), bk: stnClean(bk.value, 40), ac: stnClean(ac.value, 30).replace(/[^\w-]/g, "") };
+        if (v.nm.length < 5 || v.bk.length < 3 || v.ac.length < 6) { out.textContent = "Lengkapkan nama, bank dan nombor akaun."; return; }
+        go.disabled = true; out.textContent = "Menghantar...";
+        try { await AUTH.ensure(); await FB.req("PUT", "tuntutan/" + b.m + "/" + AUTH.uid(), Object.assign(v, { md: md, em: AUTH.guru().em, st: "tunggu", t: { ".sv": "timestamp" } })); MD.me = undefined; toast("Tuntutan dihantar.", "ok"); renderGuru(); }
+        catch (e) { out.textContent = "Gagal (kod " + (e.code || "rangkaian") + ")."; go.disabled = false; }
+      });
+      row.append(nm, bk, ac, el("div", { class: "row", style: "gap:8px;align-items:center" }, go, out), el("span", { class: "muted", style: "font-size:12px" }, "Butiran bank hanya boleh dibaca oleh anda dan pentadbir. Penjawat awam bertanggungjawab mendapatkan kebenaran ketua jabatan dan mengisytiharkan pendapatan sampingan untuk cukai."));
+    }
+    c.appendChild(row);
+  });
+}
+/* pentadbir: kira MD setiap guru bagi satu bulan, tetapkan tabung, urus tuntutan */
+async function mdAdmLoad(m) {
+  MD.admBusy = true; MD.admM = m;
+  try {
+    const [g, st, tb, tt] = await Promise.all([kmAdmReq("GET", "stesen_guna"), kmAdmReq("GET", "stesen"), kmAdmReq("GET", "tabung/" + m), kmAdmReq("GET", "tuntutan/" + m)]);
+    const rows = Object.keys(g || {}).map((id) => Object.assign({ id: id, d: (st || {})[id] || {} }, mdTally(g[id], m))).filter((r) => r.md > 0).sort((a, b) => b.md - a.md);
+    MD.adm = { rows: rows, tot: rows.reduce((a, r) => a + r.md, 0), tb: tb, tt: tt || {} };
+  } catch (e) { MD.adm = null; toast("Gagal memuat data MD (kod " + (e.code || "rangkaian") + ").", "bad"); }
+  MD.admBusy = false;
+}
+function mdAdminBox(box) {
+  if (!kmAdm()) return;
+  const c = el("details", { class: "card", style: "margin:8px 0" }); c.open = !!MD.adm;
+  c.appendChild(el("summary", { style: "cursor:pointer;font-weight:700" }, "Pentadbir: tabung dan tuntutan MD"));
+  box.appendChild(c);
+  const sel = el("select", { "aria-label": "Bulan" }); let mm = mdMonth(); for (let i = 0; i < 6; i++) { sel.appendChild(el("option", { value: mm }, mdMonthName(mm))); mm = mdPrevMonth(mm); }
+  sel.value = MD.admM || mdPrevMonth(mdMonth());
+  const ld = el("button", { type: "button", class: "btn alt sm" }, MD.admBusy ? "Memuat..." : "Muat"); ld.addEventListener("click", async () => { ld.disabled = true; await mdAdmLoad(sel.value); renderGuru(); });
+  c.appendChild(el("div", { class: "row", style: "gap:8px" }, sel, ld));
+  const A = MD.adm; if (!A || MD.admM !== sel.value) return;
+  c.appendChild(el("p", { style: "font-size:14px" }, mdMonthName(MD.admM) + ": " + A.tot + " MD daripada " + A.rows.length + " inovasi." + (A.tb ? " Tabung ditetapkan: " + mdRM(A.tb.rm) + " (" + mdRM(A.tb.kd) + "/MD)." : " Tabung belum ditetapkan.")));
+  A.rows.forEach((r) => c.appendChild(el("div", { style: "font-size:13px;padding:4px 0;border-top:1px solid var(--line2)" }, (r.d.tj || r.id) + " · " + (r.d.n || "-") + " · " + r.md + " MD · " + r.n + " guna · " + r.murid + " murid" + (r.n > r.murid * 20 ? " ⚠ semak: guna berulang tinggi" : ""))));
+  if (MD.admM !== mdMonth()) {
+    const rm = el("input", { type: "number", min: "0", step: "1", value: A.tb ? String(A.tb.rm) : "", placeholder: "Jumlah tabung (RM)", "aria-label": "Jumlah tabung RM", style: "max-width:180px" });
+    const set = el("button", { type: "button", class: "btn sm" }, A.tb ? "Kemas kini tabung" : "Tetapkan tabung dan umumkan");
+    set.addEventListener("click", async () => {
+      const v = Math.round(+rm.value * 100) / 100; if (!(v > 0) || !A.tot) { toast("Isi jumlah RM dan pastikan ada MD bulan ini.", "warn"); return; }
+      if (!confirm("Agihkan " + mdRM(v) + " kepada " + A.rows.length + " guru ikut bahagian MD (" + A.tot + " MD)?")) return;
+      try {
+        const by = {}; A.rows.forEach((r) => { by[r.id] = r.md; });
+        await kmAdmPut("tabung_by/" + MD.admM, by);
+        await kmAdmPut("tabung/" + MD.admM, { rm: v, tot: A.tot, kd: Math.floor(v / A.tot * 10000) / 10000, t: Date.now() });
+        toast("Tabung ditetapkan.", "ok"); await mdAdmLoad(MD.admM); renderGuru();
+      } catch (e) { toast("Gagal (kod " + (e.code || "rangkaian") + ").", "bad"); }
+    });
+    c.appendChild(el("div", { class: "row", style: "gap:8px;margin-top:8px" }, rm, set));
+  }
+  const ids = Object.keys(A.tt);
+  c.appendChild(el("b", { style: "display:block;margin-top:10px" }, "Tuntutan (" + ids.length + ")"));
+  ids.forEach((id) => {
+    const t = A.tt[id], rmv = A.tb ? t.md * A.tb.kd : 0, d = el("div", { class: "card", style: "padding:10px;gap:4px" });
+    d.append(el("b", null, ({ tunggu: "⏳", lulus: "✅", bayar: "💸", tolak: "❌" })[t.st] + " " + t.nm + " · " + mdRM(rmv) + " (" + t.md + " MD)"), el("div", { style: "font-size:13px" }, t.em + " · " + t.bk + " · " + t.ac + (t.rj ? " · rujukan " + t.rj : "")));
+    const put = async (patch, lbl) => { try { await kmAdmPut("tuntutan/" + MD.admM + "/" + id, Object.assign({}, t, patch)); toast(lbl, "ok"); await mdAdmLoad(MD.admM); renderGuru(); } catch (e) { toast("Gagal (kod " + (e.code || "rangkaian") + ").", "bad"); } };
+    const row = el("div", { class: "row", style: "gap:8px" });
+    if (t.st === "tunggu") { const ok = el("button", { type: "button", class: "btn sm" }, "Lulus"); ok.addEventListener("click", () => put({ st: "lulus" }, "Diluluskan.")); row.appendChild(ok); }
+    if (t.st === "tunggu" || t.st === "lulus") {
+      const pay = el("button", { type: "button", class: "btn sm" }, "Tanda dibayar"); pay.addEventListener("click", () => { const rj = prompt("Nombor rujukan pindahan:", ""); if (rj === null) return; put({ st: "bayar", rj: stnClean(rj, 40), tb: Date.now() }, "Ditanda dibayar."); });
+      const no = el("button", { type: "button", class: "btn alt sm" }, "Tolak"); no.addEventListener("click", () => { const why = prompt("Sebab (dipaparkan kepada guru):", ""); if (why === null) return; put({ st: "tolak", sb: stnClean(why, 140) }, "Ditolak."); });
+      row.append(pay, no);
+    }
+    d.appendChild(row); c.appendChild(d);
   });
 }
 
@@ -17313,7 +17458,7 @@ function guruAdminBox(box) {
   if (!kmAdm()) return;
   const c = el("details", { class: "card", style: "margin:8px 0" }), out = el("p", { class: "muted", style: "font-size:13px;margin:6px 0" });
   c.appendChild(el("summary", { style: "cursor:pointer;font-weight:700" }, "Pentadbir: mulakan semula kedudukan"));
-  c.appendChild(el("p", { class: "muted", style: "font-size:13px" }, "Kosongkan XP, pangkat, mata minggu/bulan dan semua mata ranking mod bagi SEMUA murid dan SEMUA subjek. Syiling, barang Gudang, avatar, bintang misi dan lencana tidak dipadam. Peranti murid akan dikosongkan secara automatik apabila aplikasi dibuka. Tindakan ini tidak boleh dibatalkan." + (Net.reset ? " Reset terakhir: " + new Date(Net.reset).toLocaleString("ms-MY") + "." : "")));
+  c.appendChild(el("p", { class: "muted", style: "font-size:13px" }, "Kosongkan XP, pangkat, mata minggu/bulan dan semua mata ranking mod bagi SEMUA murid dan SEMUA subjek. MD, barang Gudang, avatar, bintang misi dan lencana tidak dipadam. Peranti murid akan dikosongkan secara automatik apabila aplikasi dibuka. Tindakan ini tidak boleh dibatalkan." + (Net.reset ? " Reset terakhir: " + new Date(Net.reset).toLocaleString("ms-MY") + "." : "")));
   const b = el("button", { type: "button", class: "btn alt" }, "Mulakan semula kedudukan");
   b.addEventListener("click", async () => {
     if (!confirm("Mulakan semula SEMUA kedudukan untuk semua murid dan semua subjek?")) return;
@@ -17393,7 +17538,7 @@ function renderGuru() {
   const sid = mySid();
   if (!(Net.fb && FB.url)) { box.appendChild(el("div", { class: "notice warn" }, "Papan pemuka guru memerlukan sambungan Firebase (versi GitHub Pages). Ia tidak tersedia pada sesi ini.")); return; }
   guruAdminBox(box);
-  try { stnAdminBox(box); iptAdminBox(box); stnGuruBox(box); } catch (e) { /* abaikan */ }
+  try { stnAdminBox(box); mdAdminBox(box); iptAdminBox(box); stnGuruBox(box); mdGuruBox(box); } catch (e) { /* abaikan */ }
   if (!sid) { box.appendChild(el("div", { class: "notice warn" }, "Tetapkan sekolah dan negeri anda dalam profil (klik nama anda di bahagian atas) supaya data murid sekolah anda boleh dipaparkan. Murid juga mesti mengisi sekolah yang sama.")); return; }
   const top = el("div", { class: "row", style: "margin:6px 0;gap:10px" });
   const rf = el("button", { type: "button", class: "btn alt sm" }, GURU.loading ? "Memuat..." : "Muat semula data");
@@ -18526,7 +18671,7 @@ const ZVUI = { slot: "ou" };
 function zvEquip(id) { const z = zvState(), it = zvItem(id); if (!zvOk(z, it)) return; z.eq[it.s] = it.id; saveP(); }
 function zvBuy(id) {
   const z = zvState(), it = zvItem(id); if (!it || z.own.indexOf(id) >= 0 || (it.g !== "*" && it.g !== z.g)) return;
-  if ((P.coin | 0) < it.p) { toast("Syiling belum cukup. Kumpul lagi dalam misi dan peti bekalan.", "warn"); return; }
+  if ((P.coin | 0) < it.p) { toast("MD belum cukup. Kumpul lagi dalam misi dan peti bekalan.", "warn"); return; }
   P.coin -= it.p; z.own.push(id); z.eq[it.s] = id; saveP();
   try { toast(it.n + " kini milik anda dan sedang dipakai.", "good"); } catch (e) { /* abaikan */ }
   renderGudangZv();
@@ -18552,8 +18697,8 @@ function renderGudangZv() {
     el("div", { class: "zvlbl" }, "Warna kulit"));
   const sw = el("div", { class: "zvsw", role: "group", "aria-label": "Warna kulit" });
   ZV_SKIN.forEach((c, i) => { const b = el("button", { type: "button", "aria-label": "Warna kulit " + (i + 1), "aria-pressed": (z.sk | 0) === i ? "true" : "false" }); b.style.background = c; b.addEventListener("click", () => { z.sk = i; saveP(); renderGudangZv(); renderMaps(); }); sw.appendChild(b); });
-  const wal = el("div", { class: "zvcoin" }); const ci = el("span", { class: "wc" }); ci.innerHTML = coinSvg(); wal.append(ci, el("b", { class: "walnum" }, walFmt(P.coin | 0)), el("span", { class: "muted" }, "syiling"));
-  ctl.append(sw, wal, el("p", { class: "muted", style: "font-size:13px;margin:6px 0 0" }, "Avatar 3D anda dipakai di META DIDIK dan dilihat oleh rakan. Seret avatar untuk memusing. Pilih Keraian untuk cara avatar meraikan setiap kali selesai kuiz. Kumpul syiling daripada semua permainan."));
+  const wal = el("div", { class: "zvcoin" }); const ci = el("span", { class: "wc" }); ci.innerHTML = coinSvg(); wal.append(ci, el("b", { class: "walnum" }, walFmt(P.coin | 0)), el("span", { class: "muted" }, "MD"));
+  ctl.append(sw, wal, el("p", { class: "muted", style: "font-size:13px;margin:6px 0 0" }, "Avatar 3D anda dipakai di META DIDIK dan dilihat oleh rakan. Seret avatar untuk memusing. Pilih Keraian untuk cara avatar meraikan setiap kali selesai kuiz. Kumpul MD daripada semua permainan."));
   if (tryIt && ZVUI.try) {
     const own = tryIt.p === 0 || z.own.indexOf(tryIt.id) >= 0, nt = el("div", { class: "notice", style: "margin-top:8px" });
     nt.append(el("b", null, "Mencuba: " + tryIt.n + " "));
@@ -18591,7 +18736,7 @@ function renderGudangZv() {
     const b = el("button", { type: "button", class: "btn sm" + (own ? " alt" : "") }, on ? "Dipakai" : own ? "Pakai" : "Beli " + it.p);
     if (on || (!own && (P.coin | 0) < it.p)) b.disabled = true;
     b.addEventListener("click", () => { if (own) { zvEquip(it.id); renderGudangZv(); renderMaps(); } else { zvBuy(it.id); renderMaps(); } });
-    c.append(p, el("b", null, it.n), el("span", { class: "muted", style: "font-size:13px" }, own ? (on ? "Sedang dipakai" : "Dimiliki") : it.p + " syiling" + ((P.coin | 0) < it.p ? " (kurang " + (it.p - (P.coin | 0)) + ")" : "")), b);
+    c.append(p, el("b", null, it.n), el("span", { class: "muted", style: "font-size:13px" }, own ? (on ? "Sedang dipakai" : "Dimiliki") : it.p + " MD" + ((P.coin | 0) < it.p ? " (kurang " + (it.p - (P.coin | 0)) + ")" : "")), b);
     grid.appendChild(c);
   });
   shop.appendChild(grid);
