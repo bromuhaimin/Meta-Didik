@@ -106,3 +106,23 @@ Kawalan penyalahgunaan:
   (sama seperti `stesen`).
 - Penjawat awam bertanggungjawab mendapatkan kebenaran ketua jabatan dan mengisytiharkan pendapatan untuk cukai.
   Dapatkan nasihat peguam / akauntan sebelum bayaran pertama.
+
+## Mod percubaan MD (v18.22): sekarang, sebelum pelancaran metadidik.com
+Selagi `TW_AUTH.apiKey` kosong (log masuk DELIMa belum diaktifkan), aplikasi berjalan dalam **mod percubaan**:
+- Guru mendaftar Stesen Inovasi tanpa log masuk. Identiti guru ialah **ID peranti**; guru mengisi e-mel DELIMa
+  sendiri (disimpan di `stesen_em`, hanya pentadbir boleh membaca) dan pentadbir menyemaknya sebelum meluluskan.
+  Guru perlu menggunakan peranti yang sama untuk mengurus stesen dan menuntut pendapatan.
+- Murid membayar MD dengan ID peranti.
+- Tuntutan guru (butiran bank) hanya boleh dibaca oleh pentadbir; status tuntutan dipaparkan melalui `tuntutan_st`.
+
+Gunakan **`docs/firebase-rules-percubaan.json`** dalam Firebase Rules semasa percubaan.
+
+Had mod percubaan (diterima untuk rintis):
+- Sesiapa yang tahu ID sesebuah stesen boleh menghantar semula borangnya (status kembali "menunggu"); pentadbir
+  akan nampak dan boleh meluluskan semula.
+- ID peranti mudah dicipta, jadi semak amaran ⚠ dalam panel tabung sebelum membayar.
+
+### Semasa pelancaran di metadidik.com
+1. Aktifkan log masuk DELIMa (Langkah 1-4) dan wajibkan untuk guru dan murid.
+2. Tukar Rules kepada **`docs/firebase-rules-stesen.json`** (versi ketat).
+3. Reset MD semua murid (alat reset akan disediakan pada pelancaran) dan daftar semula stesen guru dengan DELIMa.

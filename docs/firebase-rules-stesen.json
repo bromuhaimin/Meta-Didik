@@ -67,6 +67,15 @@
       }
     }
   },
+  "tuntutan_st": {
+    ".read": true,
+    "$m": {
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid && (!data.exists() || data.child('st').val() === 'tolak')",
+        ".validate": "newData.child('st').val() === 'tunggu' && root.child('tuntutan/' + $m + '/' + $uid).exists()"
+      }
+    }
+  },
   "ipt": {
     ".read": true,
     ".write": false
