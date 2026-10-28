@@ -18,23 +18,36 @@ const WS = 2;
 const WB = { x0: -3400 * WS, z0: -1250 * WS, w: 6800 * WS, h: 2450 * WS }; /* sempadan dunia (unit) */
 let GEOD = null;
 const ll = (lat, lon) => lmWarp((lon - GEOD.lon0) * GEOD.kx * GEOD.U, (GEOD.lat0 - lat) * GEOD.kz * GEOD.U);
-/* zum setempat Lembah Klang: titik dalam jejari KV.R diregang secara jejarian (2.6x di pusat, 1x di tepi)
-   supaya bangunan di KL, PJ, Shah Alam dan Putrajaya tidak berhimpit; sempadan, pantai dan DEM ikut sama */
-const KV = { la: 3.1, lo: 101.62, R: 50 * 3 * WS, a: 1.6, c: null };
+/* zum setempat Lembah Klang (v18.15: profil kanta): pembesaran jejarian m(r) = 1 + A.exp(-(r/s)^2) - B.w(r).
+   Pusat KL kira-kira 4.5 kali ganda (1 + A) supaya stesen MRT/LRT, universiti dan mercu tanda tidak berhimpit;
+   pemampatan B.w(r) diagihkan sekata dalam gelang luar (2s hingga R) supaya D(R) = R dan peta di luar R tidak berubah.
+   Sempadan, pantai dan DEM ikut sama (lmUnwarp ialah songsangan melalui jadual). */
+const KV = { la: 3.135, lo: 101.675, R: 180 * 3 * WS, A: 3.5, s: 13 * 3 * WS, c: null, t: null };
 function lmKvC() { if (!KV.c) KV.c = { x: (KV.lo - GEOD.lon0) * GEOD.kx * GEOD.U, z: (GEOD.lat0 - KV.la) * GEOD.kz * GEOD.U }; return KV.c; }
+function lmKvT() {
+  if (KV.t) return KV.t;
+  const N = 4096, R = KV.R, dr = R / N, r1 = 2 * KV.s, sp = R - r1;
+  const gs = (r) => KV.A * Math.exp(-(r / KV.s) * (r / KV.s));
+  const w = (r) => { if (r <= r1) return 0; const u = (r - r1) / sp, e = 0.2, sm = (t) => t * t * (3 - 2 * t); return u < e ? sm(u / e) : u > 1 - e ? sm((1 - u) / e) : 1; };
+  let ex = 0, W = 0; for (let i = 0; i < N; i++) { const r = (i + 0.5) * dr; ex += gs(r) * dr; W += w(r) * dr; }
+  const B = ex / W, D = new Float64Array(N + 1); /* D[i] = jarak selepas zum bagi jarak asal i.dr */
+  for (let i = 0; i < N; i++) { const r = (i + 0.5) * dr; D[i + 1] = D[i] + (1 + gs(r) - B * w(r)) * dr; }
+  const k = R / D[N]; for (let i = 0; i <= N; i++) D[i] *= k; /* betulkan ralat kamiran supaya D(R) = R tepat */
+  return (KV.t = { D: D, dr: dr, N: N, B: B });
+}
 function lmWarp(x, z) {
   const c = lmKvC(), dx = x - c.x, dz = z - c.z, d = Math.hypot(dx, dz);
   if (d >= KV.R || d < 1e-6) return { x: x, z: z };
-  const u = d / KV.R, f = 1 + KV.a * (1 - u) * (1 - u);
-  return { x: c.x + dx * f, z: c.z + dz * f };
+  const T0 = lmKvT(), f = d / T0.dr, i = Math.min(T0.N - 1, f | 0), u = f - i, D = T0.D[i] + (T0.D[i + 1] - T0.D[i]) * u, k = D / d;
+  return { x: c.x + dx * k, z: c.z + dz * k };
 }
 function lmUnwarp(x, z) {
-  const c = lmKvC(), dx = x - c.x, dz = z - c.z, D = Math.hypot(dx, dz);
-  if (D >= KV.R || D < 1e-6) return { x: x, z: z };
-  /* songsangan d -> d(1 + a(1-d/R)^2) dengan pembahagian dua (fungsi monotonik untuk a < 3) */
-  let lo = 0, hi = D;
-  for (let i = 0; i < 30; i++) { const m = (lo + hi) / 2, u = m / KV.R; if (m * (1 + KV.a * (1 - u) * (1 - u)) < D) lo = m; else hi = m; }
-  const k = (lo + hi) / 2 / D; return { x: c.x + dx * k, z: c.z + dz * k };
+  const c = lmKvC(), dx = x - c.x, dz = z - c.z, Dd = Math.hypot(dx, dz);
+  if (Dd >= KV.R || Dd < 1e-6) return { x: x, z: z };
+  const T0 = lmKvT(), A = T0.D; let lo = 0, hi = T0.N;
+  while (hi - lo > 1) { const m = (lo + hi) >> 1; if (A[m] <= Dd) lo = m; else hi = m; }
+  const d = (lo + (Dd - A[lo]) / Math.max(1e-9, A[hi] - A[lo])) * T0.dr, k = d / Dd;
+  return { x: c.x + dx * k, z: c.z + dz * k };
 }
 const XP_CAP = 80, XP_KEY = "gt-lm-xp";
 const EMOTE = { salam: "Assalamualaikum!", hebat: "Hebat!", jom: "Jom ikut saya!", tahniah: "Tahniah!" };
@@ -1341,6 +1354,21 @@ const RAILS = [
     ["pahang", "Cherating", 4.1200, 103.3900, 0], ["terengganu", "Kemaman", 4.2300, 103.4100, 1], ["terengganu", "Kerteh", 4.5200, 103.4300, 0], ["terengganu", "Dungun", 4.7700, 103.4000, 1],
     ["terengganu", "Kuala Terengganu", 5.3000, 103.0600, 1], ["terengganu", "Penarik", 5.5900, 102.8000, 0], ["terengganu", "Kota Putera", 5.6800, 102.6200, 0], ["terengganu", "Jerteh", 5.7400, 102.4900, 1],
     ["kelantan", "Pasir Puteh", 5.8300, 102.4000, 0], ["kelantan", "Kota Bharu", 6.1000, 102.2600, 1]], quiz: 1 },
+  /* v18.15: KTM Komuter, KLIA Ekspres dan KTM Sabah (kereta api di aras tanah); tap: tiket 1 soalan */
+  { id: "kmsr", n: "Komuter", nm: "KTM Komuter (Laluan Seremban)", col: "#1d5fbf", c2: "#e23a3a", tap: 1, st: [
+    ["wp", "KL Sentral", 3.1340, 101.6869, 1], ["wp", "Mid Valley", 3.1185, 101.6770, 1], ["wp", "Salak Selatan", 3.0980, 101.7050, 0], ["wp", "Bandar Tasik Selatan", 3.0763, 101.7111, 1],
+    ["selangor", "Serdang", 3.0230, 101.7160, 1], ["selangor", "Kajang", 2.9830, 101.7900, 1], ["selangor", "UKM", 2.9400, 101.7880, 1], ["selangor", "Bangi", 2.9040, 101.7860, 1],
+    ["nsembilan", "Batang Benar", 2.8300, 101.8260, 0], ["nsembilan", "Nilai", 2.8020, 101.7990, 1], ["nsembilan", "Seremban", 2.7190, 101.9400, 1]] },
+  { id: "kmpk", n: "Komuter", nm: "KTM Komuter (Laluan Pelabuhan Klang)", col: "#1d5fbf", c2: "#e23a3a", tap: 1, st: [
+    ["wp", "KL Sentral", 3.1340, 101.6869, 1], ["wp", "Angkasapuri", 3.1130, 101.6730, 0], ["selangor", "Petaling Jaya (Jalan Templer)", 3.0840, 101.6560, 0], ["selangor", "Subang Jaya", 3.0846, 101.5880, 1],
+    ["selangor", "Batu Tiga", 3.0760, 101.5590, 0], ["selangor", "Shah Alam", 3.0566, 101.5255, 1], ["selangor", "Padang Jawa", 3.0525, 101.4930, 0], ["selangor", "Klang", 3.0430, 101.4490, 1],
+    ["selangor", "Pelabuhan Klang", 2.9990, 101.3910, 1]] },
+  { id: "erl", n: "KLIA Ekspres", nm: "KLIA Ekspres / KLIA Transit", col: "#6a2c91", c2: "#f2c13a", tap: 1, st: [
+    ["wp", "KL Sentral", 3.1340, 101.6869, 1], ["wp", "Bandar Tasik Selatan", 3.0763, 101.7111, 1], ["selangor", "Putrajaya & Cyberjaya", 2.9210, 101.6730, 1],
+    ["selangor", "Salak Tinggi", 2.8180, 101.7330, 1], ["selangor", "KLIA T1", 2.7560, 101.7070, 1]] },
+  { id: "ktms", n: "KTM Sabah", nm: "Keretapi Negeri Sabah", col: "#2d7d46", c2: "#f2c13a", tap: 1, st: [
+    ["sabah", "Tanjung Aru", 5.9460, 116.0500, 1], ["sabah", "Kinarut", 5.8190, 116.0430, 0], ["sabah", "Papar", 5.7340, 115.9310, 1], ["sabah", "Bongawan", 5.5370, 115.8650, 0],
+    ["sabah", "Beaufort", 5.3470, 115.7460, 1], ["sabah", "Halogilat", 5.2400, 115.8800, 0], ["sabah", "Tenom", 5.1200, 115.9480, 1]] },
   /* v18.11: lebuh raya sebenar. Bas ekspres hanya boleh dinaiki di terminal lebuh raya, selepas lulus kuiz tiket. */
   { id: "plus", n: "PLUS", nm: "Lebuhraya Utara-Selatan (PLUS)", road: 1, quiz: 1, col: "#f28c28", c2: "#ffffff", st: [
     ["kedah", "Bukit Kayu Hitam", 6.505, 100.421, 1], ["kedah", "Changlun", 6.43, 100.43, 0], ["kedah", "Jitra", 6.27, 100.43, 0], ["kedah", "Alor Setar", 6.13, 100.40, 1],
@@ -1362,9 +1390,74 @@ const RAILS = [
   { id: "pbsb", n: "Pan Borneo", nm: "Lebuhraya Pan Borneo (Sabah)", road: 1, quiz: 1, col: "#7a5cd6", c2: "#ffffff", st: [
     ["sarawak", "Lawas", 4.85, 115.41, 1], ["sabah", "Sipitang", 5.08, 115.55, 0], ["sabah", "Beaufort", 5.35, 115.75, 1], ["sabah", "Papar", 5.73, 115.93, 0],
     ["sabah", "Kota Kinabalu", 5.95, 116.07, 1], ["sabah", "Tamparuli", 6.13, 116.27, 0], ["sabah", "Ranau", 5.95, 116.66, 1], ["sabah", "Telupid", 5.63, 117.12, 0],
-    ["sabah", "Sandakan", 5.85, 118.03, 1]] }
+    ["sabah", "Sandakan", 5.85, 118.03, 1]] },
+  /* v18.15: rel bandar Lembah Klang (metro): landasan bertingkat, segmen bawah tanah (u = 1), stesen kecil.
+     [negeri, stesen, lat, lon, berhenti, bawah tanah]; stesen pertukaran berkongsi satu pintu masuk */
+  { id: "lrtkj", n: "LRT Kelana Jaya", nm: "LRT Laluan Kelana Jaya", metro: 1, tap: 1, col: "#e0245e", c2: "#ffffff", st: [
+    ["selangor", "Gombak", 3.2313, 101.7244, 1], ["selangor", "Taman Melati", 3.2196, 101.7219, 1], ["wp", "Wangsa Maju", 3.2058, 101.7318, 1], ["wp", "Setiawangsa", 3.1757, 101.7358, 1],
+    ["wp", "Ampang Park", 3.1600, 101.7194, 1, 1], ["wp", "KLCC", 3.1590, 101.7135, 1, 1], ["wp", "Masjid Jamek", 3.1496, 101.6964, 1, 1], ["wp", "Pasar Seni", 3.1424, 101.6953, 1],
+    ["wp", "KL Sentral", 3.1345, 101.6862, 1], ["wp", "Bangsar", 3.1277, 101.6793, 1], ["wp", "Universiti", 3.1144, 101.6614, 1], ["selangor", "Taman Paramount", 3.1047, 101.6233, 1],
+    ["selangor", "Kelana Jaya", 3.1125, 101.6045, 1], ["selangor", "Glenmarie", 3.0947, 101.5907, 1], ["selangor", "Subang Jaya", 3.0846, 101.5880, 1], ["selangor", "USJ 7", 3.0546, 101.5926, 1],
+    ["selangor", "Putra Heights", 2.9960, 101.5753, 1]] },
+  { id: "lrtam", n: "LRT Ampang", nm: "LRT Laluan Ampang", metro: 1, tap: 1, col: "#f08a24", c2: "#ffffff", st: [
+    ["wp", "Sentul Timur", 3.1856, 101.6952, 1], ["wp", "Titiwangsa", 3.1736, 101.6953, 1], ["wp", "Masjid Jamek", 3.1497, 101.6966, 1],
+    ["wp", "Hang Tuah", 3.1404, 101.7060, 1], ["wp", "Chan Sow Lin", 3.1280, 101.7157, 1], ["wp", "Maluri", 3.1235, 101.7275, 1],
+    ["selangor", "Cempaka", 3.1380, 101.7524, 1], ["selangor", "Ampang", 3.1500, 101.7600, 1]] },
+  { id: "lrtsp", n: "LRT Sri Petaling", nm: "LRT Laluan Sri Petaling", metro: 1, tap: 1, col: "#8a1e2d", c2: "#ffffff", st: [
+    ["wp", "Chan Sow Lin", 3.1280, 101.7157, 1], ["wp", "Bandar Tun Razak", 3.0896, 101.7125, 1], ["wp", "Bandar Tasik Selatan", 3.0763, 101.7111, 1], ["wp", "Bukit Jalil", 3.0581, 101.6922, 1],
+    ["wp", "Sri Petaling", 3.0612, 101.6870, 1], ["selangor", "Kinrara BK5", 3.0503, 101.6439, 1], ["selangor", "Puchong Prima", 2.9998, 101.6167, 1], ["selangor", "Putra Heights", 2.9960, 101.5753, 1]] },
+  { id: "mrtkg", n: "MRT Kajang", nm: "MRT Laluan Kajang", metro: 1, tap: 1, col: "#0f8a3d", c2: "#ffffff", st: [
+    ["selangor", "Kwasa Damansara", 3.1763, 101.5721, 1], ["selangor", "Bandar Utama", 3.1468, 101.6185, 1], ["wp", "TTDI", 3.1360, 101.6303, 1], ["wp", "Semantan", 3.1509, 101.6651, 1],
+    ["wp", "Muzium Negara", 3.1372, 101.6878, 1, 1], ["wp", "Pasar Seni", 3.1423, 101.6955, 1, 1], ["wp", "Bukit Bintang", 3.1461, 101.7114, 1, 1],
+    ["wp", "TRX", 3.1424, 101.7196, 1, 1], ["wp", "Maluri", 3.1238, 101.7277, 1, 1], ["wp", "Taman Connaught", 3.0791, 101.7414, 1], ["selangor", "Bandar Tun Hussein Onn", 3.0479, 101.7570, 1],
+    ["selangor", "Sungai Jernih", 3.0003, 101.7837, 1], ["selangor", "Kajang", 2.9826, 101.7903, 1]] },
+  { id: "mrtpy", n: "MRT Putrajaya", nm: "MRT Laluan Putrajaya", metro: 1, tap: 1, col: "#f2c418", c2: "#1d2b3a", st: [
+    ["selangor", "Kwasa Damansara", 3.1763, 101.5721, 1], ["selangor", "Damansara Damai", 3.2050, 101.5980, 1], ["wp", "Kepong Baru", 3.2112, 101.6386, 1], ["wp", "Jinjang", 3.2096, 101.6556, 1],
+    ["wp", "Kentonmen", 3.1963, 101.6726, 1], ["wp", "Sentul Barat", 3.1791, 101.6898, 1], ["wp", "Titiwangsa", 3.1736, 101.6955, 1, 1], 
+    ["wp", "Ampang Park", 3.1620, 101.7183, 1, 1], ["wp", "TRX", 3.1424, 101.7196, 1, 1], ["wp", "Chan Sow Lin", 3.1285, 101.7155, 1, 1],
+    ["wp", "Kuchai", 3.0898, 101.6942, 1], ["selangor", "Serdang Raya Utara", 3.0424, 101.7053, 1], ["selangor", "UPM", 3.0082, 101.7060, 1], ["selangor", "Cyberjaya Utara", 2.9497, 101.6582, 1],
+    ["wp", "Putrajaya Sentral", 2.9335, 101.6715, 1]] },
+  { id: "mono", n: "Monorel", nm: "Monorel KL", metro: 1, mono: 1, tap: 1, col: "#7cc242", c2: "#1d2b3a", st: [
+    ["wp", "KL Sentral", 3.1325, 101.6875, 1], ["wp", "Hang Tuah", 3.1404, 101.7063, 1], ["wp", "Bukit Bintang", 3.1460, 101.7112, 1],
+    ["wp", "Chow Kit", 3.1674, 101.6984, 1], ["wp", "Titiwangsa", 3.1740, 101.6960, 1]] }
 ];
 const CAR = 16.6; /* panjang gerabak + sambungan */
+/* v18.15: ikon jenis pengangkutan */
+function lmIc(L) { return L.road ? "🚌" : L.mono ? "🚝" : L.metro ? "🚇" : "🚆"; }
+/* pintu masuk stesen metro di aras jalan (dikongsi oleh stesen pertukaran) */
+function lmMetroGate(L, name, ug) {
+  const g = new T.Group();
+  g.add(lmMesh(lmBox(7, 0.3, 5), "#cfc6b4", 0, 0.15, 0));
+  g.add(lmMesh(lmBox(5.6, 3.4, 3.6), ug ? "#e9eef2" : "#efe9dc", 0, 1.9, -0.4));
+  g.add(lmMesh(lmBox(4.6, 2.4, 0.1), "#1d2b3a", 0, 1.7, 1.42));
+  g.add(lmMesh(lmBox(6.4, 0.5, 4.4), L.col, 0, 3.8, -0.3));
+  g.add(lmMesh(lmBox(0.25, 5.4, 0.25), "#8a94a0", 3.4, 2.7, 1.9)); g.add(lmMesh(lmBox(1.3, 1.3, 0.2), L.col, 3.4, 5.6, 1.9));
+  const sign = lmLabel(lmIc(L) + " " + name, { fs: 22, k: 0.024, bg: "rgba(10,30,60,.88)", bd: L.col }); sign.position.set(0, 6.4, 0); g.add(sign);
+  g.userData.sign = sign;
+  return g;
+}
+/* platform bertingkat di atas landasan metro */
+function lmMetroPlatform(L) {
+  const g = new T.Group(), w = L.mono ? 2.2 : 3.2;
+  for (const z of [-w, w]) g.add(lmMesh(lmBox(11, 0.45, 1.6), "#d6d0c4", 0, -0.35, z));
+  for (const x of [-4.5, 4.5]) for (const z of [-w - 0.5, w + 0.5]) g.add(lmMesh(lmBox(0.22, 3, 0.22), "#8a94a0", x, 1.2, z));
+  g.add(lmMesh(lmBox(11.4, 0.25, w * 2 + 2), "#e6e6e2", 0, 2.8, 0)); g.add(lmMesh(lmBox(11.5, 0.3, 0.3), L.col, 0, 2.75, w + 1));
+  return g;
+}
+function lmMetroCar(L, front, back) {
+  const g = new T.Group(), sm = (c, o) => new T.MeshStandardMaterial(Object.assign({ color: c, roughness: 0.45, metalness: 0.2 }, o || {}));
+  const key = "met" + L.id, M = GEO[key] || (GEO[key] = { w: sm(0xf4f6f8), b: sm(new T.Color(L.col)), gl: sm(0x1d2b3a, { roughness: 0.1, metalness: 0.6 }), d: sm(0x2a2d33) });
+  const yb = L.mono ? 1.0 : 0;
+  const body = new T.Mesh(GEO.mtB || (GEO.mtB = new T.BoxGeometry(7.6, 2.5, 2.4)), M.w); body.position.y = 1.9 + yb; body.castShadow = true; g.add(body);
+  const band = new T.Mesh(GEO.mtL || (GEO.mtL = new T.BoxGeometry(7.65, 0.7, 2.45)), M.b); band.position.y = 1.0 + yb; g.add(band);
+  const win = new T.Mesh(GEO.mtW || (GEO.mtW = new T.BoxGeometry(6.6, 0.8, 2.48)), M.gl); win.position.y = 2.4 + yb; g.add(win);
+  if (L.mono) { const sk = new T.Mesh(GEO.mtK || (GEO.mtK = new T.BoxGeometry(7.2, 1.0, 1.6)), M.b); sk.position.y = 0.4; g.add(sk); }
+  else for (const x of [-2.6, 2.6]) { const bg = new T.Mesh(GEO.mtG || (GEO.mtG = new T.BoxGeometry(2, 0.6, 2)), M.d); bg.position.set(x, 0.5, 0); g.add(bg); }
+  if (front) { const f = new T.Mesh(GEO.mtF || (GEO.mtF = new T.BoxGeometry(0.3, 2.0, 2.2)), M.gl); f.position.set(3.85, 2.1 + yb, 0); g.add(f); const c = new T.Mesh(GEO.mtC || (GEO.mtC = new T.BoxGeometry(0.32, 0.5, 2.3)), M.b); c.position.set(3.86, 0.9 + yb, 0); g.add(c); }
+  if (back) g.userData.back = true;
+  return g;
+}
+function lmMetroTrain(L) { return [lmMetroCar(L, true), lmMetroCar(L, true, true)]; }
 function lmStationModel(L, name) {
   const g = new T.Group();
   g.add(lmMesh(lmBox(30, 0.7, 5), "#cfc6b4", 0, 0.35, 4.6));
@@ -1423,9 +1516,25 @@ function lmRailsPlan(g, used, placed, avoid, gnd) {
   RAILS.forEach((L) => {
     const sts = [];
     const via = [];
-    L.st.forEach(([k, name, la, lo, stop], i) => {
+    L.st.forEach(([k, name, la, lo, stop, ug], i) => {
       if (!DATA.negeri[k]) return;
       if (!stop) { via.push({ i: i, w: ll(la, lo) }); return; }
+      if (L.metro) { /* v18.15: pintu masuk kecil; stesen pertukaran (nama sama, berdekatan) berkongsi satu pintu */
+        let w = ll(la, lo);
+        const hubs = g.hubs || (g.hubs = []), hub = hubs.find((h) => h.nm === name && Math.hypot(h.x - w.x, h.z - w.z) < 90);
+        const st = { kind: "st", id: L.id + "-" + i, k: k, n: "Stesen " + name, nm: name, line: null, i: sts.length, o: i, x: 0, z: 0, r: 0, ir: 9, m: null, ug: !!ug, hub: null };
+        if (hub) { st.x = hub.x; st.z = hub.z; st.m = hub.m; st.hub = hub; hub.lines.push(st); sts.push(st); return; }
+        const free = (x, z) => lmLandW(x, z) && lmLandW(x + 6, z) && lmLandW(x - 6, z) && !placed.some((u) => Math.hypot(u.x - x, u.z - z) < u.r + 6) && !g.items.some((it) => it.kind !== "st" && Math.hypot(it.x - x, it.z - z) < 12) && !hubs.some((h) => Math.hypot(h.x - x, h.z - z) < 9);
+        if (!free(w.x, w.z)) { let best = null; for (let d = 3; d <= 30 && !best; d += 3) for (let j = 0; j < 12; j++) { const a = j * 0.5236 + d * 0.1, x = w.x + Math.cos(a) * d, z = w.z + Math.sin(a) * d; if (free(x, z)) { best = { x: x, z: z }; break; } } if (best) w = best; }
+        const m = lmMetroGate(L, name, ug); m.position.set(w.x, 0, w.z); g.scene.add(m); gnd.push([m, 0]); lmPad(g, w.x, w.z, 6);
+        const h = { nm: name, x: w.x, z: w.z, m: m, lines: [st] }; hubs.push(h);
+        st.x = w.x; st.z = w.z; st.m = m; st.hub = h; sts.push(st); g.items.push(st); avoid.push({ x: w.x, z: w.z, r: 8 });
+        return;
+      }
+      if (!L.road) {
+        const hubs = g.hubs || (g.hubs = []), w0 = ll(la, lo), hub = hubs.find((h) => h.heavy && h.nm === name && Math.hypot(h.x - w0.x, h.z - w0.z) < 90);
+        if (hub) { const st = { kind: "st", id: L.id + "-" + i, k: k, n: "Stesen " + name, nm: name, line: null, i: sts.length, o: i, x: hub.x, z: hub.z, r: 0, ir: 13, m: hub.m, hub: hub }; hub.lines.push(st); sts.push(st); return; }
+      }
       const okK = (q) => q === k || (k === "wp" && q === "selangor") || (k === "selangor" && q === "wp");
       const free = (x, z) => okK(lmAt(x, z)) && lmLandW(x + 16, z) && lmLandW(x - 16, z) && lmLandW(x, z + 14) && lmLandW(x, z - 14)
         && !used.some((u) => Math.hypot(u.x - x, u.z - z) < 20) && !placed.some((u) => Math.hypot(u.x - x, u.z - z) < u.r + 30) && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + 14);
@@ -1434,6 +1543,7 @@ function lmRailsPlan(g, used, placed, avoid, gnd) {
       const m = L.road ? lmBusStationModel(L, name) : lmStationModel(L, name); m.position.set(w.x, 0, w.z); g.scene.add(m);
       lmPad(g, w.x, w.z, L.road ? 22 : 18);
       const st = { kind: "st", id: L.id + "-" + i, k: k, n: (L.road ? "Terminal Bas " : "Stesen ") + name, nm: name, line: null, i: sts.length, o: i, x: w.x, z: w.z, r: 0, ir: 13, m: m };
+      if (!L.road) { const h = { nm: name, x: w.x, z: w.z, m: m, lines: [st], heavy: true, owner: st }; (g.hubs || (g.hubs = [])).push(h); st.hub = h; }
       sts.push(st); g.items.push(st); avoid.push({ x: w.x, z: w.z, r: 22 });
     });
     const R = { L: L, st: sts, via: via, pts: null, cum: null, sS: [], train: null, s: 0, dir: 1, wait: 4, next: 1 };
@@ -1452,13 +1562,14 @@ function lmRailsPath(g, avoid) {
     const ctrl = R.ctrl.map((q) => new T.Vector3(q.x, 0, q.z)), curve = new T.CatmullRomCurve3(ctrl, false, "centripetal", 0.5);
     const tot = curve.getLength(), n = Math.max(20, Math.round(tot / 4)), raw = curve.getSpacedPoints(n);
     /* landasan melencong mengelak menara, mercu tanda, lapangan terbang dan markas (stesen kekal) */
-    const obs = [];
-    for (const it of g.items) {
+    const obs = [], met = !!R.L.metro;
+    if (met) { for (const it of g.items) if (it.kind === "tw" || it.kind === "pl" || it.kind === "ip" || it.kind === "sn") obs.push({ x: it.x, z: it.z, c: 10 }); }
+    else for (const it of g.items) {
       if (it.kind === "tw" || it.kind === "pl" || it.kind === "kh") obs.push({ x: it.x, z: it.z, c: Math.max(it.r || 0, it.kind === "tw" ? 3 : 6) + 12 });
       else if ((it.kind === "st" && it.line !== R) || it.kind === "ip" || it.kind === "sk" || it.kind === "fd" || it.kind === "sn") obs.push({ x: it.x, z: it.z, c: 26 });
       else if (it.kind === "ap" && it.rw) { const w = it.rw, ux = Math.cos(w.a), uz = Math.sin(w.a); for (let t = -w.L - 10; t <= w.L + 10; t += 12) obs.push({ x: w.x + ux * t, z: w.z + uz * t, c: 16 }); obs.push({ x: it.x, z: it.z, c: 30 }); }
     }
-    const fixed = raw.map((q) => S.some((st) => Math.hypot(st.x - q.x, st.z - q.z) < 20));
+    const fixed = raw.map((q) => S.some((st) => Math.hypot(st.x - q.x, st.z - q.z) < (met ? 8 : 20)));
     const push = () => { raw.forEach((q, i) => { if (fixed[i]) return; for (const o of obs) { const dx = q.x - o.x, dz = q.z - o.z, d = Math.hypot(dx, dz); if (d < o.c) { if (d < 0.01) { q.x += o.c; continue; } const k = (o.c - d) / d; q.x += dx * k; q.z += dz * k; } } }); };
     for (let it = 0; it < 8; it++) { push(); for (let i = 1; i < raw.length - 1; i++) if (!fixed[i]) { raw[i].x = (raw[i - 1].x + raw[i].x * 2 + raw[i + 1].x) / 4; raw[i].z = (raw[i - 1].z + raw[i].z * 2 + raw[i + 1].z) / 4; } }
     push();
@@ -1467,6 +1578,17 @@ function lmRailsPath(g, avoid) {
     const base = gy.map((v) => Math.max(1.4, v + 0.6));
     const avg = (arr, w) => arr.map((_, i) => { let s = 0, c = 0; for (let j = -w; j <= w; j++) { const v = arr[i + j]; if (v != null) { s += v; c++; } } return s / c; });
     let grade = R.L.road ? avg(avg(base, 7), 4) : avg(avg(base, 14), 8);
+    if (met) { /* metro: bertingkat 8 unit di atas tanah; antara stesen bawah tanah, landasan di bawah tanah */
+      const si = S.map((st) => { let bi = 0, bd = 1e9; raw.forEach((q, i) => { const d = Math.hypot(q.x - st.x, q.z - st.z); if (d < bd) { bd = d; bi = i; } }); return bi; });
+      const ugp = raw.map(() => false);
+      for (let j = 0; j < S.length - 1; j++) { const a = si[j], b = si[j + 1], ua = S[j].ug, ub = S[j + 1].ug; for (let i = Math.min(a, b); i <= Math.max(a, b); i++) { const t = b === a ? 0 : (i - a) / (b - a); ugp[i] = ugp[i] || (ua && ub) || (ua && t < 0.4) || (ub && t > 0.6); } }
+      const sg = avg(avg(gy.map((v) => Math.max(0.6, v)), 6), 3), want = sg.map((v, i) => ugp[i] ? v - 9 : v + (R.L.mono ? 7 : 8));
+      grade = avg(want, 3);
+      const pts = raw.map((p, i) => ({ x: p.x, y: ugp[i] ? grade[i] : Math.max(gy[i] + 6, grade[i]), z: p.z, tun: false, ug: ugp[i] }));
+      const cum = [0]; for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].z - pts[i - 1].z));
+      R.pts = pts; R.cum = cum; R.len = cum[cum.length - 1];
+      continue;
+    }
     const pts = raw.map((p, i) => ({ x: p.x, y: Math.max(1.4, grade[i]), z: p.z, tun: gy[i] - grade[i] > RAIL_CUT }));
     /* terowong pendek (< 3 titik) dijadikan potongan biasa */
     for (let i = 0; i < pts.length; i++) if (pts[i].tun) { let j = i; while (j < pts.length && pts[j].tun) j++; if (j - i < 3) for (let k = i; k < j; k++) pts[k].tun = false; i = j; }
@@ -1480,7 +1602,7 @@ function lmRailCarve(g) {
   if (!g.rails) return;
   const { cs, nx, nz, h, x0, z0, land } = TER, W0 = 4.5, W1 = 18, best = new Float32Array(nx * nz).fill(1e9), raw = new Float32Array(nx * nz).fill(1e9), tgt = new Float32Array(nx * nz);
   for (const R of g.rails) {
-    if (!R.pts) continue;
+    if (!R.pts || R.L.metro) continue;
     const Wr = R.L.road ? 8 : 0;
     for (const p of R.pts) {
       if (p.tun) continue;
@@ -1538,12 +1660,15 @@ function lmRailsBuild(g) {
   for (const R of g.rails) {
     const S = R.st, pts = R.pts, cum = R.cum; if (!pts) continue;
     if (R.L.road) { lmRoadBuild(g, R, asM, bar, pillars, lamps); continue; }
+    if (R.L.metro) { lmMetroBuild(g, R, pillars); continue; }
     /* kedudukan stesen di sepanjang laluan */
     R.sS = S.map((q) => { let bi = 0, bd = 1e9; pts.forEach((p, i) => { const d = Math.hypot(p.x - q.x, p.z - q.z); if (d < bd) { bd = d; bi = i; } }); return cum[bi]; });
     S.forEach((q, i) => {
       const a = lmRailAt(R, R.sS[i]), yaw = Math.atan2(-a.tz, a.tx);
+      if (q.hub && q.hub.owner && q.hub.owner !== q) { const o = q.hub.owner; q.px = -a.tz; q.pz = a.tx; q.tx = a.tx; q.tz = a.tz; q.y = a.y; q.x = o.x; q.z = o.z; return; }
       q.m.position.set(a.x, a.y - 0.5, a.z); q.m.rotation.y = yaw;
       const px = -a.tz, pz = a.tx; q.x = a.x + px * 6.5; q.z = a.z + pz * 6.5; q.px = px; q.pz = pz; q.tx = a.tx; q.tz = a.tz; q.y = a.y;
+      if (q.hub) { q.hub.x = q.x; q.hub.z = q.z; }
       g.cols.push({ x: a.x + px * 10.6, z: a.z + pz * 10.6, r: 4.5, h: a.y + 4 });
     });
     const inTun = (i) => pts[i].tun && pts[i - 1].tun;
@@ -1577,6 +1702,26 @@ function lmRailsBuild(g) {
     const hg = new T.BoxGeometry(1.6, 0.25, 0.5); inst(hg, new T.MeshBasicMaterial({ color: 0xfff1c4 }), lamps, (a) => { q.setFromAxisAngle(up, Math.atan2(-a.tz, a.tx) + Math.PI / 2); mt.compose(ps.set(a.x + a.tz * 6.5, a.y + 7.3, a.z - a.tx * 6.5), q, sc.set(1, 1, 1)); }); }
   inst(mastG, lmMat("#7d8792"), masts, (a) => { q.setFromAxisAngle(up, Math.atan2(-a.tz, a.tx)); mt.compose(ps.set(a.x - a.tz * 3.2, a.y - 0.6, a.z + a.tx * 3.2), q, sc.set(1, 1, 1)); }, true);
 }
+/* v18.15: landasan metro bertingkat (dek konkrit, tiang), platform di stesen bertingkat, portal ke bawah tanah */
+function lmMetroBuild(g, R, pillars) {
+  const S = R.st, pts = R.pts, cum = R.cum;
+  R.sS = S.map((q) => { let bi = 0, bd = 1e9; pts.forEach((p, i) => { const d = Math.hypot(p.x - q.x, p.z - q.z); if (d < bd) { bd = d; bi = i; } }); return cum[bi]; });
+  S.forEach((q, i) => {
+    const a = lmRailAt(R, R.sS[i]); q.tx = a.tx; q.tz = a.tz; q.px = -a.tz; q.pz = a.tx; q.y = lmGround(q.x, q.z);
+    if (a.ug) return;
+    const pf = lmMetroPlatform(R.L); pf.position.set(a.x, a.y, a.z); pf.rotation.y = Math.atan2(-a.tz, a.tx); g.scene.add(pf);
+  });
+  const skip = (i) => pts[i].ug || pts[i - 1].ug;
+  const conc = GEO.mtDeck || (GEO.mtDeck = lmMat("#c9c4b8"));
+  const prof = R.L.mono ? [[-0.6, -1.6], [-0.6, 0], [0.6, 0], [0.6, -1.6]] : [[-2.6, -1.1], [-2.6, 0.6], [-2.3, 0.6], [-2.3, 0], [2.3, 0], [2.3, 0.6], [2.6, 0.6], [2.6, -1.1]];
+  g.scene.add(Object.assign(new T.Mesh(lmSweep(pts, cum, prof, 6, skip), conc), { receiveShadow: true, castShadow: !!LM.gq }));
+  if (!R.L.mono) { const rm = GEO.mtRail || (GEO.mtRail = new T.MeshStandardMaterial({ color: 0xc4c9d0, metalness: 0.7, roughness: 0.35 })); for (const o of [-0.72, 0.72]) g.scene.add(new T.Mesh(lmSweep(pts, cum, [[o - 0.1, 0], [o - 0.1, 0.22], [o + 0.1, 0.22], [o + 0.1, 0]], 4, skip), rm)); }
+  for (let i = 0; i < pts.length; i += 3) { const p = pts[i]; if (p.ug) continue; const gy = lmHRaw(p.x, p.z); if (p.y - gy > 1.5) pillars.push({ x: p.x, z: p.z, y0: Math.max(gy, -16), y1: p.y - 1.1 }); }
+  for (let i = 1; i < pts.length; i++) if (pts[i].ug !== pts[i - 1].ug) { const j = pts[i].ug ? i - 1 : i, a = lmRailAt(R, cum[j]), po = lmPortal(); po.scale.set(0.8, 0.7, 0.6); po.position.set(a.x, Math.max(a.y, lmGround(a.x, a.z)) - 0.6, a.z); po.rotation.y = Math.atan2(-a.tz, a.tx); g.scene.add(po); }
+  R.train = lmMetroTrain(R.L); R.train.forEach((c) => g.scene.add(c));
+  R.s = R.sS[0]; R.dir = 1; R.next = 1; R.wait = 3;
+  lmRailPlace(R);
+}
 /* lebuh raya: terminal di tepi jalan, permukaan asfalt dua hala dengan penghadang tengah, lampu jalan dan bas ekspres */
 function lmRoadBuild(g, R, asM, bar, pillars, lamps) {
   const S = R.st, pts = R.pts, cum = R.cum;
@@ -1597,13 +1742,12 @@ function lmRoadBuild(g, R, asM, bar, pillars, lamps) {
   R.train = lmBus(R.L); R.train.forEach((c) => g.scene.add(c));
   R.s = R.sS[0]; R.dir = 1; R.next = 1; R.wait = 3;
   lmRailPlace(R);
-  /* kereta lain di lebuh raya (dua hala, lorong kiri dan kanan) */
-  const CC = ["#c0392b", "#f4f4f4", "#2c3e50", "#7f8c8d", "#2e86de", "#f1c40f", "#16a085"], n = Math.min(LM.gq ? 14 : 7, Math.max(2, Math.round(R.len / 260)));
+  /* v18.15: tiada kenderaan persendirian; trafik lebuh raya ialah bas awam dan bas ekspres syarikat lain (dua hala) */
+  const BC = [{ id: "rk", col: "#d7282f" }, { id: "tr", col: "#1d5fbf" }, { id: "ks", col: "#f2a21a" }, { id: "hj", col: "#2d7d46" }, { id: "un", col: "#7a5cd6" }], n = Math.min(LM.gq ? 10 : 5, Math.max(2, Math.round(R.len / 320)));
   R.cars = [];
   for (let i = 0; i < n; i++) {
-    const c = new T.Group(), M = lmMat(CC[i % CC.length]);
-    c.add(lmMesh(GEO.cB || (GEO.cB = new T.BoxGeometry(4.2, 1.1, 1.9)), M, 0, 0.85, 0)); c.add(lmMesh(GEO.cT || (GEO.cT = new T.BoxGeometry(2.2, 0.8, 1.7)), lmMat("#1d2b3a"), -0.3, 1.75, 0));
-    g.scene.add(c); R.cars.push({ m: c, s: Math.random() * R.len, dir: i % 2 ? 1 : -1, v: 26 + Math.random() * 12, lane: Math.random() < 0.5 ? 2.2 : 4.4 });
+    const c = lmBus(BC[i % BC.length])[0];
+    g.scene.add(c); R.cars.push({ m: c, s: Math.random() * R.len, dir: i % 2 ? 1 : -1, v: 24 + Math.random() * 10, lane: 3.2 });
   }
 }
 /* kedudukan dan arah pada jarak s di sepanjang laluan */
@@ -1611,13 +1755,15 @@ function lmRailAt(R, s) {
   const c = R.cum, P = R.pts; s = clamp(s, 0, R.len);
   let lo = 0, hi = c.length - 1; while (hi - lo > 1) { const m = (lo + hi) >> 1; if (c[m] <= s) lo = m; else hi = m; }
   const a = P[lo], b = P[hi], k = c[hi] > c[lo] ? (s - c[lo]) / (c[hi] - c[lo]) : 0, dx = b.x - a.x, dz = b.z - a.z, l = Math.hypot(dx, dz) || 1;
-  return { x: a.x + dx * k, y: a.y + (b.y - a.y) * k, z: a.z + dz * k, tx: dx / l, tz: dz / l, ty: (b.y - a.y) / l, tun: !!(a.tun && b.tun) };
+  return { x: a.x + dx * k, y: a.y + (b.y - a.y) * k, z: a.z + dz * k, tx: dx / l, tz: dz / l, ty: (b.y - a.y) / l, tun: !!(a.tun && b.tun), ug: !!(a.ug && b.ug) };
 }
 function lmRailPlace(R) {
+  const cl = R.L.metro ? 8 : CAR;
   R.train.forEach((car, i) => {
-    const a = lmRailAt(R, R.s - R.dir * i * CAR - R.dir * CAR / 2), yaw = Math.atan2(-a.tz, a.tx) + (R.dir < 0 ? Math.PI : 0) + (car.userData.back ? Math.PI : 0);
+    const a = lmRailAt(R, R.s - R.dir * i * cl - R.dir * cl / 2), yaw = Math.atan2(-a.tz, a.tx) + (R.dir < 0 ? Math.PI : 0) + (car.userData.back ? Math.PI : 0);
     if (R.L.road) { const fx = a.tx * R.dir, fz = a.tz * R.dir; car.position.set(a.x + fz * 2.8, a.y - 0.05, a.z - fx * 2.8); car.rotation.set(0, yaw, 0); return; } /* pandu di sebelah kiri */
     car.position.set(a.x, a.y - 0.05, a.z); car.rotation.set(0, yaw, 0);
+    if (R.L.metro) car.visible = !a.ug;
   });
 }
 /* kereta api bergerak sendiri antara stesen (kecuali ketika dinaiki pemain) */
@@ -1631,7 +1777,7 @@ function lmRailTick(g, dt) {
     }
     if (!R.train || (g.ride && g.ride.R === R)) continue;
     if (R.wait > 0) { R.wait -= dt; continue; }
-    const tgt = R.sS[R.next], d = tgt - R.s, v = Math.min(R.L.road ? 36 : 60, 8 + Math.abs(d) * 0.5);
+    const tgt = R.sS[R.next], d = tgt - R.s, v = Math.min(R.L.road ? 36 : R.L.metro ? 34 : 60, 8 + Math.abs(d) * 0.5);
     if (Math.abs(d) < 0.6) {
       R.s = tgt; R.wait = 7;
       if (R.next === R.sS.length - 1) R.dir = -1; else if (R.next === 0) R.dir = 1;
@@ -1647,15 +1793,42 @@ const RAIL_TXT = {
   plus: "Lebuhraya Utara-Selatan (PLUS) sepanjang lebih 770 km menghubungkan Bukit Kayu Hitam di sempadan Thailand hingga Johor Bahru.",
   lpt: "Lebuhraya Pantai Timur (LPT) menghubungkan Lembah Klang ke Kuantan dan Kuala Terengganu melalui Karak.",
   pbsw: "Lebuhraya Pan Borneo merentasi Sarawak dari Kuching hingga Miri.",
-  pbsb: "Lebuhraya Pan Borneo di Sabah menghubungkan Lawas, Kota Kinabalu, Ranau hingga Sandakan."
+  pbsb: "Lebuhraya Pan Borneo di Sabah menghubungkan Lawas, Kota Kinabalu, Ranau hingga Sandakan.",
+  kmsr: "KTM Komuter Laluan Seremban menghubungkan KL Sentral ke Kajang, Bangi (UKM), Nilai (USIM) dan Seremban.",
+  kmpk: "KTM Komuter Laluan Pelabuhan Klang menghubungkan KL Sentral ke Subang Jaya, Shah Alam (UiTM), Klang dan Pelabuhan Klang.",
+  erl: "KLIA Ekspres dan KLIA Transit menghubungkan KL Sentral ke Putrajaya, Cyberjaya dan Lapangan Terbang Antarabangsa Kuala Lumpur.",
+  ktms: "Keretapi Negeri Sabah ialah satu-satunya laluan kereta api di Borneo, dari Tanjung Aru (Kota Kinabalu) ke Beaufort dan Tenom.",
+  lrtkj: "LRT Laluan Kelana Jaya merentasi KL dari Gombak ke Putra Heights; di tengah bandar ia bergerak di bawah tanah. Stesen Universiti berhampiran Universiti Malaya.",
+  lrtam: "LRT Laluan Ampang menghubungkan Sentul Timur ke Ampang melalui Masjid Jamek dan Hang Tuah.",
+  lrtsp: "LRT Laluan Sri Petaling menghubungkan Chan Sow Lin ke Bukit Jalil, Puchong dan Putra Heights.",
+  mrtkg: "MRT Laluan Kajang dari Kwasa Damansara ke Kajang; dari Muzium Negara hingga Maluri ia bergerak di bawah tanah.",
+  mrtpy: "MRT Laluan Putrajaya dari Kwasa Damansara ke Putrajaya Sentral, melalui KLCC (bawah tanah) dan stesen UPM.",
+  mono: "Monorel KL bergerak di atas satu rasuk konkrit dari KL Sentral ke Bukit Bintang dan Titiwangsa."
 };
 /* v18.12: ETS, ECRL dan bas ekspres memerlukan tiket: lulus kuiz ringkas (2 daripada 3 betul) setiap kali menaiki */
-function lmRailOpen(st) {
+function lmRailOpen(st, chosen) {
+  if (!chosen && st.hub && st.hub.lines.length > 1) {
+    lmCard((b) => {
+      b.append(el("div", { class: "lm-kick" }, "🔀 Stesen pertukaran"), el("h2", null, st.nm), el("p", null, "Pilih laluan yang hendak dinaiki:"));
+      const row = el("div", { class: "lm-grid" });
+      st.hub.lines.forEach((q) => { const R = q.line, a = R.st[0], z = R.st[R.st.length - 1]; const bt = lmBtn(lmIc(R.L) + " " + R.L.n + " (" + a.nm + " ↔ " + z.nm + ")", "", () => { lmCardClose(); lmRailOpen(q, true); }); bt.style.borderLeft = "6px solid " + R.L.col; row.appendChild(bt); });
+      b.append(row, el("div", { class: "lm-row" }, lmBtn("Nanti dulu", "pri", lmCardClose)));
+    });
+    return;
+  }
   const L = st.line.L;
+  if (L.tap) {
+    lmQuiz({
+      kick: "💳 Tap kad · " + L.n, title: "Jawab untuk masuk", pass: 1, qs: lmPickQs([], 1), noRai: true,
+      intro: (b) => { b.append(el("div", { class: "lm-kick" }, lmIc(L) + " " + L.nm + " · " + st.n), el("h2", null, "Tap kad di pintu masuk"), el("p", null, RAIL_TXT[L.id] || ""), el("p", null, "Jawab 1 soalan dengan betul untuk membuka pintu masuk.")); },
+      onDone: (pass) => { if (pass) { lmPop("Pintu dibuka. Selamat jalan!"); lmRailPick(st); } else lmCard((b) => { b.append(el("div", { class: "lm-kick" }, "Pintu belum dibuka"), el("h2", null, "Jawapan belum tepat"), el("p", null, "Cuba soalan lain untuk masuk.")); b.append(el("div", { class: "lm-row" }, lmBtn("Cuba lagi", "pri", () => lmRailOpen(st, true)), lmBtn("Nanti dulu", "", lmCardClose))); }); }
+    });
+    return;
+  }
   if (!L.quiz) return lmRailPick(st);
   lmQuiz({
-    kick: (L.road ? "🚌 Tiket bas " : "🚆 Tiket ") + L.n, title: "Jawab untuk dapatkan tiket", pass: 2, qs: lmPickQs([], 3),
-    intro: (b) => { b.append(el("div", { class: "lm-kick" }, (L.road ? "🚌 " : "🚆 ") + L.nm + " · " + st.n), el("h2", null, "Tiket perjalanan"), el("p", null, RAIL_TXT[L.id] || ""), el("p", null, "Jawab 3 soalan. Betul sekurang-kurangnya 2 untuk mendapat tiket " + (L.road ? "bas ekspres." : L.n + "."))); },
+    kick: (L.road ? "🚌 Tiket bas " : lmIc(L) + " Tiket ") + L.n, title: "Jawab untuk dapatkan tiket", pass: 2, qs: lmPickQs([], 3),
+    intro: (b) => { b.append(el("div", { class: "lm-kick" }, lmIc(L) + " " + L.nm + " · " + st.n), el("h2", null, "Tiket perjalanan"), el("p", null, RAIL_TXT[L.id] || ""), el("p", null, "Jawab 3 soalan. Betul sekurang-kurangnya 2 untuk mendapat tiket " + (L.road ? "bas ekspres." : L.n + "."))); },
     onDone: (pass, ok, tot) => {
       if (pass) { lmPop("Tiket diperoleh! (" + ok + "/" + tot + ")"); lmRailPick(st); }
       else lmCard((b) => { b.append(el("div", { class: "lm-kick" }, "Tiket belum diperoleh"), el("h2", null, ok + "/" + tot + " betul"), el("p", null, "Betul sekurang-kurangnya 2 untuk mendapat tiket. Cuba lagi.")); b.append(el("div", { class: "lm-row" }, lmBtn("Cuba lagi", "pri", () => lmRailOpen(st)), lmBtn("Nanti dulu", "", lmCardClose))); });
@@ -1665,12 +1838,12 @@ function lmRailOpen(st) {
 function lmRailPick(st) {
   const R = st.line, L = R.L, here = st.i;
   lmCard((b) => {
-    b.append(el("div", { class: "lm-kick" }, (L.road ? "🚌 " : "🚆 ") + L.nm + " · " + st.n), el("h2", null, "Pilih destinasi"));
+    b.append(el("div", { class: "lm-kick" }, lmIc(L) + " " + L.nm + " · " + st.n), el("h2", null, "Pilih destinasi"));
     b.append(el("p", null, RAIL_TXT[L.id] || ""));
     const grid = el("div", { class: "lm-grid" });
     R.st.forEach((q, i) => {
       if (i === here) return;
-      const km = Math.round(Math.abs(R.sS[i] - R.sS[here]) / (3 * WS));
+      const km = Math.max(1, Math.round(lmRailKm(R, R.sS[here], R.sS[i])));
       const bt = lmBtn((i < here ? "◀ " : "▶ ") + q.nm + " · " + km + " km", "", () => { lmCardClose(); lmRide(st, q); });
       grid.appendChild(bt);
     });
@@ -1681,15 +1854,15 @@ function lmRide(a, b) {
   const g = LM.g; if (!g || g.flight || g.sail || g.ride) return;
   const R = a.line, s0 = R.sS[a.i], s1 = R.sS[b.i], dir = s1 > s0 ? 1 : -1;
   R.dir = dir; R.s = s0; R.wait = 0; lmRailPlace(R);
-  g.ride = { R: R, a: a, b: b, s0: s0, s1: s1, dir: dir, t: -1.6, dur: clamp(Math.abs(s1 - s0) / (R.L.road ? 110 : 130), 7, 28), v: 0 };
-  if (R.L.road) LM.st.rb = (LM.st.rb | 0) + 1; else LM.st.rt = (LM.st.rt | 0) + 1; lmSave();
+  g.ride = { R: R, a: a, b: b, s0: s0, s1: s1, dir: dir, t: -1.6, dur: R.L.metro ? clamp(Math.abs(s1 - s0) / 45, 5, 16) : clamp(Math.abs(s1 - s0) / (R.L.road ? 110 : 130), 7, 28), v: 0 };
+  if (R.L.road) LM.st.rb = (LM.st.rb | 0) + 1; else if (R.L.metro) LM.st.rm = (LM.st.rm | 0) + 1; else LM.st.rt = (LM.st.rt | 0) + 1; lmSave();
   g.ui = true; g.me.g.visible = false; if (g.sky5) g.sky5.sp.visible = false;
-  lmChime(); lmPop(R.L.road ? "Sila naik bas ekspres" : "Sila naik ke dalam " + R.L.n); lmRideHud(true);
+  lmChime(); lmPop(R.L.road ? "Sila naik bas ekspres" : "Sila naik ke dalam " + R.L.n + (R.L.metro ? ". Berdiri di belakang garisan kuning." : "")); lmRideHud(true);
 }
 function lmRideHud(on) {
   let h = LM.ui.rd; if (!on) { if (h) h.remove(); LM.ui.rd = null; return; }
   const r = LM.g.ride; h = el("div", { class: "lm-fl" }); LM.ui.rd = h; LM.root.appendChild(h);
-  h.append(el("b", null, (r.R.L.road ? "🚌 " : "🚆 ") + r.R.L.n + " · " + r.a.nm + " → " + r.b.nm), el("span", { class: "lm-fl-st" }, r.R.L.road ? "Menaiki bas ekspres..." : "Menaiki kereta api..."), el("div", { class: "lm-bar" }, el("i")), lmBtn("Langkau", "", () => { const x = LM.g && LM.g.ride; if (x) x.t = x.dur; }));
+  h.append(el("b", null, lmIc(r.R.L) + " " + r.R.L.n + " · " + r.a.nm + " → " + r.b.nm), el("span", { class: "lm-fl-st" }, r.R.L.road ? "Menaiki bas ekspres..." : "Menaiki kereta api..."), el("div", { class: "lm-bar" }, el("i")), lmBtn("Langkau", "", () => { const x = LM.g && LM.g.ride; if (x) x.t = x.dur; }));
 }
 function lmRideTick(g, dt) {
   const r = g.ride, R = r.R; r.t += dt;
@@ -1705,7 +1878,7 @@ function lmRideTick(g, dt) {
   if (g.dome) g.dome.position.copy(cam.position);
   if (g.sun) { const sd = g.sunDir || new T.Vector3(0.45, 0.8, 0.3); g.sun.position.set(a.x + sd.x * 150, a.y + sd.y * 150, a.z + sd.z * 150); g.sun.target.position.set(a.x, a.y, a.z); g.sun.target.updateMatrixWorld(); }
   const h = LM.ui.rd;
-  if (h) { const st = h.querySelector(".lm-fl-st"), kmh = Math.round(20 + (R.L.road ? 90 : 140) * Math.sin(k * Math.PI)), txt = r.t < 0 ? "Pintu ditutup..." : k < 1 ? (a.tun ? "Melalui terowong · " : "Kelajuan ") + kmh + " km/j" : "Tiba di " + r.b.nm; if (st.textContent !== txt) st.textContent = txt; h.querySelector(".lm-bar i").style.width = Math.round(k * 100) + "%"; }
+  if (h) { const st = h.querySelector(".lm-fl-st"), kmh = Math.round(20 + (R.L.road ? 90 : R.L.metro ? 60 : 140) * Math.sin(k * Math.PI)), txt = r.t < 0 ? "Pintu ditutup..." : k < 1 ? (a.ug ? "Di bawah tanah · " : a.tun ? "Melalui terowong · " : "Kelajuan ") + kmh + " km/j" : "Tiba di " + r.b.nm; if (st.textContent !== txt) st.textContent = txt; h.querySelector(".lm-bar i").style.width = Math.round(k * 100) + "%"; }
   if (k >= 1 && !r.end) { r.end = true; lmChime(); setTimeout(() => lmRideEnd(g), 600); }
 }
 function lmRideEnd(g) {
@@ -1716,7 +1889,7 @@ function lmRideEnd(g) {
     const d = r.b, R = r.R; g.ride = null; g.ui = false; g.me.g.visible = true; lmRideHud(false); if (g.sky5) g.sky5.sp.visible = LM.st.sky !== 0;
     R.s = r.s1; R.wait = 6; R.next = clamp(d.i + R.dir, 0, R.sS.length - 1); if (R.next === d.i) { R.dir = -R.dir; R.next = clamp(d.i + R.dir, 0, R.sS.length - 1); }
     /* turun di hujung platform, menghadap stesen */
-    const ex = d.x + d.tx * 21 + d.px * 2, ez = d.z + d.tz * 21 + d.pz * 2, ok = lmCanStand(ex, ez);
+    const ex = R.L.metro ? d.x + d.px * 5 : d.x + d.tx * 21 + d.px * 2, ez = R.L.metro ? d.z + d.pz * 5 : d.z + d.tz * 21 + d.pz * 2, ok = lmCanStand(ex, ez);
     g.p.x = ok ? ex : d.x; g.p.z = ok ? ez : d.z; g.p.y = lmGround(g.p.x, g.p.z); g.p.vx = g.p.vz = g.p.vy = 0;
     g.p.yaw = Math.atan2(-d.tx, -d.tz); g.cam.yaw = Math.atan2(d.tx + d.px * 0.6, d.tz + d.pz * 0.6);
     g.camera.position.set(g.p.x + Math.sin(g.cam.yaw) * 18, g.p.y + 9, g.p.z + Math.cos(g.cam.yaw) * 18);
@@ -2050,8 +2223,8 @@ function lmStnBuild(g, used, placed, avoid, gnd) {
     for (let i = 1; i <= SN_N; i++) {
       const a = (i - 2) * 0.85, lx = Math.sin(a) * 12, lz = -Math.cos(a) * 12, b = lmStnBooth();
       b.position.set(lx, 0, lz); b.rotation.y = -a; plaza.add(b);
-      const pw = toWd(lx * 0.55, lz * 0.55), bw = toWd(lx, lz);
-      const it = { kind: "sn", id: "sn-" + k + "-" + i, sl: k + "-" + i, k: k, n: "Tapak kosong", x: pw.x, z: pw.z, r: 0, ir: 6, m: b, d: null, lb: null };
+      const pw = toWd(lx * 0.72, lz * 0.72), bw = toWd(lx, lz);
+      const it = { kind: "sn", id: "sn-" + k + "-" + i, sl: k + "-" + i, k: k, n: "Tapak kosong", x: pw.x, z: pw.z, r: 0, ir: 4.5, m: b, d: null, lb: null };
       g.items.push(it); g.stn.push(it);
       g.cols.push({ x: bw.x, z: bw.z, r: 3.2, h: 5.5 });
     }
@@ -2294,20 +2467,30 @@ function lmAkOpen(it) {
    Sentiasa menunjukkan universiti terdekat yang belum selesai, tajuknya, jarak dan arah. Jika jauh, panduan
    mencadangkan pengangkutan (ETS, ECRL, bas ekspres atau kapal terbang) dan tiang penunjuk dihalakan ke tempat naik. */
 const KM = (u) => u / (3 * WS);
+/* v18.15: jarak sebenar (km) antara dua titik dunia: buang zum Lembah Klang dahulu */
+function lmKmAB(ax, az, bx, bz) { const a = lmUnwarp(ax, az), b = lmUnwarp(bx, bz); return KM(Math.hypot(b.x - a.x, b.z - a.z)); }
+/* jarak sebenar di sepanjang landasan antara kedudukan s0 dan s1 */
+function lmRailKm(R, s0, s1) {
+  const lo = Math.min(s0, s1), hi = Math.max(s0, s1), P = R.pts, c = R.cum; let km = 0, prev = null;
+  for (let i = 0; i < P.length; i++) { if (c[i] < lo || c[i] > hi) continue; if (prev) km += lmKmAB(prev.x, prev.z, P[i].x, P[i].z); prev = P[i]; }
+  return km;
+}
 const lmBorneo = (k) => k === "sabah" || k === "sarawak" || (ISL_BY[k] && (ISL_BY[k].from === "sabah" || ISL_BY[k].from === "sarawak"));
 function lmGuideRoute(g, P, T) {
   const dir = Math.hypot(T.x - P.x, T.z - P.z), kP = lmAt(P.x, P.z) || g.lastK, kT = lmAt(T.x, T.z) || T.k, cross = lmBorneo(kP) !== lmBorneo(kT);
-  if (!cross && dir < 450) return null;
+  /* v18.15: jarak sederhana (bandar): hanya rel bandar (MRT, LRT, Monorel, Komuter, KLIA Ekspres) */
+  const urban = !cross && dir < 450;
+  if (urban && dir < 120) return null;
   let best = null;
   const near = (list, q) => { let b = null, bd = 1e9; list.forEach((x) => { const d = Math.hypot(x.x - q.x, x.z - q.z); if (d < bd) { bd = d; b = x; } }); return b; };
   for (const R of g.rails || []) {
-    if (!R.sS || R.st.length < 2) continue;
+    if (!R.sS || R.st.length < 2 || (urban && !R.L.metro && !R.L.tap)) continue;
     const a = near(R.st, P), b = near(R.st, T); if (!a || !b || a === b) continue;
     const cost = Math.hypot(a.x - P.x, a.z - P.z) + Math.hypot(b.x - T.x, b.z - T.z) + 0.12 * Math.abs(R.sS[a.i] - R.sS[b.i]);
-    if (!best || cost < best.cost) best = { m: R.L.road ? "bas" : "kereta", L: R.L, a: a, b: b, cost: cost };
+    if (!best || cost < best.cost) best = { m: R.L.road ? "bas" : R.L.metro ? "metro" : "kereta", L: R.L, a: a, b: b, cost: cost };
   }
   const aps = g.items.filter((x) => x.kind === "ap");
-  if (aps.length > 1) { const a = near(aps, P), b = near(aps, T); if (a && b && a !== b) { const cost = Math.hypot(a.x - P.x, a.z - P.z) + Math.hypot(b.x - T.x, b.z - T.z) + 160; if (!best || cost < best.cost || cross) { if (cross || !best || cost < best.cost) best = { m: "terbang", a: a, b: b, cost: cost }; } } }
+  if (aps.length > 1 && !urban) { const a = near(aps, P), b = near(aps, T); if (a && b && a !== b) { const cost = Math.hypot(a.x - P.x, a.z - P.z) + Math.hypot(b.x - T.x, b.z - T.z) + 160; if (!best || cost < best.cost || cross) { if (cross || !best || cost < best.cost) best = { m: "terbang", a: a, b: b, cost: cost }; } } }
   if (!best) return null;
   if (!cross && best.cost > dir * 0.75) return null;
   if (cross && best.m !== "terbang") { const a = near(aps, P), b = near(aps, T); if (a && b && a !== b) best = { m: "terbang", a: a, b: b, cost: 0 }; }
@@ -2335,29 +2518,29 @@ function lmGuideTick(g) {
     else {
       const R = lmGuideRoute(g, P, it);
       if (R) {
-        const da = Math.hypot(R.a.x - P.x, R.a.z - P.z), ic = R.m === "terbang" ? "✈" : R.m === "bas" ? "🚌" : "🚆";
+        const da = Math.hypot(R.a.x - P.x, R.a.z - P.z), ic = R.m === "terbang" ? "✈" : lmIc(R.L);
         const naik = R.m === "terbang" ? "Terbang dari " + R.a.n + " ke " + R.b.n : (R.m === "bas" ? "Naik bas " + R.L.n + " di " : "Naik " + R.L.n + " di ") + R.a.n + ", turun di " + R.b.nm;
-        route = ic + " Cadangan: " + naik + (da > 26 ? " (" + Math.max(1, Math.round(KM(da))) + " km ke sana)" : ". Tekan E untuk naik");
+        route = ic + " Cadangan: " + naik + (da > 26 ? " (" + Math.max(1, Math.round(lmKmAB(P.x, P.z, R.a.x, R.a.z))) + " km ke sana)" : ". Tekan E untuk naik");
         if (da > 26) tgt = { x: R.a.x, z: R.a.z, n: R.m === "terbang" ? R.a.n : R.a.n };
       }
     }
   }
   if (g.ak && !g.ak.done) extra.push("❗ " + g.ak.n + ": " + (g.ak.act || "ikut tanda kuning"));
-  if (lmEnergy() < 35) { let f = null, fd = 1e9; g.items.forEach((x) => { if (x.kind !== "fd") return; const d = Math.hypot(x.x - P.x, x.z - P.z); if (d < fd) { fd = d; f = x; } }); if (f) extra.push("🍛 Lapar: " + f.n + ", " + f.town + " (" + Math.max(1, Math.round(KM(fd))) + " km) atau kantin sekolah"); }
+  if (lmEnergy() < 35) { let f = null, fd = 1e9; g.items.forEach((x) => { if (x.kind !== "fd") return; const d = Math.hypot(x.x - P.x, x.z - P.z); if (d < fd) { fd = d; f = x; } }); if (f) extra.push("🍛 Lapar: " + f.n + ", " + f.town + " (" + Math.max(1, Math.round(lmKmAB(P.x, P.z, f.x, f.z))) + " km) atau kantin sekolah"); }
   /* tiang penunjuk automatik (tidak mengganggu destinasi yang dipilih sendiri) */
   if (g.guideAuto !== false && !g.flight && !g.sail && !g.ride) {
     if (tgt && Math.hypot(tgt.x - P.x, tgt.z - P.z) > 14) { if (!g.wp || g.wp.auto) { if (!g.wp || Math.hypot(g.wp.x - tgt.x, g.wp.z - tgt.z) > 1) { g.wp = { x: tgt.x, z: tgt.z, n: tgt.n, auto: true }; lmWpSet(); } } }
     else if (g.wp && g.wp.auto) { g.wp = null; lmWpSet(); }
   }
-  const aim = g.wp || tgt, dist = aim ? Math.hypot(aim.x - P.x, aim.z - P.z) : 0, gd = goal ? Math.hypot(goal.x - P.x, goal.z - P.z) : 0;
-  const key = head + main + sub + route + extra.join() + (goal ? Math.round(KM(gd)) : "") + (g.guideAuto === false);
+  const aim = g.wp || tgt, dist = aim ? Math.hypot(aim.x - P.x, aim.z - P.z) : 0, gdk = goal ? lmKmAB(P.x, P.z, goal.x, goal.z) : 0;
+  const key = head + main + sub + route + extra.join() + (goal ? Math.round(gdk) : "") + (g.guideAuto === false);
   if (box._k !== key) {
     box._k = key; box.textContent = "";
     const hd = el("div", { class: "gh" }, el("b", null, head), el("span", null, "🎓 " + J.d + "/" + J.t));
     const tg = el("button", { type: "button", class: "gt" }, g.guideAuto === false ? "Penunjuk: tutup" : "Penunjuk: auto");
     tg.addEventListener("click", (e) => { e.stopPropagation(); g.guideAuto = g.guideAuto === false; if (g.guideAuto === false && g.wp && g.wp.auto) { g.wp = null; lmWpSet(); } box._k = ""; lmGuideTick(g); });
     hd.appendChild(tg); box.appendChild(hd);
-    const row = el("div", { class: "gm" }); ui.gArrow = el("span", { class: "ga", "aria-hidden": "true" }, "➤"); row.append(ui.gArrow, el("b", null, main)); if (goal) row.append(el("span", null, " · " + Math.max(0, Math.round(KM(gd))) + " km")); box.appendChild(row);
+    const row = el("div", { class: "gm" }); ui.gArrow = el("span", { class: "ga", "aria-hidden": "true" }, "➤"); row.append(ui.gArrow, el("b", null, main)); if (goal) row.append(el("span", null, " · " + Math.max(0, Math.round(gdk)) + " km")); box.appendChild(row);
     if (sub) box.appendChild(el("div", { class: "gs" }, sub));
     if (route) box.appendChild(el("div", { class: "gr" }, route));
     extra.forEach((x) => box.appendChild(el("div", { class: "gx" }, x)));
@@ -3119,7 +3302,8 @@ const LCN = [
   ["akAll", "🌟", "Insan Berakhlak Mulia", "Selesaikan setiap jenis situasi akhlak", () => [Object.keys(LM.st.akT || {}).filter((k) => AKH.some((a) => a.id === k)).length, AKH.length]],
   ["fd1", "🍽", "Selera Tempatan", "Rasa satu masakan tradisi negeri", () => [Object.keys(LM.st.food || {}).length, 1]],
   ["fdAll", "🍛", "Duta Juadah Malaysia", "Rasa masakan tradisi setiap negeri", () => [FOOD.filter((f) => (LM.st.food || {})[f[0]]).length, FOOD.length]],
-  ["rail", "🚆", "Penumpang Kereta Api", "Naik ETS, ECRL atau kereta api lain", () => [LM.st.rt | 0, 1]],
+  ["rail", "🚆", "Penumpang Kereta Api", "Naik ETS, ECRL, KTM Komuter atau kereta api lain", () => [LM.st.rt | 0, 1]],
+  ["metro", "🚇", "Warga Kota", "Naik MRT, LRT atau Monorel", () => [LM.st.rm | 0, 1]],
   ["bus", "🚌", "Kembara Lebuh Raya", "Naik bas ekspres di lebuh raya", () => [LM.st.rb | 0, 1]],
   ["fly", "✈", "Juruterbang Muda", "Terbang dengan Gempur Air", () => [LM.st.fl | 0, 1]],
   ["ap5", "🛬", "Pelancong Udara", "Mendarat di 5 lapangan terbang", () => [Object.keys(LM.st.ap || {}).length, 5]],
@@ -3291,7 +3475,7 @@ function lmQuiz(opt) {
   /* v18.2: setiap kali kuiz selesai, avatar meraikan dahulu (cara keraian dipilih di Gudang) */
   const done = () => {
     const pass = z.ok >= opt.pass, fin = () => { if (LM.g) opt.onDone(pass, z.ok, z.qs.length); };
-    lmCardClose(); const d = lmRai(); if (d) setTimeout(fin, d * 1000 + 250); else fin();
+    lmCardClose(); const d = opt.noRai ? 0 : lmRai(); if (d) setTimeout(fin, d * 1000 + 250); else fin();
   };
   if (opt.intro) lmCard((b) => { opt.intro(b); b.appendChild(el("div", { class: "lm-row" }, lmBtn("Mula kuiz", "pri", show), lmBtn("Nanti dulu", "", lmCardClose))); });
   else show();
@@ -3657,7 +3841,7 @@ function lmBigMap() {
   const wrap = el("div", { class: "lm-big" }), m = lmMapBase(1240, 500), cv = el("canvas", { width: 1240, height: 500, "aria-label": "Peta Malaysia" });
   const box = el("div", { style: "display:grid;gap:10px;justify-items:center;padding:12px" });
   const dot = (c, t, sh) => el("span", null, el("i", { style: "background:" + c + (sh ? ";border-radius:2px" : "") }), t);
-  const leg = el("div", { class: "lm-leg" }, el("span", null, "▲ Anda"), dot("#4dff9a", LM.roomKind === "open" ? "Rakan sekolah" : "Rakan"), LM.roomKind === "open" ? dot("#ff7ad9", "Pemain lain") : null, dot("#7fe3ff", "Menara", 1), el("span", null, "🎓 IPTA"), el("span", null, "🍽 Kedai makan"), dot("#1f4fa8", "ETS"), dot("#0e8a6a", "ECRL"), dot("#f28c28", "PLUS"), dot("#d64f8a", "LPT"), dot("#7a5cd6", "Pan Borneo"), dot("#ffd45a", "Ditawan / diziarahi"), dot("#ffffff", "Tempat menarik"));
+  const leg = el("div", { class: "lm-leg" }, el("span", null, "▲ Anda"), dot("#4dff9a", LM.roomKind === "open" ? "Rakan sekolah" : "Rakan"), LM.roomKind === "open" ? dot("#ff7ad9", "Pemain lain") : null, dot("#7fe3ff", "Menara", 1), el("span", null, "🎓 IPTA"), el("span", null, "🍽 Kedai makan"), dot("#1f4fa8", "ETS"), dot("#0e8a6a", "ECRL"), dot("#f28c28", "PLUS"), dot("#d64f8a", "LPT"), dot("#7a5cd6", "Pan Borneo"), dot("#1d5fbf", "KTM Komuter"), dot("#e0245e", "LRT"), dot("#0f8a3d", "MRT"), dot("#7cc242", "Monorel"), dot("#ffd45a", "Ditawan / diziarahi"), dot("#ffffff", "Tempat menarik"));
   const list = el("div", { class: "lm-who" });
   box.append(el("div", { class: "lm-kick" }, "Peta · ketik tempat atau rakan untuk tetapkan destinasi"), cv, leg, list, el("div", { class: "lm-row" }, lmBtn("Buang destinasi", "", () => { g.wp = null; lmWpSet(); lmMapDraw(cv, m, true); }), lmBtn("Tutup peta", "pri", lmBigMap)));
   wrap.appendChild(box); LM.root.appendChild(wrap); LM.ui.big = wrap;
@@ -3774,7 +3958,7 @@ function lmHud() {
 }
 function lmHudTick(g) {
   const ui = LM.ui, k = lmAt(g.p.x, g.p.z), s = lmSummary();
-  const nm = g.flight && g.flight.ph === "air" ? "Di udara ✈ " + (k ? lmPlaceShort(k) : "Laut China Selatan") : g.sail ? "⛴ Di laut" : g.ride ? (g.ride.R.L.road ? "🚌 " : "🚆 ") + g.ride.R.L.n + " ke " + g.ride.b.nm : g.p.swim ? "🏊 Berenang" : lmPlaceName(k);
+  const nm = g.flight && g.flight.ph === "air" ? "Di udara ✈ " + (k ? lmPlaceShort(k) : "Laut China Selatan") : g.sail ? "⛴ Di laut" : g.ride ? lmIc(g.ride.R.L) + " " + g.ride.R.L.n + " ke " + g.ride.b.nm : g.p.swim ? "🏊 Berenang" : lmPlaceName(k);
   if (ui.state.textContent !== nm) { ui.state.textContent = nm; if ((DATA.negeri[k] || ISL_BY[k]) && g.lastK && g.lastK !== k) lmPop(lmPlaceShort(k)); }
   if (DATA.negeri[k] || ISL_BY[k]) g.lastK = k;
   ui.coin.innerHTML = ""; ui.coin.append("🪙 ", el("b", null, String(P.coin | 0)));
@@ -3798,7 +3982,7 @@ function lmHudTick(g) {
   ui.peers.textContent = op ? (LM.room ? "🌏 " + (np + 1) + " · " + (ZONES[LM.zone] || "") : LM.openFull ? "🌏 Penuh · main solo" : "🌏 Menyambung...") : "👥 " + (np + 1) + (LM.roomKind === "sekolah" ? " · sekolah" : LM.roomCode ? " · " + LM.roomCode : "");
   ui.chat.hidden = !LM.room; if (!ui.vcB.hidden !== lmVoiceOk()) lmVoiceUi();
   if (g.wp && g.wp.pid) { const e = LM.peers[g.wp.pid]; if (!e) { g.wp = null; lmWpSet(); lmPop("Rakan sudah keluar"); } else { g.wp.x = e.x; g.wp.z = e.z; lmWpSet(); } }
-  if (g.wp) { ui.wp.hidden = false; const d = Math.round(Math.hypot(g.wp.x - g.p.x, g.wp.z - g.p.z)), km = KM(d); ui.wp.textContent = "📍 " + g.wp.n + " · " + (km < 1 ? Math.round(km * 1000) + " m" : Math.round(km) + " km"); if (d < 12) { g.wp = null; lmWpSet(); } }
+  if (g.wp) { ui.wp.hidden = false; const km = lmKmAB(g.p.x, g.p.z, g.wp.x, g.wp.z); ui.wp.textContent = "📍 " + g.wp.n + " · " + (km < 1 ? Math.round(km * 1000) + " m" : Math.round(km) + " km"); if (d < 12) { g.wp = null; lmWpSet(); } }
   else ui.wp.hidden = true;
 }
 /* ---------- interaksi ---------- */
@@ -3812,7 +3996,7 @@ function lmNearTick(g) {
   if (!best || g.ui) { pr.hidden = true; return; }
   const key = TOUCH ? "" : "E: ";
   const txt = best.kind === "tw" ? key + "Menara Ilmu " + (best.t.kod || best.t.id) + (best.done ? " ✔" : "") : best.kind === "pl" ? key + "Ziarah " + best.n + (LM.st.pl[best.id] ? " ✔" : "")
-    : best.kind === "st" ? key + (best.line.L.road ? "Naik bas ekspres " + best.line.L.n : "Naik " + best.line.L.n) + " · " + best.n
+    : best.kind === "st" ? key + (best.hub && best.hub.lines.length > 1 ? "🔀 " + best.n + " · " + [...new Set(best.hub.lines.map((q) => q.line.L.n))].join(", ") : best.line.L.road ? "Naik bas ekspres " + best.line.L.n + " · " + best.n : "Naik " + best.line.L.n + " · " + best.n)
     : best.kind === "ip" ? key + best.sn + " · " + (best.t ? (best.t.kod || best.t.id) + " " + best.t.nama : "Pusat Ulangkaji") + (best.done ? " ✔" : "")
     : best.kind === "sk" ? key + "Sekolah anda: " + best.n
     : best.kind === "fd" ? key + "Kedai makan: " + best.n
@@ -4067,5 +4251,5 @@ function lmClose() {
 }
 /* untuk ujian automatik */
 LM._g = (x, z) => lmGround(x, z); LM._fly = (a, d) => lmFlyStart(a, d); LM._ride = (a, b) => lmRide(a, b); LM._rai = () => lmRai(); LM._swim = (x, z) => lmSwimOk(x, z);
-LM._t = { lmStnFetch: lmStnFetch, lmStnOpen: lmStnOpen, lmCertCanvas: lmCertCanvas, lmLcCheck: lmLcCheck, LCN: LCN, lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
+LM._t = { lmRailOpen: lmRailOpen, lmRide: lmRide, lmStnFetch: lmStnFetch, lmStnOpen: lmStnOpen, lmCertCanvas: lmCertCanvas, lmLcCheck: lmLcCheck, LCN: LCN, lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
 })();

@@ -1,4 +1,4 @@
-const V="gt-v18-14";
+const V="gt-v18-15";
 const SHELL=["./","./index.html","./app.js","./app.css","./mod/prak.js","./mod/slaid.js","./mod/selam.js","./manifest.json","./icon-192.png","./icon-512.png","./three.min.js","./dunia.js","./avatar3d.js","./meta-geo.json","./meta-dem.bin","./meta-sekolah.json",
   "./soalan.json","./soalan_pi.json","./soalan_ba.json","./soalan_p3.json","./soalan_sj.json","./soalan_sc.json","./soalan_mt.json","./soalan_bm.json","./soalan_bi.json",
   "./img/lg-pg.jpg","./img/lg-pb.jpg","./img/lg-ps.jpg","./img/lg-pk.jpg","./img/lg-pd.jpg"];
