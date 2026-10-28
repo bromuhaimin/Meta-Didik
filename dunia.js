@@ -250,6 +250,7 @@ function lmAudCtx() {
   if (LAUD.ac) { if (LAUD.ac.state === "suspended") LAUD.ac.resume().catch(() => {}); return LAUD.ac; }
   const C = window.AudioContext || window.webkitAudioContext; if (!C) return null;
   try { LAUD.ac = (typeof AR !== "undefined" && AR.ctx) || new C(); } catch (e) { return null; }
+  if (typeof AR !== "undefined" && !AR.ctx) AR.ctx = LAUD.ac; /* satu konteks dikongsi: bunyi lama (arBeep) turut dibuka kuncinya */
   const ac = LAUD.ac, comp = ac.createDynamicsCompressor(); LAUD.m = ac.createGain(); LAUD.m.gain.value = 0; LAUD.m.connect(comp); comp.connect(ac.destination);
   /* hingar putih, merah jambu dan perang (4 s, berulang) */
   const mk = (f) => { const n = ac.sampleRate * 4, b = ac.createBuffer(1, n, ac.sampleRate), d = b.getChannelData(0); f(d); return b; };
@@ -261,7 +262,7 @@ function lmAudCtx() {
   const loop = (buf, chain) => { const s = ac.createBufferSource(); s.buffer = buf; s.loop = true; s.loopStart = Math.random(); let n = s; chain.forEach((x) => { n.connect(x); n = x; }); const g = ac.createGain(); g.gain.value = 0; n.connect(g); g.connect(LAUD.m); s.start(0, Math.random() * 3); return { g: g, f: chain[0] }; };
   const F = (type, f, q) => { const x = ac.createBiquadFilter(); x.type = type; x.frequency.value = f; if (q) x.Q.value = q; return x; };
   LAUD.L = {
-    wind: loop(LAUD.nb.b, [F("lowpass", 420, 0.6)]),
+    wind: loop(LAUD.nb.b, [F("lowpass", 650, 0.6)]),
     wave: loop(LAUD.nb.p, [F("lowpass", 900, 0.5), F("highpass", 80)]),
     rain: loop(LAUD.nb.w, [F("highpass", 1400), F("lowpass", 8500)]),
     traf: loop(LAUD.nb.b, [F("lowpass", 260, 0.8)]),
@@ -295,7 +296,7 @@ function lmAudTone(f, f2, vol, dur, when, type, pan) {
 /* bunyi peristiwa */
 function lmAudFx(k, a) {
   if (LM.mute || !lmAudCtx()) return;
-  if (k === "step") { const hard = a === "keras"; lmAudHit("w", hard ? "bandpass" : "lowpass", hard ? 1900 : 650, hard ? 1.3 : 0.7, hard ? 0.32 : 0.42, 0.004, hard ? 0.07 : 0.11); if (!hard) lmAudHit("p", "highpass", 2600, 0.5, 0.06, 0.01, 0.09, 0.02); }
+  if (k === "step") { const hard = a === "keras"; lmAudHit("w", hard ? "bandpass" : "lowpass", hard ? 1900 : 950, hard ? 1.3 : 0.7, hard ? 0.45 : 0.6, 0.004, hard ? 0.07 : 0.11); /* julat frekuensi yang jelas pada pembesar suara telefon */ if (!hard) lmAudHit("p", "highpass", 2600, 0.5, 0.06, 0.01, 0.09, 0.02); }
   else if (k === "swim") { lmAudHit("w", "bandpass", 700, 0.7, 0.35, 0.06, 0.35, 0, 1600); lmAudHit("p", "highpass", 3000, 0.6, 0.08, 0.05, 0.3, 0.08); }
   else if (k === "jump") lmAudHit("p", "bandpass", 380, 1.2, 0.22, 0.03, 0.22, 0, 1500);
   else if (k === "land") { lmAudHit("b", "lowpass", 160, 0.8, 0.9, 0.005, 0.18); lmAudHit("w", "lowpass", 900, 0.8, 0.25, 0.003, 0.06); }
@@ -319,7 +320,7 @@ function lmAudTick(g, dt) {
   if (LM.mute) { if (LAUD.m && LAUD.on !== false) { LAUD.m.gain.setTargetAtTime(0, LAUD.ac.currentTime, 0.1); LAUD.on = false; } return; }
   if (!lmAudCtx()) return;
   const vol = (typeof SET !== "undefined" && SET.sfx != null ? SET.sfx : 0.8);
-  if (LAUD.on !== true || LAUD.vol !== vol) { LAUD.m.gain.setTargetAtTime(vol * 0.9, LAUD.ac.currentTime, 0.4); LAUD.on = true; LAUD.vol = vol; }
+  if (LAUD.on !== true || LAUD.vol !== vol) { LAUD.m.gain.setTargetAtTime(vol * 1.1, LAUD.ac.currentTime, 0.4); LAUD.on = true; LAUD.vol = vol; }
   const p = g.p, free = !g.flight && !g.sail && !g.ride && !LM.pause, sp = Math.hypot(p.vx, p.vz);
   /* tapak kaki dan renang */
   if (free && p.moving && p.on && !p.swim) { LAUD.step -= dt * sp; if (LAUD.step <= 0) { LAUD.step = 10.5; lmAudFx("step", lmAt(p.x, p.z) === "jambatan" || (g.pads || []).some((q) => Math.hypot(q.x - p.x, q.z - p.z) < q.r) ? "keras" : "rumput"); } }
@@ -348,6 +349,22 @@ function lmAudTick(g, dt) {
   if (wild && day && (LAUD.bird -= 0.2) <= 0) { LAUD.bird = 1.5 + Math.random() * 4.5; lmAudFx("bird"); }
   const ck = wild && !day ? 0.05 : 0; lmAudSet("crk", ck, 1.5);
   if (ck && (LAUD.crick -= 0.2) <= 0) { LAUD.crick = 0.4 + Math.random() * 0.5; const t = LAUD.ac.currentTime, b = LAUD.L.crk.burst.gain; LAUD.L.crk.car.frequency.setValueAtTime(4300 + Math.random() * 600, t); b.setValueAtTime(0, t); b.linearRampToValueAtTime(1, t + 0.02); b.setValueAtTime(1, t + 0.18); b.linearRampToValueAtTime(0, t + 0.22); }
+}
+/* telefon: AudioContext mesti dimulakan/disambung semula dalam sentuhan pengguna. iOS juga membisukan
+   Web Audio apabila suis senyap dihidupkan; elemen <audio> senyap yang berulang menukar sesi kepada "playback". */
+function lmAudUnlock() {
+  const ac = lmAudCtx(); if (!ac) return;
+  if (ac.state !== "running") ac.resume().catch(() => {});
+  if (LAUD.unl) { if (LAUD.sil && LAUD.sil.paused) LAUD.sil.play().catch(() => {}); return; }
+  LAUD.unl = 1;
+  try { const b = ac.createBuffer(1, 1, 22050), s = ac.createBufferSource(); s.buffer = b; s.connect(ac.destination); s.start(0); } catch (e) { /* abaikan */ }
+  try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) { /* abaikan */ }
+  try {
+    const n = 4000, buf = new ArrayBuffer(44 + n), v = new DataView(buf), w = (o, t) => { for (let i = 0; i < t.length; i++) v.setUint8(o + i, t.charCodeAt(i)); };
+    w(0, "RIFF"); v.setUint32(4, 36 + n, true); w(8, "WAVEfmt "); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, 8000, true); v.setUint32(28, 8000, true); v.setUint16(32, 1, true); v.setUint16(34, 8, true); w(36, "data"); v.setUint32(40, n, true);
+    for (let i = 0; i < n; i++) v.setUint8(44 + i, 128);
+    const a = new Audio(URL.createObjectURL(new Blob([buf], { type: "audio/wav" }))); a.loop = true; a.setAttribute("playsinline", ""); a.play().catch(() => {}); LAUD.sil = a;
+  } catch (e) { /* abaikan */ }
 }
 function lmAudStop() { if (LAUD.m && LAUD.ac) { LAUD.m.gain.setTargetAtTime(0, LAUD.ac.currentTime, 0.2); LAUD.on = false; } }
 function lmTex(w, h, draw) {
@@ -3581,7 +3598,11 @@ const LM_CSS = `
 function lmRoot() {
   if (!document.getElementById("lmCss")) { const s = document.createElement("style"); s.id = "lmCss"; s.textContent = LM_CSS; document.head.appendChild(s); }
   let r = document.getElementById("lmOv");
-  if (!r) { r = el("div", { id: "lmOv", role: "dialog", "aria-modal": "true", "aria-label": "META DIDIK" }); document.body.appendChild(r); }
+  if (!r) {
+    r = el("div", { id: "lmOv", role: "dialog", "aria-modal": "true", "aria-label": "META DIDIK" }); document.body.appendChild(r);
+    const un = () => { if (!LM.mute && (!LAUD.ac || LAUD.ac.state !== "running" || !LAUD.unl)) lmAudUnlock(); };
+    ["touchend", "pointerdown", "keydown"].forEach((k) => r.addEventListener(k, un, { capture: true, passive: true }));
+  }
   r.textContent = ""; r.hidden = false; r.classList.toggle("touch", !!TOUCH);
   LM.root = r; return r;
 }
@@ -4525,7 +4546,7 @@ function lmHud() {
     lmPop(n === "siang" ? "☀️ Suasana siang" : n === "malam" ? "🌙 Suasana malam" : "🕒 Suasana ikut masa sebenar (1 minit = 1 jam)");
   });
   top.append(ui.smB, lmBtn("Pasport (P)", "", () => lmPassport()), lmBtn("Tajuk (T)", "", () => lmPassport("tajuk")), ui.skyB, lmBtn("Bilik", "", lmRoomPanel), lmBtn("Swafoto", "", () => lmSelfie(null)),
-    ui.snd = lmBtn(LM.mute ? "Bunyi: tutup" : "Bunyi: buka", "", () => { LM.mute = !LM.mute; ui.snd.textContent = LM.mute ? "Bunyi: tutup" : "Bunyi: buka"; }),
+    ui.snd = lmBtn(LM.mute ? "Bunyi: tutup" : "Bunyi: buka", "", () => { LM.mute = !LM.mute; if (!LM.mute) lmAudUnlock(); ui.snd.textContent = LM.mute ? "Bunyi: tutup" : "Bunyi: buka"; }),
     lmBtn("Keluar", "", () => { if (confirm("Keluar dari META DIDIK? Cop pasport dan menara yang ditawan sudah disimpan.")) lmClose(); }));
   ui.vcB = lmBtn("🎙 Suara: tutup", "", () => { if (LM.vc) lmVoiceOff(); else lmVoiceOn(); }); ui.vcB.hidden = true; top.insertBefore(ui.vcB, top.children[4]);
   r.appendChild(top);
@@ -4829,6 +4850,7 @@ function lmOpen(tid) {
   lmGeoLoad().then(() => lmOwnSchool()).then((sk) => { LM.ownSk = sk; lmRaster(); if (LM.resume) lmStart("", ""); else lmSetup(); }).catch(() => { toast("Peta META DIDIK tidak dapat dimuatkan. Semak sambungan internet dan cuba lagi.", "warn"); lmClose(); });
 }
 function lmStart(code, kind) {
+  lmAudUnlock(); /* dalam klik pengguna: buka kunci audio telefon */
   const r = LM.root; LM.ptsLast = null; LM.roomKind = kind || ""; LM.sh = lmMySh(); LM.zoneN = null; LM.zoneAt = 0; LM.roomCode = ""; LM.openFull = false; LM.openRetry = 0; LM.zone = "";
   lmCardClose(); r.textContent = "";
   const ld = el("div", { class: "lm-card" }, el("div", { class: "lm-box" }, el("div", { class: "lm-kick" }, "META DIDIK"), el("h2", null, "Membina peta Malaysia..."), el("p", null, "Menyusun negeri, menara ilmu dan tempat pelancongan.")));
@@ -4848,7 +4870,7 @@ function lmStart(code, kind) {
 function lmClose() {
   { const b = document.getElementById("lmGdBack"); if (b) b.remove(); } LM.pause = false;
   if (LM.ui.big && LM.ui.big._off) { LM.ui.big._off(); LM.ui.big = null; }
-  LM.on = false; cancelAnimationFrame(LM.raf); lmAudStop(); lmoStop(); lmNetLeave(); lmEngine(0); LM.roomKind = "";
+  LM.on = false; cancelAnimationFrame(LM.raf); lmAudStop(); if (LAUD.sil) LAUD.sil.pause(); lmoStop(); lmNetLeave(); lmEngine(0); LM.roomKind = "";
   window.removeEventListener("keydown", lmKey, true); window.removeEventListener("keyup", lmKey, true); window.removeEventListener("resize", lmResize);
   const g = LM.g;
   if (g) {
