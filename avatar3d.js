@@ -273,6 +273,17 @@ const RAI = {
     return mixP(land, POSE0, ez((t - 2.5) / 0.4));
   } }
 };
+/* v18.19: pose ibadah untuk simulasi (doa, takbir, qiyam, rukuk, sujud, duduk, salam); kekal sehingga ditukar */
+const IBADAH = {
+  doa: { ax: -1.05, bx: -1.05, az: 0.32, bz: -0.32 },
+  takbir: { ax: -2.15, bx: -2.15, az: -0.22, bz: 0.22 }, /* lengan lurus tanpa siku: tangan di sisi kepala */
+  qiyam: { ax: -1.05, bx: -1.05, az: 0.78, bz: -0.78 },
+  rukuk: { th: 1.42, hip: 2.3, zo: 0, lx: 0, rx: 0, ax: -1.25, bx: -1.25, az: 0.08, bz: -0.08 },
+  sujud: { th: 1.45, hip: 1.05, zo: -0.7, lx: 1.15, rx: 1.15, ax: -2.05, bx: -2.05, az: 0.12, bz: -0.12 },
+  duduk: { th: 0.05, hip: 1.05, zo: -0.5, lx: 1.5, rx: 1.5, ax: -0.75, bx: -0.75, az: -0.1, bz: 0.1 },
+  salam: { th: 0.05, hip: 1.05, zo: -0.5, lx: 1.5, rx: 1.5, ax: -0.75, bx: -0.75, az: -0.1, bz: 0.1 }
+};
+function pose(av, k) { if (!av) return; av.hold = k && IBADAH[k] ? Object.assign({}, POSE0, IBADAH[k]) : null; if (k === "salam") av.head.rotation.y = Math.sin(av.t * 0.8) * 0.9; }
 function rai(av, k) { if (!av || !RAI[k]) return 0; av.rai = { k: k, t: 0 }; return RAI[k].d; }
 function swimPose(av) {
   const t = av.t;
@@ -296,6 +307,7 @@ function poseTick(av, dt) {
   let p = null;
   if (av.rai) { const R = RAI[av.rai.k]; av.rai.t += dt; if (!R || av.rai.t >= R.d) av.rai = null; else p = R.f(av.rai.t); }
   if (!p && av.swim) p = swimPose(av);
+  if (!p && av.hold) p = av.hold;
   if (p) poseApply(av, p);
   else if (av._pz) { av._pz = false; av.body.rotation.set(0, 0, 0); av.body.position.z = 0; av.lL.rotation.z = av.lR.rotation.z = 0; av.aL.rotation.z = av.aR.rotation.z = 0; }
 }
@@ -332,5 +344,5 @@ function pvLoop(ts) {
 }
 /* mainkan keraian pada avatar pratonton Gudang */
 function previewRai(k) { if (!PV.av) return 0; const d = rai(PV.av, k); if (d) { PV.yaw = 0; PV.hold = d + 1; } return d; }
-window.AV3 = { build: build, anim: anim, code: code, parse: parse, preview: preview, dispose: dispose, rai: rai, previewRai: previewRai, RAI: Object.keys(RAI) };
+window.AV3 = { pose: pose, build: build, anim: anim, code: code, parse: parse, preview: preview, dispose: dispose, rai: rai, previewRai: previewRai, RAI: Object.keys(RAI) };
 })();

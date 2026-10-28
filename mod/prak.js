@@ -280,12 +280,18 @@ function hjOpen(k, opt) {
 }
 function hjClose() {
   const only = HJ.only; HJ.only = null; if (only && only.done && !only.fired) { only.fired = true; setTimeout(() => only.done(0, 0, false), 0); }
-  HJ.open = false; cancelAnimationFrame(HJ.raf); HJ.raf = 0; HJ.g = null; window.removeEventListener("keydown", hjKey, true); window.removeEventListener("keyup", hjKey, true);
+  HJ.open = false; cancelAnimationFrame(HJ.raf); hj3Close(); HJ.raf = 0; HJ.g = null; window.removeEventListener("keydown", hjKey, true); window.removeEventListener("keyup", hjKey, true);
   try { if (document.fullscreenElement) document.exitFullscreen(); } catch (e) { /* abaikan */ }
   if (HJ.root) { HJ.root.remove(); HJ.root = null; } HJ.cv = null; HJ.ui = {}; document.body.classList.remove("ar-lock"); if (typeof renderPrak === "function") renderPrak();
 }
 function hjMenu() {
-  cancelAnimationFrame(HJ.raf); HJ.raf = 0; HJ.g = null; const r = hjRoot(); r.textContent = ""; const cl = el("button", { type: "button", class: "hj-x" }, "Tutup"); cl.addEventListener("click", hjClose);
+  cancelAnimationFrame(HJ.raf); HJ.raf = 0; HJ.g = null; hj3Close();
+  setTimeout(() => { /* v18.19: pilihan enjin grafik */
+    const m = HJ.root && HJ.root.querySelector(".hj-menu"), go = m && m.querySelector(".hj-go"); if (!go || m.querySelector(".hj-r3") || !window.THREE) return;
+    let v = "1"; try { v = localStorage.getItem("gt-hj-r3") === "0" ? "0" : "1"; } catch (e) { /* abaikan */ }
+    const sg = segBtns([["1", "3D baharu"], ["0", "Klasik (peranti lemah)"]], v, (x) => { try { localStorage.setItem("gt-hj-r3", x); } catch (e) { /* abaikan */ } [].forEach.call(sg.children, (b, i) => b.setAttribute("aria-pressed", String(["1", "0"][i] === x))); }, "Enjin grafik");
+    sg.classList.add("hj-r3"); m.insertBefore(el("label", { class: "hj-lb" }, "Grafik"), go); m.insertBefore(sg, go);
+  }, 0); const r = hjRoot(); r.textContent = ""; const cl = el("button", { type: "button", class: "hj-x" }, "Tutup"); cl.addEventListener("click", hjClose);
   const mark = (seg, vals, cur) => [].forEach.call(seg.children, (b, i) => b.setAttribute("aria-pressed", String(vals[i] === cur))); let sexB = null, skB = null;
   sexB = segBtns([["m", "Lelaki"], ["f", "Perempuan"]], HJ.sex, (v) => { HJ.sex = v; mark(sexB, ["m", "f"], v); }, "Jantina jemaah"); skB = segBtns([[0, "Cerah"], [1, "Sawo matang"], [2, "Sederhana"], [3, "Gelap"]], HJ.skin, (v) => { HJ.skin = +v; mark(skB, [0, 1, 2, 3], +v); }, "Warna kulit");
   const go = el("button", { type: "button", class: "hj-go" }, HJ.only ? "Mula: " + ((hjSt().find((S) => S.id === HJ.only.stage) || {}).n || "peringkat") : HJ.mode.go); go.addEventListener("click", () => hjStart());
@@ -301,7 +307,10 @@ function hjKey(e) {
   if (dn && !e.repeat && (k === "e" || k === "enter" || k === " ")) { e.preventDefault(); e.stopPropagation(); hjAct(); }
 }
 function hjStart() {
-  const r = hjRoot(); r.textContent = ""; const cv = el("canvas", { class: "hj-cv" }); HJ.cv = cv; HJ.cx = cv.getContext("2d"); HJ.ui = {};
+  try { HJ.r3 = localStorage.getItem("gt-hj-r3") !== "0"; } catch (e) { HJ.r3 = true; }
+  if (HJ.r3 && window.THREE && !window.AV3 && typeof av3Load === "function" && !HJ.av3Try) { HJ.av3Try = true; av3Load(() => hjStart()); return; }
+  const r = hjRoot(); r.textContent = ""; hj3Close(); const cv = el("canvas", { class: "hj-cv" }); HJ.cv = cv; HJ.cx = cv.getContext("2d"); HJ.ui = {};
+  if (HJ.r3 && hj3Ok()) { const c3 = el("canvas", { class: "hj-cv" }); r.appendChild(c3); if (!hj3Init(c3)) { c3.remove(); HJ.r3 = false; } } else HJ.r3 = false;
   const u = HJ.ui; u.hud = el("div", { class: "hj-hud" }); u.obj = el("div", { class: "hj-obj" }); u.toast = el("div", { class: "hj-toast", "aria-live": "polite" }); u.pan = el("div", { class: "hj-pan", hidden: "" });
   u.act = el("button", { type: "button", class: "hj-act", hidden: "" }); u.act.addEventListener("click", hjAct); const ex = el("button", { type: "button", class: "hj-x" }, "Keluar"); ex.addEventListener("click", () => hjMenu());
   r.append(cv, u.hud, u.obj, u.toast, u.act, ex, u.pan); hjPtr(cv);
@@ -309,7 +318,7 @@ function hjStart() {
   { let i0 = 0; if (HJ.only) { i0 = hjSt().findIndex((S) => S.id === HJ.only.stage); if (i0 < 0) i0 = 0; } hjLoadStage(i0); } hjFit(); window.addEventListener("resize", hjFit);
   HJ.last = performance.now(); HJ.raf = requestAnimationFrame(hjLoop);
 }
-function hjFit() { const cv = HJ.cv; if (!cv) return; const d = Math.min(2, window.devicePixelRatio || 1), W = Math.max(320, window.innerWidth), H = Math.max(280, window.innerHeight); HJ.dpr = d; HJ.W = W; HJ.H = H; cv.width = Math.round(W * d); cv.height = Math.round(H * d); cv.style.width = W + "px"; cv.style.height = H + "px"; }
+function hjFit() { const cv = HJ.cv; if (!cv) return; const d = Math.min(2, window.devicePixelRatio || 1), W = Math.max(320, window.innerWidth), H = Math.max(280, window.innerHeight); HJ.dpr = d; HJ.W = W; HJ.H = H; cv.width = Math.round(W * d); cv.height = Math.round(H * d); cv.style.width = W + "px"; cv.style.height = H + "px"; hj3Fit(W, H); }
 function hjPtr(cv) {
   HJ.js = { on: false, id: -1, cx: 0, cy: 0, x: 0, y: 0 }; HJ.cd = { id: -1, x: 0, y: 0 };
   cv.addEventListener("pointerdown", (e) => { const g = HJ.g; if (!g || g.modal) return; try { cv.setPointerCapture(e.pointerId); } catch (x) { /* abaikan */ } if (e.pointerType !== "mouse" && e.clientX < HJ.W * 0.42 && e.clientY > HJ.H * 0.3 && !HJ.js.on) { HJ.js.on = true; HJ.js.id = e.pointerId; HJ.js.cx = e.clientX; HJ.js.cy = e.clientY; HJ.js.x = HJ.js.y = 0; } else if (HJ.cd.id < 0) { HJ.cd.id = e.pointerId; HJ.cd.x = e.clientX; HJ.cd.y = e.clientY; } });
@@ -321,7 +330,7 @@ function hjLoadStage(i) {
   const g = HJ.g, S = hjSt()[i]; g.st = i; g.W = HJ.mode.build(S.id); g.so = 0; g.sn = 0; g.lock = false; g.mk = []; g.pts = []; g.look = HJ.mode.look(i); g.o = {}; g.bonus = null;
   dwApplyTheme(S.th); const sp = HJ.mode.spawn(S.id); g.p = { x: sp[0], z: sp[1], yaw: sp[2], vx: 0, vz: 0, mv: 0 }; g.cam = { yaw: sp[2], pitch: 0.34, dist: 8, tx: sp[0], ty: 1.3, tz: sp[1] };
   g.W.npcs.forEach((n) => { if (n.k === "orbit") { n.x = Math.cos(n.a) * n.r; n.z = Math.sin(n.a) * n.r; } });
-  HJ.mode.setup(S.id); hjHud(); hjIntro(S);
+  HJ.mode.setup(S.id); if (HJ.r3) hj3Stage(g); hjHud(); hjIntro(S);
 }
 const HJ_JM = [{ n: "Jamrah Ula", x: -16 }, { n: "Jamrah Wusta", x: 0 }, { n: "Jamrah Aqabah", x: 16 }];
 function hjSpawn(id) { return { miqat: [0, -4, 0], tawaf: [16, -5, 0], saie: [0, 2, 0], arafah: [0, -8, 0], muzdalifah: [0, -6, 0], mina: [0, -6, 0] }[id]; }
@@ -442,6 +451,7 @@ function hjLoop(ts) {
   HJ.raf = requestAnimationFrame(hjLoop);
 }
 function hjDraw(g) {
+  if (HJ.r3 && HJ3.r) { hj3Draw(g); return hjOverlay(); }
   const c = HJ.cx, W = HJ.W, H = HJ.H, d = HJ.dpr, S = hjSt()[g.st], th = S.th, C0 = g.cam, Wd = g.W, p = g.p; c.setTransform(d, 0, 0, d, 0, 0); DW_TOON = !!(HJ.mode && HJ.mode.toon && HJ.toon);
   const cam = dwCam(C0.tx, C0.ty, C0.tz, C0.yaw, C0.pitch, C0.dist, W, H, 1.2), F = cam.F, hz = clamp(H / 2 - Math.tan(C0.pitch) * F, -H, H * 1.2);
   c.fillStyle = "rgb(" + Math.round(DW_FOG[0] * 255) + "," + Math.round(DW_FOG[1] * 255) + "," + Math.round(DW_FOG[2] * 255) + ")"; c.fillRect(0, Math.max(0, hz), W, H);
@@ -464,6 +474,107 @@ function hjDraw(g) {
   if (js && js.on) { c.globalAlpha = 0.5; c.strokeStyle = "#fff"; c.lineWidth = 3; c.beginPath(); c.arc(js.cx, js.cy, 56, 0, 7); c.stroke(); c.fillStyle = "#fff"; c.beginPath(); c.arc(js.cx + js.x * 40, js.cy - js.y * 40, 24, 0, 7); c.fill(); c.globalAlpha = 1; }
 }
 
+/* ---------- v18.19: pemapar Three.js untuk simulasi (menggantikan pelukis kanvas 2.5D) ----------
+   Logik simulasi (peringkat, penanda, kuiz, pergerakan) tidak berubah. Dunia W (W.stat: muka segi empat) ditukar
+   kepada satu jejaring berwarna; jemaah menggunakan avatar AV3 dengan pose ibadah. Koordinat enjin lama dicerminkan
+   (paksi x) berbanding Three.js, jadi dunia diletakkan dalam kumpulan root dengan skala x = -1 (Three.js menukar
+   arah muka secara automatik), manakala label sprite diletakkan di luar root pada x songsang. */
+const HJ3 = { r: null, scene: null, root: null, cam: null, sun: null, hemi: null, av: new Map(), lab: new Map(), mk: new Map(), dyn: new Map(), rocks: [], pts: null, me: null, meLb: null, ball: null };
+const HJ3_S = 0.43; /* skala avatar AV3 (tinggi ~4.6) kepada jemaah enjin simulasi (~2.0) */
+function hj3Ok() { return !!(window.THREE && window.AV3); }
+function hj3Init(cv) {
+  const T = window.THREE; try { HJ3.r = new T.WebGLRenderer({ canvas: cv, antialias: true }); } catch (e) { HJ3.r = null; return false; }
+  HJ3.r.setPixelRatio(Math.min(2, window.devicePixelRatio || 1)); HJ3.r.shadowMap.enabled = true; HJ3.r.shadowMap.type = T.PCFSoftShadowMap;
+  HJ3.cam = new T.PerspectiveCamera(58, 1, 0.1, 600); return true;
+}
+function hj3Free() {
+  if (!HJ3.scene) return;
+  HJ3.scene.traverse((o) => { if (o.isMesh && o.userData.own) { o.geometry.dispose(); if (o.material.map) o.material.map.dispose(); o.material.dispose(); } if (o.isSprite) { o.material.map.dispose(); o.material.dispose(); } });
+  HJ3.scene = null; HJ3.av.clear(); HJ3.lab.clear(); HJ3.mk.clear(); HJ3.dyn.clear(); HJ3.rocks = []; HJ3.me = null;
+}
+function hj3Close() { hj3Free(); if (HJ3.r) { try { HJ3.r.dispose(); if (HJ3.r.forceContextLoss) HJ3.r.forceContextLoss(); } catch (e) { /* abaikan */ } } HJ3.r = null; }
+function hj3Sky(top, bot) { const c = document.createElement("canvas"); c.width = 4; c.height = 256; const x = c.getContext("2d"), gr = x.createLinearGradient(0, 0, 0, 256); gr.addColorStop(0, top); gr.addColorStop(0.55, bot); gr.addColorStop(1, bot); x.fillStyle = gr; x.fillRect(0, 0, 4, 256); return new window.THREE.CanvasTexture(c); }
+function hj3Label(text, col, size) {
+  const T = window.THREE, c = document.createElement("canvas"), x = c.getContext("2d"), fs = 34; x.font = "800 " + fs + "px Nunito, sans-serif";
+  const w = Math.min(1024, Math.ceil(x.measureText(text).width) + 26), h = fs + 18; c.width = w; c.height = h; x.font = "800 " + fs + "px Nunito, sans-serif";
+  x.fillStyle = "rgba(6,16,30,.72)"; x.beginPath(); if (x.roundRect) x.roundRect(1, 1, w - 2, h - 2, 12); else x.rect(1, 1, w - 2, h - 2); x.fill(); x.fillStyle = col || "#fff"; x.textAlign = "center"; x.textBaseline = "middle"; x.fillText(text, w / 2, h / 2 + 1);
+  const sp = new T.Sprite(new T.SpriteMaterial({ map: new T.CanvasTexture(c), transparent: true, depthWrite: false })), k = (size || 0.5) * 0.034; sp.scale.set(w * k, h * k, 1); sp.renderOrder = 5; return sp;
+}
+/* kod avatar AV3 daripada rupa jemaah enjin lama {sex, skin, ihram, solat, col} */
+function hj3Code(lk) {
+  const f = lk.sex === "f", sk = Math.max(0, Math.min(5, lk.skin | 0));
+  if (lk.ihram) return (f ? "P" : "L") + "|" + sk + "|ou_jb|oc_wh|" + (f ? "hd_td|hc_w" : "hd_no|hc_w");
+  if (lk.solat) return (f ? "P|" + sk + "|ou_jb|oc_wh|hd_td|hc_w" : "L|" + sk + "|ou_my|oc_wh|hd_kp|hc_w");
+  return f ? "P|" + sk + "|ou_kr|oc_gn|hd_td|hc_w" : "L|" + sk + "|ou_my|oc_bl|hd_no|hc_w";
+}
+function hj3Avatar(key, lk) {
+  let a = HJ3.av.get(key); const code = hj3Code(lk || {});
+  if (a && a.code === code) return a;
+  if (a) HJ3.root.remove(a.av.g);
+  const av = AV3.build(code); av.g.scale.setScalar(HJ3_S); av.g.traverse((o) => { if (o.isMesh) o.castShadow = true; }); HJ3.root.add(av.g);
+  a = { av: av, code: code }; HJ3.av.set(key, a); return a;
+}
+function hj3Stage(g) {
+  if (!HJ3.r) return; hj3Free();
+  const T = window.THREE, S = hjSt()[g.st], th = S.th, Wd = g.W, night = rbLum(th.sky[0]) < 0.3;
+  const scene = HJ3.scene = new T.Scene(), root = HJ3.root = new T.Group(); root.scale.x = -1; scene.add(root);
+  scene.background = hj3Sky(th.sky[0], th.sky[1]); scene.fog = new T.Fog(new T.Color(th.sky[1]), 70, 170);
+  HJ3.hemi = new T.HemisphereLight(night ? 0x8090ff : 0xffffff, new T.Color(Wd.ground), night ? 0.45 : 0.75); scene.add(HJ3.hemi);
+  const sun = HJ3.sun = new T.DirectionalLight(night ? 0xb8c4ff : 0xfff2dc, night ? 0.45 : 0.95); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
+  const sc = sun.shadow.camera; sc.left = sc.bottom = -45; sc.right = sc.top = 45; sc.near = 1; sc.far = 220; sun.shadow.bias = -0.0008; scene.add(sun); scene.add(sun.target);
+  if (night) [[-30, 0], [30, 0], [-30, 30], [30, 30], [0, 15], [0, 45]].forEach(([x, z]) => { const L = new T.PointLight(0xfff0b0, 0.7, 40); L.position.set(-x, 8, z); scene.add(L); });
+  /* lantai */
+  const gr = new T.Mesh(new T.PlaneGeometry(800, 800), new T.MeshLambertMaterial({ color: new T.Color(Wd.ground) })); gr.rotation.x = -Math.PI / 2; gr.position.y = -0.03; gr.receiveShadow = true; gr.userData.own = true; root.add(gr);
+  /* muka statik -> satu jejaring berwarna */
+  const n = Wd.stat.length, pos = new Float32Array(n * 18), nor = new Float32Array(n * 18), col = new Float32Array(n * 18), c = new T.Color();
+  Wd.stat.forEach((f, i) => { const v = f.v, o = i * 18; c.set(f.col); [0, 1, 2, 0, 2, 3].forEach((k, j) => { pos[o + j * 3] = v[k * 3]; pos[o + j * 3 + 1] = v[k * 3 + 1]; pos[o + j * 3 + 2] = v[k * 3 + 2]; nor[o + j * 3] = f.n[0]; nor[o + j * 3 + 1] = f.n[1]; nor[o + j * 3 + 2] = f.n[2]; col[o + j * 3] = c.r; col[o + j * 3 + 1] = c.g; col[o + j * 3 + 2] = c.b; }); });
+  const geo = new T.BufferGeometry(); geo.setAttribute("position", new T.BufferAttribute(pos, 3)); geo.setAttribute("normal", new T.BufferAttribute(nor, 3)); geo.setAttribute("color", new T.BufferAttribute(col, 3));
+  const m = new T.Mesh(geo, new T.MeshLambertMaterial({ vertexColors: true, side: T.DoubleSide })); m.castShadow = true; m.receiveShadow = true; m.userData.own = true; root.add(m);
+  Wd.signs.forEach((s) => { const sp = hj3Label(s.t, "#fff", 0.5); sp.position.set(-s.x, s.y, s.z); scene.add(sp); });
+  Wd.rocks.forEach((r) => { const b = new T.Mesh(new T.DodecahedronGeometry(0.2, 0), new T.MeshLambertMaterial({ color: 0xd8d2c6, emissive: 0x332f20 })); b.position.set(r.x, 0.18, r.z); b.castShadow = true; b.userData.own = true; root.add(b); HJ3.rocks.push([r, b]); });
+  HJ3.pts = new T.InstancedMesh(new T.BoxGeometry(0.12, 0.12, 0.12), new T.MeshBasicMaterial({ color: 0xffffff }), 300); HJ3.pts.count = 0; HJ3.pts.userData.own = true; HJ3.pts.instanceColor = new T.InstancedBufferAttribute(new Float32Array(900), 3); root.add(HJ3.pts);
+  HJ3.ball = new T.Mesh(new T.SphereGeometry(0.12, 8, 6), new T.MeshLambertMaterial({ color: 0xcfc8b8 })); HJ3.ball.visible = false; HJ3.ball.userData.own = true; root.add(HJ3.ball);
+  HJ3.meLb = hj3Label("Anda", "#fff", 0.32); scene.add(HJ3.meLb);
+}
+function hj3Marker(mk) {
+  let o = HJ3.mk.get(mk); if (o) return o; const T = window.THREE;
+  const grp = new T.Group(), ring = new T.Mesh(new T.RingGeometry(mk.r * 0.75, mk.r, 32), new T.MeshBasicMaterial({ color: 0xffd23d, transparent: true, opacity: 0.55, side: T.DoubleSide, depthWrite: false })); ring.rotation.x = -Math.PI / 2; ring.position.y = 0.05; ring.userData.own = true; grp.add(ring);
+  const beam = new T.Mesh(new T.CylinderGeometry(0.45, 0.45, 4.2, 16, 1, true), new T.MeshBasicMaterial({ color: 0xffe27a, transparent: true, opacity: 0.22, side: T.DoubleSide, depthWrite: false })); beam.position.y = 2.1; beam.userData.own = true; grp.add(beam);
+  HJ3.root.add(grp); o = { grp: grp, ring: ring, lb: null, txt: "" }; HJ3.mk.set(mk, o); return o;
+}
+function hj3Draw(g) {
+  const T = window.THREE, R = HJ3.r; if (!R || !HJ3.scene) return; const Wd = g.W, C = g.cam, p = g.p, Tt = g.T;
+  /* kamera: sama seperti dwCam (sasaran - arah hadapan * jarak), x dicerminkan */
+  const cy = Math.cos(C.yaw), sy = Math.sin(C.yaw), cp = Math.cos(C.pitch), sp = Math.sin(C.pitch);
+  HJ3.cam.position.set(-(C.tx - sy * cp * C.dist), C.ty + sp * C.dist, C.tz - cy * cp * C.dist); HJ3.cam.lookAt(-C.tx, C.ty, C.tz);
+  HJ3.sun.position.set(-(p.x + 30), 70, p.z - 40); HJ3.sun.target.position.set(-p.x, 0, p.z); HJ3.sun.target.updateMatrixWorld();
+  const seen = new Set();
+  /* penanda */
+  g.mk.forEach((mk) => { const o = hj3Marker(mk), on = !!mk.show(); o.grp.visible = on; seen.add(mk); if (!on) return; const pu = 0.5 + 0.5 * Math.sin(Tt * 3); o.grp.position.set(mk.x, 0, mk.z); o.ring.material.opacity = 0.4 + pu * 0.3;
+    if (o.txt !== mk.label) { if (o.lb) HJ3.scene.remove(o.lb); o.lb = mk.label ? hj3Label(mk.label, "#ffe27a", 0.42) : null; if (o.lb) HJ3.scene.add(o.lb); o.txt = mk.label; } if (o.lb) o.lb.position.set(-mk.x, 4.4 + pu * 0.15, mk.z); });
+  HJ3.mk.forEach((o, mk) => { if (!seen.has(mk)) { o.grp.visible = false; if (o.lb) o.lb.visible = false; } else if (o.lb) o.lb.visible = o.grp.visible; });
+  HJ3.rocks.forEach(([r, b]) => { b.visible = !r.got; b.rotation.y = Tt; });
+  const ball = g.o && g.o.jm && g.o.jm.ball; HJ3.ball.visible = !!ball; if (ball) HJ3.ball.position.set(ball.x, ball.y, ball.z);
+  /* objek dinamik */
+  const dseen = new Set(); (Wd.dyn || []).forEach((e) => { let mm = HJ3.dyn.get(e); if (!mm) { mm = new T.Mesh(new T.BoxGeometry(1, 1, 1), new T.MeshLambertMaterial({ color: new T.Color(e.col) })); mm.castShadow = true; mm.userData.own = true; HJ3.root.add(mm); HJ3.dyn.set(e, mm); } dseen.add(e); mm.visible = !(e.show && !e.show()); mm.position.set(e.x, e.y, e.z); mm.scale.set(e.sx || 0.01, e.sy || 0.01, e.sz || 0.01); mm.material.color.set(e.col); });
+  HJ3.dyn.forEach((mm, e) => { if (!dseen.has(e)) mm.visible = false; });
+  /* zarah */
+  const P = HJ3.pts, M4 = new T.Matrix4(), cc = new T.Color(); let k = 0; g.pts.forEach((e) => { if (k >= 300) return; M4.makeTranslation(e.x, e.y, e.z); P.setMatrixAt(k, M4); cc.set(e.col); P.setColorAt(k, cc); k++; }); P.count = k; P.instanceMatrix.needsUpdate = true; if (P.instanceColor) P.instanceColor.needsUpdate = true;
+  /* jemaah */
+  const dt = HJ3.lastT != null ? Math.max(0, Math.min(0.05, Tt - HJ3.lastT)) : 0.016; HJ3.lastT = Tt;
+  Wd.npcs.forEach((nn, i) => { const a = hj3Avatar("n" + i, nn.look || { sex: nn.sex, skin: nn.sk, ihram: true }), far = Math.hypot(nn.x - C.tx, nn.z - C.tz) > 70; a.av.g.visible = !far; if (far) return;
+    a.av.g.position.set(nn.x, 0, nn.z); a.av.g.rotation.y = nn.yaw || 0; AV3.pose(a.av, nn.pose || (nn.k === "doa" ? "doa" : "")); AV3.anim(a.av, (nn.mv || 0) > 0.1, false, dt, 1, null); });
+  const me = hj3Avatar("me", g.look); me.av.g.position.set(p.x, 0, p.z); me.av.g.rotation.y = p.yaw; AV3.pose(me.av, p.pose || ""); AV3.anim(me.av, (p.mv || 0) > 0.1, false, dt, 1 + (p.mv || 0) * 0.3, null);
+  HJ3.meLb.position.set(-p.x, 2.6, p.z);
+  R.render(HJ3.scene, HJ3.cam);
+}
+function hj3Fit(W, H) { if (!HJ3.r) return; HJ3.r.setSize(W, H, false); HJ3.cam.aspect = W / H; HJ3.cam.updateProjectionMatrix(); }
+
+function hjOverlay() {
+  const c = HJ.cx, W = HJ.W, H = HJ.H, d = HJ.dpr; c.setTransform(d, 0, 0, d, 0, 0); c.clearRect(0, 0, W, H);
+  const js = HJ.js; if (js && !js.on && "ontouchstart" in window) { c.globalAlpha = 0.22; c.strokeStyle = "#fff"; c.lineWidth = 3; c.beginPath(); c.arc(86, H - 86, 56, 0, 7); c.stroke(); c.fillStyle = "#fff"; c.beginPath(); c.arc(86, H - 86, 22, 0, 7); c.fill(); c.globalAlpha = 1; }
+  if (js && js.on) { c.globalAlpha = 0.5; c.strokeStyle = "#fff"; c.lineWidth = 3; c.beginPath(); c.arc(js.cx, js.cy, 56, 0, 7); c.stroke(); c.fillStyle = "#fff"; c.beginPath(); c.arc(js.cx + js.x * 40, js.cy - js.y * 40, 24, 0, 7); c.fill(); c.globalAlpha = 1; }
+}
 /* ---------- Mod simulasi: Wuduk dan Solat, Pengurusan Jenazah (v17.64) ---------- */
 function hjSt() { return HJ.mode.st; }
 function hjQs(id) { const m = HJ.mode, x = m.qx && HJ.g ? m.qx[HJ.g.st] : null; return x || m.q[id]; }
