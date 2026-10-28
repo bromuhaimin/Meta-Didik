@@ -193,6 +193,8 @@ function lmDem(wx, wz) {
 /* jarak ke tepi kawasan DEM (untuk melandaikan daratan negara jiran ke laut) */
 function lmDemEdge(wx, wz) { let best = 0; for (const r of GEOD.dem) { const d = Math.min(wx - r.x0, wz - r.z0, r.x0 + (r.nx - 1) * GEOD.cs - wx, r.z0 + (r.nz - 1) * GEOD.cs - wz); if (d > best) best = d; } return best; }
 function lmSave() {
+  /* v18.13: ringkasan untuk papan pemuka guru: [universiti selesai, jumlah, lencana, akhlak, tempat] */
+  try { if (LM.g && LM.g.ipta && LM.st) { const J = lmJourney(); LM.st.ms = [J.d, J.t, lmLcCount(), LM.st.ak | 0, Object.keys(LM.st.pl || {}).length]; LM.st.lt = Date.now(); } } catch (e) { /* abaikan */ }
   try { localStorage.setItem("gt-lm-" + SUBJ, JSON.stringify(LM.st)); } catch (e) { /* abaikan */ }
 }
 function lmLoad() {
@@ -1680,6 +1682,7 @@ function lmRide(a, b) {
   const R = a.line, s0 = R.sS[a.i], s1 = R.sS[b.i], dir = s1 > s0 ? 1 : -1;
   R.dir = dir; R.s = s0; R.wait = 0; lmRailPlace(R);
   g.ride = { R: R, a: a, b: b, s0: s0, s1: s1, dir: dir, t: -1.6, dur: clamp(Math.abs(s1 - s0) / (R.L.road ? 110 : 130), 7, 28), v: 0 };
+  if (R.L.road) LM.st.rb = (LM.st.rb | 0) + 1; else LM.st.rt = (LM.st.rt | 0) + 1; lmSave();
   g.ui = true; g.me.g.visible = false; if (g.sky5) g.sky5.sp.visible = false;
   lmChime(); lmPop(R.L.road ? "Sila naik bas ekspres" : "Sila naik ke dalam " + R.L.n); lmRideHud(true);
 }
@@ -1862,6 +1865,7 @@ function lmIptaTopic(it, t) {
         const row = el("div", { class: "lm-row" });
         if (pass && J.next) row.append(lmBtn("Tunjuk arah ke " + J.next.sn, "pri", () => { LM.g.wp = { x: J.next.x, z: J.next.z, n: J.next.sn }; lmWpSet(); lmCardClose(); }));
         if (!pass) row.append(lmBtn("Cuba lagi", "pri", () => lmIptaTopic(it, t)));
+        if (fin) row.append(lmBtn("📜 Sijil META GEMPUR", "pri", lmCertGet));
         row.append(lmBtn("Teruskan jelajah", pass && J.next ? "" : "pri", lmCardClose));
         b.append(row);
       });
@@ -1945,6 +1949,7 @@ function lmOwnSchoolOpen(it) {
     b.append(el("p", null, "Di sinilah perjalanan menuntut ilmu anda bermula. Kembara ke setiap universiti di seluruh Malaysia; setiap universiti memegang satu tajuk " + SUBJS[SUBJ].subjek + "."));
     b.append(el("p", { class: "lm-ex" }, "Cop universiti: " + J.d + "/" + J.t + (J.next ? " · Seterusnya: " + J.next.sn + " (" + J.next.n + ")" : " · Perjalanan lengkap!")));
     const row = el("div", { class: "lm-row" });
+    if (!J.next && J.t) row.append(lmBtn("📜 Terima Sijil META GEMPUR", "pri", lmCertGet), lmBtn("🏅 Lencana", "", () => lmPassport("lencana")));
     if (J.next) row.append(lmBtn("Tunjuk arah ke " + J.next.sn, "pri", () => { LM.g.wp = { x: J.next.x, z: J.next.z, n: J.next.sn }; lmWpSet(); lmCardClose(); lmPop("Ikut tiang merah ke " + J.next.sn); }));
     row.append(lmBtn("🍛 Kantin (percuma)", "", () => { if (lmEnergy() >= 100) { toast("Tenaga anda masih penuh.", "ok"); return; } lmCardClose(); lmEat(50, "Makan di kantin sekolah"); }), lmBtn("🛍 Gudang", "", lmGudang), lmBtn("Pasport", "", () => lmPassport("ipta")), lmBtn("Tutup", "", lmCardClose));
     b.append(el("p", { class: "lm-ex" }, "Gudang hanya boleh dibuka di sekolah anda: beli avatar, pakaian seragam, lencana dan cara meraikan."), row);
@@ -2133,7 +2138,7 @@ function lmAkFx(it, fx) {
   });
 }
 function lmAkDone(g, it) {
-  it.done = true; it.ring.visible = false; LM.st.ak = (LM.st.ak | 0) + 1; lmSave(); lmSnd("win");
+  it.done = true; it.ring.visible = false; LM.st.ak = (LM.st.ak | 0) + 1; (LM.st.akT || (LM.st.akT = {}))[it.S.id] = 1; lmSave(); lmSnd("win");
   let coin = 0; try { coin = gdCoin(2); } catch (e) { coin = 0; } const xp = lmXp(5);
   (it.npcs || []).forEach((av) => { try { lmBubble({ g: av.g, bub: null }, "Terima kasih!"); } catch (e) { /* abaikan */ } });
   lmPop("Akhlak terpuji! +" + coin + " syiling · XP +" + xp);
@@ -2175,6 +2180,84 @@ function lmAkOpen(it) {
   if (s.say) lmBubble(LM.g.me, s.say);
   lmAkFx(it, s.fx); lmSnd("ok"); it.st++;
   if (it.st >= it.S.steps.length) lmAkDone(LM.g, it); else lmAkStep(it);
+}
+/* ---------- v18.13: Panduan "Apa seterusnya" ----------
+   Sentiasa menunjukkan universiti terdekat yang belum selesai, tajuknya, jarak dan arah. Jika jauh, panduan
+   mencadangkan pengangkutan (ETS, ECRL, bas ekspres atau kapal terbang) dan tiang penunjuk dihalakan ke tempat naik. */
+const KM = (u) => u / (3 * WS);
+const lmBorneo = (k) => k === "sabah" || k === "sarawak" || (ISL_BY[k] && (ISL_BY[k].from === "sabah" || ISL_BY[k].from === "sarawak"));
+function lmGuideRoute(g, P, T) {
+  const dir = Math.hypot(T.x - P.x, T.z - P.z), kP = lmAt(P.x, P.z) || g.lastK, kT = lmAt(T.x, T.z) || T.k, cross = lmBorneo(kP) !== lmBorneo(kT);
+  if (!cross && dir < 450) return null;
+  let best = null;
+  const near = (list, q) => { let b = null, bd = 1e9; list.forEach((x) => { const d = Math.hypot(x.x - q.x, x.z - q.z); if (d < bd) { bd = d; b = x; } }); return b; };
+  for (const R of g.rails || []) {
+    if (!R.sS || R.st.length < 2) continue;
+    const a = near(R.st, P), b = near(R.st, T); if (!a || !b || a === b) continue;
+    const cost = Math.hypot(a.x - P.x, a.z - P.z) + Math.hypot(b.x - T.x, b.z - T.z) + 0.12 * Math.abs(R.sS[a.i] - R.sS[b.i]);
+    if (!best || cost < best.cost) best = { m: R.L.road ? "bas" : "kereta", L: R.L, a: a, b: b, cost: cost };
+  }
+  const aps = g.items.filter((x) => x.kind === "ap");
+  if (aps.length > 1) { const a = near(aps, P), b = near(aps, T); if (a && b && a !== b) { const cost = Math.hypot(a.x - P.x, a.z - P.z) + Math.hypot(b.x - T.x, b.z - T.z) + 160; if (!best || cost < best.cost || cross) { if (cross || !best || cost < best.cost) best = { m: "terbang", a: a, b: b, cost: cost }; } } }
+  if (!best) return null;
+  if (!cross && best.cost > dir * 0.75) return null;
+  if (cross && best.m !== "terbang") { const a = near(aps, P), b = near(aps, T); if (a && b && a !== b) best = { m: "terbang", a: a, b: b, cost: 0 }; }
+  return best;
+}
+function lmGuidePick(g) {
+  const its = (g.ipta || []).filter((it) => it.tids.length && !it.done), P = g.p;
+  if (!its.length) return null;
+  let best = null, bd = 1e9;
+  its.forEach((it) => { let d = Math.hypot(it.x - P.x, it.z - P.z); if (lmBorneo(it.k) !== lmBorneo(lmAt(P.x, P.z) || g.lastK)) d += 4000; if (d < bd) { bd = d; best = it; } });
+  return best;
+}
+function lmGuideTick(g) {
+  const ui = LM.ui, box = ui.guide; if (!box) return;
+  const P = g.p, J = lmJourney(), it = lmGuidePick(g), st = LM.st;
+  let head = "🎯 Seterusnya", main = "", sub = "", route = "", extra = [], tgt = null, goal = null;
+  if (g.flight || g.sail || g.ride) { main = g.ride ? "Dalam perjalanan ke " + g.ride.b.nm : g.flight ? "Dalam penerbangan" : "Menaiki feri"; }
+  else if (!it) {
+    head = "🎓 Semua universiti selesai!"; main = g.ownSk ? "Pulang ke sekolah anda atau ketik di sini untuk sijil" : "Ketik di sini untuk menerima sijil dan lencana"; if (g.ownSk) goal = tgt = { x: g.ownSk.x, z: g.ownSk.z, n: "Sekolah anda" };
+  } else {
+    const tid = it.tids.find((t) => !lmTopicDone(t)) || it.tids[0], t = TOPIK[tid], d = Math.hypot(it.x - P.x, it.z - P.z);
+    main = "Ke " + it.sn + ", " + (DATA.negeri[it.k] ? DATA.negeri[it.k].pendek : ""); sub = "Tajuk " + (t.kod || t.id) + ": " + t.nama;
+    tgt = { x: it.x, z: it.z, n: it.sn }; goal = tgt;
+    if (d < 26) { route = "👉 Tekan E di pintu " + it.sn + " untuk menjawab kuiz tajuk ini"; tgt = null; }
+    else {
+      const R = lmGuideRoute(g, P, it);
+      if (R) {
+        const da = Math.hypot(R.a.x - P.x, R.a.z - P.z), ic = R.m === "terbang" ? "✈" : R.m === "bas" ? "🚌" : "🚆";
+        const naik = R.m === "terbang" ? "Terbang dari " + R.a.n + " ke " + R.b.n : (R.m === "bas" ? "Naik bas " + R.L.n + " di " : "Naik " + R.L.n + " di ") + R.a.n + ", turun di " + R.b.nm;
+        route = ic + " Cadangan: " + naik + (da > 26 ? " (" + Math.max(1, Math.round(KM(da))) + " km ke sana)" : ". Tekan E untuk naik");
+        if (da > 26) tgt = { x: R.a.x, z: R.a.z, n: R.m === "terbang" ? R.a.n : R.a.n };
+      }
+    }
+  }
+  if (g.ak && !g.ak.done) extra.push("❗ " + g.ak.n + ": " + (g.ak.act || "ikut tanda kuning"));
+  if (lmEnergy() < 35) { let f = null, fd = 1e9; g.items.forEach((x) => { if (x.kind !== "fd") return; const d = Math.hypot(x.x - P.x, x.z - P.z); if (d < fd) { fd = d; f = x; } }); if (f) extra.push("🍛 Lapar: " + f.n + ", " + f.town + " (" + Math.max(1, Math.round(KM(fd))) + " km) atau kantin sekolah"); }
+  /* tiang penunjuk automatik (tidak mengganggu destinasi yang dipilih sendiri) */
+  if (g.guideAuto !== false && !g.flight && !g.sail && !g.ride) {
+    if (tgt && Math.hypot(tgt.x - P.x, tgt.z - P.z) > 14) { if (!g.wp || g.wp.auto) { if (!g.wp || Math.hypot(g.wp.x - tgt.x, g.wp.z - tgt.z) > 1) { g.wp = { x: tgt.x, z: tgt.z, n: tgt.n, auto: true }; lmWpSet(); } } }
+    else if (g.wp && g.wp.auto) { g.wp = null; lmWpSet(); }
+  }
+  const aim = g.wp || tgt, dist = aim ? Math.hypot(aim.x - P.x, aim.z - P.z) : 0, gd = goal ? Math.hypot(goal.x - P.x, goal.z - P.z) : 0;
+  const key = head + main + sub + route + extra.join() + (goal ? Math.round(KM(gd)) : "") + (g.guideAuto === false);
+  if (box._k !== key) {
+    box._k = key; box.textContent = "";
+    const hd = el("div", { class: "gh" }, el("b", null, head), el("span", null, "🎓 " + J.d + "/" + J.t));
+    const tg = el("button", { type: "button", class: "gt" }, g.guideAuto === false ? "Penunjuk: tutup" : "Penunjuk: auto");
+    tg.addEventListener("click", (e) => { e.stopPropagation(); g.guideAuto = g.guideAuto === false; if (g.guideAuto === false && g.wp && g.wp.auto) { g.wp = null; lmWpSet(); } box._k = ""; lmGuideTick(g); });
+    hd.appendChild(tg); box.appendChild(hd);
+    const row = el("div", { class: "gm" }); ui.gArrow = el("span", { class: "ga", "aria-hidden": "true" }, "➤"); row.append(ui.gArrow, el("b", null, main)); if (goal) row.append(el("span", null, " · " + Math.max(0, Math.round(KM(gd))) + " km")); box.appendChild(row);
+    if (sub) box.appendChild(el("div", { class: "gs" }, sub));
+    if (route) box.appendChild(el("div", { class: "gr" }, route));
+    extra.forEach((x) => box.appendChild(el("div", { class: "gx" }, x)));
+  }
+  /* anak panah relatif kepada arah kamera */
+  if (ui.gArrow) {
+    if (!aim || dist < 6) ui.gArrow.style.visibility = "hidden";
+    else { const cy = Math.cos(g.cam.yaw), sy = Math.sin(g.cam.yaw), vx = aim.x - P.x, vz = aim.z - P.z, fw = -vx * sy - vz * cy, rt = vx * cy - vz * sy; ui.gArrow.style.visibility = ""; ui.gArrow.style.transform = "rotate(" + (Math.atan2(rt, fw) - Math.PI / 2).toFixed(2) + "rad)"; }
+  }
 }
 /* v18.11: Gudang dibuka dari sekolah sendiri. Dunia 3D dijeda; avatar dibina semula jika ditukar. */
 function lmGudang() {
@@ -2373,7 +2456,7 @@ function lmUpdatePlayer(g, dt) {
   if (p.swim) {
     /* terapung: permukaan air pada y = 0 */
     const ty = p.moving ? -1.5 : -3.3; p.y += (ty - p.y) * Math.min(1, dt * (wasSwim ? 5 : 9)); p.vy = 0; p.on = true; LM.jump = false;
-    if (!wasSwim) { lmPuff(g, p.x, 0.4, p.z, 3, 1.4, 3.2, 0.8); lmPop("Berenang"); }
+    if (!wasSwim) { lmPuff(g, p.x, 0.4, p.z, 3, 1.4, 3.2, 0.8); lmPop("Berenang"); if (!LM.st.sw) { LM.st.sw = 1; lmSave(); } }
     if (p.moving && ((g.splT = (g.splT || 0) - dt) <= 0)) { g.splT = 0.18; lmPuff(g, p.x + (Math.random() - 0.5) * 2, 0.35, p.z + (Math.random() - 0.5) * 2, 1.4, 1.1, 2.2, 0.7); }
   } else {
     /* lompat dan graviti */
@@ -2767,7 +2850,13 @@ const LM_CSS = `
 @keyframes lmPulse{50%{transform:translateX(-50%) scale(1.05)}}
 #lmOv .lm-quest{position:absolute;left:max(10px,env(safe-area-inset-left));top:calc(max(10px,env(safe-area-inset-top)) + 44px);background:rgba(8,24,40,.72);border-radius:12px;padding:8px 12px;font-size:13px;max-width:260px;pointer-events:none}
 #lmOv .lm-quest b{color:#ffd45a}
-#lmOv .lm-akdone{position:absolute;left:50%;top:22%;transform:translateX(-50%);width:min(560px,92vw);display:grid;gap:6px;padding:14px 16px;border-radius:14px;background:rgba(10,60,40,.92);border:2px solid #ffd45a;color:#fff;font-size:14px;line-height:1.45;text-align:center;pointer-events:none;animation:lmPopIn .3s ease-out}#lmOv .lm-akdone b{color:#ffd45a;font-size:16px}#lmOv .lm-akdone small{opacity:.8}@keyframes lmPopIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translateX(-50%)}}
+#lmOv .lm-guide{position:absolute;left:max(10px,env(safe-area-inset-left));top:calc(max(10px,env(safe-area-inset-top)) + 44px);width:min(330px,calc(100vw - 180px));background:rgba(10,30,52,.86);border:2px solid #ffd45a;border-radius:14px;padding:8px 12px;font-size:13px;line-height:1.35;color:#fff;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.35)}
+#lmOv .lm-guide .gh{display:flex;align-items:center;gap:8px;margin-bottom:3px}#lmOv .lm-guide .gh b{color:#ffd45a;flex:1}#lmOv .lm-guide .gh span{font-size:12px;opacity:.85}
+#lmOv .lm-guide .gt{border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;border-radius:99px;font-size:11px;padding:3px 8px;cursor:pointer}
+#lmOv .lm-guide .gm{display:flex;align-items:center;gap:6px;font-size:14px}#lmOv .lm-guide .ga{display:inline-block;color:#ffd45a;font-size:18px;transition:transform .2s}
+#lmOv .lm-guide .gs{opacity:.9;margin-top:2px}#lmOv .lm-guide .gr{margin-top:4px;padding:4px 8px;border-radius:8px;background:rgba(80,160,255,.18);color:#cfe6ff}
+#lmOv .lm-guide .gx{margin-top:4px;color:#ffd166}
+#lmOv .lm-akdone{position:absolute;left:50%;top:22%;transform:translateX(-50%);width:min(560px,92vw);display:grid;gap:6px;padding:14px 16px;border-radius:14px;background:rgba(10,60,40,.92);border:2px solid #ffd45a;color:#fff;font-size:14px;line-height:1.45;text-align:center;pointer-events:none;animation:lmPopIn .3s ease-out}#lmOv .lm-akdone b{color:#ffd45a;font-size:16px}#lmOv .lm-akdone small{opacity:.8}@keyframes lmPopIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translateX(-50%)}}#lmOv .lm-lcpop{position:absolute;left:50%;top:30%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;min-width:min(380px,90vw);max-width:92vw;padding:12px 18px;border-radius:16px;background:linear-gradient(135deg,rgba(11,74,74,.95),rgba(8,47,54,.95));border:2px solid #ffd45a;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.4);pointer-events:none;animation:lmPopIn .35s ease-out;z-index:6}#lmOv .lm-lcpop>i{font-style:normal;font-size:40px;line-height:1}#lmOv .lm-lcpop>div{display:grid;gap:2px}#lmOv .lm-lcpop small{color:#ffd45a;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:11px}#lmOv .lm-lcpop b{font-size:17px}#lmOv .lm-lcpop span{font-size:12.5px;opacity:.85}#lmOv .lm-lcgrid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}#lmOv .lm-lc{display:grid;gap:3px;justify-items:center;text-align:center;padding:10px 8px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);font-size:12px;opacity:.75}#lmOv .lm-lc>i{font-style:normal;font-size:30px;filter:grayscale(1);opacity:.45}#lmOv .lm-lc b{font-size:13px}#lmOv .lm-lc small{opacity:.8}#lmOv .lm-lc .lm-bar{width:100%}#lmOv .lm-lc.on{opacity:1;background:rgba(255,212,90,.12);border-color:#ffd45a}#lmOv .lm-lc.on>i{filter:none;opacity:1}#lmOv .lm-lc.on small{color:#ffd45a}
 #lmOv .lm-quest .dn{text-decoration:line-through;opacity:.6}
 #lmOv .lm-emo{position:absolute;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:6px}
 #lmOv .lm-tc{position:absolute;right:calc(16px + env(safe-area-inset-right));bottom:calc(20px + env(safe-area-inset-bottom));display:none;gap:10px;align-items:flex-end}
@@ -2830,7 +2919,7 @@ const LM_CSS = `
 #lmOv .lm-who{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;max-width:96vw;font-size:13px}#lmOv .lm-who button{font-size:13px;padding:5px 10px}#lmOv .lm-who .muted{color:#b9cde0}
 #lmOv .lm-pl{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}#lmOv .lm-pl button{font-size:12px;padding:4px 8px}
 @media (max-height:500px){#lmOv .lm-top{flex-direction:row;flex-wrap:wrap;justify-content:flex-end;max-width:62vw;top:calc(max(10px,env(safe-area-inset-top)) + 84px)}#lmOv .lm-top button{padding:6px 9px;font-size:12px}#lmOv .lm-mm{width:150px;height:76px}#lmOv .lm-quest{font-size:12px;max-width:220px}}
-@media (max-width:640px){#lmOv .lm-mm{width:140px;height:72px}#lmOv .lm-top{top:calc(max(10px,env(safe-area-inset-top)) + 80px)}#lmOv .lm-hud{max-width:calc(100% - 160px)}#lmOv .lm-emo{display:none}#lmOv .lm-quest{display:none}}
+@media (max-width:640px){#lmOv .lm-mm{width:140px;height:72px}#lmOv .lm-top{top:calc(max(10px,env(safe-area-inset-top)) + 80px)}#lmOv .lm-hud{max-width:calc(100% - 160px)}#lmOv .lm-emo{display:none}#lmOv .lm-quest{display:none}#lmOv .lm-guide{font-size:12px;width:min(260px,calc(100vw - 170px));padding:6px 9px}}
 @media (prefers-reduced-motion:reduce){#lmOv .lm-prompt,#lmOv .lm-box,#lmOv .lm-toast{animation:none}}
 `;
 function lmRoot() {
@@ -2903,6 +2992,155 @@ function lmCode() { const a = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let s = ""; fo
 function lmSummary() {
   const tws = DATA.topik.filter((t) => DATA.negeri[t.negeri]);
   return { pl: PLACES.filter((p) => LM.st.pl[p[0]]).length, plN: PLACES.length, tw: tws.filter((t) => (LM.st.tw[t.id] | 0) >= 3).length, twN: tws.length };
+}
+
+/* ---------- v18.13: lencana META GEMPUR ----------
+   [id, ikon, nama, syarat, fungsi kemajuan -> [capai, sasaran]]; disimpan dalam LM.st.lc (id -> masa) */
+const LCN = [
+  ["ipta1", "🎓", "Langkah Pertama", "Dapatkan cop universiti pertama", () => { const J = lmJourney(); return [J.d, 1]; }],
+  ["ipta5", "📚", "Pencinta Ilmu", "Dapatkan cop 5 universiti", () => { const J = lmJourney(); return [J.d, Math.min(5, J.t || 5)]; }],
+  ["iptaAll", "🏛", "Graduan META GEMPUR", "Lengkapkan semua universiti", () => { const J = lmJourney(); return [J.d, J.t || 1]; }],
+  ["tw10", "🏰", "Penawan Tajuk", "Tawan 10 tajuk (betul 3/5 atau lebih)", () => [lmSummary().tw, 10]],
+  ["pl10", "📘", "Pengembara", "Ziarahi 10 tempat bersejarah", () => [lmSummary().pl, 10]],
+  ["plAll", "🗺", "Pengembara Agung", "Ziarahi semua tempat dalam peta", () => { const s = lmSummary(); return [s.pl, s.plN]; }],
+  ["ak1", "🤝", "Ringan Tangan", "Bantu orang dalam satu situasi akhlak", () => [LM.st.ak | 0, 1]],
+  ["ak5", "💚", "Pemurah Budi", "Selesaikan 5 situasi akhlak", () => [LM.st.ak | 0, 5]],
+  ["akAll", "🌟", "Insan Berakhlak Mulia", "Selesaikan setiap jenis situasi akhlak", () => [Object.keys(LM.st.akT || {}).filter((k) => AKH.some((a) => a.id === k)).length, AKH.length]],
+  ["fd1", "🍽", "Selera Tempatan", "Rasa satu masakan tradisi negeri", () => [Object.keys(LM.st.food || {}).length, 1]],
+  ["fdAll", "🍛", "Duta Juadah Malaysia", "Rasa masakan tradisi setiap negeri", () => [FOOD.filter((f) => (LM.st.food || {})[f[0]]).length, FOOD.length]],
+  ["rail", "🚆", "Penumpang Kereta Api", "Naik ETS, ECRL atau kereta api lain", () => [LM.st.rt | 0, 1]],
+  ["bus", "🚌", "Kembara Lebuh Raya", "Naik bas ekspres di lebuh raya", () => [LM.st.rb | 0, 1]],
+  ["fly", "✈", "Juruterbang Muda", "Terbang dengan Gempur Air", () => [LM.st.fl | 0, 1]],
+  ["ap5", "🛬", "Pelancong Udara", "Mendarat di 5 lapangan terbang", () => [Object.keys(LM.st.ap || {}).length, 5]],
+  ["borneo", "🌴", "Jambatan Malaysia", "Jejakkan kaki di Semenanjung dan Borneo", () => [[2, 4].filter((m) => LM.st.bo & m).length, 2]],
+  ["swim", "🏊", "Perenang Pantai", "Berenang di tepi pantai", () => [LM.st.sw | 0, 1]],
+  ["kh", "🏝", "Wira Pulau", "Lulus satu Misi Khas di pulau (7/10)", () => [Object.values(LM.st.kh || {}).some((r) => r && r.b >= 7) ? 1 : 0, 1]]
+];
+function lmLcProg(L) { let r = [0, 1]; try { r = L[4](); } catch (e) { r = [0, 1]; } return [Math.min(r[0] | 0, r[1] | 0), Math.max(1, r[1] | 0)]; }
+function lmLcCount() { const lc = LM.st.lc || {}; return LCN.filter((L) => lc[L[0]]).length; }
+/* semak lencana baharu (setiap saat dari HUD); kali pertama: rekod senyap untuk pemain lama */
+function lmLcCheck(g) {
+  if (!g || !g.ipta) return;
+  if (lmBorneo(lmAt(g.p.x, g.p.z) || "") && !g.flight) { if (!(LM.st.bo & 2)) LM.st.bo = (LM.st.bo | 0) | 2; }
+  else if (DATA.negeri[lmAt(g.p.x, g.p.z)] && !(LM.st.bo & 4)) LM.st.bo = (LM.st.bo | 0) | 4;
+  const first = !LM.st.lc, lc = LM.st.lc || (LM.st.lc = {}), add = [];
+  LCN.forEach((L) => { if (lc[L[0]]) return; const p = lmLcProg(L); if (p[0] >= p[1]) { lc[L[0]] = Date.now(); add.push(L); } });
+  if (!add.length) { if (first) lmSave(); return; }
+  lmSave();
+  if (first) { lmPop("🏅 " + add.length + " lencana META GEMPUR telah direkodkan"); return; }
+  const xp = lmXp(10 * add.length);
+  add.forEach((L, i) => setTimeout(() => lmLcShow(L, i ? 0 : xp), i * 3800));
+}
+function lmLcShow(L, xp) {
+  if (!LM.root) return; lmSnd("win");
+  const ex = el("div", { class: "lm-lcpop" }, el("i", null, L[1]), el("div", null, el("small", null, "🏅 Lencana baharu"), el("b", null, L[2]), el("span", null, L[3] + (xp ? " · XP +" + xp : ""))));
+  LM.root.appendChild(ex); setTimeout(() => ex.remove(), 3600);
+}
+function lmLcPassport(b) {
+  const lc = LM.st.lc || {}, n = lmLcCount(), J = lmJourney();
+  b.append(el("p", { class: "lm-ex" }, "Lencana diperoleh: " + n + "/" + LCN.length + ". Kumpul lencana dengan menuntut ilmu, mengembara, membantu orang dan merasa juadah setiap negeri."));
+  const grid = el("div", { class: "lm-grid lm-lcgrid" });
+  LCN.forEach((L) => {
+    const on = !!lc[L[0]], p = lmLcProg(L), c = el("div", { class: "lm-lc" + (on ? " on" : "") });
+    c.append(el("i", null, L[1]), el("b", null, L[2]), el("div", null, L[3]));
+    if (on) c.append(el("small", null, "✔ " + new Date(lc[L[0]]).toLocaleDateString("ms-MY")));
+    else { if (p[1] > 2) c.append(el("small", null, p[0] + "/" + p[1])); const bar = el("div", { class: "lm-bar" }), bi = el("i"); bi.style.width = Math.round(100 * p[0] / p[1]) + "%"; bar.appendChild(bi); c.append(bar); }
+    grid.appendChild(c);
+  });
+  const sj = el("div", { class: "lm-stamp" + (J.t && J.d >= J.t ? " on" : ""), style: "margin:10px 0" });
+  sj.append(el("b", null, "📜 Sijil Khas META GEMPUR · " + SUBJS[SUBJ].subjek));
+  if (J.t && J.d >= J.t) sj.append(el("div", null, "Tahniah! Anda layak menerima sijil kerana telah menamatkan perjalanan menuntut ilmu."), lmBtn("Muat turun sijil (PDF)", "pri", lmCertGet));
+  else sj.append(el("div", null, "Lengkapkan semua universiti untuk membuka sijil (" + J.d + "/" + J.t + ")." + (J.next ? " Seterusnya: " + J.next.sn + "." : "")));
+  b.append(sj, grid);
+}
+/* sijil khas META GEMPUR (guna pembantu sijil dalam app.js) */
+function lmCertOk() { const J = lmJourney(); return !!(J.t && J.d >= J.t); }
+async function lmCertGet() {
+  if (!lmCertOk()) { toast("Lengkapkan semua universiti dahulu untuk menerima sijil.", "warn"); return; }
+  if (!P.nama) { toast("Daftar nama anda dahulu.", "warn"); return; }
+  toast("Menyediakan sijil...", "ok");
+  let jpg = null, scale = 2;
+  for (const sc of [2, 1]) {
+    try { const c = await lmCertCanvas(sc); const bl = await new Promise((r) => c.toBlob(r, "image/jpeg", 0.93)); if (bl) { jpg = new Uint8Array(await bl.arrayBuffer()); scale = sc; break; } } catch (e) { /* cuba saiz lebih kecil */ }
+  }
+  if (!jpg) { toast("Sijil gagal dijana. Cuba lagi.", "warn"); return; }
+  const nm = "Sijil-META-GEMPUR-" + cleanFull(P.penuh || P.nama).replace(/[^A-Za-z0-9]+/g, "-").replace(/^-+|-+$/g, "") + ".pdf";
+  const r = await saveFile(certPdf(jpg, 1754 * scale, 1240 * scale), nm);
+  if (r === "ok") { LM.st.sj = LM.st.sj || Date.now(); lmSave(); toast("Sijil META GEMPUR telah dimuat turun.", "ok"); }
+}
+async function lmCertCanvas(scale) {
+  await certLoadFonts();
+  const now = Date.now(), W = 1754, H = 1240, c = document.createElement("canvas");
+  c.width = W * scale; c.height = H * scale;
+  const g = c.getContext("2d"); g.scale(scale, scale);
+  const TEAL = "#0b4a4a", DEEP = "#082f36", GOLD = "#b8902c", GOLD2 = "#d9b44a", RED = "#8c1d2c", PAPER = "#f8f6ec", INK = "#2a2a2a", MUTE = "#5c5a52";
+  const SERIF = "'Cormorant Garamond', Georgia, 'Times New Roman', serif", CAPS = "Cinzel, 'Times New Roman', serif", SANS = "Barlow, Arial, sans-serif";
+  const J = lmJourney(), s = lmSummary(), sub = SUBJS[SUBJ].subjek;
+  g.fillStyle = PAPER; g.fillRect(0, 0, W, H);
+  /* corak guilloche halus */
+  g.save(); g.globalAlpha = 0.5;
+  certRosette(g, W / 2, H / 2 + 30, 520, 173, 240, "rgba(11,74,74,0.12)", 1.2);
+  certRosette(g, W / 2, H / 2 + 30, 430, 113, 190, "rgba(184,144,44,0.12)", 1);
+  g.restore();
+  g.fillStyle = DEEP; g.fillRect(0, 0, W, 22); g.fillRect(0, H - 22, W, 22);
+  g.fillStyle = GOLD; g.fillRect(0, 22, W, 4); g.fillRect(0, H - 26, W, 4);
+  g.strokeStyle = TEAL; g.lineWidth = 10; g.strokeRect(48, 48, W - 96, H - 96);
+  g.strokeStyle = GOLD; g.lineWidth = 3; g.strokeRect(66, 66, W - 132, H - 132);
+  g.strokeStyle = TEAL; g.lineWidth = 1.5; g.strokeRect(78, 78, W - 156, H - 156);
+  [[78, 78, 1, 1], [W - 78, 78, -1, 1], [78, H - 78, 1, -1], [W - 78, H - 78, -1, -1]].forEach(([x, y, sx, sy]) => {
+    g.save(); g.translate(x, y); g.scale(sx, sy);
+    g.fillStyle = GOLD; g.beginPath(); g.moveTo(0, 0); g.lineTo(80, 0); g.lineTo(0, 80); g.closePath(); g.fill();
+    g.fillStyle = TEAL; g.beginPath(); g.moveTo(0, 0); g.lineTo(50, 0); g.lineTo(0, 50); g.closePath(); g.fill();
+    g.fillStyle = PAPER; certStar(g, 22, 22, 13, 5); g.fill(); g.restore();
+  });
+  /* lambang: globe bergaris dalam heksagon */
+  const ex = W / 2, ey = 158;
+  g.fillStyle = TEAL; certHex(g, ex, ey, 58, Math.PI / 6); g.fill();
+  g.strokeStyle = GOLD2; g.lineWidth = 4; certHex(g, ex, ey, 58, Math.PI / 6); g.stroke();
+  g.strokeStyle = GOLD2; g.lineWidth = 2.5; g.beginPath(); g.arc(ex, ey, 30, 0, Math.PI * 2); g.stroke();
+  g.beginPath(); g.ellipse(ex, ey, 13, 30, 0, 0, Math.PI * 2); g.stroke();
+  g.beginPath(); g.moveTo(ex - 30, ey); g.lineTo(ex + 30, ey); g.moveTo(ex - 26, ey - 15); g.lineTo(ex + 26, ey - 15); g.moveTo(ex - 26, ey + 15); g.lineTo(ex + 26, ey + 15); g.stroke();
+  certText(g, "META GEMPUR · " + sub.toUpperCase(), W / 2, 250, "600 26px " + CAPS, TEAL, "center", 7, 1200);
+  certText(g, "SIJIL KHAS", W / 2, 338, "700 88px " + CAPS, TEAL, "center", 8);
+  certText(g, "PERJALANAN MENUNTUT ILMU", W / 2, 396, "700 32px " + CAPS, RED, "center", 8);
+  g.font = "700 32px " + CAPS; try { g.letterSpacing = "8px"; } catch (e) { /* abaikan */ }
+  const hw = g.measureText("PERJALANAN MENUNTUT ILMU").width / 2; try { g.letterSpacing = "0px"; } catch (e) { /* abaikan */ }
+  g.strokeStyle = GOLD; g.lineWidth = 2.5; g.beginPath(); g.moveTo(W / 2 - hw - 170, 385); g.lineTo(W / 2 - hw - 28, 385); g.moveTo(W / 2 + hw + 28, 385); g.lineTo(W / 2 + hw + 170, 385); g.stroke();
+  certText(g, "Dengan ini disahkan bahawa", W / 2, 460, "italic 500 34px " + SERIF, MUTE, "center", 0);
+  certText(g, cleanFull(P.penuh || P.nama).toUpperCase(), W / 2, 552, "600 92px " + SERIF, TEAL, "center", 3, 1300);
+  g.strokeStyle = GOLD; g.lineWidth = 2; g.beginPath(); g.moveTo(W / 2 - 330, 576); g.lineTo(W / 2 + 330, 576); g.stroke();
+  const asal = [cleanSekolah(P.sekolah), negeriNama(P.negeri)].filter(Boolean).join(", ") + (P.kelas ? " | " + P.kelas : "");
+  certText(g, asal, W / 2, 624, "600 30px " + SANS, INK, "center", 1.5, 1350);
+  certText(g, "telah menamatkan perjalanan menuntut ilmu dalam dunia maya META GEMPUR,", W / 2, 688, "italic 500 34px " + SERIF, INK, "center", 0, 1400);
+  certText(g, "mengembara ke " + J.t + " universiti di seluruh Malaysia dan lulus setiap tajuk " + sub + ".", W / 2, 730, "italic 500 34px " + SERIF, INK, "center", 0, 1400);
+  const stats = [[J.d + " / " + J.t, "Universiti"], [s.tw + " / " + s.twN, "Tajuk ditawan"], [lmLcCount() + " / " + LCN.length, "Lencana"], [String(LM.st.ak | 0), "Akhlak terpuji"], [s.pl + " / " + s.plN, "Tempat diziarahi"]];
+  const bw = 270, gap = 22, x0 = W / 2 - (bw * 5 + gap * 4) / 2, by = 778;
+  stats.forEach((t, i) => {
+    const x = x0 + i * (bw + gap);
+    g.fillStyle = "rgba(11,74,74,0.05)"; g.fillRect(x, by, bw, 94);
+    g.strokeStyle = "rgba(184,144,44,0.7)"; g.lineWidth = 1.5; g.strokeRect(x, by, bw, 94);
+    g.fillStyle = GOLD; g.fillRect(x, by, 6, 94);
+    certText(g, t[0], x + bw / 2, by + 50, "700 38px " + CAPS, TEAL, "center", 1, bw - 30);
+    certText(g, t[1].toUpperCase(), x + bw / 2, by + 79, "600 16px " + SANS, MUTE, "center", 2.5);
+  });
+  /* deretan lencana (bulatan emas = diperoleh) */
+  const lc = LM.st.lc || {}, nL = LCN.length, dx = 34, lx0 = W / 2 - (nL - 1) * dx / 2;
+  LCN.forEach((L, i) => { const on = !!lc[L[0]], x = lx0 + i * dx, y = 912; g.fillStyle = on ? GOLD2 : "rgba(92,90,82,0.18)"; g.beginPath(); g.arc(x, y, 11, 0, Math.PI * 2); g.fill(); if (on) { g.fillStyle = TEAL; certStar(g, x, y, 7, 3); g.fill(); } });
+  const d = new Date(now), tarikh = d.getDate() + " " + BULAN[d.getMonth()] + " " + d.getFullYear(), ly = 1066;
+  g.strokeStyle = TEAL; g.lineWidth = 1.5; g.beginPath(); g.moveTo(190, ly); g.lineTo(520, ly); g.moveTo(W - 520, ly); g.lineTo(W - 190, ly); g.stroke();
+  certText(g, tarikh, 355, ly - 14, "italic 600 34px " + SERIF, TEAL, "center", 0);
+  certText(g, "TARIKH", 355, ly + 26, "600 16px " + SANS, MUTE, "center", 3);
+  certText(g, CERT.issuer, W - 355, ly - 14, "italic 700 34px " + SERIF, TEAL, "center", 0);
+  certText(g, "DIKELUARKAN OLEH", W - 355, ly + 26, "600 16px " + SANS, MUTE, "center", 3);
+  const sx = W / 2, sy = 1036;
+  g.fillStyle = GOLD; g.beginPath(); for (let i = 0; i < 32; i++) { const a = i * Math.PI / 16, r = i % 2 ? 70 : 80; g[i ? "lineTo" : "moveTo"](sx + Math.cos(a) * r, sy + Math.sin(a) * r); } g.closePath(); g.fill();
+  g.fillStyle = TEAL; g.beginPath(); g.arc(sx, sy, 63, 0, Math.PI * 2); g.fill();
+  g.strokeStyle = GOLD2; g.lineWidth = 2.5; g.beginPath(); g.arc(sx, sy, 56, 0, Math.PI * 2); g.stroke();
+  g.fillStyle = GOLD2; certStar(g, sx, sy - 8, 26, 11); g.fill();
+  certText(g, "GRADUAN", sx, sy + 38, "700 12px " + CAPS, GOLD2, "center", 2.5);
+  certText(g, "No. sijil: " + certNo(now).replace(/^GT-/, "MG-"), W / 2, 1136, "500 17px " + SANS, MUTE, "center", 2);
+  certText(g, "Sijil ini dikeluarkan oleh sistemguru.my melalui META GEMPUR dan bukan sijil rasmi Kementerian Pendidikan Malaysia.", W / 2, 1156, "500 14px " + SANS, MUTE, "center", 0.5);
+  return c;
 }
 
 /* ---------- kuiz ---------- */
@@ -3068,14 +3306,15 @@ function lmTeleport(x, z, msg) {
 /* pasport ziarah */
 function lmPassport(tab) {
   if (tab) LM.ppTab = tab;
-  const cur = LM.ppTab === "tajuk" ? "tajuk" : LM.ppTab === "ipta" ? "ipta" : "tempat";
+  const cur = ["tajuk", "ipta", "lencana"].indexOf(LM.ppTab) >= 0 ? LM.ppTab : "tempat";
   lmCard((b) => {
     const s = lmSummary();
     b.append(el("div", { class: "lm-kick" }, "Pasport · " + (cleanName(P.nama) || "Pelajar") + " · " + SUBJS[SUBJ].subjek), el("h2", null, s.pl + "/" + s.plN + " cop tempat · " + s.tw + "/" + s.twN + " tajuk ditawan"));
     const tabs = el("div", { class: "lm-row lm-tabs" });
-    [["tempat", "📘 Tempat dilawati"], ["tajuk", "🏰 Tajuk mengikut tema"], ["ipta", "🎓 IPTA"]].forEach(([k, n]) => { const t = lmBtn(n, k === cur ? "pri" : "", () => lmPassport(k)); t.setAttribute("aria-pressed", k === cur ? "true" : "false"); tabs.appendChild(t); });
+    [["tempat", "📘 Tempat dilawati"], ["tajuk", "🏰 Tajuk mengikut tema"], ["ipta", "🎓 IPTA"], ["lencana", "🏅 Lencana " + lmLcCount() + "/" + LCN.length]].forEach(([k, n]) => { const t = lmBtn(n, k === cur ? "pri" : "", () => lmPassport(k)); t.setAttribute("aria-pressed", k === cur ? "true" : "false"); tabs.appendChild(t); });
     b.appendChild(tabs);
     if (cur === "tajuk") { lmTopicList(b); b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose))); return; }
+    if (cur === "lencana") { lmLcPassport(b); b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose))); return; }
     if (cur === "ipta") { lmIptaPassport(b); b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose))); return; }
     if (s.pl >= s.plN) b.append(el("p", null, "Gelaran: Pengembara META GEMPUR! Anda telah menziarahi semua tempat."));
     b.append(el("p", { class: "lm-ex" }, "✈ Penerbangan Gempur Air: " + (LM.st.fl | 0) + " · Lapangan terbang didarati: " + Object.keys(LM.st.ap || {}).length + "/" + AIRPORTS.length));
@@ -3384,6 +3623,7 @@ function lmHud() {
   ui.wx = el("div", { class: "lm-pill", title: "Waktu dan cuaca (1 minit = 1 jam permainan)" });
   ui.en = el("div", { class: "lm-pill", title: "Tenaga: berkurang apabila berjalan, berlari atau berenang. Makan di kedai makan atau kantin sekolah." });
   ui.hud.append(ui.state, ui.wx, ui.pts, ui.coin, ui.en, ui.stamp, ui.tw, ui.peers, ui.wp); r.appendChild(ui.hud);
+  ui.guide = el("div", { class: "lm-guide", role: "status", title: "Ketik untuk melihat pasport universiti" }); ui.guide.addEventListener("click", () => lmPassport(lmCertOk() ? "lencana" : "ipta")); r.appendChild(ui.guide);
   ui.quest = el("div", { class: "lm-quest" }); r.appendChild(ui.quest); lmQuestRender();
   ui.mm = el("canvas", { class: "lm-mm", width: 380, height: 192, title: "Buka peta (M)", "aria-label": "Peta mini" }); ui.mm.addEventListener("click", lmBigMap); r.appendChild(ui.mm);
   LM.mmBase = lmMapBase(380, 192);
@@ -3427,7 +3667,12 @@ function lmHudTick(g) {
   if (DATA.negeri[k] || ISL_BY[k]) g.lastK = k;
   ui.coin.innerHTML = ""; ui.coin.append("🪙 ", el("b", null, String(P.coin | 0)));
   if (g.wx && g.wx.h != null) { const W = g.wx, h = W.h, ic = W.kind === "ribut" ? "⛈" : W.kind === "hujan" ? "🌧" : W.kind === "berawan" ? "⛅" : h < 6.2 || h > 19.4 ? "🌙" : h < 7.6 ? "🌅" : h > 18.4 ? "🌇" : W.terik ? "🥵" : "☀️", t = ic + " " + lmClockTxt(h) + " · " + (W.terik ? "Panas terik" : WXN[W.kind]); if (ui.wx.textContent !== t) ui.wx.textContent = t; }
-  if (ui.quest && ui.hud) { const tp = ui.hud.offsetTop + ui.hud.offsetHeight + 6; if (ui.quest._tp !== tp) { ui.quest._tp = tp; ui.quest.style.top = tp + "px"; } } /* panel misi di bawah HUD (HUD boleh menjadi dua baris) */
+  lmGuideTick(g);
+  { const t = performance.now(); if (t - (g.lcT || 0) > 1000) { g.lcT = t; lmLcCheck(g); } }
+  if (ui.hud) { /* panduan dan panel misi di bawah HUD (HUD boleh menjadi dua baris) */
+    const t1 = ui.hud.offsetTop + ui.hud.offsetHeight + 6; if (ui.guide && ui.guide._tp !== t1) { ui.guide._tp = t1; ui.guide.style.top = t1 + "px"; }
+    const t2 = ui.guide ? ui.guide.offsetTop + ui.guide.offsetHeight + 6 : t1; if (ui.quest && ui.quest._tp !== t2) { ui.quest._tp = t2; ui.quest.style.top = t2 + "px"; }
+  }
   { const e = Math.round(lmEnergy()), t = (e <= 15 ? "😫" : e <= 35 ? "🍛" : "🍛") + " Tenaga " + e + "%"; if (ui.en.textContent !== t) { ui.en.textContent = t; ui.en.style.color = e <= 15 ? "#ff6b6b" : e <= 35 ? "#ffd166" : ""; } }
   { /* mata hari ini (sama seperti papan Top 5) dan kedudukan */
     let pts = 0; try { pts = rkVal(rkLoad().m, "all", "hari", "jumlah", ""); } catch (e) { pts = 0; }
@@ -3441,7 +3686,7 @@ function lmHudTick(g) {
   ui.peers.textContent = op ? (LM.room ? "🌏 " + (np + 1) + " · " + (ZONES[LM.zone] || "") : LM.openFull ? "🌏 Penuh · main solo" : "🌏 Menyambung...") : "👥 " + (np + 1) + (LM.roomKind === "sekolah" ? " · sekolah" : LM.roomCode ? " · " + LM.roomCode : "");
   ui.chat.hidden = !LM.room; if (!ui.vcB.hidden !== lmVoiceOk()) lmVoiceUi();
   if (g.wp && g.wp.pid) { const e = LM.peers[g.wp.pid]; if (!e) { g.wp = null; lmWpSet(); lmPop("Rakan sudah keluar"); } else { g.wp.x = e.x; g.wp.z = e.z; lmWpSet(); } }
-  if (g.wp) { ui.wp.hidden = false; const d = Math.round(Math.hypot(g.wp.x - g.p.x, g.wp.z - g.p.z)); ui.wp.textContent = "📍 " + g.wp.n + " · " + d + " m"; if (d < 12) { g.wp = null; lmWpSet(); } }
+  if (g.wp) { ui.wp.hidden = false; const d = Math.round(Math.hypot(g.wp.x - g.p.x, g.wp.z - g.p.z)), km = KM(d); ui.wp.textContent = "📍 " + g.wp.n + " · " + (km < 1 ? Math.round(km * 1000) + " m" : Math.round(km) + " km"); if (d < 12) { g.wp = null; lmWpSet(); } }
   else ui.wp.hidden = true;
 }
 /* ---------- interaksi ---------- */
@@ -3709,5 +3954,5 @@ function lmClose() {
 }
 /* untuk ujian automatik */
 LM._g = (x, z) => lmGround(x, z); LM._fly = (a, d) => lmFlyStart(a, d); LM._ride = (a, b) => lmRide(a, b); LM._rai = () => lmRai(); LM._swim = (x, z) => lmSwimOk(x, z);
-LM._t = { lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
+LM._t = { lmCertCanvas: lmCertCanvas, lmLcCheck: lmLcCheck, LCN: LCN, lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
 })();
