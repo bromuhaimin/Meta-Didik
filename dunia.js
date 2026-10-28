@@ -1596,6 +1596,51 @@ function lmRailsPath(g, avoid) {
     R.pts = pts; R.cum = cum; R.len = cum[cum.length - 1];
     for (let i = 0; i < pts.length; i += 2) avoid.push({ x: pts[i].x, z: pts[i].z, r: 7 });
   }
+  lmRailFlyovers(g);
+}
+/* v18.16: jejantas rel. Di setiap persilangan landasan kereta api dengan lebuh raya, landasan dinaikkan
+   FLY_H unit di atas jalan dengan cerun landai di kedua-dua belah (bas lalu di bawah). Persilangan terlalu
+   dekat dengan stesen kekal sebagai lintasan aras. */
+const FLY_H = 8, FLY_FLAT = 16, FLY_GRADE = 0.11, FLY_CS = 40;
+function lmSegX(a, b, c, d) {
+  const rx = b.x - a.x, rz = b.z - a.z, sx = d.x - c.x, sz = d.z - c.z, den = rx * sz - rz * sx; if (Math.abs(den) < 1e-9) return null;
+  const qx = c.x - a.x, qz = c.z - a.z, t = (qx * sz - qz * sx) / den, u = (qx * rz - qz * rx) / den;
+  return t >= 0 && t <= 1 && u >= 0 && u <= 1 ? { t: t, u: u } : null;
+}
+function lmRoadNear(g, x, z, r) {
+  const G = g.roadSeg; if (!G) return false;
+  const cx = Math.floor(x / FLY_CS), cz = Math.floor(z / FLY_CS);
+  for (let ox = -1; ox <= 1; ox++) for (let oz = -1; oz <= 1; oz++) {
+    const L = G.get((cx + ox) + "," + (cz + oz)); if (!L) continue;
+    for (const s of L) { const vx = s.b.x - s.a.x, vz = s.b.z - s.a.z, l2 = vx * vx + vz * vz || 1, t = clamp(((x - s.a.x) * vx + (z - s.a.z) * vz) / l2, 0, 1); if (Math.hypot(s.a.x + vx * t - x, s.a.z + vz * t - z) < r) return true; }
+  }
+  return false;
+}
+function lmRailFlyovers(g) {
+  const G = g.roadSeg = new Map();
+  for (const R of g.rails) if (R.L.road && R.pts) R.pts.forEach((p, i) => { if (!i) return; const q = R.pts[i - 1], k = Math.floor((p.x + q.x) / 2 / FLY_CS) + "," + Math.floor((p.z + q.z) / 2 / FLY_CS); let L = G.get(k); if (!L) G.set(k, (L = [])); L.push({ a: q, b: p }); });
+  g.flyN = 0;
+  for (const R of g.rails) {
+    if (R.L.road || R.L.metro || !R.pts) continue;
+    const P = R.pts, C = R.cum, hits = [];
+    for (let i = 1; i < P.length; i++) {
+      const a = P[i - 1], b = P[i], cx = Math.floor((a.x + b.x) / 2 / FLY_CS), cz = Math.floor((a.z + b.z) / 2 / FLY_CS);
+      for (let ox = -1; ox <= 1; ox++) for (let oz = -1; oz <= 1; oz++) {
+        const L = G.get((cx + ox) + "," + (cz + oz)); if (!L) continue;
+        for (const sg of L) { const x = lmSegX(a, b, sg.a, sg.b); if (x) hits.push({ s: C[i - 1] + (C[i] - C[i - 1]) * x.t, y: sg.a.y + (sg.b.y - sg.a.y) * x.u }); }
+      }
+    }
+    for (const h of hits) {
+      if (R.st.some((st) => Math.hypot(st.x - lmRailAt(R, h.s).x, st.z - lmRailAt(R, h.s).z) < 45)) continue; /* dekat stesen: lintasan aras */
+      const top = h.y + FLY_H; g.flyN++; { const q = lmRailAt(R, h.s); (g.flyAt || (g.flyAt = [])).push({ x: q.x, z: q.z, id: R.L.id }); }
+      for (let j = 0; j < P.length; j++) {
+        const d = Math.abs(C[j] - h.s); if (d > FLY_FLAT + FLY_H / FLY_GRADE + 4) continue;
+        const want = top - Math.max(0, d - FLY_FLAT) * FLY_GRADE;
+        if (want > P[j].y) { P[j].y = want; P[j].tun = false; P[j].up = true; }
+        if (d < FLY_FLAT + 6) P[j].fly = true;
+      }
+    }
+  }
 }
 /* dipanggil oleh lmBuildTerrain selepas tapak rata: potong bukit / tambak rendah di sepanjang landasan */
 function lmRailCarve(g) {
@@ -1605,7 +1650,7 @@ function lmRailCarve(g) {
     if (!R.pts || R.L.metro) continue;
     const Wr = R.L.road ? 8 : 0;
     for (const p of R.pts) {
-      if (p.tun) continue;
+      if (p.tun || p.fly || p.up) continue;
       const W2 = W1 + Wr, xa = Math.max(0, Math.floor((p.x - W2 - x0) / cs)), xb = Math.min(nx - 1, Math.ceil((p.x + W2 - x0) / cs));
       const za = Math.max(0, Math.floor((p.z - W2 - z0) / cs)), zb = Math.min(nz - 1, Math.ceil((p.z + W2 - z0) / cs));
       /* keutamaan ikut jarak sebenar ke garisan (landasan dan lebuh raya yang berdekatan tidak saling menimbus); lebar rata lebuh raya disimpan berasingan */
@@ -1682,7 +1727,10 @@ function lmRailsBuild(g) {
     /* kayu landas konkrit setiap ~1.6 unit, tiang elektrik setiap ~32 unit, tiang jambatan */
     for (let s = 0; s < R.len; s += 1.6) { const a = lmRailAt(R, s); if (!a.tun) sleepers.push(a); }
     for (let s = 6; s < R.len; s += 32) { const a = lmRailAt(R, s); if (!a.tun) masts.push(a); }
-    for (let i = 0; i < pts.length; i += 3) { const p = pts[i], gy = lmHRaw(p.x, p.z); if (p.y - gy > 2.4 && !p.tun) pillars.push({ x: p.x, z: p.z, y0: Math.max(gy, -16), y1: p.y - 0.75 }); }
+    for (let i = 0; i < pts.length; i += 3) { const p = pts[i], gy = lmHRaw(p.x, p.z); if (p.y - gy > 2.4 && !p.tun && !((p.fly || p.up) && lmRoadNear(g, p.x, p.z, 9))) pillars.push({ x: p.x, z: p.z, y0: Math.max(gy, -16), y1: p.y - 0.75 }); }
+    /* v18.16: rasuk jejantas (galang konkrit di bawah landasan dan dinding sisi) */
+    { const fl = (i) => !(pts[i].fly && pts[i - 1].fly), gm = GEO.flyM || (GEO.flyM = lmMat("#b8b2a6"));
+      if (pts.some((q) => q.fly)) { g.scene.add(new T.Mesh(lmSweep(pts, cum, [[-3.3, -2.2], [-3.3, -0.6], [3.3, -0.6], [3.3, -2.2]], 6, fl), gm)); for (const o of [-3.2, 3.2]) g.scene.add(new T.Mesh(lmSweep(pts, cum, [[o - 0.15, -0.7], [o - 0.15, 0.9], [o + 0.15, 0.9], [o + 0.15, -0.7]], 6, fl), gm)); } }
     /* portal di kedua-dua hujung terowong */
     for (let i = 1; i < pts.length; i++) if (pts[i].tun !== pts[i - 1].tun) {
       const j = pts[i].tun ? i - 1 : i, a = lmRailAt(R, cum[j]), po = lmPortal();
@@ -1805,7 +1853,7 @@ const RAIL_TXT = {
   mrtpy: "MRT Laluan Putrajaya dari Kwasa Damansara ke Putrajaya Sentral, melalui KLCC (bawah tanah) dan stesen UPM.",
   mono: "Monorel KL bergerak di atas satu rasuk konkrit dari KL Sentral ke Bukit Bintang dan Titiwangsa."
 };
-/* v18.12: ETS, ECRL dan bas ekspres memerlukan tiket: lulus kuiz ringkas (2 daripada 3 betul) setiap kali menaiki */
+/* v18.12: ETS, ECRL dan bas ekspres memerlukan tiket: lulus kuiz ringkas (v18.16: 3 daripada 5 betul) setiap kali menaiki */
 function lmRailOpen(st, chosen) {
   if (!chosen && st.hub && st.hub.lines.length > 1) {
     lmCard((b) => {
@@ -1827,11 +1875,11 @@ function lmRailOpen(st, chosen) {
   }
   if (!L.quiz) return lmRailPick(st);
   lmQuiz({
-    kick: (L.road ? "🚌 Tiket bas " : lmIc(L) + " Tiket ") + L.n, title: "Jawab untuk dapatkan tiket", pass: 2, qs: lmPickQs([], 3),
-    intro: (b) => { b.append(el("div", { class: "lm-kick" }, lmIc(L) + " " + L.nm + " · " + st.n), el("h2", null, "Tiket perjalanan"), el("p", null, RAIL_TXT[L.id] || ""), el("p", null, "Jawab 3 soalan. Betul sekurang-kurangnya 2 untuk mendapat tiket " + (L.road ? "bas ekspres." : L.n + "."))); },
+    kick: (L.road ? "🚌 Tiket bas " : lmIc(L) + " Tiket ") + L.n, title: "Jawab untuk dapatkan tiket", pass: 3, qs: lmPickQs([], 5),
+    intro: (b) => { b.append(el("div", { class: "lm-kick" }, lmIc(L) + " " + L.nm + " · " + st.n), el("h2", null, "Tiket perjalanan"), el("p", null, RAIL_TXT[L.id] || ""), el("p", null, "Jawab 5 soalan. Betul sekurang-kurangnya 3 untuk mendapat tiket " + (L.road ? "bas ekspres." : L.n + "."))); },
     onDone: (pass, ok, tot) => {
       if (pass) { lmPop("Tiket diperoleh! (" + ok + "/" + tot + ")"); lmRailPick(st); }
-      else lmCard((b) => { b.append(el("div", { class: "lm-kick" }, "Tiket belum diperoleh"), el("h2", null, ok + "/" + tot + " betul"), el("p", null, "Betul sekurang-kurangnya 2 untuk mendapat tiket. Cuba lagi.")); b.append(el("div", { class: "lm-row" }, lmBtn("Cuba lagi", "pri", () => lmRailOpen(st)), lmBtn("Nanti dulu", "", lmCardClose))); });
+      else lmCard((b) => { b.append(el("div", { class: "lm-kick" }, "Tiket belum diperoleh"), el("h2", null, ok + "/" + tot + " betul"), el("p", null, "Betul sekurang-kurangnya 3 untuk mendapat tiket. Cuba lagi.")); b.append(el("div", { class: "lm-row" }, lmBtn("Cuba lagi", "pri", () => lmRailOpen(st)), lmBtn("Nanti dulu", "", lmCardClose))); });
     }
   });
 }
@@ -3442,8 +3490,12 @@ async function lmCertCanvas(scale) {
 function lmPickQs(tids, n) {
   let pool = []; tids.forEach((t) => { pool = pool.concat(BYTOPIK[t] || []); });
   if (pool.length < n) pool = pool.concat(shuffle(QLIST.slice()).slice(0, n * 3));
+  /* v18.16: soalan yang baru dijawab (120 terakhir) diletakkan di belakang supaya tidak kerap berulang */
+  const rec = Array.isArray(LM.st.qr) ? LM.st.qr : (LM.st.qr = []), recS = new Set(rec);
+  const sh = shuffle(pool.slice()), ord = sh.filter((q) => !recS.has(q.i)).concat(sh.filter((q) => recS.has(q.i)));
   const seen = new Set(), out = [];
-  for (const q of shuffle(pool.slice())) { if (seen.has(q.i)) continue; seen.add(q.i); out.push(q); if (out.length >= n) break; }
+  for (const q of ord) { if (seen.has(q.i)) continue; seen.add(q.i); out.push(q); if (out.length >= n) break; }
+  out.forEach((q) => rec.push(q.i)); if (rec.length > 120) rec.splice(0, rec.length - 120);
   return out.map((q) => { const ord = shuffle([0, 1, 2, 3]); return { q: q, o: ord.map((i) => q.o[i]), ans: ord.indexOf(q.a) }; });
 }
 /* opt: { kick, title, intro, qs, pass, onDone(ok, tot) } */
@@ -3521,11 +3573,11 @@ function lmPlaceOpen(pl) {
   lmNamesLoad(pl);
   const tids = DATA.topik.filter((t) => t.negeri === pl.k).map((t) => t.id), seen = !!LM.st.pl[pl.id];
   lmQuiz({
-    kick: "Ziarah · " + DATA.negeri[pl.k].pendek, title: pl.n, pass: 2, qs: lmPickQs(tids, 3),
+    kick: "Ziarah · " + DATA.negeri[pl.k].pendek, title: pl.n, pass: 3, qs: lmPickQs(tids, 5),
     intro: (b) => {
       b.append(el("div", { class: "lm-kick" }, "Tempat pelancongan · " + DATA.negeri[pl.k].nama), el("h2", null, pl.n));
       b.append(el("p", null, pl.fakta));
-      b.append(el("p", { class: "lm-ex" }, (seen ? "Anda sudah menziarahi tempat ini. " : "") + "Jawab 3 soalan (betul sekurang-kurangnya 2) untuk mendapat cop pasport dan menggantung nama pada Papan Kenangan." + (pl.count ? " Sudah " + pl.count + " pelawat menggantung nama di sini." : "")));
+      b.append(el("p", { class: "lm-ex" }, (seen ? "Anda sudah menziarahi tempat ini. " : "") + "Jawab 5 soalan (betul sekurang-kurangnya 3) untuk mendapat cop pasport dan menggantung nama pada Papan Kenangan." + (pl.count ? " Sudah " + pl.count + " pelawat menggantung nama di sini." : "")));
     },
     onDone: (pass, ok, tot) => {
       let xp = 0;
@@ -3989,6 +4041,12 @@ function lmHudTick(g) {
 function lmNearTick(g) {
   let best = null, bd = 1e9;
   for (const it of g.items) { const d = Math.hypot(it.x - g.p.x, it.z - g.p.z); if (d < it.ir && d < bd) { bd = d; best = it; } }
+  /* v18.16: seluruh kompleks lapangan terbang (landasan, apron, terminal, pintu masuk) boleh ditekan E, bukan satu titik sahaja */
+  if (!best) for (const it of g.items) {
+    if (it.kind !== "ap" || !it.rw) continue;
+    const w = it.rw, ux = Math.cos(w.a), uz = Math.sin(w.a), dx = g.p.x - w.x, dz = g.p.z - w.z, u = dx * ux + dz * uz, v = -dx * uz + dz * ux;
+    if (Math.abs(u) < w.L + 14 && v > -16 && v < 60) { best = it; break; }
+  }
   /* papan kenangan juga boleh dibuka dari hadapannya */
   for (const it of g.items) if (it.kind === "pl") { const d = Math.hypot(it.bx - g.p.x, it.bz - g.p.z); if (d < 7 && d < bd) { bd = d; best = it; } if (d < 60) lmNamesLoad(it); }
   g.near = best;
