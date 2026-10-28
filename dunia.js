@@ -3579,7 +3579,7 @@ async function lmCertGet() {
     try { const c = await lmCertCanvas(sc); const bl = await new Promise((r) => c.toBlob(r, "image/jpeg", 0.93)); if (bl) { jpg = new Uint8Array(await bl.arrayBuffer()); scale = sc; break; } } catch (e) { /* cuba saiz lebih kecil */ }
   }
   if (!jpg) { toast("Sijil gagal dijana. Cuba lagi.", "warn"); return; }
-  const nm = "Sijil-META-META DIDIK-" + cleanFull(P.penuh || P.nama).replace(/[^A-Za-z0-9]+/g, "-").replace(/^-+|-+$/g, "") + ".pdf";
+  const nm = "Sijil-Meta-Didik-" + cleanFull(P.penuh || P.nama).replace(/[^A-Za-z0-9]+/g, "-").replace(/^-+|-+$/g, "") + ".pdf";
   const r = await saveFile(certPdf(jpg, 1754 * scale, 1240 * scale), nm);
   if (r === "ok") { LM.st.sj = LM.st.sj || Date.now(); lmSave(); toast("Sijil META DIDIK telah dimuat turun.", "ok"); }
 }
