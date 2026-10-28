@@ -3522,6 +3522,7 @@ const LCN = [
   ["fdAll", "🍛", "Duta Juadah Malaysia", "Rasa masakan tradisi setiap negeri", () => [FOOD.filter((f) => (LM.st.food || {})[f[0]]).length, FOOD.length]],
   ["rail", "🚆", "Penumpang Kereta Api", "Naik ETS, ECRL, KTM Komuter atau kereta api lain", () => [LM.st.rt | 0, 1]],
   ["kampus5", "🎓", "Kembara Kampus", "Lawati galeri 5 kampus IPT", () => [Object.keys(LM.st.kp || {}).length, 5]],
+  ["tetamu", "🕋", "Tetamu Allah", "Selesaikan Umrah atau Haji di Tanah Suci", () => [Object.keys(LM.st.ts || {}).length ? 1 : 0, 1]],
   ["metro", "🚇", "Warga Kota", "Naik MRT, LRT atau Monorel", () => [LM.st.rm | 0, 1]],
   ["bus", "🚌", "Kembara Lebuh Raya", "Naik bas ekspres di lebuh raya", () => [LM.st.rb | 0, 1]],
   ["fly", "✈", "Juruterbang Muda", "Terbang dengan Didik Air", () => [LM.st.fl | 0, 1]],
@@ -3811,8 +3812,33 @@ function lmAirportOpen(ap) {
         } });
       }));
     });
+    if (ap.id === "ap-klia") b.append(el("div", { class: "lm-row" }, lmBtn("🕋 Penerbangan Umrah / Haji ke Jeddah", "pri", lmTanahSuci)));
     b.append(grid, el("div", { class: "lm-row" }, lmBtn("Tutup", "", lmCardClose)));
   });
+}
+/* v18.18: penerbangan ibadah dari KLIA ke Tanah Suci (mod/tanahsuci.js): rupa bumi sebenar Makkah dan Madinah,
+   setiap manasik dilaksanakan di lokasi sebenar melalui simulasi haji. Selepas pulang, pemain kembali ke KLIA. */
+function lmTanahSuci() {
+  let sv = null; try { sv = JSON.parse(localStorage.getItem("gt-ts") || "null"); } catch (e) { sv = null; }
+  const opts = [["umrah", "🕋 Umrah", "Ihram, tawaf, saie dan tahallul. Boleh dikerjakan sepanjang tahun."], ["ifrad", "🥇 Haji Ifrad", "Haji dahulu, kemudian umrah dari Tan'im. Tiada dam."], ["qiran", "🔗 Haji Qiran", "Niat haji dan umrah serentak. Wajib dam."], ["tamattuk", "🔄 Haji Tamattuk", "Umrah dahulu, kemudian ihram haji pada 8 Zulhijjah. Wajib dam."]];
+  lmCard((b) => {
+    b.append(el("div", { class: "lm-kick" }, "KLIA · Didik Air · Penerbangan ibadah"), el("h2", null, "Ke Tanah Suci"));
+    b.append(el("p", null, "Terbang ke Jeddah dan laksanakan setiap manasik di lokasi sebenar: Masjidil Haram, Mina, Muzdalifah dan Arafah, mengikut bentuk muka bumi sebenar. Anda juga boleh menaiki kereta api laju Haramain ke Madinah."));
+    if (sv && sv.mode && sv.i) b.append(el("p", { class: "lm-ex" }, "Kemajuan tersimpan: " + sv.mode + ", " + sv.i + " peringkat selesai. Pilih ibadah yang sama untuk menyambung."));
+    const grid = el("div", { class: "lm-grid" });
+    opts.forEach(([k, n, d]) => { const c = el("div", { class: "lm-stamp" }); c.append(el("b", null, n), el("div", null, d), lmBtn("Pilih", "pri", () => lmTanahGo(k))); grid.appendChild(c); });
+    b.append(grid, el("div", { class: "lm-row" }, lmBtn("Kembali", "", () => lmAirportOpen(LM.g.items.find((x) => x.id === "ap-klia")))));
+  });
+}
+function lmTanahGo(mode) {
+  const code = (LM.g && LM.g.myCode) || "";
+  lmQuiz({ kick: "Pas masuk", title: "Penerbangan ke Jeddah", pass: 1, qs: lmPickQs([], 1), noRai: true, onDone: (pass) => {
+    if (!pass) { lmCard((b2) => { b2.append(el("h2", null, "Pas masuk ditolak"), el("p", null, "Jawapan belum tepat. Cuba lagi.")); b2.append(el("div", { class: "lm-row" }, lmBtn("Cuba lagi", "pri", () => lmTanahGo(mode)), lmBtn("Tutup", "", lmCardClose))); }); return; }
+    lmCardClose(); LM.resume = { at: "ap-klia", msg: "Selamat pulang ke tanah air!" }; lmSave(); lmClose();
+    modLoad("tanahsuci").then(() => window.tsOpen({ mode: mode, code: code,
+      onDone: () => { try { LM.st.ts = LM.st.ts || {}; LM.st.ts[mode] = Date.now(); lmSave(); } catch (e) { /* abaikan */ } },
+      onExit: () => { lmOpen(""); } })).catch(() => { LM.resume = null; toast("Penerbangan tidak dapat dimuatkan. Semak sambungan internet.", "warn"); lmOpen(""); });
+  } });
 }
 function lmTeleport(x, z, msg) {
   const f = LM.ui.fade; f.style.opacity = "1";
@@ -4488,5 +4514,5 @@ function lmClose() {
 }
 /* untuk ujian automatik */
 LM._g = (x, z) => lmGround(x, z); LM._fly = (a, d) => lmFlyStart(a, d); LM._ride = (a, b) => lmRide(a, b); LM._rai = () => lmRai(); LM._swim = (x, z) => lmSwimOk(x, z);
-LM._t = { lmKemOpen: lmKemOpen, lmKampusOpen: lmKampusOpen, lmIlmuOpen: lmIlmuOpen, lmKampusFetch: lmKampusFetch, lmRailOpen: lmRailOpen, lmRide: lmRide, lmStnFetch: lmStnFetch, lmStnOpen: lmStnOpen, lmCertCanvas: lmCertCanvas, lmLcCheck: lmLcCheck, LCN: LCN, lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
+LM._t = { lmTanahGo: lmTanahGo, lmAirportOpen: lmAirportOpen, lmKemOpen: lmKemOpen, lmKampusOpen: lmKampusOpen, lmIlmuOpen: lmIlmuOpen, lmKampusFetch: lmKampusFetch, lmRailOpen: lmRailOpen, lmRide: lmRide, lmStnFetch: lmStnFetch, lmStnOpen: lmStnOpen, lmCertCanvas: lmCertCanvas, lmLcCheck: lmLcCheck, LCN: LCN, lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
 })();
