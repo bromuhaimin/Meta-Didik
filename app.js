@@ -10,7 +10,11 @@ const FB = {
   set(u) { this.url = String(u || "").trim().replace(/\/+$/, ""); },
   valid(u) { return /^(https:\/\/[a-z0-9-]+(\.[a-z0-9-]+)*\.(firebaseio\.com|firebasedatabase\.app)|https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?)$/i.test(String(u || "").trim().replace(/\/+$/, "")); },
   async req(method, path, body, query) {
-    const r = await fetch(this.url + "/" + path + ".json" + (method === "GET" ? (query ? "?" + query : "") : "?print=silent"), { method, headers: body === undefined ? undefined : { "Content-Type": "application/json" }, body: body === undefined ? undefined : JSON.stringify(body), keepalive: method !== "GET" });
+    /* v18.14: token Firebase Auth (jika diaktifkan) disertakan; jika ditolak (401), cuba sekali tanpa token */
+    const tok = AUTH.cur(), q0 = method === "GET" ? (query || "") : "print=silent";
+    const go = (t) => fetch(this.url + "/" + path + ".json" + ((q0 || t) ? "?" + [q0, t ? "auth=" + encodeURIComponent(t) : ""].filter(Boolean).join("&") : ""), { method, headers: body === undefined ? undefined : { "Content-Type": "application/json" }, body: body === undefined ? undefined : JSON.stringify(body), keepalive: method !== "GET" });
+    let r = await go(tok);
+    if (!r.ok && r.status === 401 && tok) { AUTH.stale(); r = await go(""); }
     if (!r.ok) { const e = new Error("fb " + r.status); e.code = r.status; throw e; }
     return method === "GET" ? r.json() : null;
   },
@@ -22,6 +26,84 @@ const FB = {
     this.uid = u; return u;
   }
 };
+/* =====================================================================
+   v18.14: AUTH | Firebase Authentication melalui REST (tanpa SDK)
+   - Tanpa nama: setiap peranti mendapat auth.uid untuk peraturan pangkalan data yang lebih ketat.
+   - Guru: log masuk Google DELIMa (@moe-dl.edu.my) untuk mengesahkan guru sebenar.
+   Tidak aktif selagi window.TW_AUTH.apiKey kosong (lihat docs/FASA1-PERSEDIAAN.md).
+   ===================================================================== */
+window.TW_AUTH = window.TW_AUTH || { apiKey: "", gcid: "", hd: "moe-dl.edu.my" };
+const AUTH = {
+  s: null, busy: null, gis: null,
+  on() { return !!(window.TW_AUTH && window.TW_AUTH.apiKey); },
+  load() { if (this.s) return this.s; try { const v = JSON.parse(localStorage.getItem("gt-auth") || "null"); if (v && v.rt && v.uid) this.s = v; } catch (e) { this.s = null; } return this.s; },
+  save(v) { this.s = v; try { if (v) localStorage.setItem("gt-auth", JSON.stringify(v)); else localStorage.removeItem("gt-auth"); } catch (e) { /* abaikan */ } },
+  cur() { const s = this.load(); if (!s || !this.on()) return ""; if (s.id && s.exp - Date.now() > 60000) return s.id; this.ensure().catch(() => {}); return ""; },
+  stale() { const s = this.load(); if (s) { s.id = ""; s.exp = 0; } },
+  uid() { const s = this.load(); return s ? s.uid : ""; },
+  guru() { const s = this.load(); return s && s.em && s.ve && AUTH.okEmel(s.em) ? s : null; },
+  okEmel(e) { const hd = (window.TW_AUTH && window.TW_AUTH.hd) || "moe-dl.edu.my"; return typeof e === "string" && e.toLowerCase().endsWith("@" + hd); },
+  async post(url, body, form) {
+    const r = await fetch(url, { method: "POST", headers: { "Content-Type": form ? "application/x-www-form-urlencoded" : "application/json" }, body: form ? body : JSON.stringify(body) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) { const e = new Error((j.error && j.error.message) || "auth " + r.status); e.code = r.status; throw e; }
+    return j;
+  },
+  idt(path) { return "https://identitytoolkit.googleapis.com/v1/" + path + "?key=" + encodeURIComponent(window.TW_AUTH.apiKey); },
+  /* pastikan ada token sah: segarkan token lama atau daftar tanpa nama */
+  ensure() {
+    if (!this.on()) return Promise.resolve("");
+    const s = this.load();
+    if (s && s.id && s.exp - Date.now() > 60000) return Promise.resolve(s.id);
+    if (this.busy) return this.busy;
+    this.busy = (async () => {
+      try {
+        if (s && s.rt) {
+          const j = await this.post("https://securetoken.googleapis.com/v1/token?key=" + encodeURIComponent(window.TW_AUTH.apiKey), "grant_type=refresh_token&refresh_token=" + encodeURIComponent(s.rt), true);
+          this.save(Object.assign({}, s, { id: j.id_token, rt: j.refresh_token, uid: j.user_id, exp: Date.now() + (+j.expires_in || 3600) * 1000 }));
+        } else {
+          const j = await this.post(this.idt("accounts:signUp"), { returnSecureToken: true });
+          this.save({ id: j.idToken, rt: j.refreshToken, uid: j.localId, exp: Date.now() + (+j.expiresIn || 3600) * 1000, em: "", ve: false });
+        }
+        return this.s.id;
+      } catch (e) {
+        if (s && e.code === 400) this.save(null); /* token lama ditarik balik: mula semula tanpa nama pada cubaan seterusnya */
+        throw e;
+      } finally { this.busy = null; }
+    })();
+    return this.busy;
+  },
+  /* log masuk Google: kelayakan JWT daripada Google Identity Services -> sesi Firebase */
+  async google(cred) {
+    const j = await this.post(this.idt("accounts:signInWithIdp"), { postBody: "id_token=" + encodeURIComponent(cred) + "&providerId=google.com", requestUri: location.origin || "http://localhost", returnSecureToken: true, returnIdpCredential: true });
+    const em = String(j.email || "").toLowerCase(), ve = j.emailVerified === true || j.emailVerified === "true";
+    if (!this.okEmel(em) || !ve) throw Object.assign(new Error("Hanya akaun DELIMa (@" + ((window.TW_AUTH && window.TW_AUTH.hd) || "moe-dl.edu.my") + ") boleh disahkan sebagai guru."), { code: "domain" });
+    this.save({ id: j.idToken, rt: j.refreshToken, uid: j.localId, exp: Date.now() + (+j.expiresIn || 3600) * 1000, em: em, ve: true, gn: String(j.fullName || j.displayName || "").slice(0, 60) });
+    return this.s;
+  },
+  loadGis() {
+    if (this.gis) return this.gis;
+    this.gis = new Promise((ok, no) => {
+      if (window.google && google.accounts && google.accounts.id) { ok(); return; }
+      const sc = document.createElement("script"); sc.src = "https://accounts.google.com/gsi/client"; sc.async = true;
+      sc.onload = () => ok(); sc.onerror = () => { this.gis = null; no(new Error("gis")); }; document.head.appendChild(sc);
+    });
+    return this.gis;
+  },
+  /* lukis butang "Log masuk dengan Google" dalam host; done(sesi) dipanggil selepas berjaya */
+  async button(host, done, fail) {
+    if (!this.on() || !window.TW_AUTH.gcid) { host.textContent = "Log masuk DELIMa belum diaktifkan oleh pentadbir sistem."; return; }
+    host.textContent = "Memuatkan log masuk Google...";
+    try { await this.loadGis(); } catch (e) { host.textContent = "Log masuk Google tidak dapat dimuatkan. Semak sambungan internet."; return; }
+    host.textContent = "";
+    google.accounts.id.initialize({ client_id: window.TW_AUTH.gcid, hd: window.TW_AUTH.hd || "moe-dl.edu.my", ux_mode: "popup", callback: async (res) => {
+      try { const s = await this.google(res.credential); done(s); } catch (e) { (fail || toast)(e.code === "domain" ? e.message : "Log masuk gagal: " + (e.message || e)); }
+    } });
+    google.accounts.id.renderButton(host, { theme: "filled_blue", size: "large", text: "signin_with", shape: "pill" });
+  },
+  out() { const s = this.load(); if (s && s.em) { this.save(null); this.ensure().catch(() => {}); } }
+};
+setTimeout(() => { if (AUTH.on()) AUTH.ensure().catch(() => {}); }, 2500);
 function fbSetAt(tree, path, data) {
   const parts = path.split("/").filter(Boolean);
   if (!parts.length) return data;
@@ -264,7 +346,7 @@ if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.
 if (SUBJ === "bm") { DATA.tema = DATA_BM.tema; DATA.topik = DATA_BM.topik; DATA.soalan = DATA_BM.soalan; }
 if (SUBJ === "bi") { DATA.tema = DATA_BI.tema; DATA.topik = DATA_BI.topik; DATA.soalan = DATA_BI.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v18.13"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v18.14"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -6883,7 +6965,7 @@ function lgRoot() {
    Dibuka daripada butang di peta utama; dunia.js dimuat hanya apabila diperlukan. */
 /* v17.91: avatar 3D dikongsi Gudang dan META GEMPUR; dimuat apabila perlu */
 /* v18.4: versi aplikasi untuk memecah cache skrip (Safari/ikon skrin utama iPhone menyimpan salinan lama) */
-const APP_VER = "18.13";
+const APP_VER = "18.14";
 function av3Load(cb) {
   if (window.AV3) { cb(); return; }
   if (typeof THREE === "undefined") return;
@@ -16999,6 +17081,110 @@ function exitToHub(view) {
 }
 
 
+/* ---------- v18.14: Stesen Inovasi (rintis Fasa 1) ----------
+   Guru yang disahkan DELIMa memohon satu stesen; pentadbir meluluskan dan menetapkan tapak di Dataran Inovasi
+   (STN_N tapak setiap negeri dalam META GEMPUR). Data awam: stesen/<auth.uid>; kiraan: stesen_lawat|suka|klik/<id>/<peranti>. */
+const STN_N = 3;
+const STN_KAT = ["Pendidikan Islam", "Tasawwur Islam", "Bahasa", "Sains & Matematik", "Sejarah & Kemanusiaan", "Teknologi & Digital", "Pengurusan Bilik Darjah", "Lain-lain"];
+const STN = { mine: undefined, busy: false, msg: "", err: "", stat: null, adm: null, admBusy: false };
+function stnSlots() { const out = []; Object.keys(DATA.negeri).forEach((k) => { for (let i = 1; i <= STN_N; i++) out.push(k + "-" + i); }); return out; }
+function stnSlotName(sl) { const m = /^(.+)-(\d)$/.exec(String(sl || "")); return m && DATA.negeri[m[1]] ? "Dataran Inovasi " + DATA.negeri[m[1]].pendek + " · tapak " + m[2] : "-"; }
+function stnUrlOk(u) { try { const x = new URL(u); return x.protocol === "https:" && !!x.hostname && x.hostname.indexOf(".") > 0; } catch (e) { return false; } }
+function stnClean(s, n) { return String(s || "").replace(/[\u0000-\u001f<>]/g, " ").replace(/\s+/g, " ").trim().slice(0, n); }
+async function stnCount(node, id) { try { const v = await FB.req("GET", node + "/" + id, undefined, "shallow=true"); return v && typeof v === "object" ? Object.keys(v).length : 0; } catch (e) { return 0; } }
+async function stnStats(id) { const r = await Promise.all(["stesen_lawat", "stesen_suka", "stesen_klik"].map((n) => stnCount(n, id))); return { lawat: r[0], suka: r[1], klik: r[2] }; }
+async function stnLoadMine() {
+  const uid = AUTH.uid(); if (!uid || !AUTH.guru()) { STN.mine = null; return; }
+  try { await AUTH.ensure(); STN.mine = (await FB.req("GET", "stesen/" + uid)) || null; STN.stat = STN.mine ? await stnStats(uid) : null; } catch (e) { STN.mine = null; STN.err = "Tidak dapat memuat stesen anda (kod " + (e.code || "rangkaian") + ")."; }
+}
+async function stnSubmit(f) {
+  const g = AUTH.guru(); if (!g) throw new Error("Sahkan akaun DELIMa dahulu.");
+  const tj = stnClean(f.tj, 60), ds = stnClean(f.ds, 600), url = stnClean(f.url, 300), yt = rlId(f.yt || "");
+  if (tj.length < 4) throw new Error("Tajuk inovasi terlalu pendek (sekurang-kurangnya 4 aksara).");
+  if (ds.length < 20) throw new Error("Huraikan inovasi anda sekurang-kurangnya 20 aksara.");
+  if (kmBad(tj) || kmBad(ds)) throw new Error("Tajuk atau huraian mengandungi perkataan tidak sesuai, pautan atau nombor telefon. Letakkan pautan dalam ruangan Pautan sahaja.");
+  if (url && !stnUrlOk(url)) throw new Error("Pautan mesti bermula dengan https://");
+  if (f.yt && !yt) throw new Error("Pautan YouTube tidak sah.");
+  if (!DATA.negeri[f.pn]) throw new Error("Pilih negeri tapak pilihan.");
+  await AUTH.ensure();
+  const old = STN.mine || {};
+  const doc = { u: g.uid, n: stnClean(P.penuh || P.nama || g.gn, 60), sk: cleanSekolah(P.sekolah).slice(0, 80), ng: P.negeri || "", tj: tj, kat: STN_KAT.indexOf(f.kat) >= 0 ? f.kat : "Lain-lain", ds: ds, yt: yt, url: url, pn: f.pn, st: "tunggu", t: old.t || Date.now(), tu: Date.now() };
+  Object.keys(doc).forEach((k) => { if (doc[k] === "") delete doc[k]; }); /* peraturan: medan kosong tidak dihantar */
+  await FB.req("PUT", "stesen/" + g.uid, doc);
+  STN.mine = doc;
+}
+function stnGuruBox(box) {
+  const c = el("details", { class: "card", style: "margin:8px 0" }); c.open = !(STN.mine && STN.mine.st === "lulus") || !!STN.msg;
+  c.appendChild(el("summary", { style: "cursor:pointer;font-weight:700" }, "🏛 Stesen Inovasi saya (rintis META GEMPUR)"));
+  c.appendChild(el("p", { class: "muted", style: "font-size:13px;margin:4px 0" }, "Pamerkan inovasi pengajaran anda di Dataran Inovasi dalam META GEMPUR. Guru dan murid seluruh Malaysia boleh melawat, menonton video dan membuka pautan produk anda. Setiap stesen disemak oleh pentadbir sebelum dipaparkan. Peringatan: penjawat awam yang menjana pendapatan sampingan perlu mendapatkan kebenaran ketua jabatan."));
+  box.appendChild(c);
+  if (!AUTH.on()) { c.appendChild(el("div", { class: "notice warn" }, "Pengesahan guru (DELIMa) belum diaktifkan oleh pentadbir sistem. Stesen Inovasi akan dibuka sebaik sahaja ia diaktifkan.")); return; }
+  const g = AUTH.guru();
+  if (!g) {
+    c.appendChild(el("p", null, "Langkah 1: sahkan anda guru dengan log masuk akaun DELIMa (@moe-dl.edu.my)."));
+    const host = el("div", { style: "min-height:44px" }); c.appendChild(host);
+    AUTH.button(host, () => { toast("Akaun DELIMa disahkan.", "ok"); STN.mine = undefined; renderGuru(); }, (m) => toast(m, "bad"));
+    return;
+  }
+  const hd = el("div", { class: "row", style: "gap:10px;align-items:center" }, el("span", null, "✔ Disahkan: " + g.em));
+  const lo = el("button", { type: "button", class: "btn alt sm" }, "Log keluar DELIMa"); lo.addEventListener("click", () => { AUTH.out(); STN.mine = undefined; renderGuru(); }); hd.appendChild(lo);
+  c.appendChild(hd);
+  if (STN.mine === undefined) { c.appendChild(el("p", { class: "muted" }, "Memuat stesen anda...")); if (!STN.busy) { STN.busy = true; stnLoadMine().then(() => { STN.busy = false; renderGuru(); }); } return; }
+  if (STN.err) c.appendChild(el("div", { class: "notice warn" }, STN.err));
+  const m = STN.mine;
+  if (m) {
+    const stt = m.st === "lulus" ? "✅ Diluluskan · " + stnSlotName(m.sl) : m.st === "tolak" ? "❌ Ditolak" + (m.sb ? ": " + m.sb : "") + ". Kemas kini dan hantar semula." : "⏳ Menunggu semakan pentadbir";
+    c.appendChild(el("div", { class: "notice" + (m.st === "tolak" ? " warn" : "") }, "Status: " + stt));
+    if (STN.stat) c.appendChild(el("div", { class: "gstats" }, el("div", { class: "gstat" }, el("b", null, String(STN.stat.lawat)), el("span", null, "Pelawat")), el("div", { class: "gstat" }, el("b", null, String(STN.stat.suka)), el("span", null, "Suka")), el("div", { class: "gstat" }, el("b", null, String(STN.stat.klik)), el("span", null, "Klik pautan"))));
+  }
+  const fld = (id, lab, node) => { const f = el("div", { class: "field" }); f.append(el("label", { for: id }, lab), node); return f; };
+  const iTj = el("input", { id: "stTj", maxlength: "60", value: m ? m.tj : "", placeholder: "Contoh: Kad Imbas Tajwid AR" });
+  const iKat = el("select", { id: "stKat" }); STN_KAT.forEach((k) => iKat.appendChild(el("option", { value: k }, k))); iKat.value = m ? m.kat : STN_KAT[0];
+  const iDs = el("textarea", { id: "stDs", maxlength: "600", rows: "4", style: "background:#0b100b;color:var(--ink);border:1px solid var(--line2);padding:10px 12px;font:inherit;width:100%" }); iDs.value = m ? m.ds : "";
+  const iYt = el("input", { id: "stYt", maxlength: "200", value: m && m.yt ? "https://youtu.be/" + m.yt : "", placeholder: "Pautan video YouTube (pilihan)" });
+  const iUrl = el("input", { id: "stUrl", maxlength: "300", value: m ? m.url || "" : "", placeholder: "https://... kedai, borang tempahan atau laman inovasi (pilihan)" });
+  const iPn = el("select", { id: "stPn" }); Object.keys(DATA.negeri).forEach((k) => iPn.appendChild(el("option", { value: k }, DATA.negeri[k].nama))); iPn.value = m ? m.pn : (DATA.negeri[lmNegeriKey(P.negeri)] ? lmNegeriKey(P.negeri) : Object.keys(DATA.negeri)[0]);
+  c.append(fld("stTj", "Tajuk inovasi", iTj), fld("stKat", "Kategori", iKat), fld("stDs", "Huraian (apa, untuk siapa, kesan)", iDs), fld("stYt", "Video YouTube", iYt), fld("stUrl", "Pautan produk / maklumat", iUrl), fld("stPn", "Negeri tapak pilihan", iPn));
+  const out = el("p", { class: "muted", style: "font-size:13px;margin:4px 0" }, STN.msg || "");
+  const sb = el("button", { type: "button", class: "btn" }, m ? "Kemas kini dan hantar semula untuk semakan" : "Hantar permohonan stesen");
+  sb.addEventListener("click", async () => {
+    sb.disabled = true; out.textContent = "Menghantar...";
+    try { await stnSubmit({ tj: iTj.value, kat: iKat.value, ds: iDs.value, yt: iYt.value, url: iUrl.value, pn: iPn.value }); STN.msg = "Permohonan dihantar. Pentadbir akan menyemak dan menetapkan tapak anda."; renderGuru(); }
+    catch (e) { out.textContent = e.message || "Gagal dihantar. Cuba lagi."; sb.disabled = false; }
+  });
+  c.append(sb, out);
+}
+/* kod negeri profil (JHR, KUL...) -> kunci peta META GEMPUR */
+function lmNegeriKey(kod) { return ({ JHR: "johor", KDH: "kedah", KTN: "kelantan", MLK: "melaka", NSN: "nsembilan", PHG: "pahang", PRK: "perak", PLS: "perlis", PNG: "penang", SBH: "sabah", SWK: "sarawak", SGR: "selangor", TRG: "terengganu", KUL: "wp", PJY: "wp", LBN: "sabah" })[kod] || ""; }
+async function stnAdmLoad() { STN.admBusy = true; try { const v = (await kmAdmReq("GET", "stesen")) || {}; STN.adm = Object.keys(v).map((k) => Object.assign({ id: k }, v[k])).filter((x) => x && x.tj); } catch (e) { STN.adm = []; STN.err = "Gagal memuat stesen (kod " + (e.code || "rangkaian") + ")."; } STN.admBusy = false; }
+function stnAdminBox(box) {
+  if (!kmAdm()) return;
+  const c = el("details", { class: "card", style: "margin:8px 0" }); c.open = !!STN.adm;
+  c.appendChild(el("summary", { style: "cursor:pointer;font-weight:700" }, "Pentadbir: semakan Stesen Inovasi" + (STN.adm ? " (" + STN.adm.filter((x) => x.st === "tunggu").length + " menunggu)" : "")));
+  box.appendChild(c);
+  if (!STN.adm) { const b = el("button", { type: "button", class: "btn alt sm" }, STN.admBusy ? "Memuat..." : "Muat permohonan"); b.addEventListener("click", async () => { b.disabled = true; await stnAdmLoad(); renderGuru(); }); c.appendChild(b); return; }
+  const used = {}; STN.adm.forEach((x) => { if (x.st === "lulus" && x.sl) used[x.sl] = x.id; });
+  const free = stnSlots().filter((s) => !used[s]);
+  c.appendChild(el("p", { class: "muted", style: "font-size:13px" }, "Tapak kosong: " + free.length + " / " + stnSlots().length + ". Lulus = stesen dipaparkan dalam META GEMPUR."));
+  const order = { tunggu: 0, lulus: 1, tolak: 2 };
+  STN.adm.slice().sort((a, b) => (order[a.st] | 0) - (order[b.st] | 0) || (b.tu || 0) - (a.tu || 0)).forEach((x) => {
+    const d = el("div", { class: "card", style: "gap:6px;padding:10px" });
+    d.append(el("b", null, (x.st === "lulus" ? "✅ " : x.st === "tolak" ? "❌ " : "⏳ ") + x.tj + " · " + x.kat), el("div", { style: "font-size:13px" }, x.n + " · " + x.sk + " · pilihan " + (DATA.negeri[x.pn] ? DATA.negeri[x.pn].pendek : "-") + (x.sl ? " · " + stnSlotName(x.sl) : "")), el("div", { style: "font-size:14px" }, x.ds));
+    if (x.yt) d.appendChild(el("div", { style: "font-size:13px" }, "Video: https://youtu.be/" + x.yt));
+    if (x.url) d.appendChild(el("div", { style: "font-size:13px;word-break:break-all" }, "Pautan: " + x.url));
+    const row = el("div", { class: "row", style: "gap:8px" });
+    const sel = el("select", { "aria-label": "Tapak" }); const cand = free.filter((s) => s.indexOf(x.pn + "-") === 0).concat(free.filter((s) => s.indexOf(x.pn + "-") !== 0));
+    if (x.sl && used[x.sl] === x.id) cand.unshift(x.sl);
+    cand.forEach((s) => sel.appendChild(el("option", { value: s }, stnSlotName(s))));
+    const put = async (patch, lbl) => { try { const doc = Object.assign({}, x, patch); delete doc.id; Object.keys(doc).forEach((k) => { if (doc[k] == null) delete doc[k]; }); await kmAdmPut("stesen/" + x.id, doc); toast(lbl, "ok"); await stnAdmLoad(); renderGuru(); } catch (e) { toast("Gagal (kod " + (e.code || "rangkaian") + ").", "bad"); } };
+    const ok = el("button", { type: "button", class: "btn sm" }, x.st === "lulus" ? "Tukar tapak" : "Lulus"); ok.disabled = !cand.length;
+    ok.addEventListener("click", () => put({ st: "lulus", sl: sel.value, sb: null }, "Stesen diluluskan."));
+    const no = el("button", { type: "button", class: "btn alt sm" }, x.st === "lulus" ? "Tarik balik" : "Tolak");
+    no.addEventListener("click", () => { const why = prompt("Sebab (dipaparkan kepada guru):", ""); if (why === null) return; put({ st: "tolak", sl: null, sb: stnClean(why, 140) }, "Stesen ditolak."); });
+    row.append(sel, ok, no); d.appendChild(row); c.appendChild(d);
+  });
+}
+
 /* ---------- Papan pemuka guru ---------- */
 /* v18.13: ringkasan META GEMPUR subjek semasa untuk guru: "universiti,jumlah,lencana,akhlak,tempat,sijil,masa(s)" */
 function mgPack() {
@@ -17158,6 +17344,7 @@ function renderGuru() {
   const sid = mySid();
   if (!(Net.fb && FB.url)) { box.appendChild(el("div", { class: "notice warn" }, "Papan pemuka guru memerlukan sambungan Firebase (versi GitHub Pages). Ia tidak tersedia pada sesi ini.")); return; }
   guruAdminBox(box);
+  try { stnAdminBox(box); stnGuruBox(box); } catch (e) { /* abaikan */ }
   if (!sid) { box.appendChild(el("div", { class: "notice warn" }, "Tetapkan sekolah dan negeri anda dalam profil (klik nama anda di bahagian atas) supaya data murid sekolah anda boleh dipaparkan. Murid juga mesti mengisi sekolah yang sama.")); return; }
   const top = el("div", { class: "row", style: "margin:6px 0;gap:10px" });
   const rf = el("button", { type: "button", class: "btn alt sm" }, GURU.loading ? "Memuat..." : "Muat semula data");
