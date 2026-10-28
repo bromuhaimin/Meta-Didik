@@ -1,0 +1,105 @@
+{
+  "stesen": {
+    ".read": true,
+    ".indexOn": [
+      "st"
+    ],
+    "$uid": {
+      ".write": "true",
+      ".validate": "newData.hasChildren(['u', 'n', 'tj', 'ds', 'kat', 'pn', 'st', 't']) && newData.child('u').val() === $uid && $uid.length <= 40 && newData.child('st').val() === 'tunggu' && !newData.child('sl').exists() && newData.child('tj').isString() && newData.child('tj').val().length <= 60 && newData.child('ds').isString() && newData.child('ds').val().length <= 600 && (!newData.child('url').exists() || (newData.child('url').isString() && newData.child('url').val().length <= 300 && newData.child('url').val().beginsWith('https://'))) && (!newData.child('yt').exists() || (newData.child('yt').isString() && newData.child('yt').val().length === 11)) && (!newData.child('hg').exists() || (newData.child('hg').isNumber() && (newData.child('hg').val() === 5 || newData.child('hg').val() === 10 || newData.child('hg').val() === 20 || newData.child('hg').val() === 30 || newData.child('hg').val() === 50)))"
+    }
+  },
+  "stesen_em": {
+    ".read": false,
+    "$uid": {
+      ".write": "true",
+      ".validate": "newData.isString() && newData.val().length <= 80 && newData.val().matches(/^[a-z0-9._+-]+@moe-dl\\.edu\\.my$/) && root.child('stesen/' + $uid).exists()"
+    }
+  },
+  "stesen_lawat": {
+    ".read": true,
+    "$id": {
+      "$dev": {
+        ".write": true,
+        ".validate": "$dev.length <= 40 && newData.val() === true && root.child('stesen/' + $id + '/st').val() === 'lulus'"
+      }
+    }
+  },
+  "stesen_suka": {
+    ".read": true,
+    "$id": {
+      "$dev": {
+        ".write": true,
+        ".validate": "$dev.length <= 40 && newData.val() === true && root.child('stesen/' + $id + '/st').val() === 'lulus'"
+      }
+    }
+  },
+  "stesen_klik": {
+    ".read": true,
+    "$id": {
+      "$dev": {
+        ".write": true,
+        ".validate": "$dev.length <= 40 && newData.val() === true && root.child('stesen/' + $id + '/st').val() === 'lulus'"
+      }
+    }
+  },
+  "stesen_guna": {
+    ".read": true,
+    "$id": {
+      "$p": {
+        "$d": {
+          ".write": "$p !== $id && $p.length <= 40 && !data.exists()",
+          ".validate": "$d.matches(/^20[0-9]{6}$/) && newData.hasChildren(['h','t']) && newData.child('t').val() === now && root.child('stesen/' + $id + '/st').val() === 'lulus' && newData.child('h').val() === root.child('stesen/' + $id + '/hg').val()"
+        }
+      }
+    }
+  },
+  "tabung": {
+    ".read": true,
+    ".write": false
+  },
+  "tabung_by": {
+    ".read": true,
+    ".write": false
+  },
+  "tuntutan": {
+    ".read": false,
+    "$m": {
+      "$uid": {
+        ".write": "$uid.length <= 40 && (!data.exists() || data.child('st').val() === 'tolak')",
+        ".validate": "newData.hasChildren(['md','nm','bk','ac','em','st','t']) && newData.child('st').val() === 'tunggu' && newData.child('t').val() === now && newData.child('md').val() === root.child('tabung_by/' + $m + '/' + $uid).val() && newData.child('nm').isString() && newData.child('nm').val().length <= 80 && newData.child('bk').isString() && newData.child('bk').val().length <= 40 && newData.child('ac').isString() && newData.child('ac').val().length <= 30 && !newData.child('rj').exists()"
+      }
+    }
+  },
+  "tuntutan_st": {
+    ".read": true,
+    "$m": {
+      "$uid": {
+        ".write": "(!data.exists() || data.child('st').val() === 'tolak')",
+        ".validate": "newData.child('st').val() === 'tunggu' && root.child('tuntutan/' + $m + '/' + $uid).exists()"
+      }
+    }
+  },
+  "ipt": {
+    ".read": true,
+    ".write": false
+  },
+  "ipt_lawat": {
+    ".read": true,
+    "$id": {
+      "$dev": {
+        ".write": true,
+        ".validate": "$dev.length <= 40 && newData.val() === true && $id.beginsWith('ip-') && $id.length <= 20"
+      }
+    }
+  },
+  "ipt_minat": {
+    ".read": true,
+    "$id": {
+      "$dev": {
+        ".write": true,
+        ".validate": "$dev.length <= 40 && newData.val() === true && root.child('ipt/' + $id + '/pk').exists()"
+      }
+    }
+  }
+}
