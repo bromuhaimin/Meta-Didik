@@ -989,3 +989,18 @@ body.vmap #fabDock{bottom:calc(var(--dockh,190px) + 26px + env(safe-area-inset-b
 .testi-n button.ar{width:40px;height:40px;border-radius:50%;border:1px solid var(--line2);background:rgba(255,255,255,.05);color:#fff;font-size:18px;cursor:pointer}
 .testi-d{display:flex;gap:6px}.testi-d i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);cursor:pointer}.testi-d i.on{background:#6fe0a6;width:20px;border-radius:99px}
 @media (prefers-reduced-motion:reduce){.mdh-sky,.mdgo,.mdgo-ring{animation:none}}
+/* ---------- v18.28: peta operasi dan PdPc hanya untuk guru DELIMa; Ruang Guru ---------- */
+body:not(.gv) #v-map .mapstage,body:not(.gv) #v-map .legend,body:not(.gv) #v-map .tlist,body:not(.gv) #v-map .homebar,body:not(.gv) #v-map .dock,body:not(.gv) #v-map .mapctl,body:not(.gv) .gvonly{display:none!important}
+#gvMapH{max-width:1100px;margin:18px auto 6px}#gvMapH small{font:600 13px var(--font-body);color:var(--muted);margin-left:6px}
+#kmFab{display:none!important}
+.gbtn{min-height:40px;padding:6px 14px;border-radius:999px;border:1px solid #ffd45a;background:linear-gradient(180deg,rgba(255,212,90,.22),rgba(255,159,67,.12));color:#ffe9a8;font:800 14px var(--font-body);cursor:pointer;white-space:nowrap}
+.gbtn[hidden]{display:none}
+.gtabs{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 12px}
+.gtabs button{min-height:44px;padding:8px 16px;border-radius:999px;border:1px solid var(--line2);background:rgba(255,255,255,.04);color:var(--ink);font:800 14px var(--font-body);cursor:pointer}
+.gtabs button[aria-pressed="true"]{background:linear-gradient(90deg,#ffd45a,#6fe0a6);color:#1d1300;border-color:transparent}
+.ggate{display:grid;gap:12px;justify-items:start;padding:18px;border-radius:18px;border:1px solid var(--line2);background:rgba(255,255,255,.04);max-width:640px}
+.lpick{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line2);background:#0d4f86;touch-action:none}
+.lpick canvas{display:block;width:100%;cursor:crosshair}
+.lpick-bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:6px 0}
+.lpick-bar button{min-height:36px}
+.lpick-out{font-size:14px;color:#ffe9a8}

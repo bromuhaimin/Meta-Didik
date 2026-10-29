@@ -126,3 +126,28 @@ Had mod percubaan (diterima untuk rintis):
 1. Aktifkan log masuk DELIMa (Langkah 1-4) dan wajibkan untuk guru dan murid.
 2. Tukar Rules kepada **`docs/firebase-rules-stesen.json`** (versi ketat).
 3. Reset MD semua murid (alat reset akan disediakan pada pelancaran) dan daftar semula stesen guru dengan DELIMa.
+
+## v18.28: DELIMa wajib untuk guru, Ruang Guru dan Kolam Ikan
+- **Guru wajib log masuk DELIMa.** Butang **🎓 Ruang Guru** (di header, bagi pengguna berperanan guru) membuka
+  Ruang Guru hanya selepas log masuk akaun @moe-dl.edu.my. Peta Operasi dan alat PdPc di paparan utama juga hanya
+  kelihatan kepada guru yang disahkan. Pentadbir yang memasukkan kunci moderator dikecualikan.
+  **Langkah 1-4 di atas (Web API Key dan Google OAuth Client ID) mesti disiapkan dahulu**; sebelum itu Ruang Guru
+  memaparkan "sedang diaktifkan".
+- **Stesen Inovasi di lokasi pilihan guru.** Guru memilih subjek, tajuk berkaitan (wajib) dan titik pada peta
+  Malaysia. Stesen yang diluluskan dibina di titik itu dalam Meta Didik, **hanya dalam dunia subjek tersebut**
+  (medan baharu `sj`, `tp`, `la`, `lo` dalam `stesen`).
+- **Kolam Ikan** dibuka dari menu dalam Meta Didik. Guru (DELIMa) mengetik ikan murid dan memberi makanan ikan
+  (+10 MD, sekali sehari bagi setiap murid). Rekod di `kolam_makan/<uid murid>/<id>`; murid menerima MD apabila
+  membuka aplikasi atau Kolam Ikan.
+- Kemas kini Rules dengan fail terkini (`firebase-rules-stesen.json` selepas DELIMa aktif).
+
+## v18.29: Gelaran guru dan Bank Soalan
+
+- **Gelaran**: dalam Ruang Guru, guru atau pentadbir memilih gelaran (Cikgu, Ustaz, Ustazah, Sir, Puan, Encik, Cik, Madam, Tuan, Dr., Prof. atau "Lain-lain..." untuk taip sendiri). Gelaran dipaparkan pada tanda nama 🎓 dalam Meta Didik dan pada makanan ikan yang diberi kepada murid.
+- **Bank Soalan** (tab "📝 Bank soalan" dalam Ruang Guru): guru melihat semua soalan kuiz mengikut subjek dan tajuk, kemudian boleh:
+  - ➕ menyumbang soalan baharu,
+  - ✏ membaiki soalan sedia ada,
+  - 🗑 mencadangkan soalan yang tidak relevan dibuang (sebab wajib diisi).
+- Cadangan disimpan di `soalan_ubah/<subjek>/<id>` dengan status `tunggu`. Pentadbir menyemaknya di tab Pentadbir, kemudian memilih **Lulus** atau **Tolak**. Hanya cadangan yang diluluskan dikenakan kepada semua pengguna, sebagai lapisan di atas fail `soalan*.json`.
+- Pentadbir boleh memuat turun cadangan yang diluluskan dalam bentuk JSON, untuk digabungkan secara kekal ke dalam fail soalan melalui `bank.html`.
+- **Firebase Rules**: salin semula `docs/firebase-rules-stesen.json`, kerana nod `soalan_ubah` ditambah. Guru DELIMa sahaja boleh menulis, dan hanya cadangan sendiri yang masih menunggu.
