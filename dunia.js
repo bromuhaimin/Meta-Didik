@@ -2748,17 +2748,39 @@ async function lmStnFetch(g) {
   if (typeof FB === "undefined" || !FB.url || !g.stn) return;
   let v = null; try { v = await FB.req("GET", "stesen"); } catch (e) { return; }
   if (!LM.g || LM.g !== g) return;
-  const by = {}; Object.keys(v || {}).forEach((id) => { const d = v[id]; if (d && d.st === "lulus" && d.sl && d.tj) by[d.sl] = Object.assign({}, d, { id: id }); });
+  /* v18.28: stesen hanya dipaparkan dalam dunia subjeknya (stesen lama tanpa subjek = Tasawwur Islam) */
+  const mine = (d) => d && d.st === "lulus" && d.tj && (d.sj || "tw") === SUBJ;
+  const by = {}; Object.keys(v || {}).forEach((id) => { const d = v[id]; if (mine(d) && d.sl && d.la == null) by[d.sl] = Object.assign({}, d, { id: id }); });
+  lmStnGeo(g, v || {}, mine);
   g.stn.forEach((it) => {
     const d = by[it.sl] || null; if ((it.d && it.d.id + it.d.tu) === (d && d.id + d.tu)) return;
     it.d = d; it.n = d ? d.tj : "Tapak kosong";
     const scr = it.m.userData.scr; if (scr) { const old = scr.material.map; scr.material.map = lmStnScreen(d ? d.tj : "Tapak kosong", d ? String(d.kat || "STESEN INOVASI").toUpperCase() : "STESEN INOVASI"); scr.material.needsUpdate = true; if (old) old.dispose(); }
   });
 }
+/* stesen di lokasi pilihan guru (la, lo): gerai dibina semasa dunia berjalan, berhampiran titik itu */
+function lmStnGeo(g, v, mine) {
+  g.stnG = g.stnG || {};
+  const want = {}; Object.keys(v).forEach((id) => { const d = v[id]; if (mine(d) && d.la != null && d.lo != null) want[id] = Object.assign({}, d, { id: id }); });
+  for (const id in g.stnG) if (!want[id] || want[id].tu !== g.stnG[id].d.tu) { const it = g.stnG[id]; g.scene.remove(it.m); if (it.lb) g.scene.remove(it.lb); g.items.splice(g.items.indexOf(it), 1); const ci = g.cols.indexOf(it.col); if (ci >= 0) g.cols.splice(ci, 1); delete g.stnG[id]; }
+  for (const id in want) {
+    if (g.stnG[id]) continue;
+    const d = want[id], c0 = ll(d.la, d.lo); let w = null;
+    const ok = (x, z) => lmAt(x, z) !== "" && !g.items.some((it) => Math.hypot(it.x - x, it.z - z) < 12);
+    for (let r = 0; r <= 90 && !w; r += 6) for (let i = 0; i < (r ? 12 : 1); i++) { const a = i * 0.5236, x = c0.x + Math.cos(a) * r, z = c0.z + Math.sin(a) * r; if (ok(x, z)) { w = { x: x, z: z }; break; } }
+    if (!w) continue;
+    const md = lmStnBooth(), rot = (Math.abs(hashStr(id)) % 628) / 100, gy = lmGround(w.x, w.z); md.position.set(w.x, gy, w.z); md.rotation.y = rot; g.scene.add(md);
+    md.userData.scr.material.map = lmStnScreen(d.tj, String(d.kat || "STESEN INOVASI").toUpperCase()); md.userData.scr.material.needsUpdate = true;
+    const lb = lmLabel("🏛 " + d.tj + " · Stesen Inovasi", { fs: 26, k: 0.028, bg: "rgba(11,74,74,.9)", bd: "#ffd45a" }); lb.position.set(w.x, gy + 9, w.z); g.scene.add(lb);
+    const fx = Math.sin(rot), fz = Math.cos(rot), k = lmAt(w.x, w.z), col = { x: w.x - fx * 1, z: w.z - fz * 1, r: 4.6, h: 6 }; g.cols.push(col);
+    const it = { kind: "sn", id: "sg-" + id, sl: "", k: DATA.negeri[k] ? k : (DATA.negeri[d.pn] ? d.pn : Object.keys(DATA.negeri)[0]), n: d.tj, x: w.x + fx * 6, z: w.z + fz * 6, r: 0, ir: 6, m: md, d: d, lb: lb, col: col, geo: 1 };
+    g.items.push(it); g.stnG[id] = it;
+  }
+}
 function lmStnOpen(it) {
   const d = it.d, gid = FB.getUid();
   lmCard((b) => {
-    b.append(el("div", { class: "lm-kick" }, "🏛 Dataran Inovasi " + DATA.negeri[it.k].pendek + (d ? " · " + d.kat : "")), el("h2", null, d ? d.tj : "Tapak kosong"));
+    b.append(el("div", { class: "lm-kick" }, (it.geo ? "🏛 Stesen Inovasi · " : "🏛 Dataran Inovasi ") + DATA.negeri[it.k].pendek + (d ? " · " + d.kat : "")), el("h2", null, d ? d.tj : "Tapak kosong"));
     if (!d) {
       b.append(el("p", null, "Tapak ini disediakan untuk guru mempamerkan inovasi pengajaran kepada guru dan murid seluruh Malaysia."), el("p", { class: "lm-ex" }, "Guru: buka Papan pemuka guru → Stesen Inovasi saya, sahkan akaun DELIMa dan hantar permohonan."), el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose)));
       return;
@@ -3212,7 +3234,7 @@ function lmTowerState(o) {
 /* ---------- avatar 3D (avatar3d.js): semua pakaian dan aksesori Gudang, menutup aurat, wajah tanpa ciri ---------- */
 function lmMyCode() { return window.AV3 ? AV3.code() : "L|1|ou_sc|oc_gn|hd_no|hc_w"; }
 /* v18.26: guru ditanda "🎓 Cikgu" pada nama (label, chat, peta) supaya murid menghormati guru */
-function lmIsGuru() { try { return (typeof AUTH !== "undefined" && AUTH.guru && AUTH.guru()) || (typeof gtRole === "function" && gtRole() === "guru"); } catch (e) { return false; } }
+function lmIsGuru() { try { return typeof AUTH !== "undefined" && AUTH.guru && !!AUTH.guru(); } catch (e) { return false; } } /* v18.28: hanya guru disahkan DELIMa */
 function lmGuruName(n, gr) { return gr ? "🎓 Cikgu " + String(n).replace(/^(cikgu|cg\.?|ustaz|ustazah)\s+/i, "") : n; }
 function lmAvatar(code, name, me, gr) {
   const av = AV3.build(code);
@@ -4389,7 +4411,7 @@ function lmMapDraw(cv, m, big) {
     else if (big && it.kind === "ap") { x.font = "16px sans-serif"; x.fillStyle = "#fff"; x.fillText("✈", px - 7, py + 6); }
     else if (it.kind === "sk") { x.font = (big ? 18 : 10) + "px sans-serif"; x.textAlign = "center"; x.fillText("🏫", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
     else if (it.kind === "ak") { x.fillStyle = "#ff4d4d"; x.beginPath(); x.arc(px, py, big ? 6 : 3, 0, 6.2832); x.fill(); if (big) { x.fillStyle = "#fff"; x.font = "bold 11px sans-serif"; x.textAlign = "center"; x.fillText("!", px, py + 4); x.textAlign = "left"; } }
-    else if (it.kind === "sn") { if (big && it.sl.slice(-2) === "-2") { x.font = "15px sans-serif"; x.textAlign = "center"; x.fillText("🏛", px, py + 5); x.textAlign = "left"; } }
+    else if (it.kind === "sn") { if (big && (it.geo || it.sl.slice(-2) === "-2")) { x.font = "15px sans-serif"; x.textAlign = "center"; x.fillText("🏛", px, py + 5); x.textAlign = "left"; } }
     else if (it.kind === "fd") { if (big) { x.font = "15px sans-serif"; x.textAlign = "center"; x.fillText("🍽", px, py + 5); x.textAlign = "left"; } else { x.fillStyle = "#ff9f43"; x.fillRect(px - 1.2, py - 1.2, 2.4, 2.4); } }
     else if (it.kind === "km") { x.font = (big ? 16 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("🎖", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
     else if (it.kind === "vn") { x.font = (big ? 16 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText(VN_INFO[it.sub].ic, px, py + (big ? 6 : 3)); x.textAlign = "left"; }
@@ -4542,7 +4564,7 @@ function lmMap3(area, onPick) {
       case "ap": return [emo("✈", "#fff"), 22];
       case "sk": return [emo("🏫"), 24];
       case "ak": return [emo("❗"), 20];
-      case "sn": return it.sl.slice(-2) === "-2" ? [emo("🏛"), 22] : null;
+      case "sn": return it.geo || it.sl.slice(-2) === "-2" ? [emo("🏛"), 22] : null;
       case "fd": return [emo("🍽"), 20];
       case "km": return [emo("🎖"), 22];
       case "ny": return [emo("🎣"), 22];
@@ -4689,7 +4711,7 @@ function lmBuildScene() {
 }
 function lmSpawn(g) {
   { const rs = LM.resume; LM.resume = null; /* v18.18: kembali dari Tempur atau Tanah Suci */
-    const it = rs && rs.at && g.items.find((x) => x.id === rs.at);
+    const it = rs && (rs.at ? g.items.find((x) => x.id === rs.at) : rs.x != null ? { x: rs.x, z: rs.z, n: "Meta Didik" } : null); /* v18.28: atau kedudukan terakhir (Kolam Ikan) */
     if (it) { g.p.x = it.x; g.p.z = it.z; g.p.yaw = 0; g.cam.yaw = 0; g.camera.position.set(it.x, 30, it.z + 30); setTimeout(() => lmPop(rs.msg || "Selamat kembali ke " + (it.n || it.sn || "Meta Didik")), 600); return; } }
   if (g.ownSk) { /* setiap misi bermula di hadapan pintu pagar sekolah sendiri */
     const o = g.ownSk; g.p.x = o.x; g.p.z = o.z + 3; g.p.yaw = Math.PI; g.cam.yaw = 0;
@@ -4727,7 +4749,9 @@ function lmHud() {
     ui.smB.textContent = smTxt(); const g = LM.g; if (g && g.wx) { g.wx.hp = null; lmDayNight(g); }
     lmPop(n === "siang" ? "☀️ Suasana siang" : n === "malam" ? "🌙 Suasana malam" : "🕒 Suasana ikut masa sebenar (1 minit = 1 jam)");
   });
-  top.append(ui.smB, lmBtn("Pasport (P)", "", () => lmPassport()), lmBtn("Tajuk (T)", "", () => lmPassport("tajuk")), ui.skyB, lmBtn("Bilik", "", lmRoomPanel), lmBtn("Swafoto", "", () => lmSelfie(null)),
+  /* v18.28: Kolam Ikan dalam menu Meta Didik (murid dan guru); kembali ke kedudukan yang sama */
+  const kol = lmBtn("🐟 Kolam Ikan", "", () => { const g = LM.g; if (!g) return; LM.resume = { x: g.p.x, z: g.p.z, msg: "Kembali dari Kolam Ikan" }; lmSave(); lmClose(); setTimeout(() => setView("kolam"), 60); });
+  top.append(ui.smB, kol, lmBtn("Pasport (P)", "", () => lmPassport()), lmBtn("Tajuk (T)", "", () => lmPassport("tajuk")), ui.skyB, lmBtn("Bilik", "", lmRoomPanel), lmBtn("Swafoto", "", () => lmSelfie(null)),
     ui.snd = lmBtn(LM.mute ? "Bunyi: tutup" : "Bunyi: buka", "", () => { LM.mute = !LM.mute; if (!LM.mute) lmAudUnlock(); ui.snd.textContent = LM.mute ? "Bunyi: tutup" : "Bunyi: buka"; }),
     lmBtn("Keluar", "", () => { if (confirm("Keluar dari META DIDIK? Cop pasport dan menara yang ditawan sudah disimpan.")) lmClose(); }));
   ui.vcB = lmBtn("🎙 Suara: tutup", "", () => { if (LM.vc) lmVoiceOff(); else lmVoiceOn(); }); ui.vcB.hidden = true; top.insertBefore(ui.vcB, top.children[4]);

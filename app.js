@@ -337,6 +337,7 @@ function sjUnlocked() { try { return localStorage.getItem(SJ_KEY) === "6171"; } 
 function sjLocked(k) { return !SJ_OPEN[k] && !sjUnlocked(); }
 const SUBJ = (() => { try { const v = localStorage.getItem("gt-subj"); if (v && sjLocked(v)) return "tw"; return v === "pi" || v === "ba" || v === "p3" || v === "sj" || v === "sc" || v === "mt" || v === "bm" || v === "bi" ? v : "tw"; } catch (e) { return "tw"; } })();
 const TW_NMIS = DATA.topik.length;
+const DATA_TW = { tema: DATA.tema, topik: DATA.topik }; /* v18.28: tajuk TI disimpan untuk borang inovasi guru (subjek lain) */
 if (SUBJ === "pi") { DATA.tema = DATA_PI.tema; DATA.topik = DATA_PI.topik; DATA.soalan = DATA_PI.soalan; }
 if (SUBJ === "ba") { DATA.tema = DATA_BA.tema; DATA.topik = DATA_BA.topik; DATA.soalan = DATA_BA.soalan; }
 if (SUBJ === "p3") { DATA.tema = DATA_P3.tema; DATA.topik = DATA_P3.topik; DATA.soalan = DATA_P3.soalan; }
@@ -346,7 +347,7 @@ if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.
 if (SUBJ === "bm") { DATA.tema = DATA_BM.tema; DATA.topik = DATA_BM.topik; DATA.soalan = DATA_BM.soalan; }
 if (SUBJ === "bi") { DATA.tema = DATA_BI.tema; DATA.topik = DATA_BI.topik; DATA.soalan = DATA_BI.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v18.27"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = "Hub Inovasi Digital Pendidikan \u00b7 v18.28"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -7230,7 +7231,7 @@ function lgRoot() {
    Dibuka daripada butang di peta utama; dunia.js dimuat hanya apabila diperlukan. */
 /* v17.91: avatar 3D dikongsi Gudang dan META DIDIK; dimuat apabila perlu */
 /* v18.4: versi aplikasi untuk memecah cache skrip (Safari/ikon skrin utama iPhone menyimpan salinan lama) */
-const APP_VER = "18.27";
+const APP_VER = "18.28";
 function av3Load(cb) {
   if (window.AV3) { cb(); return; }
   if (typeof THREE === "undefined") return;
@@ -7315,6 +7316,8 @@ setTimeout(() => {
   let auto = false; try { auto = localStorage.getItem("gt-auto-meta") === "1"; localStorage.removeItem("gt-auto-meta"); } catch (e) { auto = false; }
   if (auto && P && P.nama) mdWarp(() => lmOpen(""), SUBJS[SUBJ].subjek.toUpperCase());
 }, 900);
+/* v18.28: butang Ruang Guru di header; peta operasi dan PdPc hanya bagi guru DELIMa */
+setTimeout(() => { try { guruUi(); const b = document.getElementById("guruBtn"); if (b) b.addEventListener("click", () => setView("guru")); } catch (e) { /* abaikan */ } }, 0);
 /* kembali ke Meta Didik selepas permainan yang dibuka dari dunia itu (Lagenda, Busana, Dunia Ilmu, Amali) */
 /* v18.27: misi kendiri murid dimainkan dalam Meta Didik; panel tajuk hanya menyimpan alat PdPc guru */
 function mdKendiri() {
@@ -14216,7 +14219,7 @@ function renderSubj() {
     if (ld) ld.textContent = "Setiap penanda ialah satu topik tatabahasa (nahu dan sarf) atau kosa kata Bahasa Arab SPM. Warna penanda menunjukkan bidang. Semenanjung ialah Tingkatan 4 dan Borneo ialah Tingkatan 5. Selesaikan misi untuk menawan negeri dan menaikkan pangkat.";
   }
   const vt = $("verTap");
-  if (vt) { const vv = (vt.textContent.match(/v[\d.]+$/) || [""])[0]; vt.textContent = SUBJS[SUBJ].nama + " \u00b7 " + vv; }
+  if (vt) { const vv = (vt.textContent.match(/v[\d.]+$/) || [""])[0]; vt.textContent = "Hub Inovasi Digital Pendidikan \u00b7 " + vv; } /* v18.28: tiada nama subjek di paparan utama */
 }
 renderSubj();
 /* ---------- Teks Arab: kanan ke kiri ---------- */
@@ -14773,6 +14776,7 @@ function gtRoleSave() {
   try { localStorage.setItem("gt-role", r); localStorage.setItem("gt-gsubj", String($("inSubj").value || "").replace(/[\u0000-\u001f<>]/g, "").trim().slice(0, 40)); } catch (e) { /* abaikan */ }
   if (r === "guru") gtGuruSync(true);
   else if (was === "guru" && Net.fb && FB.url) { FB.req("DELETE", "guru_daftar/" + FB.getUid()).catch(() => {}); try { localStorage.removeItem("gt-guru-sig"); } catch (e) { /* abaikan */ } }
+  try { guruUi(); } catch (e) { /* abaikan */ }
 }
 setTimeout(() => gtGuruSync(false), 7000);
 async function kmGuruStat() {
@@ -17258,7 +17262,7 @@ setTimeout(() => { const go = () => ["prak", "slaid"].forEach((m) => modLoad(m).
   document.addEventListener("focusout", hide); document.addEventListener("pointerdown", hide); window.addEventListener("scroll", hide, true);
 })();
 function setView(v) {
-  if (UI.view === "prak" && v === "map") metaBack(); /* Amali dibuka dari Meta Didik */
+  if ((UI.view === "prak" || UI.view === "kolam") && v === "map") metaBack(); /* Amali / Kolam Ikan dibuka dari Meta Didik */
   UI.view = v;
   { const f = document.getElementById("kmFab"); if (f) { f.hidden = v !== "map"; if (v === "map") { f.classList.remove("pop"); void f.offsetWidth; f.classList.add("pop"); } } }
   document.body.classList.toggle("vmap", v === "map");
@@ -17275,7 +17279,7 @@ function setView(v) {
   if (v === "pangkat") renderPangkat();
   if (v === "guru") { if (GURU.rows && Date.now() - GURU.at > 60000) GURU.rows = null; renderGuru(); }
   if (v === "gudang") renderGudangZv();
-  if (v === "kolam") renderKolam();
+  if (v === "kolam") { renderKolam(); kmFeedClaim(); }
   if (v === "latihan") renderLatihan();
   if (v === "kelas") renderKelas();
   if (v === "prak") renderPrak();
@@ -17570,12 +17574,14 @@ async function stnSubmit(f) {
   if (kmBad(tj) || kmBad(ds)) throw new Error("Tajuk atau huraian mengandungi perkataan tidak sesuai, pautan atau nombor telefon. Letakkan pautan dalam ruangan Pautan sahaja.");
   if (url && !stnUrlOk(url)) throw new Error("Pautan mesti bermula dengan https://");
   if (f.yt && !yt) throw new Error("Pautan YouTube tidak sah.");
-  if (!DATA.negeri[f.pn]) throw new Error("Pilih negeri tapak pilihan.");
+  if (f.la == null || f.lo == null || !DATA.negeri[f.pn]) throw new Error("Pilih lokasi stesen pada peta (ketik pada daratan).");
+  if (!SUBJS[f.sj] || sjLocked(f.sj)) throw new Error("Pilih subjek inovasi.");
+  if (!sjTopik(f.sj).some((t) => t.id === f.tp)) throw new Error("Pilih tajuk " + SUBJS[f.sj].subjek + " yang berkaitan dengan inovasi anda.");
   const hg = MD_HARGA.indexOf(+f.hg) >= 0 ? +f.hg : 0;
   if (hg && !url) throw new Error("Inovasi berbayar MD perlukan pautan produk / maklumat (yang dibuka selepas murid membayar).");
   await AUTH.ensure();
   const old = STN.mine || {};
-  const doc = { u: g.uid, n: stnClean(P.penuh || P.nama || g.gn, 60), sk: cleanSekolah(P.sekolah).slice(0, 80), ng: P.negeri || "", tj: tj, kat: STN_KAT.indexOf(f.kat) >= 0 ? f.kat : "Lain-lain", ds: ds, yt: yt, url: url, pn: f.pn, hg: hg, st: "tunggu", t: old.t || Date.now(), tu: Date.now() };
+  const doc = { u: g.uid, n: stnClean(P.penuh || P.nama || g.gn, 60), sk: cleanSekolah(P.sekolah).slice(0, 80), ng: P.negeri || "", tj: tj, kat: STN_KAT.indexOf(f.kat) >= 0 ? f.kat : "Lain-lain", ds: ds, yt: yt, url: url, pn: f.pn, la: +f.la, lo: +f.lo, sj: f.sj, tp: f.tp, hg: hg, st: "tunggu", t: old.t || Date.now(), tu: Date.now() };
   Object.keys(doc).forEach((k) => { if (doc[k] === "" || doc[k] === 0) delete doc[k]; }); /* peraturan: medan kosong tidak dihantar */
   await FB.req("PUT", "stesen/" + g.uid, doc);
   if (g.trial) await FB.req("PUT", "stesen_em/" + g.uid, g.em); /* e-mel tidak awam: hanya pentadbir membaca */
@@ -17583,8 +17589,8 @@ async function stnSubmit(f) {
 }
 function stnGuruBox(box) {
   const c = el("details", { class: "card", style: "margin:8px 0" }); c.open = !(STN.mine && STN.mine.st === "lulus") || !!STN.msg;
-  c.appendChild(el("summary", { style: "cursor:pointer;font-weight:700" }, "🏛 Stesen Inovasi saya (rintis META DIDIK)"));
-  c.appendChild(el("p", { class: "muted", style: "font-size:13px;margin:4px 0" }, "Pamerkan inovasi pengajaran anda di Dataran Inovasi dalam META DIDIK. Guru dan murid seluruh Malaysia boleh melawat, menonton video dan membuka pautan produk anda. Setiap stesen disemak oleh pentadbir sebelum dipaparkan. Peringatan: penjawat awam yang menjana pendapatan sampingan perlu mendapatkan kebenaran ketua jabatan."));
+  c.appendChild(el("summary", { style: "cursor:pointer;font-weight:700" }, "🏛 Stesen Inovasi saya"));
+  c.appendChild(el("p", { class: "muted", style: "font-size:13px;margin:4px 0" }, "Pamerkan inovasi pengajaran anda di mana-mana lokasi pilihan dalam peta Meta Didik, dalam dunia subjek inovasi itu. Guru dan murid seluruh Malaysia boleh melawat, menonton video dan membuka pautan produk anda. Setiap stesen disemak oleh pentadbir sebelum dipaparkan. Peringatan: penjawat awam yang menjana pendapatan sampingan perlu mendapatkan kebenaran ketua jabatan."));
   box.appendChild(c);
   const g = stnGuru();
   if (!g) {
@@ -17594,16 +17600,12 @@ function stnGuruBox(box) {
     return;
   }
   if (g.trial) c.appendChild(el("div", { class: "notice" }, "🧪 Mod percubaan: log masuk DELIMa belum diwajibkan. Stesen anda terikat pada peranti ini, jadi gunakan peranti yang sama untuk mengurus stesen dan pendapatan MD. Pentadbir menyemak e-mel DELIMa anda sebelum meluluskan."));
-  else {
-    const hd = el("div", { class: "row", style: "gap:10px;align-items:center" }, el("span", null, "✔ Disahkan: " + g.em));
-    const lo = el("button", { type: "button", class: "btn alt sm" }, "Log keluar DELIMa"); lo.addEventListener("click", () => { AUTH.out(); STN.mine = undefined; renderGuru(); }); hd.appendChild(lo);
-    c.appendChild(hd);
-  }
+
   if (STN.mine === undefined) { c.appendChild(el("p", { class: "muted" }, "Memuat stesen anda...")); if (!STN.busy) { STN.busy = true; stnLoadMine().then(() => { STN.busy = false; renderGuru(); }); } return; }
   if (STN.err) c.appendChild(el("div", { class: "notice warn" }, STN.err));
   const m = STN.mine;
   if (m) {
-    const stt = m.st === "lulus" ? "✅ Diluluskan · " + stnSlotName(m.sl) : m.st === "tolak" ? "❌ Ditolak" + (m.sb ? ": " + m.sb : "") + ". Kemas kini dan hantar semula." : "⏳ Menunggu semakan pentadbir";
+    const stt = m.st === "lulus" ? "✅ Diluluskan · " + (m.la != null ? "dipaparkan di " + (DATA.negeri[m.pn] ? DATA.negeri[m.pn].nama : "lokasi pilihan") + " dalam dunia " + (SUBJS[m.sj] ? SUBJS[m.sj].subjek : "Tasawwur Islam") : stnSlotName(m.sl)) : m.st === "tolak" ? "❌ Ditolak" + (m.sb ? ": " + m.sb : "") + ". Kemas kini dan hantar semula." : "⏳ Menunggu semakan pentadbir";
     c.appendChild(el("div", { class: "notice" + (m.st === "tolak" ? " warn" : "") }, "Status: " + stt));
     if (STN.stat) c.appendChild(el("div", { class: "gstats" }, el("div", { class: "gstat" }, el("b", null, String(STN.stat.lawat)), el("span", null, "Pelawat")), el("div", { class: "gstat" }, el("b", null, String(STN.stat.suka)), el("span", null, "Suka")), el("div", { class: "gstat" }, el("b", null, String(STN.stat.klik)), el("span", null, "Klik pautan"))));
   }
@@ -17614,15 +17616,20 @@ function stnGuruBox(box) {
   const iYt = el("input", { id: "stYt", maxlength: "200", value: m && m.yt ? "https://youtu.be/" + m.yt : "", placeholder: "Pautan video YouTube (pilihan)" });
   const iUrl = el("input", { id: "stUrl", maxlength: "300", value: m ? m.url || "" : "", placeholder: "https://... kedai, borang tempahan atau laman inovasi (pilihan)" });
   const iHg = el("select", { id: "stHg" }); MD_HARGA.forEach((h) => iHg.appendChild(el("option", { value: String(h) }, h ? h + " MD sehari bagi setiap murid" : "Percuma"))); iHg.value = String(m ? m.hg | 0 : 10);
-  const iPn = el("select", { id: "stPn" }); Object.keys(DATA.negeri).forEach((k) => iPn.appendChild(el("option", { value: k }, DATA.negeri[k].nama))); iPn.value = m ? m.pn : (DATA.negeri[lmNegeriKey(P.negeri)] ? lmNegeriKey(P.negeri) : Object.keys(DATA.negeri)[0]);
+  /* v18.28: inovasi mesti berkaitan subjek dan tajuk; lokasi dipilih guru pada peta (dipaparkan hanya dalam dunia subjek itu) */
+  const iSj = el("select", { id: "stSj" }); Object.keys(SUBJS).filter((k) => !sjLocked(k)).forEach((k) => iSj.appendChild(el("option", { value: k }, SUBJS[k].subjek))); iSj.value = m && m.sj && !sjLocked(m.sj) ? m.sj : SUBJ;
+  const iTp = el("select", { id: "stTp" }), fillTp = () => { iTp.textContent = ""; iTp.appendChild(el("option", { value: "" }, "Pilih tajuk berkaitan...")); sjTopik(iSj.value).forEach((t) => iTp.appendChild(el("option", { value: t.id }, (t.kod || t.id) + " " + t.nama))); };
+  fillTp(); if (m && m.tp && m.sj === iSj.value) iTp.value = m.tp; iSj.addEventListener("change", fillTp);
+  const loc = { la: m && m.la != null ? m.la : null, lo: m && m.lo != null ? m.lo : null, pn: m ? m.pn : "" };
+  const iLoc = lpPicker(m && m.la != null ? { la: m.la, lo: m.lo } : null, (la, lo, k) => { loc.la = la; loc.lo = lo; loc.pn = k; });
   const iEm = el("input", { id: "stEm", type: "email", maxlength: "80", value: g.em || "", placeholder: "nama@moe-dl.edu.my" });
   if (g.trial) c.appendChild(fld("stEm", "E-mel DELIMa anda (untuk semakan)", iEm));
-  c.append(fld("stTj", "Tajuk inovasi", iTj), fld("stKat", "Kategori", iKat), fld("stDs", "Huraian (apa, untuk siapa, kesan)", iDs), fld("stYt", "Video YouTube", iYt), fld("stUrl", "Pautan produk / maklumat", iUrl), fld("stHg", "Harga guna inovasi (MD)", iHg), fld("stPn", "Negeri tapak pilihan", iPn));
+  c.append(fld("stTj", "Tajuk inovasi", iTj), fld("stKat", "Kategori", iKat), fld("stDs", "Huraian (apa, untuk siapa, kesan)", iDs), fld("stYt", "Video YouTube", iYt), fld("stUrl", "Pautan produk / maklumat", iUrl), fld("stHg", "Harga guna inovasi (MD)", iHg), fld("stSj", "Subjek inovasi", iSj), fld("stTp", "Tajuk berkaitan (wajib)", iTp), fld("stLoc", "Lokasi stesen dalam peta Meta Didik", iLoc));
   const out = el("p", { class: "muted", style: "font-size:13px;margin:4px 0" }, STN.msg || "");
   const sb = el("button", { type: "button", class: "btn" }, m ? "Kemas kini dan hantar semula untuk semakan" : "Hantar permohonan stesen");
   sb.addEventListener("click", async () => {
     sb.disabled = true; out.textContent = "Menghantar...";
-    try { await stnSubmit({ tj: iTj.value, kat: iKat.value, ds: iDs.value, yt: iYt.value, url: iUrl.value, pn: iPn.value, hg: iHg.value, em: iEm.value }); STN.msg = "Permohonan dihantar. Pentadbir akan menyemak dan menetapkan tapak anda."; renderGuru(); }
+    try { await stnSubmit({ tj: iTj.value, kat: iKat.value, ds: iDs.value, yt: iYt.value, url: iUrl.value, pn: loc.pn, la: loc.la, lo: loc.lo, sj: iSj.value, tp: iTp.value, hg: iHg.value, em: iEm.value }); STN.msg = "Permohonan dihantar. Pentadbir akan menyemak inovasi anda sebelum stesen dipaparkan di lokasi pilihan."; renderGuru(); }
     catch (e) { out.textContent = e.message || "Gagal dihantar. Cuba lagi."; sb.disabled = false; }
   });
   c.append(sb, out);
@@ -17645,13 +17652,16 @@ function stnAdminBox(box) {
     d.append(el("b", null, (x.st === "lulus" ? "✅ " : x.st === "tolak" ? "❌ " : "⏳ ") + x.tj + " · " + x.kat), el("div", { style: "font-size:13px" }, x.n + " · " + x.sk + (x._em ? " · ✉ " + x._em : "") + " · pilihan " + (DATA.negeri[x.pn] ? DATA.negeri[x.pn].pendek : "-") + (x.sl ? " · " + stnSlotName(x.sl) : "")), el("div", { style: "font-size:14px" }, x.ds));
     if (x.yt) d.appendChild(el("div", { style: "font-size:13px" }, "Video: https://youtu.be/" + x.yt));
     if (x.url) d.appendChild(el("div", { style: "font-size:13px;word-break:break-all" }, "Pautan: " + x.url));
+    const geo = x.la != null; /* v18.28: lokasi pilihan guru pada peta, ikut subjek */
+    if (geo) { const tp = sjTopik(x.sj || "tw").find((t) => t.id === x.tp); d.appendChild(el("div", { style: "font-size:13px;color:#ffe9a8" }, "📍 " + (DATA.negeri[x.pn] ? DATA.negeri[x.pn].nama : "-") + " (" + x.la + ", " + x.lo + ") · Subjek: " + (SUBJS[x.sj] ? SUBJS[x.sj].subjek : "-") + " · Tajuk: " + (tp ? (tp.kod || tp.id) + " " + tp.nama : "-"))); }
     const row = el("div", { class: "row", style: "gap:8px" });
     const sel = el("select", { "aria-label": "Tapak" }); const cand = free.filter((s) => s.indexOf(x.pn + "-") === 0).concat(free.filter((s) => s.indexOf(x.pn + "-") !== 0));
     if (x.sl && used[x.sl] === x.id) cand.unshift(x.sl);
     cand.forEach((s) => sel.appendChild(el("option", { value: s }, stnSlotName(s))));
     const put = async (patch, lbl) => { try { const doc = Object.assign({}, x, patch); delete doc.id; delete doc._em; Object.keys(doc).forEach((k) => { if (doc[k] == null) delete doc[k]; }); await kmAdmPut("stesen/" + x.id, doc); toast(lbl, "ok"); await stnAdmLoad(); renderGuru(); } catch (e) { toast("Gagal (kod " + (e.code || "rangkaian") + ").", "bad"); } };
-    const ok = el("button", { type: "button", class: "btn sm" }, x.st === "lulus" ? "Tukar tapak" : "Lulus"); ok.disabled = !cand.length;
-    ok.addEventListener("click", () => put({ st: "lulus", sl: sel.value, sb: null }, "Stesen diluluskan."));
+    const ok = el("button", { type: "button", class: "btn sm" }, x.st === "lulus" ? (geo ? "Diluluskan" : "Tukar tapak") : "Lulus"); ok.disabled = geo ? x.st === "lulus" : !cand.length;
+    ok.addEventListener("click", () => put(geo ? { st: "lulus", sl: null, sb: null } : { st: "lulus", sl: sel.value, sb: null }, "Stesen diluluskan."));
+    if (geo) sel.hidden = true;
     const no = el("button", { type: "button", class: "btn alt sm" }, x.st === "lulus" ? "Tarik balik" : "Tolak");
     no.addEventListener("click", () => { const why = prompt("Sebab (dipaparkan kepada guru):", ""); if (why === null) return; put({ st: "tolak", sl: null, sb: stnClean(why, 140) }, "Stesen ditolak."); });
     row.append(sel, ok, no); d.appendChild(row); c.appendChild(d);
@@ -17998,14 +18008,89 @@ function guruMurid(td, x) {
     el("div", null, el("b", null, "Dikuasai 3 bintang: "), kuat.length + " daripada " + tp.length + " tajuk"),
     el("div", null, el("b", null, "META DIDIK: "), x.mg ? x.mg.u + "/" + x.mg.ut + " Stesen Ilmu · " + x.mg.lc + " lencana · " + x.mg.ak + " akhlak terpuji · " + x.mg.pl + " tempat" + (x.mg.ut && x.mg.u >= x.mg.ut ? " · layak sijil" : "") : "Belum bermain"));
 }
+/* ---------- v18.28: pemilih lokasi inovasi pada peta Malaysia (sempadan negeri meta-geo.json) ----------
+   Koordinat geo: x = (lon - lon0) * kx * U, z = (lat0 - lat) * kz * U (sama seperti Meta Didik sebelum lenturan). */
+const SJ_DATA = () => ({ tw: DATA_TW, pi: DATA_PI, p3: DATA_P3, ba: DATA_BA, sj: DATA_SJ, sc: DATA_SC, mt: DATA_MT, bm: DATA_BM, bi: DATA_BI });
+function sjTopik(k) { const d = SJ_DATA()[k]; return d && d.topik ? d.topik : []; }
+const LPK = { geo: null, p: null };
+function lpLoad() { return LPK.p || (LPK.p = fetch("meta-geo.json?v=" + APP_VER).then((r) => r.json()).then((j) => { LPK.geo = j; return j; }).catch((e) => { LPK.p = null; throw e; })); }
+function lpLL(G, x, z) { return { lo: x / (G.kx * G.U) + G.lon0, la: G.lat0 - z / (G.kz * G.U) }; }
+function lpXZ(G, la, lo) { return { x: (lo - G.lon0) * G.kx * G.U, z: (G.lat0 - la) * G.kz * G.U }; }
+function lpIn(r, x, z) { let c = false; for (let i = 0, j = r.length - 1; i < r.length; j = i++) { const a = r[i], b = r[j]; if ((a[1] > z) !== (b[1] > z) && x < (b[0] - a[0]) * (z - a[1]) / (b[1] - a[1]) + a[0]) c = !c; } return c; }
+function lpState(G, x, z) { for (const k in G.states) for (const r of G.states[k]) if (lpIn(r, x, z)) return k; return ""; }
+/* komponen: kanvas peta, butang kawasan dan zum; pilih(la, lo, negeri) dipanggil apabila titik dipilih */
+function lpPicker(init, pilih) {
+  const wrap = el("div"), cv = el("canvas", { width: "900", height: "560", "aria-label": "Peta Malaysia: ketik untuk memilih lokasi stesen" }), box = el("div", { class: "lpick" }, cv);
+  const out = el("div", { class: "lpick-out" }, init && init.la != null ? "📍 Lokasi semasa disimpan." : "Ketik pada peta untuk memilih lokasi stesen anda.");
+  const V = { reg: init && init.lo > 108 ? "b" : "s", zm: 1, c: null, pt: null };
+  const REG = { s: [99.4, 104.8, 0.9, 6.9], b: [109.3, 119.6, 0.6, 7.6] };
+  const bar = el("div", { class: "lpick-bar" });
+  const bt = (t, f) => { const b = el("button", { type: "button", class: "btn alt sm" }, t); b.addEventListener("click", f); bar.appendChild(b); return b; };
+  bt("Semenanjung", () => { V.reg = "s"; V.zm = 1; V.c = null; draw(); }); bt("Sabah & Sarawak", () => { V.reg = "b"; V.zm = 1; V.c = null; draw(); });
+  bt("＋ Zum", () => { V.zm = Math.min(12, V.zm * 2); draw(); }); bt("－", () => { V.zm = Math.max(1, V.zm / 2); if (V.zm === 1) V.c = null; draw(); });
+  wrap.append(bar, box, out);
+  let G = null, view = null;
+  const draw = () => {
+    if (!G) return; const x = cv.getContext("2d"), W = cv.width, H = cv.height, R = REG[V.reg], a = lpXZ(G, R[3], R[0]), b = lpXZ(G, R[2], R[1]);
+    let cx = (a.x + b.x) / 2, cz = (a.z + b.z) / 2; if (V.c && V.zm > 1) { cx = V.c.x; cz = V.c.z; }
+    const s = Math.min(W / (b.x - a.x), H / (b.z - a.z)) * V.zm; view = { s: s, ox: W / 2 - cx * s, oz: H / 2 - cz * s };
+    x.fillStyle = "#0d4f86"; x.fillRect(0, 0, W, H); x.lineJoin = "round";
+    for (const k in G.states) {
+      x.fillStyle = (typeof STATE_COL !== "undefined" && STATE_COL[k]) || ["#8fd16a", "#a8d86a", "#7cc46a", "#b5dc7a"][Object.keys(G.states).indexOf(k) % 4]; x.strokeStyle = "rgba(30,60,20,.75)"; x.lineWidth = 1.2;
+      for (const r of G.states[k]) { x.beginPath(); r.forEach((q, i) => { const px = view.ox + q[0] * s, pz = view.oz + q[1] * s; if (i) x.lineTo(px, pz); else x.moveTo(px, pz); }); x.closePath(); x.fill(); x.stroke(); }
+    }
+    x.font = "800 " + Math.round(13 + Math.min(6, V.zm)) + "px Nunito, sans-serif"; x.textAlign = "center"; x.fillStyle = "rgba(10,30,20,.85)";
+    for (const k in G.states) { if (!DATA.negeri[k]) continue; let sx = 0, sz = 0, n = 0, best = null; for (const r of G.states[k]) if (!best || r.length > best.length) best = r; best.forEach((q) => { sx += q[0]; sz += q[1]; n++; }); if (n) x.fillText(DATA.negeri[k].pendek, view.ox + sx / n * s, view.oz + sz / n * s); }
+    if (V.pt) { const px = view.ox + V.pt.x * s, pz = view.oz + V.pt.z * s; x.fillStyle = "#ff3b3b"; x.strokeStyle = "#fff"; x.lineWidth = 3; x.beginPath(); x.moveTo(px, pz); x.arc(px, pz - 22, 11, Math.PI * 0.8, Math.PI * 2.2); x.closePath(); x.fill(); x.stroke(); x.fillStyle = "#fff"; x.beginPath(); x.arc(px, pz - 22, 4, 0, 6.3); x.fill(); }
+  };
+  cv.addEventListener("click", (e) => {
+    if (!G || !view) return; const rc = cv.getBoundingClientRect(), mx = (e.clientX - rc.left) * cv.width / rc.width, mz = (e.clientY - rc.top) * cv.height / rc.height;
+    const gx = (mx - view.ox) / view.s, gz = (mz - view.oz) / view.s, k = lpState(G, gx, gz);
+    if (!k || !DATA.negeri[k]) { out.textContent = "Titik itu di laut atau di luar Malaysia. Ketik pada daratan."; return; }
+    V.pt = { x: gx, z: gz }; if (V.zm > 1) V.c = { x: gx, z: gz }; const ll = lpLL(G, gx, gz);
+    out.textContent = "📍 " + DATA.negeri[k].nama + " · " + ll.la.toFixed(4) + ", " + ll.lo.toFixed(4) + (V.zm < 4 ? " (zum masuk untuk lokasi lebih tepat)" : ""); pilih(+ll.la.toFixed(4), +ll.lo.toFixed(4), k); draw();
+  });
+  cv.addEventListener("wheel", (e) => { e.preventDefault(); if (!view) return; const rc = cv.getBoundingClientRect(), mx = (e.clientX - rc.left) * cv.width / rc.width, mz = (e.clientY - rc.top) * cv.height / rc.height; V.c = { x: (mx - view.ox) / view.s, z: (mz - view.oz) / view.s }; V.zm = clamp(V.zm * (e.deltaY < 0 ? 1.5 : 1 / 1.5), 1, 12); if (V.zm === 1) V.c = null; draw(); }, { passive: false });
+  lpLoad().then((g) => { G = g; if (init && init.la != null) { V.pt = lpXZ(G, init.la, init.lo); V.c = V.pt; V.zm = 4; } draw(); }).catch(() => { out.textContent = "Peta tidak dapat dimuatkan. Semak sambungan internet."; });
+  return wrap;
+}
+/* ---------- v18.28: Ruang Guru: log masuk DELIMa diwajibkan (pentadbir dengan kunci moderator dikecualikan) ---------- */
+const GTAB = { t: "inovasi" };
+function guruOk() { try { return !!((AUTH.guru && AUTH.guru()) || kmAdm()); } catch (e) { return false; } }
+function guruUi() {
+  const ok = guruOk(); document.body.classList.toggle("gv", ok);
+  const b = document.getElementById("guruBtn"); if (b) b.hidden = !(ok || gtRole() === "guru");
+}
+function guruGate(box) {
+  const c = el("div", { class: "ggate" });
+  c.append(el("h3", { style: "margin:0" }, "🔐 Log masuk DELIMa diperlukan"), el("p", { style: "margin:0" }, "Ruang Guru, Peta Operasi dan alat PdPc hanya untuk guru yang disahkan dengan akaun DELIMa (@moe-dl.edu.my)."));
+  if (!AUTH.on()) c.append(el("div", { class: "notice warn" }, "Log masuk DELIMa sedang diaktifkan oleh pentadbir sistem. Ruang Guru akan dibuka sebaik sahaja ia sedia."));
+  else { const host = el("div", { style: "min-height:44px" }); c.appendChild(host); AUTH.button(host, () => { toast("Akaun DELIMa disahkan. Selamat datang, Cikgu!", "ok"); STN.mine = undefined; MD.me = undefined; guruUi(); renderGuru(); }, (m) => toast(m, "bad")); }
+  box.appendChild(c);
+  const adm = el("details", { class: "card", style: "margin-top:14px;max-width:640px" }); adm.appendChild(el("summary", { style: "cursor:pointer;font-weight:700" }, "Pentadbir sistem")); box.appendChild(adm);
+  try { guruAdminBox(adm); } catch (e) { /* abaikan */ }
+}
 function renderGuru() {
-  const box = $("guruBody");
-  if (!box) return;
-  box.textContent = "";
+  const box = $("guruBody"); if (!box) return; box.textContent = ""; guruUi();
+  if (!guruOk()) { guruGate(box); return; }
+  const tabs = [["inovasi", "💡 Inovasi saya"], ["kolam", "🐟 Kolam murid"], ["papan", "📊 Papan pemuka"], ["peta", "🗺 Peta operasi PdPc"]].concat(kmAdm() ? [["admin", "⚙ Pentadbir"]] : []);
+  const bar = el("div", { class: "gtabs", role: "tablist" });
+  tabs.forEach(([k, l]) => {
+    const b = el("button", { type: "button", "aria-pressed": String(GTAB.t === k) }, l);
+    b.addEventListener("click", () => { if (k === "peta") { setView("map"); setTimeout(() => { const h = $("gvMapH"); if (h) h.scrollIntoView({ behavior: "smooth" }); }, 80); return; } GTAB.t = k; renderGuru(); });
+    bar.appendChild(b);
+  });
+  const g = AUTH.guru(), hd = el("div", { class: "row", style: "gap:10px;align-items:center;margin-bottom:6px" }, el("span", { class: "muted" }, g ? "✔ DELIMa: " + g.em : "Pentadbir (kunci moderator)"));
+  if (g) { const lo = el("button", { type: "button", class: "btn alt sm" }, "Log keluar"); lo.addEventListener("click", () => { AUTH.out(); STN.mine = undefined; MD.me = undefined; guruUi(); renderGuru(); }); hd.appendChild(lo); }
+  box.append(hd, bar);
+  if (GTAB.t === "inovasi") { try { stnGuruBox(box); mdGuruBox(box); } catch (e) { console.error(e); } }
+  else if (GTAB.t === "kolam") guruKolamTab(box);
+  else if (GTAB.t === "admin" && kmAdm()) { try { guruAdminBox(box); stnAdminBox(box); mdAdminBox(box); iptAdminBox(box); } catch (e) { console.error(e); } }
+  else renderGuruDash(box);
+}
+function renderGuruDash(box) {
   const sid = mySid();
   if (!(Net.fb && FB.url)) { box.appendChild(el("div", { class: "notice warn" }, "Papan pemuka guru memerlukan sambungan Firebase (versi GitHub Pages). Ia tidak tersedia pada sesi ini.")); return; }
-  guruAdminBox(box);
-  try { stnAdminBox(box); mdAdminBox(box); iptAdminBox(box); stnGuruBox(box); mdGuruBox(box); } catch (e) { /* abaikan */ }
   if (!sid) { box.appendChild(el("div", { class: "notice warn" }, "Tetapkan sekolah dan negeri anda dalam profil (klik nama anda di bahagian atas) supaya data murid sekolah anda boleh dipaparkan. Murid juga mesti mengisi sekolah yang sama.")); return; }
   const top = el("div", { class: "row", style: "margin:6px 0;gap:10px" });
   const rf = el("button", { type: "button", class: "btn alt sm" }, GURU.loading ? "Memuat..." : "Muat semula data");
@@ -19348,6 +19433,43 @@ function klInfo() {
   const f = KL.sel && KL.fish[KL.sel]; if (!f) { inf.hidden = true; return; }
   const e = f.e; inf.hidden = false; inf.textContent = "";
   inf.append(el("b", null, (e.me ? "Anda: " : "") + e.n), el("span", null, KL_ST[klStage(e.x)][1] + " | " + e.pts + (KL.per === "selam" ? " skor Nelayan" : " mata" + (KL.per === "minggu" ? " minggu ini" : ""))), el("span", { class: "muted" }, "Kedudukan #" + e.no + (e.k ? " | " + e.k : "")));
+  if (!e.me && typeof guruOk === "function" && guruOk()) inf.appendChild(kmFeedBtn(e, f));
+}
+/* v18.28: guru (DELIMa) memberi makanan ikan sebagai ganjaran; murid menerima +10 MD apabila membuka aplikasi atau Kolam Ikan.
+   kolam_makan/<uid murid>/<id> = { g: nama guru, sk: sekolah, n: 10, t } */
+const KM_FEED = 10;
+function kmFeedBtn(e, f) {
+  let done = {}; try { done = JSON.parse(localStorage.getItem("gt-km-feed") || "{}") || {}; } catch (x) { done = {}; }
+  const today = dayKey(), b = el("button", { type: "button", class: "btn sm" }, done[e.id] === today ? "🍤 Sudah diberi hari ini" : "🍤 Beri makanan ikan (+" + KM_FEED + " MD)");
+  b.disabled = done[e.id] === today;
+  b.addEventListener("click", async () => {
+    b.disabled = true;
+    try {
+      await AUTH.ensure();
+      await FB.req("POST", "kolam_makan/" + e.id, { g: stnClean("Cikgu " + (cleanName(P.nama) || "").replace(/^cikgu\s+/i, ""), 40), sk: cleanSekolah(P.sekolah).slice(0, 60), n: KM_FEED, t: { ".sv": "timestamp" } });
+      done[e.id] = today; Object.keys(done).forEach((k) => { if (done[k] !== today) delete done[k]; }); try { localStorage.setItem("gt-km-feed", JSON.stringify(done)); } catch (x) { /* abaikan */ }
+      if (f) { klDrop(f.x, 10, 8); f.eat = 1; } b.textContent = "🍤 Diberi! Murid menerima +" + KM_FEED + " MD"; toast("Makanan ikan diberi kepada " + e.n + ".", "ok");
+    } catch (x) { b.disabled = false; toast("Gagal memberi makanan (kod " + (x.code || "rangkaian") + ").", "bad"); }
+  });
+  return b;
+}
+async function kmFeedClaim() {
+  try {
+    if (!(Net.fb && FB.url) || !Net.uid) return;
+    const v = (await FB.req("GET", "kolam_makan/" + Net.uid)) || {};
+    let got = {}; try { got = JSON.parse(localStorage.getItem("gt-km-got") || "{}") || {}; } catch (x) { got = {}; }
+    let md = 0; const dari = [];
+    Object.keys(v).forEach((id) => { const r = v[id]; if (got[id] || !r || !(r.n > 0)) return; got[id] = 1; md += Math.min(20, r.n | 0); dari.push(r.g || "Cikgu"); });
+    if (!md) return;
+    P.coin = (P.coin | 0) + md; saveP(); try { localStorage.setItem("gt-km-got", JSON.stringify(got)); } catch (x) { /* abaikan */ }
+    toast("🍤 " + [...new Set(dari)].join(", ") + " memberi makanan kepada ikan anda! +" + md + " MD", "good"); try { renderMe(); } catch (x) { /* abaikan */ }
+  } catch (e) { /* cuba lagi kemudian */ }
+}
+(function kfBoot(n) { if (typeof Net !== "undefined" && Net.fb && FB.url && Net.uid) { kmFeedClaim(); return; } if (n < 40) setTimeout(() => kfBoot(n + 1), 1500); })(0);
+/* tab Kolam murid dalam Ruang Guru */
+function guruKolamTab(box) {
+  const b = el("button", { type: "button", class: "btn" }, "🐟 Buka Kolam Ikan sekolah anda"); b.addEventListener("click", () => setView("kolam"));
+  box.append(el("div", { class: "card", style: "gap:10px" }, el("h3", { style: "margin:0" }, "🐟 Kolam murid"), el("p", { style: "margin:0" }, "Setiap murid sekolah anda ialah seekor ikan; saiznya ikut mata pembelajaran. Ketik ikan seorang murid untuk melihat kemajuannya dan memberi makanan ikan sebagai ganjaran (+" + KM_FEED + " MD, sekali sehari bagi setiap murid)."), el("p", { class: "muted", style: "margin:0;font-size:13px" }, "Murid menerima ganjaran apabila membuka aplikasi atau Kolam Ikan. Murid juga boleh membuka Kolam Ikan dari menu dalam Meta Didik."), b));
 }
 function klBuild() {
   const box = $("kolamBody"); if (!box) return;

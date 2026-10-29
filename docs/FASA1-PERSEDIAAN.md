@@ -126,3 +126,17 @@ Had mod percubaan (diterima untuk rintis):
 1. Aktifkan log masuk DELIMa (Langkah 1-4) dan wajibkan untuk guru dan murid.
 2. Tukar Rules kepada **`docs/firebase-rules-stesen.json`** (versi ketat).
 3. Reset MD semua murid (alat reset akan disediakan pada pelancaran) dan daftar semula stesen guru dengan DELIMa.
+
+## v18.28: DELIMa wajib untuk guru, Ruang Guru dan Kolam Ikan
+- **Guru wajib log masuk DELIMa.** Butang **🎓 Ruang Guru** (di header, bagi pengguna berperanan guru) membuka
+  Ruang Guru hanya selepas log masuk akaun @moe-dl.edu.my. Peta Operasi dan alat PdPc di paparan utama juga hanya
+  kelihatan kepada guru yang disahkan. Pentadbir yang memasukkan kunci moderator dikecualikan.
+  **Langkah 1-4 di atas (Web API Key dan Google OAuth Client ID) mesti disiapkan dahulu**; sebelum itu Ruang Guru
+  memaparkan "sedang diaktifkan".
+- **Stesen Inovasi di lokasi pilihan guru.** Guru memilih subjek, tajuk berkaitan (wajib) dan titik pada peta
+  Malaysia. Stesen yang diluluskan dibina di titik itu dalam Meta Didik, **hanya dalam dunia subjek tersebut**
+  (medan baharu `sj`, `tp`, `la`, `lo` dalam `stesen`).
+- **Kolam Ikan** dibuka dari menu dalam Meta Didik. Guru (DELIMa) mengetik ikan murid dan memberi makanan ikan
+  (+10 MD, sekali sehari bagi setiap murid). Rekod di `kolam_makan/<uid murid>/<id>`; murid menerima MD apabila
+  membuka aplikasi atau Kolam Ikan.
+- Kemas kini Rules dengan fail terkini (`firebase-rules-stesen.json` selepas DELIMa aktif).
