@@ -346,7 +346,7 @@ if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.
 if (SUBJ === "bm") { DATA.tema = DATA_BM.tema; DATA.topik = DATA_BM.topik; DATA.soalan = DATA_BM.soalan; }
 if (SUBJ === "bi") { DATA.tema = DATA_BI.tema; DATA.topik = DATA_BI.topik; DATA.soalan = DATA_BI.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v18.24"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v18.25"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -6965,7 +6965,7 @@ function lgRoot() {
    Dibuka daripada butang di peta utama; dunia.js dimuat hanya apabila diperlukan. */
 /* v17.91: avatar 3D dikongsi Gudang dan META DIDIK; dimuat apabila perlu */
 /* v18.4: versi aplikasi untuk memecah cache skrip (Safari/ikon skrin utama iPhone menyimpan salinan lama) */
-const APP_VER = "18.24";
+const APP_VER = "18.25";
 function av3Load(cb) {
   if (window.AV3) { cb(); return; }
   if (typeof THREE === "undefined") return;
@@ -7324,9 +7324,6 @@ function renderPanel() {
   const prb = el("button", { type: "button", class: "btn alt", id: "btnPR" }, "Amali");
   prb.title = "Latihan amali: simulasi, urutan langkah dan situasi sebenar";
   prb.addEventListener("click", () => setView("prak"));
-  const srb = el("button", { type: "button", class: "btn alt", id: "btnSR" }, "Selam");
-  srb.title = "Kuiz selam: ikan anda mencari harta karun, skor naik di Kolam Ikan";
-  srb.addEventListener("click", () => srOpen(t.id));
   const arb = el("button", { type: "button", class: "btn alt", id: "btnAR" }, "Latihan AR");
   arb.title = "Kuiz berkumpulan dengan kawalan tapak tangan dan genggam";
   arb.addEventListener("click", () => arOpen(t.id));
@@ -7355,7 +7352,7 @@ function renderPanel() {
     el("div", { class: "tagline" }, SUBJ !== "tw" ? "Tingkatan " + tm.tingkatan + " | " + tm.nama + " | " + (SUBJ === "pi" || SUBJ === "p3" ? "Pelajaran " : "Misi ") + t.kod : "Tingkatan " + tm.tingkatan + " | Tema " + tm.id.split("-")[1] + " | Misi " + t.kod),
     el("h3", null, t.nama),
     sr,
-    el("div", { class: "mgl k" }, "Kendiri murid"), el("div", { class: "row k" }, go, prb, srb, lgb, dwb, bzb), el("div", { class: "mgl pd" }, "PdPc guru"), el("div", { class: "row pd" }, slb, arb, jtb, blb, nlb));
+    el("div", { class: "mgl k" }, "Kendiri murid"), el("div", { class: "row k" }, go, prb, lgb, dwb, bzb), el("div", { class: "mgl pd" }, "PdPc guru"), el("div", { class: "row pd" }, slb, arb, jtb, blb, nlb));
   decorModes(p);
   // pilihan misi lain dalam negeri yang sama
   const sibs = DATA.topik.filter((x) => x.negeri === t.negeri);
@@ -12056,9 +12053,6 @@ function renderKhasPanel(p, kh) {
   const prk = el("button", { type: "button", class: "btn alt", id: "btnPRk" }, "Amali");
   prk.title = "Latihan amali: simulasi, urutan langkah dan situasi sebenar";
   prk.addEventListener("click", () => setView("prak"));
-  const srk = el("button", { type: "button", class: "btn alt", id: "btnSR" }, kh.rahsia ? "Selam Rahsia" : "Selam");
-  srk.title = "Kuiz selam: ikan anda mencari harta karun, skor naik di Kolam Ikan";
-  srk.addEventListener("click", () => srOpen(kh.id));
   const ark = el("button", { type: "button", class: "btn alt", id: "btnARk" }, "Latihan AR");
   ark.title = "Kuiz berkumpulan dengan kawalan tapak tangan dan genggam";
   ark.addEventListener("click", () => arOpen(kh.id));
@@ -12084,7 +12078,7 @@ function renderKhasPanel(p, kh) {
   bd.addEventListener("click", () => { UI.boardMode = "khas"; UI.khasLv = kh.id; setView("rank"); });
   p.append(close, el("div", { class: "tagline" }, "Latihan khas"), el("h3", null, kh.n),
     el("div", { class: "muted" }, kh.rahsia ? (SUBJ === "tw" ? "Operasi Rahsia Tasawwur Islam Tingkatan 4. " : "Operasi Rahsia Pendidikan Islam Tingkatan 3. ") + khasAll(kh).length + " soalan dalam bank." : "Semua topik " + (kh.tk === "s" ? "Tingkatan 4 dan 5, gaya SPM" : "Tingkatan " + kh.tk) + ". " + khasAll(kh).length + " soalan dalam bank."),
-    sr, el("div", { class: "mgl k" }, "Kendiri murid"), el("div", { class: "row k" }, go, prk, srk, lgk, dwk, bzk), el("div", { class: "mgl pd" }, "PdPc guru"), el("div", { class: "row pd" }, ark, jtk, blk, nlk));
+    sr, el("div", { class: "mgl k" }, "Kendiri murid"), el("div", { class: "row k" }, go, prk, lgk, dwk, bzk), el("div", { class: "mgl pd" }, "PdPc guru"), el("div", { class: "row pd" }, ark, jtk, blk, nlk));
   decorModes(p);
   const ul = el("ul"); khasT(kh).nota.forEach((x) => ul.appendChild(el("li", null, x)));
   const d = el("details"); d.open = true; d.append(el("summary", { class: "tagline", style: "color:var(--khaki);cursor:pointer" }, "Cara bermain"), ul);
@@ -16780,7 +16774,9 @@ function renderPrak() { const box = $("prakBody"); if (box && !box.childElementC
 function hjOpen() { return modCall("prak", "hjOpen", [].slice.call(arguments)); }
 function slOpen() { return modCall("slaid", "slOpen", [].slice.call(arguments)); }
 function slPick() { return modCall("slaid", "slPick", [].slice.call(arguments)); }
-function srOpen() { return modCall("selam", "srOpen", [].slice.call(arguments)); }
+/* v18.25: Selam diganti permainan Nelayan (mod/nelayan.js), dibuka dari jeti nelayan dalam Meta Didik */
+function pcOpen() { return modCall("nelayan", "pcOpen", [].slice.call(arguments)); }
+function srOpen(tid) { return pcOpen(tid); }
 /* muat modul secara senyap selepas aplikasi siap supaya pembukaan pertama pantas */
 setTimeout(() => { const go = () => ["prak", "slaid"].forEach((m) => modLoad(m).catch(() => {})); if (window.requestIdleCallback) requestIdleCallback(go, { timeout: 8000 }); else go(); }, 6000);
 
@@ -17095,7 +17091,7 @@ function stnUrlOk(u) { try { const x = new URL(u); return x.protocol === "https:
 function stnClean(s, n) { return String(s || "").replace(/[\u0000-\u001f<>]/g, " ").replace(/\s+/g, " ").trim().slice(0, n); }
 async function stnCount(node, id) { try { const v = await FB.req("GET", node + "/" + id, undefined, "shallow=true"); return v && typeof v === "object" ? Object.keys(v).length : 0; } catch (e) { return 0; } }
 async function stnStats(id) { const r = await Promise.all(["stesen_lawat", "stesen_suka", "stesen_klik"].map((n) => stnCount(n, id))); return { lawat: r[0], suka: r[1], klik: r[2] }; }
-/* v18.24: mod percubaan (sebelum log masuk DELIMa diwajibkan di metadidik.com): tanpa Firebase Auth,
+/* v18.25: mod percubaan (sebelum log masuk DELIMa diwajibkan di metadidik.com): tanpa Firebase Auth,
    identiti guru dan murid ialah ID peranti; e-mel DELIMa guru diisi sendiri dan disemak pentadbir. */
 function stnTrial() { return !AUTH.on(); }
 function stnGuru() {
@@ -17209,7 +17205,7 @@ function stnAdminBox(box) {
   });
 }
 
-/* ---------- v18.24: MD (Meta Didik), mata wang pembelajaran ----------
+/* ---------- v18.25: MD (Meta Didik), mata wang pembelajaran ----------
    Murid memperoleh MD dengan belajar (kuiz, misi, menara) dan tidak boleh membelinya dengan wang.
    Murid membelanjakan MD untuk menggunakan inovasi guru: stesen_guna/<stesen>/<pembayar>/<YYYYMMDD> = { h: harga, t: masa pelayan }.
    Setiap bulan pentadbir menetapkan tabung RM (sewaan tapak, penaja, langganan sekolah) dan mengagihkannya ikut bahagian MD:
@@ -18898,7 +18894,7 @@ function klInfo() {
   const inf = document.getElementById("klInfo"); if (!inf) return;
   const f = KL.sel && KL.fish[KL.sel]; if (!f) { inf.hidden = true; return; }
   const e = f.e; inf.hidden = false; inf.textContent = "";
-  inf.append(el("b", null, (e.me ? "Anda: " : "") + e.n), el("span", null, KL_ST[klStage(e.x)][1] + " | " + e.pts + (KL.per === "selam" ? " skor Selam" : " mata" + (KL.per === "minggu" ? " minggu ini" : ""))), el("span", { class: "muted" }, "Kedudukan #" + e.no + (e.k ? " | " + e.k : "")));
+  inf.append(el("b", null, (e.me ? "Anda: " : "") + e.n), el("span", null, KL_ST[klStage(e.x)][1] + " | " + e.pts + (KL.per === "selam" ? " skor Nelayan" : " mata" + (KL.per === "minggu" ? " minggu ini" : ""))), el("span", { class: "muted" }, "Kedudukan #" + e.no + (e.k ? " | " + e.k : "")));
 }
 function klBuild() {
   const box = $("kolamBody"); if (!box) return;
@@ -18911,7 +18907,7 @@ function klBuild() {
   const rf = el("button", { type: "button", class: "btn alt sm" }, "Segarkan"); rf.addEventListener("click", () => klLoad(true));
   const feed = el("button", { type: "button", class: "btn sm" }, "Beri makan semua"); feed.addEventListener("click", () => { for (let i = 0; i < 16; i++) setTimeout(() => klDrop(30 + Math.random() * (KL.w - 60), 6, 1), i * 70); });
   const fs = el("button", { type: "button", class: "btn alt sm" }, "Skrin penuh"); fs.addEventListener("click", () => { const w = document.getElementById("klStage"); if (!w) return; if (document.fullscreenElement) document.exitFullscreen(); else if (w.requestFullscreen) w.requestFullscreen(); });
-  bar.append(sel, segBtns([["semua", "Keseluruhan"], ["minggu", "Minggu ini"]].concat([["selam", "Selam"]]), KL.per, (x) => { KL.per = x; klBuild(); }, "Tempoh mata"), segBtns([["semua", "Semua nama"], ["sentuh", "Nama bila disentuh"]], KL.names, (x) => { KL.names = x; klBuild(); }, "Paparan nama"), feed, fs, rf);
+  bar.append(sel, segBtns([["semua", "Keseluruhan"], ["minggu", "Minggu ini"]].concat([["selam", "Nelayan"]]), KL.per, (x) => { KL.per = x; klBuild(); }, "Tempoh mata"), segBtns([["semua", "Semua nama"], ["sentuh", "Nama bila disentuh"]], KL.names, (x) => { KL.names = x; klBuild(); }, "Paparan nama"), feed, fs, rf);
   box.appendChild(bar);
   box.appendChild(el("p", { class: "muted", style: "margin:6px 0;font-size:13px" }, "Saiz ikan mengikut mata dalam subjek " + SUBJS[SUBJ].subjek + ". Mata naik apabila anda menjawab dengan betul dan menamatkan misi."));
   if (KL.err) box.appendChild(el("div", { class: "notice warn" }, KL.err));
@@ -19067,7 +19063,7 @@ function rlDraw() {
   feed.focus({ preventScroll: true });
 }
 function rlInit() {
-  return; /* v18.24: butang Reels dibuang daripada menu utama */
+  return; /* v18.25: butang Reels dibuang daripada menu utama */
   const row = document.querySelector(".mnmore"); if (!row || document.getElementById("rlBtn")) return;
   const b = el("button", { type: "button", id: "rlBtn" }, "Reels"); b.addEventListener("click", rlOpen); row.insertBefore(b, row.firstChild);
 }
@@ -19095,6 +19091,6 @@ const RL_CSS = `
 @media(max-height:560px){.rl-vid{max-height:50vh}}
 `;
 
-/* v18.24: Gudang hanya di sekolah sendiri dalam Meta Didik: dompet membuka Meta Didik */
+/* v18.25: Gudang hanya di sekolah sendiri dalam Meta Didik: dompet membuka Meta Didik */
 document.addEventListener("click", (ev) => { const b = ev.target && ev.target.closest && ev.target.closest("#walletBtn"); if (b && !(typeof S !== "undefined" && S && S.running)) { toast("Belanja MD di Gudang sekolah anda dalam Meta Didik.", "ok"); if (!(window.LMX && window.LMX.on)) lmOpen(""); } });
 
