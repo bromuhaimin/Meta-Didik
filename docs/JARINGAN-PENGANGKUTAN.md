@@ -1,4 +1,4 @@
-# Jaringan Pengangkutan Malaysia dalam Meta Didik (v18.31)
+# Jaringan Pengangkutan Malaysia dalam Meta Didik (v18.32)
 
 Dokumen ini menghimpunkan maklumat jaringan jalan raya, lebuh raya, pengangkutan awam, lapangan terbang, terminal bas, rel dan pulau di Malaysia, serta cara maklumat itu digunakan dalam prototaip jaringan pengangkutan Meta Didik.
 
@@ -19,20 +19,18 @@ Dokumen ini menghimpunkan maklumat jaringan jalan raya, lebuh raya, pengangkutan
 | Lapangan terbang | [OurAirports](https://ourairports.com/countries/MY/) (domain awam) | Tepat |
 | Terminal bas | Senarai manual dalam `extra.py` | Anggaran, perlu disahkan |
 | Pulau | Senarai manual dalam `pulau.py`, disemak dengan Natural Earth | Kedudukan dan keluasan anggaran |
-| Rel (ETS, ECRL, Komuter, LRT, MRT, Monorel, ERL, KTM Sabah) | Data `RAILS` sedia ada dalam `dunia.js` | Kedudukan stesen anggaran |
+| Rel KTMB (ETS, Komuter, Komuter Utara, Laluan Pantai Timur) | [GTFS rasmi KTMB](https://developer.data.gov.my/realtime-api/gtfs-static), data.gov.my | **Tepat** (koordinat rasmi setiap stesen dan hentian) |
+| Rel bandar (LRT Kelana Jaya, Ampang, Sri Petaling, Shah Alam; MRT Kajang, Putrajaya; Monorel; BRT Sunway) | [GTFS rasmi Prasarana Rapid Rail KL](https://developer.data.gov.my/realtime-api/gtfs-static) termasuk `shapes.txt` | **Tepat** (stesen dan jajaran landasan) |
+| ECRL, KLIA Ekspres, KTM Sabah | Data `RAILS` sedia ada (tiada dalam GTFS) | Kedudukan stesen anggaran |
 
-**Had semasa:** tetapan rangkaian sesi pembangunan menyekat beberapa sumber data:
-- OpenStreetMap (`overpass-api.de`, `openstreetmap.org`)
-- GTFS rasmi Prasarana dan KTMB (`api.data.gov.my`)
-- Wikipedia
-
-Apabila domain itu dibenarkan, data boleh dinaik taraf kepada:
+**Had semasa:** OpenStreetMap (`overpass-api.de`) masih disekat oleh tetapan rangkaian sesi. Apabila dibenarkan, data boleh dinaik taraf kepada:
 - semua jalan persekutuan dan negeri (OSM `highway=motorway/trunk/primary/secondary`);
-- koordinat tepat setiap stesen MRT, LRT dan KTM daripada GTFS `stops.txt`;
-- terminal bas daripada OSM `amenity=bus_station`;
+- terminal bas tepat daripada OSM `amenity=bus_station`;
 - garis pantai sebenar bagi pulau kecil.
 
-Data boleh dijana semula dengan `python3 tools/jaringan/bina.py`. Cara penggunaan diterangkan dalam docstring fail itu.
+**Menjana semula data:**
+- jalan, terminal dan pulau: `python3 tools/jaringan/bina.py`
+- rel daripada GTFS: `python3 tools/jaringan/rel_gtfs.py` (memuat turun GTFS terkini dan menulis semula blok `RAILS` dalam `dunia.js`)
 
 ## 3. Jaringan jalan dalam prototaip
 
@@ -87,22 +85,35 @@ Lebuh raya bandar Lembah Klang (NKVE, NPE, LDP, KESAS, SPRINT, DUKE, SMART, SUKE
 
 ## 5. Pengangkutan awam
 
-### Rel (sudah ada dalam Meta Didik)
+### Rel (v18.32: dijana daripada GTFS rasmi)
+
+Perkhidmatan yang berkongsi landasan sebenar dipecahkan supaya setiap landasan dibina sekali sahaja:
+- **ETS:** Utara (KL Sentral - Padang Besar) dan Selatan (Pulau Sebang/Tampin - JB Sentral). Antara KL dan Pulau Sebang/Tampin, naik Komuter Laluan Seremban.
+- **Komuter Utara** di landasan utama diwakili oleh tren ETS. Cawangan Butterworth - Bukit Mertajam ialah laluan sendiri.
+- **LRT Sri Petaling** bermula di Chan Sow Lin; dari situ ke Sentul Timur berkongsi landasan Laluan Ampang.
+
+Stesen bertanda ° ialah hentian yang dilalui, tetapi tren laluan itu tidak berhenti di situ dalam Meta Didik.
 
 | Laluan | Stesen berhenti dalam Meta Didik |
 |---|---|
-| ETS KTM | KL Sentral, Rawang, Tanjung Malim, Kampar, Ipoh, Kuala Kangsar, Taiping, Bukit Mertajam, Sungai Petani, Alor Setar, Arau, Padang Besar |
-| ECRL | Gombak (KL), Bentong, Mentakab, Kuantan, Kemaman, Dungun, Kuala Terengganu, Jerteh, Kota Bharu |
-| KTM Komuter (Laluan Seremban) | KL Sentral, Mid Valley, Bandar Tasik Selatan, Serdang, Kajang, UKM, Bangi, Nilai, Seremban |
-| KTM Komuter (Laluan Pelabuhan Klang) | KL Sentral, Subang Jaya, Shah Alam, Klang, Pelabuhan Klang |
+| ECRL | Gombak (KL), Genting (terowong)°, Bentong, Karak°, Mentakab, Maran°, Kuantan, Pelabuhan Kuantan°, Cherating°, Kemaman, Kerteh°, Dungun, Kuala Terengganu, Penarik°, Kota Putera°, Jerteh, Pasir Puteh°, Kota Bharu |
 | KLIA Ekspres / KLIA Transit | KL Sentral, Bandar Tasik Selatan, Putrajaya & Cyberjaya, Salak Tinggi, KLIA T1 |
-| Keretapi Negeri Sabah | Tanjung Aru, Papar, Beaufort, Tenom |
-| LRT Laluan Kelana Jaya | Gombak, Taman Melati, Wangsa Maju, Setiawangsa, Ampang Park, KLCC, Masjid Jamek, Pasar Seni, KL Sentral, Bangsar, Universiti, Taman Paramount, Kelana Jaya, Glenmarie, Subang Jaya, USJ 7, Putra Heights |
-| LRT Laluan Ampang | Sentul Timur, Titiwangsa, Masjid Jamek, Hang Tuah, Chan Sow Lin, Maluri, Cempaka, Ampang |
-| LRT Laluan Sri Petaling | Chan Sow Lin, Bandar Tun Razak, Bandar Tasik Selatan, Bukit Jalil, Sri Petaling, Kinrara BK5, Puchong Prima, Putra Heights |
-| MRT Laluan Kajang | Kwasa Damansara, Bandar Utama, TTDI, Semantan, Muzium Negara, Pasar Seni, Bukit Bintang, TRX, Maluri, Taman Connaught, Bandar Tun Hussein Onn, Sungai Jernih, Kajang |
-| MRT Laluan Putrajaya | Kwasa Damansara, Damansara Damai, Kepong Baru, Jinjang, Kentonmen, Sentul Barat, Titiwangsa, Ampang Park, TRX, Chan Sow Lin, Kuchai, Serdang Raya Utara, UPM, Cyberjaya Utara, Putrajaya Sentral |
-| Monorel KL | KL Sentral, Hang Tuah, Bukit Bintang, Chow Kit, Titiwangsa |
+| Keretapi Negeri Sabah | Tanjung Aru, Kinarut°, Papar, Bongawan°, Beaufort, Halogilat°, Tenom |
+| ETS KTM (Utara) | KL Sentral, Kuala Lumpur, Bank Negara°, Putra°, Segambut°, Kepong°, Kepong Sentral, Sungai Buloh, Kuang°, Rawang, Serendah°, Batang Kali, Rasa°, Kuala Kubu Bharu°, Tanjung Malim, Slim River, Sungkai, Tapah Road, Kampar, Batu Gajah, Ipoh, Sungai Siput, Kuala Kangsar, Padang Rengas°, Taiping, Kamunting, Bagan Serai, Parit Buntar, Nibong Tebal, Simpang Ampat°, Bukit Mertajam, Tasik Gelugor, Sungai Petani, Gurun, Kobah°, Alor Setar, Anak Bukit, Kodiang°, Arau, Bukit Ketri°, Padang Besar |
+| ETS KTM (Selatan) | Pulau Sebang/Tampin, Batang Melaka, Gemas, Segamat, Labis, Bekok, Paloh, Kluang, Mengkibol°, Rengam, Layang Layang, Kulai, Kempas Baru, JB Sentral |
+| KTM Laluan Pantai Timur (Ekspres Rakyat Timuran) | Gemas, Bahau, Kemayan, Triang, Mengkarak°, Mentakab, Kuala Krau, Jenderak°, Jerantut, Mela°, Krambit, Kuala Lipis, Padang Tungku°, Bukit Betong°, Kampung Berkam°, Aur Gading°, Chegar Perah, Sungai Temau°, Teluk Gunung°, Merapoh, Mentara Baru°, Gua Musang, Pan Malayan°, Kampung Sirian°, Sungai Sirian°, Limau Kasturi°, Bertam Baru°, Bertam°, Jerek Baru°, Sungai Tasin°, Sri Bintang°, Sri Mahligai°, Sri Jaya°, Kemubu°, Dabong, Kuala Gris°, Bukit Abu°, Kampung Baru Bukit Abu°, Ulu Temiang°, Sungai Mengkuang Baru°, Manek Urai°, Pahi°, Krai, Sungai Nal°, Temangan°, Tanah Merah, Bukit Panau°, Sungai Keladi°, To Uban°, Chicha Tinggi°, Pasir Mas, Bunut Susu°, Wakaf Bharu, Kampung Kok Pasir°, Tumpat |
+| KTM Komuter (Laluan Seremban) | KL Sentral, Mid Valley, Seputeh, Salak Selatan, Bandar Tasik Selatan, Serdang, Kajang, Kajang 2, UKM, Bangi, Batang Benar, Nilai, Labu, Tiroi, Seremban, Senawang, Sungai Gadut, Rembau, Pulau Sebang/Tampin |
+| KTM Komuter (Cawangan Batu Caves) | Putra, Sentul, Batu Kentonmen, Kampung Batu, Taman Wahyu, Batu Caves |
+| KTM Komuter (Laluan Pelabuhan Klang) | KL Sentral, Abdullah Hukum, Angkasapuri, Pantai Dalam, Petaling, Jalan Templer, Kampung Dato Harun, Seri Setia, Setia Jaya, Subang Jaya, Batu Tiga, Shah Alam, Padang Jawa, Bukit Badak, Klang, Telok Pulai, Telok Gadong, Kampung Raja Uda, Jalan Kastam, Pelabuhan Klang Selatan |
+| KTM Komuter Utara (Butterworth) | Butterworth, Bukit Tengah, Bukit Mertajam |
+| LRT Laluan Kelana Jaya | Putra Heights, Subang Alam, Alam Megah, USJ 21, Wawasan, Taipan, USJ 7, SS 18, SS 15, Subang Jaya, Glenmarie, Ara Damansara, Lembah Subang, Kelana Jaya, Taman Bahagia, Taman Paramount, Asia Jaya, Taman Jaya, Universiti, Kerinchi, Abdullah Hukum, Bangsar, KL Sentral, Pasar Seni, Masjid Jamek, Dang Wangi, Kampung Baru, KLCC, Ampang Park, Damai, Dato' Keramat, Jelatek, Setiawangsa, Sri Rampai, Wangsa Maju, Taman Melati, Gombak |
+| LRT Laluan Ampang | Ampang, Cahaya, Cempaka, Pandan Indah, Pandan Jaya, Maluri, Miharja, Chan Sow Lin, Pudu, Hang Tuah, Plaza Rakyat, Masjid Jamek, Bandaraya, Sultan Ismail, PWTC, Titiwangsa, Sentul, Sentul Timur |
+| LRT Laluan Sri Petaling | Putra Heights, Puchong Prima, Puchong Perdana, Bandar Puteri, Taman Perindustrian Puchong, Pusat Bandar Puchong, IOI Puchong Jaya, Kinrara BK5, Alam Sutera, Muhibbah, Awan Besar, Sri Petaling, Bukit Jalil, Sungai Besi, Bandar Tasik Selatan, Bandar Tun Razak, Salak Selatan, Cheras, Chan Sow Lin |
+| MRT Laluan Kajang | Kwasa Damansara, Kwasa Sentral, Kota Damansara, Surian, Mutiara Damansara, Bandar Utama, Taman Tun Dr Ismail, Phileo Damansara, Pusat Bandar Damansara, Semantan, Muzium Negara, Pasar Seni, Merdeka, Bukit Bintang, TRX, Cochrane, Maluri, Taman Pertama, Taman Midah, Taman Mutiara, Taman Connaught, Taman Suntex, Sri Raya, Bandar Tun Hussein Onn, Batu 11 Cheras, Bukit Dukung, Sungai Jernih, Stadium Kajang, Kajang |
+| MRT Laluan Putrajaya | Kwasa Damansara, Kampung Selamat, Sungai Buloh, Damansara Damai, Sri Damansara Barat, Sri Damansara Sentral, Sri Damansara Timur, Metro Prima, Kepong Baru, Jinjang, Sri Delima, Kampung Batu, Kentonmen, Jalan Ipoh, Sentul Barat, Titiwangsa, Hospital Kuala Lumpur, Raja Uda, Ampang Park, Persiaran KLCC, Conlay, TRX, Chan Sow Lin, Kuchai, Taman Naga Emas, Sungai Besi, Serdang Raya Utara, Serdang Raya Selatan, Serdang Jaya, UPM, Taman Equine, Putra Permai, 16 Sierra, Cyberjaya Utara, Cyberjaya City Centre, Putrajaya Sentral |
+| Monorel KL | KL Sentral, Tun Sambanthan, Maharajalela, Hang Tuah, Imbi, Bukit Bintang, Raja Chulan, Bukit Nanas, Medan Tuanku, Chow Kit, Titiwangsa |
+| LRT Laluan Shah Alam | Bandar Utama, Kayu Ara, Bandar Utama 11, Damansara Idaman, Subang, Glenmarie 2, Kerjaya, Stadium Shah Alam, Dato' Menteri, UiTM Shah Alam, Seksyen 7, Bandar Baru Klang, Pasar Klang, Jalan Meru, Jambatan Kota, Taman Selatan, Seri Andalas, Klang Jaya, Bandar Bukit Tinggi, Johan Setia |
+| BRT Laluan Sunway | Sunway-Setia Jaya, Mentari, Sunway Lagoon, Sunmed, SunU-Monash, South Quay-USJ 1, USJ 7 |
 
 ### Bas ekspres di lebuh raya (sudah ada)
 
@@ -111,10 +122,15 @@ Lebuh raya bandar Lembah Klang (NKVE, NPE, LDP, KESAS, SPRINT, DUKE, SMART, SUKE
 - **Lebuhraya Pan Borneo (Sarawak):** Kuching Sentral, Serian, Sri Aman, Sarikei, Sibu, Bintulu, Miri
 - **Lebuhraya Pan Borneo (Sabah):** Lawas, Beaufort, Kota Kinabalu, Ranau, Sandakan
 
-### Bas dan teksi (baharu dalam v18.31)
+### Bas dan teksi
 
 - **Bas ekspres antara bandar:** 47 terminal bas utama di setiap negeri, semuanya bersambung melalui graf jalan.
-- **Bas bandar dan bas henti-henti** (Rapid KL, Rapid Penang, Rapid Kuantan dan BAS.MY di bandar-bandar negeri) belum dimodelkan sebagai laluan khas. Dalam prototaip, ia diwakili oleh trafik bas di jalan.
+- **Bas bandar (GTFS rasmi, belum dimodelkan sebagai laluan khas; diwakili oleh trafik bas di jalan):**
+  - Rapid Bus KL: 139 laluan, 4,106 hentian
+  - Bas perantara MRT: 91 laluan, 2,117 hentian
+  - Rapid Penang: 47 laluan, 1,934 hentian
+  - myBAS Johor: 21 laluan, 988 hentian
+  Data ini sedia untuk fasa seterusnya: hentian bas bandar dan laluan bas sebenar.
 - **Teksi:** teksi bajet (merah-putih) dan teksi eksekutif (biru) boleh dipanggil di mana-mana tepi jalan.
 
 ### Terminal bas utama
@@ -296,13 +312,10 @@ Semua pulau dalam senarai ini dilabelkan dalam dunia 3D (🏝, tekan E untuk mak
 ## 8. Langkah seterusnya (cadangan)
 
 1. **Benarkan domain data** dalam tetapan rangkaian persekitaran: `overpass-api.de`, `api.data.gov.my` dan `en.wikipedia.org`. Selepas itu, jana semula dengan OSM supaya jalan persekutuan, jalan negeri dan stesen rel mencapai ketepatan kira-kira 50 m.
-2. **Laluan bas bandar** Rapid KL, Rapid Penang dan BAS.MY daripada GTFS, dengan hentian bas sebenar.
-3. **Laluan rel baharu:**
-   - LRT Laluan Shah Alam (LRT3)
-   - KTM Komuter Utara
-   - KTM Laluan Pantai Timur (Gemas - Tumpat)
-   - ETS Gemas - Johor Bahru
+2. **Laluan bas bandar** Rapid KL, Rapid Penang, bas perantara MRT dan myBAS Johor daripada GTFS (sudah boleh dimuat turun), dengan hentian bas sebenar.
+3. **Laluan rel seterusnya:**
    - RTS Link Johor Bahru - Woodlands
+   - Shuttle Tebrau (JB Sentral - Woodlands)
    - jajaran ECRL penuh mengikut fasa pembinaan
 4. **Feri** ke pulau-pulau baharu (contohnya Kuala Besut ke Perhentian, Mersing ke Rawa, Semporna ke Mabul).
 
