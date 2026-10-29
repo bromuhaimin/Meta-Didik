@@ -106,5 +106,19 @@
         ".validate": "newData.hasChildren(['g', 'n', 't']) && newData.child('n').isNumber() && newData.child('n').val() > 0 && newData.child('n').val() <= 10 && newData.child('t').val() === now && newData.child('g').isString() && newData.child('g').val().length <= 40"
       }
     }
+  },
+  "soalan_ubah": {
+    ".read": true,
+    "$sj": {
+      "$id": {
+        ".write": "auth != null && auth.token.email_verified === true && auth.token.email.matches(/.*@moe-dl\\.edu\\.my$/) && (!data.exists() || (data.child('by').val() === auth.uid && data.child('st').val() === 'tunggu'))",
+        ".validate": "$sj.length <= 3 && $id.length <= 24 && newData.hasChildren(['k', 't', 'by', 'n', 'em', 'st', 'tu']) && newData.child('by').val() === auth.uid && newData.child('em').val() === auth.token.email && newData.child('st').val() === 'tunggu' && newData.child('tu').val() === now && (newData.child('k').val() === 'baru' || newData.child('k').val() === 'baiki' || newData.child('k').val() === 'buang') && newData.child('t').isString() && newData.child('t').val().length <= 24 && newData.child('n').isString() && newData.child('n').val().length <= 60 && (!newData.child('qi').exists() || newData.child('qi').isNumber()) && (!newData.child('q').exists() || (newData.child('q').isString() && newData.child('q').val().length <= 600)) && (!newData.child('a').exists() || (newData.child('a').isNumber() && newData.child('a').val() >= 0 && newData.child('a').val() <= 3)) && (!newData.child('d').exists() || (newData.child('d').isNumber() && newData.child('d').val() >= 1 && newData.child('d').val() <= 3)) && (!newData.child('e').exists() || (newData.child('e').isString() && newData.child('e').val().length <= 800)) && (!newData.child('why').exists() || (newData.child('why').isString() && newData.child('why').val().length <= 300)) && !newData.child('sb').exists()",
+        "o": {
+          "$n": {
+            ".validate": "$n.matches(/^[0-3]$/) && newData.isString() && newData.val().length <= 200"
+          }
+        }
+      }
+    }
   }
 }

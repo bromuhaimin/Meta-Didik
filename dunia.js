@@ -3234,8 +3234,9 @@ function lmTowerState(o) {
 /* ---------- avatar 3D (avatar3d.js): semua pakaian dan aksesori Gudang, menutup aurat, wajah tanpa ciri ---------- */
 function lmMyCode() { return window.AV3 ? AV3.code() : "L|1|ou_sc|oc_gn|hd_no|hc_w"; }
 /* v18.26: guru ditanda "🎓 Cikgu" pada nama (label, chat, peta) supaya murid menghormati guru */
-function lmIsGuru() { try { return typeof AUTH !== "undefined" && AUTH.guru && !!AUTH.guru(); } catch (e) { return false; } } /* v18.28: hanya guru disahkan DELIMa */
-function lmGuruName(n, gr) { return gr ? "🎓 Cikgu " + String(n).replace(/^(cikgu|cg\.?|ustaz|ustazah)\s+/i, "") : n; }
+/* v18.28: hanya guru disahkan DELIMa (atau pentadbir); v18.29: dengan gelaran pilihan (Ustaz, Ustazah, Cikgu, Sir...) */
+function lmIsGuru() { try { return typeof AUTH !== "undefined" && ((AUTH.guru && AUTH.guru()) || (typeof kmAdm === "function" && kmAdm())) ? myGel() : false; } catch (e) { return false; } }
+function lmGuruName(n, gr) { return gr ? "🎓 " + gelName(typeof gr === "string" ? gr : "Cikgu", n) : n; }
 function lmAvatar(code, name, me, gr) {
   const av = AV3.build(code);
   const tag = lmLabel(lmGuruName(cleanName(name) || "Pemain", gr), gr ? { fs: 32, k: 0.028, bg: "rgba(120,80,0,.92)", fg: "#fff6d8", bd: "#ffd45a", dt: false } : { fs: 32, k: 0.028, bd: me ? "#f5c542" : null, dt: false });
@@ -3376,7 +3377,7 @@ function lmNet(g, dt, ts) {
   if (LM.vc && ts - (LM.vcT || 0) > 700) { LM.vcT = ts; lmVoiceTick(g); }
   if (ts - LM.sent > (LM.roomKind === "open" ? 500 : 200)) {
     LM.sent = ts;
-    const o = { x: +p.x.toFixed(1), y: +p.y.toFixed(1), z: +p.z.toFixed(1), r: +p.yaw.toFixed(2), m: p.moving ? 1 : 0, a: p.on ? 0 : 1, n: lmMyName(), gr: lmIsGuru() ? 1 : 0, sh: LM.sh || "", c: g.myCode, st: lmStamps(), fy: g.sail ? 1 : 0, rl: g.ride ? 1 : 0, sw: p.swim ? (p.moving ? 2 : 1) : 0, pl: g.flight ? 1 : 0, pp: g.flight ? +g.flight.pitch.toFixed(2) : 0, pb: g.flight ? +g.flight.bank.toFixed(2) : 0 };
+    const o = { x: +p.x.toFixed(1), y: +p.y.toFixed(1), z: +p.z.toFixed(1), r: +p.yaw.toFixed(2), m: p.moving ? 1 : 0, a: p.on ? 0 : 1, n: lmMyName(), gr: lmIsGuru() ? 1 : 0, gl: lmIsGuru() || "", sh: LM.sh || "", c: g.myCode, st: lmStamps(), fy: g.sail ? 1 : 0, rl: g.ride ? 1 : 0, sw: p.swim ? (p.moving ? 2 : 1) : 0, pl: g.flight ? 1 : 0, pp: g.flight ? +g.flight.pitch.toFixed(2) : 0, pb: g.flight ? +g.flight.bank.toFixed(2) : 0 };
     const sig = [o.x, o.y, o.z, o.r, o.m, o.a, o.st, o.pl, o.pp, o.pb, o.fy, o.rl, o.sw].join(",");
     if (sig !== LM.lastSig) { LM.lastSig = sig; try { const x = r.presence(o); if (x && x.catch) x.catch(() => {}); } catch (e) { /* abaikan */ } }
   }
@@ -3390,8 +3391,9 @@ function lmNet(g, dt, ts) {
       n++; seen[pr.peer] = 1;
       const x = clamp(v.x, WB.x0, WB.x0 + WB.w), y = clamp(+v.y || 0, -8, 400), z = clamp(v.z, WB.z0, WB.z0 + WB.h), nm = cleanName(String(v.n || "")) || "Pelajar";
       let e = LM.peers[pr.peer];
-      if (e && (e.c !== v.c || e.n !== nm || e.gr !== !!v.gr)) { lmAvatarDrop(g, e.av, e); e = null; }
-      if (!e) { const av = lmAvatar(v.c, nm, false, !!v.gr); g.scene.add(av.g); e = LM.peers[pr.peer] = { id: pr.peer, x: x, y: y, z: z, r: +v.r || 0, av: av, c: v.c, n: nm, gr: !!v.gr, en: v.en | 0, cn: v.cn | 0, rn: v.rn | 0 }; } /* emote lama sebelum kita masuk tidak dipaparkan */
+      const gr = v.gr ? (gelClean(v.gl) || "Cikgu") : false;
+      if (e && (e.c !== v.c || e.n !== nm || e.gr !== gr)) { lmAvatarDrop(g, e.av, e); e = null; }
+      if (!e) { const av = lmAvatar(v.c, nm, false, gr); g.scene.add(av.g); e = LM.peers[pr.peer] = { id: pr.peer, x: x, y: y, z: z, r: +v.r || 0, av: av, c: v.c, n: nm, gr: gr, en: v.en | 0, cn: v.cn | 0, rn: v.rn | 0 }; } /* emote lama sebelum kita masuk tidak dipaparkan */
       e.tx = x; e.ty = y; e.tz = z; e.tr = +v.r || 0; e.m = !!v.m; e.a = !!v.a; e.st = clamp(v.st | 0, 0, 999); e.pl = !!v.pl; e.fy = !!v.fy; e.pp = clamp(+v.pp || 0, -1, 1); e.pb = clamp(+v.pb || 0, -1, 1);
       if (typeof v.e === "string" && EMOTE[v.e] && (v.en | 0) !== e.en) { if (!lmMuted(pr.peer)) lmBubble(e.av, EMOTE[v.e]); e.en = v.en | 0; }
       if (typeof v.ct === "string" && (v.cn | 0) !== e.cn) { e.cn = v.cn | 0; lmChatGot(e, v.ct); }
@@ -4644,7 +4646,7 @@ function lmMap3(area, onPick) {
     for (const s of its) { const L = look(s.userData.it); if (L && s.material !== L[0]) s.material = L[0]; }
     const seen = new Set();
     for (const id in LM.peers) {
-      const e = LM.peers[id], fr = lmFriend(e), key = (fr ? "f" : "o") + (e.pl ? "p" : "") + (e.gr ? "g" : "") + e.n + (e.fy ? "⛴" : ""); seen.add(id);
+      const e = LM.peers[id], fr = lmFriend(e), key = (fr ? "f" : "o") + (e.pl ? "p" : "") + (e.gr ? "g" + e.gr : "") + e.n + (e.fy ? "⛴" : ""); seen.add(id);
       let o = peers.get(id);
       if (!o || o.key !== key) {
         if (o) { scene.remove(o.s, o.l); sprites.splice(sprites.indexOf(o.s), 1); sprites.splice(sprites.indexOf(o.l), 1); }
