@@ -131,7 +131,30 @@ const AIRPORTS = [
   ["ap-kb", "kelantan", "Lapangan Terbang Kota Bharu", 6.1668, 102.2930],
   ["ap-jb", "johor", "Lapangan Terbang Senai", 1.6413, 103.6697],
   ["ap-kch", "sarawak", "Lapangan Terbang Kuching", 1.4847, 110.3470],
-  ["ap-bki", "sabah", "Lapangan Terbang Kota Kinabalu", 5.9372, 116.0510]
+  ["ap-bki", "sabah", "Lapangan Terbang Kota Kinabalu", 5.9372, 116.0510],
+  /* v18.31: semua lapangan terbang berjadual (koordinat OurAirports) */
+  ["ap-aor", "kedah", "Lapangan Terbang Sultan Abdul Halim (Alor Setar)", 6.1897, 100.3980],
+  ["ap-lgk", "kedah", "Lapangan Terbang Antarabangsa Langkawi", 6.3297, 99.7287],
+  ["ap-iph", "perak", "Lapangan Terbang Sultan Azlan Shah (Ipoh)", 4.5673, 101.0916],
+  ["ap-szb", "selangor", "Lapangan Terbang Sultan Abdul Aziz Shah (Subang)", 3.1306, 101.5490],
+  ["ap-mkz", "melaka", "Lapangan Terbang Antarabangsa Melaka", 2.2656, 102.2528],
+  ["ap-kua", "pahang", "Lapangan Terbang Sultan Haji Ahmad Shah (Kuantan)", 3.7754, 103.2090],
+  ["ap-tod", "pahang", "Lapangan Terbang Pulau Tioman", 2.8182, 104.1600],
+  ["ap-tgg", "terengganu", "Lapangan Terbang Sultan Mahmud (Kuala Terengganu)", 5.3826, 103.1030],
+  ["ap-sbw", "sarawak", "Lapangan Terbang Sibu", 2.2616, 111.9850],
+  ["ap-btu", "sarawak", "Lapangan Terbang Bintulu", 3.1239, 113.0200],
+  ["ap-myy", "sarawak", "Lapangan Terbang Miri", 4.3220, 113.9870],
+  ["ap-mkm", "sarawak", "Lapangan Terbang Mukah", 2.8819, 112.0433],
+  ["ap-mzv", "sarawak", "Lapangan Terbang Mulu", 4.0483, 114.8050],
+  ["ap-bbn", "sarawak", "Lapangan Terbang Bario", 3.7346, 115.4785],
+  ["ap-mur", "sarawak", "Lapangan Terbang Marudi", 4.1787, 114.3303],
+  ["ap-lmn", "sarawak", "Lapangan Terbang Limbang", 4.8083, 115.0100],
+  ["ap-lwy", "sarawak", "Lapangan Terbang Lawas", 4.8492, 115.4080],
+  ["ap-lbu", "sabah", "Lapangan Terbang Labuan", 5.3017, 115.2483],
+  ["ap-kud", "sabah", "Lapangan Terbang Kudat", 6.9241, 116.8371],
+  ["ap-sdk", "sabah", "Lapangan Terbang Sandakan", 5.9009, 118.0590],
+  ["ap-ldu", "sabah", "Lapangan Terbang Lahad Datu", 5.0324, 118.3238],
+  ["ap-twu", "sabah", "Lapangan Terbang Tawau", 4.3134, 118.1215]
 ];
 const STATE_COL = {
   perlis: "#8fd16a", kedah: "#b6dd5c", penang: "#6fcf9e", perak: "#9ccc65", kelantan: "#c5e17a", terengganu: "#7fd6a8",
@@ -183,13 +206,13 @@ function lmGeoLoad() {
         (gj.isl || []).forEach((o) => { o.c = [o.c[0] * WS, o.c[1] * WS]; });
         gj.dem.forEach((r) => { r.x0 *= WS; r.z0 *= WS; }); gj.cs *= WS; gj.U *= WS;
       }
-      GEOD = gj; KV.c = null;
+      GEOD = gj; KV.c = null; lmJalanLoad();
       /* zum Lembah Klang pada sempadan negeri (dipadatkan dahulu supaya lengkung pantai kekal licin) */
       const dense = (r) => { const o = []; for (let i = 0; i < r.length; i++) { const p = r[i], q = r[(i + 1) % r.length], n = Math.max(1, Math.ceil(Math.hypot(q[0] - p[0], q[1] - p[1]) / 8)), c = lmKvC(); if (Math.hypot(p[0] - c.x, p[1] - c.z) > KV.R + 400 && Math.hypot(q[0] - c.x, q[1] - c.z) > KV.R + 400) { o.push(p); continue; } for (let j = 0; j < n; j++) o.push([p[0] + (q[0] - p[0]) * j / n, p[1] + (q[1] - p[1]) * j / n]); } return o; };
       for (const k in gj.states) gj.states[k] = gj.states[k].map((r) => dense(r).map((q) => { const w = lmWarp(q[0], q[1]); return [w.x, w.z]; }));
       (gj.isl || []).forEach((o) => { const w = lmWarp(o.c[0], o.c[1]); o.c = [w.x, w.z]; });
       return gj;
-    }).catch((e) => { LM.geoP = null; throw e; });
+    }).then((gj) => lmJalanLoad().then(() => gj)).catch((e) => { LM.geoP = null; throw e; });
   return LM.geoP;
 }
 /* ketinggian sebenar (meter) daripada grid DEM; -1 = di luar kawasan data */
@@ -1960,6 +1983,257 @@ function lmRailTick(g, dt) {
     lmRailPlace(R);
   }
 }
+/* ---------- v18.31: jaringan jalan Malaysia (meta-jalan.json) ----------
+   Graf bersambung: jalan utama Natural Earth 10m, jajaran tambahan (FT8, FT4, FT13 Sabah, Miri - Lawas dan lain-lain)
+   serta lebuh raya sedia ada (PLUS, LPT, Pan Borneo) sebagai sebahagian graf. Pengangkutan awam di jalan hanyalah bas
+   dan teksi: terminal bas utama setiap negeri, teksi boleh dipanggil di mana-mana tepi jalan. Pulau: label dan kad info. */
+const JL = { d: null, p: null };
+function lmJalanLoad() {
+  if (JL.p) return JL.p;
+  const v = typeof APP_VER !== "undefined" ? "?v=" + APP_VER : "";
+  JL.p = fetch("meta-jalan.json" + v).then((r) => (r.ok ? r.json() : null)).then((j) => (JL.d = j)).catch(() => null);
+  return JL.p;
+}
+const JL_W = [0, 5.4, 3.6]; /* separuh lebar jalan ikut kelas: 1 lebuh raya, 2 jalan persekutuan */
+function lmJalanBuild(g) {
+  const J = JL.d; if (!J || !J.jalan) return;
+  const N = new Map(), nodes = [], edges = [];
+  const node = (q) => { const k = q[0].toFixed(4) + "," + q[1].toFixed(4); let n = N.get(k); if (!n) { const w = ll(q[0], q[1]); n = { i: nodes.length, x: w.x, z: w.z, e: [], hw: null }; N.set(k, n); nodes.push(n); } return n; };
+  const RB = {}; (g.rails || []).forEach((R) => { if (R.L.road && R.pts) RB[R.L.id] = R; });
+  const nearS = (R, x, z) => { let bi = 0, bd = 1e9; R.pts.forEach((p, i) => { const d = (p.x - x) * (p.x - x) + (p.z - z) * (p.z - z); if (d < bd) { bd = d; bi = i; } }); return R.cum[bi]; };
+  /* 1. nod; nod di atas lebuh raya sedia ada dipindah ke jajaran sebenar lebuh raya itu */
+  const raw = J.jalan.map(([c, P, src]) => ({ c: c, P: P, src: src, a: node(P[0]), b: node(P[P.length - 1]) }));
+  raw.forEach((w) => { const R = typeof w.src === "string" && RB[w.src]; if (!R) return; for (const n of [w.a, w.b]) if (!n.hw) { const s = nearS(R, n.x, n.z), q = lmRailAt(R, s); n.hw = { R: R, s: s }; n.x = q.x; n.z = q.z; } });
+  /* 2. tepi: titik setiap ~7 unit; lebuh raya sedia ada mengikut titik jajarannya (termasuk jambatan dan tambak) */
+  const rwy = g.items.filter((it) => it.kind === "ap" && it.rw).map((it) => it.rw);
+  const onRwy = (x, z) => rwy.some((w) => { const ux = Math.cos(w.a), uz = Math.sin(w.a), dx = x - w.x, dz = z - w.z, u = dx * ux + dz * uz, v = -dx * uz + dz * ux; return Math.abs(u) < w.L + 8 && v > -12 && v < 54; });
+  for (const w of raw) {
+    let pts;
+    const R = typeof w.src === "string" && RB[w.src];
+    if (R && w.a.hw && w.b.hw && w.a.hw.R === R && w.b.hw.R === R) {
+      const s0 = w.a.hw.s, s1 = w.b.hw.s, n = Math.max(2, Math.ceil(Math.abs(s1 - s0) / 7)); pts = [];
+      for (let k = 0; k <= n; k++) { const q = lmRailAt(R, s0 + (s1 - s0) * k / n); pts.push({ x: q.x, y: q.y, z: q.z, hw: 1 }); }
+    } else {
+      const W = w.P.map((q) => ll(q[0], q[1])); W[0] = { x: w.a.x, z: w.a.z }; W[W.length - 1] = { x: w.b.x, z: w.b.z }; pts = [{ x: W[0].x, z: W[0].z }];
+      for (let i = 1; i < W.length; i++) { const p = W[i - 1], q = W[i], d = Math.hypot(q.x - p.x, q.z - p.z), n = Math.max(1, Math.ceil(d / 7)); for (let k = 1; k <= n; k++) pts.push({ x: p.x + (q.x - p.x) * k / n, z: p.z + (q.z - p.z) * k / n }); }
+      const gy = pts.map((p) => lmHRaw(p.x, p.z));
+      pts.forEach((p, i) => { let s = 0, c = 0; for (let j = -2; j <= 2; j++) { const v = gy[i + j]; if (v != null) { s += Math.max(v, 1.25); c++; } } p.wet = gy[i] < 0.5; p.y = Math.max(s / c, gy[i], p.wet ? 1.6 : 0) + 0.38; p.rw = onRwy(p.x, p.z); });
+    }
+    const cum = [0]; for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].z - pts[i - 1].z));
+    const e = { i: edges.length, a: w.a, b: w.b, c: w.c, pts: pts, cum: cum, len: cum[cum.length - 1] || 0.01, hw: !!R, lane: R ? 3.2 : w.c === 1 ? 2.8 : 1.8 };
+    edges.push(e); w.a.e.push(e); w.b.e.push(e);
+  }
+  /* 3. komponen bersambung (Semenanjung, Borneo) dan grid carian */
+  let cc = 0; for (const n of nodes) { if (n.cc != null) continue; const st = [n]; n.cc = cc; while (st.length) { const x = st.pop(); for (const e of x.e) for (const y of [e.a, e.b]) if (y.cc == null) { y.cc = cc; st.push(y); } } cc++; }
+  const CS = 60, G = new Map();
+  edges.forEach((e) => { for (let i = 1; i < e.pts.length; i++) { const p = e.pts[i - 1], q = e.pts[i], k = Math.floor((p.x + q.x) / 2 / CS) + "," + Math.floor((p.z + q.z) / 2 / CS); let L = G.get(k); if (!L) G.set(k, (L = [])); L.push([e, i]); } });
+  g.jl = { nodes: nodes, edges: edges, G: G, CS: CS, tr: [], spT: 0 };
+  /* 4. permukaan jalan baharu: satu jejaring bagi setiap kelas (lebuh raya sedia ada sudah dibina) */
+  const tex = lmTex(64, 64, (x, w, h) => {
+    x.fillStyle = "#45474c"; x.fillRect(0, 0, w, h);
+    for (let i = 0; i < 260; i++) { const v = 58 + Math.random() * 30 | 0; x.fillStyle = "rgba(" + v + "," + v + "," + (v + 4) + ",.7)"; x.fillRect(Math.random() * w, Math.random() * h, 1.5, 1.5); }
+    x.fillStyle = "#f2f2f2"; x.fillRect(3, 0, 1.6, h); x.fillRect(w - 4.6, 0, 1.6, h);
+    x.fillStyle = "#e8c23a"; x.fillRect(w / 2 - 0.8, 2, 1.6, 30);
+  });
+  tex.wrapS = tex.wrapT = T.RepeatWrapping;
+  const mat = new T.MeshLambertMaterial({ map: tex, side: T.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -4 });
+  const deck = [];
+  for (const cl of [1, 2]) {
+    const pos = [], uv = [], idx = [], hw = JL_W[cl];
+    for (const e of edges) {
+      if (e.hw || e.c !== cl) continue;
+      const P = e.pts; let base = -1;
+      for (let i = 0; i < P.length; i++) {
+        const p = P[i], a = P[Math.max(0, i - 1)], b = P[Math.min(P.length - 1, i + 1)], dx = b.x - a.x, dz = b.z - a.z, l = Math.hypot(dx, dz) || 1, nx = -dz / l, nz = dx / l, v = e.cum[i] / 10;
+        const k = pos.length / 3; pos.push(p.x + nx * hw, p.y, p.z + nz * hw, p.x - nx * hw, p.y, p.z - nz * hw); uv.push(0, v, 1, v);
+        if (i && base >= 0 && !(p.rw && P[i - 1].rw)) idx.push(k - 2, k - 1, k, k, k - 1, k + 1);
+        base = k;
+        if (p.wet && i % 3 === 0) deck.push(p);
+      }
+    }
+    if (!idx.length) continue;
+    const geo = new T.BufferGeometry(); geo.setAttribute("position", new T.Float32BufferAttribute(pos, 3)); geo.setAttribute("uv", new T.Float32BufferAttribute(uv, 2)); geo.setIndex(idx); geo.computeVertexNormals();
+    const m = new T.Mesh(geo, mat); m.receiveShadow = true; g.scene.add(m);
+  }
+  /* tiang jambatan di atas air */
+  if (deck.length) {
+    const pm = new T.InstancedMesh(GEO.jlP || (GEO.jlP = new T.BoxGeometry(1.2, 1, 1.2)), lmMat("#b8b2a6"), deck.length), o = new T.Object3D();
+    deck.forEach((p, i) => { const h = p.y + 3; o.position.set(p.x, p.y - h / 2, p.z); o.scale.set(1, h, 1); o.updateMatrix(); pm.setMatrixAt(i, o.matrix); });
+    g.scene.add(pm);
+  }
+  /* 5. terminal bas utama */
+  for (const t of J.terminal || []) {
+    const [nm, k, la, lo, rla, rlo] = t; if (!DATA.negeri[k] && k !== "wp") continue;
+    const r = ll(rla, rlo), q = lmJalanNear(g, r.x, r.z, 40); if (!q) continue;
+    const a = lmRailAt(q.e, q.s), px = -a.tz, pz = a.tx;
+    let side = 1; if (!lmCanStand(a.x + px * 16, a.z + pz * 16)) side = -1;
+    let x = a.x + px * 16 * side, z = a.z + pz * 16 * side;
+    if (g.items.some((it) => it.kind !== "pu" && Math.hypot(it.x - x, it.z - z) < 22)) { x += a.tx * 30; z += a.tz * 30; }
+    const m = lmJTerminalModel(nm); m.position.set(x, lmHRaw(x, z), z); m.rotation.y = Math.atan2(-a.tz, a.tx) + (side < 0 ? Math.PI : 0); g.scene.add(m);
+    g.cols.push({ x: x + px * side * 5.5, z: z + pz * side * 5.5, r: 6, h: lmHRaw(x, z) + 6 });
+    g.items.push({ kind: "bt", id: "bt-" + nm, k: k, n: nm, x: x, z: z, r: 0, ir: 12, m: m, q: q, cc: q.e.a.cc });
+  }
+  /* 6. pulau: label dan kad maklumat */
+  for (const p of J.pulau || []) {
+    const [nm, k, la, lo, km2, nota, fl] = p, w = ll(la, lo), gy = Math.max(0, lmHRaw(w.x, w.z));
+    const lb = lmLabel("🏝 " + nm, { fs: 26, k: 0.028, bg: "rgba(8,60,70,.78)", bd: "#7fe3d0" }); lb.position.set(w.x, gy + 12, w.z); lb.visible = false; g.scene.add(lb);
+    g.items.push({ kind: "pu", id: "pu-" + nm, k: k, n: nm, x: w.x, z: w.z, r: 0, ir: 16, lb: lb, km2: km2, nota: nota, fl: fl });
+  }
+}
+function lmJTerminalModel(name) {
+  const g = new T.Group(), col = "#d7282f";
+  g.add(lmMesh(lmBox(26, 0.4, 9), "#b9b4aa", 0, 0.2, 0));
+  g.add(lmMesh(lmBox(26, 0.6, 4), "#d9d2c3", 0, 0.3, 6.5));
+  for (const x of [-10, -3.4, 3.4, 10]) g.add(lmMesh(lmBox(0.35, 4.4, 0.35), "#8a94a0", x, 2.5, 7.8));
+  g.add(lmMesh(lmBox(27, 0.4, 6), col, 0, 4.8, 6.8));
+  g.add(lmMesh(lmBox(14, 5, 6), "#efe9dc", 0, 2.5, 12.5)); g.add(lmMesh(lmBox(14.6, 0.6, 6.6), col, 0, 5.2, 12.5));
+  const sign = lmLabel("🚌 " + name, { fs: 28, k: 0.03, bg: "rgba(60,10,10,.88)", bd: "#ffd45a" }); sign.position.set(0, 9, 7); g.add(sign);
+  return g;
+}
+/* titik jalan terdekat (dalam r unit) */
+function lmJalanNear(g, x, z, r) {
+  const J = g.jl; if (!J) return null;
+  const cx = Math.floor(x / J.CS), cz = Math.floor(z / J.CS), rr = Math.ceil(r / J.CS); let best = null;
+  for (let ox = -rr; ox <= rr; ox++) for (let oz = -rr; oz <= rr; oz++) {
+    const L = J.G.get((cx + ox) + "," + (cz + oz)); if (!L) continue;
+    for (const [e, i] of L) {
+      const p = e.pts[i - 1], q = e.pts[i], vx = q.x - p.x, vz = q.z - p.z, l2 = vx * vx + vz * vz || 1, t = clamp(((x - p.x) * vx + (z - p.z) * vz) / l2, 0, 1), d = Math.hypot(p.x + vx * t - x, p.z + vz * t - z);
+      if (d < r && (!best || d < best.d)) best = { e: e, s: e.cum[i - 1] + (e.cum[i] - e.cum[i - 1]) * t, d: d, x: p.x + vx * t, z: p.z + vz * t };
+    }
+  }
+  return best;
+}
+/* laluan terpendek (Dijkstra) antara dua titik jalan; pulangkan titik dunia */
+function lmJalanPath(g, A, B) {
+  const J = g.jl, n = J.nodes.length, dist = new Float64Array(n).fill(Infinity), prev = new Array(n), H = [];
+  const push = (d, i) => { H.push([d, i]); let c = H.length - 1; while (c > 0) { const p = (c - 1) >> 1; if (H[p][0] <= H[c][0]) break; [H[p], H[c]] = [H[c], H[p]]; c = p; } };
+  const pop = () => { const t = H[0], l = H.pop(); if (H.length) { H[0] = l; let c = 0; for (;;) { const a = 2 * c + 1, b = a + 1; let m = c; if (a < H.length && H[a][0] < H[m][0]) m = a; if (b < H.length && H[b][0] < H[m][0]) m = b; if (m === c) break; [H[m], H[c]] = [H[c], H[m]]; c = m; } } return t; };
+  const ea = A.e; dist[ea.a.i] = A.s; prev[ea.a.i] = { st: [A.s, 0] }; push(A.s, ea.a.i);
+  if (ea.len - A.s < dist[ea.b.i]) { dist[ea.b.i] = ea.len - A.s; prev[ea.b.i] = { st: [A.s, ea.len] }; push(ea.len - A.s, ea.b.i); }
+  while (H.length) {
+    const [d, i] = pop(); if (d > dist[i]) continue; const nd = J.nodes[i];
+    for (const e of nd.e) { const o = e.a === nd ? e.b : e.a, dd = d + e.len; if (dd < dist[o.i]) { dist[o.i] = dd; prev[o.i] = { e: e, from: i }; push(dd, o.i); } }
+  }
+  const eb = B.e, ca = dist[eb.a.i] + B.s, cb = dist[eb.b.i] + eb.len - B.s;
+  let best = Math.min(ca, cb), direct = ea === eb ? Math.abs(A.s - B.s) : Infinity;
+  if (!isFinite(best) && !isFinite(direct)) return null;
+  const sub = (e, s0, s1) => { const out = [], dir = s1 >= s0 ? 1 : -1; out.push(lmRailAt(e, s0)); if (dir > 0) { for (let i = 0; i < e.pts.length; i++) if (e.cum[i] > s0 && e.cum[i] < s1) out.push(e.pts[i]); } else { for (let i = e.pts.length - 1; i >= 0; i--) if (e.cum[i] < s0 && e.cum[i] > s1) out.push(e.pts[i]); } out.push(lmRailAt(e, s1)); return out.map((p) => ({ x: p.x, y: p.y, z: p.z })); };
+  if (direct <= best) return { pts: sub(ea, A.s, B.s), len: direct };
+  const end = ca <= cb ? eb.a : eb.b, tail = ca <= cb ? sub(eb, 0, B.s) : sub(eb, eb.len, B.s), parts = [tail];
+  let cur = end.i;
+  while (prev[cur] && !prev[cur].st) { const pv = prev[cur], e = pv.e, fromN = J.nodes[pv.from]; parts.push(e.a === fromN ? sub(e, 0, e.len) : sub(e, e.len, 0)); cur = pv.from; }
+  if (prev[cur] && prev[cur].st) parts.push(sub(ea, prev[cur].st[0], prev[cur].st[1]));
+  const pts = []; for (let k = parts.length - 1; k >= 0; k--) for (const p of parts[k]) { const l = pts[pts.length - 1]; if (!l || Math.hypot(l.x - p.x, l.z - p.z) > 0.5) pts.push(p); }
+  return { pts: pts, len: best };
+}
+/* naik bas/teksi di sepanjang laluan graf (menggunakan semula perjalanan sinematik lmRide) */
+function lmJalanRide(kind, pts, aNm, bNm) {
+  const g = LM.g; if (!g || g.ride || pts.length < 2) return;
+  const cum = [0]; for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].z - pts[i - 1].z));
+  const len = cum[cum.length - 1], tx = kind === "teksi";
+  const L = tx ? { id: "teksi", n: "Teksi", nm: "Teksi", road: 1, col: "#d7282f", c2: "#ffffff" } : { id: "basjl", n: "Bas", nm: "Bas Ekspres", road: 1, col: "#1d5fbf", c2: "#ffffff" };
+  const R = { L: L, pts: pts, cum: cum, len: len, tmp: true, st: [], sS: [0, len], s: 0, dir: 1, wait: 0, next: 1 };
+  R.train = tx ? [lmTaxi(false)] : lmBus(L); R.train.forEach((c) => g.scene.add(c));
+  const mk = (i, s, nm) => { const a = lmRailAt(R, s); return { i: i, nm: nm, x: a.x, z: a.z, y: a.y, tx: a.tx, tz: a.tz, px: -a.tz, pz: a.tx, line: R }; };
+  R.st = [mk(0, 0, aNm), mk(1, len, bNm)];
+  lmRide(R.st[0], R.st[1]);
+}
+function lmTaxi(ex) {
+  const g = new T.Group(), sm = (c, o) => new T.MeshStandardMaterial(Object.assign({ color: c, roughness: 0.45, metalness: 0.25 }, o || {}));
+  const key = ex ? "txE" : "txB", M = GEO[key] || (GEO[key] = { a: sm(ex ? 0x1d4fa0 : 0xd7282f), w: sm(0xf6f6f2), gl: sm(0x1d2b3a, { roughness: 0.1, metalness: 0.6 }), d: sm(0x2a2d33), y: new T.MeshBasicMaterial({ color: 0xffd23a }) });
+  const bx = (w, h, d, m, x, y) => { const k = "tx" + w + h + d, me = new T.Mesh(GEO[k] || (GEO[k] = new T.BoxGeometry(w, h, d)), m); me.position.set(x, y, 0); g.add(me); return me; };
+  bx(4.8, 0.9, 2.0, M.a, 0, 0.85).castShadow = true; bx(2.7, 0.75, 1.85, M.w, -0.25, 1.65); bx(2.75, 0.45, 1.9, M.gl, -0.25, 1.7); bx(0.9, 0.32, 0.5, M.y, -0.25, 2.2);
+  for (const x of [-1.5, 1.5]) for (const z of [-0.95, 0.95]) { const w = new T.Mesh(GEO.txT || (GEO.txT = new T.CylinderGeometry(0.4, 0.4, 0.3, 10).rotateX(Math.PI / 2)), M.d); w.position.set(x, 0.42, z); g.add(w); }
+  return g;
+}
+/* trafik: bas dan teksi sahaja, dijana di jalan berhampiran pemain */
+const JL_BC = ["#d7282f", "#1d5fbf", "#f2a21a", "#2d7d46", "#7a5cd6"];
+function lmTrafikTick(g, dt) {
+  const J = g.jl; if (!J || !LM.g) return;
+  const V = J.tr, want = LM.gq ? 14 : 8, px = g.p.x, pz = g.p.z;
+  for (let i = V.length - 1; i >= 0; i--) { const v = V[i]; if (Math.hypot(v.m.position.x - px, v.m.position.z - pz) > 760) { g.scene.remove(v.m); V.splice(i, 1); } }
+  J.spT -= dt;
+  if (V.length < want && J.spT <= 0) {
+    J.spT = 0.35;
+    const a = Math.random() * 6.2832, d = 120 + Math.random() * 480, q = lmJalanNear(g, px + Math.cos(a) * d, pz + Math.sin(a) * d, 90);
+    if (q && !q.e.hw) {
+      const tx = Math.random() < 0.5, m = tx ? lmTaxi(Math.random() < 0.3) : lmBus({ id: "tr" + (V.length % 5), col: JL_BC[V.length % 5] })[0];
+      g.scene.add(m); V.push({ m: m, e: q.e, s: q.s, dir: Math.random() < 0.5 ? 1 : -1, v: tx ? 26 + Math.random() * 8 : 20 + Math.random() * 6 });
+    }
+  }
+  for (const v of V) {
+    v.s += v.dir * v.v * dt;
+    if (v.s > v.e.len || v.s < 0) { /* persimpangan: pilih jalan seterusnya secara rawak */
+      const nd = v.s > v.e.len ? v.e.b : v.e.a, over = v.s > v.e.len ? v.s - v.e.len : -v.s, opts = nd.e.filter((e) => e !== v.e && !e.hw), e = opts.length ? opts[(Math.random() * opts.length) | 0] : v.e;
+      if (e === v.e) { v.dir = -v.dir; v.s = v.s > v.e.len ? v.e.len : 0; }
+      else { v.e = e; if (e.a === nd) { v.dir = 1; v.s = Math.min(over, e.len); } else { v.dir = -1; v.s = Math.max(0, e.len - over); } }
+    }
+    const a = lmRailAt(v.e, v.s), fx = a.tx * v.dir, fz = a.tz * v.dir, ln = v.e.lane;
+    v.m.position.set(a.x + fz * ln, a.y - 0.05, a.z - fx * ln); v.m.rotation.set(0, Math.atan2(-fz, fx), 0);
+  }
+  /* label pulau: hanya berhampiran */
+  if ((J.lbT = (J.lbT || 0) - dt) <= 0) { J.lbT = 0.5; for (const it of g.items) if (it.kind === "pu") it.lb.visible = Math.hypot(it.x - px, it.z - pz) < 900; }
+}
+/* kad: terminal bas */
+function lmTerminalOpen(it) {
+  const g = LM.g, here = it.q, dest = g.items.filter((o) => o.kind === "bt" && o !== it && o.cc === it.cc).map((o) => ({ o: o, km: Math.hypot(o.x - it.x, o.z - it.z) / 6 })).sort((a, b) => a.km - b.km);
+  lmCard((b) => {
+    b.append(el("div", { class: "lm-kick" }, "🚌 Terminal bas · " + (DATA.negeri[it.k] ? DATA.negeri[it.k].pendek : "")), el("h2", null, it.n));
+    b.append(el("p", null, "Bas ekspres menghubungkan terminal di seluruh " + (it.x > 0 ? "Sabah dan Sarawak" : "Semenanjung") + " melalui jaringan jalan yang bersambung. Pilih destinasi; tiket diperoleh dengan menjawab 1 soalan."));
+    const grid = el("div", { class: "lm-grid" });
+    dest.slice(0, 18).forEach(({ o, km }) => grid.appendChild(lmBtn(o.n + " · ~" + Math.max(1, Math.round(km)) + " km", "", () => { lmCardClose(); lmJalanTicket(it, o); })));
+    b.append(grid, el("div", { class: "lm-row" }, lmBtn("🚕 Teksi", "", () => { lmCardClose(); lmTaksiOpen({ x: it.x, z: it.z, q: here }); }), lmBtn("Tutup", "pri", lmCardClose)));
+  });
+}
+function lmJalanTicket(from, to) {
+  lmQuiz({
+    kick: "🚌 Tiket bas", title: "Jawab untuk dapatkan tiket", pass: 1, qs: lmPickQs([], 1), noRai: true,
+    intro: (b) => { b.append(el("div", { class: "lm-kick" }, "🚌 " + from.n), el("h2", null, "Tiket ke " + to.n), el("p", null, "Jawab 1 soalan dengan betul untuk mendapatkan tiket.")); },
+    onDone: (pass) => {
+      if (!pass) { lmCard((b) => { b.append(el("div", { class: "lm-kick" }, "Tiket belum diperoleh"), el("h2", null, "Jawapan belum tepat"), el("div", { class: "lm-row" }, lmBtn("Cuba lagi", "pri", () => { lmCardClose(); lmJalanTicket(from, to); }), lmBtn("Tutup", "", lmCardClose))); }); return; }
+      const r = lmJalanPath(LM.g, from.q, to.q); if (!r) { lmPop("Tiada laluan jalan ke destinasi itu"); return; }
+      lmJalanRide("bas", r.pts, from.n, to.n);
+    }
+  });
+}
+/* kad: panggil teksi di tepi jalan; tambang MD ikut jarak jalan */
+function lmTaksiFare(km) { return 3 + Math.ceil(km / 15); }
+function lmTaksiOpen(it) {
+  const g = LM.g, q = it.q || lmJalanNear(g, it.x, it.z, 14); if (!q) return;
+  const cc = q.e.a.cc, list = [];
+  for (const o of g.items) {
+    if (o.kind === "bt" && o.cc === cc) list.push({ o: o, ic: "🚌", q: o.q });
+    else if (o.kind === "ap") { const qa = lmJalanNear(g, o.x, o.z, 160); if (qa && qa.e.a.cc === cc) list.push({ o: o, ic: "✈", q: qa }); }
+  }
+  list.forEach((d) => (d.km = Math.hypot(d.o.x - it.x, d.o.z - it.z) / 6));
+  list.sort((a, b) => a.km - b.km);
+  lmCard((b) => {
+    b.append(el("div", { class: "lm-kick" }, "🚕 Teksi"), el("h2", null, "Ke mana?"));
+    b.append(el("p", null, "Teksi bergerak mengikut jalan sebenar ke terminal bas atau lapangan terbang. Tambang: 3 MD + 1 MD setiap 15 km. MD anda: " + (P.coin | 0) + "."));
+    const grid = el("div", { class: "lm-grid" });
+    list.filter((d) => d.km > 1.5).slice(0, 16).forEach((d) => {
+      const fare = lmTaksiFare(d.km * 1.25);
+      grid.appendChild(lmBtn(d.ic + " " + d.o.n + " · ~" + Math.round(d.km) + " km · " + fare + " MD", "", () => {
+        const r = lmJalanPath(g, q, d.q); if (!r) { lmPop("Tiada laluan jalan ke destinasi itu"); return; }
+        const f = lmTaksiFare(r.len / 6);
+        if ((P.coin | 0) < f) { toast("MD tidak mencukupi untuk tambang " + f + " MD. Naik bas di terminal (tiket kuiz) atau kutip MD dahulu.", "warn"); return; }
+        P.coin = (P.coin | 0) - f; try { saveP(); } catch (e) { /* abaikan */ }
+        lmCardClose(); lmPop("Tambang teksi -" + f + " MD"); lmJalanRide("teksi", r.pts, "Tepi jalan", d.o.n);
+      }));
+    });
+    b.append(grid, el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose)));
+  });
+}
+/* kad: pulau */
+function lmPulauOpen(it) {
+  lmCard((b) => {
+    b.append(el("div", { class: "lm-kick" }, "🏝 Pulau · " + (DATA.negeri[it.k] ? DATA.negeri[it.k].nama : it.k)), el("h2", null, it.n));
+    b.append(el("p", null, "Keluasan sebenar: kira-kira " + (it.km2 >= 1 ? Math.round(it.km2) : it.km2) + " km²." + (it.nota ? " " + it.nota + "." : "")));
+    if (it.fl === 1) b.append(el("p", { class: "lm-ex" }, "Pulau kecil ini dibesarkan dalam Meta Didik supaya kelihatan dan boleh diterokai."));
+    else if (it.fl === 2) b.append(el("p", { class: "lm-ex" }, "Pulau ini terlalu kecil dan dekat dengan daratan lain untuk dipaparkan berasingan pada skala peta ini."));
+    b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose)));
+  });
+}
 /* ---------- tiket dan perjalanan kereta api sinematik ---------- */
 const RAIL_TXT = {
   ets: "ETS (Electric Train Service) menghubungkan Kuala Lumpur ke utara Semenanjung hingga Padang Besar.",
@@ -2031,12 +2305,12 @@ function lmRide(a, b) {
   g.ride = { R: R, a: a, b: b, s0: s0, s1: s1, dir: dir, t: -1.6, dur: R.L.metro ? clamp(Math.abs(s1 - s0) / 45, 5, 16) : clamp(Math.abs(s1 - s0) / (R.L.road ? 110 : 130), 7, 28), v: 0 };
   if (R.L.road) LM.st.rb = (LM.st.rb | 0) + 1; else if (R.L.metro) LM.st.rm = (LM.st.rm | 0) + 1; else LM.st.rt = (LM.st.rt | 0) + 1; lmSave();
   g.ui = true; g.me.g.visible = false; if (g.sky5) g.sky5.sp.visible = false;
-  lmChime(); lmPop(R.L.road ? "Sila naik bas ekspres" : "Sila naik ke dalam " + R.L.n + (R.L.metro ? ". Berdiri di belakang garisan kuning." : "")); lmRideHud(true);
+  lmChime(); lmPop(R.L.id === "teksi" ? "Sila naik teksi" : R.L.road ? "Sila naik bas ekspres" : "Sila naik ke dalam " + R.L.n + (R.L.metro ? ". Berdiri di belakang garisan kuning." : "")); lmRideHud(true);
 }
 function lmRideHud(on) {
   let h = LM.ui.rd; if (!on) { if (h) h.remove(); LM.ui.rd = null; return; }
   const r = LM.g.ride; h = el("div", { class: "lm-fl" }); LM.ui.rd = h; LM.root.appendChild(h);
-  h.append(el("b", null, lmIc(r.R.L) + " " + r.R.L.n + " · " + r.a.nm + " → " + r.b.nm), el("span", { class: "lm-fl-st" }, r.R.L.road ? "Menaiki bas ekspres..." : "Menaiki kereta api..."), el("div", { class: "lm-bar" }, el("i")), lmBtn("Langkau", "", () => { const x = LM.g && LM.g.ride; if (x) x.t = x.dur; }));
+  h.append(el("b", null, lmIc(r.R.L) + " " + r.R.L.n + " · " + r.a.nm + " → " + r.b.nm), el("span", { class: "lm-fl-st" }, r.R.L.id === "teksi" ? "Menaiki teksi..." : r.R.L.road ? "Menaiki bas ekspres..." : "Menaiki kereta api..."), el("div", { class: "lm-bar" }, el("i")), lmBtn("Langkau", "", () => { const x = LM.g && LM.g.ride; if (x) x.t = x.dur; }));
 }
 function lmRideTick(g, dt) {
   const r = g.ride, R = r.R; r.t += dt;
@@ -2060,7 +2334,7 @@ function lmRideEnd(g) {
   const f = LM.ui.fade; if (f) f.style.opacity = "1";
   setTimeout(() => {
     if (!LM.g) return;
-    const d = r.b, R = r.R; g.ride = null; g.ui = false; g.me.g.visible = true; lmRideHud(false); if (g.sky5) g.sky5.sp.visible = LM.st.sky !== 0;
+    const d = r.b, R = r.R; g.ride = null; g.ui = false; if (R.tmp) R.train.forEach((c) => g.scene.remove(c)); g.me.g.visible = true; lmRideHud(false); if (g.sky5) g.sky5.sp.visible = LM.st.sky !== 0;
     R.s = r.s1; R.wait = 6; R.next = clamp(d.i + R.dir, 0, R.sS.length - 1); if (R.next === d.i) { R.dir = -R.dir; R.next = clamp(d.i + R.dir, 0, R.sS.length - 1); }
     /* turun di hujung platform, menghadap stesen */
     const ex = R.L.metro ? d.x + d.px * 5 : d.x + d.tx * 21 + d.px * 2, ez = R.L.metro ? d.z + d.pz * 5 : d.z + d.tz * 21 + d.pz * 2, ok = lmCanStand(ex, ez);
@@ -3213,6 +3487,7 @@ function lmBuildWorld(g) {
   for (const [o, dy] of gnd) o.position.y = lmHRaw(o.position.x, o.position.z) + dy;
   for (const c of g.cols) c.h = (c.h || 30) + lmHRaw(c.x, c.z);
   lmRailsBuild(g);
+  try { lmJalanBuild(g); } catch (e) { console.warn("jalan", e); } /* v18.31: jaringan jalan, terminal bas, pulau */
   lmBuildTrees(g, avoid);
   /* MD harian bertaburan (deterministik mengikut hari) */
   const R = lmRand("lm-coin-" + dayKey()), got = new Set(LM.st.cd.got);
@@ -4437,6 +4712,11 @@ function lmMapBase(w, h) {
 function lmMapPt(m, wx, wz) { return [m.ox + wx * m.s, m.oy + wz * m.s]; }
 function lmMapDraw(cv, m, big) {
   const g = LM.g; if (!g) return;
+  if (g.jl && !m.jl) { /* v18.31: jaringan jalan dilukis sekali pada peta asas */
+    m.jl = 1; const c = m.c.getContext("2d"); c.strokeStyle = "rgba(255,236,190,.8)"; c.lineWidth = big ? 1.6 : 0.9; c.lineJoin = "round"; c.beginPath();
+    for (const e of g.jl.edges) { if (e.hw) continue; e.pts.forEach((q, i) => { if (i % 2 && i !== e.pts.length - 1) return; const [px, py] = lmMapPt(m, q.x, q.z); if (!i) c.moveTo(px, py); else c.lineTo(px, py); }); }
+    c.stroke();
+  }
   const x = cv.getContext("2d"); x.drawImage(m.c, 0, 0);
   const r = big ? 5 : 2.2;
   if (g.rails) for (const R of g.rails) {
@@ -4450,6 +4730,8 @@ function lmMapDraw(cv, m, big) {
     if (it.kind === "pl") { x.fillStyle = LM.st.pl[it.id] ? "#ffd45a" : "#ffffff"; x.beginPath(); x.arc(px, py, r, 0, 6.2832); x.fill(); if (big) { x.strokeStyle = "#5a3a1e"; x.lineWidth = 1.5; x.stroke(); } }
     else if (it.kind === "tw") { x.fillStyle = it.done ? "#ffd45a" : "#7fe3ff"; x.fillRect(px - r * 0.8, py - r * 0.8, r * 1.6, r * 1.6); }
     else if (big && it.kind === "ap") { x.font = "16px sans-serif"; x.fillStyle = "#fff"; x.fillText("✈", px - 7, py + 6); }
+    else if (it.kind === "bt") { if (big) { x.font = "13px sans-serif"; x.textAlign = "center"; x.fillText("🚌", px, py + 5); x.textAlign = "left"; } else { x.fillStyle = "#ff5a4d"; x.fillRect(px - 1.2, py - 1.2, 2.4, 2.4); } }
+    else if (big && it.kind === "pu") { x.font = "700 10px Nunito, sans-serif"; x.fillStyle = "rgba(255,255,255,.9)"; x.textAlign = "center"; x.fillText(it.n.replace("Pulau ", "P. "), px, py - 6); x.textAlign = "left"; }
     else if (it.kind === "sk") { x.font = (big ? 18 : 10) + "px sans-serif"; x.textAlign = "center"; x.fillText("🏫", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
     else if (it.kind === "ak") { x.fillStyle = "#ff4d4d"; x.beginPath(); x.arc(px, py, big ? 6 : 3, 0, 6.2832); x.fill(); if (big) { x.fillStyle = "#fff"; x.font = "bold 11px sans-serif"; x.textAlign = "center"; x.fillText("!", px, py + 4); x.textAlign = "left"; } }
     else if (it.kind === "sn") { if (big && (it.geo || it.sl.slice(-2) === "-2")) { x.font = "15px sans-serif"; x.textAlign = "center"; x.fillText("🏛", px, py + 5); x.textAlign = "left"; } }
@@ -4575,6 +4857,11 @@ function lmMap3(area, onPick) {
   /* tekstur: peta 2D asas + laluan rel/jalan */
   const TW = 2048, TH = Math.round(TW * MAPB.h / MAPB.w), base = lmMapBase(TW, TH), tc = document.createElement("canvas"); tc.width = TW; tc.height = TH;
   const tx = tc.getContext("2d"); tx.drawImage(base.c, 0, 0);
+  if (g.jl) { /* v18.31: jaringan jalan */
+    tx.strokeStyle = "rgba(255,236,190,.85)"; tx.lineWidth = 1.8; tx.lineJoin = "round"; tx.beginPath();
+    for (const e of g.jl.edges) { if (e.hw) continue; e.pts.forEach((q, i) => { if (i % 2 && i !== e.pts.length - 1) return; const [px, py] = lmMapPt(base, q.x, q.z); if (!i) tx.moveTo(px, py); else tx.lineTo(px, py); }); }
+    tx.stroke();
+  }
   if (g.rails) for (const R of g.rails) {
     if (!R.pts) continue;
     tx.strokeStyle = R.L.col; tx.lineWidth = 3.5; tx.lineJoin = "round"; tx.beginPath();
@@ -4604,6 +4891,7 @@ function lmMap3(area, onPick) {
       case "tw": return [dotM(it.done ? "#ffd45a" : "#7fe3ff", 1), 13];
       case "ap": return [emo("✈", "#fff"), 22];
       case "sk": return [emo("🏫"), 24];
+      case "bt": return [emo("🚌"), 18];
       case "ak": return [emo("❗"), 20];
       case "sn": return it.geo || it.sl.slice(-2) === "-2" ? [emo("🏛"), 22] : null;
       case "fd": return [emo("🍽"), 20];
@@ -4868,6 +5156,7 @@ function lmNearTick(g) {
   }
   /* papan kenangan juga boleh dibuka dari hadapannya */
   for (const it of g.items) if (it.kind === "pl") { const d = Math.hypot(it.bx - g.p.x, it.bz - g.p.z); if (d < 7 && d < bd) { bd = d; best = it; } if (d < 60) lmNamesLoad(it); }
+  if (!best && g.jl && !g.ride && !g.flight && !g.sail) { const q = lmJalanNear(g, g.p.x, g.p.z, 9); if (q) best = { kind: "tx", n: "Teksi", x: q.x, z: q.z, q: q }; }
   g.near = best;
   const pr = LM.ui.prompt;
   if (!best || g.ui) { pr.hidden = true; return; }
@@ -4880,6 +5169,9 @@ function lmNearTick(g) {
     : best.kind === "vn" ? key + VN_INFO[best.sub].ic + " " + best.n + " · " + VN_INFO[best.sub].m
     : best.kind === "ip" ? key + "🎓 " + best.sn + " · Galeri kampus" + ((LM.st.kp || {})[best.id] ? " ✔" : "")
     : best.kind === "sk" ? key + "Sekolah anda: " + best.n
+    : best.kind === "bt" ? key + "🚌 " + best.n + " · Bas & teksi"
+    : best.kind === "tx" ? key + "🚕 Panggil teksi"
+    : best.kind === "pu" ? key + "🏝 " + best.n
     : best.kind === "fd" ? key + "Kedai makan: " + best.n
     : best.kind === "sn" ? key + (best.d ? "Stesen Inovasi: " + best.n : "Dataran Inovasi: tapak kosong")
     : best.kind === "ak" ? key + (best.act || "Bantu: " + best.n)
@@ -4891,7 +5183,7 @@ function lmInteract() {
   const g = LM.g; if (!g || g.ui || !g.near) return;
   lmSnd("open");
   const it = g.near;
-  if (it.kind === "sn") lmStnOpen(it); else if (it.kind === "tw") lmTowerOpen(it); else if (it.kind === "pl") lmPlaceOpen(it); else if (it.kind === "ap") lmAirportOpen(it); else if (it.kind === "kh") lmKhasOpen(it); else if (it.kind === "jt") lmFerryOpen(it); else if (it.kind === "st") lmRailOpen(it); else if (it.kind === "si") lmIlmuOpen(it); else if (it.kind === "km") lmKemOpen(it); else if (it.kind === "ny") lmNelayanOpen(it); else if (it.kind === "vn") lmVenueOpen(it); else if (it.kind === "ip") lmKampusOpen(it); else if (it.kind === "sk") lmOwnSchoolOpen(it); else if (it.kind === "fd") lmFoodOpen(it); else if (it.kind === "ak") lmAkOpen(it);
+  if (it.kind === "bt") lmTerminalOpen(it); else if (it.kind === "tx") lmTaksiOpen(it); else if (it.kind === "pu") lmPulauOpen(it); else if (it.kind === "sn") lmStnOpen(it); else if (it.kind === "tw") lmTowerOpen(it); else if (it.kind === "pl") lmPlaceOpen(it); else if (it.kind === "ap") lmAirportOpen(it); else if (it.kind === "kh") lmKhasOpen(it); else if (it.kind === "jt") lmFerryOpen(it); else if (it.kind === "st") lmRailOpen(it); else if (it.kind === "si") lmIlmuOpen(it); else if (it.kind === "km") lmKemOpen(it); else if (it.kind === "ny") lmNelayanOpen(it); else if (it.kind === "vn") lmVenueOpen(it); else if (it.kind === "ip") lmKampusOpen(it); else if (it.kind === "sk") lmOwnSchoolOpen(it); else if (it.kind === "fd") lmFoodOpen(it); else if (it.kind === "ak") lmAkOpen(it);
 }
 /* ---------- input ---------- */
 function lmKey(e) {
@@ -5065,7 +5357,7 @@ function lmLoop(ts) {
     if (g.ui && !g.flight && !g.sail && !g.ride && !LM.ui.card && !LM.ui.big) g.ui = false; /* tiada panel terbuka: lepaskan kunci pergerakan */
     if (g.rai && (g.rai.t -= dt) <= 0) g.rai = null;
     if (g.flight) lmFlightTick(g, dt); else if (g.sail) lmSailTick(g, dt); else if (g.ride) lmRideTick(g, dt); else { lmUpdatePlayer(g, dt); lmUpdateCam(g, dt); }
-    lmRailTick(g, dt);
+    lmRailTick(g, dt); lmTrafikTick(g, dt);
     lmNet(g, dt, ts); lmPuffTick(g, dt); lmTrafficTick(g, dt); lmWxTick(g, dt); lmAkTick(g, dt); lmAudTick(g, dt);
     if (g.me.bub && (g.me.bubT -= dt) <= 0) lmBubble(g.me, "");
     if ((g.nearT -= dt) <= 0) { g.nearT = 0.15; lmNearTick(g); }
@@ -5136,5 +5428,5 @@ function lmClose() {
 }
 /* untuk ujian automatik */
 LM._g = (x, z) => lmGround(x, z); LM._fly = (a, d) => lmFlyStart(a, d); LM._ride = (a, b) => lmRide(a, b); LM._rai = () => lmRai(); LM._swim = (x, z) => lmSwimOk(x, z);
-LM._t = { LAUD: LAUD, lmVenueOpen: lmVenueOpen, lmCoast: lmCoast, TER: TER, lmNelayanOpen: lmNelayanOpen, lmTanahGo: lmTanahGo, lmAirportOpen: lmAirportOpen, lmKemOpen: lmKemOpen, lmKampusOpen: lmKampusOpen, lmIlmuOpen: lmIlmuOpen, lmKampusFetch: lmKampusFetch, lmRailOpen: lmRailOpen, lmRide: lmRide, lmStnFetch: lmStnFetch, lmStnOpen: lmStnOpen, lmCertCanvas: lmCertCanvas, lmLcCheck: lmLcCheck, LCN: LCN, lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
+LM._t = { lmJalanNear: lmJalanNear, lmJalanPath: lmJalanPath, lmJalanRide: lmJalanRide, lmTaksiOpen: lmTaksiOpen, lmTerminalOpen: lmTerminalOpen, lmBigMap: typeof lmBigMap === "function" ? lmBigMap : null, LAUD: LAUD, lmVenueOpen: lmVenueOpen, lmCoast: lmCoast, TER: TER, lmNelayanOpen: lmNelayanOpen, lmTanahGo: lmTanahGo, lmAirportOpen: lmAirportOpen, lmKemOpen: lmKemOpen, lmKampusOpen: lmKampusOpen, lmIlmuOpen: lmIlmuOpen, lmKampusFetch: lmKampusFetch, lmRailOpen: lmRailOpen, lmRide: lmRide, lmStnFetch: lmStnFetch, lmStnOpen: lmStnOpen, lmCertCanvas: lmCertCanvas, lmLcCheck: lmLcCheck, LCN: LCN, lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
 })();

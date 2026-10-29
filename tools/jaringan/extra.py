@@ -1,0 +1,35 @@
+# Jalan tambahan yang tiada dalam Natural Earth 10m (titik laluan lat, lon; anggaran mengikut jajaran sebenar)
+EXTRA = [
+ {"n":"Laluan Persekutuan 8 (Bentong - Raub - Kuala Lipis - Gua Musang - Kuala Krai - Kota Bharu)","c":2,"p":[[3.52,101.91],[3.80,101.85],[4.00,101.93],[4.18,102.05],[4.45,101.98],[4.88,101.97],[5.20,102.08],[5.53,102.20],[5.80,102.22],[6.12,102.24]]},
+ {"n":"Lebuhraya Timur-Barat, Laluan Persekutuan 4 (Gerik - Banding - Jeli)","c":2,"p":[[5.43,101.13],[5.55,101.33],[5.60,101.55],[5.70,101.84],[5.75,102.05],[5.80,102.22]]},
+ {"n":"Jalan Tapah - Cameron Highlands","c":2,"p":[[4.20,101.26],[4.32,101.33],[4.42,101.38],[4.47,101.38],[4.52,101.42]]},
+ {"n":"Jalan Genting Highlands","c":2,"p":[[3.29,101.70],[3.35,101.75],[3.42,101.79]]},
+ {"n":"ELITE / MEX (KL - Putrajaya - KLIA)","c":1,"p":[[3.08,101.70],[2.99,101.70],[2.93,101.69],[2.83,101.70],[2.75,101.71]]},
+ {"n":"FT12 Kuantan - Muadzam Shah - Segamat","c":2,"p":[[3.80,103.30],[3.55,103.20],[3.06,103.08],[2.75,102.95],[2.50,102.82]]},
+ {"n":"E3 Laluan Kedua Malaysia-Singapura","c":1,"p":[[1.60,103.66],[1.48,103.62],[1.36,103.63]]},
+ {"n":"FT3 Kuala Terengganu - Kota Bharu","c":2,"p":[[5.33,103.13],[5.55,102.90],[5.70,102.62],[5.83,102.42],[6.13,102.24]]},
+ {"n":"FT13 Sandakan - Lahad Datu - Kunak - Tawau","c":2,"p":[[5.84,118.06],[5.66,117.85],[5.40,118.00],[5.18,118.20],[5.03,118.33],[4.85,118.30],[4.69,118.25],[4.47,118.05],[4.25,117.89]]},
+ {"n":"FT13 Tawau - Semporna","c":2,"p":[[4.25,117.89],[4.33,118.20],[4.40,118.45],[4.48,118.61]]},
+ {"n":"Jalan Kota Kinabalu - Kota Belud - Kudat","c":2,"p":[[5.98,116.07],[6.14,116.25],[6.35,116.43],[6.62,116.60],[6.88,116.84]]},
+ {"n":"Jalan Papar - Kimanis - Keningau - Tenom","c":2,"p":[[5.73,115.93],[5.60,115.93],[5.47,116.07],[5.34,116.16],[5.12,115.95]]},
+ {"n":"Jalan Keningau - Sapulut - Kalabakan - Tawau","c":2,"p":[[5.34,116.16],[5.04,116.45],[4.70,116.48],[4.55,116.95],[4.42,117.48],[4.30,117.75],[4.25,117.89]]},
+ {"n":"Jalan Miri - Limbang - Lawas (melalui Brunei)","c":2,"p":[[4.40,113.99],[4.58,114.08],[4.70,114.45],[4.86,114.80],[4.75,115.00],[4.85,115.41]]},
+ {"n":"Jalan Pesisir Mukah - Dalat - Sibu","c":2,"p":[[2.90,112.09],[2.73,111.93],[2.50,111.85],[2.29,111.83]]},
+ {"n":"Jalan Bintulu - Samalaju","c":2,"p":[[3.17,113.04],[3.35,113.25],[3.53,113.48]]},
+ {"n":"Jalan Kuching - Bau","c":2,"p":[[1.53,110.33],[1.47,110.22],[1.42,110.15]]},
+ {"n":"Jalan Kuching - Lundu - Sematan","c":2,"p":[[1.53,110.33],[1.58,110.05],[1.67,109.85],[1.80,109.78]]},
+]
+# Terminal bas utama: [nama, lat, lon] (anggaran kedudukan; disahkan semula dengan OSM apabila dibenarkan)
+TERMINAL = [
+ ["Terminal Bersepadu Selatan (TBS)",3.0767,101.7111],["Pudu Sentral",3.1440,101.6990],["Terminal Bersepadu Gombak (TBG)",3.2363,101.7173],["Hentian Duta",3.1735,101.6830],
+ ["Terminal Bas Klang Sentral",3.0710,101.4640],["Terminal One Seremban",2.7228,101.9390],["Melaka Sentral",2.2156,102.2459],["Larkin Sentral (Johor Bahru)",1.4950,103.7430],
+ ["Terminal Bas Muar",2.0480,102.5670],["Terminal Bas Batu Pahat",1.8530,102.9320],["Terminal Bas Kluang",2.0340,103.3190],["Terminal Bas Segamat",2.5050,102.8150],["Terminal Bas Mersing",2.4310,103.8360],
+ ["Terminal Amanjaya (Ipoh)",4.6560,101.0700],["Terminal Kamunting Raya (Taiping)",4.8960,100.7210],["Terminal Bas Teluk Intan",4.0260,101.0190],["Terminal Bas Lumut",4.2320,100.6320],["Terminal Bas Tanah Rata",4.4700,101.3790],
+ ["Penang Sentral (Butterworth)",5.3940,100.3670],["Terminal Bas Sungai Nibong",5.3490,100.3010],["Terminal Shahab Perdana (Alor Setar)",6.1420,100.3780],["Terminal Bas Kangar",6.4390,100.1940],
+ ["Terminal Bas Kota Bharu",6.1240,102.2450],["Terminal Bas Kuala Krai",5.5300,102.2010],["Terminal Bas Gua Musang",4.8800,101.9680],["Terminal MBKT (Kuala Terengganu)",5.3300,103.1380],
+ ["Terminal Sentral Kuantan",3.8290,103.2870],["Terminal Bas Temerloh",3.4480,102.4180],["Terminal Bas Jerantut",3.9360,102.3620],["Terminal Bas Kuala Lipis",4.1830,102.0460],
+ ["Kuching Sentral",1.4970,110.3380],["Terminal Bas Sri Aman",1.2380,111.4610],["Terminal Bas Ekspres Sibu",2.3160,111.8440],["Terminal Bas Mukah",2.8970,112.0930],["Terminal Bas Bintulu (Medan Jaya)",3.1950,113.0710],
+ ["Terminal Bas Miri (Pujut)",4.4110,114.0110],["Terminal Bas Limbang",4.7530,115.0070],["Terminal Bas Lawas",4.8560,115.4050],
+ ["Terminal Bas Inanam (Kota Kinabalu)",5.9850,116.1250],["Terminal Bas Beaufort",5.3470,115.7460],["Terminal Bas Keningau",5.3370,116.1610],["Terminal Bas Kudat",6.8830,116.8380],["Terminal Bas Ranau",5.9580,116.6800],
+ ["Terminal Bas Sandakan (Batu 2.5)",5.8650,118.0590],["Terminal Bas Lahad Datu",5.0310,118.3270],["Terminal Bas Tawau (Sabindo)",4.2470,117.8850],["Terminal Bas Semporna",4.4800,118.6110],
+]
