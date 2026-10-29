@@ -1,0 +1,317 @@
+{
+  "rules": {
+    "pemain": {
+      ".read": true,
+      ".indexOn": [
+        "sid",
+        "xp",
+        "wp",
+        "mp"
+      ],
+      "$id": {
+        ".read": true,
+        ".write": true,
+        "xp": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10000000"
+        },
+        "la": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "ad": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "wp": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000000"
+        },
+        "mp": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000000"
+        },
+        "n": {
+          ".validate": "newData.isString() && newData.val().length <= 40"
+        }
+      }
+    },
+    "ringkas": {
+      ".read": true,
+      ".indexOn": [
+        "x",
+        "p",
+        "mp",
+        "sid"
+      ],
+      "$id": {
+        ".read": true,
+        ".write": true,
+        "x": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10000000"
+        },
+        "l": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "a": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "p": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000000"
+        },
+        "mp": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000000"
+        },
+        "n": {
+          ".validate": "newData.isString() && newData.val().length <= 16"
+        },
+        "zl": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000"
+        },
+        "z4": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000"
+        },
+        "z5": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000"
+        },
+        "zs": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000"
+        },
+        "zr": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000"
+        }
+      }
+    },
+    "sek": {
+      ".read": true,
+      ".write": true
+    },
+    "pas": {
+      ".read": true,
+      ".write": true
+    },
+    "rkm_tw": {
+      ".read": true,
+      ".write": true
+    },
+    "rkm_pi": {
+      ".read": true,
+      ".write": true
+    },
+    "rkm_p3": {
+      ".read": true,
+      ".write": true
+    },
+    "rkm_sj": {
+      ".read": true,
+      ".write": true
+    },
+    "rkm_sc": {
+      ".read": true,
+      ".write": true
+    },
+    "rkm_mt": {
+      ".read": true,
+      ".write": true
+    },
+    "rkm_ba": {
+      ".read": true,
+      ".write": true
+    },
+    "rkm_bm": {
+      ".read": true,
+      ".write": true
+    },
+    "rkm_bi": {
+      ".read": true,
+      ".write": true
+    },
+    "komen": {
+      ".read": true,
+      ".indexOn": [
+        "t"
+      ],
+      "$id": {
+        ".write": "!data.exists() && newData.exists()",
+        ".validate": "newData.hasChildren(['n','r','m','t']) && newData.child('m').isString() && newData.child('m').val().length <= 280 && newData.child('n').isString() && newData.child('n').val().length <= 30 && newData.child('r').isString() && newData.child('r').val().length <= 12 && newData.child('t').isNumber() && newData.child('t').val() <= now + 120000 && newData.child('t').val() >= now - 600000"
+      }
+    },
+    "komen_lapor": {
+      "$id": {
+        "$uid": {
+          ".write": "!data.exists() && newData.val() === 1"
+        }
+      }
+    },
+    "guru_daftar": {
+      "$uid": {
+        ".write": true,
+        ".validate": "newData.hasChildren(['n','sk','ng','t']) && newData.child('n').isString() && newData.child('n').val().length <= 30 && newData.child('sk').isString() && newData.child('sk').val().length <= 60 && newData.child('ng').isString() && newData.child('ng').val().length <= 8"
+      }
+    },
+    "bilik": {
+      ".read": true,
+      ".write": true
+    },
+    "ziarah": {
+      ".read": true,
+      "$tempat": {
+        "$uid": {
+          ".write": true,
+          ".validate": "newData.hasChildren(['n','t']) && newData.child('n').isString() && newData.child('n').val().length <= 40 && newData.child('t').isNumber() && newData.child('t').val() <= now + 120000"
+        }
+      }
+    },
+    "tetapan": {
+      ".read": true
+    },
+    "lmo": {
+      ".read": true,
+      "$uid": {
+        ".write": true,
+        ".validate": "newData.hasChildren(['t','c']) && newData.child('t').isNumber() && newData.child('t').val() <= now + 5000 && newData.child('c').isString() && newData.child('c').val().length <= 32"
+      }
+    },
+    "lmlapor": {
+      "$id": {
+        ".write": "!data.exists() && newData.exists()",
+        ".validate": "newData.hasChildren(['u','n','m','by','t']) && newData.child('m').isString() && newData.child('m').val().length <= 80"
+      }
+    },
+    "stesen": {
+      ".read": true,
+      ".indexOn": [
+        "st"
+      ],
+      "$uid": {
+        ".write": "true",
+        ".validate": "newData.hasChildren(['u', 'n', 'tj', 'ds', 'kat', 'pn', 'st', 't']) && newData.child('u').val() === $uid && $uid.length <= 40 && newData.child('st').val() === 'tunggu' && !newData.child('sl').exists() && newData.child('tj').isString() && newData.child('tj').val().length <= 60 && newData.child('ds').isString() && newData.child('ds').val().length <= 600 && (!newData.child('url').exists() || (newData.child('url').isString() && newData.child('url').val().length <= 300 && newData.child('url').val().beginsWith('https://'))) && (!newData.child('yt').exists() || (newData.child('yt').isString() && newData.child('yt').val().length === 11)) && (!newData.child('hg').exists() || (newData.child('hg').isNumber() && (newData.child('hg').val() === 5 || newData.child('hg').val() === 10 || newData.child('hg').val() === 20 || newData.child('hg').val() === 30 || newData.child('hg').val() === 50))) && (!newData.child('sj').exists() || (newData.child('sj').isString() && newData.child('sj').val().length <= 3)) && (!newData.child('tp').exists() || (newData.child('tp').isString() && newData.child('tp').val().length <= 24)) && (!newData.child('la').exists() || (newData.child('la').isNumber() && newData.child('la').val() > 0 && newData.child('la').val() < 8)) && (!newData.child('lo').exists() || (newData.child('lo').isNumber() && newData.child('lo').val() > 99 && newData.child('lo').val() < 120))"
+      }
+    },
+    "stesen_em": {
+      ".read": false,
+      "$uid": {
+        ".write": "true",
+        ".validate": "newData.isString() && newData.val().length <= 80 && newData.val().matches(/^[a-z0-9._+-]+@moe-dl\\.edu\\.my$/) && root.child('stesen/' + $uid).exists()"
+      }
+    },
+    "stesen_lawat": {
+      ".read": true,
+      "$id": {
+        "$dev": {
+          ".write": true,
+          ".validate": "$dev.length <= 40 && newData.val() === true && root.child('stesen/' + $id + '/st').val() === 'lulus'"
+        }
+      }
+    },
+    "stesen_suka": {
+      ".read": true,
+      "$id": {
+        "$dev": {
+          ".write": true,
+          ".validate": "$dev.length <= 40 && newData.val() === true && root.child('stesen/' + $id + '/st').val() === 'lulus'"
+        }
+      }
+    },
+    "stesen_klik": {
+      ".read": true,
+      "$id": {
+        "$dev": {
+          ".write": true,
+          ".validate": "$dev.length <= 40 && newData.val() === true && root.child('stesen/' + $id + '/st').val() === 'lulus'"
+        }
+      }
+    },
+    "stesen_guna": {
+      ".read": true,
+      "$id": {
+        "$p": {
+          "$d": {
+            ".write": "$p !== $id && $p.length <= 40 && !data.exists()",
+            ".validate": "$d.matches(/^20[0-9]{6}$/) && newData.hasChildren(['h','t']) && newData.child('t').val() === now && root.child('stesen/' + $id + '/st').val() === 'lulus' && newData.child('h').val() === root.child('stesen/' + $id + '/hg').val()"
+          }
+        }
+      }
+    },
+    "tabung": {
+      ".read": true,
+      ".write": false
+    },
+    "tabung_by": {
+      ".read": true,
+      ".write": false
+    },
+    "tuntutan": {
+      ".read": false,
+      "$m": {
+        "$uid": {
+          ".write": "$uid.length <= 40 && (!data.exists() || data.child('st').val() === 'tolak')",
+          ".validate": "newData.hasChildren(['md','nm','bk','ac','em','st','t']) && newData.child('st').val() === 'tunggu' && newData.child('t').val() === now && newData.child('md').val() === root.child('tabung_by/' + $m + '/' + $uid).val() && newData.child('nm').isString() && newData.child('nm').val().length <= 80 && newData.child('bk').isString() && newData.child('bk').val().length <= 40 && newData.child('ac').isString() && newData.child('ac').val().length <= 30 && !newData.child('rj').exists()"
+        }
+      }
+    },
+    "tuntutan_st": {
+      ".read": true,
+      "$m": {
+        "$uid": {
+          ".write": "(!data.exists() || data.child('st').val() === 'tolak')",
+          ".validate": "newData.child('st').val() === 'tunggu' && root.child('tuntutan/' + $m + '/' + $uid).exists()"
+        }
+      }
+    },
+    "ipt": {
+      ".read": true,
+      ".write": false
+    },
+    "ipt_lawat": {
+      ".read": true,
+      "$id": {
+        "$dev": {
+          ".write": true,
+          ".validate": "$dev.length <= 40 && newData.val() === true && $id.beginsWith('ip-') && $id.length <= 20"
+        }
+      }
+    },
+    "ipt_minat": {
+      ".read": true,
+      "$id": {
+        "$dev": {
+          ".write": true,
+          ".validate": "$dev.length <= 40 && newData.val() === true && root.child('ipt/' + $id + '/pk').exists()"
+        }
+      }
+    },
+    "kolam_makan": {
+      ".read": true,
+      "$uid": {
+        "$id": {
+          ".write": "auth != null && auth.token.email_verified === true && auth.token.email.matches(/.*@moe-dl\\.edu\\.my$/) && !data.exists()",
+          ".validate": "newData.hasChildren(['g', 'n', 't']) && newData.child('n').isNumber() && newData.child('n').val() > 0 && newData.child('n').val() <= 10 && newData.child('t').val() === now && newData.child('g').isString() && newData.child('g').val().length <= 40"
+        }
+      }
+    },
+    "soalan_ubah": {
+      ".read": true,
+      "$sj": {
+        "$id": {
+          ".write": "auth != null && auth.token.email_verified === true && auth.token.email.matches(/.*@moe-dl\\.edu\\.my$/) && (!data.exists() || (data.child('by').val() === auth.uid && data.child('st').val() === 'tunggu'))",
+          ".validate": "$sj.length <= 3 && $id.length <= 24 && newData.hasChildren(['k', 't', 'by', 'n', 'em', 'st', 'tu']) && newData.child('by').val() === auth.uid && newData.child('em').val() === auth.token.email && newData.child('st').val() === 'tunggu' && newData.child('tu').val() === now && (newData.child('k').val() === 'baru' || newData.child('k').val() === 'baiki' || newData.child('k').val() === 'buang') && newData.child('t').isString() && newData.child('t').val().length <= 24 && newData.child('n').isString() && newData.child('n').val().length <= 60 && (!newData.child('qi').exists() || newData.child('qi').isNumber()) && (!newData.child('q').exists() || (newData.child('q').isString() && newData.child('q').val().length <= 600)) && (!newData.child('a').exists() || (newData.child('a').isNumber() && newData.child('a').val() >= 0 && newData.child('a').val() <= 3)) && (!newData.child('d').exists() || (newData.child('d').isNumber() && newData.child('d').val() >= 1 && newData.child('d').val() <= 3)) && (!newData.child('e').exists() || (newData.child('e').isString() && newData.child('e').val().length <= 800)) && (!newData.child('why').exists() || (newData.child('why').isString() && newData.child('why').val().length <= 300)) && !newData.child('sb').exists()",
+          "o": {
+            "$n": {
+              ".validate": "$n.matches(/^[0-3]$/) && newData.isString() && newData.val().length <= 200"
+            }
+          }
+        }
+      }
+    },
+    "ruang_privasi": {
+      ".read": true,
+      "$k": {
+        ".write": "auth != null && auth.token.email_verified === true && auth.token.email.matches(/.*@moe-dl\\.edu\\.my$/) && !data.exists()",
+        ".validate": "$k.matches(/^[A-Z0-9]{5,6}$/) && newData.hasChildren(['g', 'n', 'sj', 't']) && newData.child('g').val() === auth.uid && newData.child('n').isString() && newData.child('n').val().length <= 60 && newData.child('sj').isString() && newData.child('sj').val().length <= 3 && newData.child('t').val() === now"
+      }
+    },
+    "lapor_soalan": {
+      "$q": {
+        "$uid": {
+          ".write": "!data.exists() && newData.val() === 1"
+        }
+      }
+    }
+  }
+}
