@@ -161,3 +161,8 @@ Had mod percubaan (diterima untuk rintis):
   - 🔐 **Ruang Privasi**: kod 5 aksara yang dicipta oleh guru DELIMa (butang "Cipta kod Ruang Privasi" pada skrin mula Meta Didik, hanya untuk guru). Kod didaftarkan di `ruang_privasi/<KOD>` dan sah selama 30 hari, untuk subjek yang dipilih. Murid tidak boleh mencipta kod sendiri. Pilihan "Cipta bilik rakan" dan "Bilik sekolah" dibuang.
 - **Mic (tekan-untuk-cakap)** hanya dibuka dalam Ruang Privasi.
 - **Firebase Rules**: salin semula `docs/firebase-rules-stesen.json`, kerana nod `ruang_privasi` ditambah. Hanya guru DELIMa boleh mencipta kod, dan kod tidak boleh ditulis ganti.
+
+## Rules lengkap (sedia untuk ditampal)
+- `docs/firebase-rules-lengkap-percubaan.json`: **gunakan sekarang** (mod percubaan, sebelum DELIMa aktif). Fail ini mengandungi Rules sedia ada (pemain, ringkas, komen, bilik, lmo dan lain-lain) beserta semua nod baharu: stesen, MD, kolam_makan, soalan_ubah, ruang_privasi dan lapor_soalan.
+- `docs/firebase-rules-lengkap-ketat.json`: gunakan selepas DELIMa diaktifkan di metadidik.com.
+- Cara: Firebase Console → Realtime Database → Rules → padam semua → tampal keseluruhan fail → Publish.
