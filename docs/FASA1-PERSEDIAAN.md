@@ -151,3 +151,13 @@ Had mod percubaan (diterima untuk rintis):
 - Cadangan disimpan di `soalan_ubah/<subjek>/<id>` dengan status `tunggu`. Pentadbir menyemaknya di tab Pentadbir, kemudian memilih **Lulus** atau **Tolak**. Hanya cadangan yang diluluskan dikenakan kepada semua pengguna, sebagai lapisan di atas fail `soalan*.json`.
 - Pentadbir boleh memuat turun cadangan yang diluluskan dalam bentuk JSON, untuk digabungkan secara kekal ke dalam fail soalan melalui `bank.html`.
 - **Firebase Rules**: salin semula `docs/firebase-rules-stesen.json`, kerana nod `soalan_ubah` ditambah. Guru DELIMa sahaja boleh menulis, dan hanya cadangan sendiri yang masih menunggu.
+
+## v18.30: Meta Didik minimal, Ruang Privasi dan mic
+
+- **Paparan minimal untuk semua peranti**: dalam Meta Didik hanya nama tempat, waktu, peta mini dan butang "☰ Menu" dipaparkan. Statistik dan butang lain ada di dalam menu.
+- **👤 Profil & Gudang** ada terus dalam ☰ Menu. Murid tidak perlu lagi pergi ke sekolah untuk membina profil (avatar, pakaian, lencana).
+- **Murid hanya ada dua pilihan masuk**:
+  - 🌏 **Dunia Terbuka**: chat sahaja, tanpa mic.
+  - 🔐 **Ruang Privasi**: kod 5 aksara yang dicipta oleh guru DELIMa (butang "Cipta kod Ruang Privasi" pada skrin mula Meta Didik, hanya untuk guru). Kod didaftarkan di `ruang_privasi/<KOD>` dan sah selama 30 hari, untuk subjek yang dipilih. Murid tidak boleh mencipta kod sendiri. Pilihan "Cipta bilik rakan" dan "Bilik sekolah" dibuang.
+- **Mic (tekan-untuk-cakap)** hanya dibuka dalam Ruang Privasi.
+- **Firebase Rules**: salin semula `docs/firebase-rules-stesen.json`, kerana nod `ruang_privasi` ditambah. Hanya guru DELIMa boleh mencipta kod, dan kod tidak boleh ditulis ganti.

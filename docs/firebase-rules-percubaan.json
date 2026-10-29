@@ -124,5 +124,12 @@
         }
       }
     }
+  },
+  "ruang_privasi": {
+    ".read": true,
+    "$k": {
+      ".write": "auth != null && auth.token.email_verified === true && auth.token.email.matches(/.*@moe-dl\\.edu\\.my$/) && !data.exists()",
+      ".validate": "$k.matches(/^[A-Z0-9]{5,6}$/) && newData.hasChildren(['g', 'n', 'sj', 't']) && newData.child('g').val() === auth.uid && newData.child('n').isString() && newData.child('n').val().length <= 60 && newData.child('sj').isString() && newData.child('sj').val().length <= 3 && newData.child('t').val() === now"
+    }
   }
 }
