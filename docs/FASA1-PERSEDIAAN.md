@@ -166,3 +166,19 @@ Had mod percubaan (diterima untuk rintis):
 - `docs/firebase-rules-lengkap-percubaan.json`: **gunakan sekarang** (mod percubaan, sebelum DELIMa aktif). Fail ini mengandungi Rules sedia ada (pemain, ringkas, komen, bilik, lmo dan lain-lain) beserta semua nod baharu: stesen, MD, kolam_makan, soalan_ubah, ruang_privasi dan lapor_soalan.
 - `docs/firebase-rules-lengkap-ketat.json`: gunakan selepas DELIMa diaktifkan di metadidik.com.
 - Cara: Firebase Console → Realtime Database → Rules → padam semua → tampal keseluruhan fail → Publish.
+
+## v18.34: Kod sementara, borang perjanjian, rating murid dan Dashboard Pentadbir
+
+Sementara log masuk DELIMa belum diaktifkan:
+
+- **Kod guru `1991`:** di Ruang Guru → "🎓 Kod guru". Guru kemudian mengisi **borang perjanjian ringkas** (nama penuh, sekolah, telefon/e-mel dan 6 perkara persetujuan) sebelum menghantar inovasi. Perjanjian disimpan di `stesen_janji/<id peranti>` dan tidak awam.
+- **Kod pentadbir `6171`:** buka `https://<laman>/#pentadbir` (atau Ruang Guru → Pentadbir sistem), kemudian masukkan kod untuk membuka **📊 Dashboard Pentadbir**.
+  - Tanpa kunci moderator: statistik awam (bilangan inovasi, rating, pelawat, guna).
+  - Dengan **kunci moderator Firebase** (sekali sahaja pada peranti pentadbir): semakan dan kelulusan inovasi (lengkap dengan maklumat perjanjian), komen murid, MD diterima (bulan semasa dan keseluruhan) serta panel pentadbir lain.
+  - Kod di dalam aplikasi boleh dibaca sesiapa, jadi tulisan pentadbir tetap memerlukan kunci moderator.
+- Inovasi yang diluluskan terus muncul di peta Meta Didik dalam dunia subjeknya.
+- **Rating murid:** selepas menggunakan inovasi (butang "Guna inovasi"), murid memberi 1-5 bintang dan komen pilihan.
+  - Rating disimpan di `stesen_nilai` (awam). Puratanya dipaparkan pada label stesen di peta dan dalam kad stesen.
+  - Komen disimpan di `stesen_komen` dan hanya dibaca pentadbir.
+- **Inovasi kurang menarik (⚠):** purata rating di bawah 3 (sekurang-kurangnya 3 penilaian), atau kurang 10% pelawat menggunakannya. Inovasi ini dipaparkan dahulu dalam dashboard.
+- **Firebase Rules:** tampal semula `docs/firebase-rules-lengkap-percubaan.json`, kerana nod baharu `stesen_nilai`, `stesen_komen` dan `stesen_janji` ditambah. Dalam mod percubaan, guru berkod juga boleh memberi makanan ikan, mencadang soalan dan mencipta kod Ruang Privasi.

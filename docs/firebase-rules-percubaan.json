@@ -106,7 +106,7 @@
     ".read": true,
     "$uid": {
       "$id": {
-        ".write": "auth != null && auth.token.email_verified === true && auth.token.email.matches(/.*@moe-dl\\.edu\\.my$/) && !data.exists()",
+        ".write": "!data.exists()",
         ".validate": "newData.hasChildren(['g', 'n', 't']) && newData.child('n').isNumber() && newData.child('n').val() > 0 && newData.child('n').val() <= 10 && newData.child('t').val() === now && newData.child('g').isString() && newData.child('g').val().length <= 40"
       }
     }
@@ -115,8 +115,8 @@
     ".read": true,
     "$sj": {
       "$id": {
-        ".write": "auth != null && auth.token.email_verified === true && auth.token.email.matches(/.*@moe-dl\\.edu\\.my$/) && (!data.exists() || (data.child('by').val() === auth.uid && data.child('st').val() === 'tunggu'))",
-        ".validate": "$sj.length <= 3 && $id.length <= 24 && newData.hasChildren(['k', 't', 'by', 'n', 'em', 'st', 'tu']) && newData.child('by').val() === auth.uid && newData.child('em').val() === auth.token.email && newData.child('st').val() === 'tunggu' && newData.child('tu').val() === now && (newData.child('k').val() === 'baru' || newData.child('k').val() === 'baiki' || newData.child('k').val() === 'buang') && newData.child('t').isString() && newData.child('t').val().length <= 24 && newData.child('n').isString() && newData.child('n').val().length <= 60 && (!newData.child('qi').exists() || newData.child('qi').isNumber()) && (!newData.child('q').exists() || (newData.child('q').isString() && newData.child('q').val().length <= 600)) && (!newData.child('a').exists() || (newData.child('a').isNumber() && newData.child('a').val() >= 0 && newData.child('a').val() <= 3)) && (!newData.child('d').exists() || (newData.child('d').isNumber() && newData.child('d').val() >= 1 && newData.child('d').val() <= 3)) && (!newData.child('e').exists() || (newData.child('e').isString() && newData.child('e').val().length <= 800)) && (!newData.child('why').exists() || (newData.child('why').isString() && newData.child('why').val().length <= 300)) && !newData.child('sb').exists()",
+        ".write": "!data.exists() || (data.child('by').val() === newData.child('by').val() && data.child('st').val() === 'tunggu')",
+        ".validate": "$sj.length <= 3 && $id.length <= 24 && newData.hasChildren(['k', 't', 'by', 'n', 'em', 'st', 'tu']) && newData.child('by').isString() && newData.child('by').val().length <= 40 && newData.child('em').isString() && newData.child('em').val().length <= 80 && newData.child('st').val() === 'tunggu' && newData.child('tu').val() === now && (newData.child('k').val() === 'baru' || newData.child('k').val() === 'baiki' || newData.child('k').val() === 'buang') && newData.child('t').isString() && newData.child('t').val().length <= 24 && newData.child('n').isString() && newData.child('n').val().length <= 60 && (!newData.child('qi').exists() || newData.child('qi').isNumber()) && (!newData.child('q').exists() || (newData.child('q').isString() && newData.child('q').val().length <= 600)) && (!newData.child('a').exists() || (newData.child('a').isNumber() && newData.child('a').val() >= 0 && newData.child('a').val() <= 3)) && (!newData.child('d').exists() || (newData.child('d').isNumber() && newData.child('d').val() >= 1 && newData.child('d').val() <= 3)) && (!newData.child('e').exists() || (newData.child('e').isString() && newData.child('e').val().length <= 800)) && (!newData.child('why').exists() || (newData.child('why').isString() && newData.child('why').val().length <= 300)) && !newData.child('sb').exists()",
         "o": {
           "$n": {
             ".validate": "$n.matches(/^[0-3]$/) && newData.isString() && newData.val().length <= 200"
@@ -128,8 +128,33 @@
   "ruang_privasi": {
     ".read": true,
     "$k": {
-      ".write": "auth != null && auth.token.email_verified === true && auth.token.email.matches(/.*@moe-dl\\.edu\\.my$/) && !data.exists()",
-      ".validate": "$k.matches(/^[A-Z0-9]{5,6}$/) && newData.hasChildren(['g', 'n', 'sj', 't']) && newData.child('g').val() === auth.uid && newData.child('n').isString() && newData.child('n').val().length <= 60 && newData.child('sj').isString() && newData.child('sj').val().length <= 3 && newData.child('t').val() === now"
+      ".write": "!data.exists()",
+      ".validate": "$k.matches(/^[A-Z0-9]{5,6}$/) && newData.hasChildren(['g', 'n', 'sj', 't']) && newData.child('g').isString() && newData.child('g').val().length <= 40 && newData.child('n').isString() && newData.child('n').val().length <= 60 && newData.child('sj').isString() && newData.child('sj').val().length <= 3 && newData.child('t').val() === now"
+    }
+  },
+  "stesen_nilai": {
+    ".read": true,
+    "$id": {
+      "$dev": {
+        ".write": "true",
+        ".validate": "$dev.length <= 40 && newData.hasChildren(['r','t']) && newData.child('r').isNumber() && newData.child('r').val() >= 1 && newData.child('r').val() <= 5 && newData.child('t').val() === now && root.child('stesen/' + $id + '/st').val() === 'lulus'"
+      }
+    }
+  },
+  "stesen_komen": {
+    ".read": false,
+    "$id": {
+      "$dev": {
+        ".write": "true",
+        ".validate": "$dev.length <= 40 && newData.hasChildren(['k','t']) && newData.child('k').isString() && newData.child('k').val().length <= 140 && (!newData.child('n').exists() || (newData.child('n').isString() && newData.child('n').val().length <= 20)) && newData.child('t').val() === now && root.child('stesen/' + $id + '/st').val() === 'lulus'"
+      }
+    }
+  },
+  "stesen_janji": {
+    ".read": false,
+    "$uid": {
+      ".write": "true",
+      ".validate": "$uid.length <= 40 && newData.hasChildren(['nm','sk','hp','v','t']) && newData.child('nm').isString() && newData.child('nm').val().length <= 80 && newData.child('sk').isString() && newData.child('sk').val().length <= 80 && newData.child('hp').isString() && newData.child('hp').val().length <= 80 && newData.child('v').isNumber() && newData.child('t').val() === now"
     }
   }
 }
