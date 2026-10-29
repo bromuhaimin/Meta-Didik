@@ -1692,7 +1692,7 @@ function lmRailsPath(g, avoid) {
     if (met) { for (const it of g.items) if (it.kind === "tw" || it.kind === "pl" || it.kind === "ip" || it.kind === "si" || it.kind === "km" || it.kind === "sn") obs.push({ x: it.x, z: it.z, c: 10 }); }
     else for (const it of g.items) {
       if (it.kind === "tw" || it.kind === "pl" || it.kind === "kh") obs.push({ x: it.x, z: it.z, c: Math.max(it.r || 0, it.kind === "tw" ? 3 : 6) + 12 });
-      else if ((it.kind === "st" && it.line !== R) || it.kind === "ip" || it.kind === "si" || it.kind === "km" || it.kind === "sk" || it.kind === "fd" || it.kind === "sn") obs.push({ x: it.x, z: it.z, c: 26 });
+      else if ((it.kind === "st" && it.line !== R) || it.kind === "ip" || it.kind === "si" || it.kind === "km" || it.kind === "ny" || it.kind === "sk" || it.kind === "fd" || it.kind === "sn") obs.push({ x: it.x, z: it.z, c: 26 });
       else if (it.kind === "ap" && it.rw) { const w = it.rw, ux = Math.cos(w.a), uz = Math.sin(w.a); for (let t = -w.L - 10; t <= w.L + 10; t += 12) obs.push({ x: w.x + ux * t, z: w.z + uz * t, c: 16 }); obs.push({ x: it.x, z: it.z, c: 30 }); }
     }
     const fixed = raw.map((q) => S.some((st) => Math.hypot(st.x - q.x, st.z - q.z) < (met ? 8 : 20)));
@@ -2412,6 +2412,99 @@ function lmKemOpen(it) {
     }), lmBtn("Nanti dulu", "", lmCardClose)));
   });
 }
+/* ---------- v18.25: jeti nelayan di pantai, sungai dan tasik sebenar: masuk permainan Nelayan (mod/nelayan.js) ---------- */
+const NLY = [
+  ["ny-kperlis", "perlis", "Jeti Nelayan Kuala Perlis", 6.400, 100.128, "laut"], ["ny-dawai", "kedah", "Jeti Nelayan Tanjung Dawai", 5.680, 100.362, "laut"],
+  ["ny-tbahang", "penang", "Jeti Nelayan Teluk Bahang", 5.460, 100.212, "laut"], ["ny-lumut", "perak", "Jeti Nelayan Lumut", 4.232, 100.628, "laut"],
+  ["ny-pd", "nsembilan", "Jeti Nelayan Port Dickson", 2.522, 101.796, "laut"], ["ny-melaka", "melaka", "Jeti Nelayan Pengkalan Balak", 2.322, 102.052, "laut"],
+  ["ny-mersing", "johor", "Jeti Nelayan Mersing", 2.432, 103.838, "laut"], ["ny-kuantan", "pahang", "Jeti Nelayan Tanjung Lumpur", 3.800, 103.338, "laut"],
+  ["ny-besut", "terengganu", "Jeti Nelayan Kuala Besut", 5.830, 102.560, "laut"], ["ny-sabak", "kelantan", "Pengkalan Nelayan Pantai Sabak", 6.170, 102.330, "laut"],
+  ["ny-kk", "sabah", "Jeti Nelayan Kota Kinabalu", 5.985, 116.070, "laut"], ["ny-miri", "sarawak", "Jeti Nelayan Miri", 4.400, 113.980, "laut"],
+  ["ny-sgselangor", "selangor", "Sungai Selangor, Kuala Selangor", 3.355, 101.300, "sungai"], ["ny-sgperak", "perak", "Sungai Perak, Kuala Kangsar", 4.770, 100.945, "sungai"],
+  ["ny-sgpahang", "pahang", "Sungai Pahang, Pekan", 3.492, 103.380, "sungai"], ["ny-kenyir", "terengganu", "Tasik Kenyir", 5.050, 102.640, "sungai"],
+  ["ny-pedu", "kedah", "Tasik Pedu", 6.240, 100.770, "sungai"], ["ny-muar", "johor", "Sungai Muar", 2.060, 102.600, "sungai"],
+  ["ny-titiwangsa", "wp", "Tasik Titiwangsa", 3.180, 101.705, "sungai"], ["ny-rajang", "sarawak", "Sungai Rajang, Sibu", 2.290, 111.830, "sungai"],
+  ["ny-kinabatangan", "sabah", "Sungai Kinabatangan", 5.500, 118.200, "sungai"]
+];
+/* sampan kecil (badan meruncing di haluan dan buritan) */
+function lmSampan(col) {
+  const s = new T.Group(), hg = new T.BoxGeometry(2.4, 0.9, 6.4, 2, 1, 8), hp = hg.attributes.position;
+  for (let i = 0; i < hp.count; i++) { const z = hp.getZ(i) / 3.2, y = hp.getY(i), k = z * z; hp.setX(i, hp.getX(i) * (1 - 0.75 * k) * (y < 0 ? 0.7 : 1)); hp.setY(i, y + (y > 0 ? 0.55 * k * k : 0.15 * k)); }
+  hg.computeVertexNormals();
+  s.add(lmMesh(hg, col, 0, 0.2, 0)); s.add(lmMesh(lmBox(2.46, 0.16, 5), "#f2efe6", 0, 0.58, 0)); s.add(lmMesh(lmBox(1.7, 0.1, 4.6), "#9a7a52", 0, 0.5, 0, { ns: 1 }));
+  return s;
+}
+function lmNelayanBuild(g, used, placed, avoid, gnd) {
+  NLY.forEach(([id, k, nama, la, lo, jenis]) => {
+    if (!DATA.negeri[k]) return;
+    const okK = (q) => q === k || (k === "wp" && q === "selangor") || (k === "selangor" && q === "wp");
+    const clear = (x, z, rr) => !used.some((u) => Math.hypot(u.x - x, u.z - z) < rr + 6) && !placed.some((u) => Math.hypot(u.x - x, u.z - z) < rr + u.r + 4) && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + rr);
+    const w0 = ll(la, lo); let spot = null;
+    if (jenis === "laut") {
+      /* pantai: titik daratan 2-8 unit dari laut, dengan laut terbuka di hadapan */
+      for (let d = 0; d <= 200 && !spot; d += 5) for (let i = 0; i < (d ? 24 : 1) && !spot; i++) {
+        const a = i * 0.2618 + d * 0.07, x = w0.x + Math.cos(a) * d, z = w0.z + Math.sin(a) * d;
+        if (!okK(lmAt(x, z)) || !clear(x, z, 12)) continue; /* jarak pantai (TER.dIn) belum dikira semasa binaan: semak laut terus */
+        for (let j = 0; j < 24; j++) { const b = j * 0.2618, ux = Math.cos(b), uz = Math.sin(b); if (lmAt(x + ux * 7, z + uz * 7) === "" && lmAt(x + ux * 14, z + uz * 14) === "" && lmAt(x + ux * 26, z + uz * 26) === "" && lmAt(x + ux * 38, z + uz * 38) === "" && lmAt(x - ux * 10, z - uz * 10) !== "") { spot = { x: x, z: z, ux: ux, uz: uz }; break; } }
+      }
+    }
+    if (!spot) {
+      /* sungai / tasik (atau pantai yang tidak ditemui): kolam dan anak sungai di daratan */
+      jenis = jenis === "laut" ? "laut-k" : jenis; const rr = 16;
+      const free = (x, z) => okK(lmAt(x, z)) && lmLandW(x + rr, z) && lmLandW(x - rr, z) && lmLandW(x, z + rr) && lmLandW(x, z - rr) && clear(x, z, rr);
+      if (free(w0.x, w0.z)) spot = { x: w0.x, z: w0.z };
+      for (let d = 6; d <= 160 && !spot; d += 6) for (let i = 0; i < 16; i++) { const a = i * 0.3927 + d * 0.17, x = w0.x + Math.cos(a) * d, z = w0.z + Math.sin(a) * d; if (free(x, z)) { spot = { x: x, z: z }; break; } }
+      if (!spot) return;
+      const rot = (Math.abs(hashStr(id)) % 628) / 100; spot.ux = Math.sin(rot); spot.uz = Math.cos(rot);
+    }
+    const th = Math.atan2(spot.ux, spot.uz), lab = lmLabel("🎣 " + nama + " · Nelayan", { fs: 28, k: 0.03, bg: "rgba(14,60,90,.9)", bd: "#7fe3ff" });
+    let ix = spot.x, iz = spot.z;
+    if (jenis === "laut") {
+      /* jeti kayu dari pantai ke laut, sampan ditambat, pondok nelayan di darat */
+      const md = new T.Group(); md.position.set(spot.x, 0, spot.z); md.rotation.y = th; g.scene.add(md);
+      md.add(lmMesh(lmBox(3, 0.3, 26), "#8a6a46", 0, 1.6, 15));
+      for (let z = 5; z <= 27; z += 3.6) for (const x of [-1.3, 1.3]) md.add(lmMesh(lmCyl(0.2, 0.2, 4, 6), "#5a4330", x, -0.3, z));
+      for (const [x, c] of [[-3.4, "#c8402f"], [3.4, "#2f6fae"]]) { const sp = lmSampan(c); sp.position.set(x, 0.1, 22); sp.rotation.y = x < 0 ? 0.12 : -0.1; md.add(sp); }
+      md.add(lmMesh(lmCyl(0.12, 0.12, 2.4, 6), "#5a4330", 0.9, 2.9, 27)); md.add(lmMesh(lmBox(0.05, 1.6, 0.05), "#ddd", 0.9, 4.6, 27.4));
+      const hut = new T.Group(); hut.position.set(spot.x - spot.ux * 7, 0, spot.z - spot.uz * 7); hut.rotation.y = th; g.scene.add(hut); gnd.push([hut, 0]);
+      for (const [x, z] of [[-2, -2], [2, -2], [-2, 2], [2, 2]]) hut.add(lmMesh(lmBox(0.3, 2.4, 0.3), "#5a4330", x, 1.2, z));
+      hut.add(lmMesh(lmBox(5, 2.6, 4.6), "#c8a874", 0, 3.6, 0)); { const rf = lmMesh(new T.ConeGeometry(4.2, 2, 4), "#8a3b26", 0, 5.9, 0); rf.rotation.y = Math.PI / 4; hut.add(rf); }
+      hut.add(lmMesh(lmBox(4, 2, 0.1), "#6b8a9a", 5, 1.6, 0)); lmPalm(hut, -5, 3, 0.9);
+      g.cols.push({ x: hut.position.x, z: hut.position.z, r: 3.2, h: 6 });
+      lab.position.set(spot.x, 12, spot.z); g.scene.add(lab); gnd.push([lab, 12]);
+      placed.push({ x: spot.x, z: spot.z, r: 10 }); avoid.push({ x: hut.position.x, z: hut.position.z, r: 6 });
+    } else {
+      /* kolam / tebing sungai dengan jeti kecil dan sampan */
+      const md = new T.Group(); md.position.set(spot.x, 0, spot.z); md.rotation.y = th; g.scene.add(md); gnd.push([md, 0]); lmPad(g, spot.x, spot.z, 15);
+      md.add(lmMesh(lmCyl(11, 11, 0.3, 26), jenis === "laut-k" ? "#2f9fd0" : "#3a8fa0", 0, 0.22, 0, { ns: 1 }));
+      for (let i = 0; i < 5; i++) { const s = lmMesh(lmBox(6, 0.28, 4), "#3a8fa0", -10 - i * 5, 0.2, Math.sin(i * 1.3) * 3, { ns: 1 }); s.rotation.y = Math.cos(i) * 0.4; md.add(s); }
+      md.add(lmMesh(lmBox(2.4, 0.3, 9), "#8a6a46", 0, 0.9, -8)); for (const z of [-11.5, -8, -4.5]) for (const x of [-1, 1]) md.add(lmMesh(lmCyl(0.16, 0.16, 1.4, 5), "#5a4330", x, 0.2, z));
+      { const sp = lmSampan(jenis === "laut-k" ? "#c8402f" : "#2f6fae"); sp.position.set(2.6, 0.3, -3); sp.rotation.y = 0.5; md.add(sp); }
+      for (let i = 0; i < 12; i++) { const a = i * 0.52 + 0.3, r = 11.4 + (i % 3) * 0.4; md.add(lmMesh(lmBox(0.25, 1.4 + (i % 2) * 0.6, 0.25), "#6aa84f", Math.cos(a) * r, 0.8, Math.sin(a) * r)); }
+      lmPalm(md, 9, 9, 0.9); lmPalm(md, -8, 10, 1.1);
+      ix = spot.x - spot.ux * 13; iz = spot.z - spot.uz * 13;
+      lab.position.set(spot.x, 12, spot.z); g.scene.add(lab); gnd.push([lab, 12]);
+      placed.push({ x: spot.x, z: spot.z, r: 16 }); avoid.push({ x: spot.x, z: spot.z, r: 18 });
+    }
+    g.items.push({ kind: "ny", id: id, k: k, n: nama, mod: jenis, jenis: jenis === "laut" || jenis === "laut-k" ? "laut" : "sungai", x: ix, z: iz, r: 0, ir: 9, lb: lab });
+  });
+}
+function lmNelayanOpen(it) {
+  const ts = DATA.topik.filter((t) => DATA.negeri[t.negeri]);
+  lmCard((b) => {
+    b.append(el("div", { class: "lm-kick" }, "🎣 " + it.n + " · " + DATA.negeri[it.k].pendek), el("h2", null, "Nelayan"));
+    b.append(el("p", null, (it.jenis === "laut" ? "Naik sampan ke laut" : "Naik sampan di " + (/Tasik/.test(it.n) ? "tasik" : "sungai")) + " dan memancing. Setiap kali ikan menyambar, jawab soalan tajuk dengan betul untuk menariknya naik. Jawab berturut-turut untuk ikan yang lebih besar dan jarang ditemui. Selepas tamat, anda kembali ke jeti ini."));
+    const sel = el("select", { "aria-label": "Tajuk soalan", style: "width:100%;padding:8px;border-radius:10px;font:inherit" });
+    ts.forEach((t) => sel.appendChild(el("option", { value: t.id }, (lmTopicDone(t.id) ? "✔ " : "") + (t.kod || t.id) + " " + t.nama)));
+    { const nx = ts.find((t) => !lmTopicDone(t.id)); if (nx) sel.value = nx.id; }
+    b.append(el("p", { class: "lm-ex" }, "Pilih tajuk soalan:"), sel);
+    b.append(el("div", { class: "lm-row" }, lmBtn("🎣 Mula memancing", "pri", () => {
+      const tid = sel.value, h = lmClock(), malam = h < 6.5 || h >= 19.3;
+      LM.resume = { at: it.id, msg: "Kembali dari memancing" }; lmSave(); lmCardClose(); lmClose();
+      setTimeout(() => { try { pcOpen(tid, { spot: { n: it.n, jenis: it.jenis, malam: malam }, onExit: () => { if (window.LMX && window.LMX.resume && typeof window.lmOpen === "function") window.lmOpen(""); } }); } catch (e) { LM.resume = null; toast("Permainan Nelayan tidak dapat dibuka.", "warn"); } }, 60);
+    }), lmBtn("Nanti dulu", "", lmCardClose)));
+  });
+}
 /* ---------- v18.8: sekolah murid sendiri (titik mula setiap misi) ---------- */
 const SK_STATE = { JHR: "johor", KDH: "kedah", KTN: "kelantan", MLK: "melaka", NSN: "nsembilan", PHG: "pahang", PRK: "perak", PLS: "perlis", PNG: "penang", SBH: "sabah", SWK: "sarawak", SGR: "selangor", TRG: "terengganu", KUL: "wp", LBN: "sabah", PJY: "wp" };
 const SK_ACR = { SMK: 1, SMKA: 1, SBP: 1, MRSM: 1, KV: 1, SM: 1, SMA: 1, SABK: 1, SMJK: 1, SMT: 1, SMS: 1, SK: 1, II: 1, III: 1, IV: 1 };
@@ -3007,6 +3100,8 @@ function lmBuildWorld(g) {
   lmFoodBuild(g, used, placed, avoid, gnd);
   /* Dataran Inovasi: stesen guru */
   lmStnBuild(g, used, placed, avoid, gnd); setTimeout(() => lmStnFetch(g), 1500);
+  /* jeti nelayan: permainan Nelayan */
+  lmNelayanBuild(g, used, placed, avoid, gnd);
   /* stesen kereta api ETS dan ECRL */
   lmRailsPlan(g, used, placed, avoid, gnd);
   /* pulau Misi Khas, jeti dan feri */
@@ -4214,6 +4309,7 @@ function lmMapDraw(cv, m, big) {
     else if (it.kind === "sn") { if (big && it.sl.slice(-2) === "-2") { x.font = "15px sans-serif"; x.textAlign = "center"; x.fillText("🏛", px, py + 5); x.textAlign = "left"; } }
     else if (it.kind === "fd") { if (big) { x.font = "15px sans-serif"; x.textAlign = "center"; x.fillText("🍽", px, py + 5); x.textAlign = "left"; } else { x.fillStyle = "#ff9f43"; x.fillRect(px - 1.2, py - 1.2, 2.4, 2.4); } }
     else if (it.kind === "km") { x.font = (big ? 16 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("🎖", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
+    else if (it.kind === "ny") { x.font = (big ? 16 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("🎣", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
     else if (it.kind === "si") { x.font = (big ? 17 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("📖", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
     else if (it.kind === "ip") { x.font = (big ? 18 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("🎓", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
     else if (it.kind === "kh") { x.font = (big ? 20 : 10) + "px sans-serif"; x.fillStyle = it.done ? "#ffd45a" : "#ff7a9a"; x.textAlign = "center"; x.fillText("★", px, py + (big ? 7 : 4)); x.textAlign = "left"; }
@@ -4259,7 +4355,7 @@ function lmBigMap() {
   let p3 = true; try { p3 = localStorage.getItem("gt-lm-map3") !== "0"; } catch (e) { p3 = true; }
   const wrap = el("div", { class: "lm-big" }), area = el("div", { class: "lm-big-map" });
   const dot = (c, t, sh) => el("span", null, el("i", { style: "background:" + c + (sh ? ";border-radius:2px" : "") }), t);
-  const leg = el("div", { class: "lm-leg" }, el("span", null, "▲ Anda"), dot("#4dff9a", LM.roomKind === "open" ? "Rakan sekolah" : "Rakan"), LM.roomKind === "open" ? dot("#ff7ad9", "Pemain lain") : null, dot("#7fe3ff", "Menara", 1), el("span", null, "📖 Stesen Ilmu"), el("span", null, "🎓 Kampus IPT"), el("span", null, "🎖 Kem Tempur"), el("span", null, "🍽 Kedai makan"), dot("#1f4fa8", "ETS"), dot("#0e8a6a", "ECRL"), dot("#f28c28", "PLUS"), dot("#d64f8a", "LPT"), dot("#7a5cd6", "Pan Borneo"), dot("#1d5fbf", "KTM Komuter"), dot("#e0245e", "LRT"), dot("#0f8a3d", "MRT"), dot("#7cc242", "Monorel"), dot("#ffd45a", "Ditawan / diziarahi"), dot("#ffffff", "Tempat menarik"));
+  const leg = el("div", { class: "lm-leg" }, el("span", null, "▲ Anda"), dot("#4dff9a", LM.roomKind === "open" ? "Rakan sekolah" : "Rakan"), LM.roomKind === "open" ? dot("#ff7ad9", "Pemain lain") : null, dot("#7fe3ff", "Menara", 1), el("span", null, "📖 Stesen Ilmu"), el("span", null, "🎓 Kampus IPT"), el("span", null, "🎖 Kem Tempur"), el("span", null, "🎣 Jeti Nelayan"), el("span", null, "🍽 Kedai makan"), dot("#1f4fa8", "ETS"), dot("#0e8a6a", "ECRL"), dot("#f28c28", "PLUS"), dot("#d64f8a", "LPT"), dot("#7a5cd6", "Pan Borneo"), dot("#1d5fbf", "KTM Komuter"), dot("#e0245e", "LRT"), dot("#0f8a3d", "MRT"), dot("#7cc242", "Monorel"), dot("#ffd45a", "Ditawan / diziarahi"), dot("#ffffff", "Tempat menarik"));
   const list = el("div", { class: "lm-who" }), dr = el("div", { class: "lm-big-dr", hidden: "" }, list, leg);
   const mode = lmBtn("", "", () => { p3 = !p3; try { localStorage.setItem("gt-lm-map3", p3 ? "1" : "0"); } catch (e) { /* abaikan */ } show(); });
   const me = lmBtn("📍 Saya", "", () => { if (LM.map3) LM.map3.home(); });
@@ -4365,6 +4461,7 @@ function lmMap3(area, onPick) {
       case "sn": return it.sl.slice(-2) === "-2" ? [emo("🏛"), 22] : null;
       case "fd": return [emo("🍽"), 20];
       case "km": return [emo("🎖"), 22];
+      case "ny": return [emo("🎣"), 22];
       case "si": return [emo("📖"), 22];
       case "ip": return [emo("🎓"), 24];
       case "kh": return [emo("★", it.done ? "#ffd45a" : "#ff7a9a"), 26];
@@ -4466,7 +4563,7 @@ function lmMap3(area, onPick) {
       s.center.set(0.5, s.userData.dy ? -s.userData.dy / s.userData.px + 0.5 : 0.5);
     }
     /* sembunyi ikon kecil bila zum jauh supaya tidak bersepah */
-    const far = C.d > 60; for (const s of its) { const kd = s.userData.it.kind; s.visible = !far || kd === "kh" || kd === "ip" || kd === "si" || kd === "km" || kd === "ap" || kd === "sk"; }
+    const far = C.d > 60; for (const s of its) { const kd = s.userData.it.kind; s.visible = !far || kd === "kh" || kd === "ip" || kd === "si" || kd === "km" || kd === "ny" || kd === "ap" || kd === "sk"; }
     r.render(scene, cam);
   };
   fit(); all(); tick(); raf = requestAnimationFrame(frame);
@@ -4627,6 +4724,7 @@ function lmNearTick(g) {
     : best.kind === "st" ? key + (best.hub && best.hub.lines.length > 1 ? "🔀 " + best.n + " · " + [...new Set(best.hub.lines.map((q) => q.line.L.n))].join(", ") : best.line.L.road ? "Naik bas ekspres " + best.line.L.n + " · " + best.n : "Naik " + best.line.L.n + " · " + best.n)
     : best.kind === "si" ? key + "📖 " + best.sn + " · " + (best.t ? (best.t.kod || best.t.id) + " " + best.t.nama + (best.tids.length > 1 ? " (+" + (best.tids.length - 1) + ")" : "") : "Pusat Ulangkaji") + (best.done ? " ✔" : "")
     : best.kind === "km" ? key + "🎖 " + best.n + " · Masuk Tempur"
+    : best.kind === "ny" ? key + "🎣 " + best.n + " · Memancing"
     : best.kind === "ip" ? key + "🎓 " + best.sn + " · Galeri kampus" + ((LM.st.kp || {})[best.id] ? " ✔" : "")
     : best.kind === "sk" ? key + "Sekolah anda: " + best.n
     : best.kind === "fd" ? key + "Kedai makan: " + best.n
@@ -4640,7 +4738,7 @@ function lmInteract() {
   const g = LM.g; if (!g || g.ui || !g.near) return;
   lmSnd("open");
   const it = g.near;
-  if (it.kind === "sn") lmStnOpen(it); else if (it.kind === "tw") lmTowerOpen(it); else if (it.kind === "pl") lmPlaceOpen(it); else if (it.kind === "ap") lmAirportOpen(it); else if (it.kind === "kh") lmKhasOpen(it); else if (it.kind === "jt") lmFerryOpen(it); else if (it.kind === "st") lmRailOpen(it); else if (it.kind === "si") lmIlmuOpen(it); else if (it.kind === "km") lmKemOpen(it); else if (it.kind === "ip") lmKampusOpen(it); else if (it.kind === "sk") lmOwnSchoolOpen(it); else if (it.kind === "fd") lmFoodOpen(it); else if (it.kind === "ak") lmAkOpen(it);
+  if (it.kind === "sn") lmStnOpen(it); else if (it.kind === "tw") lmTowerOpen(it); else if (it.kind === "pl") lmPlaceOpen(it); else if (it.kind === "ap") lmAirportOpen(it); else if (it.kind === "kh") lmKhasOpen(it); else if (it.kind === "jt") lmFerryOpen(it); else if (it.kind === "st") lmRailOpen(it); else if (it.kind === "si") lmIlmuOpen(it); else if (it.kind === "km") lmKemOpen(it); else if (it.kind === "ny") lmNelayanOpen(it); else if (it.kind === "ip") lmKampusOpen(it); else if (it.kind === "sk") lmOwnSchoolOpen(it); else if (it.kind === "fd") lmFoodOpen(it); else if (it.kind === "ak") lmAkOpen(it);
 }
 /* ---------- input ---------- */
 function lmKey(e) {
@@ -4885,5 +4983,5 @@ function lmClose() {
 }
 /* untuk ujian automatik */
 LM._g = (x, z) => lmGround(x, z); LM._fly = (a, d) => lmFlyStart(a, d); LM._ride = (a, b) => lmRide(a, b); LM._rai = () => lmRai(); LM._swim = (x, z) => lmSwimOk(x, z);
-LM._t = { LAUD: LAUD, lmTanahGo: lmTanahGo, lmAirportOpen: lmAirportOpen, lmKemOpen: lmKemOpen, lmKampusOpen: lmKampusOpen, lmIlmuOpen: lmIlmuOpen, lmKampusFetch: lmKampusFetch, lmRailOpen: lmRailOpen, lmRide: lmRide, lmStnFetch: lmStnFetch, lmStnOpen: lmStnOpen, lmCertCanvas: lmCertCanvas, lmLcCheck: lmLcCheck, LCN: LCN, lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
+LM._t = { LAUD: LAUD, lmCoast: lmCoast, TER: TER, lmNelayanOpen: lmNelayanOpen, lmTanahGo: lmTanahGo, lmAirportOpen: lmAirportOpen, lmKemOpen: lmKemOpen, lmKampusOpen: lmKampusOpen, lmIlmuOpen: lmIlmuOpen, lmKampusFetch: lmKampusFetch, lmRailOpen: lmRailOpen, lmRide: lmRide, lmStnFetch: lmStnFetch, lmStnOpen: lmStnOpen, lmCertCanvas: lmCertCanvas, lmLcCheck: lmLcCheck, LCN: LCN, lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
 })();
