@@ -1,10 +1,10 @@
-# Jaringan Pengangkutan Malaysia dalam Meta Didik (v18.32)
+# Jaringan Pengangkutan Malaysia dalam Meta Didik (v18.33)
 
 Dokumen ini menghimpunkan maklumat jaringan jalan raya, lebuh raya, pengangkutan awam, lapangan terbang, terminal bas, rel dan pulau di Malaysia, serta cara maklumat itu digunakan dalam prototaip jaringan pengangkutan Meta Didik.
 
 ## 1. Skala dan ketepatan peta
 
-- **Skala sebenar:** dunia Meta Didik menggunakan unjuran lat/lon sebenar, iaitu **6 unit = 1 km**. Jarak dan arah antara bandar, lapangan terbang dan terminal mengikut koordinat sebenar.
+- **Skala sebenar:** dunia Meta Didik menggunakan unjuran lat/lon sebenar, iaitu **7.5 unit = 1 km** (v18.33: dibesarkan daripada 6 unit/km supaya kawasan padat seperti Lembah Klang lebih lapang). Jarak dan arah antara bandar, lapangan terbang dan terminal mengikut koordinat sebenar.
 - **Kanta zum Lembah Klang:** pusat KL dibesarkan kira-kira 4.5 kali supaya stesen MRT/LRT tidak berhimpit. Jejarian kanta kira-kira 180 km; di luar kanta, peta tidak berubah. Jalan dan stesen di dalam kanta ikut dibesarkan secara automatik.
 - **Rupa bumi:** ketinggian sebenar daripada DEM SRTM, dengan grid 20 unit (kira-kira 3.3 km). Pulau yang lebih kecil daripada grid ini dibesarkan supaya kelihatan dan boleh diterokai, mengikut konvensyen yang sama seperti Pulau Sipadan sebelum ini.
 - **Saiz objek** (bangunan, bas, terminal) dibesarkan supaya jelas kelihatan, jadi tidak mengikut skala.
@@ -67,7 +67,34 @@ Dokumen ini menghimpunkan maklumat jaringan jalan raya, lebuh raya, pengangkutan
 - Jalan Kuching - Bau (kira-kira 23 km)
 - Jalan Kuching - Lundu - Sematan (kira-kira 72 km)
 
-## 4. Lebuh raya utama Malaysia (rujukan)
+## 4. Terowong dan plaza tol (v18.33)
+
+| Terowong | Laluan | Panjang | Koordinat (sumber) |
+|---|---|---|---|
+| Terowong Menora | Lebuhraya Utara-Selatan (E1), Jelapang, Ipoh | 800 m | 4.6836, 101.0319 hingga 4.6870, 101.0245 (Structurae) |
+| Terowong Genting Sempah | Lebuhraya KL-Karak (E8) | 900 m | 3.3500, 101.7838 (Wikipedia) |
+| Terowong Rel Bukit Berapit | Landasan berkembar KTM (ETS), Perak | 3.3 km | 4.7768, 100.7979 (Wikipedia) |
+| Terowong Genting ECRL | ECRL | 16.39 km | jajaran ECRL |
+| Terowong SMART | E38, Kuala Lumpur (Jalan Tun Razak - Sungai Besi) | 4 km (lebuh raya); 9.7 km (saliran banjir) | anggaran dari Bulatan Kampung Pandan ke Pangkalan Udara Sungai Besi (3.1114, 101.7028, Wikipedia) |
+| Terowong Penchala | SPRINT (Penchala Link) | 700 m | 3.1648, 101.6360 (Wikipedia) |
+
+- Terowong pada laluan sedia ada (PLUS, LPT, ETS, ECRL) memaksa jajaran laluan itu masuk ke bawah tanah dengan portal dan jalan masuk berpotongan.
+- Terowong SMART dan Penchala ditambah ke graf jalan, jadi bas dan teksi boleh melaluinya.
+- Setiap terowong mempunyai label dan kad maklumat (tekan E di portal).
+
+**Plaza tol (15):** Bukit Kayu Hitam, Juru, Ipoh Utara, Jalan Duta, Sungai Besi, Seremban, Ayer Keroh, Skudai, Gombak, Karak, Gambang, Jambatan Pulau Pinang (Perai), Jambatan Sultan Abdul Halim (Batu Kawan), Tanjung Kupang (Laluan Kedua) dan SMART.
+- Kedudukan ialah anggaran dan dilekatkan pada jajaran lebuh raya terdekat.
+- Pop "Melalui Plaza Tol" dipaparkan semasa menaiki bas atau teksi.
+- Tambang teksi bertambah 1 MD bagi setiap plaza tol yang dilalui.
+
+## 5. Waktu solat dan azan (v18.33)
+
+- Waktu solat dikira mengikut **masa sebenar** dan **lokasi pemain dalam peta** (kaedah JAKIM: Subuh 20 darjah, Isyak 18 darjah, Asar mazhab Syafie, ihtiyat +2 minit). Ia anggaran yang mungkin berbeza 1-3 minit daripada jadual rasmi e-Solat JAKIM.
+- Apabila masuk waktu, azan kedengaran dari **masjid terdekat** dalam peta. Kekuatan bunyi bergantung pada jarak.
+- Menu ☰ → **🕌 Waktu solat** memaparkan jadual hari ini dan butang "Tunjuk arah ke masjid".
+- **Audio azan:** letakkan rakaman yang mempunyai kebenaran di `audio/azan.mp3` dan `audio/azan-subuh.mp3`. Rakaman dalam repositori awam yang ditemui tidak mempunyai lesen yang jelas, jadi tiada rakaman disertakan. Sebelum fail dipasang, bunyi beduk tradisional (disintesis) dimainkan.
+
+## 6. Lebuh raya utama Malaysia (rujukan)
 
 | Lebuh raya | Laluan | Dalam Meta Didik |
 |---|---|---|
@@ -83,7 +110,7 @@ Dokumen ini menghimpunkan maklumat jaringan jalan raya, lebuh raya, pengangkutan
 
 Lebuh raya bandar Lembah Klang (NKVE, NPE, LDP, KESAS, SPRINT, DUKE, SMART, SUKE, DASH dan lain-lain) belum dimasukkan satu persatu. Ia memerlukan data OSM yang tepat kerana berada di dalam kanta zum KL.
 
-## 5. Pengangkutan awam
+## 7. Pengangkutan awam
 
 ### Rel (v18.32: dijana daripada GTFS rasmi)
 
@@ -187,7 +214,7 @@ Stesen bertanda ° ialah hentian yang dilalui, tetapi tren laluan itu tidak berh
 
 Koordinat terminal adalah anggaran. Ia perlu disahkan dengan OSM atau peta rasmi sebelum digunakan untuk tujuan selain prototaip.
 
-## 6. Lapangan terbang (penerbangan berjadual)
+## 8. Lapangan terbang (penerbangan berjadual)
 
 Sumber: OurAirports. Lapangan terbang bertanda ✔ ada dalam Meta Didik, lengkap dengan landasan dan boleh diterbangi.
 
@@ -230,7 +257,7 @@ Sumber: OurAirports. Lapangan terbang bertanda ✔ ada dalam Meta Didik, lengkap
 
 Lapangan terbang STOL di pedalaman Sarawak (Long Banga, Long Lellang, Long Seridan, Ba'kelalan) serta Tomanggong dan Pulau Pangkor belum dibina. Landasannya terlalu pendek untuk model lapangan terbang semasa.
 
-## 7. Pulau
+## 9. Pulau
 
 Semua pulau dalam senarai ini dilabelkan dalam dunia 3D (🏝, tekan E untuk maklumat) dan pada peta besar.
 - **Daratan sedia ada:** pulau yang sudah wujud dalam peta.
@@ -309,7 +336,7 @@ Semua pulau dalam senarai ini dilabelkan dalam dunia 3D (🏝, tekan E untuk mak
 | Pulau Sebatik (Malaysia) | Sabah | 4.185 | 117.830 | 187 | Daratan sedia ada | Dikongsi dengan Indonesia |
 | Pulau Layang-Layang | Sabah | 7.372 | 113.844 | 0.06 | Baharu (dibesarkan) | Terumbu di Kepulauan Spratly; lapangan terbang |
 
-## 8. Langkah seterusnya (cadangan)
+## 10. Langkah seterusnya (cadangan)
 
 1. **Benarkan domain data** dalam tetapan rangkaian persekitaran: `overpass-api.de`, `api.data.gov.my` dan `en.wikipedia.org`. Selepas itu, jana semula dengan OSM supaya jalan persekutuan, jalan negeri dan stesen rel mencapai ketepatan kira-kira 50 m.
 2. **Laluan bas bandar** Rapid KL, Rapid Penang, bas perantara MRT dan myBAS Johor daripada GTFS (sudah boleh dimuat turun), dengan hentian bas sebenar.
