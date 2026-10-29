@@ -3384,6 +3384,7 @@ function lmStnBuild(g, used, placed, avoid, gnd) {
 async function lmStnFetch(g) {
   if (typeof FB === "undefined" || !FB.url || !g.stn) return;
   let v = null; try { v = await FB.req("GET", "stesen"); } catch (e) { return; }
+  try { const nl = (await FB.req("GET", "stesen_nilai")) || {}; g.stnNilai = {}; for (const id in nl) { const rs = Object.values(nl[id] || {}).map((x) => x && x.r).filter((x) => x >= 1 && x <= 5); if (rs.length) g.stnNilai[id] = { n: rs.length, avg: rs.reduce((a, c) => a + c, 0) / rs.length }; } } catch (e) { /* abaikan: tanpa penilaian */ }
   if (!LM.g || LM.g !== g) return;
   /* v18.28: stesen hanya dipaparkan dalam dunia subjeknya (stesen lama tanpa subjek = Tasawwur Islam) */
   const mine = (d) => d && d.st === "lulus" && d.tj && (d.sj || "tw") === SUBJ;
@@ -3408,7 +3409,7 @@ function lmStnGeo(g, v, mine) {
     if (!w) continue;
     const md = lmStnBooth(), rot = (Math.abs(hashStr(id)) % 628) / 100, gy = lmGround(w.x, w.z); md.position.set(w.x, gy, w.z); md.rotation.y = rot; g.scene.add(md);
     md.userData.scr.material.map = lmStnScreen(d.tj, String(d.kat || "STESEN INOVASI").toUpperCase()); md.userData.scr.material.needsUpdate = true;
-    const lb = lmLabel("🏛 " + d.tj + " · Stesen Inovasi", { fs: 26, k: 0.028, bg: "rgba(11,74,74,.9)", bd: "#ffd45a" }); lb.position.set(w.x, gy + 9, w.z); g.scene.add(lb);
+    const rt = g.stnNilai && g.stnNilai[id], lb = lmLabel("🏛 " + d.tj + (rt ? " · ⭐ " + rt.avg.toFixed(1) + " (" + rt.n + ")" : "") + " · Stesen Inovasi", { fs: 26, k: 0.028, bg: "rgba(11,74,74,.9)", bd: "#ffd45a" }); lb.position.set(w.x, gy + 9, w.z); g.scene.add(lb);
     const fx = Math.sin(rot), fz = Math.cos(rot), k = lmAt(w.x, w.z), col = { x: w.x - fx * 1, z: w.z - fz * 1, r: 4.6, h: 6 }; g.cols.push(col);
     const it = { kind: "sn", id: "sg-" + id, sl: "", k: DATA.negeri[k] ? k : (DATA.negeri[d.pn] ? d.pn : Object.keys(DATA.negeri)[0]), n: d.tj, x: w.x + fx * 6, z: w.z + fz * 6, r: 0, ir: 6, m: md, d: d, lb: lb, col: col, geo: 1 };
     g.items.push(it); g.stnG[id] = it;
@@ -3441,6 +3442,7 @@ function lmStnOpen(it) {
       const hg = d.hg | 0, go = () => {
         if (!confirm("Anda akan membuka laman luar (" + host + ") yang dikendalikan oleh guru pemilik stesen, bukan Meta Didik. Teruskan?")) return;
         FB.req("PUT", "stesen_klik/" + d.id + "/" + gid, true).catch(() => {});
+        try { localStorage.setItem("gt-stn-pakai-" + d.id, "1"); } catch (e) { /* abaikan */ } drawRate();
         window.open(d.url, "_blank", "noopener");
       };
       /* inovasi berbayar: murid membelanjakan MD (sekali sehari) dan MD itu menjadi pendapatan guru */
@@ -3448,11 +3450,43 @@ function lmStnOpen(it) {
       gb.title = "Buka " + (host || "pautan"); row.appendChild(gb);
     }
     row.appendChild(lmBtn("Tutup", "", lmCardClose));
+    /* v18.34: penilaian (1-5 bintang) dan komen murid selepas menggunakan inovasi; komen hanya dibaca pentadbir */
+    const rateBox = el("div", { style: "margin-top:8px;padding:10px;border-radius:12px;background:rgba(255,212,90,.08);border:1px solid rgba(255,212,90,.35)" });
+    let myR = 0, nR = 0, avgR = 0, rated = false;
+    const canRate = () => { if (!d.url) return true; try { return localStorage.getItem("gt-stn-pakai-" + d.id) === "1"; } catch (e) { return true; } };
+    function drawRate() {
+      rateBox.textContent = "";
+      rateBox.appendChild(el("b", null, nR ? "⭐ " + avgR.toFixed(1) + " daripada 5 (" + nR + " penilaian murid)" : "⭐ Belum dinilai"));
+      if (!canRate()) { rateBox.appendChild(el("p", { class: "lm-ex", style: "margin:4px 0 0" }, "Gunakan inovasi ini dahulu, kemudian beri penilaian dan komen.")); return; }
+      if (rated) { rateBox.appendChild(el("p", { class: "lm-ex", style: "margin:4px 0 0" }, "Terima kasih! Penilaian anda: " + "★".repeat(myR) + "☆".repeat(5 - myR) + ". Anda boleh mengubahnya bila-bila masa.")); }
+      let r = myR; const st = el("div", { class: "lm-row", style: "gap:4px;margin:6px 0" });
+      const paint = () => [...st.children].forEach((x, i) => { x.textContent = i < r ? "★" : "☆"; x.className = i < r ? "pri" : ""; });
+      for (let i = 1; i <= 5; i++) { const sb = lmBtn("☆", "", () => { r = i; paint(); }); sb.setAttribute("aria-label", i + " bintang"); sb.style.minWidth = "44px"; st.appendChild(sb); }
+      paint();
+      const k = el("input", { class: "lm-in", maxlength: "140", placeholder: "Komen untuk pentadbir dan guru (pilihan)", "aria-label": "Komen", style: "width:100%;text-transform:none;letter-spacing:0;font-size:14px;text-align:left" });
+      const out = el("span", { class: "lm-ex" });
+      const send = lmBtn(rated ? "Kemas kini penilaian" : "Hantar penilaian", "pri", async () => {
+        if (!r) { out.textContent = "Pilih bilangan bintang."; return; }
+        const kk = String(k.value || "").replace(/[\u0000-\u001f<>]/g, " ").replace(/\s+/g, " ").trim().slice(0, 140);
+        if (kk && typeof kmBad === "function" && kmBad(kk)) { out.textContent = "Komen mengandungi perkataan tidak sesuai, pautan atau nombor telefon."; return; }
+        send.disabled = true; out.textContent = "Menghantar...";
+        try {
+          await FB.req("PUT", "stesen_nilai/" + d.id + "/" + gid, { r: r, t: { ".sv": "timestamp" } });
+          if (kk) await FB.req("PUT", "stesen_komen/" + d.id + "/" + gid, { k: kk, n: String(lmShortName(P.nama) || "Murid").slice(0, 20), t: { ".sv": "timestamp" } });
+          if (!rated) { avgR = (avgR * nR + r) / (nR + 1); nR++; } else avgR = nR ? (avgR * nR - myR + r) / nR : r;
+          myR = r; rated = true; lmPop("⭐ Terima kasih atas penilaian anda"); drawRate();
+        } catch (e) { send.disabled = false; out.textContent = "Gagal dihantar (kod " + (e.code || "rangkaian") + ")."; }
+      });
+      rateBox.append(st, k, el("div", { class: "lm-row", style: "margin-top:6px" }, send, out));
+    }
+    drawRate();
+    b.append(rateBox);
     b.append(row, el("p", { class: "lm-ex", style: "opacity:.75" }, "Kandungan stesen disediakan oleh guru dan disemak pentadbir. Laporkan kandungan tidak sesuai kepada pentadbir melalui ruangan komen."));
     (async () => {
       try { await FB.req("PUT", "stesen_lawat/" + d.id + "/" + gid, true); } catch (e) { /* abaikan */ }
       const cnt = async (n) => { try { const v = await FB.req("GET", n + "/" + d.id, undefined, "shallow=true"); return v && typeof v === "object" ? v : {}; } catch (e) { return {}; } };
-      const [vs, lk, gu] = await Promise.all([cnt("stesen_lawat"), cnt("stesen_suka"), (d.hg | 0) ? cnt("stesen_guna") : {}]);
+      const [vs, lk, gu, nl] = await Promise.all([cnt("stesen_lawat"), cnt("stesen_suka"), (d.hg | 0) ? cnt("stesen_guna") : {}, FB.req("GET", "stesen_nilai/" + d.id).catch(() => null)]);
+      { const rs = Object.values(nl || {}).map((x) => x && x.r).filter((x) => x >= 1 && x <= 5); nR = rs.length; avgR = nR ? rs.reduce((a, c) => a + c, 0) / nR : 0; if (nl && nl[gid] && nl[gid].r) { myR = nl[gid].r; rated = true; } drawRate(); }
       nVis = Object.keys(vs).length; nLike = Object.keys(lk).length; nUse = Object.keys(gu).length; liked = !!lk[gid]; draw();
     })();
   });
@@ -3874,7 +3908,7 @@ function lmTowerState(o) {
 function lmMyCode() { return window.AV3 ? AV3.code() : "L|1|ou_sc|oc_gn|hd_no|hc_w"; }
 /* v18.26: guru ditanda "🎓 Cikgu" pada nama (label, chat, peta) supaya murid menghormati guru */
 /* v18.28: hanya guru disahkan DELIMa (atau pentadbir); v18.29: dengan gelaran pilihan (Ustaz, Ustazah, Cikgu, Sir...) */
-function lmIsGuru() { try { return typeof AUTH !== "undefined" && ((AUTH.guru && AUTH.guru()) || (typeof kmAdm === "function" && kmAdm())) ? myGel() : false; } catch (e) { return false; } }
+function lmIsGuru() { try { return typeof guruOk === "function" && guruOk() ? myGel() : false; } catch (e) { return false; } }
 function lmGuruName(n, gr) { return gr ? "🎓 " + gelName(typeof gr === "string" ? gr : "Cikgu", n) : n; }
 function lmAvatar(code, name, me, gr) {
   const av = AV3.build(code);
@@ -4521,7 +4555,7 @@ async function lmPrivMake(btn) {
     let code = "";
     for (let i = 0; i < 5 && !code; i++) { const c = lmCode(); if (!(await FB.req("GET", "ruang_privasi/" + c))) code = c; }
     if (!code) throw Object.assign(new Error("kod"), { code: "KOD" });
-    const doc = { g: AUTH.uid() || "admin", n: gelName(myGel(), cleanName(P.nama)), sj: SUBJ };
+    const doc = { g: AUTH.uid() || FB.getUid() || "admin", n: gelName(myGel(), cleanName(P.nama)), sj: SUBJ };
     if (typeof kmAdm === "function" && kmAdm() && !(AUTH.guru && AUTH.guru())) await kmAdmPut("ruang_privasi/" + code, Object.assign(doc, { t: Date.now() }));
     else { await AUTH.ensure(); await FB.req("PUT", "ruang_privasi/" + code, Object.assign(doc, { t: { ".sv": "timestamp" } })); }
     lmCard((b) => {

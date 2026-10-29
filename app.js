@@ -347,7 +347,7 @@ if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.
 if (SUBJ === "bm") { DATA.tema = DATA_BM.tema; DATA.topik = DATA_BM.topik; DATA.soalan = DATA_BM.soalan; }
 if (SUBJ === "bi") { DATA.tema = DATA_BI.tema; DATA.topik = DATA_BI.topik; DATA.soalan = DATA_BI.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = "Hub Inovasi Digital Pendidikan \u00b7 v18.33"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = "Hub Inovasi Digital Pendidikan \u00b7 v18.34"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -779,7 +779,7 @@ function fbConfigured() {
   let u = "";
   try {
     const q = new URLSearchParams(location.search).get("fb");
-    if (q && FB.valid(q)) { u = q.trim(); localStorage.setItem("tw-fb", u); try { history.replaceState(null, "", location.pathname); } catch (e) { /* abaikan */ } }
+    if (q && FB.valid(q)) { u = q.trim(); localStorage.setItem("tw-fb", u); try { history.replaceState(null, "", location.pathname + location.hash); } catch (e) { /* abaikan */ } }
   } catch (e) { /* abaikan */ }
   if (!u) { try { u = localStorage.getItem("tw-fb") || ""; } catch (e) { u = ""; } }
   if (!u && window.TW_FB) u = String(window.TW_FB);
@@ -7232,7 +7232,7 @@ function lgRoot() {
    Dibuka daripada butang di peta utama; dunia.js dimuat hanya apabila diperlukan. */
 /* v17.91: avatar 3D dikongsi Gudang dan META DIDIK; dimuat apabila perlu */
 /* v18.4: versi aplikasi untuk memecah cache skrip (Safari/ikon skrin utama iPhone menyimpan salinan lama) */
-const APP_VER = "18.33";
+const APP_VER = "18.34";
 function av3Load(cb) {
   if (window.AV3) { cb(); return; }
   if (typeof THREE === "undefined") return;
@@ -7318,7 +7318,7 @@ setTimeout(() => {
   if (auto && P && P.nama) mdWarp(() => lmOpen(""), SUBJS[SUBJ].subjek.toUpperCase());
 }, 900);
 /* v18.28: butang Ruang Guru di header; peta operasi dan PdPc hanya bagi guru DELIMa */
-setTimeout(() => { try { guruUi(); const b = document.getElementById("guruBtn"); if (b) b.addEventListener("click", () => setView("guru")); if (localStorage.getItem("gt-open-guru")) { localStorage.removeItem("gt-open-guru"); setTimeout(() => setView("guru"), 600); } } catch (e) { /* abaikan */ } }, 0);
+setTimeout(() => { try { guruUi(); const b = document.getElementById("guruBtn"); if (b) b.addEventListener("click", () => setView("guru")); if (localStorage.getItem("gt-open-guru")) { localStorage.removeItem("gt-open-guru"); setTimeout(() => setView("guru"), 600); } if (/^#(pentadbir|admin)$/i.test(location.hash)) { GTAB.t = "admin"; setTimeout(() => setView("guru"), 600); } /* v18.34: pautan terus Dashboard Pentadbir */ } catch (e) { /* abaikan */ } }, 0);
 /* kembali ke Meta Didik selepas permainan yang dibuka dari dunia itu (Lagenda, Busana, Dunia Ilmu, Amali) */
 /* v18.27: misi kendiri murid dimainkan dalam Meta Didik; panel tajuk hanya menyimpan alat PdPc guru */
 function mdKendiri() {
@@ -17565,8 +17565,9 @@ async function stnLoadMine() {
 async function stnSubmit(f) {
   const g = stnGuru(); if (!g) throw new Error("Sahkan akaun DELIMa dahulu.");
   if (g.trial) {
+    if (!janjiOk()) throw new Error("Lengkapkan borang perjanjian ringkas dahulu.");
     const em = String(f.em || "").trim().toLowerCase();
-    if (!AUTH.okEmel(em) || !/^[\w.+-]+@/.test(em)) throw new Error("Isi e-mel DELIMa anda (@moe-dl.edu.my) untuk semakan pentadbir.");
+    if (em && (!AUTH.okEmel(em) || !/^[\w.+-]+@/.test(em))) throw new Error("E-mel DELIMa mesti berakhir dengan @moe-dl.edu.my (atau biarkan kosong).");
     g.em = em; try { localStorage.setItem("gt-stn-em", em); } catch (e) { /* abaikan */ }
   }
   const tj = stnClean(f.tj, 60), ds = stnClean(f.ds, 600), url = stnClean(f.url, 300), yt = rlId(f.yt || "");
@@ -17585,7 +17586,7 @@ async function stnSubmit(f) {
   const doc = { u: g.uid, n: stnClean(P.penuh || P.nama || g.gn, 60), sk: cleanSekolah(P.sekolah).slice(0, 80), ng: P.negeri || "", tj: tj, kat: STN_KAT.indexOf(f.kat) >= 0 ? f.kat : "Lain-lain", ds: ds, yt: yt, url: url, pn: f.pn, la: +f.la, lo: +f.lo, sj: f.sj, tp: f.tp, hg: hg, st: "tunggu", t: old.t || Date.now(), tu: Date.now() };
   Object.keys(doc).forEach((k) => { if (doc[k] === "" || doc[k] === 0) delete doc[k]; }); /* peraturan: medan kosong tidak dihantar */
   await FB.req("PUT", "stesen/" + g.uid, doc);
-  if (g.trial) await FB.req("PUT", "stesen_em/" + g.uid, g.em); /* e-mel tidak awam: hanya pentadbir membaca */
+  if (g.trial && g.em) await FB.req("PUT", "stesen_em/" + g.uid, g.em); /* e-mel tidak awam: hanya pentadbir membaca */
   STN.mine = doc;
 }
 function stnGuruBox(box) {
@@ -17602,6 +17603,7 @@ function stnGuruBox(box) {
   }
   if (g.trial) c.appendChild(el("div", { class: "notice" }, "🧪 Mod percubaan: log masuk DELIMa belum diwajibkan. Stesen anda terikat pada peranti ini, jadi gunakan peranti yang sama untuk mengurus stesen dan pendapatan MD. Pentadbir menyemak e-mel DELIMa anda sebelum meluluskan."));
 
+  if (g.trial && !janjiOk()) { c.open = true; janjiBox(c, () => renderGuru()); return; } /* v18.34 */
   if (STN.mine === undefined) { c.appendChild(el("p", { class: "muted" }, "Memuat stesen anda...")); if (!STN.busy) { STN.busy = true; stnLoadMine().then(() => { STN.busy = false; renderGuru(); }); } return; }
   if (STN.err) c.appendChild(el("div", { class: "notice warn" }, STN.err));
   const m = STN.mine;
@@ -17624,7 +17626,7 @@ function stnGuruBox(box) {
   const loc = { la: m && m.la != null ? m.la : null, lo: m && m.lo != null ? m.lo : null, pn: m ? m.pn : "" };
   const iLoc = lpPicker(m && m.la != null ? { la: m.la, lo: m.lo } : null, (la, lo, k) => { loc.la = la; loc.lo = lo; loc.pn = k; });
   const iEm = el("input", { id: "stEm", type: "email", maxlength: "80", value: g.em || "", placeholder: "nama@moe-dl.edu.my" });
-  if (g.trial) c.appendChild(fld("stEm", "E-mel DELIMa anda (untuk semakan)", iEm));
+  if (g.trial) c.appendChild(fld("stEm", "E-mel DELIMa (pilihan)", iEm));
   c.append(fld("stTj", "Tajuk inovasi", iTj), fld("stKat", "Kategori", iKat), fld("stDs", "Huraian (apa, untuk siapa, kesan)", iDs), fld("stYt", "Video YouTube", iYt), fld("stUrl", "Pautan produk / maklumat", iUrl), fld("stHg", "Harga guna inovasi (MD)", iHg), fld("stSj", "Subjek inovasi", iSj), fld("stTp", "Tajuk berkaitan (wajib)", iTp), fld("stLoc", "Lokasi stesen dalam peta Meta Didik", iLoc));
   const out = el("p", { class: "muted", style: "font-size:13px;margin:4px 0" }, STN.msg || "");
   const sb = el("button", { type: "button", class: "btn" }, m ? "Kemas kini dan hantar semula untuk semakan" : "Hantar permohonan stesen");
@@ -17637,7 +17639,7 @@ function stnGuruBox(box) {
 }
 /* kod negeri profil (JHR, KUL...) -> kunci peta META DIDIK */
 function lmNegeriKey(kod) { return ({ JHR: "johor", KDH: "kedah", KTN: "kelantan", MLK: "melaka", NSN: "nsembilan", PHG: "pahang", PRK: "perak", PLS: "perlis", PNG: "penang", SBH: "sabah", SWK: "sarawak", SGR: "selangor", TRG: "terengganu", KUL: "wp", PJY: "wp", LBN: "sabah" })[kod] || ""; }
-async function stnAdmLoad() { STN.admBusy = true; try { const [v0, em] = await Promise.all([kmAdmReq("GET", "stesen"), kmAdmReq("GET", "stesen_em").catch(() => null)]), v = v0 || {}; STN.adm = Object.keys(v).map((k) => Object.assign({ id: k }, v[k], em && em[k] ? { _em: em[k] } : {})).filter((x) => x && x.tj); } catch (e) { STN.adm = []; STN.err = "Gagal memuat stesen (kod " + (e.code || "rangkaian") + ")."; } STN.admBusy = false; }
+async function stnAdmLoad() { STN.admBusy = true; try { const [v0, em, jn] = await Promise.all([kmAdmReq("GET", "stesen"), kmAdmReq("GET", "stesen_em").catch(() => null), kmAdmReq("GET", "stesen_janji").catch(() => null)]), v = v0 || {}; STN.adm = Object.keys(v).map((k) => Object.assign({ id: k }, v[k], em && em[k] ? { _em: em[k] } : {}, jn && jn[k] ? { _jn: jn[k] } : {})).filter((x) => x && x.tj); } catch (e) { STN.adm = []; STN.err = "Gagal memuat stesen (kod " + (e.code || "rangkaian") + ")."; } STN.admBusy = false; }
 function stnAdminBox(box) {
   if (!kmAdm()) return;
   const c = el("details", { class: "card", style: "margin:8px 0" }); c.open = !!STN.adm;
@@ -17651,6 +17653,7 @@ function stnAdminBox(box) {
   STN.adm.slice().sort((a, b) => (order[a.st] | 0) - (order[b.st] | 0) || (b.tu || 0) - (a.tu || 0)).forEach((x) => {
     const d = el("div", { class: "card", style: "gap:6px;padding:10px" });
     d.append(el("b", null, (x.st === "lulus" ? "✅ " : x.st === "tolak" ? "❌ " : "⏳ ") + x.tj + " · " + x.kat), el("div", { style: "font-size:13px" }, x.n + " · " + x.sk + (x._em ? " · ✉ " + x._em : "") + " · pilihan " + (DATA.negeri[x.pn] ? DATA.negeri[x.pn].pendek : "-") + (x.sl ? " · " + stnSlotName(x.sl) : "")), el("div", { style: "font-size:14px" }, x.ds));
+    d.appendChild(x._jn ? el("div", { style: "font-size:13px;color:#9fe8b0" }, "📝 Perjanjian ditandatangani: " + x._jn.nm + " · " + x._jn.sk + " · " + x._jn.hp + (x._jn.t ? " · " + new Date(x._jn.t).toLocaleDateString("ms-MY") : "")) : el("div", { style: "font-size:13px;color:#ffb38a" }, "📝 Tiada borang perjanjian (permohonan DELIMa atau versi lama)."));
     if (x.yt) d.appendChild(el("div", { style: "font-size:13px" }, "Video: https://youtu.be/" + x.yt));
     if (x.url) d.appendChild(el("div", { style: "font-size:13px;word-break:break-all" }, "Pautan: " + x.url));
     const geo = x.la != null; /* v18.28: lokasi pilihan guru pada peta, ikut subjek */
@@ -17659,7 +17662,7 @@ function stnAdminBox(box) {
     const sel = el("select", { "aria-label": "Tapak" }); const cand = free.filter((s) => s.indexOf(x.pn + "-") === 0).concat(free.filter((s) => s.indexOf(x.pn + "-") !== 0));
     if (x.sl && used[x.sl] === x.id) cand.unshift(x.sl);
     cand.forEach((s) => sel.appendChild(el("option", { value: s }, stnSlotName(s))));
-    const put = async (patch, lbl) => { try { const doc = Object.assign({}, x, patch); delete doc.id; delete doc._em; Object.keys(doc).forEach((k) => { if (doc[k] == null) delete doc[k]; }); await kmAdmPut("stesen/" + x.id, doc); toast(lbl, "ok"); await stnAdmLoad(); renderGuru(); } catch (e) { toast("Gagal (kod " + (e.code || "rangkaian") + ").", "bad"); } };
+    const put = async (patch, lbl) => { try { const doc = Object.assign({}, x, patch); delete doc.id; delete doc._em; delete doc._jn; Object.keys(doc).forEach((k) => { if (doc[k] == null) delete doc[k]; }); await kmAdmPut("stesen/" + x.id, doc); toast(lbl, "ok"); await stnAdmLoad(); renderGuru(); } catch (e) { toast("Gagal (kod " + (e.code || "rangkaian") + ").", "bad"); } };
     const ok = el("button", { type: "button", class: "btn sm" }, x.st === "lulus" ? (geo ? "Diluluskan" : "Tukar tapak") : "Lulus"); ok.disabled = geo ? x.st === "lulus" : !cand.length;
     ok.addEventListener("click", () => put(geo ? { st: "lulus", sl: null, sb: null } : { st: "lulus", sl: sel.value, sb: null }, "Stesen diluluskan."));
     if (geo) sel.hidden = true;
@@ -18093,7 +18096,9 @@ async function sqbLoad() {
   SQB.busy = false; return window.SQ_UBL || [];
 }
 (function sqbBoot(n) { if (typeof Net !== "undefined" && Net.fb && FB.url && QB.n > 0) { sqbLoad(); return; } if (n < 40) setTimeout(() => sqbBoot(n + 1), 1500); })(0);
-function sqbMine() { const u = AUTH.uid(); return (window.SQ_UBL || []).filter((x) => x.by && x.by === u); }
+/* v18.34: guru kod sementara (tanpa DELIMa) dikenal pasti dengan ID peranti */
+function guruUid() { return AUTH.uid() || FB.getUid(); }
+function sqbMine() { const u = guruUid(); return (window.SQ_UBL || []).filter((x) => x.by && x.by === u); }
 function sqbOpts(q) { const ul = el("ol", { type: "A", style: "margin:6px 0 4px;padding-left:22px" }); (q.o || []).forEach((o, i) => ul.appendChild(el("li", { style: i === q.a ? "color:#6fe0a6;font-weight:800" : "" }, qSet(el("span"), o), i === q.a ? " ✔" : ""))); return ul; }
 /* borang cadangan: k = baru | baiki | buang */
 function sqbForm(box, k, q, tp) {
@@ -18132,9 +18137,9 @@ function sqbForm(box, k, q, tp) {
     go.disabled = true; out.textContent = "Menghantar...";
     try {
       const id = "u" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), gu = AUTH.guru();
-      Object.assign(doc, { n: gelName(myGel(), cleanName(P.nama)), em: gu ? gu.em : "pentadbir" });
+      Object.assign(doc, { n: gelName(myGel(), cleanName(P.nama)), em: gu ? gu.em : kmAdm() ? "pentadbir" : "kod-guru" });
       if (kmAdm()) { await kmAdmPut("soalan_ubah/" + SUBJ + "/" + id, Object.assign(doc, { by: AUTH.uid() || "admin", st: "lulus" })); }
-      else { await AUTH.ensure(); await FB.req("PUT", "soalan_ubah/" + SUBJ + "/" + id, Object.assign(doc, { by: AUTH.uid(), st: "tunggu", tu: { ".sv": "timestamp" } })); }
+      else { await AUTH.ensure(); await FB.req("PUT", "soalan_ubah/" + SUBJ + "/" + id, Object.assign(doc, { by: guruUid(), st: "tunggu", tu: { ".sv": "timestamp" } })); }
       (window.SQ_UBL || (window.SQ_UBL = [])).push(Object.assign({ id: id }, doc, { tu: Date.now() })); if (doc.st === "lulus") sqbApply(window.SQ_UBL);
       SQB.edit = null; SQB.msg = kmAdm() ? "Disimpan dan diluluskan." : "Cadangan dihantar. Pentadbir akan menyemak sebelum digunakan oleh semua murid."; renderGuru();
     } catch (e) { go.disabled = false; out.textContent = "Gagal (kod " + (e.code || "rangkaian") + ")."; }
@@ -18196,7 +18201,135 @@ function sqbAdminBox(box) {
   });
 }
 const GTAB = { t: (() => { try { const v = localStorage.getItem("gt-open-guru"); return v === "soalan" ? v : "inovasi"; } catch (e) { return "inovasi"; } })() };
-function guruOk() { try { return !!((AUTH.guru && AUTH.guru()) || kmAdm()); } catch (e) { return false; } }
+/* ---------- v18.34: kod sementara (sebelum DELIMa diwajibkan): guru 1991, pentadbir 6171 ----------
+   Kod hanya membuka paparan. Tulisan pentadbir ke pangkalan data (lulus/tolak, data peribadi) masih memerlukan
+   kunci moderator Firebase pada peranti pentadbir, kerana kod di dalam aplikasi boleh dibaca sesiapa. */
+const KOD_GURU = "1991", KOD_ADM = "6171";
+function kodGet(k) { try { return localStorage.getItem(k) || ""; } catch (e) { return ""; } }
+function guruKod() { return !AUTH.on() && kodGet("gt-kod-guru") === KOD_GURU; }
+function admKod() { return kodGet("gt-kod-adm") === KOD_ADM; }
+function kodMasuk(kind, v) {
+  v = String(v || "").trim();
+  if (kind === "adm" && v === KOD_ADM) { try { localStorage.setItem("gt-kod-adm", v); } catch (e) { /* abaikan */ } GTAB.t = "admin"; return true; }
+  if (kind === "guru" && v === KOD_GURU && !AUTH.on()) { try { localStorage.setItem("gt-kod-guru", v); localStorage.setItem("gt-role", "guru"); } catch (e) { /* abaikan */ } return true; }
+  return false;
+}
+function kodKeluar() { try { localStorage.removeItem("gt-kod-guru"); localStorage.removeItem("gt-kod-adm"); } catch (e) { /* abaikan */ } STN.mine = undefined; MD.me = undefined; guruUi(); renderGuru(); }
+function kodBox(kind, tajuk, nota) {
+  const c = el("div", { class: "card", style: "gap:8px;max-width:640px" });
+  const inp = el("input", { type: "password", inputmode: "numeric", maxlength: "8", placeholder: "Kod", "aria-label": tajuk, style: "max-width:160px" }), out = el("span", { class: "muted", style: "font-size:13px" });
+  const go = el("button", { type: "button", class: "btn sm" }, "Masuk");
+  const run = () => { if (kodMasuk(kind, inp.value)) { toast(kind === "adm" ? "Dashboard Pentadbir dibuka." : "Selamat datang, Cikgu!", "ok"); STN.mine = undefined; guruUi(); renderGuru(); } else out.textContent = "Kod tidak sah."; };
+  go.addEventListener("click", run); inp.addEventListener("keydown", (e) => { if (e.key === "Enter") run(); });
+  c.append(el("b", null, tajuk), el("p", { class: "muted", style: "margin:0;font-size:13px" }, nota), el("div", { class: "row", style: "gap:8px;align-items:center" }, inp, go, out));
+  return c;
+}
+/* ---------- v18.34: borang perjanjian ringkas guru (mod percubaan) ----------
+   stesen_janji/<id peranti> = { nm, sk, hp (telefon/e-mel untuk dihubungi), v, t } (tidak awam; hanya pentadbir membaca) */
+const JANJI_V = 1;
+const JANJI = [
+  "Inovasi ini hasil karya saya sendiri, atau saya mempunyai kebenaran untuk mengongsikannya.",
+  "Kandungan sesuai untuk murid, mematuhi nilai murni dan undang-undang, serta tidak mengandungi data peribadi murid.",
+  "Pautan dan video yang saya kongsi selamat dan tidak mengandungi iklan atau kandungan yang tidak sesuai.",
+  "Pentadbir Meta Didik berhak menyemak, menolak atau menarik balik inovasi saya pada bila-bila masa.",
+  "Penilaian dan komen murid boleh digunakan oleh pentadbir untuk menambah baik kualiti inovasi.",
+  "Pendapatan MD (jika inovasi berbayar) tertakluk kepada tabung bulanan dan kelulusan pentadbir."
+];
+function janjiOk() { try { return +(localStorage.getItem("gt-stn-janji") || 0) >= JANJI_V; } catch (e) { return false; } }
+function janjiBox(c, done) {
+  c.appendChild(el("div", { class: "notice" }, "📝 Langkah 1: Borang perjanjian ringkas. Isi sekali sahaja sebelum menghantar inovasi pertama anda."));
+  const fld = (lab, node) => { const f = el("div", { class: "field" }); f.append(el("label", null, lab), node); return f; };
+  const iNm = el("input", { maxlength: "80", value: P.penuh || P.nama || "", placeholder: "Nama penuh seperti dalam kad pengenalan" });
+  const iSk = el("input", { maxlength: "80", value: cleanSekolah(P.sekolah || ""), placeholder: "Sekolah" });
+  const iHp = el("input", { maxlength: "80", placeholder: "No. telefon atau e-mel (untuk pentadbir menghubungi anda)" });
+  c.append(fld("Nama penuh", iNm), fld("Sekolah", iSk), fld("Untuk dihubungi", iHp));
+  const ul = el("ol", { style: "margin:4px 0 0;padding-left:20px;font-size:14px;line-height:1.5" }); JANJI.forEach((t) => ul.appendChild(el("li", null, t))); c.appendChild(ul);
+  const ck = el("input", { type: "checkbox", id: "janjiCk" }); c.appendChild(el("label", { for: "janjiCk", class: "row", style: "gap:8px;align-items:center;font-weight:700" }, ck, "Saya telah membaca dan bersetuju dengan semua perkara di atas."));
+  const out = el("span", { class: "muted", style: "font-size:13px" }), sb = el("button", { type: "button", class: "btn" }, "Hantar perjanjian");
+  sb.addEventListener("click", async () => {
+    const nm = stnClean(iNm.value, 80), sk = stnClean(iSk.value, 80), hp = stnClean(iHp.value, 80);
+    if (nm.length < 5) { out.textContent = "Isi nama penuh anda."; return; }
+    if (sk.length < 4) { out.textContent = "Isi nama sekolah."; return; }
+    if (!/^(\+?6?0[\d\s-]{8,13}|[\w.+-]+@[\w-]+\.[\w.]+)$/.test(hp)) { out.textContent = "Isi nombor telefon atau e-mel yang sah."; return; }
+    if (!ck.checked) { out.textContent = "Tandakan persetujuan anda."; return; }
+    sb.disabled = true; out.textContent = "Menghantar...";
+    try {
+      await FB.req("PUT", "stesen_janji/" + stnGuru().uid, { nm: nm, sk: sk, hp: hp, v: JANJI_V, t: { ".sv": "timestamp" } });
+      try { localStorage.setItem("gt-stn-janji", String(JANJI_V)); } catch (e) { /* abaikan */ }
+      toast("Perjanjian diterima. Teruskan dengan borang inovasi.", "ok"); done();
+    } catch (e) { sb.disabled = false; out.textContent = "Gagal dihantar (kod " + (e.code || "rangkaian") + ")."; }
+  });
+  c.append(el("div", { class: "row", style: "gap:8px;align-items:center" }, sb, out));
+}
+/* ---------- v18.34: Dashboard Pentadbir: prestasi inovasi (rating, komen, penggunaan, MD) ----------
+   stesen_nilai/<stesen>/<peranti> = { r: 1-5, t } (awam, untuk purata di peta); stesen_komen/<stesen>/<peranti> = { k, n, t } (pentadbir sahaja) */
+const ADB = { d: null, busy: false, err: "", open: {} };
+function nilaiAvg(byDev) { const r = Object.values(byDev || {}).map((x) => x && x.r).filter((x) => x >= 1 && x <= 5); return { n: r.length, avg: r.length ? r.reduce((a, b) => a + b, 0) / r.length : 0 }; }
+async function admDashLoad() {
+  ADB.busy = true; ADB.err = "";
+  try {
+    const key = !!kmAdm(), get = (p) => (key ? kmAdmReq("GET", p) : FB.req("GET", p)).catch(() => null);
+    const [st, nl] = await Promise.all([get("stesen"), get("stesen_nilai")]);
+    const ids = Object.keys(st || {});
+    const cnt = async (node, id) => { try { const v = await FB.req("GET", node + "/" + id, undefined, "shallow=true"); return v && typeof v === "object" ? Object.keys(v).length : 0; } catch (e) { return 0; } };
+    const stats = await Promise.all(ids.map((id) => Promise.all(["stesen_lawat", "stesen_suka", "stesen_klik"].map((n) => cnt(n, id)))));
+    const [gu, km, jn] = key ? await Promise.all([get("stesen_guna"), get("stesen_komen"), get("stesen_janji")]) : [null, null, null];
+    const m = mdMonth();
+    ADB.d = { key: key, at: Date.now(), rows: ids.map((id, i) => {
+      const x = Object.assign({ id: id }, st[id]), nv = nilaiAvg((nl || {})[id]), all = gu ? mdTally((gu || {})[id]) : null, bln = gu ? mdTally((gu || {})[id], m) : null;
+      const kom = Object.values((km || {})[id] || {}).filter((c) => c && c.k).sort((a, b) => (b.t || 0) - (a.t || 0));
+      return Object.assign(x, { nv: nv, lawat: stats[i][0], suka: stats[i][1], klik: stats[i][2], mdAll: all, mdBln: bln, kom: kom, janji: (jn || {})[id] || null });
+    }) };
+  } catch (e) { ADB.err = "Gagal memuat data (kod " + (e.code || "rangkaian") + ")."; }
+  ADB.busy = false;
+}
+function admLemah(x) { return (x.nv.n >= 3 && x.nv.avg < 3) || (x.lawat >= 10 && x.klik / x.lawat < 0.1); }
+function admDashBox(box) {
+  const c = el("div", { class: "card", style: "gap:10px;margin:8px 0" }); box.appendChild(c);
+  const rf = el("button", { type: "button", class: "btn alt sm" }, ADB.busy ? "Memuat..." : "Muat semula"); rf.disabled = ADB.busy;
+  rf.addEventListener("click", async () => { await admDashLoad(); renderGuru(); });
+  c.append(el("div", { class: "row", style: "gap:10px;align-items:center;justify-content:space-between" }, el("h3", { style: "margin:0" }, "📊 Dashboard Pentadbir · Inovasi"), rf));
+  if (!kmAdm()) c.appendChild(el("div", { class: "notice warn" }, "Dibuka dengan kod pentadbir: statistik awam dipaparkan. Untuk meluluskan inovasi dan melihat komen, MD serta borang perjanjian, masukkan kunci moderator Firebase di bawah (sekali sahaja pada peranti ini)."));
+  if (!ADB.d && !ADB.busy && !ADB.err) { admDashLoad().then(() => renderGuru()); c.appendChild(el("p", { class: "muted" }, "Memuat data inovasi...")); return; }
+  if (ADB.err) c.appendChild(el("div", { class: "notice warn" }, ADB.err));
+  if (!ADB.d) return;
+  const R = ADB.d.rows, lulus = R.filter((x) => x.st === "lulus"), tunggu = R.filter((x) => x.st === "tunggu");
+  const totN = lulus.reduce((s, x) => s + x.nv.n, 0), totAvg = totN ? lulus.reduce((s, x) => s + x.nv.avg * x.nv.n, 0) / totN : 0;
+  const mdB = lulus.reduce((s, x) => s + (x.mdBln ? x.mdBln.md : 0), 0), mdA = lulus.reduce((s, x) => s + (x.mdAll ? x.mdAll.md : 0), 0);
+  const tile = (v, l) => el("div", { class: "gstat" }, el("b", null, String(v)), el("span", null, l));
+  c.appendChild(el("div", { class: "gstats" }, tile(lulus.length, "Inovasi di peta"), tile(tunggu.length, "Menunggu kelulusan"), tile(totN ? "⭐ " + totAvg.toFixed(1) : "-", totN + " penilaian murid"), tile(ADB.d.key ? mdB + " MD" : "🔒", "MD diterima " + mdMonthName(mdMonth())), tile(ADB.d.key ? mdA + " MD" : "🔒", "MD diterima (keseluruhan)")));
+  if (tunggu.length) c.appendChild(el("div", { class: "notice" }, "⏳ " + tunggu.length + " permohonan inovasi menunggu kelulusan. Semak di bahagian \"Pentadbir: semakan Stesen Inovasi\" di bawah."));
+  const rows = lulus.slice().sort((a, b) => (admLemah(b) - admLemah(a)) || (a.nv.n ? a.nv.avg : 9) - (b.nv.n ? b.nv.avg : 9));
+  if (!rows.length) { c.appendChild(el("p", { class: "muted" }, "Belum ada inovasi yang diluluskan.")); return; }
+  c.appendChild(el("p", { class: "muted", style: "font-size:13px;margin:0" }, "Disusun: inovasi yang kurang menarik minat murid (⚠: purata penilaian di bawah 3, atau kurang 10% pelawat menggunakannya) dipaparkan dahulu."));
+  rows.forEach((x) => {
+    const d = el("div", { class: "card", style: "gap:4px;padding:10px" + (admLemah(x) ? ";border-color:#ff9f43" : "") });
+    const stars = x.nv.n ? "⭐ " + x.nv.avg.toFixed(1) + " (" + x.nv.n + ")" : "⭐ belum dinilai";
+    d.append(el("b", null, (admLemah(x) ? "⚠ " : "") + x.tj + " · " + (SUBJS[x.sj || "tw"] ? SUBJS[x.sj || "tw"].subjek : "")), el("div", { style: "font-size:13px" }, (x.n || "-") + " · " + (x.sk || "-") + (DATA.negeri[x.pn] ? " · 📍 " + DATA.negeri[x.pn].nama : "") + ((x.hg | 0) ? " · " + x.hg + " MD/hari" : " · percuma")));
+    d.appendChild(el("div", { style: "font-size:14px" }, stars + " · 👁 " + x.lawat + " pelawat · 👍 " + x.suka + " · 🔗 " + x.klik + " guna" + (x.mdAll ? " · 🪙 " + x.mdBln.md + " MD bulan ini / " + x.mdAll.md + " MD keseluruhan (" + x.mdAll.murid + " murid)" : "")));
+    if (ADB.d.key) {
+      if (x.kom.length) {
+        const op = !!ADB.open[x.id], tg = el("button", { type: "button", class: "btn alt sm" }, (op ? "Sembunyi" : "Lihat") + " komen murid (" + x.kom.length + ")");
+        tg.addEventListener("click", () => { ADB.open[x.id] = !op; renderGuru(); }); d.appendChild(tg);
+        if (op) { const ul = el("ul", { style: "margin:4px 0;padding-left:18px;font-size:13px" }); x.kom.slice(0, 20).forEach((k) => ul.appendChild(el("li", null, "“" + k.k + "” — " + (k.n || "murid") + (k.t ? " · " + new Date(k.t).toLocaleDateString("ms-MY") : "")))); d.appendChild(ul); }
+      } else d.appendChild(el("div", { class: "muted", style: "font-size:13px" }, "Tiada komen murid."));
+      if (x.janji) d.appendChild(el("div", { class: "muted", style: "font-size:12px" }, "📝 Perjanjian: " + x.janji.nm + " · " + x.janji.hp + (x.janji.t ? " · " + new Date(x.janji.t).toLocaleDateString("ms-MY") : "")));
+    }
+    c.appendChild(d);
+  });
+}
+function admKunciBox(box) {
+  const c = el("div", { class: "card", style: "gap:8px;margin:8px 0;max-width:640px" });
+  const k = el("input", { type: "password", placeholder: "Kunci moderator Firebase", autocomplete: "off", style: "max-width:320px" }), ok = el("button", { type: "button", class: "btn sm" }, "Simpan pada peranti ini"), out = el("span", { class: "muted", style: "font-size:13px" });
+  ok.addEventListener("click", async () => {
+    const v = k.value.trim(); if (!v) return; try { localStorage.setItem("gt-km-adm", v); } catch (e) { /* abaikan */ }
+    try { await kmAdmReq("GET", "stesen_janji"); ADB.d = null; STN.adm = null; toast("Kunci moderator disahkan.", "ok"); renderGuru(); }
+    catch (e) { try { localStorage.removeItem("gt-km-adm"); } catch (x) { /* abaikan */ } out.textContent = "Kunci tidak sah (kod " + (e.code || "rangkaian") + ")."; }
+  });
+  c.append(el("b", null, "🔑 Kunci moderator (untuk lulus/tolak dan data peribadi)"), el("p", { class: "muted", style: "margin:0;font-size:13px" }, "Kunci hanya disimpan pada peranti ini dan tidak pernah dimasukkan ke dalam kod aplikasi."), el("div", { class: "row", style: "gap:8px;align-items:center" }, k, ok, out));
+  box.appendChild(c);
+}
+function guruOk() { try { return !!((AUTH.guru && AUTH.guru()) || kmAdm() || admKod() || guruKod()); } catch (e) { return false; } }
 function guruUi() {
   const ok = guruOk(); document.body.classList.toggle("gv", ok);
   const b = document.getElementById("guruBtn"); if (b) b.hidden = !(ok || gtRole() === "guru");
@@ -18204,30 +18337,32 @@ function guruUi() {
 function guruGate(box) {
   const c = el("div", { class: "ggate" });
   c.append(el("h3", { style: "margin:0" }, "🔐 Log masuk DELIMa diperlukan"), el("p", { style: "margin:0" }, "Ruang Guru, Peta Operasi dan alat PdPc hanya untuk guru yang disahkan dengan akaun DELIMa (@moe-dl.edu.my)."));
-  if (!AUTH.on()) c.append(el("div", { class: "notice warn" }, "Log masuk DELIMa sedang diaktifkan oleh pentadbir sistem. Ruang Guru akan dibuka sebaik sahaja ia sedia."));
+  if (!AUTH.on()) c.append(el("div", { class: "notice" }, "Sementara log masuk DELIMa belum diaktifkan, guru boleh masuk dengan kod guru daripada pentadbir Meta Didik."), kodBox("guru", "🎓 Kod guru", "Dapatkan kod daripada pentadbir Meta Didik. Selepas masuk, isi borang perjanjian ringkas dan hantar inovasi anda untuk kelulusan."));
   else { const host = el("div", { style: "min-height:44px" }); c.appendChild(host); AUTH.button(host, () => { toast("Akaun DELIMa disahkan. Selamat datang, Cikgu!", "ok"); STN.mine = undefined; MD.me = undefined; guruUi(); renderGuru(); }, (m) => toast(m, "bad")); }
   box.appendChild(c);
   const adm = el("details", { class: "card", style: "margin-top:14px;max-width:640px" }); adm.appendChild(el("summary", { style: "cursor:pointer;font-weight:700" }, "Pentadbir sistem")); box.appendChild(adm);
+  adm.appendChild(kodBox("adm", "📊 Dashboard Pentadbir", "Masukkan kod pentadbir untuk membuka Dashboard Pentadbir."));
   try { guruAdminBox(adm); } catch (e) { /* abaikan */ }
 }
 function renderGuru() {
   const box = $("guruBody"); if (!box) return; box.textContent = ""; guruUi();
   if (!guruOk()) { guruGate(box); return; }
-  const tabs = [["inovasi", "💡 Inovasi saya"], ["soalan", "📝 Bank soalan"], ["kolam", "🐟 Kolam murid"], ["papan", "📊 Papan pemuka"], ["peta", "🗺 Peta operasi PdPc"]].concat(kmAdm() ? [["admin", "⚙ Pentadbir"]] : []);
+  const tabs = [["inovasi", "💡 Inovasi saya"], ["soalan", "📝 Bank soalan"], ["kolam", "🐟 Kolam murid"], ["papan", "📊 Papan pemuka"], ["peta", "🗺 Peta operasi PdPc"]].concat(kmAdm() || admKod() ? [["admin", "📊 Dashboard Pentadbir"]] : []);
   const bar = el("div", { class: "gtabs", role: "tablist" });
   tabs.forEach(([k, l]) => {
     const b = el("button", { type: "button", "aria-pressed": String(GTAB.t === k) }, l);
     b.addEventListener("click", () => { if (k === "peta") { setView("map"); setTimeout(() => { const h = $("gvMapH"); if (h) h.scrollIntoView({ behavior: "smooth" }); }, 80); return; } GTAB.t = k; renderGuru(); });
     bar.appendChild(b);
   });
-  const g = AUTH.guru(), hd = el("div", { class: "row", style: "gap:10px;align-items:center;margin-bottom:6px" }, el("span", { class: "muted" }, g ? "✔ DELIMa: " + g.em : "Pentadbir (kunci moderator)"));
+  const g = AUTH.guru(), hd = el("div", { class: "row", style: "gap:10px;align-items:center;margin-bottom:6px" }, el("span", { class: "muted" }, g ? "✔ DELIMa: " + g.em : admKod() ? "📊 Pentadbir" + (kmAdm() ? " (kunci moderator aktif)" : "") : kmAdm() ? "Pentadbir (kunci moderator)" : "🎓 Guru (kod sementara)"));
   if (g) { const lo = el("button", { type: "button", class: "btn alt sm" }, "Log keluar"); lo.addEventListener("click", () => { AUTH.out(); STN.mine = undefined; MD.me = undefined; guruUi(); renderGuru(); }); hd.appendChild(lo); }
   hd.appendChild(gelPick());
+  if (!g && (guruKod() || admKod())) { const lo = el("button", { type: "button", class: "btn alt sm" }, "Keluar"); lo.addEventListener("click", kodKeluar); hd.appendChild(lo); }
   box.append(hd, bar);
   if (GTAB.t === "inovasi") { try { stnGuruBox(box); mdGuruBox(box); } catch (e) { console.error(e); } }
   else if (GTAB.t === "soalan") guruSoalanTab(box);
   else if (GTAB.t === "kolam") guruKolamTab(box);
-  else if (GTAB.t === "admin" && kmAdm()) { try { guruAdminBox(box); sqbAdminBox(box); stnAdminBox(box); mdAdminBox(box); iptAdminBox(box); } catch (e) { console.error(e); } }
+  else if (GTAB.t === "admin" && (kmAdm() || admKod())) { try { admDashBox(box); if (!kmAdm()) admKunciBox(box); else { stnAdminBox(box); guruAdminBox(box); sqbAdminBox(box); mdAdminBox(box); iptAdminBox(box); } } catch (e) { console.error(e); } }
   else renderGuruDash(box);
 }
 function renderGuruDash(box) {
