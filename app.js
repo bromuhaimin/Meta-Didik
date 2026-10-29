@@ -346,7 +346,7 @@ if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.
 if (SUBJ === "bm") { DATA.tema = DATA_BM.tema; DATA.topik = DATA_BM.topik; DATA.soalan = DATA_BM.soalan; }
 if (SUBJ === "bi") { DATA.tema = DATA_BI.tema; DATA.topik = DATA_BI.topik; DATA.soalan = DATA_BI.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v18.25"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = SUBJS[SUBJ].nama + " \u00b7 v18.26"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -2842,6 +2842,7 @@ function dgOpen(tid) {
   dwSetup();
 }
 function dgClose() {
+  setTimeout(metaBack, 0);
   dwStop(); DW.mode = "setup"; DW.on = false; if (DW.shopEl) { DW.shopEl.remove(); DW.shopEl = null; } window.removeEventListener("resize", dwFit);
   cancelAnimationFrame(DG.raf); DG.raf = 0; clearInterval(DG.musT); DG.open = false; DG.g = null; DG.mode = "setup"; DG.keys = {}; DG.touch = {};
   if (DG.root) { DG.root.hidden = true; DG.root.textContent = ""; }
@@ -4839,6 +4840,7 @@ function bzOpen(tid) {
   window.addEventListener("keydown", bzKey, true); bzSetup();
 }
 function bzClose() {
+  setTimeout(metaBack, 0);
   clearInterval(BZ.tm); BZ.tm = 0; BZ.open = false; BZ.g = null;
   if (BZ.root) { BZ.root.hidden = true; BZ.root.textContent = ""; }
   document.body.classList.remove("ar-lock"); if (typeof arFsBtn === "function") arFsBtn(false);
@@ -6965,7 +6967,7 @@ function lgRoot() {
    Dibuka daripada butang di peta utama; dunia.js dimuat hanya apabila diperlukan. */
 /* v17.91: avatar 3D dikongsi Gudang dan META DIDIK; dimuat apabila perlu */
 /* v18.4: versi aplikasi untuk memecah cache skrip (Safari/ikon skrin utama iPhone menyimpan salinan lama) */
-const APP_VER = "18.25";
+const APP_VER = "18.26";
 function av3Load(cb) {
   if (window.AV3) { cb(); return; }
   if (typeof THREE === "undefined") return;
@@ -6985,14 +6987,110 @@ function lmOpen(tid) {
   s.onerror = () => { lmOpen.busy = false; s.remove(); toast("META DIDIK tidak dapat dimuatkan. Semak sambungan internet dan cuba lagi.", "warn"); };
   document.head.appendChild(s);
 }
+/* ---------- v18.26: butang Meta Didik di atas paparan utama ----------
+   Tekan -> kesan disedut ke dunia metaverse -> pilih subjek (3 dibuka, lain dikunci) -> masuk Meta Didik.
+   Menukar subjek memuat semula aplikasi; bendera gt-auto-meta membuka Meta Didik terus selepas dimuat semula. */
+const SJ_ICO = { tw: "🕌", pi: "📗", p3: "📘", ba: "🔤", sj: "🏛", sc: "🔬", mt: "➗", bm: "📝", bi: "🔠" };
+function mdWarp(cb, txt) {
+  const old = document.getElementById("mdWarp"); if (old) old.remove();
+  const ov = el("div", { id: "mdWarp", role: "presentation" }), cv = el("canvas"), t = el("div", { class: "mdw-t" }, txt || "MEMASUKI META DIDIK");
+  ov.append(cv, t); document.body.appendChild(ov);
+  const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches, dur = reduce ? 500 : 1700;
+  const W = cv.width = Math.round(innerWidth * Math.min(2, devicePixelRatio || 1)), H = cv.height = Math.round(innerHeight * Math.min(2, devicePixelRatio || 1)), x = cv.getContext("2d");
+  const st = []; for (let i = 0; i < 420; i++) st.push({ a: Math.random() * 6.283, r: Math.random() * 0.9 + 0.02, z: Math.random(), h: 180 + Math.random() * 120 });
+  /* bunyi deruan: hingar ditapis menaik seperti disedut */
+  try { if (!(typeof BL !== "undefined" && BL.mute) && lgAC()) { lgNz({ ft: "bandpass", f0: 180, f1: 3800, q: 1.4, d: dur / 1000, at: 0.5, vol: 0.55 }); lgTn({ t: "sine", f: 90, f1: 520, d: dur / 1000, vol: 0.25, at: 0.3 }); } } catch (e) { /* abaikan */ }
+  const t0 = performance.now(); let raf = 0;
+  const frame = (now) => {
+    const k = Math.min(1, (now - t0) / dur), sp = 0.004 + k * k * 0.09, cx = W / 2, cy = H / 2, R = Math.hypot(W, H) / 2;
+    x.fillStyle = "rgba(2,3,12," + (0.35 - k * 0.2) + ")"; x.fillRect(0, 0, W, H);
+    for (const s of st) {
+      const z0 = s.z; s.z -= sp; if (s.z <= 0.01) { s.z = 1; s.r = Math.random() * 0.9 + 0.02; }
+      const p0 = s.r / z0 * 0.18, p1 = s.r / s.z * 0.18; if (p1 > 1.6) continue;
+      x.strokeStyle = "hsla(" + (s.h + k * 60) + ",95%," + (60 + k * 25) + "%," + Math.min(1, 0.3 + (1 - s.z)) + ")"; x.lineWidth = 1 + (1 - s.z) * 3 * (1 + k);
+      x.beginPath(); x.moveTo(cx + Math.cos(s.a) * p0 * R, cy + Math.sin(s.a) * p0 * R); x.lineTo(cx + Math.cos(s.a) * p1 * R, cy + Math.sin(s.a) * p1 * R); x.stroke();
+    }
+    const gl = x.createRadialGradient(cx, cy, 0, cx, cy, R * (0.08 + k * k * 1.1)); gl.addColorStop(0, "rgba(255,255,255," + (0.2 + k * 0.8) + ")"); gl.addColorStop(0.4, "rgba(111,224,166," + k * 0.4 + ")"); gl.addColorStop(1, "rgba(90,120,255,0)");
+    x.fillStyle = gl; x.fillRect(0, 0, W, H);
+    if (k < 1) raf = requestAnimationFrame(frame); else { ov.style.transition = "opacity .35s"; ov.style.opacity = "0"; setTimeout(() => ov.remove(), 380); if (cb) cb(); }
+  };
+  raf = requestAnimationFrame(frame); void raf;
+}
+function mdPick() {
+  const old = document.getElementById("mdPick"); if (old) old.remove();
+  const ov = el("div", { id: "mdPick", role: "dialog", "aria-modal": "true", "aria-label": "Pilih subjek" }), g = el("div", { class: "mdp-g" });
+  const close = () => { ov.remove(); document.removeEventListener("keydown", esc, true); };
+  const esc = (e) => { if (e.key === "Escape") { e.preventDefault(); close(); } };
+  Object.keys(SUBJS).sort((a, b) => sjLocked(a) - sjLocked(b)).forEach((k) => {
+    const s = SUBJS[k], lock = sjLocked(k), b = el("button", { type: "button", class: "mdp-c" + (lock ? " lock" : "") + (k === SUBJ ? " cur" : "") }, el("i", { "aria-hidden": "true" }, SJ_ICO[k] || "📚"), el("b", null, s.subjek), el("span", null, lock ? "Akan dibuka tidak lama lagi" : s.tag));
+    b.addEventListener("click", () => {
+      if (lock) { sjAskCode(k); return; }
+      close();
+      if (k === SUBJ) { lmOpen(""); return; }
+      try { localStorage.setItem("gt-auto-meta", "1"); } catch (e) { /* abaikan */ }
+      setSubject(k);
+    });
+    g.appendChild(b);
+  });
+  const x = el("button", { type: "button", class: "mdp-x" }, "Kembali"); x.addEventListener("click", close);
+  ov.appendChild(el("div", { class: "mdp-in" }, el("h2", null, "Pilih subjek"), el("p", { class: "mdp-s" }, "Dunia Meta Didik akan dibina mengikut tajuk subjek pilihan anda."), g, x));
+  document.body.appendChild(ov); document.addEventListener("keydown", esc, true);
+  try { const f = ov.querySelector(".mdp-c.cur") || ov.querySelector(".mdp-c:not(.lock)"); if (f) f.focus(); } catch (e) { /* abaikan */ }
+}
+function mdGo() {
+  if (typeof S !== "undefined" && S && S.running) { toast("Selesaikan atau keluar daripada misi dahulu.", "warn"); return; }
+  if (window.LMX && window.LMX.on) return;
+  try { if (window.AV3 == null) av3Load(() => {}); } catch (e) { /* abaikan */ }
+  mdWarp(mdPick);
+}
 function lmBtnInit() {
-  const row = document.querySelector(".mnmore"); if (!row) return;
-  let b = document.getElementById("dmBtn");
-  if (!b) { b = el("button", { type: "button", id: "dmBtn", title: "Dunia maya 3D: jelajah peta Malaysia bersama rakan dan jawab semua tajuk subjek ini" }, "🌏 META DIDIK"); b.dataset.ok = "1"; b.addEventListener("click", () => lmOpen("")); }
-  if (row.firstChild !== b) row.insertBefore(b, row.firstChild);
+  const b = document.getElementById("mdGo"); if (b && !b.dataset.ok) { b.dataset.ok = "1"; b.addEventListener("click", mdGo); }
 }
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", lmBtnInit); else setTimeout(lmBtnInit, 0);
-setTimeout(lmBtnInit, 700);
+/* selepas menukar subjek melalui pemilih: terus masuk Meta Didik */
+setTimeout(() => {
+  let auto = false; try { auto = localStorage.getItem("gt-auto-meta") === "1"; localStorage.removeItem("gt-auto-meta"); } catch (e) { auto = false; }
+  if (auto && P && P.nama) mdWarp(() => lmOpen(""), SUBJS[SUBJ].subjek.toUpperCase());
+}, 900);
+/* kembali ke Meta Didik selepas permainan yang dibuka dari dunia itu (Lagenda, Busana, Dunia Ilmu, Amali) */
+/* v18.26: misi kendiri murid dimainkan dalam Meta Didik; panel tajuk hanya menyimpan alat PdPc guru */
+function mdKendiri() {
+  const b = el("button", { type: "button", class: "btn" }, "🌏 Main dalam Meta Didik"); b.addEventListener("click", mdGo);
+  return el("div", { class: "row k" }, el("span", { class: "muted", style: "font-size:13px;flex:1 1 220px" }, "Tempur & Lagenda di kem tentera, Amali di masjid, Dunia Ilmu di perpustakaan, Busana di butik dan Nelayan di jeti."), b);
+}
+function metaBack() { if (window.LMX && window.LMX.resume && !window.LMX.on) setTimeout(() => lmOpen(""), 80); }
+/* ---------- testimoni: komen murid dan guru dipaparkan terus di paparan utama ---------- */
+const TS = { i: 0, t: 0, hold: false };
+function mdTesti() {
+  const box = document.getElementById("testi"); if (!box) return;
+  const list = (KM.list || []).filter((c) => c && c.m && c.m.length >= 8 && !(KM.rep && KM.rep[c.id] >= 3)).slice(0, 24);
+  if (!list.length) { box.hidden = true; return; }
+  box.hidden = false; box.textContent = "";
+  const add = el("button", { type: "button", class: "btn sm" }, "✍ Tulis testimoni"); add.addEventListener("click", () => setView("komen"));
+  const tr = el("div", { class: "testi-tr", tabindex: "0", "aria-label": "Senarai testimoni, leret untuk melihat lagi" }), dots = el("div", { class: "testi-d" });
+  const COL = ["#ffd45a", "#6fe0a6", "#5ad1ff", "#b48bff", "#ff9f7a"];
+  list.forEach((c, i) => {
+    const nm = cleanName(c.n || "") || "Pengguna", guru = /guru/i.test(c.r || ""), card = el("article", { class: "testi-c", tabindex: "0" });
+    card.append(el("p", null, c.m), el("div", { class: "testi-w" }, el("span", { class: "testi-av", style: "background:" + COL[hashStr(nm) % COL.length] }, nm.charAt(0).toUpperCase()), el("div", null, el("b", null, nm, el("span", { class: "testi-r" + (guru ? " guru" : "") }, guru ? "GURU" : (c.r || "MURID").toUpperCase())), el("small", null, kmAgo(c.t)))));
+    const tog = () => { card.classList.toggle("open"); };
+    card.addEventListener("click", tog); card.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tog(); } });
+    tr.appendChild(card);
+    const d = el("i", { role: "button", "aria-label": "Testimoni " + (i + 1) }); d.addEventListener("click", () => go(i)); dots.appendChild(d);
+  });
+  const cards = () => [...tr.children];
+  const mark = () => { const i = TS.i; cards().forEach((c, k) => c.classList.toggle("on", k === i)); [...dots.children].forEach((d, k) => d.classList.toggle("on", k === i)); };
+  const go = (i) => { const n = cards().length; TS.i = (i + n) % n; const c = cards()[TS.i]; if (c) tr.scrollTo({ left: c.offsetLeft - tr.offsetLeft, behavior: "smooth" }); mark(); };
+  const prev = el("button", { type: "button", class: "ar", "aria-label": "Sebelumnya" }, "‹"), next = el("button", { type: "button", class: "ar", "aria-label": "Seterusnya" }, "›");
+  prev.addEventListener("click", () => go(TS.i - 1)); next.addEventListener("click", () => go(TS.i + 1));
+  ["pointerenter", "touchstart", "focusin"].forEach((k) => tr.addEventListener(k, () => { TS.hold = true; }, { passive: true }));
+  ["pointerleave", "focusout"].forEach((k) => tr.addEventListener(k, () => { TS.hold = false; }));
+  tr.addEventListener("scroll", () => { clearTimeout(TS.sc); TS.sc = setTimeout(() => { const L = tr.scrollLeft, cs = cards(); let b = 0; cs.forEach((c, k) => { if (Math.abs(c.offsetLeft - tr.offsetLeft - L) < Math.abs(cs[b].offsetLeft - tr.offsetLeft - L)) b = k; }); TS.i = b; mark(); }, 120); }, { passive: true });
+  box.append(el("div", { class: "testi-h" }, el("div", null, el("b", null, "💬 Kata mereka tentang Meta Didik"), el("br"), el("span", null, list.length + " testimoni terkini daripada murid dan guru")), add), tr, el("div", { class: "testi-n" }, prev, dots, next));
+  TS.i = Math.min(TS.i, list.length - 1); mark();
+  clearInterval(TS.t); TS.t = setInterval(() => { if (!TS.hold && !document.hidden && UI.view === "map" && !box.hidden) go(TS.i + 1); }, 5000);
+}
+/* muat komen sebaik sahaja pangkalan data sedia (tanpa perlu membuka menu Komen) */
+(function tsBoot(n) { if (typeof Net !== "undefined" && Net.fb && FB.url) { kmLoad(); return; } if (n < 40) setTimeout(() => tsBoot(n + 1), 1000); })(0);
 function lgOpen(tid) {
   LG.tid = tid; LG.open = true; document.body.classList.add("ar-lock"); lgPrefLoad(); LG.sel.topics = [];
   const r = lgRoot(); r.hidden = false; arFsBtn(true);
@@ -7000,6 +7098,7 @@ function lgOpen(tid) {
   lgSetup();
 }
 function lgClose() {
+  setTimeout(metaBack, 0);
   cancelAnimationFrame(LG.raf); lgMusic(false); LG.open = false; LG.g = null; LG.shop = false; lgQuizEnd();
   if (LG.root) { LG.root.hidden = true; LG.root.textContent = ""; }
   document.body.classList.remove("ar-lock"); arFsBtn(false);
@@ -7352,7 +7451,7 @@ function renderPanel() {
     el("div", { class: "tagline" }, SUBJ !== "tw" ? "Tingkatan " + tm.tingkatan + " | " + tm.nama + " | " + (SUBJ === "pi" || SUBJ === "p3" ? "Pelajaran " : "Misi ") + t.kod : "Tingkatan " + tm.tingkatan + " | Tema " + tm.id.split("-")[1] + " | Misi " + t.kod),
     el("h3", null, t.nama),
     sr,
-    el("div", { class: "mgl k" }, "Kendiri murid"), el("div", { class: "row k" }, go, prb, lgb, dwb, bzb), el("div", { class: "mgl pd" }, "PdPc guru"), el("div", { class: "row pd" }, slb, arb, jtb, blb, nlb));
+    el("div", { class: "mgl k" }, "Misi kendiri murid"), mdKendiri(), el("div", { class: "mgl pd" }, "PdPc guru"), el("div", { class: "row pd" }, slb, arb, jtb, blb, nlb));
   decorModes(p);
   // pilihan misi lain dalam negeri yang sama
   const sibs = DATA.topik.filter((x) => x.negeri === t.negeri);
@@ -9980,9 +10079,8 @@ function themePal() {
   const th = themeOf();
   if (th && th.pal) { if (th.pal.wall) PAL.wall = th.pal.wall.slice(); if (th.pal.roof) PAL.roof = th.pal.roof.slice(); }
 }
-function themeLine(t) {
-  const th = THEMES[t.negeri];
-  return th ? el("div", { class: "muted", style: "color:var(--amber)" }, th.ik + " " + th.n + ": " + th.d) : document.createTextNode("");
+function themeLine() {
+  return el("div", { class: "muted", style: "color:var(--amber)" }, "🎖 Kem latihan tentera: berek, ibu pejabat, menara kawalan, kubu guni pasir dan pagar dawai berduri.");
 }
 function updateTheme(dt) { for (const f of themeAnim) f(dt); }
 
@@ -10451,8 +10549,91 @@ function closeShop() {
   try { updateHud(); } catch (e) { /* abaikan */ }
 }
 
+/* ---------- v18.26: medan Tempur dan Lagenda ialah tapak kem tentera ----------
+   Berek berbumbung hijau zaitun, ibu pejabat dengan Jalur Gemilang, surau kem, menara kawalan, pagar dawai berduri,
+   kubu guni pasir, trak, khemah, helipad dan padang kawad. Logik permainan (rintangan, tempat berlindung) dikekalkan. */
+const CAMP_PAL = { wall: [0xe2dcc6, 0xd6cfb4, 0xcfd3bf, 0xe8e1cc], roof: [0x4b5a2e, 0x56663a, 0x3f4f2e], crate: [0xb5a27a, 0xa8966e, 0xbfae84] };
+let CAMP_FLAG = null;
+function campFlagTex() {
+  if (CAMP_FLAG) return CAMP_FLAG;
+  CAMP_FLAG = makeTex(140, 70, (g, w, h) => {
+    for (let i = 0; i < 14; i++) { g.fillStyle = i % 2 ? "#ffffff" : "#cc0000"; g.fillRect(0, i * h / 14, w, h / 14 + 1); }
+    g.fillStyle = "#010066"; g.fillRect(0, 0, w / 2, h * 8 / 14);
+    g.fillStyle = "#ffcc00"; g.beginPath(); g.arc(w * 0.2, h * 0.29, h * 0.2, 0, 6.283); g.fill(); g.fillStyle = "#010066"; g.beginPath(); g.arc(w * 0.235, h * 0.29, h * 0.17, 0, 6.283); g.fill();
+    g.fillStyle = "#ffcc00"; g.beginPath(); for (let i = 0; i < 28; i++) { const a = i * Math.PI / 14 - Math.PI / 2, r = i % 2 ? h * 0.06 : h * 0.15; g.lineTo(w * 0.36 + Math.cos(a) * r, h * 0.29 + Math.sin(a) * r); } g.fill();
+  });
+  CAMP_FLAG.wrapS = CAMP_FLAG.wrapT = T3.ClampToEdgeWrapping; return CAMP_FLAG;
+}
+function campPrism() { if (!SH.prism) { const g = new T3.CylinderGeometry(1, 1, 1, 3); g.rotateX(-Math.PI / 2); g.rotateY(Math.PI / 2); SH.prism = g; } return SH.prism; } /* paksi X, puncak +Y */
+function campRoof(x, z, w, d, h, color) {
+  /* bumbung pelana memanjang ikut sisi panjang */
+  const long = w >= d, r = put(campPrism(), lamF(color), x, h + 0.8, z, (long ? w : d) + 0.8, 1.6, (long ? d : w) * 0.62); if (!long) r.rotation.y = Math.PI / 2; return r;
+}
+function campBerek(x, z, w, d, h, rnd) {
+  shelters.push({ x: x, z: z, w: w, d: d, h: h, mesh: lastBox, ob: obstacles[obstacles.length - 1] });
+  const G = shapes(); campRoof(x, z, w, d, h, CAMP_PAL.roof[Math.floor(rnd() * CAMP_PAL.roof.length)]);
+  put(G.box, lam(0x3f4f2e), x, 0.25, z, w + 0.2, 0.5, d + 0.2);                                   /* tapak konkrit hijau */
+  put(G.box, lam(0x4a3a2a), x, 1.1, z + d / 2 + 0.04, 1.1, 2.2, 0.08);
+  const wm = lamE(0xcfe6f2, 0x1a2a3a); for (const k of [-0.35, -0.15, 0.15, 0.35]) put(G.box, wm, x + w * k, 2, z + d / 2 + 0.04, 0.8, 0.7, 0.08);
+}
+function campHQ(x, z, w, d, h) {
+  shelters.push({ x: x, z: z, w: w, d: d, h: h, mesh: lastBox, ob: obstacles[obstacles.length - 1] });
+  const G = shapes(); put(G.box, lamF(0x4b5a2e), x, h + 0.25, z, w + 0.6, 0.5, d + 0.6);
+  put(G.box, lam(0x3a2a1a), x, 1.2, z + d / 2 + 0.04, 1.8, 2.4, 0.08); put(G.box, lamF(0xd9c36a), x, h - 0.6, z + d / 2 + 0.05, w * 0.6, 0.7, 0.08); /* papan nama */
+  const fx = x + w / 2 + 2.4, fz = z + d / 2 + 2.4; put(G.cyl, lam(0xdddddd), fx, 4.5, fz, 0.09, 9, 0.09);
+  const fl = new T3.Mesh(new T3.PlaneGeometry(2.8, 1.4), new T3.MeshBasicMaterial({ map: campFlagTex(), side: T3.DoubleSide })); fl.position.set(fx + 1.45, 8.2, fz); decorG.add(fl);
+  themeAnim.push((dt) => { fl.rotation.y = Math.sin(performance.now() / 600) * 0.12; });
+  colBox(fx, fz, 0.5, 9, 0.5);
+}
+function campSurau(x, z, w, d, h) { surauDecor(x, z, w, d, h); }
+function campSandbag(x, z, len, rot) {
+  /* kubu guni pasir: dinding rendah berlapis */
+  const G = shapes(), m = lamF(0xb5a27a), c = Math.cos(rot), s = Math.sin(rot), n = Math.max(2, Math.round(len / 1.1));
+  for (let row = 0; row < 3; row++) for (let i = 0; i < n - (row % 2); i++) { const t = -len / 2 + 0.55 + i * (len - 1.1) / Math.max(1, n - 1) + (row % 2) * 0.55; const b = put(G.box, m, x + c * t, 0.28 + row * 0.42, z - s * t, 1.05, 0.42, 0.75); b.rotation.y = rot; }
+  colBox(x, z, Math.abs(c) * len + Math.abs(s) * 0.8, 1.3, Math.abs(s) * len + Math.abs(c) * 0.8);
+}
+function campTruck(x, z, rot) {
+  const g = new T3.Group(); g.position.set(x, 0, z); g.rotation.y = rot; decorG.add(g);
+  const O = lamF(0x55623a), D = lamF(0x2a2a2a);
+  put(shapes().box, O, 0, 1.6, -0.6, 2.4, 1.8, 3.6, g); put(shapes().box, lamF(0x4b5a2e), 0, 2.7, -0.6, 2.5, 0.25, 3.7, g);  /* bak berbumbung kanvas */
+  put(shapes().box, O, 0, 1.4, 1.9, 2.3, 1.8, 1.6, g); put(shapes().box, lamE(0xcfe6f2, 0x1a2a3a), 0, 1.9, 2.71, 1.9, 0.7, 0.05, g);
+  for (const [wx, wz] of [[-1.15, -1.8], [1.15, -1.8], [-1.15, 0.4], [1.15, 0.4], [-1.15, 1.9], [1.15, 1.9]]) { const w = put(shapes().cyl, D, wx, 0.5, wz, 0.5, 0.3, 0.5, g); w.rotation.z = Math.PI / 2; }
+  const c = Math.cos(rot), s = Math.sin(rot); colBox(x, z, Math.abs(c) * 2.5 + Math.abs(s) * 5.4, 2.8, Math.abs(s) * 2.5 + Math.abs(c) * 5.4);
+}
+function campTent(x, z, rot) {
+  const t = put(campPrism(), lamF(0x5f6b3d), x, 0.8, z, 5, 1.6, 2.2); t.rotation.y = rot;
+  colBox(x, z, 4.6, 2.4, 4.6);
+}
+function campTower(x, z) {
+  const G = shapes(), W = lam(0x6b5a3c);
+  for (const [dx, dz] of [[-1.1, -1.1], [1.1, -1.1], [-1.1, 1.1], [1.1, 1.1]]) put(G.box, W, x + dx, 3.5, z + dz, 0.3, 7, 0.3);
+  put(G.box, lamF(0x7a6a48), x, 7, z, 3.2, 0.3, 3.2); put(G.box, lamF(0x6b5a3c), x, 7.6, z, 3.2, 0.9, 0.15); put(G.box, lamF(0x6b5a3c), x, 7.6, z + 1.55, 3.2, 0.9, 0.15);
+  const r = put(G.roof, lamF(0x4b5a2e), x, 9.4, z, 2.8, 1.4, 2.8); r.rotation.y = Math.PI / 4;
+  const sl = new T3.Mesh(new T3.CylinderGeometry(0.25, 0.35, 0.5, 8), lamE(0xffffcc, 0x666633)); sl.position.set(x, 8.4, z); decorG.add(sl);
+  colBox(x, z, 2.6, 8, 2.6);
+}
+function campFence() {
+  /* pagar dawai berduri: tiang, jaring dan gegelung kawat pada sempadan */
+  const G = shapes(), postM = lam(0x6f6f6f), net = new T3.MeshBasicMaterial({ color: srgb(0x9aa0a0), transparent: true, opacity: 0.28, side: T3.DoubleSide, depthWrite: false }), coil = new T3.MeshBasicMaterial({ color: srgb(0x8a8f92), wireframe: true });
+  const E = HALF + 3, L = E * 2;
+  for (const [cx, cz, along] of [[0, -E, 1], [0, E, 1], [-E, 0, 0], [E, 0, 0]]) {
+    for (let t = -E; t <= E; t += 8) put(G.box, postM, along ? t : cx, 1.8, along ? cz : t, 0.18, 3.6, 0.18);
+    const p = new T3.Mesh(new T3.PlaneGeometry(L, 3), net); p.position.set(cx, 1.6, cz); if (!along) p.rotation.y = Math.PI / 2; decorG.add(p);
+    const tor = new T3.Mesh(new T3.TorusGeometry(0.4, 0.05, 4, 10), coil);
+    for (let t = -E + 1; t < E; t += 1.6) { const m = tor.clone(); m.position.set(along ? t : cx, 3.8, along ? cz : t); m.rotation.y = along ? 0 : Math.PI / 2; decorG.add(m); }
+  }
+}
+function campGround() {
+  /* padang kawad di tengah (titik mula) dan helipad */
+  const G = shapes(), pad = put(G.box, lamF(0xb8ad8a), 0, 0.02, 0, 22, 0.04, 22); pad.receiveShadow = true;
+  for (const k of [-1, 1]) put(G.box, lamF(0xf2efe6), 0, 0.05, k * 10.6, 22, 0.02, 0.3), put(G.box, lamF(0xf2efe6), k * 10.6, 0.05, 0, 0.3, 0.02, 22);
+}
+function campHelipad(x, z) {
+  const G = shapes(); put(G.cyl, lamF(0x5a5f62), x, 0.03, z, 6, 0.05, 6); put(G.cyl, lamF(0xf2efe6), x, 0.06, z, 5.2, 0.02, 5.2); put(G.cyl, lamF(0x5a5f62), x, 0.07, z, 4.8, 0.02, 4.8);
+  put(G.box, lamF(0xf2efe6), x - 1.4, 0.09, z, 0.6, 0.02, 4); put(G.box, lamF(0xf2efe6), x + 1.4, 0.09, z, 0.6, 0.02, 4); put(G.box, lamF(0xf2efe6), x, 0.09, z, 2.2, 0.02, 0.6);
+}
 function buildWorld(rnd) {
-  themePal();
+  PAL.wall = CAMP_PAL.wall.slice(); PAL.roof = CAMP_PAL.roof.slice(); PAL.crate = CAMP_PAL.crate.slice(); /* v18.26: kem tentera */
   const R = (a, b) => a + rnd() * (b - a);
   const PK = (a) => a[Math.floor(rnd() * a.length)];
   shapes();
@@ -10462,48 +10643,54 @@ function buildWorld(rnd) {
   ground.position.y = -0.3; themeGround = ground;
   missionG.add(ground);
   const fence = 0x6f7a5a;
-  addBox(0, -HALF - 3, HALF * 2 + 12, 1.6, 0.8, fence);
-  addBox(0, HALF + 3, HALF * 2 + 12, 1.6, 0.8, fence);
-  addBox(-HALF - 3, 0, 0.8, 1.6, HALF * 2 + 12, fence);
-  addBox(HALF + 3, 0, 0.8, 1.6, HALF * 2 + 12, fence);
+  /* pagar kem (rintangan) dan hiasan dawai berduri */
+  addBox(0, -HALF - 3, HALF * 2 + 12, 3, 0.4, fence); lastBox.visible = false;
+  addBox(0, HALF + 3, HALF * 2 + 12, 3, 0.4, fence); lastBox.visible = false;
+  addBox(-HALF - 3, 0, 0.4, 3, HALF * 2 + 12, fence); lastBox.visible = false;
+  addBox(HALF + 3, 0, 0.4, 3, HALF * 2 + 12, fence); lastBox.visible = false;
+  campFence(); campGround();
+  /* menara kawalan di empat penjuru */
+  for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) campTower(sx * (HALF - 6), sz * (HALF - 6));
+  /* ibu pejabat, surau kem dan berek */
   let n = 0, guard = 0;
   while (n < 12 && guard++ < 400) {
     const x = R(-HALF + 15, HALF - 15), z = R(-HALF + 15, HALF - 15);
-    const w = R(6, 10), d = R(6, 9), h = 3.4;
-    if (Math.hypot(x, z) < 10 || !freeSpot(x, z, 9)) continue;
-    const wc = n < 2 ? 0xf6f1e3 : PK(PAL.wall);
+    const w = n === 0 ? R(10, 12) : n === 1 ? R(7, 9) : R(9, 13), d = n === 0 ? R(7, 9) : n === 1 ? R(7, 9) : R(5, 6.5), h = n === 0 ? 4.6 : 3.4;
+    if (Math.hypot(x, z) < 16 || !freeSpot(x, z, 9)) continue;
+    const wc = n === 1 ? 0xf6f1e3 : PK(PAL.wall);
     addBox(x, z, w, h, d, wc); BLDG.push({ x: x, z: z, w: w, d: d });
-    if (n < 2) surauDecor(x, z, w, d, h); else houseDecor(x, z, w, d, h, wc, rnd);
+    if (n === 0) campHQ(x, z, w, d, h); else if (n === 1) campSurau(x, z, w, d, h); else campBerek(x, z, w, d, h, rnd);
     n++;
   }
   planRoads();
+  /* kubu guni pasir, trak dan khemah sebagai tempat berlindung */
   n = 0; guard = 0;
-  while (n < 6 && guard++ < 300) {
-    const x = R(-HALF + 10, HALF - 10), z = R(-HALF + 10, HALF - 10), flip = rnd() < 0.5;
-    if (!freeSpot(x, z, 5) || onRoad(x, z, 3)) continue;
-    addBox(x, z, flip ? 2.4 : 6, 2.6, flip ? 6 : 2.4, PK(PAL.crate));
+  while (n < 10 && guard++ < 400) {
+    const x = R(-HALF + 10, HALF - 10), z = R(-HALF + 10, HALF - 10), rot = rnd() < 0.5 ? 0 : Math.PI / 2;
+    if (Math.hypot(x, z) < 14 || !freeSpot(x, z, 5) || onRoad(x, z, 3)) continue;
+    const k = n % 3; if (k === 0) campSandbag(x, z, 6, rot); else if (k === 1) campTruck(x, z, rot + (rnd() < 0.5 ? Math.PI : 0)); else campTent(x, z, rot);
     n++;
   }
   n = 0; guard = 0;
-  while (n < 22 && guard++ < 500) {
-    const x = R(-HALF + 8, HALF - 8), z = R(-HALF + 8, HALF - 8), flip = rnd() < 0.5;
-    if (!freeSpot(x, z, 2.5) || onRoad(x, z, 2.6)) continue;
-    addBox(x, z, flip ? 0.9 : 3.4, 1, flip ? 3.4 : 0.9, 0xcdb87a);
+  while (n < 20 && guard++ < 500) {
+    const x = R(-HALF + 8, HALF - 8), z = R(-HALF + 8, HALF - 8);
+    if (Math.hypot(x, z) < 13 || !freeSpot(x, z, 2.5) || onRoad(x, z, 2.6)) continue;
+    campSandbag(x, z, 3.4, rnd() < 0.5 ? 0 : Math.PI / 2);
     n++;
   }
+  { const hp = tSpot(rnd, 8, 20); if (hp) campHelipad(hp.x, hp.z); }
   n = 0; guard = 0;
-  while (n < 85 && guard++ < 800) {
+  while (n < 45 && guard++ < 800) {
     const x = R(-HALF + 4, HALF - 4), z = R(-HALF + 4, HALF - 4);
-    if (!freeSpot(x, z, 2) || onRoad(x, z, 2.4)) continue;
-    const s = R(0.9, 1.4), palm = rnd() < 0.35;
-    const g = palm ? treePalm(x, z, s * 0.9, rnd) : treeRound(x, z, s, rnd);
+    if (Math.hypot(x, z) < 14 || !freeSpot(x, z, 2) || onRoad(x, z, 2.4)) continue;
+    const s = R(0.9, 1.4);
+    treeRound(x, z, s, rnd);
     obstacles.push({ minx: x - 0.45, maxx: x + 0.45, minz: z - 0.45, maxz: z + 0.45, h: 9 });
     const hit = new T3.Mesh(new T3.CylinderGeometry(0.3, 0.3, 3, 5), new T3.MeshBasicMaterial({ visible: false }));
     hit.position.set(x, 1.5, z); missionG.add(hit); solids.push(hit);
     n++;
   }
-  themeApply(rnd);
-  buildDepots(rnd);
+  buildDepots(rnd); /* v18.26: tema negeri digantikan tapak kem tentera */
 }
 /* hiasan tidak berlanggar: semak, batu, pokok luar pagar, tebing, air, awan, pulau kecil */
 let envG = null, waterTex = null, clouds = [], sunDisc = null, waterM = null, hemiL = null, sunGlow = null, hazeM = null;
@@ -12078,7 +12265,7 @@ function renderKhasPanel(p, kh) {
   bd.addEventListener("click", () => { UI.boardMode = "khas"; UI.khasLv = kh.id; setView("rank"); });
   p.append(close, el("div", { class: "tagline" }, "Latihan khas"), el("h3", null, kh.n),
     el("div", { class: "muted" }, kh.rahsia ? (SUBJ === "tw" ? "Operasi Rahsia Tasawwur Islam Tingkatan 4. " : "Operasi Rahsia Pendidikan Islam Tingkatan 3. ") + khasAll(kh).length + " soalan dalam bank." : "Semua topik " + (kh.tk === "s" ? "Tingkatan 4 dan 5, gaya SPM" : "Tingkatan " + kh.tk) + ". " + khasAll(kh).length + " soalan dalam bank."),
-    sr, el("div", { class: "mgl k" }, "Kendiri murid"), el("div", { class: "row k" }, go, prk, lgk, dwk, bzk), el("div", { class: "mgl pd" }, "PdPc guru"), el("div", { class: "row pd" }, ark, jtk, blk, nlk));
+    sr, el("div", { class: "mgl k" }, "Misi kendiri murid"), mdKendiri(), el("div", { class: "mgl pd" }, "PdPc guru"), el("div", { class: "row pd" }, ark, jtk, blk, nlk));
   decorModes(p);
   const ul = el("ul"); khasT(kh).nota.forEach((x) => ul.appendChild(el("li", null, x)));
   const d = el("details"); d.open = true; d.append(el("summary", { class: "tagline", style: "color:var(--khaki);cursor:pointer" }, "Cara bermain"), ul);
@@ -14197,7 +14384,7 @@ async function kmLoad() {
     if (kmAdm()) { try { const r = (await kmAdmReq("GET", "komen_lapor")) || {}; for (const id in r) KM.rep[id] = Object.keys(r[id] || {}).length; } catch (e) { /* abaikan */ } }
     KM.at = Date.now();
   } catch (e) { KM.err = e.code === 401 || e.code === 403 ? "Peraturan Firebase belum membenarkan bacaan komen. Lihat arahan pemasangan." : "Gagal memuatkan komen. Cuba lagi sebentar."; }
-  KM.loading = false; renderKomen();
+  KM.loading = false; renderKomen(); try { mdTesti(); } catch (e) { /* abaikan */ }
 }
 async function kmPost(name, role, text) {
   text = String(text).replace(/\s+/g, " ").trim(); name = cleanName(name).slice(0, 16);
@@ -14290,7 +14477,8 @@ function renderKomen() {
   box.appendChild(mod);
 }
 
-/* ---------- Pendaftaran guru (v17.59): rekod berasingan di nod guru_daftar ---------- */
+/* ---------- Pendaftaran guru (v17.59): rekod berasingan di nod guru_daftar ----------
+   v18.26: subjek yang diajar disimpan di gt-gsubj (dahulu gt-subj, bertembung dengan subjek aplikasi) */
 function gtRole() { try { return localStorage.getItem("gt-role") === "guru" ? "guru" : "murid"; } catch (e) { return "murid"; } }
 function gtRoleUi() {
   const g = (document.querySelector('input[name="inRole"]:checked') || {}).value === "guru";
@@ -14299,14 +14487,14 @@ function gtRoleUi() {
 }
 function gtRoleInit() {
   const r = gtRole(); document.querySelectorAll('input[name="inRole"]').forEach((x) => { x.checked = x.value === r; x.onchange = gtRoleUi; });
-  try { $("inSubj").value = localStorage.getItem("gt-subj") || ""; } catch (e) { /* abaikan */ }
+  try { $("inSubj").value = localStorage.getItem("gt-gsubj") || ""; } catch (e) { /* abaikan */ }
   gtRoleUi();
 }
 async function gtGuruSync(force) {
   try {
     if (gtRole() !== "guru" || !P.nama || !P.sekolah || !(Net.fb && FB.url)) return;
     const uid = FB.getUid(), t0 = (() => { try { return +localStorage.getItem("gt-guru-t") || 0; } catch (e) { return 0; } })() || Date.now();
-    let subj = ""; try { subj = localStorage.getItem("gt-subj") || ""; } catch (e) { /* abaikan */ }
+    let subj = ""; try { subj = localStorage.getItem("gt-gsubj") || ""; } catch (e) { /* abaikan */ }
     const doc = { n: cleanName(P.nama), sk: cleanSekolah(P.sekolah).slice(0, 60), sid: mySid() || "", ng: P.negeri || "", k: String(P.kelas || "").slice(0, 12), s: subj.slice(0, 40), t: t0, u: Date.now() };
     const sig = [doc.n, doc.sk, doc.ng, doc.k, doc.s].join("|");
     let last = ""; try { last = localStorage.getItem("gt-guru-sig") || ""; } catch (e) { /* abaikan */ }
@@ -14318,7 +14506,7 @@ async function gtGuruSync(force) {
 function gtRoleSave() {
   const r = (document.querySelector('input[name="inRole"]:checked') || {}).value === "guru" ? "guru" : "murid";
   const was = gtRole();
-  try { localStorage.setItem("gt-role", r); localStorage.setItem("gt-subj", String($("inSubj").value || "").replace(/[\u0000-\u001f<>]/g, "").trim().slice(0, 40)); } catch (e) { /* abaikan */ }
+  try { localStorage.setItem("gt-role", r); localStorage.setItem("gt-gsubj", String($("inSubj").value || "").replace(/[\u0000-\u001f<>]/g, "").trim().slice(0, 40)); } catch (e) { /* abaikan */ }
   if (r === "guru") gtGuruSync(true);
   else if (was === "guru" && Net.fb && FB.url) { FB.req("DELETE", "guru_daftar/" + FB.getUid()).catch(() => {}); try { localStorage.removeItem("gt-guru-sig"); } catch (e) { /* abaikan */ } }
 }
@@ -16774,7 +16962,7 @@ function renderPrak() { const box = $("prakBody"); if (box && !box.childElementC
 function hjOpen() { return modCall("prak", "hjOpen", [].slice.call(arguments)); }
 function slOpen() { return modCall("slaid", "slOpen", [].slice.call(arguments)); }
 function slPick() { return modCall("slaid", "slPick", [].slice.call(arguments)); }
-/* v18.25: Selam diganti permainan Nelayan (mod/nelayan.js), dibuka dari jeti nelayan dalam Meta Didik */
+/* v18.26: Selam diganti permainan Nelayan (mod/nelayan.js), dibuka dari jeti nelayan dalam Meta Didik */
 function pcOpen() { return modCall("nelayan", "pcOpen", [].slice.call(arguments)); }
 function srOpen(tid) { return pcOpen(tid); }
 /* muat modul secara senyap selepas aplikasi siap supaya pembukaan pertama pantas */
@@ -16806,6 +16994,7 @@ setTimeout(() => { const go = () => ["prak", "slaid"].forEach((m) => modLoad(m).
   document.addEventListener("focusout", hide); document.addEventListener("pointerdown", hide); window.addEventListener("scroll", hide, true);
 })();
 function setView(v) {
+  if (UI.view === "prak" && v === "map") metaBack(); /* Amali dibuka dari Meta Didik */
   UI.view = v;
   { const f = document.getElementById("kmFab"); if (f) { f.hidden = v !== "map"; if (v === "map") { f.classList.remove("pop"); void f.offsetWidth; f.classList.add("pop"); } } }
   document.body.classList.toggle("vmap", v === "map");
@@ -17091,7 +17280,7 @@ function stnUrlOk(u) { try { const x = new URL(u); return x.protocol === "https:
 function stnClean(s, n) { return String(s || "").replace(/[\u0000-\u001f<>]/g, " ").replace(/\s+/g, " ").trim().slice(0, n); }
 async function stnCount(node, id) { try { const v = await FB.req("GET", node + "/" + id, undefined, "shallow=true"); return v && typeof v === "object" ? Object.keys(v).length : 0; } catch (e) { return 0; } }
 async function stnStats(id) { const r = await Promise.all(["stesen_lawat", "stesen_suka", "stesen_klik"].map((n) => stnCount(n, id))); return { lawat: r[0], suka: r[1], klik: r[2] }; }
-/* v18.25: mod percubaan (sebelum log masuk DELIMa diwajibkan di metadidik.com): tanpa Firebase Auth,
+/* v18.26: mod percubaan (sebelum log masuk DELIMa diwajibkan di metadidik.com): tanpa Firebase Auth,
    identiti guru dan murid ialah ID peranti; e-mel DELIMa guru diisi sendiri dan disemak pentadbir. */
 function stnTrial() { return !AUTH.on(); }
 function stnGuru() {
@@ -17205,7 +17394,7 @@ function stnAdminBox(box) {
   });
 }
 
-/* ---------- v18.25: MD (Meta Didik), mata wang pembelajaran ----------
+/* ---------- v18.26: MD (Meta Didik), mata wang pembelajaran ----------
    Murid memperoleh MD dengan belajar (kuiz, misi, menara) dan tidak boleh membelinya dengan wang.
    Murid membelanjakan MD untuk menggunakan inovasi guru: stesen_guna/<stesen>/<pembayar>/<YYYYMMDD> = { h: harga, t: masa pelayan }.
    Setiap bulan pentadbir menetapkan tabung RM (sewaan tapak, penaja, langganan sekolah) dan mengagihkannya ikut bahagian MD:
@@ -19063,7 +19252,7 @@ function rlDraw() {
   feed.focus({ preventScroll: true });
 }
 function rlInit() {
-  return; /* v18.25: butang Reels dibuang daripada menu utama */
+  return; /* v18.26: butang Reels dibuang daripada menu utama */
   const row = document.querySelector(".mnmore"); if (!row || document.getElementById("rlBtn")) return;
   const b = el("button", { type: "button", id: "rlBtn" }, "Reels"); b.addEventListener("click", rlOpen); row.insertBefore(b, row.firstChild);
 }
@@ -19091,6 +19280,6 @@ const RL_CSS = `
 @media(max-height:560px){.rl-vid{max-height:50vh}}
 `;
 
-/* v18.25: Gudang hanya di sekolah sendiri dalam Meta Didik: dompet membuka Meta Didik */
+/* v18.26: Gudang hanya di sekolah sendiri dalam Meta Didik: dompet membuka Meta Didik */
 document.addEventListener("click", (ev) => { const b = ev.target && ev.target.closest && ev.target.closest("#walletBtn"); if (b && !(typeof S !== "undefined" && S && S.running)) { toast("Belanja MD di Gudang sekolah anda dalam Meta Didik.", "ok"); if (!(window.LMX && window.LMX.on)) lmOpen(""); } });
 
