@@ -819,11 +819,17 @@ function lmMosque(id) {
       for (let i = 0; i < 8; i++) { const a = i / 8 * 6.2832; g.add(lmMesh(lmBox(0.25, 4, 0.25), "#cfe0f2", Math.cos(a) * 5.2, 12, Math.sin(a) * 5.2)); }
       for (const [x, z] of [[-14, -14], [14, -14], [-14, 14], [14, 14]]) lmMinaret(g, x, z, 38, 1.1, W, "#2f6fb5", { bal: "#2f6fb5" });
       r = 16; break;
-    case "wp-negara": { /* Masjid Negara: bumbung payung bintang 16 bucu, menara 73 m */
+    case "wp-negara": { /* Masjid Negara: bumbung payung berlipat 18 bucu, menara 73 m */
       lmWater(g, 15);
       g.add(lmMesh(lmBox(20, 4, 20), W, 0, 2.2, 0)); lmArches(g, 18, 2.6, 2, 10.05, 9, "#5a7a8a");
-      const um = lmMesh(new T.ConeGeometry(11, 3.4, 16), "#5fb5c8", 0, 5.9, 0); g.add(um);
-      const um2 = lmMesh(new T.ConeGeometry(10.6, 3.2, 16), "#3f95ab", 0, 5.8, 0); um2.rotation.y = Math.PI / 16; g.add(um2);
+      const roof = new T.BufferGeometry(), vertices = [], colors = [];
+      for (let i = 0; i < 36; i++) {
+        const edge = (j) => { const a = j * Math.PI / 18, r = j % 2 ? 9.4 : 11; return [Math.cos(a) * r, j % 2 ? 4.8 : 5.5, Math.sin(a) * r]; };
+        vertices.push(0, 8.1, 0, ...edge(i + 1), ...edge(i));
+        const c = new T.Color(i % 2 ? "#378fa5" : "#61b8c7"); for (let j = 0; j < 3; j++) colors.push(c.r, c.g, c.b);
+      }
+      roof.setAttribute("position", new T.Float32BufferAttribute(vertices, 3)); roof.setAttribute("color", new T.Float32BufferAttribute(colors, 3)); roof.computeVertexNormals();
+      g.add(lmMesh(roof, lmMat("#ffffff", { vertexColors: true, side: T.DoubleSide })));
       g.add(lmMesh(lmCyl(1.1, 1.3, 32, 12), W, 13, 16, -6)); const cap = lmMesh(new T.ConeGeometry(2.6, 2.2, 16), "#5fb5c8", 13, 33, -6); g.add(cap);
       r = 14; break; }
     case "mk-selat": /* Masjid Selat Melaka: di atas tiang di laut, kubah keemasan, menara rumah api */
@@ -2843,6 +2849,98 @@ function lmIlmuModel(col) {
   for (const sx of [-1, 1]) { const pg = lmMesh(lmBox(0.75, 0.06, 1), "#fffbe8", sx * 0.4, 1.4, 1.2); pg.rotation.z = sx * 0.25; g.add(pg); }
   return g;
 }
+/* Model mercu tanda berskala permainan; ukuran bukan pelan ukur bangunan. */
+function lmFoldRoof(g, x, z, w, d, y, rise, col) {
+  const a = [-w / 2, 0, -d / 2], b = [w / 2, 0, -d / 2], c = [0, rise, -d / 2];
+  const e = [-w / 2, 0, d / 2], f = [w / 2, 0, d / 2], h = [0, rise, d / 2];
+  const points = [a, e, c, e, h, c, c, h, b, h, f, b, a, c, b, e, f, h];
+  const geo = new T.BufferGeometry(); geo.setAttribute("position", new T.Float32BufferAttribute(points.flat(), 3)); geo.computeVertexNormals();
+  const roof = lmMesh(geo, col, x, y, z); g.add(roof); return roof;
+}
+function lmLandmarkModel(id, col) {
+  const mosque = { "si-zahir": "kd-zahir", "si-kapitan": "pg-kapitan", "si-ubudiah": "pk-ubudiah", "si-biru": "sl-biru", "si-negara": "wp-negara", "si-selat": "mk-selat", "si-abubakar": "jh-abubakar", "si-kk": "sb-masjidkk", "si-ns": "ns-seremban" };
+  if (mosque[id]) {
+    const m = lmMosque(mosque[id]), bounds = new T.Box3().setFromObject(m.g);
+    const scale = 9.5 / Math.max(14, m.r, Math.abs(bounds.min.x), Math.abs(bounds.max.x), Math.abs(bounds.min.z), Math.abs(bounds.max.z));
+    m.g.scale.setScalar(scale);
+    m.g.userData.landmark = { height: new T.Box3().setFromObject(m.g).max.y, cols: [{ x: 0, z: 0, r: 4.5, h: 6 }] };
+    return m.g;
+  }
+  if (!["si-th", "si-bursa", "si-parlimen", "si-istbudaya", "si-ik"].includes(id)) return lmIlmuModel(col);
+  const g = new T.Group(), stone = "#e4dfd1", glass = "#446779", trim = "#f2eee4";
+  const box = (w, h, d, color, x, y, z) => { const m = lmMesh(lmBox(w, h, d), color, x, y, z); g.add(m); return m; };
+  const cylinder = (rt, rb, h, color, x, y, z, n) => { const m = lmMesh(lmCyl(rt, rb, h, n || 32), color, x, y, z); g.add(m); return m; };
+  const cols = [];
+  box(16, 0.35, 13, stone, 0, 0.175, 0);
+  if (id === "si-th") {
+    /* Menara TH Jalan Tun Razak: siluet bulat melebar ke atas, rusuk menegak. */
+    const profile = [[0, 1], [2.7, 1], [2.7, 3], [2.4, 6], [2.65, 10], [3.25, 15], [4.25, 21], [4.6, 23], [0, 23]];
+    const tower = new T.LatheGeometry(profile.map((p) => new T.Vector2(p[0], p[1])), 40);
+    g.add(lmMesh(tower, glass, 0, 0, -1));
+    const radius = (y) => y < 6 ? 2.7 - (y - 3) * 0.1 : y < 10 ? 2.4 + (y - 6) * 0.0625 : y < 15 ? 2.65 + (y - 10) * 0.12 : y < 21 ? 3.25 + (y - 15) / 6 : 4.25 + (y - 21) * 0.175;
+    for (let y = 4; y <= 22; y += 1.25) cylinder(radius(y) + 0.05, radius(y) + 0.05, 0.12, stone, 0, y, -1, 40);
+    for (let i = 0; i < 20; i++) {
+      const angle = i * Math.PI / 10, points = [3, 6, 10, 15, 21, 23].map((y) => new T.Vector3(Math.cos(angle) * (radius(y) + 0.07), y, Math.sin(angle) * (radius(y) + 0.07) - 1));
+      g.add(lmMesh(new T.TubeGeometry(new T.CatmullRomCurve3(points), 12, 0.075, 4, false), stone));
+    }
+    cylinder(4.7, 4.7, 0.5, trim, 0, 23.2, -1, 40);
+    box(8, 0.3, 3, stone, 0, 2.8, 4.5);
+    for (const x of [-3.5, 3.5]) box(0.25, 2.5, 0.25, trim, x, 1.6, 5.5);
+    cols.push({ x: 0, z: -1, r: 3, h: 23 });
+  } else if (id === "si-parlimen") {
+    /* Menara pejabat berlayar konkrit dan dewan rendah berbumbung berlipat. */
+    box(4.8, 19, 4, glass, -4.3, 9.85, -2.4);
+    box(5.3, 0.45, 4.5, trim, -4.3, 19.6, -2.4);
+    const screen = new T.InstancedMesh(lmBox(0.08, 1.85, 0.12), lmMat(trim), 96), member = new T.Object3D(); let instance = 0;
+    for (let row = 0; row < 12; row++) for (let c = 0; c < 4; c++) {
+      const x = -6.1 + c * 1.2, y = 1.3 + row * 1.48;
+      member.position.set(x, y, -0.34);
+      for (const angle of [0.63, -0.63]) { member.rotation.z = angle; member.updateMatrix(); screen.setMatrixAt(instance++, member.matrix); }
+    }
+    screen.castShadow = screen.receiveShadow = true; g.add(screen);
+    for (const x of [-6.76, -1.84]) for (let y = 1.5; y < 19; y += 1.45) box(0.12, 0.1, 4.1, trim, x, y, -2.4);
+    box(9, 3.5, 9, stone, 2.2, 2.1, 0.5);
+    for (let i = 0; i < 6; i++) lmFoldRoof(g, -1.55 + i * 1.5, 0.5, 1.6, 9.6, 4, 1.5, trim);
+    box(9.8, 0.25, 2, trim, 2.2, 3.3, 5.8);
+    for (let x = -1.8; x < 7; x += 1.1) box(0.2, 3, 0.2, trim, x, 1.85, 6.4);
+    cols.push({ x: -4.3, z: -2.4, r: 3.2, h: 20 }, { x: 2.2, z: 0.5, r: 4.6, h: 5.5 });
+  } else if (id === "si-bursa") {
+    /* Exchange Square: podium batu, blok pejabat berkaca dan tingkat beranjak. */
+    box(14.5, 3.6, 10.5, stone, 0, 2.15, -0.5);
+    box(8.6, 13, 6.7, glass, -0.8, 10.45, -2);
+    box(7, 3.4, 5.8, glass, -0.8, 18.65, -2);
+    box(5.2, 2, 4.7, stone, -0.8, 21.35, -2);
+    for (let y = 4.4; y <= 20; y += 1.15) {
+      const upper = y > 17, w = upper ? 7.2 : 8.8, d = upper ? 6 : 6.9;
+      box(w, 0.16, d, stone, -0.8, y, -2);
+    }
+    for (const x of [-4.9, -2.85, -0.8, 1.25, 3.3]) box(0.22, 12.7, 6.85, trim, x, 10.5, -2);
+    box(5.2, 3, 0.25, "#314f60", 0, 1.85, 4.87);
+    for (const x of [-3, 3]) box(1, 4.5, 1, stone, x, 2.6, 5.25);
+    box(7, 0.65, 1.6, trim, 0, 4.6, 5.2);
+    cols.push({ x: 0, z: -0.5, r: 5, h: 23 });
+  } else if (id === "si-istbudaya") {
+    /* Istana Budaya: gugusan bumbung biru kehijauan berlipat seperti sirih junjung. */
+    box(14, 5, 11, stone, 0, 2.85, -0.5);
+    for (const [x, z, w, d, y, rise] of [[0, -1, 8, 10, 5.3, 6], [-5, 0, 5, 8, 4.7, 4.2], [5, 0, 5, 8, 4.7, 4.2], [0, 4.8, 8, 4, 3.2, 3]]) lmFoldRoof(g, x, z, w, d, y, rise, "#298a91");
+    box(8, 2.5, 0.2, glass, 0, 1.9, 5.05);
+    for (let i = 0; i < 4; i++) box(9 + i * 0.6, 0.25, 0.7, trim, 0, 1.05 - i * 0.2, 5.8 + i * 0.65);
+    cols.push({ x: 0, z: -1, r: 5.5, h: 11.5 });
+  } else if (id === "si-ik") {
+    /* Istana Kehakiman: simetri, kubah bawang dan pintu masuk berkolonad. */
+    box(15, 6, 10, stone, 0, 3.35, -1);
+    box(6, 3, 6, trim, 0, 7.5, -1);
+    lmDome(g, 3.5, "#b9b9b2", 0, 9, -1, true, true);
+    for (const x of [-5.5, 5.5]) { cylinder(1.8, 1.8, 1, trim, x, 6.8, -1); lmDome(g, 2, "#c4c4bc", x, 7.3, -1, true, true); }
+    box(9, 0.4, 3, trim, 0, 4.7, 5);
+    for (let x = -4; x <= 4; x += 2) cylinder(0.25, 0.3, 4.3, trim, x, 2.5, 6);
+    lmArches(g, 12, 3, 2.8, 4.06, 7, "#5d635e");
+    cols.push({ x: 0, z: -1, r: 5.3, h: 16 });
+  }
+  g.userData.landmark = { height: new T.Box3().setFromObject(g).max.y, cols: cols };
+  return g;
+}
+
 function lmIlmuBuild(g, used, placed, avoid, gnd) {
   SILMU.forEach(([id, k, nama, la, lo, col]) => {
     if (!DATA.negeri[k]) return;
@@ -2852,14 +2950,15 @@ function lmIlmuBuild(g, used, placed, avoid, gnd) {
       && !g.items.some((it) => Math.hypot(it.x - x, it.z - z) < 16);
     let w = ll(la, lo);
     if (!free(w.x, w.z)) { let best = null; for (let d = 6; d <= 120 && !best; d += 6) for (let i = 0; i < 16; i++) { const a = i * 0.3927 + d * 0.13, x = w.x + Math.cos(a) * d, z = w.z + Math.sin(a) * d; if (free(x, z)) { best = { x: x, z: z }; break; } } if (best) w = best; }
-    const md = lmIlmuModel(col), rot = (Math.abs(hashStr(id)) % 628) / 100;
+    const md = lmLandmarkModel(id, col), landmark = md.userData.landmark, labelY = landmark ? Math.max(13, landmark.height + 3) : 13, rot = (Math.abs(hashStr(id)) % 628) / 100;
     md.position.set(w.x, 0, w.z); md.rotation.y = rot; g.scene.add(md); gnd.push([md, 0]); lmPad(g, w.x, w.z, 10);
-    const lb = lmLabel("📖 Stesen Ilmu · " + nama, { fs: 28, k: 0.03, bg: "rgba(11,74,74,.88)", bd: "#ffd45a" }); lb.position.set(w.x, 13, w.z); g.scene.add(lb); gnd.push([lb, 13]);
+    const lb = lmLabel("📖 Stesen Ilmu · " + nama, { fs: 28, k: 0.03, bg: "rgba(11,74,74,.88)", bd: "#ffd45a" }); lb.position.set(w.x, labelY, w.z); g.scene.add(lb); gnd.push([lb, labelY]);
     const fx = Math.sin(rot), fz = Math.cos(rot);
-    g.items.push({ kind: "si", id: id, k: k, sn: nama, n: nama, col: col, x: w.x + fx * 5, z: w.z + fz * 5, cx: w.x, cz: w.z, r: 0, ir: 10, m: md, lb: lb, tids: [] });
+    g.items.push({ kind: "si", id: id, k: k, sn: nama, n: nama, col: col, x: w.x + fx * (landmark ? 8.5 : 5), z: w.z + fz * (landmark ? 8.5 : 5), cx: w.x, cz: w.z, r: 0, ir: 10, m: md, lb: lb, tids: [] });
     placed.push({ x: w.x, z: w.z, r: rr }); avoid.push({ x: w.x, z: w.z, r: rr + 2 });
     const cr = Math.cos(rot), sr = Math.sin(rot);
-    for (const [lx, lz] of [[-4.6, -3.6], [4.6, -3.6], [-4.6, 3.6], [4.6, 3.6]]) g.cols.push({ x: w.x + lx * cr + lz * sr, z: w.z - lx * sr + lz * cr, r: 0.7, h: 6 });
+    const colliders = landmark ? landmark.cols : [[-4.6, -3.6], [4.6, -3.6], [-4.6, 3.6], [4.6, 3.6]].map(([x, z]) => ({ x: x, z: z, r: 0.7, h: 6 }));
+    for (const c of colliders) g.cols.push({ x: w.x + c.x * cr + c.z * sr, z: w.z - c.x * sr + c.z * cr, r: c.r, h: c.h });
   });
 }
 function lmIlmuAssign(g) {

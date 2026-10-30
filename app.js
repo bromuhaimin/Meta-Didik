@@ -347,7 +347,7 @@ if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.
 if (SUBJ === "bm") { DATA.tema = DATA_BM.tema; DATA.topik = DATA_BM.topik; DATA.soalan = DATA_BM.soalan; }
 if (SUBJ === "bi") { DATA.tema = DATA_BI.tema; DATA.topik = DATA_BI.topik; DATA.soalan = DATA_BI.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = "Hub Inovasi Digital Pendidikan \u00b7 v18.34"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = "Hub Inovasi Digital Pendidikan \u00b7 v18.35"; } catch (e) { /* abaikan */ }
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -7232,7 +7232,7 @@ function lgRoot() {
    Dibuka daripada butang di peta utama; dunia.js dimuat hanya apabila diperlukan. */
 /* v17.91: avatar 3D dikongsi Gudang dan META DIDIK; dimuat apabila perlu */
 /* v18.4: versi aplikasi untuk memecah cache skrip (Safari/ikon skrin utama iPhone menyimpan salinan lama) */
-const APP_VER = "18.34";
+const APP_VER = "18.35";
 function av3Load(cb) {
   if (window.AV3) { cb(); return; }
   if (typeof THREE === "undefined") return;
@@ -18616,7 +18616,21 @@ function openReg(first) {
   $("regReset").textContent = "Padam kemajuan";
   resetArmed = 0;
   $("reg").hidden = false;
+  if (!first) zvProfileCard();
+  else { const card = $("studentProfileCard"); if (card) card.remove(); }
   $("inName").focus();
+}
+function zvProfileCard() {
+  let card = $("studentProfileCard"); if (card) card.remove();
+  card = el("div", { id: "studentProfileCard", class: "student-profile" });
+  const z = zvState(), eq = zvEqAll(z), pv = el("div", { class: "zvpv" });
+  pv.innerHTML = zvSvg(z, 130);
+  const outfit = zvItem(eq.ou), info = el("div", { class: "student-profile-info" });
+  const edit = el("button", { type: "button", class: "btn alt sm" }, "Pakaian & avatar");
+  edit.addEventListener("click", () => { $("reg").hidden = true; setView("gudang"); });
+  info.append(el("span", { class: "tagline" }, gtRole() === "guru" ? "Profil guru" : "Profil murid"), el("h2", null, cleanName(P.nama) || "Anggota"), el("p", null, [P.sekolah, kelasNorm(P.kelas)].filter(Boolean).join(" · ")), el("p", { class: "muted" }, outfit ? outfit.n : "Pakaian sekolah"), edit);
+  card.append(pv, info); $("reg").querySelector("h1").after(card);
+  av3Load(() => { if (pv.isConnected) AV3.preview(pv, AV3.code(z, eq)); });
 }
 function confirmReg() {
   const n = cleanName($("inName").value), sk = cleanSekolah($("inSekolah").value), ng = $("inNegeri").value;
@@ -19333,10 +19347,18 @@ const ZV_UNI = {
   ou_pw: { t: "#1e3a7a", b: "#1a2238", tie: "#f0c53c" },
   ou_sb: { t: "#a9d4f2", b: "#27345a", tie: "#27345a", bP: "#1f3f7a" },
   ou_pk: { t: "#b59a5b", b: "#6b5532", tP: "#5b8fd0", bP: "#27345a", scarf: "#c43b52" },
-  ou_kp: { t: "#22305e", b: "#1a2238", tie: "#1a2238", lan: "#f0c53c" },
-  ou_bs: { t: "#f4f4f0", b: "#1a2238", tie: "#d0232f", arm: "#d0232f" }
+  ou_kp: { t: "#22305e", b: "#1a2238", tie: "#1a2238", lan: "#f0c53c", unit: "KADET POLIS", beret: "#192943", trousers: true },
+  ou_bs: { t: "#f4f4f0", b: "#1a2238", arm: "#d0232f", unit: "BSMM", beret: "#161b25", trousers: true },
+  ou_pg: { t: "#a7a6a0", b: "#26384b", scarf: "#b92830", unit: "PENGAKAP", beret: "#1e2938", trousers: true },
+  ou_pd: { t: "#80b5db", b: "#233653", scarf: "#263e6a", unit: "PANDU PUTERI" },
+  ou_pi: { t: "#f1c4d8", b: "#a92e63", unit: "PPIM" },
+  ou_ks: { t: "#466941", b: "#344c32", unit: "KRS", beret: "#345d37", trousers: true },
+  ou_ts: { t: "#466941", b: "#344c32", unit: "TKRS", beret: "#345d37", trousers: true },
+  ou_kb: { t: "#245885", b: "#193656", unit: "KADET BOMBA", beret: "#c52d2c", trousers: true },
+  ou_ka: { t: "#4c89b1", b: "#233c60", unit: "KASPA", beret: "#e17824", trousers: true },
+  ou_sj: { t: "#f4f4f0", b: "#20252d", unit: "ST. JOHN", beret: "#161b25", trousers: true }
 };
-function zvUni(ou, g) { const u = ZV_UNI[ou]; if (!u) return null; return { t: (g === "P" && u.tP) || u.t, b: (g === "P" && u.bP) || u.b, tie: u.tie || "", scarf: u.scarf || "", lan: u.lan || "", arm: u.arm || "" }; }
+function zvUni(ou, g) { const u = ZV_UNI[ou]; if (!u) return null; return Object.assign({}, u, { t: (g === "P" && u.tP) || u.t, b: (g === "P" && u.bP) || u.b, tie: u.tie || "", scarf: u.scarf || "", lan: u.lan || "", arm: u.arm || "" }); }
 /* v18.3: lencana sekolah (singkatan, warna dan bentuk dipilih murid) */
 const ZV_SBC = ["#1e3a7a", "#b3242f", "#1f7a4d", "#6a2c91", "#d98a1f", "#0f6e7a", "#2a2d37", "#8a5a2b"];
 function zvSbAuto(nm) {
@@ -19358,7 +19380,15 @@ const ZV_IT = [];
   const zi = (id, s, n, p, g) => ZV_IT.push({ id: id, s: s, n: n, p: p, g: g || "*" });
   zi("ou_sc", "ou", "Pakaian sekolah", 0); zi("ou_my", "ou", "Baju Melayu", 120, "L"); zi("ou_sm", "ou", "Baju Melayu bersampin", 260, "L");
   zi("ou_kr", "ou", "Baju Kurung", 120, "P"); zi("ou_jb", "ou", "Jubah", 200); zi("ou_tk", "ou", "Pakaian sukan", 90);
-  zi("ou_sb", "ou", "Pakaian sekolah agama", 80); zi("ou_bs", "ou", "Bulan Sabit Merah (PBSM)", 100); zi("ou_pk", "ou", "Pengakap / Pandu Puteri", 120); zi("ou_kp", "ou", "Kadet Polis", 120); zi("ou_pw", "ou", "Seragam pengawas", 150);
+  zi("ou_sb", "ou", "Pakaian sekolah agama", 80); zi("ou_bs", "ou", "Bulan Sabit Merah Malaysia (BSMM)", 100); zi("ou_pk", "ou", "Pengakap / Pandu Puteri (klasik)", 120); zi("ou_kp", "ou", "Kadet Polis", 120); zi("ou_pw", "ou", "Seragam pengawas", 150);
+  zi("ou_pg", "ou", "Persekutuan Pengakap Malaysia", 120);
+  zi("ou_pd", "ou", "Pandu Puteri Remaja", 120, "P");
+  zi("ou_pi", "ou", "Pergerakan Puteri Islam Malaysia", 120, "P");
+  zi("ou_ks", "ou", "Kadet Remaja Sekolah (KRS)", 120);
+  zi("ou_ts", "ou", "Tunas Kadet Remaja Sekolah (TKRS)", 100);
+  zi("ou_kb", "ou", "Kadet Bomba dan Penyelamat", 120);
+  zi("ou_ka", "ou", "Kadet Sekolah Pertahanan Awam (KASPA)", 120);
+  zi("ou_sj", "ou", "St. John Ambulans Malaysia", 100);
   ZV_OCOL.forEach((c) => zi("oc_" + c[0], "oc", c[1], c[3]));
   zi("hd_no", "hd", "Tanpa penutup", 0, "L"); zi("hd_sk", "hd", "Songkok", 60, "L"); zi("hd_kp", "hd", "Kopiah", 40, "L"); zi("hd_sb", "hd", "Serban", 150, "L"); zi("hd_tp", "hd", "Topi", 50, "L");
   zi("hd_td", "hd", "Tudung bawal", 0, "P"); zi("hd_sw", "hd", "Tudung sarung", 70, "P"); zi("hd_tl", "hd", "Tudung labuh", 100, "P"); zi("hd_ts", "hd", "Tudung sukan", 80, "P");
@@ -19389,7 +19419,7 @@ function zvInner(z, e, o) {
   o = o || {};
   const g = z.g === "P" ? "P" : "L", sk = ZV_SKIN[clamp(z.sk | 0, 0, 5)], skd = zvShade(sk, -0.12);
   const oc = zvCol(ZV_OCOL, e.oc), hc = zvCol(ZV_HCOL, e.hc), ocd = zvShade(oc, -0.28), ocl = zvShade(oc, 0.3), hcd = zvShade(hc, -0.22);
-  const ou = e.ou, uni = zvUni(ou, g), sch = !!uni, long = ou === "ou_kr" || ou === "ou_jb" || (sch && g === "P");
+  const ou = e.ou, uni = zvUni(ou, g), sch = !!uni, long = ou === "ou_kr" || ou === "ou_jb" || (sch && g === "P" && !uni.trousers);
   const topC = sch ? uni.t : oc, botC = sch ? uni.b : (ou === "ou_tk" ? ocd : oc);
   let s = "";
   if (!o.noframe && e.fr !== "fr_no") {
@@ -19445,6 +19475,8 @@ function zvInner(z, e, o) {
     else if (hd === "hd_tp") s += '<path d="M32 23Q32 6 50 6Q68 6 68 23Z" fill="' + hc + '"/><path d="M29 23Q50 33 71 23Q50 27 29 23Z" fill="' + hcd + '"/>';
   }
   const fy = g === "P" ? 36 : 34;
+  if (g === "L" && hd === "hd_no" && sch && uni.beret) s += '<path d="M31 23Q30 5 52 7Q72 7 70 22L65 26H33Z" fill="' + uni.beret + '"/><rect x="37" y="16" width="4" height="5" rx="1" fill="#c7b477"/>';
+  s += '<path d="M39 ' + (fy - 5) + 'h7m8 0h7" stroke="#4c3930" stroke-width="1.3" stroke-linecap="round"/><ellipse cx="43" cy="' + fy + '" rx="1.5" ry="2" fill="#30241e"/><ellipse cx="57" cy="' + fy + '" rx="1.5" ry="2" fill="#30241e"/><path d="M50 ' + (fy + 1) + 'l-1 5h2m-5 4q4 3 8 0" fill="none" stroke="' + skd + '" stroke-width="1.2" stroke-linecap="round"/>';
   if (e.fc === "fc_cm") s += '<circle cx="43" cy="' + fy + '" r="5.4" fill="rgba(190,230,255,.3)" stroke="#2a2a33" stroke-width="1.4"/><circle cx="57" cy="' + fy + '" r="5.4" fill="rgba(190,230,255,.3)" stroke="#2a2a33" stroke-width="1.4"/><path d="M48.4 ' + fy + 'H51.6" stroke="#2a2a33" stroke-width="1.4"/>';
   else if (e.fc === "fc_cs") s += '<rect x="37.5" y="' + (fy - 4.5) + '" width="10.5" height="9" rx="2" fill="rgba(190,230,255,.3)" stroke="#2a2a33" stroke-width="1.4"/><rect x="52" y="' + (fy - 4.5) + '" width="10.5" height="9" rx="2" fill="rgba(190,230,255,.3)" stroke="#2a2a33" stroke-width="1.4"/><path d="M48 ' + fy + 'H52" stroke="#2a2a33" stroke-width="1.4"/>';
   else if (e.fc === "fc_sg") s += '<rect x="37" y="' + (fy - 4.5) + '" width="11.5" height="9" rx="3.5" fill="#15151b"/><rect x="51.5" y="' + (fy - 4.5) + '" width="11.5" height="9" rx="3.5" fill="#15151b"/><path d="M48 ' + (fy - 1) + 'H52" stroke="#15151b" stroke-width="1.6"/>';
@@ -19512,7 +19544,7 @@ function renderGudangZv() {
   if (z.g !== "L" && z.g !== "P") {
     const c = el("div", { class: "zvfirst" });
     const mk = (g, t) => { const b = el("button", { type: "button", class: "zvpick" }); b.innerHTML = zvSvg({ g: g, sk: 1, own: [], eq: {} }, 120, { noframe: true }); b.append(el("b", null, t)); b.addEventListener("click", () => { z.g = g; saveP(); renderGudangZv(); setTimeout(() => { try { renderMaps(); } catch (e) { /* abaikan */ } }, 0); }); return b; };
-    c.append(el("div", { class: "tagline" }, "Cipta avatar"), el("h3", null, "Pilih gaya avatar anda"), el("p", { class: "muted" }, "Pakaian dan penutup kepala sentiasa menutup aurat. Wajah avatar sengaja tidak dilukis."), el("div", { class: "zvpicks" }, mk("L", "Lelaki"), mk("P", "Perempuan")));
+    c.append(el("div", { class: "tagline" }, "Cipta avatar"), el("h3", null, "Pilih gaya avatar anda"), el("p", { class: "muted" }, "Cipta avatar 3D anda dengan pakaian sopan dan pilihan unit beruniform sekolah."), el("div", { class: "zvpicks" }, mk("L", "Lelaki"), mk("P", "Perempuan")));
     box.appendChild(c); return;
   }
   const e = zvEqAll(z), tryIt = ZVUI.try ? zvItem(ZVUI.try) : null, ev3 = Object.assign({}, e);
@@ -19521,7 +19553,9 @@ function renderGudangZv() {
   pv.innerHTML = zvSvg(z, 190, ZVUI.try ? { eq: ev3 } : undefined);
   av3Load(() => { if (pv.isConnected) { AV3.preview(pv, AV3.code(z, ev3)); if (tryIt && tryIt.s === "rc" && AV3.previewRai) AV3.previewRai(tryIt.id); } });
   const ctl = el("div", { class: "zvctl" });
-  ctl.append(el("div", { class: "tagline" }, "Avatar anda"),
+  ctl.append(el("div", { class: "tagline" }, (gtRole() === "guru" ? "Profil guru" : "Profil murid") + " · Avatar 3D"),
+    el("h3", { class: "zvname" }, cleanName(P.nama) || "Avatar anda"),
+    el("p", { class: "zvschool" }, [P.sekolah, kelasNorm(P.kelas)].filter(Boolean).join(" · ") || "Lengkapkan sekolah dalam profil anda"),
     segBtns([["L", "Lelaki"], ["P", "Perempuan"]], z.g, (v) => { z.g = v; saveP(); renderGudangZv(); renderMaps(); }, "Gaya avatar"),
     el("div", { class: "zvlbl" }, "Warna kulit"));
   const sw = el("div", { class: "zvsw", role: "group", "aria-label": "Warna kulit" });
@@ -19539,6 +19573,7 @@ function renderGudangZv() {
   hero.append(pv, ctl);
   const shop = el("div", { class: "zvshop" });
   shop.appendChild(segBtns(ZV_SLOTS, ZVUI.slot, (v) => { ZVUI.slot = v; renderGudangZv(); }, "Jenis barang"));
+  if (ZVUI.slot === "ou") shop.appendChild(el("p", { class: "muted" }, "Pilih pakaian sekolah atau unit beruniform. Tekan avatar kecil untuk mencuba sebelum membeli. Uniform mempunyai warna tetap; aksesori sedia ada boleh dipadankan."));
   if (ZVUI.slot === "bd") {
     /* v18.3: reka lencana sekolah sendiri */
     const sb = zvSb(z), pan = el("div", { class: "notice zvsb" }), put = (o) => { z.sb = Object.assign({}, zvSb(z), o); z.sb = zvSb(z); saveP(); renderGudangZv(); renderMaps(); };

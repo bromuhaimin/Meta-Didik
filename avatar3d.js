@@ -1,7 +1,7 @@
 /* =====================================================================
    AVATAR 3D (v17.91): avatar realistik yang dikongsi oleh Gudang (pratonton berputar) dan META DIDIK.
    Memaparkan semua barang Gudang (pakaian, warna, penutup kepala, cermin mata, pegangan, beg,
-   lencana, haiwan, bingkai) dan kesan khas 3D. Pakaian menutup aurat; wajah sengaja tanpa ciri.
+   lencana, haiwan, bingkai) dan kesan khas 3D. Pakaian sopan dengan wajah dan butiran jahitan.
    Bergantung pada global index.html: THREE, ZV_SKIN, ZV_OCOL, ZV_HCOL, zvCol, zvShade, zvItem, zvState, zvEqAll.
    ===================================================================== */
 (function () {
@@ -91,16 +91,25 @@ function ballTex() {
     return new T.CanvasTexture(c);
   });
 }
+function unitTex(name) {
+  return geo("unitLabel:" + name, () => {
+    const c = document.createElement("canvas"); c.width = 256; c.height = 48;
+    const x = c.getContext("2d"); x.fillStyle = "#202730"; x.fillRect(0, 0, c.width, c.height);
+    x.fillStyle = "#f4eee1"; x.font = "600 26px Arial"; x.textAlign = "center"; x.textBaseline = "middle"; x.fillText(name, 128, 25, 244);
+    return new T.CanvasTexture(c);
+  });
+}
 /* ---------- pembina avatar ---------- */
 function build(c, opt) {
   opt = opt || {};
   const o = typeof c === "string" ? parse(c) : c;
   const sk = ZV_SKIN[o.sk] || "#e9b98f", oc = zvCol(ZV_OCOL, o.oc), hc = zvCol(ZV_HCOL, o.hc);
   let uni = null; try { uni = zvUni(o.ou, o.g); } catch (e) { uni = o.ou === "ou_sc" ? { t: "#f4f4f0", b: "#27345a", tie: "#27345a" } : null; }
-  const sch = !!uni, P = o.g === "P", long = o.ou === "ou_kr" || o.ou === "ou_jb" || (sch && P);
+  const sch = !!uni, P = o.g === "P", long = o.ou === "ou_kr" || o.ou === "ou_jb" || (sch && P && !uni.trousers);
   const topC = sch ? uni.t : oc, botC = sch ? uni.b : (o.ou === "ou_tk" ? shade(oc, -0.3) : o.ou === "ou_my" || o.ou === "ou_sm" ? oc : shade(oc, -0.08));
   const mSk = mat(sk, { roughness: 0.6 }), mTop = mat(topC), mBot = mat(botC), mShoe = mat(o.ou === "ou_tk" ? "#f1f1f1" : "#23232b", { roughness: 0.45 });
   const root = new T.Group(), body = new T.Group(); root.add(body);
+  body.scale.x = 0.92;
   const pv = (x, y, z) => { const p = new T.Group(); p.position.set(x, y, z || 0); body.add(p); return p; };
   /* kaki */
   const lL = pv(-0.36, 2.3), lR = pv(0.36, 2.3);
@@ -125,6 +134,22 @@ function build(c, opt) {
   if (sch && !P) { if (uni.tie) body.add(mesh(geo("tie", () => new T.BoxGeometry(0.2, 1.1, 0.05)), mat(uni.tie), 0, 3.75, 0.62)); body.add(mesh(geo("colw", () => new T.CylinderGeometry(0.3, 0.33, 0.16, 14)), mat(shade(topC, -0.06)), 0, 4.47, 0)); }
   if (sch && uni.scarf) { const sc = mesh(geo("scarf", () => { const g2 = new T.ConeGeometry(0.42, 0.9, 3); g2.rotateX(Math.PI); return g2; }), mat(uni.scarf), 0, 4.05, P ? 0.82 : 0.62); sc.scale.z = 0.25; body.add(sc); body.add(mesh(geo("scarfr", () => new T.TorusGeometry(0.3, 0.06, 6, 18)), mat(uni.scarf), 0, 4.47, 0.05)); body.children[body.children.length - 1].rotation.x = Math.PI / 2; }
   if (sch && uni.lan) { const ln = mesh(geo("lany", () => new T.TorusGeometry(0.4, 0.03, 6, 16, Math.PI * 0.8)), mat(uni.lan), -0.62, 4.0, 0.6); ln.rotation.z = Math.PI * 1.05; body.add(ln); }
+  if (sch) {
+    const seam = mat(shade(topC, -0.18));
+    body.add(mesh(rbox(0.035, 1.55, 0.025), seam, 0, 3.35, 0.625));
+    for (const side of [-1, 1]) {
+      body.add(mesh(rbox(0.36, 0.36, 0.055), seam, side * 0.46, 3.68, 0.56));
+      body.add(mesh(rbox(0.34, 0.1, 0.065), mTop, side * 0.46, 3.86, 0.57));
+      body.add(mesh(rbox(0.42, 0.055, 0.26), seam, side * 0.78, 4.24, 0));
+    }
+    for (let i = 0; i < 4; i++) body.add(mesh(geo("uniformButton", () => new T.SphereGeometry(0.035, 6, 4)), mat("#c8c4b9"), 0, 4.1 - i * 0.32, 0.65));
+    if (uni.unit) {
+      const belt = mesh(geo("uniformBelt", () => new T.CylinderGeometry(0.87, 0.87, 0.14, 18)), mat("#24272b"), 0, 2.62, 0); belt.scale.z = 0.65; body.add(belt);
+      body.add(mesh(rbox(0.2, 0.13, 0.06), mat("#bfa776", { metalness: 0.35 }), 0, 2.62, 0.59));
+      const key = "unit:" + uni.unit, label = MAT[key] || (MAT[key] = new T.MeshBasicMaterial({ map: unitTex(uni.unit) }));
+      body.add(mesh(geo("unitLabelPlane", () => new T.PlaneGeometry(0.58, 0.11)), label, -0.45, 4.02, 0.58));
+    }
+  }
   if (o.ou === "ou_tk") { body.add(mesh(geo("zip", () => new T.BoxGeometry(0.06, 2.0, 0.04)), mat("#f4f4f0"), 0, 3.3, 0.64)); }
   /* lengan */
   const aL = pv(-1.02, 4.15), aR = pv(1.02, 4.15);
@@ -139,6 +164,15 @@ function build(c, opt) {
   body.add(mesh(geo("neck", () => new T.CylinderGeometry(0.21, 0.24, 0.35, 12)), mSk, 0, 4.6, 0));
   const head = new T.Group(); head.position.y = 5.22; body.add(head);
   const hs = mesh(geo("head", () => new T.SphereGeometry(0.62, 24, 18)), mSk, 0, 0, 0); hs.scale.set(1, 1.12, 1.02); head.add(hs);
+  /* ciri wajah ringan; dikongsi oleh pratonton dan pemain multiplayer */
+  for (const side of [-1, 1]) {
+    head.add(mesh(geo("ear", () => new T.SphereGeometry(0.13, 10, 8)), mSk, side * 0.59, -0.03, 0));
+    head.add(mesh(geo("eyeWhite", () => new T.SphereGeometry(0.075, 10, 8)), mat("#f4eee6"), side * 0.22, 0.06, 0.582));
+    head.add(mesh(geo("iris", () => new T.SphereGeometry(0.043, 10, 8)), mat("#30241e"), side * 0.22, 0.06, 0.638));
+    const brow = mesh(rbox(0.19, 0.035, 0.025), mat("#392a24"), side * 0.22, 0.2, 0.589); brow.rotation.z = side * -0.07; head.add(brow);
+  }
+  const nose = mesh(geo("nose", () => new T.SphereGeometry(0.09, 10, 8)), mat(shade(sk, -0.05)), 0, -0.08, 0.62); nose.scale.set(0.65, 1.2, 0.8); head.add(nose);
+  const smile = mesh(geo("smile", () => new T.TorusGeometry(0.13, 0.018, 6, 14, Math.PI * 0.7)), mat(shade(sk, -0.38)), 0, -0.2, 0.59); smile.rotation.z = Math.PI * 1.15; head.add(smile);
   const hd = o.hd, mH = mat(hc);
   if (P) {
     /* tudung: tempurung dengan bukaan wajah + labuhan menutup leher dan dada */
@@ -153,7 +187,11 @@ function build(c, opt) {
     if (hd === "hd_sw") { const vis = mesh(geo("visor", () => new T.TorusGeometry(0.62, 0.06, 6, 20, Math.PI)), mat(shade(hc, -0.2)), 0, 0.42, 0.18); vis.rotation.x = -0.5; head.add(vis); }
   } else {
     const hair = mesh(geo("hair", () => new T.SphereGeometry(0.66, 22, 14, 0, Math.PI * 2, 0, Math.PI * 0.5)), mat("#1f1f26", { roughness: 0.9 }), 0, 0.06, -0.04); hair.scale.set(1, 1.08, 1.04); head.add(hair);
-    if (hd === "hd_sk") head.add(mesh(geo("songkok", () => new T.CylinderGeometry(0.6, 0.64, 0.5, 26)), mat("#15151a", { roughness: 0.95 }), 0, 0.6, -0.02));
+    if (hd === "hd_no" && sch && uni.beret) {
+      const beret = mesh(geo("unitBeret", () => new T.SphereGeometry(0.69, 20, 12, 0, Math.PI * 2, 0, Math.PI / 2)), mat(uni.beret), 0.07, 0.4, -0.03); beret.scale.y = 0.38; beret.rotation.z = -0.12; head.add(beret);
+      head.add(mesh(rbox(0.14, 0.17, 0.04), mat("#c7b477"), -0.25, 0.5, 0.57));
+    }
+    else if (hd === "hd_sk") head.add(mesh(geo("songkok", () => new T.CylinderGeometry(0.6, 0.64, 0.5, 26)), mat("#15151a", { roughness: 0.95 }), 0, 0.6, -0.02));
     else if (hd === "hd_kp") { const kp = mesh(geo("kopiah", () => new T.SphereGeometry(0.66, 22, 10, 0, Math.PI * 2, 0, Math.PI * 0.35)), mH, 0, 0.18, -0.02); kp.scale.y = 1.2; head.add(kp); }
     else if (hd === "hd_sb") { for (let i = 0; i < 3; i++) { const t = mesh(geo("serb" + i, () => new T.TorusGeometry(0.6 - i * 0.12, 0.17, 10, 24)), mat("#f4f4f0"), 0, 0.42 + i * 0.17, -0.03); t.rotation.x = Math.PI / 2 + (i - 1) * 0.12; head.add(t); } head.add(mesh(geo("serbt", () => new T.SphereGeometry(0.3, 12, 8)), mat("#f4f4f0"), 0, 0.82, -0.04)); }
     else if (hd === "hd_tp") { const cp = mesh(geo("cap", () => new T.SphereGeometry(0.68, 22, 10, 0, Math.PI * 2, 0, Math.PI * 0.45)), mH, 0, 0.12, -0.03); head.add(cp); const br = mesh(geo("brim", () => new T.CylinderGeometry(0.42, 0.42, 0.05, 18, 1, false, 0, Math.PI)), mat(shade(hc, -0.2)), 0, 0.38, 0.5); br.rotation.y = Math.PI / 2; br.scale.x = 1.3; head.add(br); }

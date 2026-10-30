@@ -880,6 +880,10 @@ body.vmap #fabDock{bottom:calc(var(--dockh,190px) + 26px + env(safe-area-inset-b
 .zvhero{display:flex;gap:20px;align-items:center;flex-wrap:wrap;padding:16px;border-radius:22px;background:var(--panel);border:1px solid var(--line2);margin-bottom:14px}
 .zvpv{padding:8px 14px;border-radius:18px;background:radial-gradient(ellipse at 50% 30%,rgba(41,230,255,.2),transparent 70%),rgba(255,255,255,.04)}
 .zvctl{display:grid;gap:10px;min-width:220px;flex:1}
+.zvname{margin:0;font-size:24px}.zvschool{margin:0;color:var(--muted);line-height:1.5}
+.student-profile{display:flex;align-items:center;gap:20px;padding:16px;margin:12px 0 20px;border:1px solid var(--line2);border-radius:20px;background:linear-gradient(135deg,rgba(41,130,180,.16),rgba(41,180,130,.07))}
+.student-profile .zvpv{width:150px;flex-shrink:0}.student-profile-info{min-width:0;overflow-wrap:anywhere}.student-profile-info h2{margin:6px 0}.student-profile-info p{margin:6px 0 12px}
+@media(max-width:480px){.student-profile{flex-direction:column;text-align:center}.student-profile .zvpv{width:140px}}
 .zvlbl{font:700 12px var(--font-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .zvsw{display:flex;gap:8px;flex-wrap:wrap}
 .zvsb{display:grid;gap:10px;margin:10px 0}.zvsbh{display:flex;gap:12px;align-items:center}.zvsbr{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.zvsbr input{font:800 18px Nunito,sans-serif;text-transform:uppercase;letter-spacing:.12em;width:9em;padding:6px 10px;border-radius:10px;border:2px solid rgba(255,255,255,.25);background:rgba(0,0,0,.25);color:inherit}.zvsb .zvsw button{width:34px;height:34px}.zvsbpv svg{display:block}
