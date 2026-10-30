@@ -4473,6 +4473,7 @@ const LM_CSS = `
 #lmOv.mini .lm-top{flex-direction:row;flex-wrap:wrap;justify-content:flex-end;align-items:center;max-width:min(360px,48vw)}
 #lmOv.mini.menu .lm-top{background:rgba(8,24,40,.88);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:8px}
 #lmOv.mini .lm-top button{display:none}#lmOv.mini .lm-top .lm-mb{display:block;order:-1;flex-basis:100%;text-align:center}#lmOv.mini.menu .lm-top button:not([hidden]){display:block}
+@media (hover:hover) and (pointer:fine){#lmOv.mini .lm-top .lm-fs:not([hidden]){display:block}}
 #lmOv.mini .lm-quest,#lmOv.mini .lm-emo{display:none}#lmOv.mini.menu .lm-quest{display:block}
 #lmOv.mini .lm-guide .gs,#lmOv.mini .lm-guide .gr,#lmOv.mini .lm-guide .gx{display:none}
 @media (prefers-reduced-motion:reduce){#lmOv .lm-prompt,#lmOv .lm-box,#lmOv .lm-toast{animation:none}}
@@ -5452,6 +5453,23 @@ function lmSpawn(g) {
   g.camera.position.set(x + 20, 30, z + 20);
 }
 /* ---------- HUD ---------- */
+function lmFsSync() {
+  const b = LM.ui.fs; if (!b) return;
+  const on = !!(document.fullscreenElement || document.webkitFullscreenElement);
+  b.textContent = on ? "Keluar skrin penuh" : "Skrin penuh";
+  b.setAttribute("aria-pressed", String(on));
+}
+async function lmFsToggle() {
+  try {
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      await (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    } else {
+      const d = document.documentElement;
+      await (d.requestFullscreen || d.webkitRequestFullscreen).call(d);
+    }
+  } catch (e) { lmPop("Pelayar tidak membenarkan skrin penuh. Cuba lagi."); }
+  lmFsSync();
+}
 function lmHud() {
   const r = LM.root, ui = LM.ui;
   ui.hud = el("div", { class: "lm-hud" });
@@ -5469,6 +5487,12 @@ function lmHud() {
   /* v18.30: semua peranti: butang dan statistik di bawah satu butang menu */
   ui.menuB = lmBtn("☰ Menu", "lm-mb", () => { const on = !r.classList.contains("menu"); r.classList.toggle("menu", on); ui.menuB.textContent = on ? "✕ Tutup" : "☰ Menu"; });
   top.append(ui.menuB);
+  if (document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen) {
+    ui.fs = lmBtn("Skrin penuh", "lm-fs", lmFsToggle);
+    top.appendChild(ui.fs); lmFsSync();
+    document.addEventListener("fullscreenchange", lmFsSync);
+    document.addEventListener("webkitfullscreenchange", lmFsSync);
+  }
   ui.skyB = lmBtn(LM.st.sky === 0 ? "Top 5: tutup" : "Top 5: buka", "", () => { const g = LM.g; if (!g || !g.sky5) return; const on = !g.sky5.sp.visible; g.sky5.sp.visible = on; LM.st.sky = on ? 1 : 0; lmSave(); ui.skyB.textContent = on ? "Top 5: buka" : "Top 5: tutup"; });
   const smTxt = () => ({ siang: "☀️ Suasana: siang", malam: "🌙 Suasana: malam" })[LM.st.sm] || "🕒 Suasana: ikut masa";
   ui.smB = lmBtn(smTxt(), "", () => {
@@ -5812,6 +5836,8 @@ function lmStart(code, kind) {
   }, 30);
 }
 function lmClose() {
+  document.removeEventListener("fullscreenchange", lmFsSync);
+  document.removeEventListener("webkitfullscreenchange", lmFsSync);
   lmAzanStop();
   { const b = document.getElementById("lmGdBack"); if (b) b.remove(); } LM.pause = false;
   if (LM.ui.big && LM.ui.big._off) { LM.ui.big._off(); LM.ui.big = null; }
