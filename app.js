@@ -347,7 +347,7 @@ if (SUBJ === "mt") { DATA.tema = DATA_MT.tema; DATA.topik = DATA_MT.topik; DATA.
 if (SUBJ === "bm") { DATA.tema = DATA_BM.tema; DATA.topik = DATA_BM.topik; DATA.soalan = DATA_BM.soalan; }
 if (SUBJ === "bi") { DATA.tema = DATA_BI.tema; DATA.topik = DATA_BI.topik; DATA.soalan = DATA_BI.soalan; }
 document.documentElement.setAttribute("data-sj", SUBJ);
-try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) vt.textContent = "Hub Inovasi Digital Pendidikan \u00b7 v18.35"; } catch (e) { /* abaikan */ }
+try { const vt = document.getElementById("verTap"); if (vt && SUBJS[SUBJ]) setTimeout(() => { vt.textContent = "Hub Inovasi Digital Pendidikan \u00b7 v" + APP_VER; }, 0); } catch (e) { /* abaikan */ } /* v18.39: ikut APP_VER (dahulu tertulis tetap v18.35) */
 const FIRST_ID = DATA.topik[0].id, LAST_TEMA = DATA.tema[DATA.tema.length - 1].id;
 function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
@@ -7232,7 +7232,7 @@ function lgRoot() {
    Dibuka daripada butang di peta utama; dunia.js dimuat hanya apabila diperlukan. */
 /* v17.91: avatar 3D dikongsi Gudang dan META DIDIK; dimuat apabila perlu */
 /* v18.4: versi aplikasi untuk memecah cache skrip (Safari/ikon skrin utama iPhone menyimpan salinan lama) */
-const APP_VER = "18.38";
+const APP_VER = "18.39";
 function av3Load(cb) {
   if (window.AV3) { cb(); return; }
   if (typeof THREE === "undefined") return;
@@ -7253,7 +7253,7 @@ function lmOpen(tid) {
   document.head.appendChild(s);
 }
 /* ---------- v18.27: butang Meta Didik di atas paparan utama ----------
-   Tekan -> kesan disedut ke dunia metaverse -> pilih subjek (3 dibuka, lain dikunci) -> masuk Meta Didik.
+   Tekan -> kesan disedut ke dunia metaverse -> terus masuk Meta Didik (v18.39: subjek ditukar melalui ☰ Menu).
    Menukar subjek memuat semula aplikasi; bendera gt-auto-meta membuka Meta Didik terus selepas dimuat semula. */
 const SJ_ICO = { tw: "🕌", pi: "📗", p3: "📘", ba: "🔤", sj: "🏛", sc: "🔬", mt: "➗", bm: "📝", bi: "🔠" };
 function mdWarp(cb, txt) {
@@ -7291,7 +7291,7 @@ function mdPick() {
     b.addEventListener("click", () => {
       if (lock) { sjAskCode(k); return; }
       close();
-      if (k === SUBJ) { lmOpen(""); return; }
+      if (k === SUBJ) { if (!(window.LMX && window.LMX.on)) lmOpen(""); return; }
       try { localStorage.setItem("gt-auto-meta", "1"); } catch (e) { /* abaikan */ }
       setSubject(k);
     });
@@ -7306,7 +7306,10 @@ function mdGo() {
   if (typeof S !== "undefined" && S && S.running) { toast("Selesaikan atau keluar daripada misi dahulu.", "warn"); return; }
   if (window.LMX && window.LMX.on) return;
   try { if (window.AV3 == null) av3Load(() => {}); } catch (e) { /* abaikan */ }
-  mdWarp(mdPick);
+  /* v18.39: terus masuk permainan (subjek ditukar melalui ☰ Menu dalam Meta Didik) */
+  /* skrin penuh mesti diminta dalam klik pengguna (sebelum animasi dan memuat dunia) */
+  try { let fs = 1; try { fs = (JSON.parse(localStorage.getItem("gt-lm-" + SUBJ) || "{}") || {}).fs; } catch (e) { fs = 1; } const d = document.documentElement, f = d.requestFullscreen || d.webkitRequestFullscreen; window.MD_FS = false; if (TOUCH && fs !== 0 && f && !document.fullscreenElement) { const pr = f.call(d); window.MD_FS = true; if (pr && pr.catch) pr.catch(() => { window.MD_FS = false; }); } } catch (e) { window.MD_FS = false; }
+  mdWarp(() => lmOpen(""));
 }
 function lmBtnInit() {
   const b = document.getElementById("mdGo"); if (b && !b.dataset.ok) { b.dataset.ok = "1"; b.addEventListener("click", mdGo); }
@@ -7358,7 +7361,7 @@ async function pjMuat() {
 /* jalur logo penaja di paparan utama */
 function pjJalur() {
   let box = document.getElementById("pjBar");
-  if (!box) { const h = document.getElementById("mdHero"); if (!h) return; box = el("section", { class: "pjbar", id: "pjBar", "aria-label": "Penaja Meta Didik" }); h.after(box); }
+  if (!box) { const h = document.getElementById("testi") || document.getElementById("mdHero"); if (!h) return; box = el("section", { class: "pjbar", id: "pjBar", "aria-label": "Penaja Meta Didik" }); h.after(box); } /* v18.39: di bawah testimoni */
   box.textContent = "";
   const join = el("button", { type: "button", class: "btn sm" }, "🤝 Jadi Penaja"); join.addEventListener("click", () => pjBuka());
   box.appendChild(el("div", { class: "pjbar-h" }, el("span", { class: "pjbar-k" }, "DISOKONG OLEH PENAJA & RAKAN PENDIDIKAN"), join));
@@ -17647,8 +17650,10 @@ async function stnSubmit(f) {
   if (g.trial && g.em) await FB.req("PUT", "stesen_em/" + g.uid, g.em); /* e-mel tidak awam: hanya pentadbir membaca */
   STN.mine = doc;
 }
-function stnGuruBox(box) {
-  const c = el("details", { class: "card", style: "margin:8px 0" }); c.open = !(STN.mine && STN.mine.st === "lulus") || !!STN.msg;
+function stnGuruBox(box, opt) {
+  /* v18.39: lokasi stesen dipilih dalam Meta Didik (☰ Menu → Pacak inovasi di sini); opt.loc = { la, lo, pn }, opt.rr = lukis semula */
+  opt = opt || {}; const rr = opt.rr || renderGuru, dalam = !!opt.loc;
+  const c = el("details", { class: "card", style: "margin:8px 0" }); c.open = dalam || !(STN.mine && STN.mine.st === "lulus") || !!STN.msg;
   c.appendChild(el("summary", { style: "cursor:pointer;font-weight:700" }, "🏛 Stesen Inovasi saya"));
   c.appendChild(el("p", { class: "muted", style: "font-size:13px;margin:4px 0" }, "Pamerkan inovasi pengajaran anda di mana-mana lokasi pilihan dalam peta Meta Didik, dalam dunia subjek inovasi itu. Guru dan murid seluruh Malaysia boleh melawat, menonton video dan membuka pautan produk anda. Setiap stesen disemak oleh pentadbir sebelum dipaparkan. Peringatan: penjawat awam yang menjana pendapatan sampingan perlu mendapatkan kebenaran ketua jabatan."));
   box.appendChild(c);
@@ -17656,13 +17661,13 @@ function stnGuruBox(box) {
   if (!g) {
     c.appendChild(el("p", null, "Langkah 1: sahkan anda guru dengan log masuk akaun DELIMa (@moe-dl.edu.my)."));
     const host = el("div", { style: "min-height:44px" }); c.appendChild(host);
-    AUTH.button(host, () => { toast("Akaun DELIMa disahkan.", "ok"); STN.mine = undefined; renderGuru(); }, (m) => toast(m, "bad"));
+    AUTH.button(host, () => { toast("Akaun DELIMa disahkan.", "ok"); STN.mine = undefined; rr(); }, (m) => toast(m, "bad"));
     return;
   }
   if (g.trial) c.appendChild(el("div", { class: "notice" }, "🧪 Mod percubaan: log masuk DELIMa belum diwajibkan. Stesen anda terikat pada peranti ini, jadi gunakan peranti yang sama untuk mengurus stesen dan pendapatan MD. Pentadbir menyemak e-mel DELIMa anda sebelum meluluskan."));
 
-  if (g.trial && !janjiOk()) { c.open = true; janjiBox(c, () => renderGuru()); return; } /* v18.34 */
-  if (STN.mine === undefined) { c.appendChild(el("p", { class: "muted" }, "Memuat stesen anda...")); if (!STN.busy) { STN.busy = true; stnLoadMine().then(() => { STN.busy = false; renderGuru(); }); } return; }
+  if (g.trial && !janjiOk()) { c.open = true; janjiBox(c, () => rr()); return; } /* v18.34 */
+  if (STN.mine === undefined) { c.appendChild(el("p", { class: "muted" }, "Memuat stesen anda...")); if (!STN.busy) { STN.busy = true; stnLoadMine().then(() => { STN.busy = false; rr(); }); } return; }
   if (STN.err) c.appendChild(el("div", { class: "notice warn" }, STN.err));
   const m = STN.mine;
   if (m) {
@@ -17681,8 +17686,14 @@ function stnGuruBox(box) {
   const iSj = el("select", { id: "stSj" }); Object.keys(SUBJS).filter((k) => !sjLocked(k)).forEach((k) => iSj.appendChild(el("option", { value: k }, SUBJS[k].subjek))); iSj.value = m && m.sj && !sjLocked(m.sj) ? m.sj : SUBJ;
   const iTp = el("select", { id: "stTp" }), fillTp = () => { iTp.textContent = ""; iTp.appendChild(el("option", { value: "" }, "Pilih tajuk berkaitan...")); sjTopik(iSj.value).forEach((t) => iTp.appendChild(el("option", { value: t.id }, (t.kod || t.id) + " " + t.nama))); };
   fillTp(); if (m && m.tp && m.sj === iSj.value) iTp.value = m.tp; iSj.addEventListener("change", fillTp);
-  const loc = { la: m && m.la != null ? m.la : null, lo: m && m.lo != null ? m.lo : null, pn: m ? m.pn : "" };
-  const iLoc = lpPicker(m && m.la != null ? { la: m.la, lo: m.lo } : null, (la, lo, k) => { loc.la = la; loc.lo = lo; loc.pn = k; });
+  const loc = dalam ? { la: opt.loc.la, lo: opt.loc.lo, pn: opt.loc.pn } : { la: m && m.la != null ? m.la : null, lo: m && m.lo != null ? m.lo : null, pn: m ? m.pn : "" };
+  if (!dalam && loc.la == null) { /* stesen baharu: lokasi mesti dipilih dalam Meta Didik */
+    const go = el("button", { type: "button", class: "btn" }, "🌏 Masuk Meta Didik untuk pilih lokasi");
+    go.addEventListener("click", () => mdGo());
+    c.append(el("div", { class: "notice" }, "📍 Cara memacak inovasi: 1) Masuk Meta Didik. 2) Berjalan ke tempat yang anda mahu (contohnya sekolah, masjid atau bandar). 3) Tekan ☰ Menu → 🏛 Pacak inovasi di sini. 4) Isi borang inovasi."), go);
+    return;
+  }
+  const iLoc = el("div", { class: "notice" }, "📍 Lokasi: " + (DATA.negeri[loc.pn] ? DATA.negeri[loc.pn].nama : "Malaysia") + " (" + (+loc.la).toFixed(4) + ", " + (+loc.lo).toFixed(4) + ")" + (dalam ? " · kedudukan anda sekarang dalam Meta Didik" : " · untuk tukar lokasi, masuk Meta Didik dan pilih ☰ Menu → 🏛 Pacak inovasi di sini"));
   const iEm = el("input", { id: "stEm", type: "email", maxlength: "80", value: g.em || "", placeholder: "nama@moe-dl.edu.my" });
   if (g.trial) c.appendChild(fld("stEm", "E-mel DELIMa (pilihan)", iEm));
   c.append(fld("stTj", "Tajuk inovasi", iTj), fld("stKat", "Kategori", iKat), fld("stDs", "Huraian (apa, untuk siapa, kesan)", iDs), fld("stYt", "Video YouTube", iYt), fld("stUrl", "Pautan produk / maklumat", iUrl), fld("stHg", "Harga guna inovasi (MD)", iHg), fld("stSj", "Subjek inovasi", iSj), fld("stTp", "Tajuk berkaitan (wajib)", iTp), fld("stLoc", "Lokasi stesen dalam peta Meta Didik", iLoc));
@@ -17690,7 +17701,7 @@ function stnGuruBox(box) {
   const sb = el("button", { type: "button", class: "btn" }, m ? "Kemas kini dan hantar semula untuk semakan" : "Hantar permohonan stesen");
   sb.addEventListener("click", async () => {
     sb.disabled = true; out.textContent = "Menghantar...";
-    try { await stnSubmit({ tj: iTj.value, kat: iKat.value, ds: iDs.value, yt: iYt.value, url: iUrl.value, pn: loc.pn, la: loc.la, lo: loc.lo, sj: iSj.value, tp: iTp.value, hg: iHg.value, em: iEm.value }); STN.msg = "Permohonan dihantar. Pentadbir akan menyemak inovasi anda sebelum stesen dipaparkan di lokasi pilihan."; renderGuru(); }
+    try { await stnSubmit({ tj: iTj.value, kat: iKat.value, ds: iDs.value, yt: iYt.value, url: iUrl.value, pn: loc.pn, la: loc.la, lo: loc.lo, sj: iSj.value, tp: iTp.value, hg: iHg.value, em: iEm.value }); STN.msg = "Permohonan dihantar. Pentadbir akan menyemak inovasi anda sebelum stesen dipaparkan di lokasi pilihan."; rr(); }
     catch (e) { out.textContent = e.message || "Gagal dihantar. Cuba lagi."; sb.disabled = false; }
   });
   c.append(sb, out);
