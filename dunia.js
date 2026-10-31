@@ -4638,6 +4638,7 @@ const LM_CSS = `
 #lmOv.touch .lm-tc{display:flex}
 #lmOv .lm-tc button{width:64px;height:64px;border-radius:50%;font-size:13px;padding:0}
 #lmOv .lm-tc button.big{width:78px;height:78px}
+#lmOv .lm-stnform{display:grid;gap:8px;text-align:left;max-height:62vh;overflow:auto}#lmOv .lm-stnform .card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px;display:grid;gap:8px}#lmOv .lm-stnform .field{display:grid;gap:4px}#lmOv .lm-stnform label{font-weight:700;font-size:13px}#lmOv .lm-stnform input:not([type=checkbox]),#lmOv .lm-stnform select,#lmOv .lm-stnform textarea{width:100%;box-sizing:border-box;padding:9px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.3);background:#0b1e33;color:#fff;font:inherit;user-select:text;-webkit-user-select:text}#lmOv .lm-stnform summary{font-weight:800;cursor:pointer}#lmOv .lm-stnform .notice{background:rgba(255,212,90,.1);border:1px solid rgba(255,212,90,.4);border-radius:10px;padding:8px 10px;font-size:13px}
 #lmOv .lm-js{position:absolute;left:calc(26px + env(safe-area-inset-left));bottom:calc(26px + env(safe-area-inset-bottom));width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);display:none;pointer-events:none}
 #lmOv.touch .lm-js{display:block}
 #lmOv .lm-js i{position:absolute;left:35px;top:35px;width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.55)}
@@ -4766,44 +4767,58 @@ function lmPop(text) {
 function lmBtn(text, cls, fn) { const b = el("button", { type: "button", class: cls || "" }, text); b.addEventListener("click", fn); return b; }
 
 /* ---------- skrin mula ---------- */
-function lmSetup() {
-  const r = lmRoot();
-  r.appendChild(el("div", { style: "position:absolute;inset:0;background:radial-gradient(900px 520px at 20% 0%,#2f8fd055,transparent),radial-gradient(800px 500px at 90% 100%,#3aa66a44,transparent),#0b2a44" }));
-  const c = el("div", { class: "lm-card", style: "background:none" }), b = el("div", { class: "lm-box", style: "width:min(720px,100%)" });
-  c.appendChild(b); r.appendChild(c);
-  const t = lmNextTopic(), ng = t && DATA.negeri[t.negeri], nT = DATA.topik.filter((x) => DATA.negeri[x.negeri]).length;
-  b.append(el("div", { class: "lm-kick" }, "Dunia maya · " + SUBJS[SUBJ].nama), el("h2", null, "META DIDIK"));
-  b.append(el("p", null, "Jelajah peta Malaysia 3D bersama rakan. Kesemua " + nT + " tajuk " + SUBJS[SUBJ].subjek + " dipegang oleh Stesen Ilmu di institusi sebenar seluruh Malaysia (masjid, mahkamah, Parlimen, Bursa Malaysia dan lain-lain). Universiti awam pula menjadi galeri Kembara Kampus."));
-  b.append(el("p", { class: "lm-ex" }, (LM.ownSk ? "Perjalanan menuntut ilmu: anda bermula di sekolah anda, " + LM.ownSk.n + ", kemudian kembara ke setiap Stesen Ilmu. Setiap stesen memegang tajuk yang berkait dengan institusi itu. " : "Sekolah anda tidak ditemui; misi bermula di KLIA. Pastikan nama sekolah di profil sama seperti nama rasmi (contoh: SMK Taman Universiti). ") + "Kawalan: W A S D atau anak panah untuk bergerak, Shift lari, Space lompat, E berinteraksi, M peta, P pasport, T senarai tajuk, seret tetikus untuk pusing kamera. Di telefon: kayu bedik kiri dan butang kanan."));
-  /* v18.30: murid hanya ada dua pilihan: Dunia Terbuka (chat sahaja) atau Ruang Privasi (kod daripada guru; mic dibenarkan) */
-  const solo = lmBtn("Main solo", Net.room ? "" : "pri", () => lmStart(""));
-  const row = el("div", { class: "lm-row" });
-  if (Net.room) {
-    row.append(lmBtn("🌏 Masuk Dunia Terbuka", "pri", () => lmStart("", "open")));
-    const inp = el("input", { class: "lm-in", maxlength: "6", placeholder: "KOD GURU", "aria-label": "Kod Ruang Privasi daripada guru", autocomplete: "off" });
-    const join = lmBtn("🔐 Masuk Ruang Privasi", "", () => lmPrivJoin(inp.value, join));
-    inp.addEventListener("keydown", (e) => { e.stopPropagation(); if (e.key === "Enter") join.click(); });
-    b.append(row, el("div", { class: "lm-row" }, inp, join));
-    if (lmIsGuru()) { const mk = lmBtn("➕ Cipta kod Ruang Privasi (guru)", "", () => lmPrivMake(mk)); b.append(el("div", { class: "lm-row" }, mk)); }
-    b.append(el("p", { class: "lm-ex" }, "🌏 Dunia Terbuka: murid seluruh Malaysia, berbual melalui chat sahaja. 🔐 Ruang Privasi: bilik kelas yang dicipta oleh guru; dapatkan kodnya daripada guru anda. Mic (tekan-untuk-cakap) hanya ada dalam Ruang Privasi."));
-  } else {
-    row.append(solo);
-    b.append(row, el("p", { class: "lm-ex" }, "Dunia Terbuka dan Ruang Privasi memerlukan sambungan pelayan Firebase. Mod solo tetap boleh dimainkan."));
-  }
-  const q = clamp(LM.st.gq | 0, 0, 2);
-  const gq = lmBtn("Grafik: " + GQN[q], "", () => { LM.st.gq = LM.gq = (q + 1) % 3; lmSave(); lmSetup(); }); /* v18.35: Rendah -> Sederhana -> Tinggi */
-  gq.title = "Rendah: tiada bayang, untuk telefon lemah. Sederhana: bayang dan pantulan. Tinggi: bayang lembut dan antialias.";
-  const x = lmBtn("Tutup", "", lmClose);
-  const rf = lmBtn("Muat semula versi terkini", "", () => { if (typeof appHardReload === "function") appHardReload(); else location.reload(); });
-  const fps = lmBtn(LM.f30 ? "FPS: 30 (jimat bateri)" : "FPS: 60", "", () => { LM.st.f30 = LM.f30 ? 0 : 1; LM.f30 = !!LM.st.f30; lmSave(); lmSetup(); });
-  const kg = lmBtn(lmKurangGerak() ? "Kesan visual: dikurangkan" : "Kesan visual: penuh", "", () => { LM.st.rm = lmKurangGerak() ? 0 : 1; lmSave(); lmSetup(); });
-  kg.title = "Kurangkan gerakan hologram dan kesan visual untuk keselesaan mata";
-  b.append(el("div", { class: "lm-row" }, gq, fps, kg), el("div", { class: "lm-row" }, rf, x));
-  const st = lmSummary();
-  b.append(el("p", { class: "lm-ex" }, "Pasport anda: " + st.pl + "/" + st.plN + " tempat diziarahi, " + st.tw + "/" + st.twN + " Menara Ilmu ditawan."));
-  b.append(el("p", { class: "lm-ex", style: "font-size:12px;opacity:.75" }, "META DIDIK v" + (typeof APP_VER !== "undefined" ? APP_VER : "?") + ". Jika tidak dapat bergerak atau paparan lama, tekan Muat semula versi terkini."));
-  if (!TOUCH) solo.focus();
+/* ---------- v18.39: tetapan, Ruang Privasi dan pacak inovasi melalui ☰ Menu (tiada skrin mula) ---------- */
+function lmTetapan() {
+  lmCard((b) => {
+    b.append(el("div", { class: "lm-kick" }, "⚙ Tetapan Meta Didik"), el("h2", null, "Tetapan"));
+    const q = clamp(LM.st.gq | 0, 0, 2);
+    const gq = lmBtn("Grafik: " + GQN[q], "", () => { LM.st.gq = LM.gq = (q + 1) % 3; lmSave(); lmTetapan(); });
+    gq.title = "Rendah: tiada bayang, untuk telefon lemah. Sederhana: bayang dan pantulan. Tinggi: bayang lembut dan antialias.";
+    const fps = lmBtn(LM.f30 ? "FPS: 30 (jimat bateri)" : "FPS: 60", "", () => { LM.st.f30 = LM.f30 ? 0 : 1; LM.f30 = !!LM.st.f30; lmSave(); lmTetapan(); });
+    const kg = lmBtn(lmKurangGerak() ? "Kesan visual: dikurangkan" : "Kesan visual: penuh", "", () => { LM.st.rm = lmKurangGerak() ? 0 : 1; lmSave(); lmTetapan(); });
+    b.append(el("div", { class: "lm-row" }, gq, fps, kg));
+    const bina = lmBtn("Guna tetapan grafik sekarang (bina semula dunia)", "", () => { const g = LM.g; if (g) LM.resume = { x: g.p.x, z: g.p.z, msg: "Grafik: " + GQN[clamp(LM.st.gq | 0, 0, 2)] }; lmSave(); lmCardClose(); lmClose(); setTimeout(() => lmOpen(""), 80); });
+    const rf = lmBtn("Muat semula versi terkini", "", () => { if (typeof appHardReload === "function") appHardReload(); else location.reload(); });
+    b.append(el("p", { class: "lm-ex" }, "Tukar tahap grafik berkuat kuasa selepas dunia dibina semula. FPS dan kesan visual berkuat kuasa serta-merta."), el("div", { class: "lm-row" }, bina, rf));
+    const st = lmSummary();
+    b.append(el("p", { class: "lm-ex" }, "Pasport anda: " + st.pl + "/" + st.plN + " tempat diziarahi, " + st.tw + "/" + st.twN + " Menara Ilmu ditawan."), el("p", { class: "lm-ex", style: "font-size:12px;opacity:.75" }, "META DIDIK v" + (typeof APP_VER !== "undefined" ? APP_VER : "?") + ". Jika tidak dapat bergerak atau paparan lama, tekan Muat semula versi terkini."));
+    b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose)));
+  });
 }
+function lmPrivMasuk(code) {
+  if (LM.on && LM.g) { lmNetJoin(code, "privasi").then((ok) => { if (ok) lmPop("🔐 Ruang Privasi " + String(code).slice(1) + " · mic dibenarkan"); }); }
+  else lmStart(code, "privasi");
+}
+function lmPrivPanel() {
+  lmCard((b) => {
+    b.append(el("div", { class: "lm-kick" }, "🔐 Ruang Privasi"), el("h2", null, LM.roomKind === "privasi" && LM.room ? "Ruang " + String(LM.roomCode).slice(1) : "Masuk bilik kelas"));
+    if (!Net.room) { b.append(el("p", null, "Ruang Privasi memerlukan sambungan pelayan Firebase."), el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose))); return; }
+    b.append(el("p", null, "Bilik kelas yang dicipta oleh guru. Dapatkan kod daripada guru anda. Mic (tekan-untuk-cakap) hanya dibenarkan di sini; Dunia Terbuka guna chat sahaja."));
+    const inp = el("input", { class: "lm-in", maxlength: "6", placeholder: "KOD GURU", "aria-label": "Kod Ruang Privasi daripada guru", autocomplete: "off" });
+    const join = lmBtn("🔐 Masuk Ruang Privasi", "pri", () => lmPrivJoin(inp.value, join).then(() => { if (LM.roomKind === "privasi") lmCardClose(); }));
+    inp.addEventListener("keydown", (e) => { e.stopPropagation(); if (e.key === "Enter") join.click(); });
+    b.append(el("div", { class: "lm-row" }, inp, join));
+    if (lmIsGuru()) { const mk = lmBtn("➕ Cipta kod Ruang Privasi (guru)", "", () => lmPrivMake(mk)); b.append(el("div", { class: "lm-row" }, mk)); }
+    const row = el("div", { class: "lm-row" });
+    if (LM.roomKind === "privasi") row.append(lmBtn("🌏 Kembali ke Dunia Terbuka", "", () => { lmCardClose(); lmNetLeave(); const g = LM.g; lmOpenJoin(lmZone(lmAt(g.p.x, g.p.z)) || "tengah").then((ok) => { if (ok) lmPop("Kembali ke Dunia Terbuka"); }); }));
+    row.append(lmBtn("Tutup", "", lmCardClose)); b.append(row);
+  });
+}
+/* guru: pacak Stesen Inovasi di kedudukan semasa avatar, kemudian isi borang */
+function lmPacak() {
+  const g = LM.g; if (!g) return;
+  if (!lmIsGuru()) { toast("Hanya guru boleh memacak inovasi.", "warn"); return; }
+  const k = lmAt(g.p.x, g.p.z);
+  if (!k || !DATA.negeri[k]) { toast("Pergi ke daratan dalam Malaysia dahulu, kemudian cuba lagi.", "warn"); return; }
+  const c = lmLatLon(g.p.x, g.p.z), loc = { la: Math.round(c.lat * 1e5) / 1e5, lo: Math.round(c.lon * 1e5) / 1e5, pn: k };
+  lmCard((b) => {
+    b.append(el("div", { class: "lm-kick" }, "🏛 Pacak inovasi · " + DATA.negeri[k].nama), el("h2", null, "Stesen Inovasi di sini"));
+    const host = el("div", { class: "lm-stnform" }); b.appendChild(host);
+    try { stnGuruBox(host, { loc: loc, rr: () => { if (LM.ui.card) lmPacakLukis(host, loc); } }); } catch (e) { host.textContent = "Borang tidak dapat dibuka."; }
+    b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "", lmCardClose)));
+  });
+}
+function lmPacakLukis(host, loc) { host.textContent = ""; stnGuruBox(host, { loc: loc, rr: () => lmPacakLukis(host, loc) }); }
 /* menara seterusnya: tajuk pertama (ikut susunan peta operasi) yang belum ditawan */
 function lmNextTopic() {
   const ts = DATA.topik.filter((t) => DATA.negeri[t.negeri]);
@@ -4824,7 +4839,7 @@ async function lmPrivMake(btn) {
     lmCard((b) => {
       b.append(el("div", { class: "lm-kick" }, "🔐 Ruang Privasi"), el("h2", null, "Kod: " + code));
       b.append(el("p", null, "Berikan kod ini kepada murid anda. Mereka masuk Meta Didik " + SUBJS[SUBJ].subjek + ", taip kod dan tekan Masuk Ruang Privasi. Kod sah selama " + LMP_HARI + " hari."));
-      b.append(el("div", { class: "lm-row" }, lmBtn("Masuk sekarang", "pri", () => { lmCardClose(); lmStart("P" + code, "privasi"); }), lmBtn("Salin kod", "", () => { try { navigator.clipboard.writeText(code); toast("Kod disalin.", "ok"); } catch (e) { /* abaikan */ } }), lmBtn("Tutup", "", lmCardClose)));
+      b.append(el("div", { class: "lm-row" }, lmBtn("Masuk sekarang", "pri", () => { lmCardClose(); lmPrivMasuk("P" + code); }), lmBtn("Salin kod", "", () => { try { navigator.clipboard.writeText(code); toast("Kod disalin.", "ok"); } catch (e) { /* abaikan */ } }), lmBtn("Tutup", "", lmCardClose)));
     });
   } catch (e) { toast("Gagal mencipta kod (kod " + (e.code || "rangkaian") + ").", "warn"); }
   btn.disabled = false;
@@ -4838,7 +4853,7 @@ async function lmPrivJoin(raw, btn) {
     if (!r || !r.g) { toast("Kod tidak sah. Dapatkan kod Ruang Privasi daripada guru anda.", "warn"); return; }
     if (r.t && Date.now() - r.t > LMP_HARI * 864e5) { toast("Kod ini sudah tamat tempoh. Minta kod baharu daripada guru.", "warn"); return; }
     if (r.sj && r.sj !== SUBJ && SUBJS[r.sj]) { toast("Kod ini untuk Meta Didik " + SUBJS[r.sj].subjek + ". Tukar subjek dahulu.", "warn"); return; }
-    LM.privBy = String(r.n || "Guru").slice(0, 40); lmStart("P" + v, "privasi");
+    LM.privBy = String(r.n || "Guru").slice(0, 40); lmPrivMasuk("P" + v);
   } catch (e) { toast("Tidak dapat menyemak kod (kod " + (e.code || "rangkaian") + ").", "warn"); }
   finally { btn.disabled = false; }
 }
@@ -5301,7 +5316,7 @@ function lmRoomPanel() {
       list.appendChild(el("div", { class: "lm-stamp" }, el("b", null, (lmFriend(e) ? "🟢 " : "") + e.n + (e.vo ? " 🎙" : "") + (mu ? " 🔇" : "")), el("div", null, (e.st | 0) + " cop pasport · " + Math.round(Math.hypot(e.x - LM.g.p.x, e.z - LM.g.p.z)) + " m"), el("div", { class: "lm-pl" }, lmBtn("Tunjuk arah", "", () => { lmGoPeer(id); lmCardClose(); }), mb, lmBtn("Lapor", "", () => { if (confirm("Laporkan " + e.n + " kerana mengganggu?")) { lmReport(id); lmRoomPanel(); } }))));
     });
     b.appendChild(list);
-    if (!LM.room && !op) b.append(el("p", { class: "lm-ex" }, "Untuk main bersama, keluar ke skrin mula dan pilih Dunia Terbuka atau masukkan kod Ruang Privasi daripada guru."));
+    if (!LM.room && !op) b.append(el("p", { class: "lm-ex" }, "Untuk main bersama, buka ☰ Menu → 🔐 Ruang Privasi dan masukkan kod daripada guru."));
     b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose)));
   });
 }
@@ -5789,6 +5804,13 @@ function lmHud() {
   /* v18.30: bina profil (avatar, pakaian, lencana) terus dari menu; tidak perlu ke sekolah */
   const prof = lmBtn("👤 Profil & Gudang", "", () => { r.classList.remove("menu"); ui.menuB.textContent = "☰ Menu"; lmGudang(); });
   const sol = lmBtn("🕌 Waktu solat", "", () => { r.classList.remove("menu"); ui.menuB.textContent = "☰ Menu"; lmSolatOpen(); });
+  const tutupM = () => { r.classList.remove("menu"); ui.menuB.textContent = "☰ Menu"; };
+  const sjB = lmBtn("📚 Subjek: " + SUBJS[SUBJ].subjek, "", () => { tutupM(); if (typeof mdPick === "function") mdPick(); });
+  const setB = lmBtn("⚙ Tetapan", "", () => { tutupM(); lmTetapan(); });
+  const pvB = lmBtn("🔐 Ruang Privasi", "", () => { tutupM(); lmPrivPanel(); });
+  top.append(sjB);
+  if (lmIsGuru()) top.append(lmBtn("🏛 Pacak inovasi di sini", "", () => { tutupM(); lmPacak(); }));
+  top.append(pvB, setB);
   top.append(prof, ui.smB, kol, sol, lmBtn("Pasport (P)", "", () => lmPassport()), lmBtn("Tajuk (T)", "", () => lmPassport("tajuk")), ui.skyB, lmBtn("Bilik", "", lmRoomPanel), lmBtn("Swafoto", "", () => lmSelfie(null)),
     ui.snd = lmBtn(LM.mute ? "Bunyi: tutup" : "Bunyi: buka", "", () => { LM.mute = !LM.mute; if (!LM.mute) lmAudUnlock(); ui.snd.textContent = LM.mute ? "Bunyi: tutup" : "Bunyi: buka"; }),
     lmBtn("Keluar", "", () => { if (confirm("Keluar dari META DIDIK? Cop pasport dan menara yang ditawan sudah disimpan.")) lmClose(); }));
@@ -5900,6 +5922,7 @@ function lmKey(e) {
   if (!LM.on || !LM.g || LM.pause) return;
   const t = e.target; if (t && (t.nodeName === "INPUT" || t.nodeName === "TEXTAREA")) return;
   const k = String(e.key || "").toLowerCase(), dn = e.type === "keydown", g = LM.g;
+  if (dn && !LAUD.unl && !LM.mute) lmAudUnlock();
   if (dn && k === "escape") { e.preventDefault(); if (LM.ui.big) lmBigMap(); else if (LM.ui.card) lmCardClose(); else if (confirm("Keluar dari META DIDIK?")) lmClose(); return; }
   if (g.ui) return;
   if ([" ", "arrowup", "arrowdown", "arrowleft", "arrowright"].indexOf(k) >= 0) e.preventDefault();
@@ -5934,6 +5957,7 @@ function lmPointers(cv) {
   }
   /* pengendali dikongsi: id ialah nombor (pointerId, atau 100000 + identifier bagi Touch Events) */
   const down = (id, cx, cy, touch) => {
+    if (!LAUD.unl && !LM.mute) lmAudUnlock(); /* v18.39: sentuhan pertama dalam dunia membuka audio telefon */
     if (!LM.g || LM.g.ui) return;
     /* sentuhan baharu di kiri sentiasa mengambil alih kayu bedik (elak id lama yang tersangkut) */
     if (touch && cx < window.innerWidth * 0.42) {
@@ -6109,7 +6133,7 @@ function lmOpen(tid) {
   if (!GEOD) {
     const r = lmRoot(); r.appendChild(el("div", { class: "lm-card" }, el("div", { class: "lm-box" }, el("div", { class: "lm-kick" }, "META DIDIK"), el("h2", null, "Memuat peta Malaysia sebenar..."), el("p", null, "Sempadan negeri dan ketinggian muka bumi (kali pertama sahaja)."))));
   }
-  lmGeoLoad().then(() => lmOwnSchool()).then((sk) => { LM.ownSk = sk; lmRaster(); if (LM.resume) lmStart("", ""); else lmSetup(); }).catch(() => { toast("Peta META DIDIK tidak dapat dimuatkan. Semak sambungan internet dan cuba lagi.", "warn"); lmClose(); });
+  lmGeoLoad().then(() => lmOwnSchool()).then((sk) => { LM.ownSk = sk; lmRaster(); lmStart("", Net.room ? "open" : ""); /* v18.39: terus masuk; subjek, tetapan dan Ruang Privasi dalam ☰ Menu */ }).catch(() => { toast("Peta META DIDIK tidak dapat dimuatkan. Semak sambungan internet dan cuba lagi.", "warn"); lmClose(); });
 }
 /* v18.38: logo penaja Platinum pada skrin memuat */
 function lmPjMuatLogo() {
@@ -6118,7 +6142,7 @@ function lmPjMuatLogo() {
   const row = el("div", { style: "display:flex;gap:10px;flex-wrap:wrap;justify-content:center" }); L.forEach((d) => row.appendChild(el("div", { style: "background:#fff;border-radius:10px;width:130px;height:62px;display:grid;place-items:center;padding:6px" }, el("img", { src: d.logo, alt: d.n, style: "max-width:100%;max-height:100%" })))); r.appendChild(row); return r;
 }
 function lmStart(code, kind) {
-  if (TOUCH && LM.st && LM.st.fs !== 0) lmFsMasuk(); /* v18.35: dalam klik pengguna: skrin penuh + landskap */
+  if (TOUCH && LM.st && LM.st.fs !== 0) { if ((document.fullscreenElement || document.webkitFullscreenElement) && window.MD_FS) { LM.fsAuto = true; lmLandskap(); } else lmFsMasuk(); } /* v18.35/18.39: skrin penuh + landskap (diminta semasa klik Masuk Meta Didik) */
   lmAudUnlock(); AZ.last = null; lmAzanLoad(); /* v18.33: azan */ /* dalam klik pengguna: buka kunci audio telefon */
   const r = lmRoot(); /* kembali dari permainan lain (LM.resume): lapisan mungkin masih tersembunyi */ LM.ptsLast = null; LM.roomKind = kind || ""; LM.sh = lmMySh(); LM.zoneN = null; LM.zoneAt = 0; LM.roomCode = ""; LM.openFull = false; LM.openRetry = 0; LM.zone = "";
   lmCardClose(); r.textContent = "";
