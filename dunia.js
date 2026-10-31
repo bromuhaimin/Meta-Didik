@@ -241,8 +241,8 @@ function lmLoad() {
   if (!s.nm || typeof s.nm !== "object") s.nm = {};   /* nama digantung: id -> masa */
   if (!s.cd || s.cd.d !== dayKey()) s.cd = { d: dayKey(), got: [] }; /* MD dikutip hari ini */
   if (!s.dq || s.dq.d !== dayKey()) s.dq = { d: dayKey(), done: 0, v: [] }; /* misi pelancong harian */
-  if (s.gq == null) s.gq = TOUCH ? 0 : 1;
-  LM.st = s; LM.gq = s.gq;
+  if (s.gqv !== 3) { s.gq = s.gq == null ? (TOUCH ? (lmLemah() ? 0 : 1) : 2) : (s.gq ? (TOUCH ? 1 : 2) : 0); s.gqv = 3; } /* v18.35: 3 tahap grafik */
+  LM.st = s; LM.gq = s.gq; LM.f30 = s.f30 != null ? !!s.f30 : TOUCH; /* v18.35: had 30 FPS lalai pada telefon */
 }
 function lmXp(n) {
   let left = XP_CAP;
@@ -507,7 +507,7 @@ function lmElevY(m) { return 0.55 + 30 * Math.pow(Math.max(0, m) / 1000, 0.95); 
 /* puncak sebenar (meter): DEM 1.7 km melicinkan puncak, jadi puncak dinaikkan semula di lokasi mercu tanda */
 const PEAK_M = { "sb-kinabalu": 4095, "sw-mulu": 2376, "kd-jerai": 1217, "jh-ledang": 1276, "kn-stong": 1422, "pg-bendera": 833, "ph-genting": 1800, "ph-cameron": 1500, "ph-fraser": 1300 };
 function lmTerrainBase(g) {
-  const cs = TER.cs = LM.gq ? 12 : 20, nx = TER.nx = Math.floor(WB.w / cs) + 1, nz = TER.nz = Math.floor(WB.h / cs) + 1, N = nx * nz;
+  const cs = TER.cs = lmQv([20, 16, 12]), nx = TER.nx = Math.floor(WB.w / cs) + 1, nz = TER.nz = Math.floor(WB.h / cs) + 1, N = nx * nz;
   TER.x0 = WB.x0; TER.z0 = WB.z0;
   const land = TER.land = new Uint8Array(N), st = TER.st = new Uint8Array(N), fg = TER.fg = new Uint8Array(N), dem = new Float32Array(N), keys = RAST.keys;
   for (let z = 0; z < nz; z++) for (let x = 0; x < nx; x++) {
@@ -682,12 +682,12 @@ function lmBuildSky(g) {
   g.sunDisc = new T.Sprite(new T.SpriteMaterial({ map: sunTex, fog: false, depthWrite: false, transparent: true })); g.sunDisc.scale.set(160, 160, 1); g.sunDisc.renderOrder = -9; g.scene.add(g.sunDisc);
   const puff = lmTex(128, 128, (x, w) => { for (let i = 0; i < 7; i++) { const cx = 30 + Math.random() * 68, cy = 50 + Math.random() * 30, r = 22 + Math.random() * 18, gr = x.createRadialGradient(cx, cy, 0, cx, cy, r); gr.addColorStop(0, "rgba(255,255,255,.95)"); gr.addColorStop(1, "rgba(255,255,255,0)"); x.fillStyle = gr; x.fillRect(0, 0, w, w); } });
   const clouds = new T.Group(), R = lmRand("lm-cloud"), cm = new T.SpriteMaterial({ map: puff, transparent: true, depthWrite: false, opacity: 0.9 });
-  for (let i = 0; i < (LM.gq ? 70 : 36); i++) { const s = new T.Sprite(cm); const k = 60 + R() * 70; s.scale.set(k * 1.8, k, 1); s.position.set(WB.x0 + R() * WB.w, 130 + R() * 70, WB.z0 + R() * WB.h); clouds.add(s); }
+  for (let i = 0; i < lmQv([36, 50, 70]); i++) { const s = new T.Sprite(cm); const k = 60 + R() * 70; s.scale.set(k * 1.8, k, 1); s.position.set(WB.x0 + R() * WB.w, 130 + R() * 70, WB.z0 + R() * WB.h); clouds.add(s); }
   g.scene.add(clouds); g.clouds = clouds;
 }
 /* ---------- tumbuhan: pokok hutan, pokok kelapa di pantai, batu ---------- */
 function lmBuildTrees(g, avoid) {
-  const NT = LM.gq ? 6500 : 2400, NP = LM.gq ? 1800 : 700, NR = LM.gq ? 900 : 320, R = lmRand("lm-trees");
+  const NT = lmQv([2400, 4200, 6500]), NP = lmQv([700, 1200, 1800]), NR = lmQv([320, 600, 900]), R = lmRand("lm-trees");
   const trunkG = new T.CylinderGeometry(0.28, 0.45, 4, 5); trunkG.translate(0, 2, 0);
   const crownG = new T.IcosahedronGeometry(2.6, 0); crownG.translate(0, 5.2, 0);
   const crown2G = new T.IcosahedronGeometry(1.9, 0); crown2G.translate(1.3, 6.6, 0.6);
@@ -2318,7 +2318,7 @@ function lmTaxi(ex) {
 const JL_BC = ["#d7282f", "#1d5fbf", "#f2a21a", "#2d7d46", "#7a5cd6"];
 function lmTrafikTick(g, dt) {
   const J = g.jl; if (!J || !LM.g) return;
-  const V = J.tr, want = LM.gq ? 14 : 8, px = g.p.x, pz = g.p.z;
+  const V = J.tr, want = lmQv([6, 10, 14]), px = g.p.x, pz = g.p.z;
   for (let i = V.length - 1; i >= 0; i--) { const v = V[i]; if (Math.hypot(v.m.position.x - px, v.m.position.z - pz) > 760) { g.scene.remove(v.m); V.splice(i, 1); } }
   J.spT -= dt;
   if (V.length < want && J.spT <= 0) {
@@ -3338,17 +3338,166 @@ function lmStnScreen(tj, sub) {
     lines.slice(0, 3).forEach((l, i) => x.fillText(l, w / 2, 124 + i * 50));
   });
 }
+/* ---------- v18.35: grafik berlapis (Rendah / Sederhana / Tinggi) ----------
+   LM.gq: 0 Rendah (telefon lemah: tiada bayang, resolusi 1x, kurang pokok), 1 Sederhana (bayang 1024, peta persekitaran),
+   2 Tinggi (bayang lembut 2048, antialias, rupa bumi lebih halus). Nilai lama (0 Jimat / 1 Tinggi) dipetakan sekali. */
+const GQN = ["Rendah", "Sederhana", "Tinggi"];
+function lmQ() { return clamp(LM.gq | 0, 0, 2); }
+function lmQv(a) { return a[lmQ()]; }
+/* peranti lemah: RAM <= 3 GB atau <= 4 teras CPU (jika pelayar melaporkannya) */
+function lmLemah() { const m = navigator.deviceMemory, c = navigator.hardwareConcurrency; return (m && m <= 3) || (c && c <= 4); }
+/* kurangkan gerakan dan kesan visual: ikut tetapan sistem, boleh ditukar dalam menu */
+function lmKurangGerak() { return LM.st && LM.st.rm != null ? !!LM.st.rm : !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches); }
+
+/* peta persekitaran (pantulan langit) untuk bahan PBR: dijana sekali daripada kecerunan langit, siang dan malam */
+function lmEnvMaps(g) {
+  if (lmQ() < 1 || !T.PMREMGenerator) return;
+  const mk = (top, hor, gnd, sun) => {
+    const sc = new T.Scene(), geo = new T.SphereGeometry(50, 32, 16), col = [], c = new T.Color(), pos = geo.attributes.position;
+    for (let i = 0; i < pos.count; i++) { const y = pos.getY(i) / 50; if (y > 0) c.copy(hor).lerp(top, Math.pow(y, 0.6)); else c.copy(hor).lerp(gnd, Math.min(1, -y * 3)); col.push(c.r, c.g, c.b); }
+    geo.setAttribute("color", new T.Float32BufferAttribute(col, 3));
+    sc.add(new T.Mesh(geo, new T.MeshBasicMaterial({ vertexColors: true, side: T.BackSide })));
+    if (sun) { const s = new T.Mesh(new T.SphereGeometry(4, 12, 8), new T.MeshBasicMaterial({ color: sun })); s.position.set(25, 30, 15); sc.add(s); }
+    const pm = new T.PMREMGenerator(g.renderer), rt = pm.fromScene(sc, 0.02); pm.dispose(); geo.dispose(); return rt.texture;
+  };
+  g.envDay = mk(new T.Color(0x6fa8e6), new T.Color(0xe6f1ff), new T.Color(0x5d6b4c), 0xfff4d8);
+  g.envNight = mk(new T.Color(0x0b1430), new T.Color(0x2a3456), new T.Color(0x0d120c), null);
+  lmEnvSet(g.envDay); /* hanya bahan PBR baharu; avatar dan kenderaan sedia ada tidak berubah */
+}
+function lmEnvSet(t) { for (const k in PBR) { const m = PBR[k]; if (m.isMeshStandardMaterial && m.envMap !== t) { m.envMap = t; m.needsUpdate = true; } } }
+function lmEnvTick(g) { if (!g.envDay) return; const n = g.night > 0.55; if (n !== g.envN) { g.envN = n; lmEnvSet(n ? g.envNight : g.envDay); } }
+
+/* bahan: PBR (MeshStandardMaterial) pada Sederhana/Tinggi, Lambert pada Rendah (lebih murah) */
+const PBR = {};
+function lmPbr(k, o) {
+  const key = k + "|" + lmQ(); if (PBR[key]) return PBR[key];
+  o = Object.assign({ roughness: 0.8, metalness: 0, envMapIntensity: 0.45 }, o || {});
+  let m;
+  if (lmQ() >= 1) { m = new T.MeshStandardMaterial(o); if (LM.g && LM.g.envDay) m.envMap = LM.g.envN ? LM.g.envNight : LM.g.envDay; }
+  else { const l = Object.assign({}, o); delete l.roughness; delete l.metalness; delete l.envMapIntensity; delete l.flatShading; m = new T.MeshLambertMaterial(l); }
+  return (PBR[key] = m);
+}
+/* tekstur berjubin dilukis sekali (canvas), skala ikut saiz dunia sebenar */
+function lmTexPaving() {
+  return GEO.txPave || (GEO.txPave = (() => { const t = lmTex(256, 256, (x, w, h) => {
+    x.fillStyle = "#8f887a"; x.fillRect(0, 0, w, h);
+    for (let j = 0; j < 4; j++) for (let i = 0; i < 4; i++) { const v = 150 + ((i * 7 + j * 13) % 5) * 9; x.fillStyle = "rgb(" + v + "," + (v - 6) + "," + (v - 18) + ")"; x.fillRect(i * 64 + 2, j * 64 + 2, 60, 60); }
+    for (let n = 0; n < 2600; n++) { const v = 150 + Math.random() * 90 | 0; x.fillStyle = "rgba(" + v + "," + v + "," + (v - 10) + ",.18)"; x.fillRect(Math.random() * w, Math.random() * h, 1.5, 1.5); }
+    x.fillStyle = "rgba(60,56,48,.8)"; for (let i = 0; i <= 4; i++) { x.fillRect(i * 64 - 1, 0, 2, h); x.fillRect(0, i * 64 - 1, w, 2); }
+  }); t.wrapS = t.wrapT = T.RepeatWrapping; return t; })());
+}
+function lmTexSongket() { /* motif pucuk rebung / songket (corak geometri asli, bukan aset luar) */
+  return GEO.txSong || (GEO.txSong = (() => { const t = lmTex(256, 64, (x, w, h) => {
+    x.fillStyle = "#0b4a4a"; x.fillRect(0, 0, w, h);
+    x.fillStyle = "#e9c25a";
+    for (let i = 0; i < 8; i++) { const cx = i * 32 + 16; x.beginPath(); x.moveTo(cx, 6); x.lineTo(cx + 13, 32); x.lineTo(cx, 58); x.lineTo(cx - 13, 32); x.closePath(); x.fill(); x.fillStyle = "#0b4a4a"; x.beginPath(); x.moveTo(cx, 18); x.lineTo(cx + 6, 32); x.lineTo(cx, 46); x.lineTo(cx - 6, 32); x.closePath(); x.fill(); x.fillStyle = "#e9c25a"; }
+    x.fillRect(0, 0, w, 3); x.fillRect(0, h - 3, w, 3);
+  }); t.wrapS = t.wrapT = T.RepeatWrapping; return t; })());
+}
+function lmTexWood() {
+  return GEO.txWood || (GEO.txWood = (() => { const t = lmTex(128, 128, (x, w, h) => {
+    x.fillStyle = "#9a6a3e"; x.fillRect(0, 0, w, h);
+    for (let i = 0; i < 40; i++) { x.strokeStyle = "rgba(" + (70 + Math.random() * 40 | 0) + ",40,18,.35)"; x.lineWidth = 1 + Math.random() * 2; x.beginPath(); const y = Math.random() * h; x.moveTo(0, y); x.bezierCurveTo(w * 0.3, y + Math.random() * 6 - 3, w * 0.7, y + Math.random() * 6 - 3, w, y); x.stroke(); }
+  }); t.wrapS = t.wrapT = T.RepeatWrapping; return t; })());
+}
+/* bayang sentuhan (ambient occlusion palsu) di bawah objek: murah, tanpa lampu tambahan */
+function lmBlobAt(par, w, d, op, x, z) { const b = lmBlob(w, d, op); b.position.set(x, 0.32, z); par.add(b); return b; }
+function lmBlob(w, d, op) {
+  const tex = GEO.txBlob || (GEO.txBlob = lmTex(64, 64, (x, W, H) => { const gr = x.createRadialGradient(W / 2, H / 2, 2, W / 2, H / 2, W / 2); gr.addColorStop(0, "rgba(0,0,0,.85)"); gr.addColorStop(1, "rgba(0,0,0,0)"); x.fillStyle = gr; x.fillRect(0, 0, W, H); }));
+  const m = new T.Mesh(GEO.blobG || (GEO.blobG = new T.PlaneGeometry(1, 1).rotateX(-Math.PI / 2)), new T.MeshBasicMaterial({ map: tex, transparent: true, opacity: op == null ? 0.45 : op, depthWrite: false }));
+  m.scale.set(w, 1, d); m.renderOrder = 1; return m;
+}
+/* bahan bercahaya (emissive) yang menyala lebih terang pada waktu malam; dikemas kini oleh lmGfxTick */
+function lmGlow(col, base) { const m = lmQ() >= 1 ? new T.MeshStandardMaterial({ color: 0x111111, emissive: new T.Color(col), emissiveIntensity: base || 0.6, roughness: 0.4 }) : new T.MeshBasicMaterial({ color: col }); m.userData.glow = base || 0.6; (GEO.glowList || (GEO.glowList = [])).push(m); return m; }
+
+/* ---------- Dataran Inovasi (kawasan contoh v18.35) ---------- */
 function lmStnBooth() {
-  const g = new T.Group();
-  g.add(lmMesh(lmBox(9, 0.4, 7), "#e8e2d4", 0, 0.2, 0));
-  for (const x of [-4.2, 4.2]) g.add(lmMesh(lmBox(0.4, 5.2, 0.4), "#0b4a4a", x, 2.8, -3));
-  g.add(lmMesh(lmBox(9.4, 0.4, 7.4), "#0b4a4a", 0, 5.4, -0.2));
-  g.add(lmMesh(lmBox(9.6, 0.25, 0.3), "#ffd45a", 0, 5.2, 3.5));
-  g.add(lmMesh(lmBox(8.2, 4.4, 0.3), "#1d2a33", 0, 2.8, -3.1));
-  g.add(lmMesh(lmBox(5, 1.1, 1.2), "#c9a46a", 0, 0.95, 1.2));
+  const g = new T.Group(), q = lmQ();
+  const conc = lmPbr("konkrit", { color: 0xa9a397, roughness: 0.92 }), metal = lmPbr("logam", { color: 0xb9c3cc, roughness: 0.35, metalness: 0.85 });
+  const panel = lmPbr("panel", { color: 0x16323c, roughness: 0.55, metalness: 0.2 }), roof = lmPbr("bumbung", { color: 0xd8d4ca, roughness: 0.6 });
+  const wood = lmPbr("kayu", { map: lmTexWood(), roughness: 0.75 }), glass = lmPbr("kaca", { color: 0x8fd6e0, roughness: 0.08, metalness: 0.1, transparent: true, opacity: 0.32, depthWrite: false });
+  const m = (geo, mat, x, y, z) => { const o = new T.Mesh(geo, mat); o.position.set(x, y, z); o.castShadow = q >= 1; o.receiveShadow = true; g.add(o); return o; };
+  g.add(lmBlob(12, 10, 0.4));
+  m(lmBox(9, 0.4, 7), conc, 0, 0.2, 0);                                        /* lantai konkrit */
+  lmInst(g, lmBox(0.32, 5.3, 0.32), metal, [[-4.2, 2.85, -3], [4.2, 2.85, -3], [-4.2, 2.85, 2.9], [4.2, 2.85, 2.9]]); /* tiang logam (1 panggilan lukisan) */
+  m(lmBox(9.6, 0.35, 7.6), roof, 0, 5.55, -0.1);                                /* bumbung */
+  const led = new T.Mesh(lmBox(9.4, 0.12, 0.12), lmGlow("#5ff2ff", 0.7)); led.position.set(0, 5.32, 3.55); g.add(led); /* jalur LED */
+  m(lmBox(8.2, 4.5, 0.25), panel, 0, 2.85, -3.12);                              /* dinding belakang */
+  lmInst(g, lmBox(0.08, 3.6, 3.2), glass, [[-4.25, 2.3, 0.6], [4.25, 2.3, 0.6]], false); /* sirip kaca */
+  m(lmBox(5, 1.05, 1.2), wood, 0, 0.92, 1.2); m(lmBox(5.2, 0.1, 1.4), metal, 0, 1.5, 1.2); /* kaunter kayu */
   const scr = new T.Mesh(new T.PlaneGeometry(7.4, 4.16), new T.MeshBasicMaterial({ map: lmStnScreen("Tapak kosong", "STESEN INOVASI") }));
-  scr.position.set(0, 2.9, -2.93); g.add(scr); g.userData.scr = scr;
+  scr.position.set(0, 2.9, -2.98); g.add(scr); g.userData.scr = scr;
+  const fr = new T.Mesh(lmBox(7.7, 4.45, 0.06), lmGlow("#ffd45a", 0.35)); fr.position.set(0, 2.9, -3.0); g.add(fr); /* bingkai skrin */
   return g;
+}
+function lmPlazaDeco(plaza0, rr, k) {
+  /* v18.35: hiasan dalam kumpulan "perincian" yang disembunyikan dari jauh (LOD); lantai, gerbang dan gerai kekal */
+  const plaza = new T.Group(); plaza0.add(plaza); (GEO.lodList || (GEO.lodList = [])).push({ o: plaza, p: null, d: 450 });
+  const q = lmQ(), conc = lmPbr("konkrit", { color: 0xa9a397, roughness: 0.92 }), metal = lmPbr("logam", { color: 0xb9c3cc, roughness: 0.35, metalness: 0.85 });
+  const add = (geo, mat, x, y, z, sh) => { const o = new T.Mesh(geo, mat); o.position.set(x, y, z); o.castShadow = q >= 1 && sh !== false; o.receiveShadow = true; plaza.add(o); return o; };
+  /* lantai berjubin (jubin 2 unit; skala ikut diameter) dan cincin songket */
+  const pave = lmTexPaving().clone(); pave.needsUpdate = true; pave.repeat.set((rr - 2) / 2, (rr - 2) / 2);
+  plaza0.add(Object.assign(new T.Mesh(lmCyl(rr - 2, rr - 1.6, 0.3, 40), lmPbr("paving" + rr, { map: pave, roughness: 0.88 })), { receiveShadow: true })); plaza0.children[plaza0.children.length - 1].position.y = 0.15;
+  const sg = lmTexSongket().clone(); sg.needsUpdate = true; sg.repeat.set(10, 1);
+  const ring = new T.Mesh(new T.CylinderGeometry(rr - 2.1, rr - 2.1, 0.6, 48, 1, true), lmPbr("songket", { map: sg, roughness: 0.6, metalness: 0.15, side: T.DoubleSide }));
+  ring.position.y = 0.32; plaza.add(ring);
+  /* laluan masuk */
+  const pv2 = lmTexPaving().clone(); pv2.needsUpdate = true; pv2.repeat.set(3, 6);
+  add(lmBox(6, 0.28, 12), lmPbr("laluan", { map: pv2, roughness: 0.88 }), 0, 0.14, rr + 3.5, false);
+  for (const x of [-3.2, 3.2]) { const s = new T.Mesh(lmBox(0.18, 0.1, 12), lmGlow("#5ff2ff", 0.45)); s.position.set(x, 0.33, rr + 3.5); plaza.add(s); }
+  /* gerbang moden: tiang konkrit bersalut logam, rasuk songket, papan tanda jelas */
+  for (const x of [-6, 6]) { const pl = add(lmBox(1.4, 8.6, 1.4), conc, x, 4.3, rr - 4); plaza.remove(pl); plaza0.add(pl); add(lmBox(1.5, 0.5, 1.5), metal, x, 8.75, rr - 4); lmBlobAt(plaza, 4, 4, 0.5, x, rr - 4); }
+  const beam = new T.Mesh(lmBox(13.4, 1.7, 1.1), lmPbr("songketB", { map: (() => { const t = lmTexSongket().clone(); t.needsUpdate = true; t.repeat.set(4, 1); return t; })(), roughness: 0.55, metalness: 0.2 }));
+  beam.position.set(0, 9.4, rr - 4); beam.castShadow = q >= 1; plaza0.add(beam);
+  const sign = lmTex(512, 96, (x, w, h) => { x.fillStyle = "#0b2a33"; x.fillRect(0, 0, w, h); x.fillStyle = "#ffd45a"; x.font = "800 44px Nunito, sans-serif"; x.textAlign = "center"; x.textBaseline = "middle"; x.fillText("DATARAN INOVASI · " + DATA.negeri[k].pendek.toUpperCase(), w / 2, h / 2 + 2); });
+  for (const s of [1, -1]) { const p = new T.Mesh(new T.PlaneGeometry(12, 2.2), new T.MeshBasicMaterial({ map: sign })); p.position.set(0, 9.4, rr - 4 + s * 0.57); if (s < 0) p.rotation.y = Math.PI; plaza0.add(p); }
+  const ledG = new T.Mesh(lmBox(12.6, 0.12, 0.12), lmGlow("#5ff2ff", 0.8)); ledG.position.set(0, 8.5, rr - 4 + 0.6); plaza.add(ledG);
+  /* hologram pusat: tugu "Pokok Ilmu" (cincin cahaya dan sfera rangka), animasi lembut */
+  add(lmCyl(1.6, 2.0, 1.0, 24), conc, 0, 0.5, 0); add(lmCyl(1.3, 1.3, 0.12, 24), metal, 0, 1.06, 0, false);
+  lmBlobAt(plaza, 6, 6, 0.4, 0, 0);
+  const holo = new T.Group(); holo.position.y = 4.2; plaza.add(holo);
+  const hm = new T.LineBasicMaterial({ color: 0x5ff2ff, transparent: true, opacity: 0.75 });
+  holo.add(new T.LineSegments(new T.EdgesGeometry(new T.IcosahedronGeometry(1.7, 1)), hm));
+  for (let i = 0; i < 2; i++) { const r = new T.Mesh(new T.TorusGeometry(2.4 + i * 0.5, 0.05, 6, 48), lmGlow(i ? "#ffd45a" : "#5ff2ff", 0.9)); r.rotation.x = Math.PI / 2 + i * 0.5; holo.add(r); }
+  const beamM = new T.Mesh(new T.CylinderGeometry(0.9, 1.25, 3.0, 24, 1, true), new T.MeshBasicMaterial({ color: 0x5ff2ff, transparent: true, opacity: 0.14, side: T.DoubleSide, depthWrite: false }));
+  beamM.position.y = -1.6; holo.add(beamM);
+  (GEO.holoList || (GEO.holoList = [])).push(holo);
+  /* landskap: pasu tanaman, bangku dan lampu tiang (instancing: satu panggilan lukisan bagi setiap jenis; Rendah tanpa bangku/lampu) */
+  const leaf = lmPbr("daun", { color: 0x3f8f4a, roughness: 0.85, flatShading: true }), bloom = lmPbr("bunga", { color: 0xe0405a, roughness: 0.8, flatShading: true });
+  const wood = lmPbr("kayu", { map: lmTexWood(), roughness: 0.75 }), L = { pasu: [], daun: [], bunga: [], blob: [], tiang: [], kepala: [], duduk: [], kaki: [] };
+  for (let i = 0; i < 6; i++) {
+    const a = (i + 0.5) / 6 * Math.PI * 2, cx = Math.sin(a) * (rr - 4.2), cz = Math.cos(a) * (rr - 4.2);
+    if (Math.abs(cx) < 7 && cz > rr - 8) continue; /* jangan halang gerbang */
+    L.pasu.push([cx, 0.75, cz]); L.daun.push([cx, 1.85, cz]); if (i % 2) L.bunga.push([cx + 0.5, 2.5, cz + 0.2]); L.blob.push([cx, 0.33, cz, 0, 3.4, 1, 3.4]);
+    const lx = Math.sin(a + 0.26) * (rr - 3), lz = Math.cos(a + 0.26) * (rr - 3); L.tiang.push([lx, 2.9, lz]); L.kepala.push([lx, 5.55, lz]);
+    const ba = a - 0.3, bx = Math.sin(ba) * (rr - 6.5), bz = Math.cos(ba) * (rr - 6.5), c = Math.cos(ba), sn = Math.sin(ba);
+    L.duduk.push([bx, 0.85, bz, ba]); for (const ox of [-1.1, 1.1]) L.kaki.push([bx + ox * c, 0.57, bz - ox * sn, ba]);
+  }
+  lmInst(plaza, lmBox(2.2, 0.9, 2.2), conc, L.pasu); lmInst(plaza, lmSph(1.05, 7, 5), leaf, L.daun); lmInst(plaza, lmSph(0.45, 6, 4), bloom, L.bunga);
+  { const b = lmBlob(1, 1, 0.35); plaza.add(lmInst(null, b.geometry, b.material, L.blob, false)); }
+  if (q >= 1) {
+    lmInst(plaza, lmCyl(0.12, 0.16, 5.2, 8), metal, L.tiang); lmInst(plaza, lmBox(0.9, 0.22, 0.5), lmGlow("#fff2c4", 0.5), L.kepala, false);
+    lmInst(plaza, lmBox(2.6, 0.12, 0.7), wood, L.duduk); lmInst(plaza, lmBox(0.1, 0.55, 0.6), metal, L.kaki);
+  }
+}
+/* InstancedMesh daripada senarai [x, y, z, putaranY?, sx?, sy?, sz?] */
+function lmInst(par, geo, mat, list, shadow) {
+  if (!list.length) return null;
+  const im = new T.InstancedMesh(geo, mat, list.length), o = new T.Object3D();
+  list.forEach((a, i) => { o.position.set(a[0], a[1], a[2]); o.rotation.set(0, a[3] || 0, 0); o.scale.set(a[4] || 1, a[5] || 1, a[6] || 1); o.updateMatrix(); im.setMatrixAt(i, o.matrix); });
+  im.castShadow = shadow !== false && lmQ() >= 1; im.receiveShadow = true;
+  if (par) par.add(im); return im;
+}
+/* animasi dan cahaya malam (dipanggil setiap bingkai) */
+function lmGfxTick(g, dt) {
+  lmEnvTick(g);
+  if (GEO.lodList && (g.lodT = (g.lodT || 0) - dt) <= 0) { /* LOD: hiasan jauh disembunyikan (2 kali sesaat) */
+    g.lodT = 0.5; const cp = g.camera.position;
+    for (const l of GEO.lodList) { if (!l.p) { l.p = new T.Vector3(); l.o.getWorldPosition(l.p); } l.o.visible = Math.hypot(l.p.x - cp.x, l.p.z - cp.z) < l.d; }
+  }
+  const n = g.night || 0, still = lmKurangGerak();
+  if (GEO.glowList) { const f = 0.45 + 1.4 * n; for (const m of GEO.glowList) if (m.emissiveIntensity != null) m.emissiveIntensity = m.userData.glow * f; }
+  if (GEO.holoList && !still) { g.holoT = (g.holoT || 0) + dt; for (const h of GEO.holoList) { h.rotation.y += dt * 0.5; h.children[1].rotation.z += dt * 0.8; h.children[2].rotation.z -= dt * 0.6; h.position.y = 4.2 + Math.sin(g.holoT * 1.4) * 0.18; } }
 }
 function lmStnBuild(g, used, placed, avoid, gnd) {
   g.stn = [];
@@ -3363,11 +3512,9 @@ function lmStnBuild(g, used, placed, avoid, gnd) {
     const rot = Math.atan2(c0.x - w.x, c0.z - w.z); /* menghadap bandar */
     lmPad(g, w.x, w.z, rr);
     const plaza = new T.Group(); plaza.position.set(w.x, 0, w.z); plaza.rotation.y = rot; g.scene.add(plaza); gnd.push([plaza, 0]);
-    plaza.add(lmMesh(lmCyl(rr - 2, rr - 2, 0.3, 28), "#d9d2c0", 0, 0.15, 0));
-    /* gerbang Dataran Inovasi */
-    for (const x of [-6, 6]) plaza.add(lmMesh(lmBox(1, 8, 1), "#0b4a4a", x, 4, rr - 4));
-    plaza.add(lmMesh(lmBox(13, 1.6, 1), "#ffd45a", 0, 8.4, rr - 4));
-    const lb = lmLabel("🏛 Dataran Inovasi " + DATA.negeri[k].pendek, { fs: 30, k: 0.032, bg: "rgba(11,74,74,.9)", bd: "#ffd45a" }); lb.position.set(w.x, 12.5, w.z); g.scene.add(lb); gnd.push([lb, 12.5]);
+    lmPlazaDeco(plaza, rr, k); /* v18.35: lantai berjubin, cincin songket, gerbang, hologram, landskap, lampu */
+    (g.plazas || (g.plazas = [])).push({ k: k, x: w.x, z: w.z, rot: rot });
+    const lb = lmLabel("🏛 Dataran Inovasi " + DATA.negeri[k].pendek, { fs: 30, k: 0.032, bg: "rgba(11,74,74,.9)", bd: "#ffd45a" }); lb.position.set(w.x, 14.5, w.z); g.scene.add(lb); gnd.push([lb, 14.5]);
     const sn = Math.sin(rot), cs = Math.cos(rot), toWd = (lx, lz) => ({ x: w.x + lx * cs + lz * sn, z: w.z - lx * sn + lz * cs });
     for (let i = 1; i <= SN_N; i++) {
       const a = (i - 2) * 0.85, lx = Math.sin(a) * 12, lz = -Math.cos(a) * 12, b = lmStnBooth();
@@ -3784,7 +3931,7 @@ function lmCoinMesh() {
   const m = new T.Mesh(GEO.coin, new T.MeshLambertMaterial({ color: 0xf5c542, emissive: 0x6b4a00, emissiveIntensity: 0.5 }));
   m.rotation.x = Math.PI / 2; return m;
 }
-function lmBuildWorld(g) {
+async function lmBuildWorld(g) {
   const avoid = [], gnd = []; /* gnd: [objek, offset] diletakkan di atas tanah selepas rupa bumi siap */
   /* Menara Ilmu: satu bagi setiap tajuk, pada titik yang sama seperti peta operasi (t.xy atau pin negeri) */
   const used = [];
@@ -3806,6 +3953,7 @@ function lmBuildWorld(g) {
   });
   /* sekolah murid sendiri: titik mula setiap misi */
   const placed = [];
+  await lmProg(8, "Sekolah anda dan tempat pelancongan");
   lmOwnSchoolBuild(g, placed, avoid, gnd);
   /* tempat pelancongan */
   PLACES.forEach((p) => {
@@ -3846,6 +3994,7 @@ function lmBuildWorld(g) {
     avoid.push({ x: w.x, z: w.z, r: Math.max(md.r, 14) }, { x: pl.bx, z: pl.bz, r: 6 });
     lmBoardRefresh(pl);
   });
+  await lmProg(18, "Lapangan terbang");
   /* lapangan terbang lengkap: landasan dipilih supaya muat di darat dan jauh daripada menara serta mercu tanda */
   AIRPORTS.forEach((a) => {
     const [id, k, nama, la, lo] = a; if (!DATA.negeri[k]) return;
@@ -3863,29 +4012,36 @@ function lmBuildWorld(g) {
     for (const t of [-18, 0, 18]) avoid.push({ x: fit.x + px * 32 + ux * t, z: fit.z + pz * 32 + uz * t, r: 16 });
   });
   /* IPTA: galeri kampus (Kembara Kampus) */
-  lmIptaBuild(g, used, placed, avoid, gnd); setTimeout(() => lmKampusFetch(g), 1500);
+  await lmProg(26, "Universiti, kem dan Stesen Ilmu");
+  lmIptaBuild(g, used, placed, avoid, gnd); (g.after || (g.after = [])).push(() => lmKampusFetch(g));
   /* Stesen Ilmu: setiap tajuk di institusi sebenar; kem Tempur */
   lmKemBuild(g, used, placed, avoid, gnd);
   lmIlmuBuild(g, used, placed, avoid, gnd); lmIlmuAssign(g);
   /* kedai makan tradisi setiap negeri */
   lmFoodBuild(g, used, placed, avoid, gnd);
   /* Dataran Inovasi: stesen guru */
-  lmStnBuild(g, used, placed, avoid, gnd); setTimeout(() => lmStnFetch(g), 1500);
+  await lmProg(36, "Dataran Inovasi");
+  lmStnBuild(g, used, placed, avoid, gnd); (g.after || (g.after = [])).push(() => lmStnFetch(g));
   /* jeti nelayan: permainan Nelayan */
   lmNelayanBuild(g, used, placed, avoid, gnd);
   /* butik Busana, perpustakaan Dunia Ilmu, pusat Amali */
   lmVenueBuild(g, used, placed, avoid, gnd);
   /* stesen kereta api ETS dan ECRL */
+  await lmProg(44, "Stesen kereta api");
   lmRailsPlan(g, used, placed, avoid, gnd);
   /* pulau Misi Khas, jeti dan feri */
   lmBuildIslands(g, gnd, avoid);
   /* rupa bumi: ketinggian, tapak rata, kemudian semua objek diletakkan di atas tanah */
-  lmTerrainBase(g); lmRailsPath(g, avoid); lmBuildTerrain(g);
+  await lmProg(52, "Rupa bumi Malaysia");
+  lmTerrainBase(g); await lmProg(62, "Landasan dan lebuh raya"); lmRailsPath(g, avoid); await lmProg(70, "Membentuk bukit dan lembah"); lmBuildTerrain(g);
   for (const [o, dy] of gnd) o.position.y = lmHRaw(o.position.x, o.position.z) + dy;
   for (const c of g.cols) c.h = (c.h || 30) + lmHRaw(c.x, c.z);
+  await lmProg(78, "Kereta api dan stesen");
   lmRailsBuild(g);
+  await lmProg(86, "Jaringan jalan, terowong dan tol");
   try { lmJalanBuild(g); } catch (e) { console.warn("jalan", e); } /* v18.31: jaringan jalan, terminal bas, pulau */
   try { lmTunBuild(g); lmTolBuild(g); } catch (e) { console.warn("terowong/tol", e); } /* v18.33 */
+  await lmProg(94, "Pokok dan MD harian");
   lmBuildTrees(g, avoid);
   /* MD harian bertaburan (deterministik mengikut hari) */
   const R = lmRand("lm-coin-" + dayKey()), got = new Set(LM.st.cd.got);
@@ -3940,6 +4096,18 @@ function lmUpdatePlayer(g, dt) {
   if (!g.ui && !g.rai) {
     if (k.w || k.arrowup) iz -= 1; if (k.s || k.arrowdown) iz += 1; if (k.a || k.arrowleft) ix -= 1; if (k.d || k.arrowright) ix += 1;
     if (LM.js.id >= 0) { ix += LM.js.x; iz -= LM.js.y; }
+  }
+  /* v18.35: ketik untuk bergerak: avatar berjalan sendiri ke destinasi peta; input manual membatalkannya */
+  if (LM.auto) {
+    if (Math.hypot(ix, iz) > 0.1 || !g.wp) LM.auto = null;
+    else if (!g.ui && !g.rai) {
+      const wx = g.wp.x - p.x, wz = g.wp.z - p.z, dd = Math.hypot(wx, wz);
+      if (dd < 10) { LM.auto = null; lmPop("📍 Tiba di " + g.wp.n); }
+      else {
+        const cy0 = Math.cos(g.cam.yaw), sy0 = Math.sin(g.cam.yaw), ux = wx / dd, uz = wz / dd; ix = ux * cy0 - uz * sy0; iz = ux * sy0 + uz * cy0;
+        if ((LM.auto.t += dt) > 1.5) { if (LM.auto.d - dd < 2) LM.auto.n++; else LM.auto.n = 0; LM.auto.d = dd; LM.auto.t = 0; if (LM.auto.n >= 2) { LM.auto = null; lmPop("Laluan terhalang. Gunakan kayu bedik."); } }
+      }
+    }
   }
   const il = Math.hypot(ix, iz); if (il > 1) { ix /= il; iz /= il; }
   const en = lmEnergy(), weak = en <= 0 ? 0.5 : en < 15 ? 0.75 : 1;
@@ -3996,10 +4164,13 @@ function lmUpdateCam(g, dt) {
     if (Math.abs(cl.x - tx) > d + cl.r + 2 || Math.abs(cl.z - tz) > d + cl.r + 2) continue;
     for (let s = 2; s < d; s += 1.5) { const x = tx + ux * s, y = ty + uy * s, z = tz + uz * s; if (y < (cl.h || 30) && Math.hypot(x - cl.x, z - cl.z) < cl.r + 1.2) { d = Math.max(3, s - 1.5); break; } }
   }
+  /* v18.35: jarak kamera dilicinkan (masuk pantas apabila terlindung, keluar perlahan) supaya tidak melompat */
+  c.ds = c.ds == null ? d : c.ds + (d - c.ds) * (1 - Math.exp(-dt * (d < c.ds ? 14 : 3)));
+  d = c.ds;
   const want = new T.Vector3(tx + Math.sin(c.yaw) * Math.cos(c.pitch) * d, ty + Math.sin(c.pitch) * d, tz + Math.cos(c.yaw) * Math.cos(c.pitch) * d);
   /* keraian: kamera berpindah ke hadapan avatar */
   if (g.rai) want.set(tx + Math.sin(p.yaw) * 13, p.y + 5.5, tz + Math.cos(p.yaw) * 13);
-  g.camera.position.lerp(want, Math.min(1, dt * (g.rai ? 3.5 : 8)));
+  g.camera.position.lerp(want, 1 - Math.exp(-dt * (g.rai ? 3.5 : 9))); /* v18.35: bebas kadar bingkai */
   { const cp = g.camera.position, gy = Math.max(lmGround(cp.x, cp.z), 0.3) + 1.6; if (cp.y < gy) cp.y = gy; }
   if (g.rai) g.camera.lookAt(tx, p.y + 3.2, tz); else g.camera.lookAt(tx, ty, tz);
   if (g.dome) g.dome.position.copy(g.camera.position);
@@ -4532,11 +4703,15 @@ function lmSetup() {
     row.append(solo);
     b.append(row, el("p", { class: "lm-ex" }, "Dunia Terbuka dan Ruang Privasi memerlukan sambungan pelayan Firebase. Mod solo tetap boleh dimainkan."));
   }
-  const q = LM.st.gq;
-  const gq = lmBtn("Grafik: " + (q ? "Tinggi" : "Jimat"), "", () => { LM.st.gq = LM.gq = q ? 0 : 1; lmSave(); lmSetup(); });
+  const q = clamp(LM.st.gq | 0, 0, 2);
+  const gq = lmBtn("Grafik: " + GQN[q], "", () => { LM.st.gq = LM.gq = (q + 1) % 3; lmSave(); lmSetup(); }); /* v18.35: Rendah -> Sederhana -> Tinggi */
+  gq.title = "Rendah: tiada bayang, untuk telefon lemah. Sederhana: bayang dan pantulan. Tinggi: bayang lembut dan antialias.";
   const x = lmBtn("Tutup", "", lmClose);
   const rf = lmBtn("Muat semula versi terkini", "", () => { if (typeof appHardReload === "function") appHardReload(); else location.reload(); });
-  b.append(el("div", { class: "lm-row" }, gq, rf, x));
+  const fps = lmBtn(LM.f30 ? "FPS: 30 (jimat bateri)" : "FPS: 60", "", () => { LM.st.f30 = LM.f30 ? 0 : 1; LM.f30 = !!LM.st.f30; lmSave(); lmSetup(); });
+  const kg = lmBtn(lmKurangGerak() ? "Kesan visual: dikurangkan" : "Kesan visual: penuh", "", () => { LM.st.rm = lmKurangGerak() ? 0 : 1; lmSave(); lmSetup(); });
+  kg.title = "Kurangkan gerakan hologram dan kesan visual untuk keselesaan mata";
+  b.append(el("div", { class: "lm-row" }, gq, fps, kg), el("div", { class: "lm-row" }, rf, x));
   const st = lmSummary();
   b.append(el("p", { class: "lm-ex" }, "Pasport anda: " + st.pl + "/" + st.plN + " tempat diziarahi, " + st.tw + "/" + st.twN + " Menara Ilmu ditawan."));
   b.append(el("p", { class: "lm-ex", style: "font-size:12px;opacity:.75" }, "META DIDIK v" + (typeof APP_VER !== "undefined" ? APP_VER : "?") + ". Jika tidak dapat bergerak atau paparan lama, tekan Muat semula versi terkini."));
@@ -5197,6 +5372,7 @@ function lmBigMap() {
     else if (it) g.wp = { x: it.x, z: it.z, n: it.kind === "tw" ? "Menara " + (it.t.kod || it.t.id) : it.n };
     else g.wp = { x: wx, z: wz, n: "Titik pilihan" };
     if (!peer) lmWpSet(); redraw();
+    if (!peer && g.wp) { LM.auto = { d: 1e9, t: 0, n: 0 }; lmPop("🚶 Berjalan ke " + g.wp.n + " · sentuh kayu bedik untuk berhenti"); if (TOUCH) setTimeout(() => { if (LM.ui.big) lmBigMap(); }, 450); } /* v18.35 */
   };
   let m2 = null, cv2 = null;
   const redraw = () => { if (LM.map3) LM.map3.tick(); else if (cv2) lmMapDraw(cv2, m2, true); };
@@ -5414,25 +5590,27 @@ function lmWpSet() {
 }
 
 /* ---------- adegan ---------- */
-function lmBuildScene() {
+async function lmBuildScene() {
   const gq = LM.gq, r = LM.root;
   const cv = el("canvas", { class: "lm-cv", "aria-label": "META DIDIK, paparan 3D" }); r.appendChild(cv); LM.cv = cv;
   let renderer;
-  try { renderer = new T.WebGLRenderer({ canvas: cv, antialias: !!gq, powerPreference: "high-performance" }); } catch (e) { return null; }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, gq ? 1.75 : 1.25));
+  try { renderer = new T.WebGLRenderer({ canvas: cv, antialias: lmQ() === 2, powerPreference: "high-performance" }); } catch (e) { return null; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, lmQv([1, 1.35, 1.75]))); /* v18.35: resolusi ikut tahap grafik */
+  GEO.glowList = []; GEO.holoList = []; GEO.lodList = [];
   renderer.setSize(window.innerWidth, window.innerHeight, false);
-  if (gq && renderer.shadowMap) { renderer.shadowMap.enabled = true; renderer.shadowMap.type = T.PCFSoftShadowMap; }
+  if (gq && renderer.shadowMap) { renderer.shadowMap.enabled = true; renderer.shadowMap.type = lmQ() === 2 ? T.PCFSoftShadowMap : T.PCFShadowMap; }
   const scene = new T.Scene(), sky = new T.Color(0xbfe3ff);
   scene.background = sky.clone(); scene.fog = new T.Fog(sky.clone(), 320, 1180);
-  const camera = new T.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.5, 1700);
+  const camera = new T.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.5, lmQv([1000, 1450, 1700])); /* v18.35: jarak pandang ikut tahap grafik */
   const hemi = new T.HemisphereLight(0xe6f4ff, 0x4f6b35, 0.62); scene.add(hemi);
   const sun = new T.DirectionalLight(0xfff1d6, 0.9);
-  if (gq) { sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); const sc = sun.shadow.camera; sc.left = sc.bottom = -110; sc.right = sc.top = 110; sc.near = 10; sc.far = 420; sun.shadow.bias = -0.0005; sun.shadow.normalBias = 0.4; }
+  if (gq) { sun.castShadow = true; const ms = lmQv([512, 1024, 2048]), ext = lmQv([60, 85, 110]); sun.shadow.mapSize.set(ms, ms); const sc = sun.shadow.camera; sc.left = sc.bottom = -ext; sc.right = sc.top = ext; sc.near = 10; sc.far = 420; sun.shadow.bias = -0.0005; sun.shadow.normalBias = 0.4; }
   scene.add(sun); scene.add(sun.target);
   const g = { renderer: renderer, scene: scene, camera: camera, sun: sun, hemi: hemi, sky: sky, clouds: null, items: [], cols: [], trees: [], coins: [], landM: {}, pads: [],
     p: { x: 0, y: 0, z: 0, vx: 0, vz: 0, vy: 0, yaw: 0, on: true, moving: false }, cam: { yaw: 0.4, pitch: 0.3, dist: 18 }, T: 0, ui: false, near: null, nearT: 0, cullT: 0, mmT: 0, hudT: 0, saveT: 0 };
   LM.g = g;
-  lmBuildSky(g); lmBuildWorld(g); lmBuildSea(g); lmDayNight(g);
+  lmEnvMaps(g); lmBuildSky(g); await lmBuildWorld(g); lmBuildSea(g); lmDayNight(g);
+  setTimeout(() => (g.after || []).forEach((f) => { try { f(); } catch (e) { /* abaikan */ } }), 1500); /* muat data dalam talian selepas dunia siap */
   g.myCode = lmMyCode(); g.me = lmAvatar(g.myCode, P.nama, true, lmIsGuru()); scene.add(g.me.g);
   lmSkyInit(g); lmTrafficInit(g);
   return g;
@@ -5452,6 +5630,23 @@ function lmSpawn(g) {
   g.p.x = x; g.p.z = z; g.cam.yaw = Math.atan2(x - tw.x, z - tw.z);
   g.camera.position.set(x + 20, 30, z + 20);
 }
+/* ---------- v18.35: telefon: bar kemajuan, skrin penuh + landskap, jeda di latar belakang ---------- */
+function lmProg(pct, txt) {
+  if (LM.ldBar) LM.ldBar.style.width = pct + "%"; if (LM.ldTxt) LM.ldTxt.textContent = pct + "% · " + txt + "...";
+  return new Promise((r) => (document.hidden ? setTimeout(r, 0) : requestAnimationFrame(() => setTimeout(r, 0))));
+}
+function lmLandskap() { try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock("landscape").catch(() => {}); } catch (e) { /* abaikan */ } }
+function lmFsMasuk() {
+  const d = document.documentElement, f = d.requestFullscreen || d.webkitRequestFullscreen;
+  if (!f || document.fullscreenElement || document.webkitFullscreenElement) return;
+  try { const pr = f.call(d); LM.fsAuto = true; if (pr && pr.then) pr.then(lmLandskap).catch(() => { LM.fsAuto = false; }); else lmLandskap(); } catch (e) { LM.fsAuto = false; }
+}
+document.addEventListener("visibilitychange", () => {
+  if (!LM.on) return;
+  const ac = LAUD.ac;
+  if (document.hidden) { cancelAnimationFrame(LM.raf); LM.hid = true; if (ac && ac.state === "running") ac.suspend().catch(() => {}); }
+  else if (LM.hid) { LM.hid = false; if (ac && ac.state === "suspended" && !LM.mute) ac.resume().catch(() => {}); if (LM.g) LM.g.last = 0; LM.tDraw = 0; LM.raf = requestAnimationFrame(lmLoop); }
+});
 /* ---------- HUD ---------- */
 function lmFsSync() {
   const b = LM.ui.fs; if (!b) return;
@@ -5466,6 +5661,7 @@ async function lmFsToggle() {
     } else {
       const d = document.documentElement;
       await (d.requestFullscreen || d.webkitRequestFullscreen).call(d);
+      if (TOUCH) lmLandskap();
     }
   } catch (e) { lmPop("Pelayar tidak membenarkan skrin penuh. Cuba lagi."); }
   lmFsSync();
@@ -5719,7 +5915,7 @@ function lmSkyAt(h) {
 function lmWxInit(g) {
   const W = g.wx = { kind: "cerah", c: 0, cw: 0, t: 60 + Math.random() * 90, flash: 0, nf: 8 };
   /* titisan hujan di sekeliling kamera */
-  const N = LM.gq ? 1400 : 600, pos = new Float32Array(N * 6), sp = new Float32Array(N);
+  const N = lmQv([600, 1000, 1400]), pos = new Float32Array(N * 6), sp = new Float32Array(N);
   for (let i = 0; i < N; i++) { const x = (Math.random() - 0.5) * 140, y = Math.random() * 70, z = (Math.random() - 0.5) * 140; pos.set([x, y, z, x + 0.25, y + 2.2, z], i * 6); sp[i] = 55 + Math.random() * 25; }
   const geo = new T.BufferGeometry(); geo.setAttribute("position", new T.BufferAttribute(pos, 3));
   W.rain = new T.LineSegments(geo, new T.LineBasicMaterial({ color: 0xc8d6ea, transparent: true, opacity: 0, depthWrite: false })); W.rain.frustumCulled = false; W.rain.visible = false; W.sp = sp; g.scene.add(W.rain);
@@ -5743,7 +5939,7 @@ function lmDayNight(g) {
   const grey = new T.Color(0x77808e), dark = new T.Color(0x3e4552), cl = W.c;
   const top = S.top.clone().lerp(grey, cl * 0.75), hor = S.hor.clone().lerp(cl > 0.7 ? dark : grey, cl * 0.7);
   if (g.paintSky) g.paintSky(top, hor);
-  g.scene.background.copy(hor); g.scene.fog.color.copy(hor); g.scene.fog.near = 320 - 180 * cl; g.scene.fog.far = 1180 - 640 * cl;
+  g.scene.background.copy(hor); g.scene.fog.color.copy(hor); { const fk = lmQv([0.6, 0.85, 1]); g.scene.fog.near = (320 - 180 * cl) * fk; g.scene.fog.far = (1180 - 640 * cl) * fk; }
   g.sun.intensity = S.sun * (1 - 0.6 * cl); g.hemi.intensity = S.hemi * (1 - 0.25 * cl); g.sun.color.copy(S.col);
   /* arah cahaya: matahari pada siang, bulan pada malam (sentiasa di atas ufuk untuk bayang) */
   const day = h >= 6.2 && h <= 19.2, f = day ? (h - 6.2) / 13 : ((h + 24 - 19.2) % 24) / 11, az = Math.PI * f, el = Math.sin(Math.PI * f);
@@ -5751,7 +5947,7 @@ function lmDayNight(g) {
   g.sunDir = new T.Vector3(vis.x, Math.max(0.3, vis.y), vis.z).normalize();
   if (g.sunDisc) { g.sunDisc.visible = day; g.sunDisc.material.opacity = clamp(el * 3, 0, 1) * (1 - cl); }
   if (W.moon) { W.moon.visible = !day; W.moon.material.opacity = clamp(el * 3, 0, 1) * (1 - cl * 0.9); }
-  const night = clamp(1 - S.sun / 0.45, 0, 1); W.stars.material.opacity = night * (1 - cl);
+  const night = g.night = clamp(1 - S.sun / 0.45, 0, 1); W.stars.material.opacity = night * (1 - cl);
   if (g.clouds && g.clouds.children[0]) { const m = g.clouds.children[0].material; m.opacity = 0.75 + 0.25 * cl; m.color.setRGB(1 - 0.55 * cl - 0.4 * night, 1 - 0.5 * cl - 0.38 * night, 1 - 0.45 * cl - 0.3 * night); }
   W.rain.visible = W.c > 0.55 && W.kind !== "berawan"; W.rain.material.opacity = clamp((W.c - 0.55) * 2.2, 0, 0.6);
   W.terik = h >= 11.5 && h <= 15.5 && W.c < 0.15;
@@ -5776,13 +5972,15 @@ function lmWxTick(g, dt) {
 function lmLoop(ts) {
   if (!LM.on || !LM.g) return;
   LM.raf = requestAnimationFrame(lmLoop);
+  if (LM.f30 && ts - (LM.tDraw || 0) < 30) return; /* v18.35: had 30 FPS (telefon): kurang panas, bateri tahan lama */
+  LM.tDraw = ts;
   if (LM.pause) { LM.g.last = 0; if (LAUD.on) lmAudStop(); return; } /* Gudang dibuka */
   const g = LM.g, dt = clamp((ts - (g.last || ts)) / 1000, 0, 0.1); g.last = ts; g.T += dt;
   try {
     if (g.ui && !g.flight && !g.sail && !g.ride && !LM.ui.card && !LM.ui.big) g.ui = false; /* tiada panel terbuka: lepaskan kunci pergerakan */
     if (g.rai && (g.rai.t -= dt) <= 0) g.rai = null;
     if (g.flight) lmFlightTick(g, dt); else if (g.sail) lmSailTick(g, dt); else if (g.ride) lmRideTick(g, dt); else { lmUpdatePlayer(g, dt); lmUpdateCam(g, dt); }
-    lmRailTick(g, dt); lmTrafikTick(g, dt); lmSolatTick(g, dt);
+    lmRailTick(g, dt); lmTrafikTick(g, dt); lmSolatTick(g, dt); lmGfxTick(g, dt);
     lmNet(g, dt, ts); lmPuffTick(g, dt); lmTrafficTick(g, dt); lmWxTick(g, dt); lmAkTick(g, dt); lmAudTick(g, dt);
     if (g.me.bub && (g.me.bubT -= dt) <= 0) lmBubble(g.me, "");
     if ((g.nearT -= dt) <= 0) { g.nearT = 0.15; lmNearTick(g); }
@@ -5790,7 +5988,7 @@ function lmLoop(ts) {
     if ((g.mmT -= dt) <= 0) { g.mmT = 0.12; lmMapDraw(LM.ui.mm, LM.mmBase, false); }
     if ((g.cullT -= dt) <= 0) {
       g.cullT = 0.5; lmDayNight(g);
-      for (const it of g.items) { const d = Math.hypot(it.x - g.p.x, it.z - g.p.z); if (it.lb) it.lb.visible = d < 260; if (it.m && it.m.isObject3D) it.m.visible = d < 800; }
+      for (const it of g.items) { const d = Math.hypot(it.x - g.p.x, it.z - g.p.z); if (it.lb) it.lb.visible = d < 260; if (it.m && it.m.isObject3D) it.m.visible = d < lmQv([450, 650, 800]); }
     }
     for (const it of g.items) if (it.kind === "tw" && it.m.cr.visible !== false) { it.m.cr.rotation.y += dt * 1.4; it.m.cr.position.y = 10.4 + Math.sin(g.T * 2 + it.x) * 0.4; }
     for (let i = g.coins.length - 1; i >= 0; i--) {
@@ -5818,13 +6016,18 @@ function lmOpen(tid) {
   lmGeoLoad().then(() => lmOwnSchool()).then((sk) => { LM.ownSk = sk; lmRaster(); if (LM.resume) lmStart("", ""); else lmSetup(); }).catch(() => { toast("Peta META DIDIK tidak dapat dimuatkan. Semak sambungan internet dan cuba lagi.", "warn"); lmClose(); });
 }
 function lmStart(code, kind) {
+  if (TOUCH && LM.st && LM.st.fs !== 0) lmFsMasuk(); /* v18.35: dalam klik pengguna: skrin penuh + landskap */
   lmAudUnlock(); AZ.last = null; lmAzanLoad(); /* v18.33: azan */ /* dalam klik pengguna: buka kunci audio telefon */
   const r = lmRoot(); /* kembali dari permainan lain (LM.resume): lapisan mungkin masih tersembunyi */ LM.ptsLast = null; LM.roomKind = kind || ""; LM.sh = lmMySh(); LM.zoneN = null; LM.zoneAt = 0; LM.roomCode = ""; LM.openFull = false; LM.openRetry = 0; LM.zone = "";
   lmCardClose(); r.textContent = "";
-  const ld = el("div", { class: "lm-card" }, el("div", { class: "lm-box" }, el("div", { class: "lm-kick" }, "META DIDIK"), el("h2", null, "Membina peta Malaysia..."), el("p", null, "Menyusun negeri, menara ilmu dan tempat pelancongan.")));
+  LM.ldBar = el("i", { style: "display:block;height:100%;width:2%;background:linear-gradient(90deg,#5ff2ff,#ffd45a);border-radius:8px;transition:width .3s" });
+  LM.ldTxt = el("p", { class: "lm-ex", "aria-live": "polite" }, "Bersedia...");
+  const ld = el("div", { class: "lm-card" }, el("div", { class: "lm-box" }, el("div", { class: "lm-kick" }, "META DIDIK"), el("h2", null, "Membina peta Malaysia..."),
+    el("div", { role: "progressbar", "aria-label": "Kemajuan membina dunia", style: "height:12px;border-radius:8px;background:rgba(255,255,255,.15);overflow:hidden;margin:10px 0 4px" }, LM.ldBar), LM.ldTxt,
+    el("p", { class: "lm-ex", style: "opacity:.7" }, "Grafik: " + GQN[lmQ()] + ". Telefon mungkin mengambil masa 30 saat atau lebih. Jangan tutup aplikasi.")));
   r.appendChild(ld);
   setTimeout(async () => {
-    const g = lmBuildScene();
+    const g = await lmBuildScene();
     if (!g) { ld.remove(); toast("Grafik 3D (WebGL) tidak dapat dimulakan pada peranti ini.", "warn"); lmClose(); return; }
     ld.remove(); LM.daily = lmDaily(); lmHud(); lmSpawn(g); lmPointers(LM.cv); lmWpSet();
     LM.on = true; g.last = 0;
@@ -5836,6 +6039,7 @@ function lmStart(code, kind) {
   }, 30);
 }
 function lmClose() {
+  if (LM.fsAuto) { LM.fsAuto = false; try { if (document.fullscreenElement) document.exitFullscreen(); if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch (e) { /* abaikan */ } }
   document.removeEventListener("fullscreenchange", lmFsSync);
   document.removeEventListener("webkitfullscreenchange", lmFsSync);
   lmAzanStop();
