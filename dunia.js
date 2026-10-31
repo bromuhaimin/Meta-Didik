@@ -5835,7 +5835,12 @@ function lmPointers(cv) {
   cv.addEventListener("touchstart", stop, { passive: false }); cv.addEventListener("touchmove", stop, { passive: false });
   if (!LM.jsWin) {
     LM.jsWin = true;
-    window.addEventListener("blur", lmJsReset); window.addEventListener("orientationchange", lmJsReset);
+    /* v18.37: apl skrin utama iOS (standalone) menghantar "blur" tetingkap apabila sesi audio bermula (bunyi senyap,
+       azan, bunyi dunia) walaupun jari masih di skrin. Dahulu blur menetapkan semula kayu bedik, jadi avatar tidak
+       boleh berjalan. Kini blur hanya melepaskan kekunci papan kekunci; kayu bedik dilepaskan oleh touchend/touchcancel,
+       pertukaran orientasi atau apabila aplikasi benar-benar ke latar belakang. */
+    window.addEventListener("blur", () => { for (const k in LM.keys) LM.keys[k] = false; });
+    window.addEventListener("orientationchange", lmJsReset); window.addEventListener("pagehide", lmJsReset);
     document.addEventListener("visibilitychange", () => { if (document.hidden) lmJsReset(); });
   }
   /* pengendali dikongsi: id ialah nombor (pointerId, atau 100000 + identifier bagi Touch Events) */
@@ -5848,7 +5853,9 @@ function lmPointers(cv) {
       const j = LM.ui.js; j.style.left = (cx - 60) + "px"; j.style.top = (cy - 60) + "px"; j.style.bottom = "auto";
     } else if (touch || LM.drag.id < 0) { LM.drag.id = id; LM.drag.x = cx; LM.drag.y = cy; }
   };
-  const move = (id, cx, cy) => {
+  const move = (id, cx, cy, touch) => {
+    /* sentuhan kiri yang masih aktif tetapi terlepas (contoh: diganggu sistem) diambil semula sebagai kayu bedik */
+    if (touch && LM.js.id < 0 && id !== LM.drag.id && cx < window.innerWidth * 0.42 && LM.g && !LM.g.ui) down(id, cx, cy, true);
     if (id === LM.js.id) {
       let dx = (cx - LM.js.cx) / 50, dy = (LM.js.cy - cy) / 50; const l = Math.hypot(dx, dy); if (l > 1) { dx /= l; dy /= l; }
       LM.js.x = dx; LM.js.y = dy; const i = LM.ui.js.firstChild; i.style.transform = "translate(" + dx * 34 + "px," + -dy * 34 + "px)";
@@ -5866,7 +5873,7 @@ function lmPointers(cv) {
   if (TE) {
     const each = (e, fn) => { for (let i = 0; i < e.changedTouches.length; i++) { const t = e.changedTouches[i]; fn(100000 + t.identifier, t.clientX, t.clientY); } };
     cv.addEventListener("touchstart", (e) => each(e, (id, x, y) => down(id, x, y, true)), { passive: false });
-    cv.addEventListener("touchmove", (e) => each(e, move), { passive: false });
+    cv.addEventListener("touchmove", (e) => each(e, (id, x, y) => move(id, x, y, true)), { passive: false });
     cv.addEventListener("touchend", (e) => { stop(e); each(e, end); }, { passive: false });
     cv.addEventListener("touchcancel", (e) => each(e, end), { passive: false });
   }

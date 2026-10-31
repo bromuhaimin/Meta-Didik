@@ -7232,7 +7232,7 @@ function lgRoot() {
    Dibuka daripada butang di peta utama; dunia.js dimuat hanya apabila diperlukan. */
 /* v17.91: avatar 3D dikongsi Gudang dan META DIDIK; dimuat apabila perlu */
 /* v18.4: versi aplikasi untuk memecah cache skrip (Safari/ikon skrin utama iPhone menyimpan salinan lama) */
-const APP_VER = "18.36";
+const APP_VER = "18.37";
 function av3Load(cb) {
   if (window.AV3) { cb(); return; }
   if (typeof THREE === "undefined") return;
@@ -14084,7 +14084,7 @@ function resetTouch() {
   joy.x = 0; joy.y = 0; joy.sprint = false; touchState.jump = false; S.firing = false;
   try { $("knob").style.transform = ""; } catch (e) { /* abaikan */ }
 }
-window.addEventListener("blur", resetTouch);
+/* v18.37: tiada reset sentuhan pada "blur": apl skrin utama iOS menghantar blur ketika audio bermula walaupun jari masih di skrin */
 document.addEventListener("visibilitychange", () => { if (document.hidden) resetTouch(); });
 window.addEventListener("pagehide", resetTouch);
 document.addEventListener("contextmenu", (e) => { if (S.running && !(e.target.closest && e.target.closest(".overlay"))) e.preventDefault(); });
