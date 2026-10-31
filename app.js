@@ -7232,7 +7232,7 @@ function lgRoot() {
    Dibuka daripada butang di peta utama; dunia.js dimuat hanya apabila diperlukan. */
 /* v17.91: avatar 3D dikongsi Gudang dan META DIDIK; dimuat apabila perlu */
 /* v18.4: versi aplikasi untuk memecah cache skrip (Safari/ikon skrin utama iPhone menyimpan salinan lama) */
-const APP_VER = "18.35";
+const APP_VER = "18.36";
 function av3Load(cb) {
   if (window.AV3) { cb(); return; }
   if (typeof THREE === "undefined") return;
@@ -17233,6 +17233,15 @@ function slOpen() { return modCall("slaid", "slOpen", [].slice.call(arguments));
 function slPick() { return modCall("slaid", "slPick", [].slice.call(arguments)); }
 /* v18.27: Selam diganti permainan Nelayan (mod/nelayan.js), dibuka dari jeti nelayan dalam Meta Didik */
 function pcOpen() { return modCall("nelayan", "pcOpen", [].slice.call(arguments)); }
+/* v18.36: Meta Didik Lifelong ID (mod/lid-teras.js = logik, mod/lid.js = antara muka); dimuat apabila perlu sahaja */
+function lidOpen() { return modLoad("lid-teras").then(() => modCall("lid", "lidBuka", [])).catch(() => toast("Bahagian ini tidak dapat dimuatkan. Semak sambungan internet dan cuba lagi.", "warn")); }
+function lidAdmin(box) { const h = el("div"); box.appendChild(h); modLoad("lid-teras").then(() => modCall("lid", "lidAdminBox", [h])).catch(() => { /* abaikan */ }); }
+/* semakan ringan semasa mula: hanya jika rekod Lifelong ID wujud (tiada muat modul untuk pengguna lain) */
+function lidSemakMula() {
+  let ada = null; try { ada = localStorage.getItem("gt-lid"); } catch (e) { /* abaikan */ }
+  if (!ada) return;
+  modLoad("lid-teras").then(() => { const r = window.LIDT.normal(JSON.parse(ada)); if (r && window.LIDT.layakSemak(r)) toast("🎓 Sudah tamat persekolahan? Kemas kini status anda dalam Meta Didik ID (Profil).", "good"); }).catch(() => { /* abaikan */ });
+}
 function srOpen(tid) { return pcOpen(tid); }
 /* muat modul secara senyap selepas aplikasi siap supaya pembukaan pertama pantas */
 setTimeout(() => { const go = () => ["prak", "slaid"].forEach((m) => modLoad(m).catch(() => {})); if (window.requestIdleCallback) requestIdleCallback(go, { timeout: 8000 }); else go(); }, 6000);
@@ -18362,7 +18371,7 @@ function renderGuru() {
   if (GTAB.t === "inovasi") { try { stnGuruBox(box); mdGuruBox(box); } catch (e) { console.error(e); } }
   else if (GTAB.t === "soalan") guruSoalanTab(box);
   else if (GTAB.t === "kolam") guruKolamTab(box);
-  else if (GTAB.t === "admin" && (kmAdm() || admKod())) { try { admDashBox(box); if (!kmAdm()) admKunciBox(box); else { stnAdminBox(box); guruAdminBox(box); sqbAdminBox(box); mdAdminBox(box); iptAdminBox(box); } } catch (e) { console.error(e); } }
+  else if (GTAB.t === "admin" && (kmAdm() || admKod())) { try { admDashBox(box); if (!kmAdm()) admKunciBox(box); else { stnAdminBox(box); guruAdminBox(box); sqbAdminBox(box); mdAdminBox(box); iptAdminBox(box); lidAdmin(box); } } catch (e) { console.error(e); } }
   else renderGuruDash(box);
 }
 function renderGuruDash(box) {
@@ -18613,6 +18622,7 @@ function openReg(first) {
   { const qi = $("qbInfo"); if (qi) qi.textContent = qbankInfo(); }
   $("regCancel").hidden = !!first;
   $("regReset").hidden = !!first;
+  { const lb = $("lidBtn"); if (lb) lb.hidden = !!first; }
   $("regReset").textContent = "Padam kemajuan";
   resetArmed = 0;
   $("reg").hidden = false;
@@ -18669,6 +18679,7 @@ async function linkAccount() {
 }
 $("linkGo").addEventListener("click", linkAccount);
 $("regCancel").addEventListener("click", () => { $("reg").hidden = true; });
+{ const lb = $("lidBtn"); if (lb) lb.addEventListener("click", () => { $("reg").hidden = true; lidOpen(); }); }
 $("regReset").addEventListener("click", () => {
   if (!resetArmed) { resetArmed = 1; $("regReset").textContent = "Klik lagi untuk padam semua"; setTimeout(() => { resetArmed = 0; $("regReset").textContent = "Padam kemajuan"; }, 4000); return; }
   Net.noMerge = true;
@@ -18703,6 +18714,7 @@ function rankDropNotice() {
   renderLegend();
   renderMe(); renderMaps(); renderList(); renderPanel();
   if (!P.nama || !P.sekolah) openReg(true);
+  else setTimeout(lidSemakMula, 6000);
   Net.onRankUp = (r) => { const msg = (cleanName(r.n) || "Pemain") + " naik pangkat ke " + RANKS[clamp(r.p | 0, 0, RANKS.length - 1)].n; if (S.running) { toast(msg, "good"); return; } const b = $("rkBanner"); b.textContent = msg; b.hidden = false; clearTimeout(b._t); b._t = setTimeout(() => { b.hidden = true; }, 5000); };
   Net.boardCb = () => { if (!$("reg").hidden) fillSchoolList(); renderMe(); liveWatch(); if (UI.view === "rank") renderBoard(); if (UI.view === "pangkat") renderPangkat(); };
   qbankLoad();
