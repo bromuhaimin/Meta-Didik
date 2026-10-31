@@ -3,28 +3,32 @@
 ## Ringkasan
 
 1. Paparan utama ada **jalur logo penaja** di bawah tajuk Meta Didik, dengan butang **🤝 Jadi Penaja**.
-2. Syarikat mengisi borang: pakej, tempoh, lokasi dalam Meta Didik, maklumat syarikat, logo dan pegawai untuk dihubungi.
+2. Penaja mengisi borang:
+   - **jumlah tajaan (RM) yang ingin diberikan**;
+   - tempoh paparan logo (3, 6 atau 12 bulan);
+   - paparan yang diingini;
+   - lokasi dalam Meta Didik;
+   - maklumat penaja, logo dan pegawai untuk dihubungi.
 3. Pentadbir menyemak permohonan dalam **Dashboard Pentadbir → Pentadbir: penaja Meta Didik**:
-   - hantar invois di luar aplikasi;
-   - selepas bayaran diterima, tekan **Luluskan**.
+   - urus sumbangan di luar aplikasi;
+   - pilih jenis paparan;
+   - tekan **Luluskan (sumbangan diterima)**.
 4. Selepas diluluskan:
    - logo dipaparkan di paparan utama;
    - kedai, bangunan atau papan iklan berjenama dibina di lokasi pilihan dalam Meta Didik.
 5. Tajaan tamat secara automatik pada tarikh tamat. Pentadbir boleh **Lanjut 3 bulan** atau **Tarik balik**.
 
-## Kadar tajaan (cadangan, sebulan)
+## Tiada kadar tetap
 
-| Pakej | Harga | Paparan utama | Dalam Meta Didik |
-|---|---|---|---|
-| 🥈 Rakan Pendidikan | RM150 | Logo kecil | Papan iklan berlogo (dua muka) di lokasi pilihan |
-| 🥇 Penaja Emas | RM400 | Logo sederhana | Kedai/bangunan berjenama: logo pada fasad dan papan bumbung, kanopi warna jenama, kad maklumat |
-| 💎 Penaja Platinum | RM1,000 | Barisan pertama, logo besar | Bangunan lebih tinggi dengan LED warna jenama dan sepanduk; logo pada skrin memuat Meta Didik; ikon pada peta |
+Meta Didik menerima sebarang jumlah tajaan. Borang tidak memaparkan harga.
 
-- **Minimum 3 bulan.** 6 bulan: diskaun 10%. 12 bulan: diskaun 20%.
-- **Sekolah, PIBG, NGO atau badan pendidikan:** diskaun tambahan 30%. Jumlah diskaun maksimum 50%.
-- **Contoh:** Emas 12 bulan = RM400 × 12 × 0.8 = **RM3,840**.
-- **Asas penetapan:** kadar ini setara papan iklan digital kecil atau iklan media sosial tempatan, dan berpatutan untuk perniagaan kecil hingga sederhana.
-- Kadar boleh diubah dalam `app.js` (`PJ_PAKEJ`, `PJ_DISKAUN`, `PJ_DISKAUN_PENDIDIKAN`).
+Penaja memilih jenis paparan yang diingini sebagai cadangan. Pentadbir menentukan paparan sebenar semasa meluluskan, berdasarkan jumlah sumbangan dan kesesuaian.
+
+| Paparan | Paparan utama | Dalam Meta Didik |
+|---|---|---|
+| 🥈 Rakan Pendidikan | Logo kecil | Papan iklan berlogo (dua muka) di lokasi pilihan |
+| 🥇 Penaja Emas | Logo sederhana | Kedai/bangunan berjenama: logo pada fasad dan papan bumbung, kanopi warna jenama, kad maklumat |
+| 💎 Penaja Platinum | Barisan pertama, logo besar | Bangunan lebih tinggi dengan LED warna jenama dan sepanduk; logo pada skrin memuat Meta Didik; ikon pada peta |
 
 ## Lokasi tajaan (26 tempat sebenar, satu penaja setiap lokasi)
 
@@ -53,7 +57,7 @@
 | Nod | Baca | Tulis |
 |---|---|---|
 | `penaja/<id>` | awam (logo, nama, pakej, lokasi, tarikh) | pentadbir sahaja (kunci moderator) |
-| `penaja_mohon/<id>` | tiada (pentadbir sahaja) | cipta sahaja; ketat: perlu log masuk; disahkan (logo PNG/JPEG ≤ 120 KB, pakej, tempoh 3/6/12, panjang medan) |
+| `penaja_mohon/<id>` | tiada (pentadbir sahaja) | cipta sahaja; ketat: perlu log masuk; disahkan (jumlah tajaan RM ≥ 1, logo PNG/JPEG ≤ 120 KB, jenis paparan, tempoh 3/6/12, panjang medan) |
 
 - **Logo:** dikecilkan dalam pelayar kepada maksimum 400×200 px, kemudian disimpan sebagai data URL. Firebase Storage tidak diperlukan.
 - **Rules:** ditambah ke keempat-empat fail dalam `docs/` oleh `tools/ujian/penaja-rules.py`. Peraturan lain tidak diubah.

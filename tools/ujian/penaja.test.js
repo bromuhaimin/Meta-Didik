@@ -6,14 +6,12 @@ const path = require("node:path");
 const src = fs.readFileSync(path.join(__dirname, "../../app.js"), "utf8");
 /* ambil blok penaja tulen dari app.js (tanpa DOM) */
 const a = src.indexOf("const PJ_PAKEJ"), b = src.indexOf("async function pjMuat");
-const PJX = new Function(src.slice(a, b) + "; return { PJ_PAKEJ, PJ_LOK, PJ_MIN_BULAN, pjLok, pjHarga, pjAktif };")();
+const PJX = new Function(src.slice(a, b) + "; return { PJ_PAKEJ, PJ_LOK, PJ_TEMPOH, pjLok, pjAktif };")();
 
-test("kadar: minimum 3 bulan, diskaun 6/12 bulan dan badan pendidikan (maks 50%)", () => {
-  assert.equal(PJX.pjHarga("rakan", 1), 450, "kurang 3 bulan dikira 3 bulan");
-  assert.equal(PJX.pjHarga("emas", 12), 3840);
-  assert.equal(PJX.pjHarga("platinum", 6), 5400);
-  assert.equal(PJX.pjHarga("emas", 12, true), 2400, "20% + 30% = 50% (had)");
-  assert.equal(PJX.pjHarga("tiada", 3), 0);
+test("tiada kadar tetap: pakej hanya jenis paparan, tempoh 3/6/12 bulan", () => {
+  for (const k of ["rakan", "emas", "platinum"]) assert.ok(PJX.PJ_PAKEJ[k] && !("rm" in PJX.PJ_PAKEJ[k]));
+  assert.deepEqual(PJX.PJ_TEMPOH, [3, 6, 12]);
+  assert.ok(!/pjHarga|PJ_DISKAUN/.test(src), "tiada pengiraan harga");
 });
 test("lokasi unik dengan koordinat dalam Malaysia", () => {
   const ids = PJX.PJ_LOK.map((x) => x[0]);
@@ -35,5 +33,6 @@ for (const f of ["firebase-rules-lengkap-percubaan.json", "firebase-rules-lengka
     if (/ketat|stesen/.test(f)) assert.match(r.penaja_mohon.$id[".write"], /auth != null/);
     assert.match(r.penaja_mohon.$id[".validate"], /!newData\.child\('st'\)\.exists\(\)/, "pemohon tidak boleh meluluskan sendiri");
     assert.match(r.penaja_mohon.$id[".validate"], /length <= 120000/);
+    assert.match(r.penaja_mohon.$id[".validate"], /child\('rm'\)\.val\(\) >= 1/, "jumlah tajaan wajib");
   });
 }

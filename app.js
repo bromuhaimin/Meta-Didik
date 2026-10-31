@@ -7327,14 +7327,14 @@ function mdKendiri() {
 }
 /* ---------- v18.38: Penaja Meta Didik ----------
    penaja/<id> (awam, ditulis pentadbir sahaja): { n, logo (dataURL), pk, lk, wk, tl, web, mula, tamat }
-   penaja_mohon/<id> (tidak awam, cipta sahaja): borang permohonan. Bayaran diurus secara invois selepas kelulusan.
-   Kadar ialah cadangan awal; ubah PJ_PAKEJ jika perlu. */
+   penaja_mohon/<id> (tidak awam, cipta sahaja): borang permohonan, termasuk jumlah tajaan (rm) yang ditawarkan penaja.
+   Tiada kadar tetap: Meta Didik menerima sebarang jumlah tajaan. Pentadbir menentukan jenis paparan semasa meluluskan. */
 const PJ_PAKEJ = {
-  rakan: { n: "Rakan Pendidikan", ic: "🥈", rm: 150, d: "Logo di jalur penaja paparan utama + papan iklan berlogo di lokasi pilihan dalam Meta Didik." },
-  emas: { n: "Penaja Emas", ic: "🥇", rm: 400, d: "Logo lebih besar di paparan utama + kedai/bangunan berjenama di lokasi pilihan (logo pada fasad dan papan bumbung, kad maklumat syarikat)." },
-  platinum: { n: "Penaja Platinum", ic: "💎", rm: 1000, d: "Barisan pertama paparan utama + bangunan berjenama bercahaya LED di lokasi pilihan + logo pada skrin memuat Meta Didik + ikon pada peta besar." }
+  rakan: { n: "Rakan Pendidikan", ic: "🥈", d: "Logo di jalur penaja paparan utama + papan iklan berlogo di lokasi pilihan dalam Meta Didik." },
+  emas: { n: "Penaja Emas", ic: "🥇", d: "Logo lebih besar di paparan utama + kedai/bangunan berjenama di lokasi pilihan (logo pada fasad dan papan bumbung, kad maklumat syarikat)." },
+  platinum: { n: "Penaja Platinum", ic: "💎", d: "Barisan pertama paparan utama + bangunan berjenama bercahaya LED di lokasi pilihan + logo pada skrin memuat Meta Didik + ikon pada peta besar." }
 };
-const PJ_MIN_BULAN = 3, PJ_DISKAUN = { 3: 0, 6: 0.1, 12: 0.2 }, PJ_DISKAUN_PENDIDIKAN = 0.3;
+const PJ_TEMPOH = [3, 6, 12]; /* bulan paparan logo */
 /* lokasi tajaan: tempat sebenar (lat, lon); satu penaja bagi setiap lokasi */
 const PJ_LOK = [
   ["klcc", "KLCC, Kuala Lumpur", 3.1579, 101.7116], ["klsentral", "KL Sentral, Kuala Lumpur", 3.1340, 101.6865], ["bbintang", "Bukit Bintang, Kuala Lumpur", 3.1466, 101.7108],
@@ -7348,7 +7348,6 @@ const PJ_LOK = [
   ["miri", "Miri, Sarawak", 4.3990, 113.9910], ["labuan", "Bandar Labuan", 5.2800, 115.2420]
 ];
 function pjLok(id) { const r = PJ_LOK.find((x) => x[0] === id); return r ? { id: r[0], n: r[1], la: r[2], lo: r[3] } : null; }
-function pjHarga(pk, bulan, pendidikan) { const p = PJ_PAKEJ[pk]; if (!p) return 0; const b = Math.max(PJ_MIN_BULAN, bulan | 0), dk = (PJ_DISKAUN[b] || 0) + (pendidikan ? PJ_DISKAUN_PENDIDIKAN : 0); return Math.round(p.rm * b * (1 - Math.min(dk, 0.5))); }
 const PJ = { list: [], ok: false };
 function pjAktif(v, now) { now = now || Date.now(); return Object.keys(v || {}).map((id) => Object.assign({ id: id }, v[id])).filter((d) => d && d.n && PJ_PAKEJ[d.pk] && (!d.tamat || d.tamat > now) && (!d.mula || d.mula <= now)).sort((a, b) => ["platinum", "emas", "rakan"].indexOf(a.pk) - ["platinum", "emas", "rakan"].indexOf(b.pk) || (a.mula || 0) - (b.mula || 0)); }
 async function pjMuat() {

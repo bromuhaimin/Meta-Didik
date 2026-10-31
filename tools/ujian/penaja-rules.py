@@ -1,6 +1,6 @@
 """Tambah/kemas kini peraturan penaja (penaja, penaja_mohon) dalam 4 fail Rules (idempoten)."""
 import json, collections
-V = ("newData.hasChildren(['sy','pk','lk','logo','pic','hp','em','bln','t']) && newData.child('t').val() === now && !newData.child('st').exists()"
+V = ("newData.hasChildren(['sy','pk','lk','logo','pic','hp','em','bln','rm','t']) && newData.child('rm').isNumber() && newData.child('rm').val() >= 1 && newData.child('rm').val() <= 10000000 && newData.child('t').val() === now && !newData.child('st').exists()"
      " && newData.child('sy').isString() && newData.child('sy').val().length >= 3 && newData.child('sy').val().length <= 60"
      " && newData.child('pk').val().matches(/^(rakan|emas|platinum)$/) && newData.child('lk').isString() && newData.child('lk').val().length <= 20"
      " && newData.child('logo').isString() && newData.child('logo').val().matches(/^data:image\\/(png|jpeg);base64,/) && newData.child('logo').val().length <= 120000"
