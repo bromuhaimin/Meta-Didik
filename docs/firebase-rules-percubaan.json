@@ -156,5 +156,51 @@
       ".write": "true",
       ".validate": "$uid.length <= 40 && newData.hasChildren(['nm','sk','hp','v','t']) && newData.child('nm').isString() && newData.child('nm').val().length <= 80 && newData.child('sk').isString() && newData.child('sk').val().length <= 80 && newData.child('hp').isString() && newData.child('hp').val().length <= 80 && newData.child('v').isNumber() && newData.child('t').val() === now"
     }
+  },
+  "lid": {
+    ".read": false,
+    "$uid": {
+      ".read": "auth != null && auth.uid === $uid",
+      ".write": "auth != null && auth.uid === $uid",
+      ".validate": "$uid.length <= 128 && newData.hasChildren(['v','peranan']) && newData.child('v').isNumber() && newData.child('privasi').child('awam').val() !== true",
+      "peranan": {
+        "mentor": {
+          ".validate": "newData.child('st').val() === 'tunggu' || newData.child('st').val() === 'tamat'"
+        },
+        "$p": {
+          ".validate": "$p.matches(/^(murid|alumni|mahasiswa|graduan|profesional|mentor)$/) && newData.child('st').isString() && newData.child('st').val().matches(/^(aktif|tamat|tunggu)$/) && (!newData.child('sumber').exists() || newData.child('sumber').val().matches(/^(sendiri|mohon)$/))"
+        }
+      },
+      "pendidikan": {
+        "$e": {
+          "sah": {
+            ".validate": "newData.val() === 'sendiri'"
+          }
+        }
+      },
+      "pasport": {
+        "$e": {
+          "sah": {
+            ".validate": "newData.val() === 'sendiri'"
+          }
+        }
+      }
+    }
+  },
+  "lid_sah": {
+    ".read": false,
+    "$uid": {
+      ".read": "true",
+      ".write": false
+    }
+  },
+  "lid_mohon": {
+    ".read": false,
+    "$uid": {
+      "$id": {
+        ".write": "!data.exists()",
+        ".validate": "$uid.length <= 128 && $id.length <= 40 && newData.hasChildren(['jenis','t']) && newData.child('jenis').val().matches(/^(alumni|padam|mentor)$/) && newData.child('t').val() === now && !newData.child('st').exists() && (!newData.child('nota').exists() || (newData.child('nota').isString() && newData.child('nota').val().length <= 200)) && (!newData.child('sekolah').exists() || (newData.child('sekolah').isString() && newData.child('sekolah').val().length <= 80))"
+      }
+    }
   }
 }
