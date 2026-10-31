@@ -6163,6 +6163,8 @@ function lmHud() {
   const setB = lmBtn("⚙ Tetapan", "", () => { tutupM(); lmTetapan(); });
   const pvB = lmBtn("🔐 Ruang Privasi", "", () => { tutupM(); lmPrivPanel(); });
   top.append(sjB);
+  /* v18.42: kawasan perintis data geospatial sebenar (OpenStreetMap), adegan berasingan berskala meter */
+  top.append(lmBtn("🏙 Setapak (data sebenar)", "", () => { tutupM(); const g = LM.g; if (g) LM.resume = { x: g.p.x, z: g.p.z, msg: "Kembali dari kawasan perintis Setapak" }; lmSave(); lmClose(); window.LP_KEMBALI = () => lmOpen(""); setTimeout(() => modLoad("perintis-teras").then(() => modCall("perintis", "lpBuka", ["setapak"])), 80); }));
   if (lmIsGuru()) top.append(lmBtn("🏛 Pacak inovasi di sini", "", () => { tutupM(); lmPacak(); }));
   top.append(pvB, setB);
   top.append(prof, ui.smB, kol, sol, lmBtn("Pasport (P)", "", () => lmPassport()), lmBtn("Tajuk (T)", "", () => lmPassport("tajuk")), ui.skyB, lmBtn("Bilik", "", lmRoomPanel), lmBtn("Swafoto", "", () => lmSelfie(null)),
