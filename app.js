@@ -7232,7 +7232,7 @@ function lgRoot() {
    Dibuka daripada butang di peta utama; dunia.js dimuat hanya apabila diperlukan. */
 /* v17.91: avatar 3D dikongsi Gudang dan META DIDIK; dimuat apabila perlu */
 /* v18.4: versi aplikasi untuk memecah cache skrip (Safari/ikon skrin utama iPhone menyimpan salinan lama) */
-const APP_VER = "18.37";
+const APP_VER = "18.38";
 function av3Load(cb) {
   if (window.AV3) { cb(); return; }
   if (typeof THREE === "undefined") return;
@@ -7325,6 +7325,56 @@ function mdKendiri() {
   const b = el("button", { type: "button", class: "btn" }, "🌏 Main dalam Meta Didik"); b.addEventListener("click", mdGo);
   return el("div", { class: "row k" }, el("span", { class: "muted", style: "font-size:13px;flex:1 1 220px" }, "Tempur & Lagenda di kem tentera, Amali di masjid, Dunia Ilmu di perpustakaan, Busana di butik dan Nelayan di jeti."), b);
 }
+/* ---------- v18.38: Penaja Meta Didik ----------
+   penaja/<id> (awam, ditulis pentadbir sahaja): { n, logo (dataURL), pk, lk, wk, tl, web, mula, tamat }
+   penaja_mohon/<id> (tidak awam, cipta sahaja): borang permohonan. Bayaran diurus secara invois selepas kelulusan.
+   Kadar ialah cadangan awal; ubah PJ_PAKEJ jika perlu. */
+const PJ_PAKEJ = {
+  rakan: { n: "Rakan Pendidikan", ic: "🥈", rm: 150, d: "Logo di jalur penaja paparan utama + papan iklan berlogo di lokasi pilihan dalam Meta Didik." },
+  emas: { n: "Penaja Emas", ic: "🥇", rm: 400, d: "Logo lebih besar di paparan utama + kedai/bangunan berjenama di lokasi pilihan (logo pada fasad dan papan bumbung, kad maklumat syarikat)." },
+  platinum: { n: "Penaja Platinum", ic: "💎", rm: 1000, d: "Barisan pertama paparan utama + bangunan berjenama bercahaya LED di lokasi pilihan + logo pada skrin memuat Meta Didik + ikon pada peta besar." }
+};
+const PJ_MIN_BULAN = 3, PJ_DISKAUN = { 3: 0, 6: 0.1, 12: 0.2 }, PJ_DISKAUN_PENDIDIKAN = 0.3;
+/* lokasi tajaan: tempat sebenar (lat, lon); satu penaja bagi setiap lokasi */
+const PJ_LOK = [
+  ["klcc", "KLCC, Kuala Lumpur", 3.1579, 101.7116], ["klsentral", "KL Sentral, Kuala Lumpur", 3.1340, 101.6865], ["bbintang", "Bukit Bintang, Kuala Lumpur", 3.1466, 101.7108],
+  ["tbs", "Terminal Bersepadu Selatan, Kuala Lumpur", 3.0786, 101.7110], ["midvalley", "Mid Valley, Kuala Lumpur", 3.1180, 101.6770], ["putrajaya", "Presint 1, Putrajaya", 2.9300, 101.6900],
+  ["cyberjaya", "Cyberjaya, Selangor", 2.9213, 101.6559], ["shahalam", "Seksyen 14, Shah Alam", 3.0738, 101.5183], ["klia", "Kawasan KLIA, Sepang", 2.7600, 101.7000],
+  ["seremban", "Bandar Seremban", 2.7258, 101.9424], ["melaka", "Bandar Hilir, Melaka", 2.1900, 102.2500], ["jb", "Pusat Bandar Johor Bahru", 1.4620, 103.7640],
+  ["kuantan", "Bandar Kuantan", 3.8170, 103.3260], ["kterengganu", "Kuala Terengganu", 5.3300, 103.1400], ["kbharu", "Kota Bharu", 6.1254, 102.2381],
+  ["ipoh", "Bandar Ipoh", 4.5975, 101.0901], ["georgetown", "George Town, Pulau Pinang", 5.4146, 100.3292], ["seberang", "Seberang Jaya, Pulau Pinang", 5.3960, 100.4000],
+  ["alorsetar", "Alor Setar, Kedah", 6.1210, 100.3680], ["langkawi", "Kuah, Langkawi", 6.3260, 99.8430], ["kangar", "Kangar, Perlis", 6.4400, 100.1980],
+  ["kk", "Kota Kinabalu, Sabah", 5.9690, 116.0660], ["sandakan", "Sandakan, Sabah", 5.8400, 118.1170], ["kuching", "Kuching, Sarawak", 1.5530, 110.3500],
+  ["miri", "Miri, Sarawak", 4.3990, 113.9910], ["labuan", "Bandar Labuan", 5.2800, 115.2420]
+];
+function pjLok(id) { const r = PJ_LOK.find((x) => x[0] === id); return r ? { id: r[0], n: r[1], la: r[2], lo: r[3] } : null; }
+function pjHarga(pk, bulan, pendidikan) { const p = PJ_PAKEJ[pk]; if (!p) return 0; const b = Math.max(PJ_MIN_BULAN, bulan | 0), dk = (PJ_DISKAUN[b] || 0) + (pendidikan ? PJ_DISKAUN_PENDIDIKAN : 0); return Math.round(p.rm * b * (1 - Math.min(dk, 0.5))); }
+const PJ = { list: [], ok: false };
+function pjAktif(v, now) { now = now || Date.now(); return Object.keys(v || {}).map((id) => Object.assign({ id: id }, v[id])).filter((d) => d && d.n && PJ_PAKEJ[d.pk] && (!d.tamat || d.tamat > now) && (!d.mula || d.mula <= now)).sort((a, b) => ["platinum", "emas", "rakan"].indexOf(a.pk) - ["platinum", "emas", "rakan"].indexOf(b.pk) || (a.mula || 0) - (b.mula || 0)); }
+async function pjMuat() {
+  if (typeof FB === "undefined" || !FB.url) { pjJalur(); return; }
+  try { PJ.list = pjAktif(await FB.req("GET", "penaja")); PJ.ok = true; } catch (e) { PJ.list = []; }
+  pjJalur();
+}
+/* jalur logo penaja di paparan utama */
+function pjJalur() {
+  let box = document.getElementById("pjBar");
+  if (!box) { const h = document.getElementById("mdHero"); if (!h) return; box = el("section", { class: "pjbar", id: "pjBar", "aria-label": "Penaja Meta Didik" }); h.after(box); }
+  box.textContent = "";
+  const join = el("button", { type: "button", class: "btn sm" }, "🤝 Jadi Penaja"); join.addEventListener("click", () => pjBuka());
+  box.appendChild(el("div", { class: "pjbar-h" }, el("span", { class: "pjbar-k" }, "DISOKONG OLEH PENAJA & RAKAN PENDIDIKAN"), join));
+  const row = el("div", { class: "pjbar-r" });
+  if (!PJ.list.length) row.appendChild(el("div", { class: "pjbar-kos" }, "Ruang ini menanti logo syarikat anda. Taja Meta Didik dan logo anda dipaparkan di sini dan di bangunan pilihan anda dalam dunia 3D."));
+  PJ.list.forEach((d) => {
+    const b = el("button", { type: "button", class: "pjlogo pj-" + d.pk, title: d.n, "aria-label": "Penaja: " + d.n });
+    b.appendChild(el("img", { src: d.logo, alt: d.n, loading: "lazy", decoding: "async" }));
+    b.addEventListener("click", () => pjKad(d)); row.appendChild(b);
+  });
+  box.appendChild(row);
+}
+function pjKad(d) { return modCall("penaja", "pjKad", [d]); }
+function pjBuka() { return modCall("penaja", "pjBuka", []); }
+function pjAdmin(box) { const h = el("div"); box.appendChild(h); modCall("penaja", "pjAdminBox", [h]); }
 function metaBack() { if (window.LMX && window.LMX.resume && !window.LMX.on) setTimeout(() => lmOpen(""), 80); }
 /* ---------- testimoni: komen murid dan guru dipaparkan terus di paparan utama ---------- */
 const TS = { i: 0, t: 0, hold: false };
@@ -18371,7 +18421,7 @@ function renderGuru() {
   if (GTAB.t === "inovasi") { try { stnGuruBox(box); mdGuruBox(box); } catch (e) { console.error(e); } }
   else if (GTAB.t === "soalan") guruSoalanTab(box);
   else if (GTAB.t === "kolam") guruKolamTab(box);
-  else if (GTAB.t === "admin" && (kmAdm() || admKod())) { try { admDashBox(box); if (!kmAdm()) admKunciBox(box); else { stnAdminBox(box); guruAdminBox(box); sqbAdminBox(box); mdAdminBox(box); iptAdminBox(box); lidAdmin(box); } } catch (e) { console.error(e); } }
+  else if (GTAB.t === "admin" && (kmAdm() || admKod())) { try { admDashBox(box); if (!kmAdm()) admKunciBox(box); else { stnAdminBox(box); guruAdminBox(box); sqbAdminBox(box); mdAdminBox(box); iptAdminBox(box); lidAdmin(box); pjAdmin(box); } } catch (e) { console.error(e); } }
   else renderGuruDash(box);
 }
 function renderGuruDash(box) {
@@ -18712,7 +18762,7 @@ function rankDropNotice() {
   document.body.classList.add("vmap");
   loadP(); P.kelas = kelasNorm(P.kelas);
   renderLegend();
-  renderMe(); renderMaps(); renderList(); renderPanel();
+  renderMe(); renderMaps(); renderList(); renderPanel(); try { pjJalur(); } catch (e) { /* abaikan */ }
   if (!P.nama || !P.sekolah) openReg(true);
   else setTimeout(lidSemakMula, 6000);
   Net.onRankUp = (r) => { const msg = (cleanName(r.n) || "Pemain") + " naik pangkat ke " + RANKS[clamp(r.p | 0, 0, RANKS.length - 1)].n; if (S.running) { toast(msg, "good"); return; } const b = $("rkBanner"); b.textContent = msg; b.hidden = false; clearTimeout(b._t); b._t = setTimeout(() => { b.hidden = true; }, 5000); };
@@ -18720,6 +18770,7 @@ function rankDropNotice() {
   qbankLoad();
   Net.init().then(() => {
     if (!P.nama && Net.user) { /* nama dipilih oleh pemain sendiri */ }
+    try { pjMuat(); } catch (e) { /* abaikan */ }
     computeStand();
     renderMe();
     rankDropNotice();

@@ -3562,6 +3562,92 @@ function lmStnGeo(g, v, mine) {
     g.items.push(it); g.stnG[id] = it;
   }
 }
+/* ---------- v18.38: penaja dalam Meta Didik ----------
+   Penaja aktif (penaja/<id>, diluluskan pentadbir) dibina selepas dunia siap di lokasi sebenar pilihan mereka (PJ_LOK):
+   Rakan Pendidikan = papan iklan berlogo; Emas = kedai/bangunan berjenama; Platinum = bangunan lebih tinggi dengan LED. */
+function lmPjLogoTex(d) {
+  const tex = lmTex(512, 256, (x, w, h) => { x.fillStyle = "#ffffff"; x.fillRect(0, 0, w, h); });
+  const img = new Image();
+  img.onload = () => {
+    const c = tex.userData.c, x = c.getContext("2d"), s = Math.min((c.width - 40) / img.width, (c.height - 30) / img.height);
+    x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height); x.drawImage(img, (c.width - img.width * s) / 2, (c.height - img.height * s) / 2, img.width * s, img.height * s); tex.needsUpdate = true;
+  };
+  img.src = d.logo; return tex;
+}
+function lmPjBina(d, tex) {
+  const g = new T.Group(), q = lmQ(), wk = /^#[0-9a-f]{6}$/i.test(d.wk || "") ? d.wk : "#1f6feb";
+  const conc = lmPbr("konkrit", { color: 0xa9a397, roughness: 0.92 }), metal = lmPbr("logam", { color: 0xb9c3cc, roughness: 0.35, metalness: 0.85 });
+  const glass = lmPbr("kaca", { color: 0x8fd6e0, roughness: 0.08, metalness: 0.1, transparent: true, opacity: 0.32, depthWrite: false });
+  const brand = lmPbr("jenama" + wk, { color: new T.Color(wk), roughness: 0.45, metalness: 0.15 }), logoM = new T.MeshBasicMaterial({ map: tex });
+  const m = (geo, mat, x, y, z, ry) => { const o = new T.Mesh(geo, mat); o.position.set(x, y, z); if (ry) o.rotation.y = ry; o.castShadow = q >= 1; o.receiveShadow = true; g.add(o); return o; };
+  const papan = (w, h, y, z, ry) => { const p = new T.Mesh(new T.PlaneGeometry(w, h), logoM); p.position.set(0, y, z); if (ry) p.rotation.y = ry; g.add(p); return p; };
+  if (d.pk === "rakan") {
+    /* papan iklan: dua tiang, panel dua muka, lampu sorot */
+    g.add(lmBlob(14, 5, 0.35));
+    lmInst(g, lmBox(0.5, 9, 0.5), metal, [[-4.5, 4.5, 0], [4.5, 4.5, 0]]);
+    m(lmBox(13, 6.6, 0.6), brand, 0, 11.2, 0);
+    papan(12, 6, 11.2, 0.31); papan(12, 6, 11.2, -0.31, Math.PI);
+    const led = new T.Mesh(lmBox(12.4, 0.16, 0.5), lmGlow("#fff6d8", 0.8)); led.position.set(0, 14.6, 0.7); g.add(led);
+    return { g: g, r: 5, h: 15 };
+  }
+  const plat = d.pk === "platinum", H = plat ? 13 : 9;
+  g.add(lmBlob(22, 16, 0.4));
+  m(lmBox(18, 0.5, 13), conc, 0, 0.25, 0);                                       /* lantai */
+  m(lmBox(16, H, 10), brand, 0, H / 2 + 0.5, -1);                                 /* bangunan warna jenama */
+  m(lmBox(15.6, H * 0.45, 0.2), glass, 0, H * 0.225 + 0.6, 4.05);                 /* kaca hadapan kedai */
+  lmInst(g, lmBox(0.25, H * 0.45, 0.3), metal, [[-5.2, H * 0.225 + 0.6, 4.1], [0, H * 0.225 + 0.6, 4.1], [5.2, H * 0.225 + 0.6, 4.1]]); /* bingkai kaca */
+  m(lmBox(16.4, 3.2, 0.5), lmPbr("fasad", { color: 0xf4f4f2, roughness: 0.6 }), 0, H * 0.45 + 2.4, 4.2); /* fasad untuk logo */
+  papan(9.6, 2.9, H * 0.45 + 2.4, 4.46);
+  for (let i = 0; i < 8; i++) m(lmBox(16.4 / 8, 0.25, 2.4), i % 2 ? lmMat("#ffffff") : brand, -8.2 + 16.4 / 16 + i * 16.4 / 8, H * 0.45 + 0.7, 5.3); /* kanopi berjalur */
+  /* papan logo atas bumbung (dua muka) */
+  lmInst(g, lmBox(0.35, 2.4, 0.35), metal, [[-3.6, H + 1.7, -1], [3.6, H + 1.7, -1]]);
+  m(lmBox(10.4, 5.4, 0.4), brand, 0, H + 5, -1); papan(9.8, 4.9, H + 5, -0.78); papan(9.8, 4.9, H + 5, -1.22, Math.PI);
+  /* landskap: pasu dan bangku */
+  for (const x of [-7, 7]) { m(lmBox(1.6, 1, 1.6), conc, x, 1, 5.6); m(new T.SphereGeometry(1.1, 8, 6), lmMat("#3f8f3a"), x, 2.1, 5.6); }
+  if (plat) {
+    /* Platinum: jalur LED pada bucu dan bumbung, sepanduk menegak */
+    for (const x of [-8.05, 8.05]) { const l = new T.Mesh(lmBox(0.14, H, 0.14), lmGlow(wk, 0.9)); l.position.set(x, H / 2 + 0.5, 4.05); g.add(l); }
+    const top = new T.Mesh(lmBox(16.2, 0.16, 0.16), lmGlow(wk, 0.9)); top.position.set(0, H + 0.55, 4.05); g.add(top);
+    const ban = new T.Mesh(new T.PlaneGeometry(2.6, 5.2), logoM); ban.position.set(8.25, H * 0.62, 1); ban.rotation.y = Math.PI / 2; g.add(ban);
+  } else { const led = new T.Mesh(lmBox(16.2, 0.12, 0.12), lmGlow("#fff6d8", 0.6)); led.position.set(0, H * 0.45 + 0.75, 6.5); g.add(led); }
+  return { g: g, r: 9, h: H + 8 };
+}
+/* jarak ke landasan rel/jejantas (segmen garis, abaikan bahagian bawah tanah) */
+function lmPjDekatRel(g, x, z, lim) {
+  for (const R of g.rails || []) { const P = R.pts; if (!P) continue; for (let i = 1; i < P.length; i++) { const a = P[i - 1], b = P[i]; if (a.ug && b.ug) continue; const dx = b.x - a.x, dz = b.z - a.z, L2 = dx * dx + dz * dz || 1, t = clamp(((x - a.x) * dx + (z - a.z) * dz) / L2, 0, 1); if (Math.hypot(a.x + dx * t - x, a.z + dz * t - z) < lim) return true; } }
+  return false;
+}
+async function lmPjFetch(g) {
+  if (typeof PJ === "undefined" || typeof PJ_LOK === "undefined") return;
+  if (!PJ.ok) { try { if (typeof pjMuat === "function") await pjMuat(); } catch (e) { return; } }
+  if (!LM.g || LM.g !== g) return;
+  g.pj = g.pj || {};
+  const want = {}; PJ.list.forEach((d) => { const lk = pjLok(d.lk); if (lk && d.logo) want[d.id] = Object.assign({}, d, { la: lk.la, lo: lk.lo, lkN: lk.n }); });
+  for (const id in g.pj) if (!want[id]) { const it = g.pj[id]; g.scene.remove(it.m); if (it.lb) g.scene.remove(it.lb); g.items.splice(g.items.indexOf(it), 1); const ci = g.cols.indexOf(it.col); if (ci >= 0) g.cols.splice(ci, 1); delete g.pj[id]; }
+  for (const id in want) {
+    if (g.pj[id]) continue;
+    const d = want[id], c0 = ll(d.la, d.lo); let w = null;
+    /* tapak lapang supaya jenama jelas kelihatan: jauh dari objek lain, tiang rel/jejantas dan penaja lain */
+    const ok = (x, z) => lmAt(x, z) !== "" && lmLandW(x + 12, z) && lmLandW(x - 12, z) && lmLandW(x, z + 12) && lmLandW(x, z - 12) && !g.items.some((it) => Math.hypot(it.x - x, it.z - z) < 24) && !g.cols.some((c) => Math.hypot(c.x - x, c.z - z) < (c.r || 2) + 16) && !lmPjDekatRel(g, x, z, 20);
+    for (let r = 0; r <= 160 && !w; r += 6) for (let i = 0; i < (r ? 12 : 1); i++) { const a = i * 0.5236 + 0.2, x = c0.x + Math.cos(a) * r, z = c0.z + Math.sin(a) * r; if (ok(x, z)) { w = { x: x, z: z }; break; } }
+    if (!w) continue;
+    const b = lmPjBina(d, lmPjLogoTex(d)), rot = (Math.abs(hashStr(id)) % 628) / 100, gy = lmGround(w.x, w.z);
+    b.g.position.set(w.x, gy, w.z); b.g.rotation.y = rot; g.scene.add(b.g);
+    const lb = lmLabel((PJ_PAKEJ[d.pk] ? PJ_PAKEJ[d.pk].ic + " " : "") + d.n + " · Penaja Meta Didik", { fs: 26, k: 0.028, bg: "rgba(20,20,30,.85)", bd: d.wk || "#ffd45a" }); lb.position.set(w.x, gy + b.h + 2, w.z); g.scene.add(lb);
+    const fx = Math.sin(rot), fz = Math.cos(rot), col = { x: w.x - fx * (d.pk === "rakan" ? 0 : 1), z: w.z - fz * (d.pk === "rakan" ? 0 : 1), r: b.r * (d.pk === "rakan" ? 0.3 : 0.75), h: b.h }; g.cols.push(col);
+    const it = { kind: "pj", id: "pj-" + id, n: d.n, x: w.x + fx * (b.r + 2), z: w.z + fz * (b.r + 2), r: 0, ir: 7, m: b.g, d: d, lb: lb, col: col };
+    g.items.push(it); g.pj[id] = it;
+  }
+}
+function lmPjOpen(it) {
+  const d = it.d, pk = PJ_PAKEJ[d.pk] || { n: "Penaja", ic: "" };
+  lmCard((b) => {
+    b.append(el("div", { class: "lm-kick" }, pk.ic + " " + pk.n.toUpperCase() + " · " + d.lkN), el("div", { style: "background:#fff;border-radius:12px;display:grid;place-items:center;height:110px;margin:6px 0" }, el("img", { src: d.logo, alt: d.n, style: "max-width:90%;max-height:96px" })), el("h2", null, d.n));
+    if (d.tl) b.appendChild(el("p", null, d.tl));
+    b.append(el("p", { class: "lm-ex" }, "Terima kasih kepada " + d.n + " kerana menyokong pendidikan digital murid Malaysia melalui Meta Didik."), el("p", { class: "lm-ex", style: "opacity:.7" }, "Kandungan tajaan. Syarikat anda juga boleh menaja: paparan utama → 🤝 Jadi Penaja."));
+    b.appendChild(el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose)));
+  });
+}
 function lmStnOpen(it) {
   const d = it.d, gid = FB.getUid();
   lmCard((b) => {
@@ -4022,6 +4108,7 @@ async function lmBuildWorld(g) {
   /* Dataran Inovasi: stesen guru */
   await lmProg(36, "Dataran Inovasi");
   lmStnBuild(g, used, placed, avoid, gnd); (g.after || (g.after = [])).push(() => lmStnFetch(g));
+  g.after.push(() => lmPjFetch(g)); /* v18.38: bangunan/papan iklan penaja */
   /* jeti nelayan: permainan Nelayan */
   lmNelayanBuild(g, used, placed, avoid, gnd);
   /* butik Busana, perpustakaan Dunia Ilmu, pusat Amali */
@@ -5470,6 +5557,7 @@ function lmMap3(area, onPick) {
       case "ak": return [emo("❗"), 20];
       case "sn": return it.geo || it.sl.slice(-2) === "-2" ? [emo("🏛"), 22] : null;
       case "fd": return [emo("🍽"), 20];
+      case "pj": return it.d && it.d.pk === "platinum" ? [emo("🏢"), 22] : null;
       case "km": return [emo("🎖"), 22];
       case "ny": return [emo("🎣"), 22];
       case "vn": return [emo(VN_INFO[it.sub].ic), 22];
@@ -5794,6 +5882,7 @@ function lmNearTick(g) {
     : best.kind === "tn" ? key + "🚇 " + best.n
     : best.kind === "tl" ? key + "🛣 " + best.n
     : best.kind === "fd" ? key + "Kedai makan: " + best.n
+    : best.kind === "pj" ? key + "🏢 " + best.n + " · Penaja Meta Didik"
     : best.kind === "sn" ? key + (best.d ? "Stesen Inovasi: " + best.n : "Dataran Inovasi: tapak kosong")
     : best.kind === "ak" ? key + (best.act || "Bantu: " + best.n)
     : best.kind === "kh" ? key + "Markas Misi Khas " + best.isl.khas.pendek + (best.done ? " ✔" : "") : best.kind === "jt" ? key + (best.k === best.isl.id ? "Feri pulang ke tanah besar" : "Naik feri ke " + best.isl.n) : key + "Terbang dari " + best.n;
@@ -5804,7 +5893,7 @@ function lmInteract() {
   const g = LM.g; if (!g || g.ui || !g.near) return;
   lmSnd("open");
   const it = g.near;
-  if (it.kind === "tn") lmTunOpen(it); else if (it.kind === "tl") lmTolOpen(it); else if (it.kind === "bt") lmTerminalOpen(it); else if (it.kind === "tx") lmTaksiOpen(it); else if (it.kind === "pu") lmPulauOpen(it); else if (it.kind === "sn") lmStnOpen(it); else if (it.kind === "tw") lmTowerOpen(it); else if (it.kind === "pl") lmPlaceOpen(it); else if (it.kind === "ap") lmAirportOpen(it); else if (it.kind === "kh") lmKhasOpen(it); else if (it.kind === "jt") lmFerryOpen(it); else if (it.kind === "st") lmRailOpen(it); else if (it.kind === "si") lmIlmuOpen(it); else if (it.kind === "km") lmKemOpen(it); else if (it.kind === "ny") lmNelayanOpen(it); else if (it.kind === "vn") lmVenueOpen(it); else if (it.kind === "ip") lmKampusOpen(it); else if (it.kind === "sk") lmOwnSchoolOpen(it); else if (it.kind === "fd") lmFoodOpen(it); else if (it.kind === "ak") lmAkOpen(it);
+  if (it.kind === "tn") lmTunOpen(it); else if (it.kind === "tl") lmTolOpen(it); else if (it.kind === "bt") lmTerminalOpen(it); else if (it.kind === "tx") lmTaksiOpen(it); else if (it.kind === "pu") lmPulauOpen(it); else if (it.kind === "sn") lmStnOpen(it); else if (it.kind === "tw") lmTowerOpen(it); else if (it.kind === "pl") lmPlaceOpen(it); else if (it.kind === "ap") lmAirportOpen(it); else if (it.kind === "kh") lmKhasOpen(it); else if (it.kind === "jt") lmFerryOpen(it); else if (it.kind === "st") lmRailOpen(it); else if (it.kind === "si") lmIlmuOpen(it); else if (it.kind === "km") lmKemOpen(it); else if (it.kind === "ny") lmNelayanOpen(it); else if (it.kind === "vn") lmVenueOpen(it); else if (it.kind === "ip") lmKampusOpen(it); else if (it.kind === "sk") lmOwnSchoolOpen(it); else if (it.kind === "fd") lmFoodOpen(it); else if (it.kind === "ak") lmAkOpen(it); else if (it.kind === "pj") lmPjOpen(it);
 }
 /* ---------- input ---------- */
 function lmKey(e) {
@@ -6022,6 +6111,12 @@ function lmOpen(tid) {
   }
   lmGeoLoad().then(() => lmOwnSchool()).then((sk) => { LM.ownSk = sk; lmRaster(); if (LM.resume) lmStart("", ""); else lmSetup(); }).catch(() => { toast("Peta META DIDIK tidak dapat dimuatkan. Semak sambungan internet dan cuba lagi.", "warn"); lmClose(); });
 }
+/* v18.38: logo penaja Platinum pada skrin memuat */
+function lmPjMuatLogo() {
+  const L = (typeof PJ !== "undefined" ? PJ.list : []).filter((d) => d.pk === "platinum").slice(0, 4); if (!L.length) return null;
+  const r = el("div", { style: "display:grid;gap:6px;margin-top:10px;justify-items:center" }, el("small", { style: "letter-spacing:.18em;opacity:.75" }, "DIBAWA KEPADA ANDA OLEH"));
+  const row = el("div", { style: "display:flex;gap:10px;flex-wrap:wrap;justify-content:center" }); L.forEach((d) => row.appendChild(el("div", { style: "background:#fff;border-radius:10px;width:130px;height:62px;display:grid;place-items:center;padding:6px" }, el("img", { src: d.logo, alt: d.n, style: "max-width:100%;max-height:100%" })))); r.appendChild(row); return r;
+}
 function lmStart(code, kind) {
   if (TOUCH && LM.st && LM.st.fs !== 0) lmFsMasuk(); /* v18.35: dalam klik pengguna: skrin penuh + landskap */
   lmAudUnlock(); AZ.last = null; lmAzanLoad(); /* v18.33: azan */ /* dalam klik pengguna: buka kunci audio telefon */
@@ -6031,7 +6126,7 @@ function lmStart(code, kind) {
   LM.ldTxt = el("p", { class: "lm-ex", "aria-live": "polite" }, "Bersedia...");
   const ld = el("div", { class: "lm-card" }, el("div", { class: "lm-box" }, el("div", { class: "lm-kick" }, "META DIDIK"), el("h2", null, "Membina peta Malaysia..."),
     el("div", { role: "progressbar", "aria-label": "Kemajuan membina dunia", style: "height:12px;border-radius:8px;background:rgba(255,255,255,.15);overflow:hidden;margin:10px 0 4px" }, LM.ldBar), LM.ldTxt,
-    el("p", { class: "lm-ex", style: "opacity:.7" }, "Grafik: " + GQN[lmQ()] + ". Telefon mungkin mengambil masa 30 saat atau lebih. Jangan tutup aplikasi.")));
+    el("p", { class: "lm-ex", style: "opacity:.7" }, "Grafik: " + GQN[lmQ()] + ". Telefon mungkin mengambil masa 30 saat atau lebih. Jangan tutup aplikasi."), lmPjMuatLogo()));
   r.appendChild(ld);
   setTimeout(async () => {
     const g = await lmBuildScene();
