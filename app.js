@@ -17628,7 +17628,9 @@ async function stnCount(node, id) { try { const v = await FB.req("GET", node + "
 async function stnStats(id) { const r = await Promise.all(["stesen_lawat", "stesen_suka", "stesen_klik"].map((n) => stnCount(n, id))); return { lawat: r[0], suka: r[1], klik: r[2] }; }
 /* v18.27: mod percubaan (sebelum log masuk DELIMa diwajibkan di metadidik.com): tanpa Firebase Auth,
    identiti guru dan murid ialah ID peranti; e-mel DELIMa guru diisi sendiri dan disemak pentadbir. */
-function stnTrial() { return !AUTH.on(); }
+/* v18.41: guru WAJIB log masuk DELIMa (kod guru 1991 dimansuhkan). Tukar kepada false hanya untuk ujian dalaman. */
+const GURU_DELIMA_WAJIB = true;
+function stnTrial() { return !GURU_DELIMA_WAJIB && !AUTH.on(); }
 function stnGuru() {
   if (!stnTrial()) return AUTH.guru();
   let em = ""; try { em = localStorage.getItem("gt-stn-em") || ""; } catch (e) { em = ""; }
@@ -18291,7 +18293,7 @@ const GTAB = { t: (() => { try { const v = localStorage.getItem("gt-open-guru");
    kunci moderator Firebase pada peranti pentadbir, kerana kod di dalam aplikasi boleh dibaca sesiapa. */
 const KOD_GURU = "1991", KOD_ADM = "6171";
 function kodGet(k) { try { return localStorage.getItem(k) || ""; } catch (e) { return ""; } }
-function guruKod() { return !AUTH.on() && kodGet("gt-kod-guru") === KOD_GURU; }
+function guruKod() { return !GURU_DELIMA_WAJIB && !AUTH.on() && kodGet("gt-kod-guru") === KOD_GURU; }
 function admKod() { return kodGet("gt-kod-adm") === KOD_ADM; }
 function kodMasuk(kind, v) {
   v = String(v || "").trim();
@@ -18422,7 +18424,8 @@ function guruUi() {
 function guruGate(box) {
   const c = el("div", { class: "ggate" });
   c.append(el("h3", { style: "margin:0" }, "🔐 Log masuk DELIMa diperlukan"), el("p", { style: "margin:0" }, "Ruang Guru, Peta Operasi dan alat PdPc hanya untuk guru yang disahkan dengan akaun DELIMa (@moe-dl.edu.my)."));
-  if (!AUTH.on()) c.append(el("div", { class: "notice" }, "Sementara log masuk DELIMa belum diaktifkan, guru boleh masuk dengan kod guru daripada pentadbir Meta Didik."), kodBox("guru", "🎓 Kod guru", "Dapatkan kod daripada pentadbir Meta Didik. Selepas masuk, isi borang perjanjian ringkas dan hantar inovasi anda untuk kelulusan."));
+  if (!AUTH.on() && GURU_DELIMA_WAJIB) c.append(el("div", { class: "notice warn" }, "Log masuk DELIMa sedang disediakan oleh pentadbir Meta Didik. Guru perlu log masuk dengan akaun DELIMa (@moe-dl.edu.my) untuk memacak inovasi; kod guru tidak lagi digunakan."));
+  else if (!AUTH.on()) c.append(el("div", { class: "notice" }, "Sementara log masuk DELIMa belum diaktifkan, guru boleh masuk dengan kod guru daripada pentadbir Meta Didik."), kodBox("guru", "🎓 Kod guru", "Dapatkan kod daripada pentadbir Meta Didik. Selepas masuk, isi borang perjanjian ringkas dan hantar inovasi anda untuk kelulusan."));
   else { const host = el("div", { style: "min-height:44px" }); c.appendChild(host); AUTH.button(host, () => { toast("Akaun DELIMa disahkan. Selamat datang, Cikgu!", "ok"); STN.mine = undefined; MD.me = undefined; guruUi(); renderGuru(); }, (m) => toast(m, "bad")); }
   box.appendChild(c);
   const adm = el("details", { class: "card", style: "margin-top:14px;max-width:640px" }); adm.appendChild(el("summary", { style: "cursor:pointer;font-weight:700" }, "Pentadbir sistem")); box.appendChild(adm);
@@ -18797,6 +18800,7 @@ function rankDropNotice() {
   Net.init().then(() => {
     if (!P.nama && Net.user) { /* nama dipilih oleh pemain sendiri */ }
     try { pjMuat(); } catch (e) { /* abaikan */ }
+    setInterval(() => { if (!document.hidden && !(window.LMX && window.LMX.on)) { try { pjMuat(); } catch (e) { /* abaikan */ } } }, 120000); /* v18.41: logo penaja baru diluluskan muncul sendiri */
     computeStand();
     renderMe();
     rankDropNotice();

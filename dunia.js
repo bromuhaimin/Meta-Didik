@@ -319,7 +319,7 @@ function lmAudTone(f, f2, vol, dur, when, type, pan) {
 /* bunyi peristiwa */
 function lmAudFx(k, a) {
   if (LM.mute || !lmAudCtx()) return;
-  if (k === "step") { const hard = a === "keras"; lmAudHit("w", hard ? "bandpass" : "lowpass", hard ? 1900 : 950, hard ? 1.3 : 0.7, hard ? 0.45 : 0.6, 0.004, hard ? 0.07 : 0.11); /* julat frekuensi yang jelas pada pembesar suara telefon */ if (!hard) lmAudHit("p", "highpass", 2600, 0.5, 0.06, 0.01, 0.09, 0.02); }
+  if (k === "step") { const hard = a === "keras"; lmAudHit("w", hard ? "bandpass" : "lowpass", hard ? 1900 : 950, hard ? 1.3 : 0.7, hard ? 0.13 : 0.17, 0.004, hard ? 0.07 : 0.11); /* v18.41: tapak kaki diperlahankan (~70%) */ /* julat frekuensi yang jelas pada pembesar suara telefon */ if (!hard) lmAudHit("p", "highpass", 2600, 0.5, 0.018, 0.01, 0.09, 0.02); }
   else if (k === "swim") { lmAudHit("w", "bandpass", 700, 0.7, 0.35, 0.06, 0.35, 0, 1600); lmAudHit("p", "highpass", 3000, 0.6, 0.08, 0.05, 0.3, 0.08); }
   else if (k === "jump") lmAudHit("p", "bandpass", 380, 1.2, 0.22, 0.03, 0.22, 0, 1500);
   else if (k === "land") { lmAudHit("b", "lowpass", 160, 0.8, 0.9, 0.005, 0.18); lmAudHit("w", "lowpass", 900, 0.8, 0.25, 0.003, 0.06); }
@@ -2557,10 +2557,18 @@ function lmBeduk(ac, out, t0) { /* pukulan beduk: nada rendah + desir, dalam cor
   const hits = [0, 0.9, 1.6, 2.1, 2.5, 2.8, 3.05, 3.25, 3.42, 3.56, 3.68, 3.78, 4.6, 5.6, 6.6];
   for (const t of hits) { const o = ac.createOscillator(), gn = ac.createGain(); o.type = "sine"; o.frequency.setValueAtTime(95, t0 + t); o.frequency.exponentialRampToValueAtTime(48, t0 + t + 0.35); gn.gain.setValueAtTime(0.0001, t0 + t); gn.gain.exponentialRampToValueAtTime(0.9, t0 + t + 0.01); gn.gain.exponentialRampToValueAtTime(0.0001, t0 + t + 0.6); o.connect(gn); gn.connect(out); o.start(t0 + t); o.stop(t0 + t + 0.65); }
 }
+/* v18.41: waktu solat ikut negeri murid sendiri (profil), bukan kedudukan avatar; makluman menyebut kawasan */
+const SOLAT_NEGERI = { JHR: ["Johor Bahru", "Johor", 1.4927, 103.7414], KDH: ["Alor Setar", "Kedah", 6.1248, 100.3678], KTN: ["Kota Bharu", "Kelantan", 6.1254, 102.2381], MLK: ["Bandar Melaka", "Melaka", 2.1896, 102.2501], NSN: ["Seremban", "Negeri Sembilan", 2.7258, 101.9424], PHG: ["Kuantan", "Pahang", 3.8077, 103.326], PRK: ["Ipoh", "Perak", 4.5975, 101.0901], PLS: ["Kangar", "Perlis", 6.4414, 100.1986], PNG: ["George Town", "Pulau Pinang", 5.4141, 100.3288], SBH: ["Kota Kinabalu", "Sabah", 5.9804, 116.0735], SWK: ["Kuching", "Sarawak", 1.5533, 110.3592], SGR: ["Shah Alam", "Selangor", 3.0733, 101.5185], TRG: ["Kuala Terengganu", "Terengganu", 5.3302, 103.1408], KUL: ["Kuala Lumpur", "W.P. Kuala Lumpur", 3.139, 101.6869], PJY: ["Putrajaya", "W.P. Putrajaya", 2.9264, 101.6964], LBN: ["Bandar Labuan", "W.P. Labuan", 5.2831, 115.2308] };
+function lmSolatRef(g) {
+  const r = SOLAT_NEGERI[(typeof P !== "undefined" && P.negeri) || ""];
+  if (r) return { lat: r[2], lon: r[3], n: r[0] + ", " + r[1], neg: true };
+  const p = lmLatLon(g.p.x, g.p.z), k = lmAt(g.p.x, g.p.z); return { lat: p.lat, lon: p.lon, n: DATA.negeri[k] ? DATA.negeri[k].nama : "lokasi anda", neg: false };
+}
 function lmAzan(nama) {
   const g = LM.g; if (!g) return;
-  const ac = lmAudCtx(), mq = lmMasjidNear(g), km = mq ? mq.d / GEOD.U : 99, vol = clamp(1 - km / 40, 0.22, 1);
-  lmPop("🕌 Masuk waktu " + nama + (mq ? " · azan dari " + mq.nm + " (" + (km < 1 ? Math.round(km * 1000) + " m" : Math.round(km) + " km") + ")" : ""));
+  const ac = lmAudCtx(), mq = lmMasjidNear(g), km = mq ? mq.d / GEOD.U : 99, vol = clamp(1 - km / 40, 0.5, 1), ref = lmSolatRef(g);
+  const msg = "🕌 Telah masuk waktu " + nama + " bagi kawasan " + ref.n;
+  lmPop(msg); try { toast(msg + (mq ? ". Azan dari " + mq.nm + "." : "."), "good"); } catch (e) { /* abaikan */ }
   if (!ac || LM.mute) return;
   lmAzanStop();
   const gn = ac.createGain(); gn.gain.value = vol; gn.connect(ac.destination);
@@ -2570,19 +2578,19 @@ function lmAzan(nama) {
 }
 function lmSolatTick(g, dt) {
   if ((AZ.chk -= dt) > 0) return; AZ.chk = 4;
-  const p = lmLatLon(g.p.x, g.p.z), now = Date.now(), mn = Math.floor(((now / 60000) + 480) % 1440), W = lmSolatTimes(p.lat, p.lon, now);
+  const p = lmSolatRef(g), now = Date.now(), mn = Math.floor(((now / 60000) + 480) % 1440), W = lmSolatTimes(p.lat, p.lon, now);
   if (AZ.last != null && mn !== AZ.last) for (const [nm, k] of SOLAT) { if (k === "r") continue; const t = W[k]; if ((AZ.last < t && mn >= t) || (AZ.last > mn && (t > AZ.last || t <= mn))) lmAzan(nm); }
   AZ.last = mn; AZ.w = W;
 }
 function lmSolatOpen() {
   const g = LM.g; if (!g) return;
-  const p = lmLatLon(g.p.x, g.p.z), W = lmSolatTimes(p.lat, p.lon), mn = Math.floor(((Date.now() / 60000) + 480) % 1440), mq = lmMasjidNear(g);
+  const p = lmSolatRef(g), W = lmSolatTimes(p.lat, p.lon), mn = Math.floor(((Date.now() / 60000) + 480) % 1440), mq = lmMasjidNear(g);
   const nx = SOLAT.find(([n, k]) => k !== "r" && W[k] > mn);
   lmCard((b) => {
-    b.append(el("div", { class: "lm-kick" }, "🕌 Waktu solat hari ini · lokasi anda dalam peta"), el("h2", null, nx ? "Seterusnya: " + nx[0] + " " + lmHhmm(W[nx[1]]) : "Isyak sudah masuk"));
+    b.append(el("div", { class: "lm-kick" }, "🕌 Waktu solat hari ini · " + p.n), el("h2", null, nx ? "Seterusnya: " + nx[0] + " " + lmHhmm(W[nx[1]]) : "Isyak sudah masuk"));
     const tb = el("div", { class: "lm-grid" });
     SOLAT.forEach(([n, k]) => tb.appendChild(el("div", { class: "lm-stamp" + (nx && nx[0] === n ? " on" : "") }, el("b", null, n), el("div", null, lmHhmm(W[k])))));
-    b.append(tb, el("p", { class: "lm-ex" }, "Waktu dikira mengikut kedudukan anda (kaedah JAKIM, anggaran 1-2 minit). Apabila masuk waktu, azan kedengaran dari masjid terdekat; semakin dekat, semakin kuat." + (AZ.buf.umum ? "" : " Rakaman azan belum dipasang, jadi bunyi beduk dimainkan.")));
+    b.append(tb, el("p", { class: "lm-ex" }, (p.neg ? "Waktu dikira bagi negeri anda (profil: " + p.n + "), kaedah JAKIM, anggaran 1-2 minit." : "Waktu dikira mengikut kedudukan anda dalam peta (kaedah JAKIM, anggaran 1-2 minit). Lengkapkan negeri dalam profil untuk waktu negeri anda.") + " Apabila masuk waktu, azan kedengaran dari masjid terdekat; semakin dekat, semakin kuat." + (AZ.buf.umum ? "" : " Rakaman azan belum dipasang, jadi bunyi beduk dimainkan.")));
     const row = el("div", { class: "lm-row" });
     if (mq) row.append(lmBtn("Tunjuk arah ke " + mq.nm, "pri", () => { g.wp = { x: mq.it.x, z: mq.it.z, n: mq.nm }; lmWpSet(); lmCardClose(); }));
     row.append(lmBtn("▶ Dengar", "", () => lmAzan(nx ? nx[0] : "Zohor")), lmBtn("■ Henti", "", lmAzanStop), lmBtn("Tutup", "", lmCardClose));
@@ -2845,7 +2853,8 @@ function lmIlmuBuild(g, used, placed, avoid, gnd) {
     md.position.set(w.x, 0, w.z); md.rotation.y = rot; g.scene.add(md); gnd.push([md, 0]); lmPad(g, w.x, w.z, 10);
     const lb = lmLabel("📖 Stesen Ilmu · " + nama, { fs: 28, k: 0.03, bg: "rgba(11,74,74,.88)", bd: "#ffd45a" }); lb.position.set(w.x, 13, w.z); g.scene.add(lb); gnd.push([lb, 13]);
     const fx = Math.sin(rot), fz = Math.cos(rot);
-    g.items.push({ kind: "si", id: id, k: k, sn: nama, n: nama, col: col, x: w.x + fx * 5, z: w.z + fz * 5, cx: w.x, cz: w.z, r: 0, ir: 10, m: md, lb: lb, tids: [] });
+    const beam = lmBeam("#46ff8c", 260, 0.32); beam.position.set(w.x, 130, w.z); g.scene.add(beam); gnd.push([beam, 130]);
+    g.items.push({ kind: "si", id: id, k: k, sn: nama, n: nama, col: col, x: w.x + fx * 5, z: w.z + fz * 5, cx: w.x, cz: w.z, r: 0, ir: 10, m: md, lb: lb, tids: [], beam: beam });
     placed.push({ x: w.x, z: w.z, r: rr }); avoid.push({ x: w.x, z: w.z, r: rr + 2 });
     const cr = Math.cos(rot), sr = Math.sin(rot);
     for (const [lx, lz] of [[-4.6, -3.6], [4.6, -3.6], [-4.6, 3.6], [4.6, 3.6]]) g.cols.push({ x: w.x + lx * cr + lz * sr, z: w.z - lx * sr + lz * cr, r: 0.7, h: 6 });
@@ -2863,7 +2872,14 @@ function lmIlmuAssign(g) {
   g.ilmu = sts;
 }
 const lmTopicDone = (tid) => (LM.st.tw[tid] | 0) >= 3;
-function lmIlmuState(it) { it.done = !!it.tids && it.tids.length > 0 && it.tids.every(lmTopicDone); if (it.lb) it.lb.material.opacity = 1; }
+function lmIlmuState(it) { it.done = !!it.tids && it.tids.length > 0 && it.tids.every(lmTopicDone); if (it.lb) it.lb.material.opacity = 1; if (it.beam) { const gl = lmSiGelap(it); it.beam.visible = !gl; } }
+/* v18.41: sinar cahaya ke langit (hijau = Stesen Ilmu boleh dijawab, emas = Stesen Inovasi) */
+const BEAM_M = {};
+function lmBeam(col, h, op) {
+  const k = col + "|" + op, m = BEAM_M[k] || (BEAM_M[k] = new T.MeshBasicMaterial({ color: col, transparent: true, opacity: op, blending: T.AdditiveBlending, depthWrite: false, side: T.DoubleSide, fog: false }));
+  const g = BEAM_M["g" + h] || (BEAM_M["g" + h] = new T.CylinderGeometry(1.1, 2.6, h, 12, 1, true));
+  const b = new T.Mesh(g, m); b.renderOrder = 3; b.frustumCulled = true; return b;
+}
 function lmIlmuFor(tid) { const g = LM.g; return g && g.ilmu ? g.ilmu.find((it) => it.tids.indexOf(tid) >= 0) : null; }
 function lmJourney() { const g = LM.g, its = (g && g.ilmu) || [], act = its.filter((it) => it.tids.length); return { d: act.filter((it) => it.done).length, t: act.length, next: act.find((it) => !it.done) || null }; }
 function lmIlmuOpen(it) {
@@ -2871,22 +2887,22 @@ function lmIlmuOpen(it) {
   if (it.tids.length === 1) { lmIlmuTopic(it, it.t); return; }
   lmCard((b) => {
     b.append(el("div", { class: "lm-kick" }, "📖 Stesen Ilmu ke-" + it.no + " · " + DATA.negeri[it.k].pendek), el("h2", null, it.n));
-    b.append(el("p", null, "Stesen ini memegang " + it.tids.length + " tajuk. Pilih satu untuk dijawab."), lmKuizInfo());
+    b.append(el("p", null, "Stesen ini memegang " + it.tids.length + " tajuk. Pilih satu untuk dijawab."), lmKuizInfo(it.id));
     it.tids.forEach((tid) => { const t = TOPIK[tid]; b.append(el("div", { class: "lm-row" }, lmBtn((lmTopicDone(tid) ? "✔ " : "") + (t.kod || t.id) + " " + t.nama, lmTopicDone(tid) ? "" : "pri", () => lmIlmuTopic(it, t)))); });
     b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "", lmCardClose)));
   });
 }
 function lmIlmuTopic(it, t) {
-  const best = LM.st.tw[t.id] | 0, tm = TEMA[t.tema] || { nama: "" }, n = Math.min(5, lmKuizBaki());
-  if (n <= 0) { lmKuizHad(); return; }
+  const best = LM.st.tw[t.id] | 0, tm = TEMA[t.tema] || { nama: "" }, n = Math.min(5, lmKuizBaki(it.id));
+  if (n <= 0) { lmKuizHad(it); return; }
   lmQuiz({
-    kick: "📖 " + it.sn + " · " + tm.nama, title: (t.kod || t.id) + " " + t.nama, pass: Math.min(3, n), qs: lmPickQs([t.id], n), md: KZ_MD, harian: true,
+    kick: "📖 " + it.sn + " · " + tm.nama, title: (t.kod || t.id) + " " + t.nama, pass: Math.min(3, n), qs: lmPickQs([t.id], n), md: KZ_MD, harian: it.id,
     intro: (b) => {
       b.append(el("div", { class: "lm-kick" }, "📖 Stesen Ilmu ke-" + it.no + " · " + DATA.negeri[it.k].pendek), el("h2", null, it.n));
       b.append(el("p", null, "Tema: " + tm.nama + " · Tajuk: " + (t.kod || t.id) + " " + t.nama));
       if (t.dskp) b.append(el("p", { class: "lm-ex" }, t.dskp));
       (t.nota || []).slice(0, 3).forEach((n) => b.appendChild(qSet(el("div", { class: "lm-ex" }), n)));
-      b.append(el("p", null, "Jawab " + n + " soalan. Betul sekurang-kurangnya " + Math.min(3, n) + " untuk lulus tajuk ini dan mendapat cop " + it.sn + " dalam pasport." + (best ? " Markah terbaik anda: " + best + "/5." : "")), lmKuizInfo());
+      b.append(el("p", null, "Jawab " + n + " soalan. Betul sekurang-kurangnya " + Math.min(3, n) + " untuk lulus tajuk ini dan mendapat cop " + it.sn + " dalam pasport." + (best ? " Markah terbaik anda: " + best + "/5." : "")), lmKuizInfo(it.id));
     },
     onDone: (pass, ok, tot) => {
       const first = pass && best < 3;
@@ -2913,11 +2929,11 @@ function lmIlmuTopic(it, t) {
 }
 /* stesen tanpa tajuk (subjek dengan tajuk kurang daripada bilangan stesen): pusat ulangkaji pilihan */
 function lmIlmuReview(it) {
-  const n = Math.min(5, lmKuizBaki()); if (n <= 0) { lmKuizHad(); return; }
+  const n = Math.min(5, lmKuizBaki(it.id)); if (n <= 0) { lmKuizHad(it); return; }
   lmQuiz({
-    kick: "📖 " + it.sn + " · Pusat Ulangkaji", title: it.n, pass: Math.min(3, n), qs: lmPickQs(DATA.topik.map((t) => t.id), n), md: KZ_MD, harian: true,
+    kick: "📖 " + it.sn + " · Pusat Ulangkaji", title: it.n, pass: Math.min(3, n), qs: lmPickQs(DATA.topik.map((t) => t.id), n), md: KZ_MD, harian: it.id,
     intro: (b) => { b.append(el("div", { class: "lm-kick" }, "📖 " + it.sn + " · Pusat Ulangkaji"), el("h2", null, it.n), el("p", null, "Stesen ini tidak memegang tajuk bagi subjek ini. Jawab 5 soalan campuran sebagai ulangkaji (tidak dikira dalam pasport).")); },
-    onDone: (pass, ok, tot) => { const xp = lmXp(ok * 2); lmCard((b) => { b.append(el("div", { class: "lm-kick" }, "Ulangkaji · " + it.sn), el("h2", null, ok + "/" + tot + " betul"), el("p", { class: "lm-ex" }, "XP +" + xp), el("div", { class: "lm-row" }, lmBtn("Teruskan jelajah", "pri", lmCardClose))); }); }
+    onDone: (pass, ok, tot) => { lmIlmuState(it); const xp = lmXp(ok * 2); lmCard((b) => { b.append(el("div", { class: "lm-kick" }, "Ulangkaji · " + it.sn), el("h2", null, ok + "/" + tot + " betul"), el("p", { class: "lm-ex" }, "XP +" + xp), el("div", { class: "lm-row" }, lmBtn("Teruskan jelajah", "pri", lmCardClose))); }); }
   });
 }
 /* tab pasport: perjalanan menuntut ilmu */
@@ -3531,27 +3547,34 @@ async function lmStnFetch(g) {
   g.stn.forEach((it) => {
     const d = by[it.sl] || null; if ((it.d && it.d.id + it.d.tu) === (d && d.id + d.tu)) return;
     it.d = d; it.n = d ? d.tj : "Tapak kosong";
+    if (d && !it.beam) { const p = it.m.getWorldPosition(new T.Vector3()); it.beam = lmBeam("#ffcf3a", 260, 0.38); it.beam.position.set(p.x, p.y + 130, p.z); g.scene.add(it.beam); } else if (!d && it.beam) { g.scene.remove(it.beam); it.beam = null; }
     const scr = it.m.userData.scr; if (scr) { const old = scr.material.map; scr.material.map = lmStnScreen(d ? d.tj : "Tapak kosong", d ? String(d.kat || "STESEN INOVASI").toUpperCase() : "STESEN INOVASI"); scr.material.needsUpdate = true; if (old) old.dispose(); }
   });
 }
 /* stesen di lokasi pilihan guru (la, lo): gerai dibina semasa dunia berjalan, berhampiran titik itu */
 function lmStnGeo(g, v, mine) {
   g.stnG = g.stnG || {};
-  const want = {}; Object.keys(v).forEach((id) => { const d = v[id]; if (mine(d) && d.la != null && d.lo != null) want[id] = Object.assign({}, d, { id: id }); });
-  for (const id in g.stnG) if (!want[id] || want[id].tu !== g.stnG[id].d.tu) { const it = g.stnG[id]; g.scene.remove(it.m); if (it.lb) g.scene.remove(it.lb); g.items.splice(g.items.indexOf(it), 1); const ci = g.cols.indexOf(it.col); if (ci >= 0) g.cols.splice(ci, 1); delete g.stnG[id]; }
+  /* v18.41: inovasi yang baru dipacak ("tunggu") terus kelihatan sebagai booth "akan datang"; selepas pentadbir lulus, booth dibina semula dan boleh digunakan */
+  const ikut = (d) => d && d.tj && (d.sj || "tw") === SUBJ && (d.st === "lulus" || d.st === "tunggu");
+  const want = {}; Object.keys(v).forEach((id) => { const d = v[id]; if (ikut(d) && d.la != null && d.lo != null) want[id] = Object.assign({}, d, { id: id }); });
+  void mine;
+  for (const id in g.stnG) if (!want[id] || want[id].tu !== g.stnG[id].d.tu || want[id].st !== g.stnG[id].d.st) { const it = g.stnG[id]; g.scene.remove(it.m); if (it.lb) g.scene.remove(it.lb); if (it.beam) g.scene.remove(it.beam); g.items.splice(g.items.indexOf(it), 1); const ci = g.cols.indexOf(it.col); if (ci >= 0) g.cols.splice(ci, 1); delete g.stnG[id]; }
   for (const id in want) {
     if (g.stnG[id]) continue;
     const d = want[id], c0 = ll(d.la, d.lo); let w = null;
     const ok = (x, z) => lmAt(x, z) !== "" && !g.items.some((it) => Math.hypot(it.x - x, it.z - z) < 12);
     for (let r = 0; r <= 90 && !w; r += 6) for (let i = 0; i < (r ? 12 : 1); i++) { const a = i * 0.5236, x = c0.x + Math.cos(a) * r, z = c0.z + Math.sin(a) * r; if (ok(x, z)) { w = { x: x, z: z }; break; } }
     if (!w) continue;
-    const md = lmStnBooth(), rot = (Math.abs(hashStr(id)) % 628) / 100, gy = lmGround(w.x, w.z); md.position.set(w.x, gy, w.z); md.rotation.y = rot; g.scene.add(md);
-    md.userData.scr.material.map = lmStnScreen(d.tj, String(d.kat || "STESEN INOVASI").toUpperCase()); md.userData.scr.material.needsUpdate = true;
-    const rt = g.stnNilai && g.stnNilai[id], lb = lmLabel("🏛 " + d.tj + (rt ? " · ⭐ " + rt.avg.toFixed(1) + " (" + rt.n + ")" : "") + " · Stesen Inovasi", { fs: 26, k: 0.028, bg: "rgba(11,74,74,.9)", bd: "#ffd45a" }); lb.position.set(w.x, gy + 9, w.z); g.scene.add(lb);
+    const tg = d.st !== "lulus", md = lmStnBooth(), rot = (Math.abs(hashStr(id)) % 628) / 100, gy = lmGround(w.x, w.z); md.position.set(w.x, gy, w.z); md.rotation.y = rot; g.scene.add(md);
+    md.userData.scr.material.map = lmStnScreen(tg ? "Inovasi akan datang" : d.tj, tg ? "⏳ MENUNGGU KELULUSAN" : String(d.kat || "STESEN INOVASI").toUpperCase()); md.userData.scr.material.needsUpdate = true;
+    const rt = g.stnNilai && g.stnNilai[id], lb = lmLabel(tg ? "⏳ Akan datang: " + d.tj : "🏛 " + d.tj + (rt ? " · ⭐ " + rt.avg.toFixed(1) + " (" + rt.n + ")" : "") + " · Stesen Inovasi", { fs: 26, k: 0.028, bg: tg ? "rgba(60,60,70,.88)" : "rgba(11,74,74,.9)", bd: "#ffd45a" }); lb.position.set(w.x, gy + 9, w.z); g.scene.add(lb);
+    const beam = lmBeam("#ffcf3a", 260, tg ? 0.1 : 0.38); beam.position.set(w.x, gy + 130, w.z); g.scene.add(beam); /* sinar emas ke langit */
+    if (!tg && g.stnSeen && !g.stnSeen[id]) lmPop("✨ Inovasi baharu dibuka: " + d.tj);
     const fx = Math.sin(rot), fz = Math.cos(rot), k = lmAt(w.x, w.z), col = { x: w.x - fx * 1, z: w.z - fz * 1, r: 4.6, h: 6 }; g.cols.push(col);
-    const it = { kind: "sn", id: "sg-" + id, sl: "", k: DATA.negeri[k] ? k : (DATA.negeri[d.pn] ? d.pn : Object.keys(DATA.negeri)[0]), n: d.tj, x: w.x + fx * 6, z: w.z + fz * 6, r: 0, ir: 6, m: md, d: d, lb: lb, col: col, geo: 1 };
+    const it = { kind: "sn", id: "sg-" + id, sl: "", k: DATA.negeri[k] ? k : (DATA.negeri[d.pn] ? d.pn : Object.keys(DATA.negeri)[0]), n: d.tj, x: w.x + fx * 6, z: w.z + fz * 6, r: 0, ir: 6, m: md, d: d, lb: lb, col: col, geo: 1, beam: beam, tg: tg };
     g.items.push(it); g.stnG[id] = it;
   }
+  g.stnSeen = g.stnSeen || {}; for (const id in g.stnG) if (!g.stnG[id].tg) g.stnSeen[id] = 1;
 }
 /* ---------- v18.38: penaja dalam Meta Didik ----------
    Penaja aktif (penaja/<id>, diluluskan pentadbir) dibina selepas dunia siap di lokasi sebenar pilihan mereka (PJ_LOK):
@@ -3630,6 +3653,39 @@ async function lmPjFetch(g) {
     g.items.push(it); g.pj[id] = it;
   }
 }
+/* v18.41: papan iklan digital di lapangan terbang dan terminal bas: logo semua penaja aktif berputar setiap 6 saat
+   (satu tekstur dikongsi, jadi kos lukisan rendah). Muncul sendiri sebaik pentadbir meluluskan penaja. */
+function lmPjIklan(g) {
+  const L = (typeof PJ !== "undefined" ? PJ.list : []).filter((d) => d && d.logo);
+  if (!g.pjAd) {
+    if (!L.length) return;
+    const tex = lmTex(512, 256, (x, w, h) => { x.fillStyle = "#fff"; x.fillRect(0, 0, w, h); }), mat = new T.MeshBasicMaterial({ map: tex });
+    const frame = lmGlow("#5ff2ff", 0.6), metal = lmPbr("logam", { color: 0xb9c3cc, roughness: 0.35, metalness: 0.85 });
+    const A = { tex: tex, list: [], imgs: {}, i: 0, boards: [] }; g.pjAd = A;
+    g.items.filter((it) => it.kind === "ap" || it.kind === "bt").slice(0, 40).forEach((it, j) => {
+      const a = (Math.abs(hashStr(it.id || it.n || String(j))) % 628) / 100, x = it.x + Math.cos(a) * 16, z = it.z + Math.sin(a) * 16; if (!lmAt(x, z)) return;
+      const b = new T.Group(), gy = lmGround(x, z); b.position.set(x, gy, z); b.rotation.y = Math.atan2(it.x - x, it.z - z);
+      const pole = new T.Mesh(lmBox(0.5, 6, 0.5), metal); pole.position.y = 3; b.add(pole);
+      const fr = new T.Mesh(lmBox(9.4, 4.9, 0.4), frame); fr.position.y = 8.4; b.add(fr);
+      for (const ry of [0, Math.PI]) { const pnl = new T.Mesh(new T.PlaneGeometry(9, 4.5), mat); pnl.position.set(0, 8.4, ry ? -0.22 : 0.22); pnl.rotation.y = ry; b.add(pnl); }
+      const tag = lmLabel("PENAJA META DIDIK", { fs: 22, k: 0.025, bg: "rgba(20,20,30,.8)" }); tag.position.y = 11.4; b.add(tag);
+      g.scene.add(b); A.boards.push(b);
+    });
+    const draw = () => {
+      const d = A.list[A.i % Math.max(1, A.list.length)], c = A.tex.userData.c, x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height);
+      const img = d && A.imgs[d.id]; if (img && img.complete && img.naturalWidth) { const k = Math.min((c.width - 40) / img.naturalWidth, (c.height - 50) / img.naturalHeight); x.drawImage(img, (c.width - img.naturalWidth * k) / 2, (c.height - 30 - img.naturalHeight * k) / 2, img.naturalWidth * k, img.naturalHeight * k); }
+      if (d) { x.fillStyle = "#0b2a44"; x.font = "800 24px Nunito, sans-serif"; x.textAlign = "center"; x.fillText(d.n, c.width / 2, c.height - 14); }
+      A.tex.needsUpdate = true;
+    };
+    A.draw = draw;
+    const t = setInterval(() => { if (LM.g !== g) { clearInterval(t); return; } if (!LM.on || document.hidden || !A.list.length) return; A.i++; draw(); }, 6000);
+  }
+  const A = g.pjAd; A.list = L;
+  L.forEach((d) => { if (!A.imgs[d.id]) { const im = new Image(); im.onload = () => A.draw(); im.src = d.logo; A.imgs[d.id] = im; } });
+  A.boards.forEach((b) => { b.visible = L.length > 0; });
+  A.draw();
+  try { lmPjIklan(g); } catch (e) { /* abaikan */ }
+}
 function lmPjOpen(it) {
   const d = it.d, pk = PJ_PAKEJ[d.pk] || { n: "Penaja", ic: "" };
   lmCard((b) => {
@@ -3640,6 +3696,10 @@ function lmPjOpen(it) {
   });
 }
 function lmStnOpen(it) {
+  if (it.tg && it.d) { /* v18.41: inovasi baru dipacak, menunggu kelulusan pentadbir */
+    lmCard((b) => { b.append(el("div", { class: "lm-kick" }, "⏳ Inovasi akan datang · " + (SUBJS[it.d.sj] ? SUBJS[it.d.sj].subjek : "")), el("h2", null, it.d.tj), el("p", null, "Inovasi oleh " + (it.d.n || "guru") + " sedang disemak oleh pentadbir Meta Didik. Sebaik diluluskan, booth ini terus dibuka dan boleh digunakan di sini."), el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose))); });
+    return;
+  }
   const d = it.d, gid = FB.getUid();
   lmCard((b) => {
     b.append(el("div", { class: "lm-kick" }, (it.geo ? "🏛 Stesen Inovasi · " : "🏛 Dataran Inovasi ") + DATA.negeri[it.k].pendek + (d ? " · " + d.kat : "")), el("h2", null, d ? d.tj : "Tapak kosong"));
@@ -4100,6 +4160,8 @@ async function lmBuildWorld(g) {
   await lmProg(36, "Dataran Inovasi");
   lmStnBuild(g, used, placed, avoid, gnd); (g.after || (g.after = [])).push(() => lmStnFetch(g));
   g.after.push(() => lmPjFetch(g)); /* v18.38: bangunan/papan iklan penaja */
+  /* v18.41: automasi: inovasi dan penaja yang baru diluluskan muncul sendiri tanpa keluar dari Meta Didik */
+  g.after.push(() => { const t = setInterval(() => { if (LM.g !== g || !LM.on) { if (LM.g !== g) clearInterval(t); return; } if (document.hidden) return; try { lmStnFetch(g); } catch (e) { /* abaikan */ } try { if (typeof pjMuat === "function") pjMuat().then(() => lmPjFetch(g)); } catch (e) { /* abaikan */ } }, 60000); });
   /* jeti nelayan: permainan Nelayan */
   lmNelayanBuild(g, used, placed, avoid, gnd);
   /* butik Busana, perpustakaan Dunia Ilmu, pusat Amali */
@@ -4809,11 +4871,11 @@ function lmPacak() {
   lmCard((b) => {
     b.append(el("div", { class: "lm-kick" }, "🏛 Pacak inovasi · " + DATA.negeri[k].nama), el("h2", null, "Stesen Inovasi di sini"));
     const host = el("div", { class: "lm-stnform" }); b.appendChild(host);
-    try { stnGuruBox(host, { loc: loc, rr: () => { if (LM.ui.card) lmPacakLukis(host, loc); } }); } catch (e) { host.textContent = "Borang tidak dapat dibuka."; }
+    try { stnGuruBox(host, { loc: loc, rr: () => { if (LM.ui.card) lmPacakLukis(host, loc); lmStnFetch(LM.g); } }); } catch (e) { host.textContent = "Borang tidak dapat dibuka."; }
     b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "", lmCardClose)));
   });
 }
-function lmPacakLukis(host, loc) { host.textContent = ""; stnGuruBox(host, { loc: loc, rr: () => lmPacakLukis(host, loc) }); }
+function lmPacakLukis(host, loc) { host.textContent = ""; stnGuruBox(host, { loc: loc, rr: () => { lmPacakLukis(host, loc); lmStnFetch(LM.g); } }); }
 /* menara seterusnya: tajuk pertama (ikut susunan peta operasi) yang belum ditawan */
 function lmNextTopic() {
   const ts = DATA.topik.filter((t) => DATA.negeri[t.negeri]);
@@ -5034,13 +5096,25 @@ function lmTiket(o) {
     }
   });
 }
-const KZ_HAD = 30, KZ_MD = 2, KZ_KEY = "gt-kuiz-hari"; /* had soalan Stesen Ilmu sehari (semua subjek) dan MD bagi setiap jawapan betul */
-function lmKuizHari() { const d = new Date(Date.now() + 8 * 3600000).toISOString().slice(0, 10); let r = null; try { r = JSON.parse(localStorage.getItem(KZ_KEY) || "null"); } catch (e) { r = null; } return r && r.d === d ? r : { d: d, n: 0 }; }
-function lmKuizBaki() { return Math.max(0, KZ_HAD - (lmKuizHari().n | 0)); }
-function lmKuizKira(k) { const r = lmKuizHari(); r.n = Math.min(KZ_HAD, (r.n | 0) + k); try { localStorage.setItem(KZ_KEY, JSON.stringify(r)); } catch (e) { /* abaikan */ } }
-function lmKuizInfo() { const b = lmKuizBaki(); return el("p", { class: "lm-ex", style: "color:#ffd45a" }, "🪙 Setiap jawapan betul: +" + KZ_MD + " MD. Baki soalan hari ini: " + b + "/" + KZ_HAD + "."); }
-function lmKuizHad() { lmCard((b) => { b.append(el("div", { class: "lm-kick" }, "📖 Stesen Ilmu"), el("h2", null, "Had " + KZ_HAD + " soalan hari ini dicapai"), el("p", null, "Hebat! Anda sudah menjawab " + KZ_HAD + " soalan hari ini. Rehat dahulu dan kembali esok untuk mengumpul MD lagi."), el("div", { class: "lm-row" }, lmBtn("Teruskan jelajah", "pri", lmCardClose))); }); }
-function lmMdChip() { const c = el("div", { class: "lm-mdchip" }, "🪙 ", el("b", null, String(P.coin | 0)), " MD · soalan hari ini " + (KZ_HAD - lmKuizBaki()) + "/" + KZ_HAD); LM.mdChip = c; return c; }
+const KZ_HAD = 30, KZ_MD = 2, KZ_KEY = "gt-kuiz-hari"; /* v18.41: had 30 soalan sehari bagi SETIAP Stesen Ilmu; MD bagi setiap jawapan betul */
+function lmKuizHari() { const d = new Date(Date.now() + 8 * 3600000).toISOString().slice(0, 10); let r = null; try { r = JSON.parse(localStorage.getItem(KZ_KEY) || "null"); } catch (e) { r = null; } return r && r.d === d && r.s ? r : { d: d, s: {} }; }
+function lmKuizBaki(sid) { return Math.max(0, KZ_HAD - (lmKuizHari().s[sid] | 0)); }
+function lmKuizKira(sid, k) { const r = lmKuizHari(); r.s[sid] = Math.min(KZ_HAD, (r.s[sid] | 0) + k); try { localStorage.setItem(KZ_KEY, JSON.stringify(r)); } catch (e) { /* abaikan */ } }
+function lmKuizInfo(sid) { const b = lmKuizBaki(sid); return el("p", { class: "lm-ex", style: "color:#ffd45a" }, "🪙 Setiap jawapan betul: +" + KZ_MD + " MD. Baki soalan di stesen ini hari ini: " + b + "/" + KZ_HAD + "."); }
+/* stesen "gelap": semua tajuk lulus atau had hari ini dicapai; lain-lain "bercahaya" */
+function lmSiGelap(it) { return !!(it && (it.done || lmKuizBaki(it.id) <= 0)); }
+function lmSiSeterusnya(dari) { const g = LM.g; if (!g || !g.ilmu) return null; let best = null, bd = 1e12; g.ilmu.forEach((x) => { if (x === dari || lmSiGelap(x)) return; const d = Math.hypot(x.x - g.p.x, x.z - g.p.z); if (d < bd) { bd = d; best = x; } }); return best; }
+function lmSiPergi(x) { const g = LM.g; if (!g || !x) return; g.wp = { x: x.x, z: x.z, n: "Stesen Ilmu " + x.sn }; lmWpSet(); LM.auto = { d: 1e9, t: 0, n: 0 }; lmCardClose(); lmPop("🧭 Navigasi ke Stesen Ilmu " + x.sn + " · sentuh kayu bedik untuk berhenti"); }
+function lmKuizHad(it) {
+  const nx = lmSiSeterusnya(it);
+  lmCard((b) => {
+    b.append(el("div", { class: "lm-kick" }, "📖 Stesen Ilmu · " + (it ? it.sn : "")), el("h2", null, "Had " + KZ_HAD + " soalan di stesen ini hari ini dicapai"), el("p", null, "Hebat! Teruskan ke stesen lain untuk menjawab lebih banyak soalan dan mengumpul MD. Stesen yang sudah dijawab kelihatan gelap pada peta; yang bercahaya hijau masih boleh dijawab."));
+    const row = el("div", { class: "lm-row" });
+    if (nx) row.append(lmBtn("🧭 Navigasi ke " + nx.sn, "pri", () => lmSiPergi(nx)));
+    row.append(lmBtn("🗺 Buka peta", nx ? "" : "pri", () => { lmCardClose(); lmBigMap(); }), lmBtn("Tutup", "", lmCardClose)); b.append(row);
+  });
+}
+function lmMdChip(sid) { const c = el("div", { class: "lm-mdchip" }, "🪙 ", el("b", null, String(P.coin | 0)), " MD · soalan stesen hari ini " + (KZ_HAD - lmKuizBaki(sid)) + "/" + KZ_HAD); LM.mdChip = c; return c; }
 /* kesan: "+2 🪙" terbang dari butang jawapan ke kaunter MD, hujan syiling dan bunyi denting */
 function lmMdFx(n, from) {
   P.coin = (P.coin | 0) + n; try { saveP(); } catch (e) { /* abaikan */ }
@@ -5058,7 +5132,7 @@ function lmQuiz(opt) {
   const show = () => lmCard((b) => {
     const it = z.qs[z.i];
     b.append(el("div", { class: "lm-kick" }, opt.kick + " · Soalan " + (z.i + 1) + "/" + z.qs.length), el("h2", null, opt.title));
-    if (opt.md) b.appendChild(lmMdChip());
+    if (opt.md) b.appendChild(lmMdChip(opt.harian));
     const bar = el("div", { class: "lm-bar" }), bi = el("i"); bi.style.width = Math.round(100 * z.i / z.qs.length) + "%"; bar.appendChild(bi); b.appendChild(bar);
     b.appendChild(qSet(el("div", { class: "lm-q" }), it.q.q));
     const os = el("div", { class: "lm-opts" }), btns = [];
@@ -5067,7 +5141,7 @@ function lmQuiz(opt) {
       bt.addEventListener("click", () => {
         if (z.lock) return; z.lock = true;
         const good = k === it.ans; if (good) z.ok++;
-        if (opt.harian) lmKuizKira(1);
+        if (opt.harian) lmKuizKira(opt.harian, 1);
         if (good && opt.md) lmMdFx(opt.md, bt);
         try { lrnRec(it.q, good, opt.md ? "lmmd" : "lm"); } catch (e) { /* abaikan */ }
         btns.forEach((x, j) => { x.disabled = true; if (j === it.ans) x.classList.add("ok"); else if (j === k) x.classList.add("no"); });
@@ -5442,7 +5516,7 @@ function lmMapDraw(cv, m, big) {
     else if (it.kind === "km") { x.font = (big ? 16 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("🎖", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
     else if (it.kind === "vn") { x.font = (big ? 16 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText(VN_INFO[it.sub].ic, px, py + (big ? 6 : 3)); x.textAlign = "left"; }
     else if (it.kind === "ny") { x.font = (big ? 16 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("🎣", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
-    else if (it.kind === "si") { x.font = (big ? 17 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("📖", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
+    else if (it.kind === "si") { const gl = lmSiGelap(it), rr = big ? 13 : 6; if (!gl) { const gr = x.createRadialGradient(px, py, 1, px, py, rr); gr.addColorStop(0, "rgba(90,255,150,.95)"); gr.addColorStop(1, "rgba(90,255,150,0)"); x.fillStyle = gr; x.beginPath(); x.arc(px, py, rr, 0, 6.2832); x.fill(); } x.globalAlpha = gl ? 0.35 : 1; x.font = (big ? 17 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("📖", px, py + (big ? 6 : 3)); x.textAlign = "left"; x.globalAlpha = 1; }
     else if (it.kind === "ip") { x.font = (big ? 18 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("🎓", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
     else if (it.kind === "kh") { x.font = (big ? 20 : 10) + "px sans-serif"; x.fillStyle = it.done ? "#ffd45a" : "#ff7a9a"; x.textAlign = "center"; x.fillText("★", px, py + (big ? 7 : 4)); x.textAlign = "left"; }
     else if (big && it.kind === "jt" && it.k !== it.isl.id) { x.font = "14px sans-serif"; x.fillStyle = "#7fe3ff"; x.fillText("⛴", px - 7, py + 5); }
@@ -5498,7 +5572,7 @@ function lmBigMap() {
   /* klik pada peta (2D atau 3D) */
   const pick = (peer, it, wx, wz) => {
     if (peer) lmGoPeer(peer);
-    else if (it) g.wp = { x: it.x, z: it.z, n: it.kind === "tw" ? "Menara " + (it.t.kod || it.t.id) : it.n };
+    else if (it) g.wp = { x: it.x, z: it.z, n: it.kind === "tw" ? "Menara " + (it.t.kod || it.t.id) : it.kind === "si" ? "Stesen Ilmu " + it.sn : it.n };
     else g.wp = { x: wx, z: wz, n: "Titik pilihan" };
     if (!peer) lmWpSet(); redraw();
     if (!peer && g.wp) { LM.auto = { d: 1e9, t: 0, n: 0 }; lmPop("🚶 Berjalan ke " + g.wp.n + " · sentuh kayu bedik untuk berhenti"); if (TOUCH) setTimeout(() => { if (LM.ui.big) lmBigMap(); }, 450); } /* v18.35 */
@@ -5522,7 +5596,7 @@ function lmBigMap() {
         const rc = cv2.getBoundingClientRect(), mx = (e.clientX - rc.left) * cv2.width / rc.width, my = (e.clientY - rc.top) * cv2.height / rc.height;
         for (const id in LM.peers) { const q = LM.peers[id], [px, py] = lmMapPt(m2, q.x, q.z); if (Math.hypot(px - mx, py - my) < 16) { pick(id); return; } }
         let best = null, bd = 26;
-        for (const it of g.items) { const [px, py] = lmMapPt(m2, it.x, it.z), d = Math.hypot(px - mx, py - my); if (d < bd) { bd = d; best = it; } }
+        for (const it of g.items) { const [px, py] = lmMapPt(m2, it.x, it.z), d = Math.hypot(px - mx, py - my) - (it.kind === "si" ? 10 : 0); if (d < bd) { bd = d; best = it; } } /* v18.41: Stesen Ilmu lebih mudah diketik */
         pick(null, best, (mx - m2.ox) / m2.s, (my - m2.oy) / m2.s);
       });
     }
@@ -5603,7 +5677,7 @@ function lmMap3(area, onPick) {
       case "km": return [emo("🎖"), 22];
       case "ny": return [emo("🎣"), 22];
       case "vn": return [emo(VN_INFO[it.sub].ic), 22];
-      case "si": return [emo("📖"), 22];
+      case "si": { const gl = lmSiGelap(it); return [ico("si" + (gl ? "g" : "b"), (x) => { if (!gl) { const gr = x.createRadialGradient(32, 32, 4, 32, 32, 31); gr.addColorStop(0, "rgba(90,255,150,.95)"); gr.addColorStop(1, "rgba(90,255,150,0)"); x.fillStyle = gr; x.fillRect(0, 0, 64, 64); } x.globalAlpha = gl ? 0.35 : 1; x.font = "38px sans-serif"; x.textAlign = "center"; x.textBaseline = "middle"; x.fillText("📖", 32, 35); }), gl ? 20 : 26]; }
       case "ip": return [emo("🎓"), 24];
       case "kh": return [emo("★", it.done ? "#ffd45a" : "#ff7a9a"), 26];
       case "jt": return it.k !== it.isl.id ? [emo("⛴", "#7fe3ff"), 20] : null;
