@@ -22,7 +22,8 @@
 
 | | |
 |---|---|
-| Nama akaun | **DIM HOLDINGS SDN. BHD** |
+| Bank | **Maybank Islamic** |
+| Nama akaun | **DIM HOLDINGS SDN. BHD.** |
 | No. akaun | **5560 5751 6022** |
 
 - Dipaparkan dalam borang penaja (bahagian "Cara sumbangan") dan dalam mesej selepas borang dihantar, dengan butang **Salin no. akaun** dan rujukan pindahan (nama penaja).

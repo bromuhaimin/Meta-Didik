@@ -37,9 +37,9 @@ for (const f of ["firebase-rules-lengkap-percubaan.json", "firebase-rules-lengka
   });
 }
 
-test("akaun rasmi: satu sumber, DIM HOLDINGS SDN. BHD 5560 5751 6022", () => {
-  const m = src.match(/const MD_BAYAR = \{ nama: "([^"]+)", akaun: "([^"]+)"/);
-  assert.ok(m); assert.equal(m[1], "DIM HOLDINGS SDN. BHD"); assert.equal(m[2].replace(/\s/g, ""), "556057516022");
+test("akaun rasmi: satu sumber, DIM HOLDINGS SDN. BHD. (Maybank Islamic) 5560 5751 6022", () => {
+  const m = src.match(/const MD_BAYAR = \{ nama: "([^"]+)", akaun: "([^"]+)", bank: "([^"]*)"/);
+  assert.ok(m); assert.equal(m[1], "DIM HOLDINGS SDN. BHD."); assert.equal(m[3], "Maybank Islamic"); assert.equal(m[2].replace(/\s/g, ""), "556057516022");
   const pj = fs.readFileSync(path.join(__dirname, "../../mod/penaja.js"), "utf8");
   assert.ok(!/\d{4}\s?\d{4}\s?\d{4}/.test(pj), "no. akaun tidak ditulis semula dalam modul lain");
   assert.equal((src.match(/5560 5751 6022/g) || []).length, 1, "no. akaun hanya di satu tempat");
