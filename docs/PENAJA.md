@@ -18,6 +18,17 @@
    - kedai, bangunan atau papan iklan berjenama dibina di lokasi pilihan dalam Meta Didik.
 5. Tajaan tamat secara automatik pada tarikh tamat. Pentadbir boleh **Lanjut 3 bulan** atau **Tarik balik**.
 
+## Akaun rasmi untuk tajaan dan pembayaran
+
+| | |
+|---|---|
+| Nama akaun | **DIM HOLDINGS SDN. BHD** |
+| No. akaun | **5560 5751 6022** |
+
+- Dipaparkan dalam borang penaja (bahagian "Cara sumbangan") dan dalam mesej selepas borang dihantar, dengan butang **Salin no. akaun** dan rujukan pindahan (nama penaja).
+- Disimpan di **satu tempat sahaja**: `MD_BAYAR` dalam `app.js`. Ubah di situ jika akaun bertukar.
+- Tidak dipaparkan dalam dunia 3D murid.
+
 ## Tiada kadar tetap
 
 Meta Didik menerima sebarang jumlah tajaan. Borang tidak memaparkan harga.

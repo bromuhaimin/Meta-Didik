@@ -7338,6 +7338,16 @@ const PJ_PAKEJ = {
   platinum: { n: "Penaja Platinum", ic: "💎", d: "Barisan pertama paparan utama + bangunan berjenama bercahaya LED di lokasi pilihan + logo pada skrin memuat Meta Didik + ikon pada peta besar." }
 };
 const PJ_TEMPOH = [3, 6, 12]; /* bulan paparan logo */
+/* akaun rasmi untuk semua tajaan dan pembayaran kepada Meta Didik (satu tempat sahaja; ubah di sini jika bertukar) */
+const MD_BAYAR = { nama: "DIM HOLDINGS SDN. BHD", akaun: "5560 5751 6022", bank: "" };
+function mdBayarBox(ruj) {
+  const no = MD_BAYAR.akaun, cp = el("button", { type: "button", class: "btn alt sm" }, "Salin no. akaun");
+  cp.addEventListener("click", () => { try { navigator.clipboard.writeText(no.replace(/\s/g, "")).then(() => toast("No. akaun disalin.", "ok"), () => toast(no, "")); } catch (e) { toast(no, ""); } });
+  return el("div", { class: "notice", style: "display:grid;gap:4px" }, el("b", null, "💳 Akaun rasmi Meta Didik"),
+    el("div", null, "Nama akaun: ", el("b", null, MD_BAYAR.nama)), MD_BAYAR.bank ? el("div", null, "Bank: ", el("b", null, MD_BAYAR.bank)) : null,
+    el("div", { class: "row", style: "gap:8px;align-items:center;flex-wrap:wrap" }, el("span", null, "No. akaun: ", el("b", { style: "font-size:18px;letter-spacing:.04em" }, no)), cp),
+    el("small", { class: "muted" }, (ruj ? "Rujukan pindahan: " + ruj + ". " : "") + "Pastikan nama penerima ialah " + MD_BAYAR.nama + ". Meta Didik tidak akan meminta bayaran ke akaun lain."));
+}
 /* lokasi tajaan: tempat sebenar (lat, lon); satu penaja bagi setiap lokasi */
 const PJ_LOK = [
   ["klcc", "KLCC, Kuala Lumpur", 3.1579, 101.7116], ["klsentral", "KL Sentral, Kuala Lumpur", 3.1340, 101.6865], ["bbintang", "Bukit Bintang, Kuala Lumpur", 3.1466, 101.7108],
