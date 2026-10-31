@@ -332,7 +332,7 @@ const SUBJS = {
   bi: { k: "bi", nama: "Operasi Bahasa Inggeris", subjek: "Bahasa Inggeris", tag: "Latihan kendiri Bahasa Inggeris Tingkatan 4 dan 5", fail: "soalan_bi.json", cache: "tw-qbank-bi", ver: "202610251400" }
 };
 /* v18.11: hanya Tasawwur Islam dan Pendidikan Islam (T3, T4 & T5) dibuka. Subjek lain dikunci sehingga guru memasukkan kod. */
-const SJ_OPEN = { tw: 1, pi: 1, p3: 1 }, SJ_KEY = "gt-sjkey";
+const SJ_OPEN = { tw: 1, pi: 1, p3: 1, ba: 1, sj: 1, sc: 1, mt: 1, bm: 1, bi: 1 }, SJ_KEY = "gt-sjkey"; /* v18.40: semua subjek dibuka */
 function sjUnlocked() { try { return localStorage.getItem(SJ_KEY) === "6171"; } catch (e) { return false; } }
 function sjLocked(k) { return !SJ_OPEN[k] && !sjUnlocked(); }
 const SUBJ = (() => { try { const v = localStorage.getItem("gt-subj"); if (v && sjLocked(v)) return "tw"; return v === "pi" || v === "ba" || v === "p3" || v === "sj" || v === "sc" || v === "mt" || v === "bm" || v === "bi" ? v : "tw"; } catch (e) { return "tw"; } })();
@@ -353,10 +353,15 @@ function setSubject(k) {
   if (!SUBJS[k] || k === SUBJ) return;
   if (sjLocked(k)) { sjAskCode(k); return; }
   if (typeof S !== "undefined" && S && S.running) { toast("Selesaikan atau keluar daripada misi dahulu.", "warn"); return; }
-  swapRank(SUBJ, k);
-  try { P.t = Date.now(); localStorage.setItem(LS_KEY, JSON.stringify(P)); localStorage.setItem("gt-subj", k); } catch (e) { /* abaikan */ }
-  location.reload();
+  /* v18.40: kesan "masuk ke verse lain" sebelum dunia subjek baharu dimuat */
+  const go = () => {
+    swapRank(SUBJ, k);
+    try { P.t = Date.now(); localStorage.setItem(LS_KEY, JSON.stringify(P)); localStorage.setItem("gt-subj", k); } catch (e) { /* abaikan */ }
+    location.reload();
+  };
+  try { mdWarp(go, "MENUJU " + sjVerse(k), SJ_HUE[k]); } catch (e) { go(); }
 }
+function sjVerse(k) { return (SJ_ICO[k] || "📚") + " " + String(SUBJS[k] ? SUBJS[k].subjek : k).toUpperCase() + " VERSE"; }
 /* kedudukan berasingan mengikut operasi: medan kedudukan P sentiasa milik operasi semasa; operasi lain disimpan dalam P.rs */
 /* kod buka subjek berkunci (untuk guru) */
 function sjAskCode(k) {
@@ -7232,7 +7237,7 @@ function lgRoot() {
    Dibuka daripada butang di peta utama; dunia.js dimuat hanya apabila diperlukan. */
 /* v17.91: avatar 3D dikongsi Gudang dan META DIDIK; dimuat apabila perlu */
 /* v18.4: versi aplikasi untuk memecah cache skrip (Safari/ikon skrin utama iPhone menyimpan salinan lama) */
-const APP_VER = "18.39";
+const APP_VER = "18.40";
 function av3Load(cb) {
   if (window.AV3) { cb(); return; }
   if (typeof THREE === "undefined") return;
@@ -7256,13 +7261,14 @@ function lmOpen(tid) {
    Tekan -> kesan disedut ke dunia metaverse -> terus masuk Meta Didik (v18.39: subjek ditukar melalui ☰ Menu).
    Menukar subjek memuat semula aplikasi; bendera gt-auto-meta membuka Meta Didik terus selepas dimuat semula. */
 const SJ_ICO = { tw: "🕌", pi: "📗", p3: "📘", ba: "🔤", sj: "🏛", sc: "🔬", mt: "➗", bm: "📝", bi: "🔠" };
-function mdWarp(cb, txt) {
+const SJ_HUE = { tw: 150, pi: 110, p3: 205, ba: 40, sj: 20, sc: 185, mt: 280, bm: 330, bi: 230 }; /* warna setiap "verse" subjek */
+function mdWarp(cb, txt, hue) {
   const old = document.getElementById("mdWarp"); if (old) old.remove();
   const ov = el("div", { id: "mdWarp", role: "presentation" }), cv = el("canvas"), t = el("div", { class: "mdw-t" }, txt || "MEMASUKI META DIDIK");
   ov.append(cv, t); document.body.appendChild(ov);
   const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches, dur = reduce ? 500 : 1700;
   const W = cv.width = Math.round(innerWidth * Math.min(2, devicePixelRatio || 1)), H = cv.height = Math.round(innerHeight * Math.min(2, devicePixelRatio || 1)), x = cv.getContext("2d");
-  const st = []; for (let i = 0; i < 420; i++) st.push({ a: Math.random() * 6.283, r: Math.random() * 0.9 + 0.02, z: Math.random(), h: 180 + Math.random() * 120 });
+  const H0 = hue != null ? hue - 40 : 180, HS = hue != null ? 80 : 120, st = []; for (let i = 0; i < 420; i++) st.push({ a: Math.random() * 6.283, r: Math.random() * 0.9 + 0.02, z: Math.random(), h: H0 + Math.random() * HS });
   /* bunyi deruan: hingar ditapis menaik seperti disedut */
   try { if (!(typeof BL !== "undefined" && BL.mute) && lgAC()) { lgNz({ ft: "bandpass", f0: 180, f1: 3800, q: 1.4, d: dur / 1000, at: 0.5, vol: 0.55 }); lgTn({ t: "sine", f: 90, f1: 520, d: dur / 1000, vol: 0.25, at: 0.3 }); } } catch (e) { /* abaikan */ }
   const t0 = performance.now(); let raf = 0;
@@ -7318,7 +7324,7 @@ if (document.readyState === "loading") document.addEventListener("DOMContentLoad
 /* selepas menukar subjek melalui pemilih: terus masuk Meta Didik */
 setTimeout(() => {
   let auto = false; try { auto = localStorage.getItem("gt-auto-meta") === "1"; localStorage.removeItem("gt-auto-meta"); } catch (e) { auto = false; }
-  if (auto && P && P.nama) mdWarp(() => lmOpen(""), SUBJS[SUBJ].subjek.toUpperCase());
+  if (auto && P && P.nama) mdWarp(() => lmOpen(""), "SELAMAT DATANG KE " + sjVerse(SUBJ), SJ_HUE[SUBJ]);
 }, 900);
 /* v18.28: butang Ruang Guru di header; peta operasi dan PdPc hanya bagi guru DELIMa */
 setTimeout(() => { try { guruUi(); const b = document.getElementById("guruBtn"); if (b) b.addEventListener("click", () => setView("guru")); if (localStorage.getItem("gt-open-guru")) { localStorage.removeItem("gt-open-guru"); setTimeout(() => setView("guru"), 600); } if (/^#(pentadbir|admin)$/i.test(location.hash)) { GTAB.t = "admin"; setTimeout(() => setView("guru"), 600); } /* v18.34: pautan terus Dashboard Pentadbir */ } catch (e) { /* abaikan */ } }, 0);
@@ -14402,7 +14408,7 @@ function lrnRec(q, ok, src) {
   try {
     if (!q || q.i == null || !QBYID[q.i]) return;
     const m = llMap(), c = lrnC(), td = lrnDay();
-    if (ok && src !== "tm") gdCoin(2);
+    if (ok && src !== "tm" && src !== "lmmd") gdCoin(2); /* v18.40: kuiz Stesen Ilmu ("lmmd") memberi MD sendiri dengan kesan */
     const e = m[q.i] || (m[q.i] = [0, 0, 0, -1, 0]);
     e[2] = Date.now();
     c.t++; c.sj[SUBJ] = (c.sj[SUBJ] | 0) + 1;

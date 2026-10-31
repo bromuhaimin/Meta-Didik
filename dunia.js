@@ -1434,8 +1434,8 @@ function lmFerryOpen(jt) {
   const o = jt.isl, toIsland = jt.k !== o.id, dst = jt.other;
   lmCard((b) => {
     b.append(el("div", { class: "lm-kick" }, "⛴ " + jt.n), el("h2", null, toIsland ? "Feri ke " + o.n : "Feri pulang ke " + dst.n));
-    b.append(el("p", null, toIsland ? o.n + " ialah pulau Misi Khas: " + o.khas.pendek + " · " + o.khas.n + ". Naik feri, berdiri di dek dan nikmati pelayaran." : "Kembali ke tanah besar melalui " + dst.n + "."));
-    b.append(el("div", { class: "lm-row" }, lmBtn("Naik feri", "pri", () => { lmCardClose(); lmSail(jt); }), lmBtn("Nanti dulu", "", lmCardClose)));
+    b.append(el("p", null, toIsland ? o.n + " ialah pulau Misi Khas: " + o.khas.pendek + " · " + o.khas.n + ". Jawab 1 soalan untuk tiket, kemudian naik feri dan nikmati pelayaran." : "Kembali ke tanah besar melalui " + dst.n + "."));
+    b.append(el("div", { class: "lm-row" }, lmBtn("Naik feri", "pri", () => { lmCardClose(); lmTiket({ kick: "⛴ Tiket feri · " + jt.n, ok: () => lmSail(jt), retry: () => lmFerryOpen(jt) }); }), lmBtn("Nanti dulu", "", lmCardClose)));
   });
 }
 function lmHorn() { if (LM.mute) return; arBeep(110, 0.9, "sawtooth", 0.05); setTimeout(() => arBeep(98, 0.7, "sawtooth", 0.05), 120); }
@@ -2377,16 +2377,15 @@ function lmTaksiOpen(it) {
   list.sort((a, b) => a.km - b.km);
   lmCard((b) => {
     b.append(el("div", { class: "lm-kick" }, "🚕 Teksi"), el("h2", null, "Ke mana?"));
-    b.append(el("p", null, "Teksi bergerak mengikut jalan sebenar ke terminal bas atau lapangan terbang. Tambang: 3 MD + 1 MD setiap 15 km + 1 MD setiap plaza tol. MD anda: " + (P.coin | 0) + "."));
+    b.append(el("p", null, "Teksi bergerak mengikut jalan sebenar ke terminal bas atau lapangan terbang. Jawab 1 soalan dengan betul untuk menaiki teksi."));
     const grid = el("div", { class: "lm-grid" });
     list.filter((d) => d.km > 1.5).slice(0, 16).forEach((d) => {
       const fare = lmTaksiFare(d.km * 1.25);
-      grid.appendChild(lmBtn(d.ic + " " + d.o.n + " · ~" + Math.round(d.km) + " km · " + fare + " MD", "", () => {
+      grid.appendChild(lmBtn(d.ic + " " + d.o.n + " · ~" + Math.round(d.km) + " km", "", () => { void fare;
         const r = lmJalanPath(g, q, d.q); if (!r) { lmPop("Tiada laluan jalan ke destinasi itu"); return; }
         const tl = lmTolOnPath(g, r.pts), f = lmTaksiFare(r.len / GEOD.U) + tl.length;
-        if ((P.coin | 0) < f) { toast("MD tidak mencukupi untuk tambang " + f + " MD. Naik bas di terminal (tiket kuiz) atau kutip MD dahulu.", "warn"); return; }
-        P.coin = (P.coin | 0) - f; try { saveP(); } catch (e) { /* abaikan */ }
-        lmCardClose(); lmPop("Tambang teksi -" + f + " MD" + (tl.length ? " (termasuk " + tl.length + " tol)" : "")); lmJalanRide("teksi", r.pts, "Tepi jalan", d.o.n);
+        void f; lmCardClose();
+        lmTiket({ kick: "🚕 Teksi ke " + d.o.n, ok: () => { lmPop("Teksi ke " + d.o.n + (tl.length ? " · melalui " + tl.length + " plaza tol" : "")); lmJalanRide("teksi", r.pts, "Tepi jalan", d.o.n); }, retry: () => lmTaksiOpen(it) });
       }));
     });
     b.append(grid, el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose)));
@@ -2627,22 +2626,12 @@ function lmRailOpen(st, chosen) {
     return;
   }
   const L = st.line.L;
-  if (L.tap) {
-    lmQuiz({
-      kick: "💳 Tap kad · " + L.n, title: "Jawab untuk masuk", pass: 1, qs: lmPickQs([], 1), noRai: true,
-      intro: (b) => { b.append(el("div", { class: "lm-kick" }, lmIc(L) + " " + L.nm + " · " + st.n), el("h2", null, "Tap kad di pintu masuk"), el("p", null, RAIL_TXT[L.id] || ""), el("p", null, "Jawab 1 soalan dengan betul untuk membuka pintu masuk.")); },
-      onDone: (pass) => { if (pass) { lmPop("Pintu dibuka. Selamat jalan!"); lmRailPick(st); } else lmCard((b) => { b.append(el("div", { class: "lm-kick" }, "Pintu belum dibuka"), el("h2", null, "Jawapan belum tepat"), el("p", null, "Cuba soalan lain untuk masuk.")); b.append(el("div", { class: "lm-row" }, lmBtn("Cuba lagi", "pri", () => lmRailOpen(st, true)), lmBtn("Nanti dulu", "", lmCardClose))); }); }
-    });
-    return;
-  }
-  if (!L.quiz) return lmRailPick(st);
-  lmQuiz({
-    kick: (L.road ? "🚌 Tiket bas " : lmIc(L) + " Tiket ") + L.n, title: "Jawab untuk dapatkan tiket", pass: 3, qs: lmPickQs([], 5),
-    intro: (b) => { b.append(el("div", { class: "lm-kick" }, lmIc(L) + " " + L.nm + " · " + st.n), el("h2", null, "Tiket perjalanan"), el("p", null, RAIL_TXT[L.id] || ""), el("p", null, "Jawab 5 soalan. Betul sekurang-kurangnya 3 untuk mendapat tiket " + (L.road ? "bas ekspres." : L.n + "."))); },
-    onDone: (pass, ok, tot) => {
-      if (pass) { lmPop("Tiket diperoleh! (" + ok + "/" + tot + ")"); lmRailPick(st); }
-      else lmCard((b) => { b.append(el("div", { class: "lm-kick" }, "Tiket belum diperoleh"), el("h2", null, ok + "/" + tot + " betul"), el("p", null, "Betul sekurang-kurangnya 3 untuk mendapat tiket. Cuba lagi.")); b.append(el("div", { class: "lm-row" }, lmBtn("Cuba lagi", "pri", () => lmRailOpen(st)), lmBtn("Nanti dulu", "", lmCardClose))); });
-    }
+  /* v18.40: semua kenderaan awam: jawab 1 soalan sahaja (tiada tambang MD) */
+  lmTiket({
+    kick: (L.road ? "🚌 Tiket bas " : L.tap ? "💳 Tap kad · " : lmIc(L) + " Tiket ") + L.n,
+    intro: (b) => { b.append(el("div", { class: "lm-kick" }, lmIc(L) + " " + L.nm + " · " + st.n), el("h2", null, L.tap ? "Tap kad di pintu masuk" : "Tiket perjalanan"), el("p", null, RAIL_TXT[L.id] || "")); },
+    ok: () => { lmPop(L.tap ? "Pintu dibuka. Selamat jalan!" : "Tiket diperoleh!"); lmRailPick(st); },
+    retry: () => lmRailOpen(st, true)
   });
 }
 function lmRailPick(st) {
@@ -2882,21 +2871,22 @@ function lmIlmuOpen(it) {
   if (it.tids.length === 1) { lmIlmuTopic(it, it.t); return; }
   lmCard((b) => {
     b.append(el("div", { class: "lm-kick" }, "📖 Stesen Ilmu ke-" + it.no + " · " + DATA.negeri[it.k].pendek), el("h2", null, it.n));
-    b.append(el("p", null, "Stesen ini memegang " + it.tids.length + " tajuk. Pilih satu untuk dijawab."));
+    b.append(el("p", null, "Stesen ini memegang " + it.tids.length + " tajuk. Pilih satu untuk dijawab."), lmKuizInfo());
     it.tids.forEach((tid) => { const t = TOPIK[tid]; b.append(el("div", { class: "lm-row" }, lmBtn((lmTopicDone(tid) ? "✔ " : "") + (t.kod || t.id) + " " + t.nama, lmTopicDone(tid) ? "" : "pri", () => lmIlmuTopic(it, t)))); });
     b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "", lmCardClose)));
   });
 }
 function lmIlmuTopic(it, t) {
-  const best = LM.st.tw[t.id] | 0, tm = TEMA[t.tema] || { nama: "" };
+  const best = LM.st.tw[t.id] | 0, tm = TEMA[t.tema] || { nama: "" }, n = Math.min(5, lmKuizBaki());
+  if (n <= 0) { lmKuizHad(); return; }
   lmQuiz({
-    kick: "📖 " + it.sn + " · " + tm.nama, title: (t.kod || t.id) + " " + t.nama, pass: 3, qs: lmPickQs([t.id], 5),
+    kick: "📖 " + it.sn + " · " + tm.nama, title: (t.kod || t.id) + " " + t.nama, pass: Math.min(3, n), qs: lmPickQs([t.id], n), md: KZ_MD, harian: true,
     intro: (b) => {
       b.append(el("div", { class: "lm-kick" }, "📖 Stesen Ilmu ke-" + it.no + " · " + DATA.negeri[it.k].pendek), el("h2", null, it.n));
       b.append(el("p", null, "Tema: " + tm.nama + " · Tajuk: " + (t.kod || t.id) + " " + t.nama));
       if (t.dskp) b.append(el("p", { class: "lm-ex" }, t.dskp));
       (t.nota || []).slice(0, 3).forEach((n) => b.appendChild(qSet(el("div", { class: "lm-ex" }), n)));
-      b.append(el("p", null, "Jawab 5 soalan. Betul sekurang-kurangnya 3 untuk lulus tajuk ini dan mendapat cop " + it.sn + " dalam pasport." + (best ? " Markah terbaik anda: " + best + "/5." : "")));
+      b.append(el("p", null, "Jawab " + n + " soalan. Betul sekurang-kurangnya " + Math.min(3, n) + " untuk lulus tajuk ini dan mendapat cop " + it.sn + " dalam pasport." + (best ? " Markah terbaik anda: " + best + "/5." : "")), lmKuizInfo());
     },
     onDone: (pass, ok, tot) => {
       const first = pass && best < 3;
@@ -2923,8 +2913,9 @@ function lmIlmuTopic(it, t) {
 }
 /* stesen tanpa tajuk (subjek dengan tajuk kurang daripada bilangan stesen): pusat ulangkaji pilihan */
 function lmIlmuReview(it) {
+  const n = Math.min(5, lmKuizBaki()); if (n <= 0) { lmKuizHad(); return; }
   lmQuiz({
-    kick: "📖 " + it.sn + " · Pusat Ulangkaji", title: it.n, pass: 3, qs: lmPickQs(DATA.topik.map((t) => t.id), 5),
+    kick: "📖 " + it.sn + " · Pusat Ulangkaji", title: it.n, pass: Math.min(3, n), qs: lmPickQs(DATA.topik.map((t) => t.id), n), md: KZ_MD, harian: true,
     intro: (b) => { b.append(el("div", { class: "lm-kick" }, "📖 " + it.sn + " · Pusat Ulangkaji"), el("h2", null, it.n), el("p", null, "Stesen ini tidak memegang tajuk bagi subjek ini. Jawab 5 soalan campuran sebagai ulangkaji (tidak dikira dalam pasport).")); },
     onDone: (pass, ok, tot) => { const xp = lmXp(ok * 2); lmCard((b) => { b.append(el("div", { class: "lm-kick" }, "Ulangkaji · " + it.sn), el("h2", null, ok + "/" + tot + " betul"), el("p", { class: "lm-ex" }, "XP +" + xp), el("div", { class: "lm-row" }, lmBtn("Teruskan jelajah", "pri", lmCardClose))); }); }
   });
@@ -4638,6 +4629,10 @@ const LM_CSS = `
 #lmOv.touch .lm-tc{display:flex}
 #lmOv .lm-tc button{width:64px;height:64px;border-radius:50%;font-size:13px;padding:0}
 #lmOv .lm-tc button.big{width:78px;height:78px}
+#lmOv .lm-mdchip{display:inline-flex;gap:4px;align-items:center;justify-self:start;padding:5px 12px;border-radius:999px;background:linear-gradient(90deg,#3a2a00,#6b4a00);border:2px solid #ffd45a;color:#ffe9a8;font:800 14px Nunito,sans-serif;margin:2px 0 6px}#lmOv .lm-mdchip b{color:#ffd45a;font-size:18px}#lmOv .lm-mdchip.bump{animation:lmMdBump .6s ease-out}@keyframes lmMdBump{0%{transform:scale(1)}30%{transform:scale(1.35);box-shadow:0 0 24px #ffd45a}100%{transform:scale(1)}}
+.lm-mdfx{position:fixed;z-index:200;transform:translate(-50%,-50%);font:900 30px Fredoka,Nunito,sans-serif;color:#ffd45a;text-shadow:0 2px 0 #6b4a00,0 0 18px rgba(255,212,90,.8);pointer-events:none;animation:lmMdFly 1.2s cubic-bezier(.2,.8,.3,1) forwards}@keyframes lmMdFly{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}20%{opacity:1;transform:translate(-50%,-110%) scale(1.4)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.6)}}
+.lm-mdcoin{position:fixed;z-index:199;font-size:22px;pointer-events:none;transform:translate(-50%,-50%);animation:lmMdCoin 1s ease-out forwards}@keyframes lmMdCoin{0%{opacity:1;transform:translate(-50%,-50%) scale(.6)}70%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y) + 60px)) scale(1) rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.lm-mdfx,.lm-mdcoin,#lmOv .lm-mdchip.bump{animation-duration:.01s}}
 #lmOv .lm-stnform{display:grid;gap:8px;text-align:left;max-height:62vh;overflow:auto}#lmOv .lm-stnform .card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px;display:grid;gap:8px}#lmOv .lm-stnform .field{display:grid;gap:4px}#lmOv .lm-stnform label{font-weight:700;font-size:13px}#lmOv .lm-stnform input:not([type=checkbox]),#lmOv .lm-stnform select,#lmOv .lm-stnform textarea{width:100%;box-sizing:border-box;padding:9px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.3);background:#0b1e33;color:#fff;font:inherit;user-select:text;-webkit-user-select:text}#lmOv .lm-stnform summary{font-weight:800;cursor:pointer}#lmOv .lm-stnform .notice{background:rgba(255,212,90,.1);border:1px solid rgba(255,212,90,.4);border-radius:10px;padding:8px 10px;font-size:13px}
 #lmOv .lm-js{position:absolute;left:calc(26px + env(safe-area-inset-left));bottom:calc(26px + env(safe-area-inset-bottom));width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);display:none;pointer-events:none}
 #lmOv.touch .lm-js{display:block}
@@ -5028,12 +5023,42 @@ function lmPickQs(tids, n) {
   return out.map((q) => { const ord = shuffle([0, 1, 2, 3]); return { q: q, o: ord.map((i) => q.o[i]), ans: ord.indexOf(q.a) }; });
 }
 /* opt: { kick, title, intro, qs, pass, onDone(ok, tot) } */
+/* ---------- v18.40: tiket kenderaan awam (1 soalan) dan kuiz Stesen Ilmu (had harian, MD setiap jawapan betul) ---------- */
+function lmTiket(o) {
+  lmQuiz({
+    kick: o.kick, title: "Jawab 1 soalan untuk menaiki", pass: 1, qs: lmPickQs([], 1), noRai: true,
+    intro: o.intro ? (b) => { o.intro(b); b.append(el("p", null, "Jawab 1 soalan dengan betul untuk menaiki. Tiada tambang.")); } : null,
+    onDone: (pass) => {
+      if (pass) { o.ok(); return; }
+      lmCard((b) => { b.append(el("div", { class: "lm-kick" }, o.kick), el("h2", null, "Jawapan belum tepat"), el("p", null, "Cuba soalan lain untuk menaiki.")); b.append(el("div", { class: "lm-row" }, lmBtn("Cuba lagi", "pri", () => { lmCardClose(); o.retry(); }), lmBtn("Nanti dulu", "", lmCardClose))); });
+    }
+  });
+}
+const KZ_HAD = 30, KZ_MD = 2, KZ_KEY = "gt-kuiz-hari"; /* had soalan Stesen Ilmu sehari (semua subjek) dan MD bagi setiap jawapan betul */
+function lmKuizHari() { const d = new Date(Date.now() + 8 * 3600000).toISOString().slice(0, 10); let r = null; try { r = JSON.parse(localStorage.getItem(KZ_KEY) || "null"); } catch (e) { r = null; } return r && r.d === d ? r : { d: d, n: 0 }; }
+function lmKuizBaki() { return Math.max(0, KZ_HAD - (lmKuizHari().n | 0)); }
+function lmKuizKira(k) { const r = lmKuizHari(); r.n = Math.min(KZ_HAD, (r.n | 0) + k); try { localStorage.setItem(KZ_KEY, JSON.stringify(r)); } catch (e) { /* abaikan */ } }
+function lmKuizInfo() { const b = lmKuizBaki(); return el("p", { class: "lm-ex", style: "color:#ffd45a" }, "🪙 Setiap jawapan betul: +" + KZ_MD + " MD. Baki soalan hari ini: " + b + "/" + KZ_HAD + "."); }
+function lmKuizHad() { lmCard((b) => { b.append(el("div", { class: "lm-kick" }, "📖 Stesen Ilmu"), el("h2", null, "Had " + KZ_HAD + " soalan hari ini dicapai"), el("p", null, "Hebat! Anda sudah menjawab " + KZ_HAD + " soalan hari ini. Rehat dahulu dan kembali esok untuk mengumpul MD lagi."), el("div", { class: "lm-row" }, lmBtn("Teruskan jelajah", "pri", lmCardClose))); }); }
+function lmMdChip() { const c = el("div", { class: "lm-mdchip" }, "🪙 ", el("b", null, String(P.coin | 0)), " MD · soalan hari ini " + (KZ_HAD - lmKuizBaki()) + "/" + KZ_HAD); LM.mdChip = c; return c; }
+/* kesan: "+2 🪙" terbang dari butang jawapan ke kaunter MD, hujan syiling dan bunyi denting */
+function lmMdFx(n, from) {
+  P.coin = (P.coin | 0) + n; try { saveP(); } catch (e) { /* abaikan */ }
+  const chip = LM.mdChip, r0 = from.getBoundingClientRect(), r1 = chip ? chip.getBoundingClientRect() : { left: innerWidth / 2, top: 40, width: 0, height: 0 };
+  if (chip) { const b = chip.querySelector("b"); if (b) b.textContent = String(P.coin | 0); chip.classList.remove("bump"); void chip.offsetWidth; chip.classList.add("bump"); }
+  const fx = el("div", { class: "lm-mdfx" }, "+" + n + " 🪙"); fx.style.left = (r0.left + r0.width / 2) + "px"; fx.style.top = (r0.top + r0.height / 2) + "px";
+  fx.style.setProperty("--dx", (r1.left + r1.width / 2 - (r0.left + r0.width / 2)) + "px"); fx.style.setProperty("--dy", (r1.top + r1.height / 2 - (r0.top + r0.height / 2)) + "px");
+  document.body.appendChild(fx); setTimeout(() => fx.remove(), 1300);
+  if (!lmKurangGerak()) for (let i = 0; i < 10; i++) { const c = el("div", { class: "lm-mdcoin" }, "🪙"); c.style.left = (r0.left + r0.width / 2) + "px"; c.style.top = (r0.top + r0.height / 2) + "px"; const a = Math.random() * 6.283, d = 60 + Math.random() * 90; c.style.setProperty("--x", Math.cos(a) * d + "px"); c.style.setProperty("--y", (Math.sin(a) * d - 40) + "px"); c.style.animationDelay = (i * 25) + "ms"; document.body.appendChild(c); setTimeout(() => c.remove(), 1100); }
+  if (!LM.mute) { lmSnd("coin"); setTimeout(() => arBeep(1568, 0.12, "triangle", 0.05), 120); setTimeout(() => arBeep(2093, 0.16, "triangle", 0.05), 220); }
+}
 function lmQuiz(opt) {
   const z = { i: 0, ok: 0, qs: opt.qs };
   if (!z.qs.length) { toast("Tiada soalan untuk tajuk ini.", "warn"); return; }
   const show = () => lmCard((b) => {
     const it = z.qs[z.i];
     b.append(el("div", { class: "lm-kick" }, opt.kick + " · Soalan " + (z.i + 1) + "/" + z.qs.length), el("h2", null, opt.title));
+    if (opt.md) b.appendChild(lmMdChip());
     const bar = el("div", { class: "lm-bar" }), bi = el("i"); bi.style.width = Math.round(100 * z.i / z.qs.length) + "%"; bar.appendChild(bi); b.appendChild(bar);
     b.appendChild(qSet(el("div", { class: "lm-q" }), it.q.q));
     const os = el("div", { class: "lm-opts" }), btns = [];
@@ -5042,7 +5067,9 @@ function lmQuiz(opt) {
       bt.addEventListener("click", () => {
         if (z.lock) return; z.lock = true;
         const good = k === it.ans; if (good) z.ok++;
-        try { lrnRec(it.q, good, "lm"); } catch (e) { /* abaikan */ }
+        if (opt.harian) lmKuizKira(1);
+        if (good && opt.md) lmMdFx(opt.md, bt);
+        try { lrnRec(it.q, good, opt.md ? "lmmd" : "lm"); } catch (e) { /* abaikan */ }
         btns.forEach((x, j) => { x.disabled = true; if (j === it.ans) x.classList.add("ok"); else if (j === k) x.classList.add("no"); });
         lmSnd(good ? "ok" : "bad");
         if (it.q.e) b.appendChild(el("div", { class: "lm-ex" }, (good ? "Betul! " : "Jawapan: " + "ABCD"[it.ans] + ". ") + it.q.e));
@@ -6186,5 +6213,5 @@ function lmClose() {
 }
 /* untuk ujian automatik */
 LM._g = (x, z) => lmGround(x, z); LM._fly = (a, d) => lmFlyStart(a, d); LM._ride = (a, b) => lmRide(a, b); LM._rai = () => lmRai(); LM._swim = (x, z) => lmSwimOk(x, z);
-LM._t = { lmSolatTimes: lmSolatTimes, lmAzan: lmAzan, lmSolatOpen: lmSolatOpen, lmTunOpen: lmTunOpen, AZ: AZ, lmJalanNear: lmJalanNear, lmJalanPath: lmJalanPath, lmJalanRide: lmJalanRide, lmTaksiOpen: lmTaksiOpen, lmTerminalOpen: lmTerminalOpen, lmBigMap: typeof lmBigMap === "function" ? lmBigMap : null, LAUD: LAUD, lmVenueOpen: lmVenueOpen, lmCoast: lmCoast, TER: TER, lmNelayanOpen: lmNelayanOpen, lmTanahGo: lmTanahGo, lmAirportOpen: lmAirportOpen, lmKemOpen: lmKemOpen, lmKampusOpen: lmKampusOpen, lmIlmuOpen: lmIlmuOpen, lmKampusFetch: lmKampusFetch, lmRailOpen: lmRailOpen, lmRide: lmRide, lmStnFetch: lmStnFetch, lmStnOpen: lmStnOpen, lmCertCanvas: lmCertCanvas, lmLcCheck: lmLcCheck, LCN: LCN, lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs };
+LM._t = { lmSolatTimes: lmSolatTimes, lmAzan: lmAzan, lmSolatOpen: lmSolatOpen, lmTunOpen: lmTunOpen, AZ: AZ, lmJalanNear: lmJalanNear, lmJalanPath: lmJalanPath, lmJalanRide: lmJalanRide, lmTaksiOpen: lmTaksiOpen, lmTerminalOpen: lmTerminalOpen, lmBigMap: typeof lmBigMap === "function" ? lmBigMap : null, LAUD: LAUD, lmVenueOpen: lmVenueOpen, lmCoast: lmCoast, TER: TER, lmNelayanOpen: lmNelayanOpen, lmTanahGo: lmTanahGo, lmAirportOpen: lmAirportOpen, lmKemOpen: lmKemOpen, lmKampusOpen: lmKampusOpen, lmIlmuOpen: lmIlmuOpen, lmKampusFetch: lmKampusFetch, lmRailOpen: lmRailOpen, lmRide: lmRide, lmStnFetch: lmStnFetch, lmStnOpen: lmStnOpen, lmCertCanvas: lmCertCanvas, lmLcCheck: lmLcCheck, LCN: LCN, lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs, lmIlmuTopic: lmIlmuTopic, lmFerryOpen: lmFerryOpen, lmKuizBaki: lmKuizBaki };
 })();
