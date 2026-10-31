@@ -2840,6 +2840,43 @@ function lmIlmuModel(col) {
   for (const sx of [-1, 1]) { const pg = lmMesh(lmBox(0.75, 0.06, 1), "#fffbe8", sx * 0.4, 1.4, 1.2); pg.rotation.z = sx * 0.25; g.add(pg); }
   return g;
 }
+/* v18.41: Menara Tabung Haji (Kuala Lumpur) dibina semula: menara bulat berbentuk "jam pasir" yang mengembang di kaki,
+   kaca gelap dengan rusuk menegak putih, gelang putih di kaki dan mahkota putih berbumbung gerbang lancip di puncak.
+   Semua dilukis dengan kod (tiada aset luar). Ketinggian dalam unit dunia, skala landmark. */
+function lmTabungHaji() {
+  const g = new T.Group(), H = 36, q = lmQ();
+  const R = (t) => { /* jejari ikut ketinggian (0..1): kaki mengembang, pinggang ramping, puncak melebar */
+    if (t < 0.2) return 6.4 - 9 * t + 6 * t * t;                     /* kaki mengembang */
+    const u = (t - 0.2) / 0.8; return 4.45 - 1.1 * Math.sin(Math.PI * Math.min(1, u * 1.25)) * (1 - u * 0.35) + u * 0.7; /* pinggang lalu melebar */
+  };
+  const pts = []; for (let i = 0; i <= 40; i++) { const t = i / 40; pts.push(new T.Vector2(R(t), t * H)); }
+  const glass = lmPbr("kacaTH", { color: 0x16212c, roughness: 0.12, metalness: 0.65 });
+  const body = new T.Mesh(new T.LatheGeometry(pts, 48), glass); body.castShadow = q >= 1; body.receiveShadow = true; g.add(body);
+  /* rusuk putih menegak: lathe sedikit lebih besar dengan tekstur jalur (telus antara jalur) */
+  const rib = lmTex(512, 8, (x, w, h) => { x.clearRect(0, 0, w, h); x.fillStyle = "#f4f4f0"; const n = 28; for (let i = 0; i < n; i++) x.fillRect(i * w / n, 0, w / n * 0.32, h); });
+  rib.wrapS = T.RepeatWrapping;
+  const ptsR = pts.map((v) => new T.Vector2(v.x + 0.14, v.y));
+  const ribs = new T.Mesh(new T.LatheGeometry(ptsR, 112), new T.MeshLambertMaterial({ map: rib, transparent: true, alphaTest: 0.5, side: T.DoubleSide })); g.add(ribs);
+  const white = lmPbr("putihTH", { color: 0xf2f1ec, roughness: 0.5 });
+  /* gelang putih di kaki (podium) dan tapak */
+  const band = new T.Mesh(new T.CylinderGeometry(R(0.2) + 0.35, R(0.18) + 0.45, 1.6, 48, 1, true), white); band.position.y = 0.19 * H; g.add(band);
+  const base = new T.Mesh(new T.CylinderGeometry(7.4, 7.6, 0.8, 48), white); base.position.y = 0.4; base.receiveShadow = true; g.add(base);
+  /* mahkota: dinding putih dengan bukaan gerbang lancip (tekstur alfa) */
+  const arch = lmTex(512, 128, (x, w, h) => {
+    x.fillStyle = "#f4f4f0"; x.fillRect(0, 0, w, h); x.globalCompositeOperation = "destination-out";
+    const n = 8, cw = w / n; for (let i = 0; i < n; i++) { const cx = i * cw + cw / 2, hw = cw * 0.32; x.beginPath(); x.moveTo(cx - hw, h * 0.92); x.lineTo(cx - hw, h * 0.45); x.quadraticCurveTo(cx - hw, h * 0.18, cx, h * 0.1); x.quadraticCurveTo(cx + hw, h * 0.18, cx + hw, h * 0.45); x.lineTo(cx + hw, h * 0.92); x.closePath(); x.fill(); }
+    x.globalCompositeOperation = "source-over";
+  });
+  arch.wrapS = T.RepeatWrapping; arch.repeat.x = 2;
+  const rt = R(1) + 0.25, crown = new T.Mesh(new T.CylinderGeometry(rt + 0.1, rt, 4.2, 48, 1, true), new T.MeshLambertMaterial({ map: arch, transparent: true, alphaTest: 0.5, side: T.DoubleSide }));
+  crown.position.y = H + 1.6; g.add(crown);
+  const rim = new T.Mesh(new T.TorusGeometry(rt + 0.12, 0.28, 8, 48), white); rim.rotation.x = Math.PI / 2; rim.position.y = H + 3.7; g.add(rim);
+  for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2, f = new T.Mesh(lmBox(0.5, 1.6, 0.5), white); f.position.set(Math.cos(a) * (rt + 0.1), H + 4.4, Math.sin(a) * (rt + 0.1)); g.add(f); } /* puncak tiang mahkota */
+  /* pintu masuk dan papan nama */
+  g.add(lmMesh(lmBox(4, 2.6, 0.6), "#2a3440", 0, 1.9, R(0.03) + 0.2));
+  const sign = lmLabel("TABUNG HAJI", { fs: 26, k: 0.03, bg: "rgba(11,90,50,.9)", bd: "#ffd45a", dt: true }); sign.position.set(0, 0.24 * H + 1.4, 0); g.add(sign);
+  return g;
+}
 function lmIlmuBuild(g, used, placed, avoid, gnd) {
   SILMU.forEach(([id, k, nama, la, lo, col]) => {
     if (!DATA.negeri[k]) return;
@@ -2849,15 +2886,16 @@ function lmIlmuBuild(g, used, placed, avoid, gnd) {
       && !g.items.some((it) => Math.hypot(it.x - x, it.z - z) < 16);
     let w = ll(la, lo);
     if (!free(w.x, w.z)) { let best = null; for (let d = 6; d <= 120 && !best; d += 6) for (let i = 0; i < 16; i++) { const a = i * 0.3927 + d * 0.13, x = w.x + Math.cos(a) * d, z = w.z + Math.sin(a) * d; if (free(x, z)) { best = { x: x, z: z }; break; } } if (best) w = best; }
-    const md = lmIlmuModel(col), rot = (Math.abs(hashStr(id)) % 628) / 100;
+    const th = id === "si-th", md = th ? lmTabungHaji() : lmIlmuModel(col), rot = (Math.abs(hashStr(id)) % 628) / 100;
     md.position.set(w.x, 0, w.z); md.rotation.y = rot; g.scene.add(md); gnd.push([md, 0]); lmPad(g, w.x, w.z, 10);
-    const lb = lmLabel("📖 Stesen Ilmu · " + nama, { fs: 28, k: 0.03, bg: "rgba(11,74,74,.88)", bd: "#ffd45a" }); lb.position.set(w.x, 13, w.z); g.scene.add(lb); gnd.push([lb, 13]);
-    const fx = Math.sin(rot), fz = Math.cos(rot);
+    const ly = th ? 46 : 13, lb = lmLabel("📖 Stesen Ilmu · " + nama, { fs: 28, k: 0.03, bg: "rgba(11,74,74,.88)", bd: "#ffd45a" }); lb.position.set(w.x, ly, w.z); g.scene.add(lb); gnd.push([lb, ly]);
+    const fx = Math.sin(rot) * (th ? 2 : 1), fz = Math.cos(rot) * (th ? 2 : 1);
     const beam = lmBeam("#46ff8c", 260, 0.32); beam.position.set(w.x, 130, w.z); g.scene.add(beam); gnd.push([beam, 130]);
     g.items.push({ kind: "si", id: id, k: k, sn: nama, n: nama, col: col, x: w.x + fx * 5, z: w.z + fz * 5, cx: w.x, cz: w.z, r: 0, ir: 10, m: md, lb: lb, tids: [], beam: beam });
     placed.push({ x: w.x, z: w.z, r: rr }); avoid.push({ x: w.x, z: w.z, r: rr + 2 });
     const cr = Math.cos(rot), sr = Math.sin(rot);
-    for (const [lx, lz] of [[-4.6, -3.6], [4.6, -3.6], [-4.6, 3.6], [4.6, 3.6]]) g.cols.push({ x: w.x + lx * cr + lz * sr, z: w.z - lx * sr + lz * cr, r: 0.7, h: 6 });
+    if (th) g.cols.push({ x: w.x, z: w.z, r: 6.4, h: 40 }); /* menara Tabung Haji */
+    else for (const [lx, lz] of [[-4.6, -3.6], [4.6, -3.6], [-4.6, 3.6], [4.6, 3.6]]) g.cols.push({ x: w.x + lx * cr + lz * sr, z: w.z - lx * sr + lz * cr, r: 0.7, h: 6 });
   });
 }
 function lmIlmuAssign(g) {
@@ -3652,6 +3690,7 @@ async function lmPjFetch(g) {
     const it = { kind: "pj", id: "pj-" + id, n: d.n, x: w.x + fx * (b.r + 2), z: w.z + fz * (b.r + 2), r: 0, ir: 7, m: b.g, d: d, lb: lb, col: col };
     g.items.push(it); g.pj[id] = it;
   }
+  try { lmPjIklan(g); } catch (e) { /* abaikan */ } /* v18.41 */
 }
 /* v18.41: papan iklan digital di lapangan terbang dan terminal bas: logo semua penaja aktif berputar setiap 6 saat
    (satu tekstur dikongsi, jadi kos lukisan rendah). Muncul sendiri sebaik pentadbir meluluskan penaja. */
@@ -3684,7 +3723,6 @@ function lmPjIklan(g) {
   L.forEach((d) => { if (!A.imgs[d.id]) { const im = new Image(); im.onload = () => A.draw(); im.src = d.logo; A.imgs[d.id] = im; } });
   A.boards.forEach((b) => { b.visible = L.length > 0; });
   A.draw();
-  try { lmPjIklan(g); } catch (e) { /* abaikan */ }
 }
 function lmPjOpen(it) {
   const d = it.d, pk = PJ_PAKEJ[d.pk] || { n: "Penaja", ic: "" };
@@ -3836,7 +3874,30 @@ const AKH = [
     { t: "do", at: [0, 1.2], act: "Hulurkan makanan kepada musafir", fx: "drop:mangkuk", say: "Pakcik, makanlah ini." }], ok: "Musafir itu dapat makan dan meneruskan perjalanan. Sedekah tidak mengurangkan harta.", dl: "Sabda Nabi SAW: Tangan yang di atas lebih baik daripada tangan yang di bawah (riwayat al-Bukhari dan Muslim)." },
   { id: "burung", n: "Anak burung jatuh dari sarang", props: ["sarang", "pokok"], sc: "Seekor anak burung jatuh bersama sarangnya. Ibunya berlegar di atas pokok.", steps: [
     { t: "do", at: [0.6, 1.4], act: "Ambil sarang dengan berhati-hati", fx: "carry:sarang" },
-    { t: "do", at: [6, 2.6], act: "Letakkan sarang semula di dahan", fx: "drop:pokok" }], ok: "Ibu burung kembali ke sarangnya.", dl: "Nabi SAW menyuruh anak burung yang diambil daripada ibunya dikembalikan (riwayat Abu Daud)." }
+    { t: "do", at: [6, 2.6], act: "Letakkan sarang semula di dahan", fx: "drop:pokok" }], ok: "Ibu burung kembali ke sarangnya.", dl: "Nabi SAW menyuruh anak burung yang diambil daripada ibunya dikembalikan (riwayat Abu Daud)." },
+  /* v18.41: situasi sivik dan sahsiah (jati diri murid Malaysia) */
+  { id: "beratur", sv: 1, n: "Barisan di kaunter", npc: [["pakcik", 0, 3.4], ["makcik", 0, 5]], props: ["kaunter"], sc: "Ramai orang sedang beratur di kaunter. Ada yang cuba memotong barisan.", steps: [
+    { t: "do", at: [0, 1.4], act: "Beratur di belakang barisan dengan sabar", say: "Saya tunggu giliran." },
+    { t: "go", at: [1.8, 7.2], act: "Tunggu giliran dan maju ke kaunter" }], ok: "Anda menunggu giliran dengan tertib. Barisan bergerak lancar.", dl: "Rukun Negara: Kesopanan dan Kesusilaan. Beratur ialah tanda menghormati hak orang lain." },
+  { id: "paip", sv: 1, n: "Paip air terbiar", props: ["paip", "air"], sc: "Paip air di taman dibiarkan terbuka dan air mengalir membazir.", steps: [
+    { t: "do", at: [0, 1], act: "Tutup paip air yang terbiar", fx: "hide:air", say: "Air ialah amanah, jangan membazir." }], ok: "Air berhenti mengalir. Anda menjimatkan air untuk semua.", dl: "Rasulullah SAW melarang membazir air walaupun ketika berwuduk di sungai yang mengalir (riwayat Ibn Majah)." },
+  { id: "conteng", sv: 1, n: "Dinding awam diconteng", npc: [["pengawal", 10, 7]], props: ["dinding", "pondok2"], sc: "Dinding perhentian bas diconteng. Ada yang mengajak anda menambah contengan.", steps: [
+    { t: "do", at: [0, 1.6], act: "Tolak ajakan menconteng", say: "Tidak, ini harta awam milik kita semua." },
+    { t: "do", at: [10, 5.2], act: "Laporkan vandalisme kepada pengawal", say: "Encik, dinding perhentian bas diconteng." }], ok: "Pengawal akan membersihkan dinding itu. Anda menjaga harta awam.", dl: "Rukun Negara: Kedaulatan Undang-undang. Menjaga harta awam ialah tanggungjawab setiap warganegara." },
+  { id: "duduk", sv: 1, n: "Warga emas tiada tempat duduk", npc: [["makcik", 1.6, 1.4]], props: ["bangku"], sc: "Anda sedang duduk di bangku menunggu bas. Seorang makcik berdiri kepenatan.", steps: [
+    { t: "do", at: [0, 0.9], act: "Bangun dan pelawa makcik duduk", fx: "follow:0", say: "Silakan duduk, makcik." },
+    { t: "go", at: [0, 1.6], act: "Bawa makcik ke bangku" }], ok: "Makcik duduk dengan selesa dan mendoakan anda.", dl: "Sabda Nabi SAW: Bukan daripada golongan kami orang yang tidak menghormati yang tua (riwayat at-Tirmizi)." },
+  { id: "bendera", sv: 1, n: "Jalur Gemilang terjatuh", props: ["benderaJatuh", "tiang"], sc: "Jalur Gemilang di hadapan dewan terjatuh ke tanah ditiup angin.", steps: [
+    { t: "do", at: [0, 0.8], act: "Kutip Jalur Gemilang dengan hormat", fx: "carry:benderaJatuh", say: "Bendera negara mesti dihormati." },
+    { t: "do", at: [6, 3.8], act: "Kibarkan semula di tiang bendera", fx: "drop:tiang" }], ok: "Jalur Gemilang berkibar semula. Anda menunjukkan semangat patriotik.", dl: "Rukun Negara: Kesetiaan kepada Raja dan Negara. Jalur Gemilang lambang kedaulatan Malaysia." },
+  { id: "lintas", sv: 1, n: "Melintas jalan dengan selamat", npc: [["budak", 1.4, -0.4, 0.7]], props: ["zebra", "lampu"], sc: "Seorang adik hendak berlari melintas jalan walaupun lampu isyarat merah.", steps: [
+    { t: "do", at: [0, -0.6], act: "Tahan adik dan tunggu lampu hijau", fx: "follow:0", say: "Tunggu dulu, dik. Lampu masih merah." },
+    { t: "go", at: [0, 9], act: "Lintas bersama adik di garisan zebra" }], ok: "Anda dan adik melintas dengan selamat apabila lampu hijau.", dl: "Rukun Negara: Kedaulatan Undang-undang. Patuhi peraturan jalan raya untuk keselamatan semua." },
+  { id: "sedekah", sv: 1, n: "Tabung bantuan banjir", npc: [["pakcik", 2.2, 1]], props: ["tabung"], sc: "Sukarelawan sedang mengutip derma untuk mangsa banjir.", steps: [
+    { t: "do", at: [0, 1], act: "Masukkan sedekah ke dalam tabung", say: "Semoga meringankan beban mereka." }], ok: "Sumbangan anda akan membantu keluarga mangsa banjir.", dl: "Firman Allah SWT: Perumpamaan orang yang membelanjakan hartanya di jalan Allah seperti sebiji benih yang menumbuhkan tujuh tangkai (al-Baqarah: 261)." },
+  { id: "tanam", sv: 1, n: "Gotong-royong menanam pokok", npc: [["kawan", -2, 2, 0.85]], props: ["anakpokok", "lubang"], sc: "Kawan-kawan sedang bergotong-royong menghijaukan kawasan sekolah.", steps: [
+    { t: "do", at: [0, 0.8], act: "Ambil anak pokok", fx: "carry:anakpokok" },
+    { t: "do", at: [5, 3.2], act: "Tanam anak pokok di lubang", fx: "drop:lubang", say: "Semoga pokok ini membesar dengan subur." }], ok: "Anak pokok ditanam. Sekolah anda lebih hijau.", dl: "Sabda Nabi SAW: Tidaklah seorang Muslim menanam pokok, lalu dimakan oleh burung, manusia atau binatang melainkan menjadi sedekah baginya (riwayat al-Bukhari dan Muslim)." }
 ];
 function lmAkProp(kind, P) {
   const g = new T.Group(); P[kind] = g;
@@ -3858,6 +3919,18 @@ function lmAkProp(kind, P) {
   else if (kind === "sarang") { const n = new T.Mesh(new T.CylinderGeometry(0.6, 0.4, 0.35, 10), lmMat("#7a5a32")); g.add(n); g.add(lmMesh(lmBox(0.3, 0.25, 0.4), "#a0907a", 0, 0.3, 0)); g.position.set(0.6, 0.18, 0.6); }
   else if (kind === "pokok") { g.add(lmMesh(lmBox(0.7, 6, 0.7), "#6e4a2c", 6, 3, 4)); const c = new T.Mesh(new T.IcosahedronGeometry(3, 0), lmMat("#3f8a3a")); c.position.set(6, 7, 4); g.add(c); g.add(lmMesh(lmBox(2.4, 0.25, 0.3), "#6e4a2c", 6, 4.6, 3.2)); }
   else if (kind === "nasi") { g.add(lmMesh(lmBox(0.7, 0.35, 0.5), "#3a8a4a", 0, 0, 0)); }
+  else if (kind === "kaunter") { g.add(lmMesh(lmBox(4, 1.2, 1), "#8a5a34", 1.8, 0.6, 8.4)); g.add(lmMesh(lmBox(4.2, 0.12, 1.2), "#d9b27c", 1.8, 1.26, 8.4)); const lb = lmLabel("Kaunter", { fs: 24, k: 0.026 }); lb.position.set(1.8, 3, 8.4); g.add(lb); }
+  else if (kind === "paip") { g.add(lmMesh(lmBox(0.25, 1.2, 0.25), "#9aa3ab", 0, 0.6, 0)); g.add(lmMesh(lmBox(0.5, 0.18, 0.18), "#9aa3ab", 0.2, 1.2, 0)); g.add(lmMesh(lmBox(0.8, 0.1, 0.8), "#5a6a74", 0.45, 0.05, 0)); }
+  else if (kind === "air") { const w = new T.Mesh(new T.CylinderGeometry(0.06, 0.08, 1.1, 6), new T.MeshBasicMaterial({ color: 0x8fd6ff, transparent: true, opacity: 0.75 })); w.position.set(0.45, 0.6, 0); g.add(w); g.add(lmMesh(lmBox(1.6, 0.03, 1.2), "#4a90c0", 0.6, 0.03, 0.4)); }
+  else if (kind === "dinding") { g.add(lmMesh(lmBox(6, 2.6, 0.3), "#d8d2c4", 0, 1.3, -0.6)); for (let i = 0; i < 5; i++) g.add(lmMesh(lmBox(0.6 + (i % 3) * 0.4, 0.12, 0.05), ["#e74c3c", "#8e44ad", "#2c3e50"][i % 3], -2 + i * 1, 0.9 + (i % 2) * 0.8, -0.43)); }
+  else if (kind === "pondok2") { g.add(lmMesh(lmBox(3, 2.8, 2.6), "#e8e2d2", 10, 1.4, 8.6)); g.add(lmMesh(lmBox(3.4, 0.3, 3), "#2e5a8a", 10, 2.9, 8.6)); }
+  else if (kind === "bangku") { g.add(lmMesh(lmBox(2.4, 0.15, 0.7), "#8a5a34", 0, 0.75, 1.9)); for (const x of [-1, 1]) g.add(lmMesh(lmBox(0.15, 0.75, 0.6), "#555", x, 0.37, 1.9)); g.add(lmMesh(lmBox(2.4, 0.6, 0.12), "#8a5a34", 0, 1.1, 2.25)); }
+  else if (kind === "tiang") { g.add(lmMesh(lmBox(0.2, 7, 0.2), "#c9ced3", 6, 3.5, 5)); g.add(lmMesh(lmBox(1.2, 0.3, 1.2), "#9aa3ab", 6, 0.15, 5)); }
+  else if (kind === "benderaJatuh") { const f = lmTex(96, 48, (x, w, h) => { for (let i = 0; i < 14; i++) { x.fillStyle = i % 2 ? "#fff" : "#cc0001"; x.fillRect(0, i * h / 14, w, h / 14 + 1); } x.fillStyle = "#010066"; x.fillRect(0, 0, w * 0.5, h * 0.57); x.fillStyle = "#fc0"; x.beginPath(); x.arc(w * 0.2, h * 0.28, h * 0.2, 0, 6.283); x.fill(); x.fillStyle = "#010066"; x.beginPath(); x.arc(w * 0.24, h * 0.28, h * 0.17, 0, 6.283); x.fill(); x.fillStyle = "#fc0"; x.fillRect(w * 0.33, h * 0.22, h * 0.12, h * 0.12); }); const fl = new T.Mesh(new T.PlaneGeometry(1.8, 0.9), new T.MeshBasicMaterial({ map: f, side: T.DoubleSide })); fl.rotation.x = -Math.PI / 2; fl.position.y = 0.05; g.add(fl); }
+  else if (kind === "lampu") { g.add(lmMesh(lmBox(0.18, 3.4, 0.18), "#333", 3.6, 1.7, 0)); g.add(lmMesh(lmBox(0.5, 1.2, 0.4), "#222", 3.6, 3.6, 0)); const r = new T.Mesh(new T.SphereGeometry(0.16, 8, 6), new T.MeshBasicMaterial({ color: 0xff3030 })); r.position.set(3.6, 3.95, 0.22); g.add(r); const gg = new T.Mesh(new T.SphereGeometry(0.16, 8, 6), new T.MeshBasicMaterial({ color: 0x1b5e20 })); gg.position.set(3.6, 3.3, 0.22); g.add(gg); }
+  else if (kind === "tabung") { g.add(lmMesh(lmBox(1.2, 1.4, 0.8), "#1f6feb", 0, 0.7, 2)); g.add(lmMesh(lmBox(0.5, 0.05, 0.1), "#111", 0, 1.41, 2)); const lb = lmLabel("Tabung Bantuan Banjir", { fs: 22, k: 0.024 }); lb.position.set(0, 2.4, 2); g.add(lb); }
+  else if (kind === "anakpokok") { g.add(lmMesh(lmBox(0.5, 0.4, 0.5), "#7a4a2a", 0, 0.2, 0)); const c = new T.Mesh(new T.IcosahedronGeometry(0.45, 0), lmMat("#4caf50")); c.position.y = 0.85; g.add(c); g.position.set(0.6, 0, 0.6); }
+  else if (kind === "lubang") { const h = new T.Mesh(new T.CylinderGeometry(0.6, 0.5, 0.1, 12), lmMat("#4a3020")); h.position.set(5, 0.05, 4.4); g.add(h); }
   return g;
 }
 function lmAkW(it, o) { const v = new T.Vector3(o[0], 0, o[1]); it.m.updateMatrixWorld(true); it.m.localToWorld(v); return v; }
@@ -3904,7 +3977,7 @@ function lmAkFx(it, fx) {
       else { c = it.P[v] || lmAkProp(v, it.P); if (c.parent) c.parent.remove(c); }
       c.position.set(0, 3.2, 1.3); c.rotation.set(0, 0, 0); g.me.g.add(c); it.held = c;
     }
-    else if (k === "drop") { if (it.held) { g.me.g.remove(it.held); if (v !== "tong" && v !== "mangkuk") { const w = lmAkW(it, it.S.steps[it.st].at); it.held.position.set(0, 0, 0); g.scene.add(it.held); const at = { kereta: [10, 1.8, 6], kotak: [6, 0.9, 6], pondok: [12, 1.6, 7.7], pokok: [6, 4.85, 3.2] }[v]; if (at) { const ww = lmAkW(it, [at[0], at[2]]); it.held.position.set(ww.x, lmGround(ww.x, ww.z) + at[1], ww.z); } else it.held.position.set(w.x, lmGround(w.x, w.z) + 0.3, w.z); } it.held = null; } }
+    else if (k === "drop") { if (it.held) { g.me.g.remove(it.held); if (v !== "tong" && v !== "mangkuk") { const w = lmAkW(it, it.S.steps[it.st].at); it.held.position.set(0, 0, 0); g.scene.add(it.held); const at = { kereta: [10, 1.8, 6], kotak: [6, 0.9, 6], pondok: [12, 1.6, 7.7], pokok: [6, 4.85, 3.2], tiang: [6.5, 6.4, 5], lubang: [5, 0.1, 4.4] }[v]; if (v === "tiang" && it.held) it.held.rotation.set(0, 0, 0); /* bendera berkibar menegak */ if (at) { const ww = lmAkW(it, [at[0], at[2]]); it.held.position.set(ww.x, lmGround(ww.x, ww.z) + at[1], ww.z); } else it.held.position.set(w.x, lmGround(w.x, w.z) + 0.3, w.z); } it.held = null; } }
     else if (k === "stand") { const av = it.npcs[+v]; if (av) { av.g.rotation.x = 0; av.g.position.y = 0; av.down = false; } }
     else if (k === "bike") { const bk = it.P.basikal; if (bk) { bk.rotation.x = Math.PI / 2; bk.position.y = 0.7; } } /* roda tegak semula */
     else if (k === "away") v.split(",").forEach((i) => { const av = it.npcs[+i]; if (av) { const ry = it.m.rotation.y + Math.PI; g.scene.attach(av.g); av.g.rotation.set(0, ry, 0); av.away = 3; it.gone = (it.gone || []).concat([av]); } });
@@ -3914,7 +3987,8 @@ function lmAkFx(it, fx) {
 }
 function lmAkDone(g, it) {
   it.done = true; it.ring.visible = false; LM.st.ak = (LM.st.ak | 0) + 1; (LM.st.akT || (LM.st.akT = {}))[it.S.id] = 1; lmSave(); lmSnd("win");
-  let coin = 0; try { coin = gdCoin(2); } catch (e) { coin = 0; } const xp = lmXp(5);
+  const coin = it.S.sv ? 5 : 3; P.coin = (P.coin | 0) + coin; try { saveP(); } catch (e) { /* abaikan */ } const xp = lmXp(5); /* v18.41: MD sebagai token tetap (sivik +5, akhlak +3) */
+  if (it.S.sv) LM.st.sv = (LM.st.sv | 0) + 1;
   (it.npcs || []).forEach((av) => { try { lmBubble({ g: av.g, bub: null }, "Terima kasih!"); } catch (e) { /* abaikan */ } });
   lmPop("Akhlak terpuji! +" + coin + " MD · XP +" + xp);
   const ex = el("div", { class: "lm-akdone" }, el("b", null, "MasyaAllah! " + it.S.ok), el("span", null, it.S.dl), el("small", null, "Akhlak terpuji anda: " + LM.st.ak));
@@ -4932,6 +5006,9 @@ const LCN = [
   ["ak1", "🤝", "Ringan Tangan", "Bantu orang dalam satu situasi akhlak", () => [LM.st.ak | 0, 1]],
   ["ak5", "💚", "Pemurah Budi", "Selesaikan 5 situasi akhlak", () => [LM.st.ak | 0, 5]],
   ["akAll", "🌟", "Insan Berakhlak Mulia", "Selesaikan setiap jenis situasi akhlak", () => [Object.keys(LM.st.akT || {}).filter((k) => AKH.some((a) => a.id === k)).length, AKH.length]],
+  ["ak15", "🏅", "Duta Sahsiah", "Selesaikan 15 situasi akhlak dan sivik", () => [LM.st.ak | 0, 15]],
+  ["sv3", "🇲🇾", "Warganegara Prihatin", "Selesaikan 3 situasi sivik (Rukun Negara)", () => [LM.st.sv | 0, 3]],
+  ["svAll", "🛡", "Jati Diri Malaysia", "Selesaikan setiap jenis situasi sivik", () => [Object.keys(LM.st.akT || {}).filter((k) => AKH.some((a) => a.sv && a.id === k)).length, AKH.filter((a) => a.sv).length]],
   ["fd1", "🍽", "Selera Tempatan", "Rasa satu masakan tradisi negeri", () => [Object.keys(LM.st.food || {}).length, 1]],
   ["fdAll", "🍛", "Duta Juadah Malaysia", "Rasa masakan tradisi setiap negeri", () => [FOOD.filter((f) => (LM.st.food || {})[f[0]]).length, FOOD.length]],
   ["rail", "🚆", "Penumpang Kereta Api", "Naik ETS, ECRL, KTM Komuter atau kereta api lain", () => [LM.st.rt | 0, 1]],
@@ -6287,5 +6364,5 @@ function lmClose() {
 }
 /* untuk ujian automatik */
 LM._g = (x, z) => lmGround(x, z); LM._fly = (a, d) => lmFlyStart(a, d); LM._ride = (a, b) => lmRide(a, b); LM._rai = () => lmRai(); LM._swim = (x, z) => lmSwimOk(x, z);
-LM._t = { lmSolatTimes: lmSolatTimes, lmAzan: lmAzan, lmSolatOpen: lmSolatOpen, lmTunOpen: lmTunOpen, AZ: AZ, lmJalanNear: lmJalanNear, lmJalanPath: lmJalanPath, lmJalanRide: lmJalanRide, lmTaksiOpen: lmTaksiOpen, lmTerminalOpen: lmTerminalOpen, lmBigMap: typeof lmBigMap === "function" ? lmBigMap : null, LAUD: LAUD, lmVenueOpen: lmVenueOpen, lmCoast: lmCoast, TER: TER, lmNelayanOpen: lmNelayanOpen, lmTanahGo: lmTanahGo, lmAirportOpen: lmAirportOpen, lmKemOpen: lmKemOpen, lmKampusOpen: lmKampusOpen, lmIlmuOpen: lmIlmuOpen, lmKampusFetch: lmKampusFetch, lmRailOpen: lmRailOpen, lmRide: lmRide, lmStnFetch: lmStnFetch, lmStnOpen: lmStnOpen, lmCertCanvas: lmCertCanvas, lmLcCheck: lmLcCheck, LCN: LCN, lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs, lmIlmuTopic: lmIlmuTopic, lmFerryOpen: lmFerryOpen, lmKuizBaki: lmKuizBaki };
+LM._t = { lmSolatTimes: lmSolatTimes, lmAzan: lmAzan, lmSolatOpen: lmSolatOpen, lmTunOpen: lmTunOpen, AZ: AZ, lmJalanNear: lmJalanNear, lmJalanPath: lmJalanPath, lmJalanRide: lmJalanRide, lmTaksiOpen: lmTaksiOpen, lmTerminalOpen: lmTerminalOpen, lmBigMap: typeof lmBigMap === "function" ? lmBigMap : null, LAUD: LAUD, lmVenueOpen: lmVenueOpen, lmCoast: lmCoast, TER: TER, lmNelayanOpen: lmNelayanOpen, lmTanahGo: lmTanahGo, lmAirportOpen: lmAirportOpen, lmKemOpen: lmKemOpen, lmKampusOpen: lmKampusOpen, lmIlmuOpen: lmIlmuOpen, lmKampusFetch: lmKampusFetch, lmRailOpen: lmRailOpen, lmRide: lmRide, lmStnFetch: lmStnFetch, lmStnOpen: lmStnOpen, lmCertCanvas: lmCertCanvas, lmLcCheck: lmLcCheck, LCN: LCN, lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs, lmIlmuTopic: lmIlmuTopic, lmFerryOpen: lmFerryOpen, lmKuizBaki: lmKuizBaki, lmSolatOpen2: lmSolatOpen, lmPjIklan: lmPjIklan, lmSiGelap: lmSiGelap };
 })();
