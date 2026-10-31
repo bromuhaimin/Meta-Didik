@@ -62,6 +62,19 @@ Model dilukis dengan kod; tiada aset luar digunakan.
 | **Menara Exchange 106 (TRX)** | Tempat baharu dalam peta. Menara kaca biru segi empat menirus, sirip putih di bucu, mahkota kekisi berlian putih, dua menara pejabat jiran dan dataran |
 | **Bangunan Parlimen** (Stesen Ilmu) | Menara berfasad grid "kulit nenas" dengan blok mahkota bersirip, blok utama putih rendah, bumbung lipat segi tiga Dewan Rakyat dan anjung masuk |
 
+**Pusat bandar Kuala Lumpur (ikut peta pelancong KL City Centre):**
+
+| Tambahan | Butiran |
+|---|---|
+| Taman KLCC | Halaman hijau di hadapan Petronas dengan Tasik Simfoni, air pancut dan cincin pokok |
+| Hutan Simpan Bukit Nanas | Hutan pokok mengelilingi Menara KL |
+| Masjid Jamek Sultan Abdul Samad | Gaya Moor, bata merah jambu berjalur putih, tiga kubah bawang dan dua menara berjalur, di pertemuan Sungai Klang dan Sungai Gombak |
+| Bangunan Sultan Abdul Samad | Bata merah berjalur putih, serambi gerbang, menara jam berkubah tembaga, Dataran Merdeka dan tiang Jalur Gemilang |
+| Kampung Baru | Rumah Melayu kayu bertiang dengan bumbung tinggi |
+| Bukit Bintang | Deretan kedai berwarna, papan neon dan gerbang tanda nama |
+
+Nota skala: pusat bandar KL dibesarkan kira-kira 4 kali dalam Meta Didik (kanta Lembah Klang), tetapi masih padat. Model diletakkan di koordinat sebenar; jika tapak sudah diduduki, ia dianjak ke tempat lapang terdekat.
+
 Semua model dilukis dengan kod (tiada aset atau imej luar).
 
 ## 5. Pendaftaran: 3 jenis

@@ -48,3 +48,8 @@ test("mercu tanda KL dibina semula: Petronas, Menara KL, Exchange 106 (TRX), Par
   assert.match(D, /lmLandmarkKhas\(id\) \|\| lmModel\(type, R\)/);
   assert.match(D, /id === "si-parlimen" \? lmParlimen\(\)/);
 });
+test("pusat bandar KL ikut peta: tempat baharu dan taman", () => {
+  for (const id of ["wp-jamek", "wp-sas", "wp-kgbaru", "wp-bbintang"]) assert.match(D, new RegExp('\\["' + id + '", "wp",'));
+  for (const f of ["lmSultanAbdulSamad", "lmKampungBaru", "lmBukitBintang", "lmPusatKL"]) assert.match(D, new RegExp("function " + f + "\\("));
+  assert.match(D, /case "wp-jamek":/); assert.match(D, /try \{ lmPusatKL\(g, gnd\); \}/);
+});

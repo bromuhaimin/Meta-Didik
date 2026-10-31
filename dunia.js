@@ -83,6 +83,10 @@ const PLACES = [
   ["wp-klcc", "wp", "Menara Berkembar Petronas", "berkembar", 3.1579, 101.7116, "Menara Berkembar Petronas setinggi 452 m pernah menjadi bangunan tertinggi di dunia (1998-2004)."],
   ["wp-negara", "wp", "Masjid Negara", "masjid", 3.1418, 101.6918, "Masjid Negara dibuka pada tahun 1965 dengan bumbung berbentuk payung bintang 16 bucu."],
   ["wp-menarakl", "wp", "Menara Kuala Lumpur", "menara", 3.1528, 101.7038, "Menara Kuala Lumpur setinggi 421 m digunakan untuk telekomunikasi dan cerapan anak bulan."],
+  ["wp-jamek", "wp", "Masjid Jamek Sultan Abdul Samad", "masjid", 3.1489, 101.6956, "Masjid Jamek dibina pada tahun 1909 di pertemuan Sungai Klang dan Sungai Gombak, tempat asal nama Kuala Lumpur."],
+  ["wp-sas", "wp", "Bangunan Sultan Abdul Samad", "menara", 3.1486, 101.6940, "Bangunan Sultan Abdul Samad (1897) bergaya Moor dengan menara jam setinggi 41 m menghadap Dataran Merdeka, tempat bendera Malaysia dinaikkan pada 31 Ogos 1957."],
+  ["wp-kgbaru", "wp", "Kampung Baru", "istana", 3.1640, 101.7000, "Kampung Baru ialah penempatan Melayu tradisional di tengah Kuala Lumpur sejak 1900, dengan rumah kayu bertiang dan juadah tempatan."],
+  ["wp-bbintang", "wp", "Bukit Bintang", "menara", 3.1466, 101.7108, "Bukit Bintang ialah pusat beli-belah dan hiburan utama Kuala Lumpur dengan deretan kedai, pusat beli-belah dan pejalan kaki."],
   ["wp-trx", "wp", "Menara Exchange 106 (TRX)", "menara", 3.1424, 101.7186, "Menara Exchange 106 di Tun Razak Exchange (TRX) ialah antara bangunan tertinggi di Malaysia dan mercu tanda pusat kewangan antarabangsa Kuala Lumpur."],
   ["ns-pd", "nsembilan", "Pantai Port Dickson", "pantai", 2.473, 101.855, "Port Dickson terkenal dengan pantainya yang panjang dan menjadi destinasi percutian keluarga."],
   ["ns-serimenanti", "nsembilan", "Istana Lama Seri Menanti", "istana", 2.71, 102.15, "Istana Lama Seri Menanti dibina tanpa paku dengan 99 tiang kayu yang melambangkan pahlawan suku."],
@@ -855,6 +859,16 @@ function lmMosque(id) {
       g.add(lmMesh(lmBox(14, 5.5, 12), W, 0, 3.95, 0)); lmArches(g, 12, 3, 3.4, 6.05, 5, "#4f7f6a");
       lmDome(g, 3.8, "#f2f2ee", 0, 6.7, 0, true); { const t = lmMesh(new T.TorusGeometry(3.7, 0.18, 6, 28), "#e0b341", 0, 6.9, 0); t.rotation.x = Math.PI / 2; g.add(t); }
       lmMinaret(g, 10, 6, 20, 1, W, "#f2f2ee", { onion: true, bal: "#e0b341" }); r = 11; break;
+    case "wp-jamek": { /* Masjid Jamek: gaya Moor, bata merah jambu berjalur putih, tiga kubah bawang putih, dua menara berjalur, di pertemuan dua sungai */
+      const bata = "#c9765a", putih = "#f3efe6";
+      g.add(lmMesh(lmBox(30, 0.3, 4), "#3f8fc0", 0, 0.15, 11, { ns: 1 })); g.add(lmMesh(lmBox(4, 0.3, 24), "#3f8fc0", 13, 0.15, 0, { ns: 1 })); /* Sungai Klang & Sungai Gombak */
+      g.add(lmMesh(lmBox(16, 5, 11), bata, 0, 2.5, 0)); for (const y of [1.2, 2.6, 4.0]) g.add(lmMesh(lmBox(16.1, 0.25, 11.1), putih, 0, y, 0));
+      lmArches(g, 15, 2.6, 1.6, 5.56, 9, "#3a2a22");
+      g.add(lmMesh(lmCyl(2.6, 2.8, 1.2, 16), putih, 0, 5.6, 0)); lmDome(g, 2.8, putih, 0, 6.2, 0, true, true);
+      for (const x of [-5.5, 5.5]) { g.add(lmMesh(lmCyl(1.5, 1.6, 0.9, 12), putih, x, 5.45, -2)); lmDome(g, 1.6, putih, x, 5.9, -2, true, true); }
+      for (const [x, z] of [[-9, 5], [9, 5]]) { for (let i = 0; i < 6; i++) g.add(lmMesh(lmCyl(0.75, 0.8, 2.2, 10), i % 2 ? putih : bata, x, 1.1 + i * 2.2, z)); g.add(lmMesh(lmCyl(1.1, 1.1, 0.4, 10), putih, x, 13.4, z)); lmDome(g, 0.9, putih, x, 13.6, z, true, true); }
+      r = 15; break;
+    }
     case "wp-putra": /* Masjid Putra: granit merah jambu, menara 116 m, di tepi tasik */
       lmWater(g, 18);
       g.add(lmMesh(lmBox(18, 6, 16), "#e8c2c0", 0, 3.3, 0)); lmArches(g, 16, 3.2, 3, 8.05, 7, "#8a4a50");
@@ -939,7 +953,73 @@ function lmExchange106() {
   add(new T.Mesh(lmBox(34, 1, 18), lmPbr("dataranTRX", { color: 0xcfd3d6, roughness: 0.8 }))).position.set(0, 0.5, 2);
   return { g: g, r: 16 };
 }
-function lmLandmarkKhas(id) { return id === "wp-klcc" ? lmPetronas() : id === "wp-menarakl" ? lmMenaraKL() : id === "wp-trx" ? lmExchange106() : null; }
+/* Bangunan Sultan Abdul Samad: bata merah berjalur putih, serambi gerbang, menara jam tengah berkubah tembaga, dua menara sisi */
+function lmSultanAbdulSamad() {
+  const g = new T.Group(), q = lmQ(), bata = "#b5553a", putih = "#f2ede2", tembaga = "#5f9f86";
+  const add = (o) => { o.castShadow = q >= 1; o.receiveShadow = true; g.add(o); return o; };
+  add(lmMesh(lmBox(34, 6, 8), bata, 0, 3, 0)); for (const y of [1.8, 3.6, 5.6]) g.add(lmMesh(lmBox(34.1, 0.25, 8.1), putih, 0, y, 0));
+  lmArches(g, 32, 3.4, 2.4, 4.06, 16, "#3a2a22"); add(lmMesh(lmBox(34.6, 0.4, 8.6), putih, 0, 6.2, 0));
+  add(lmMesh(lmBox(4.2, 16, 4.2), bata, 0, 8, 1)); for (const y of [6.5, 10.5, 14.5]) g.add(lmMesh(lmBox(4.3, 0.3, 4.3), putih, 0, y, 1));
+  for (const [x, z, ry] of [[0, 3.16, 0], [0, -1.16, Math.PI], [2.16, 1, Math.PI / 2], [-2.16, 1, -Math.PI / 2]]) { const c = new T.Mesh(new T.CircleGeometry(1.2, 20), lmMat("#fffdf4")); c.position.set(x, 12.6, z); c.rotation.y = ry; g.add(c); const h = new T.Mesh(lmBox(0.12, 0.9, 0.05), lmMat("#222")); h.position.set(x, 12.8, z); h.rotation.y = ry; g.add(h); } /* jam */
+  add(lmMesh(lmCyl(1.9, 2.1, 1.2, 16), putih, 0, 16.6, 1)); lmDome(g, 2.1, tembaga, 0, 17.2, 1, true, true);
+  for (const x of [-13, 13]) { add(lmMesh(lmBox(3, 9, 3), bata, x, 4.5, 0)); add(lmMesh(lmCyl(1.3, 1.4, 0.8, 12), putih, x, 9.4, 0)); lmDome(g, 1.4, tembaga, x, 9.8, 0, true, true); }
+  add(lmMesh(lmBox(36, 0.2, 18), "#6fa85a", 0, 0.1, 13)); /* Dataran Merdeka */
+  const tiang = add(lmMesh(lmCyl(0.12, 0.16, 16, 8), "#d8dde2", 0, 8, 18)); void tiang;
+  const bd = new T.Mesh(GEO.pflag || (GEO.pflag = new T.PlaneGeometry(2.8, 1.4)), new T.MeshBasicMaterial({ map: lmFlagTex(), side: T.DoubleSide })); bd.position.set(1.45, 15.2, 18); g.add(bd);
+  return { g: g, r: 18 };
+}
+/* Kampung Baru: rumah Melayu tradisional bertiang di tengah bandar */
+function lmKampungBaru() {
+  const g = new T.Group(), q = lmQ(), kayu = ["#8a5a34", "#9c6b3f", "#7a4e2c"], atap = ["#7a3a2a", "#5a2e22", "#8a4a32"];
+  const add = (o) => { o.castShadow = q >= 1; o.receiveShadow = true; g.add(o); return o; };
+  [[-9, -6, 0.2], [0, -8, -0.1], [9, -5, 0.3], [-8, 6, -0.2], [2, 7, 0.1], [10, 7, -0.3]].forEach(([x, z, ry], i) => {
+    const h = new T.Group(); h.position.set(x, 0, z); h.rotation.y = ry; g.add(h);
+    for (const [px, pz] of [[-2.2, -1.6], [2.2, -1.6], [-2.2, 1.6], [2.2, 1.6]]) h.add(lmMesh(lmBox(0.3, 1.8, 0.3), "#5a3a22", px, 0.9, pz));
+    h.add(lmMesh(lmBox(5, 2.6, 3.8), kayu[i % 3], 0, 3.1, 0)); h.add(lmMesh(lmBox(1.2, 1.4, 0.1), "#f2e6c8", -1, 3.2, 1.95)); h.add(lmMesh(lmBox(1.2, 1.4, 0.1), "#f2e6c8", 1.2, 3.2, 1.95));
+    const rf = lmMesh(new T.ConeGeometry(4.2, 2.8, 4), atap[i % 3], 0, 5.8, 0); rf.rotation.y = Math.PI / 4; rf.scale.z = 0.8; h.add(rf);
+    h.add(lmMesh(lmBox(1.6, 0.15, 1.8), "#6e4a2c", 0, 1.8, 2.8)); /* serambi / tangga */
+  });
+  for (const [x, z] of [[-4, 0], [5, 0], [-13, 1], [14, -1]]) { add(lmMesh(lmBox(0.4, 5, 0.4), "#6e4a2c", x, 2.5, z)); const d = new T.Mesh(new T.IcosahedronGeometry(1.6, 0), lmMat("#3f8a3a")); d.position.set(x, 5.6, z); g.add(d); } /* pokok kelapa ringkas */
+  return { g: g, r: 16 };
+}
+/* Bukit Bintang: deretan kedai berwarna, papan neon dan gerbang tanda nama */
+function lmBukitBintang() {
+  const g = new T.Group(), q = lmQ(), war = ["#e8c26a", "#e07a5f", "#81b29a", "#f2cc8f", "#9d8df1", "#5fa8d3"];
+  const add = (o) => { o.castShadow = q >= 1; o.receiveShadow = true; g.add(o); return o; };
+  add(lmMesh(lmBox(8, 0.15, 34), "#3b3d42", 0, 0.08, 0)); /* jalan pejalan kaki */
+  for (const sx of [-1, 1]) for (let i = 0; i < 6; i++) { const h = 6 + ((i * 7 + (sx > 0 ? 3 : 0)) % 5) * 2.5; add(lmMesh(lmBox(5, h, 5.2), war[(i + (sx > 0 ? 2 : 0)) % 6], sx * 7, h / 2, -14 + i * 5.6)); const n = new T.Mesh(lmBox(4.2, 0.9, 0.2), lmGlow(["#ff4fa3", "#4fd1ff", "#ffd45a"][i % 3], 0.8)); n.position.set(sx * 4.4, 3.6, -14 + i * 5.6); n.rotation.y = sx * Math.PI / 2; g.add(n); }
+  for (const x of [-4.3, 4.3]) add(lmMesh(lmBox(0.5, 7, 0.5), "#c9ced3", x, 3.5, -17));
+  add(lmMesh(lmBox(9.2, 1.2, 0.6), "#1b2026", 0, 7.4, -17));
+  const lb = lmLabel("★ BUKIT BINTANG ★", { fs: 30, k: 0.03, bg: "rgba(20,10,40,.9)", bd: "#ff4fa3", fg: "#ffd45a" }); lb.position.set(0, 9, -17); g.add(lb);
+  return { g: g, r: 14 };
+}
+function lmLandmarkKhas(id) { return id === "wp-klcc" ? lmPetronas() : id === "wp-menarakl" ? lmMenaraKL() : id === "wp-trx" ? lmExchange106() : id === "wp-sas" ? lmSultanAbdulSamad() : id === "wp-kgbaru" ? lmKampungBaru() : id === "wp-bbintang" ? lmBukitBintang() : null; }
+/* v18.41: Taman KLCC (tasik Simfoni, air pancut) dan Hutan Simpan Bukit Nanas di sekeliling Menara KL, ikut peta pusat bandar */
+function lmPusatKL(g, gnd) {
+  const find = (id) => g.items.find((i) => i.kind === "pl" && i.id === id);
+  const klcc = find("wp-klcc"), mkl = find("wp-menarakl"), pohon = lmPbr("daunKL", { color: 0x3f8a3a, roughness: 0.9 }), batang = lmPbr("batangKL", { color: 0x6e4a2c, roughness: 0.9 });
+  const lapang = (x, z, r) => lmAt(x, z) !== "" && !g.items.some((it) => it.kind !== "pl" && Math.hypot(it.x - x, it.z - z) < r) && !g.cols.some((c) => Math.hypot(c.x - x, c.z - z) < (c.r || 2) + r * 0.5);
+  if (klcc) { /* taman di hadapan podium, arah yang paling lapang */
+    const m = klcc.m, ry = m.rotation.y; let best = null, bs = -1;
+    for (let k = 0; k < 8; k++) { const a = ry + k * Math.PI / 4, x = m.position.x + Math.sin(a) * 30, z = m.position.z + Math.cos(a) * 30; let sc = 0; for (let t = 0; t < 12; t++) { const b = t * 0.5236; if (lapang(x + Math.cos(b) * 10, z + Math.sin(b) * 10, 5)) sc++; } if (lapang(x, z, 6)) sc += 4; if (sc > bs) { bs = sc; best = { x: x, z: z }; } }
+    const tm = new T.Group(); tm.position.set(best.x, lmGround(best.x, best.z), best.z); g.scene.add(tm); gnd.push([tm, 0]);
+    tm.add(lmMesh(lmCyl(15, 15, 0.12, 40), "#5fae4e", 0, 0.06, 0, { ns: 1 }));
+    const tasik = lmMesh(lmCyl(6.5, 6.5, 0.14, 32), "#3f9fd8", 2, 0.12, 1, { ns: 1 }); tasik.scale.z = 0.6; tm.add(tasik);
+    for (let i = 0; i < 7; i++) { const j = new T.Mesh(new T.CylinderGeometry(0.05, 0.14, 1.6 + (i % 3) * 0.8, 6), new T.MeshBasicMaterial({ color: 0xcfefff, transparent: true, opacity: 0.8 })); j.position.set(-1.5 + i * 0.9, 0.9 + (i % 3) * 0.4, 1); tm.add(j); } /* air pancut Simfoni */
+    const L = []; for (let i = 0; i < 26; i++) { const a = i / 26 * 6.283, rr = 9 + (i % 3) * 1.8; L.push([Math.cos(a) * rr, 0, Math.sin(a) * rr]); }
+    lmInst(tm, lmBox(0.35, 2.4, 0.35), batang, L.map(([x, , z]) => [x, 1.2, z])); lmInst(tm, new T.IcosahedronGeometry(1.6, 0), pohon, L.map(([x, , z]) => [x, 3.2, z]));
+    const lb = lmLabel("🌳 Taman KLCC · Tasik Simfoni", { fs: 24, k: 0.026, bg: "rgba(20,80,40,.85)" }); lb.position.set(0, 6, 0); tm.add(lb);
+  }
+  if (mkl) { /* hutan hujan tropika dalam bandar */
+    const c = mkl.m.position, L = [];
+    for (let i = 0; i < 90 && L.length < 60; i++) { const a = i * 2.39996, rr = 8 + (i % 9) * 1.6, x = c.x + Math.cos(a) * rr, z = c.z + Math.sin(a) * rr; if (lapang(x, z, 3)) L.push([x, z, 0.8 + (i % 4) * 0.25]); }
+    const hut = new T.Group(); g.scene.add(hut);
+    lmInst(hut, lmBox(0.4, 3, 0.4), batang, L.map(([x, z, k]) => [x, lmGround(x, z) + 1.5 * k, z, 0, k, k, k]));
+    lmInst(hut, new T.IcosahedronGeometry(2, 0), pohon, L.map(([x, z, k]) => [x, lmGround(x, z) + 4 * k, z, i2(x), k, k * 1.1, k]));
+    const lb = lmLabel("🌿 Hutan Simpan Bukit Nanas", { fs: 24, k: 0.026, bg: "rgba(20,80,40,.85)" }); lb.position.set(c.x + 9, lmGround(c.x, c.z) + 8, c.z + 9); g.scene.add(lb);
+  }
+  function i2(x) { return (Math.abs(x * 7.13) % 6.28); }
+}
 /* Bangunan Parlimen Malaysia: menara 17 tingkat berfasad "kulit nenas", blok utama rendah dan bumbung lipat segi tiga Dewan Rakyat */
 function lmParlimen() {
   const g = new T.Group(), q = lmQ();
@@ -4317,6 +4397,7 @@ async function lmBuildWorld(g) {
     for (let t = -fit.L; t <= fit.L; t += 14) avoid.push({ x: fit.x + ux * t, z: fit.z + uz * t, r: 12 });
     for (const t of [-18, 0, 18]) avoid.push({ x: fit.x + px * 32 + ux * t, z: fit.z + pz * 32 + uz * t, r: 16 });
   });
+  try { lmPusatKL(g, gnd); } catch (e) { /* abaikan */ } /* v18.41: Taman KLCC, Hutan Bukit Nanas */
   /* IPTA: galeri kampus (Kembara Kampus) */
   await lmProg(26, "Universiti, kem dan Stesen Ilmu");
   lmIptaBuild(g, used, placed, avoid, gnd); (g.after || (g.after = [])).push(() => lmKampusFetch(g));
