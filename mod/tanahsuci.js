@@ -75,7 +75,17 @@ function toW(R, lat, lon) { return { x: (lon - R.lo0) * Math.cos(R.latc * Math.P
 function toLL(R, x, z) { return { lat: R.la1 - z / (110.57 * KU), lon: R.lo0 + x / (Math.cos(R.latc * Math.PI / 180) * 111.32 * KU) }; }
 /* tapak rata di bawah mercu tanda: { x, z, r, y } dengan peralihan 14 unit */
 function padY(pads, x, z, y) { for (const p of pads) { const d = Math.hypot(x - p.x, z - p.z); if (d < p.r) return p.y; if (d < p.r + 14) { const t = (d - p.r) / 14; y = p.y + (y - p.y) * t * t * (3 - 2 * t); } } return y; }
-function gnd(x, z) { const g = TS.g, q = toLL(g.R, x, z); return padY(g.pads || [], x, z, Math.max(0, hRaw(g.R, q.lat, q.lon)) * VY); }
+/* v18.46: ketinggian mengikut jejaring yang DILUKIS: bucu yang sama (selang sampel, tapak rata padY pada setiap bucu) dan
+   pembahagian segi tiga yang sama seperti terrain(), supaya kaki avatar dan kamera tidak berada di bawah permukaan
+   (sebelum ini tapak rata dikira terus pada titik, manakala jejaring kasar di tepi tapak naik mengikut lereng, contoh Mina) */
+function gndMesh(R, x, z) {
+  const st = R.nx > 300 ? 2 : 1, nx = Math.floor((R.nx - 1) / st) + 1, nz = Math.floor((R.nz - 1) / st) + 1, D = TS.dem, pads = TS.g.pads || [], q = toLL(R, x, z);
+  const fx = (q.lon - R.lo0) / (R.st * st), fz = (R.la1 - q.lat) / (R.st * st), i = clampN(Math.floor(fx), 0, nx - 2), j = clampN(Math.floor(fz), 0, nz - 2), u = clampN(fx - i, 0, 1), v = clampN(fz - j, 0, 1);
+  const H = (ii, jj) => { const w = toW(R, R.la1 - jj * st * R.st, R.lo0 + ii * st * R.st); return padY(pads, w.x, w.z, Math.max(0, D[R.o + jj * st * R.nx + ii * st]) * VY); };
+  const a = H(i, j), b = H(i + 1, j), c = H(i, j + 1), d = H(i + 1, j + 1);
+  return u + v <= 1 ? a + (b - a) * u + (c - a) * v : d + (c - d) * (1 - u) + (b - d) * (1 - v);
+}
+function gnd(x, z) { return gndMesh(TS.g.R, x, z); }
 function isSea(x, z) { const g = TS.g, q = toLL(g.R, x, z); return hRaw(g.R, q.lat, q.lon) <= 1; }
 
 /* ---------- utiliti 3D ---------- */
@@ -136,49 +146,125 @@ function mNabawi() {
   [[-15, -18], [15, -18], [-15, 18], [15, 18], [-15, 0], [15, 0]].forEach(([x, z]) => minaret(g, x, z, 18));
   return g;
 }
+/* ---------- v18.46: grafik dipertingkat (tekstur dilukis dengan kod, tiada aset luar) ---------- */
+const TX = {};
+function tex(k, w, h, f, rx, ry) { if (TX[k]) return TX[k]; const c = document.createElement("canvas"); c.width = w; c.height = h; f(c.getContext("2d"), w, h); const t = new T.CanvasTexture(c); t.wrapS = t.wrapT = T.RepeatWrapping; t.repeat.set(rx || 1, ry || 1); t.anisotropy = 4; return (TX[k] = t); }
+/* pasir: bintik halus + riak angin (didarab dengan warna bucu rupa bumi) */
+const texPasir = () => tex("pasir", 256, 256, (x, w, h) => { x.fillStyle = "#ffffff"; x.fillRect(0, 0, w, h); for (let i = 0; i < 5000; i++) { const g = 205 + Math.random() * 50 | 0; x.fillStyle = "rgb(" + g + "," + (g - 4) + "," + (g - 12) + ")"; x.fillRect(Math.random() * w, Math.random() * h, 1 + Math.random() * 2, 1); } x.strokeStyle = "rgba(150,120,80,.10)"; x.lineWidth = 2; for (let j = 0; j < 14; j++) { x.beginPath(); for (let i = 0; i <= w; i += 8) { const y = j * h / 14 + Math.sin(i / 19 + j) * 4; i ? x.lineTo(i, y) : x.moveTo(i, y); } x.stroke(); } });
+/* apron dan landasan: konkrit berpetak, garis teksi kuning, garis tepi dan tengah putih */
+const texApron = () => tex("apron", 1024, 320, (x, w, h) => {
+  x.fillStyle = "#9a9da2"; x.fillRect(0, 0, w, h); for (let i = 0; i < 9000; i++) { const g = 140 + Math.random() * 40 | 0; x.fillStyle = "rgba(" + g + "," + g + "," + g + ",.5)"; x.fillRect(Math.random() * w, Math.random() * h, 2, 2); }
+  x.strokeStyle = "rgba(70,70,75,.35)"; x.lineWidth = 1.5; for (let i = 0; i < w; i += 32) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i, h); x.stroke(); } for (let j = 0; j < h; j += 32) { x.beginPath(); x.moveTo(0, j); x.lineTo(w, j); x.stroke(); }
+  x.fillStyle = "#3a3d42"; x.fillRect(0, 0, w, 96); x.fillStyle = "#f4f4f0"; x.fillRect(0, 6, w, 4); x.fillRect(0, 86, w, 4); for (let i = 0; i < w; i += 56) x.fillRect(i, 46, 30, 4); /* landasan */
+  for (let i = 0; i < 12; i++) x.fillRect(20 + i * 10, 18, 6, 60);
+  x.strokeStyle = "#f2c230"; x.lineWidth = 4; x.beginPath(); x.moveTo(0, 150); x.lineTo(w, 150); x.stroke(); /* garis teksi */
+  for (let i = 0; i < 6; i++) { const cx = 90 + i * 170; x.beginPath(); x.moveTo(cx - 40, 150); x.quadraticCurveTo(cx, 150, cx, 200); x.lineTo(cx, h - 20); x.stroke(); } /* garis masuk tempat letak pesawat */
+});
+const texKota = () => tex("kota", 64, 128, (x, w, h) => { x.fillStyle = "#ffffff"; x.fillRect(0, 0, w, h); for (let j = 0; j < 8; j++) for (let i = 0; i < 4; i++) { x.fillStyle = Math.random() < 0.15 ? "#c7b98f" : "#6f7d86"; x.fillRect(5 + i * 15, 6 + j * 15, 8, 9); } x.fillStyle = "#d8ccb0"; x.fillRect(0, 0, w, 4); });
+const texBadan = () => tex("badanPesawat", 256, 512, (x, w, h) => { x.fillStyle = "#f7f8fa"; x.fillRect(0, 0, w, h); for (const u of [0.27, 0.73]) { x.fillStyle = "#1f6e43"; x.fillRect(u * w - 16, 0, 9, h); x.fillRect(u * w + 7, 0, 3, h); x.fillStyle = "#26323d"; for (let j = 40; j < h - 70; j += 14) x.fillRect(u * w - 3, j, 6, 7); } x.fillStyle = "#c9ced4"; x.fillRect(0.5 * w - 30, 0, 60, h); /* perut */ });
+/* langit bergradien + jerebu gurun di ufuk, mengikut kamera */
+function langit(scene) {
+  const t = tex("langit", 4, 256, (x, w, h) => { const g = x.createLinearGradient(0, 0, 0, h); g.addColorStop(0, "#3f7fc8"); g.addColorStop(0.38, "#7fb4e2"); g.addColorStop(0.49, "#d9e2e4"); g.addColorStop(0.53, "#efe2c6"); g.addColorStop(1, "#d8c49a"); x.fillStyle = g; x.fillRect(0, 0, w, h); });
+  t.wrapS = t.wrapT = T.ClampToEdgeWrapping; const m = new T.Mesh(new T.SphereGeometry(3600, 32, 16), new T.MeshBasicMaterial({ map: t, side: T.BackSide, fog: false, depthWrite: false })); m.renderOrder = -10; scene.add(m);
+  const mt = tex("matahari", 128, 128, (x, w) => { const g = x.createRadialGradient(w / 2, w / 2, 0, w / 2, w / 2, w / 2); g.addColorStop(0, "rgba(255,252,235,1)"); g.addColorStop(0.18, "rgba(255,245,210,.95)"); g.addColorStop(0.45, "rgba(255,230,170,.25)"); g.addColorStop(1, "rgba(255,230,170,0)"); x.fillStyle = g; x.fillRect(0, 0, w, w); });
+  const sp = new T.Sprite(new T.SpriteMaterial({ map: mt, fog: false, depthWrite: false, transparent: true, blending: T.AdditiveBlending })); sp.scale.set(520, 520, 1); m.add(sp); sp.position.set(1500, 2100, 1100).setLength(3300);
+  return m;
+}
+/* pokok kurma: batang bersegmen sedikit condong + pelepah melengkung */
+function kurma(g, x, z, s, rnd) {
+  const r = rnd || Math.random, lean = (r() - 0.5) * 0.25, tr = mesh(cyl(0.16 * s, 0.24 * s, 5 * s, 7), mat("#8a6a46", { map: tex("batangKurma", 16, 64, (c, w, h) => { c.fillStyle = "#ffffff"; c.fillRect(0, 0, w, h); c.fillStyle = "#b9a58a"; for (let j = 0; j < h; j += 6) c.fillRect(0, j, w, 2); }) }), x, 2.5 * s, z); tr.rotation.z = lean; g.add(tr);
+  const tx = x - Math.sin(lean) * 2.5 * s, ty = 5 * s, n = 8;
+  const daun = GEO.pelepah || (GEO.pelepah = (() => { const sh = new T.Shape(); sh.moveTo(0, 0); sh.quadraticCurveTo(1.4, 0.45, 2.8, 0); sh.quadraticCurveTo(1.4, -0.45, 0, 0); return new T.ShapeGeometry(sh, 6); })()), md = mat("#4f8a3a", { side: T.DoubleSide });
+  for (let i = 0; i < n; i++) { const yaw = new T.Group(), jatuh = new T.Group(), f = new T.Mesh(daun, md); yaw.position.set(tx, ty, z); yaw.rotation.y = i / n * Math.PI * 2 + r(); jatuh.rotation.z = -(0.3 + r() * 0.4); f.rotation.x = Math.PI / 2; f.scale.setScalar(s * (0.9 + r() * 0.3)); f.castShadow = true; jatuh.add(f); yaw.add(jatuh); g.add(yaw); }
+}
+/* pesawat: badan bertekstur (jalur hijau Didik Air, tingkap), hidung, ekor, sayap bersudut, enjin, sirip */
+function pesawat(sk) {
+  const g = new T.Group(), putih = mat("#f4f6f8"), hijau = mat("#1f6e43"), kelabu = mat("#aab2bb"), gelap = mat("#2b333b");
+  const bd = mesh(new T.CylinderGeometry(0.95, 0.95, 13, 24, 1, true), mat("#ffffff", { map: texBadan(), side: T.DoubleSide }), 0, 1.9, 0); bd.rotation.z = Math.PI / 2; g.add(bd);
+  const hd = mesh(new T.SphereGeometry(0.95, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2), putih, 6.5, 1.9, 0); hd.rotation.z = -Math.PI / 2; hd.scale.set(1, 1.7, 1); g.add(hd);
+  g.add(mesh(box(0.5, 0.28, 1.1), gelap, 7.6, 2.35, 0)); /* tingkap kokpit */
+  const ek = mesh(new T.CylinderGeometry(0.28, 0.95, 3.2, 24, 1, false), putih, -8.1, 2.05, 0); ek.rotation.z = Math.PI / 2; g.add(ek); /* hujung tirus ke belakang */
+  const sayap = (() => { const sh = new T.Shape(); sh.moveTo(0, 0); sh.lineTo(-2.8, 7); sh.lineTo(-3.8, 7); sh.lineTo(-3.4, 0); sh.lineTo(0, 0); return new T.ExtrudeGeometry(sh, { depth: 0.18, bevelEnabled: false }); })();
+  for (const sz of [1, -1]) { const w = mesh(sayap, putih, 1.6, 1.35, 0); w.rotation.x = sz * Math.PI / 2; w.rotation.y = 0; w.scale.z = 1; if (sz < 0) w.position.y = 1.53; g.add(w);
+    const en = mesh(cyl(0.48, 0.42, 1.9, 16), kelabu, 0.6, 0.85, sz * 2.6); en.rotation.z = Math.PI / 2; g.add(en); { const ia = mesh(cyl(0.36, 0.36, 0.05, 16), gelap, 1.56, 0.85, sz * 2.6); ia.rotation.z = Math.PI / 2; g.add(ia); }
+    const st = mesh(new T.ExtrudeGeometry((() => { const sh = new T.Shape(); sh.moveTo(0, 0); sh.lineTo(-1.2, 2.6); sh.lineTo(-1.8, 2.6); sh.lineTo(-1.6, 0); sh.lineTo(0, 0); return sh; })(), { depth: 0.1, bevelEnabled: false }), putih, -7.4, 2.3, 0); st.rotation.x = sz * Math.PI / 2; if (sz < 0) st.position.y = 2.4; g.add(st); }
+  const sirip = mesh(new T.ExtrudeGeometry((() => { const sh = new T.Shape(); sh.moveTo(0, 0); sh.lineTo(-2.2, 3.4); sh.lineTo(-3.2, 3.4); sh.lineTo(-2.9, 0); sh.lineTo(0, 0); return sh; })(), { depth: 0.14, bevelEnabled: false }), hijau, -6.6, 2.6, -0.07); g.add(sirip);
+  for (const [x, z] of [[5.2, 0], [0.4, 1.2], [0.4, -1.2]]) { g.add(mesh(cyl(0.06, 0.06, 1, 6), gelap, x, 0.5, z)); const rd = mesh(cyl(0.22, 0.22, 0.18, 12), gelap, x, 0.2, z); rd.rotation.x = Math.PI / 2; g.add(rd); }
+  g.scale.setScalar(sk || 1); return g;
+}
+/* Terminal Haji Jeddah: grid modul khemah fabrik melengkung (konkaf) digantung pada tiang tinggi dengan kabel */
+function terminalHaji(g) {
+  const NX = 8, NZ = 4, S = 7.2, H0 = 4.2, H = 5.2, x0 = -(NX - 1) * S / 2, z0 = 2;
+  const pts = []; const rb = S / Math.SQRT2, rt = 0.45; for (let i = 0; i <= 14; i++) { const t = i / 14; pts.push(new T.Vector2(rt + (rb - rt) * Math.pow(1 - t, 2.2), t * H)); }
+  const kg = new T.LatheGeometry(pts, 4); kg.rotateY(Math.PI / 4); kg.computeVertexNormals();
+  const fab = new T.MeshLambertMaterial({ color: 0xfbf9f2, side: T.DoubleSide, map: tex("fabrik", 64, 64, (x, w, h) => { x.fillStyle = "#ffffff"; x.fillRect(0, 0, w, h); x.strokeStyle = "rgba(170,160,140,.35)"; x.lineWidth = 1; for (let i = 0; i < w; i += 8) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i, h); x.stroke(); } }, 4, 2) });
+  const kh = new T.InstancedMesh(kg, fab, NX * NZ), o = new T.Object3D(); let k = 0;
+  for (let i = 0; i < NX; i++) for (let j = 0; j < NZ; j++) { o.position.set(x0 + i * S, H0, z0 + j * S); o.updateMatrix(); kh.setMatrixAt(k++, o.matrix); }
+  kh.castShadow = true; kh.receiveShadow = true; g.add(kh);
+  /* gelang puncak, tiang di setiap bucu grid dan kabel ke gelang puncak */
+  const tp = [], kab = []; for (let i = 0; i <= NX; i++) for (let j = 0; j <= NZ; j++) tp.push([x0 + (i - 0.5) * S, z0 + (j - 0.5) * S]);
+  const tg = new T.InstancedMesh(cyl(0.16, 0.24, 1, 8), mat("#c9ccd0"), tp.length); tp.forEach(([x, z], i) => { o.position.set(x, (H0 + H + 3.2) / 2, z); o.scale.set(1, H0 + H + 3.2, 1); o.updateMatrix(); tg.setMatrixAt(i, o.matrix); }); o.scale.set(1, 1, 1); tg.castShadow = true; g.add(tg);
+  for (let i = 0; i < NX; i++) for (let j = 0; j < NZ; j++) { const cx = x0 + i * S, cz = z0 + j * S; for (const [dx, dz] of [[-0.5, -0.5], [0.5, -0.5], [-0.5, 0.5], [0.5, 0.5]]) kab.push(cx + dx * S, H0 + H + 3.2, cz + dz * S, cx, H0 + H, cz); }
+  const kgm = new T.BufferGeometry(); kgm.setAttribute("position", new T.Float32BufferAttribute(kab, 3)); g.add(new T.LineSegments(kgm, new T.LineBasicMaterial({ color: 0x6d7378 })));
+  const gl = new T.InstancedMesh(new T.TorusGeometry(rt, 0.09, 6, 16), mat("#bfc4c9"), NX * NZ); k = 0; for (let i = 0; i < NX; i++) for (let j = 0; j < NZ; j++) { o.position.set(x0 + i * S, H0 + H, z0 + j * S); o.rotation.x = Math.PI / 2; o.updateMatrix(); gl.setMatrixAt(k++, o.matrix); } o.rotation.x = 0; g.add(gl);
+  /* lantai plaza di bawah khemah dan blok terminal berkaca di kedua-dua hujung */
+  const lt = new T.Mesh(new T.PlaneGeometry(NX * S, NZ * S), new T.MeshLambertMaterial({ map: tex("lantaiPlaza", 128, 128, (x, w, h) => { x.fillStyle = "#e9e2d2"; x.fillRect(0, 0, w, h); x.strokeStyle = "#d6ccb6"; x.lineWidth = 2; for (let i = 0; i <= w; i += 32) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i, h); x.stroke(); x.beginPath(); x.moveTo(0, i); x.lineTo(w, i); x.stroke(); } }, NX * 2, NZ * 2) }));
+  lt.rotation.x = -Math.PI / 2; lt.position.set(0, 0.16, z0 + (NZ - 1) * S / 2); lt.receiveShadow = true; g.add(lt);
+  const kaca = mat("#ffffff", { map: tex("kacaTerminal", 128, 64, (x, w, h) => { x.fillStyle = "#e9ecee"; x.fillRect(0, 0, w, h); x.fillStyle = "#4d6575"; for (let i = 0; i < 8; i++) x.fillRect(4 + i * 16, 14, 11, 38); }, 4, 1) });
+  for (const sx of [-1, 1]) g.add(mesh(box(4, 3.4, NZ * S), kaca, sx * (NX * S / 2 + 2.2), 1.7, z0 + (NZ - 1) * S / 2));
+  /* pokok kurma di hadapan terminal */
+  let sd = 3; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < 10; i++) kurma(g, x0 - S / 2 + i * (NX * S / 9), z0 - S / 2 - 2.2, 0.85, rnd);
+}
+function terminalMadinah(g) {
+  const kaca = mat("#ffffff", { map: tex("kacaMadinah", 128, 64, (x, w, h) => { x.fillStyle = "#e7e0d0"; x.fillRect(0, 0, w, h); x.fillStyle = "#4a6a78"; for (let i = 0; i < 6; i++) x.fillRect(6 + i * 21, 10, 15, 44); }, 6, 1) });
+  g.add(mesh(box(38, 5, 12), kaca, 0, 2.5, 8)); g.add(mesh(box(40, 0.6, 14), "#d8cfbc", 0, 5.3, 8));
+  for (let i = 0; i < 7; i++) { const u = mesh(new T.ConeGeometry(2.6, 1.4, 4), "#efe9dc", -15 + i * 5, 6.3, 8); u.rotation.y = Math.PI / 4; g.add(u); }
+  let sd = 5; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647; for (let i = 0; i < 8; i++) kurma(g, -17 + i * 4.9, 0, 0.85, rnd);
+}
 function mAirport(hajj) {
   const g = new T.Group();
-  g.add(mesh(box(90, 0.1, 7), "#3b3d42", 0, 0.05, -18));
-  if (hajj) for (let i = 0; i < 5; i++) for (let j = 0; j < 3; j++) { const c = new T.Mesh(new T.ConeGeometry(3.2, 4.4, 4, 1, true), new T.MeshLambertMaterial({ color: 0xfbfaf6, side: T.DoubleSide })); c.position.set(-16 + i * 8, 6.6, j * 8); c.rotation.y = Math.PI / 4; g.add(c); g.add(mesh(cyl(0.18, 0.18, 4.4, 6), "#9aa3ad", -16 + i * 8, 2.2, j * 8)); } /* bumbung khemah Terminal Haji */
-  else g.add(mesh(box(30, 4, 10), "#e5e2dc", 0, 2, 6));
-  const pl = new T.Group(); pl.add(mesh(cyl(0.9, 0.9, 12, 12), "#f4f6f8", 0, 1.6, 0)); pl.children[0].rotation.z = Math.PI / 2; pl.add(mesh(box(2, 0.2, 14), "#f4f6f8", 0, 1.4, 0)); pl.add(mesh(box(0.2, 2.4, 1.6), "#1f6e43", -5.6, 3, 0)); pl.position.set(10, 0, -10); g.add(pl);
+  const ap = new T.Mesh(new T.PlaneGeometry(110, 34), new T.MeshLambertMaterial({ map: texApron(), polygonOffset: true, polygonOffsetFactor: -2 })); ap.rotation.x = -Math.PI / 2; ap.position.set(0, 0.14, -21); ap.receiveShadow = true; g.add(ap);
+  if (hajj) terminalHaji(g); else terminalMadinah(g);
+  const p1 = pesawat(1); p1.position.set(12, 0.14, -15); p1.rotation.y = -Math.PI / 2 + 0.1; g.add(p1);
+  const p2 = pesawat(1); p2.position.set(-22, 0.14, -27); p2.rotation.y = 0.05; g.add(p2);
   return g;
 }
 function mStation() { const g = new T.Group(); g.add(mesh(box(26, 0.6, 6), "#d8d2c4", 0, 0.3, 0)); for (let i = 0; i < 5; i++) { const a = mesh(box(4.6, 0.4, 7), "#c9a64a", -10 + i * 5, 5, 0); a.rotation.x = 0.15; g.add(a); g.add(mesh(box(0.3, 4.6, 0.3), "#9aa3ad", -10 + i * 5, 2.6, 2.6)); } g.add(mesh(box(26, 1.6, 2.4), "#c43b3b", 0, 1.4, -3.8)); return g; }
 function mKubur() { const g = new T.Group(); g.add(mesh(box(14, 1.4, 0.4), "#d8cfbc", 0, 0.7, -7)); g.add(mesh(box(14, 1.4, 0.4), "#d8cfbc", 0, 0.7, 7)); g.add(mesh(box(0.4, 1.4, 14), "#d8cfbc", -7, 0.7, 0)); g.add(mesh(box(0.4, 1.4, 14), "#d8cfbc", 7, 0.7, 0)); for (let i = 0; i < 30; i++) g.add(mesh(box(0.3, 0.2, 0.6), "#a49a88", -6 + (i % 6) * 2.4, 0.1, -5 + Math.floor(i / 6) * 2.4)); return g; }
 function mHotel() { const g = new T.Group(); for (let i = 0; i < 3; i++) g.add(mesh(box(4, 8 + i * 3, 4), "#e6dfcf", -5 + i * 5, (8 + i * 3) / 2, 0)); return g; }
 function mGunung() { const g = new T.Group(); g.add(mesh(cyl(0.15, 0.15, 3, 6), "#8a6238", 0, 1.5, 0)); return g; }
-function siteModel(kind) {
-  return kind === "haram" ? mHaram() : kind === "masa" ? mMasa() : kind === "mina" ? mMina() : kind === "arafah" ? mArafah() : kind === "nabawi" ? mNabawi() : kind === "airport" ? mAirport(true) : kind === "stesen" ? mStation()
+function siteModel(kind, id) {
+  return kind === "haram" ? mHaram() : kind === "masa" ? mMasa() : kind === "mina" ? mMina() : kind === "arafah" ? mArafah() : kind === "nabawi" ? mNabawi() : kind === "airport" ? mAirport(id !== "med") : kind === "stesen" ? mStation()
     : kind === "kubur" ? mKubur() : kind === "hotel" ? mHotel() : kind === "gunung" ? mGunung() : kind === "muzdalifah" ? mMasjid(6, "#efe9dc", "#e9e4d8", 2) : kind === "bangunan" ? mHotel() : mMasjid(7, "#f1ede4", "#e9e4d8", 2);
 }
 /* bangunan bandar di sekeliling Haram / Nabawi */
 function mCity(g, R, clat, clon, rKm, n, avoidR, tall) {
-  const im = new T.InstancedMesh(box(1, 1, 1), mat("#e6dfcf"), n), m4 = new T.Matrix4(), q = new T.Quaternion(), s = new T.Vector3(), c = toW(R, clat, clon); let k = 0;
+  const im = new T.InstancedMesh(box(1, 1, 1), MAT.kota || (MAT.kota = new T.MeshLambertMaterial({ map: texKota() })), n), m4 = new T.Matrix4(), q = new T.Quaternion(), s = new T.Vector3(), c = toW(R, clat, clon), WK = ["#efe7d6", "#e6dcc6", "#d9cdb3", "#f3eee4", "#cfc2a6", "#e2d3b8"].map((h) => new T.Color(h)); let k = 0;
   for (let i = 0; i < n * 4 && k < n; i++) {
     const a = Math.random() * Math.PI * 2, d = avoidR + Math.sqrt(Math.random()) * rKm * KU, x = c.x + Math.cos(a) * d, z = c.z + Math.sin(a) * d, q2 = toLL(R, x, z), h = hRaw(R, q2.lat, q2.lon);
     if (h <= 2 || Math.abs(hRaw(R, q2.lat + 0.0015, q2.lon) - h) > 25) continue;
-    const w = 2 + Math.random() * 3, hh = 3 + Math.random() * (d < avoidR + 30 ? (tall == null ? 14 : tall) : 6); m4.compose(new T.Vector3(x, gnd(x, z) + hh / 2 - 0.3, z), q.setFromAxisAngle(new T.Vector3(0, 1, 0), Math.random()), s.set(w, hh, w * (0.7 + Math.random() * 0.6))); im.setMatrixAt(k++, m4);
+    const w = 2 + Math.random() * 3, hh = 3 + Math.random() * (d < avoidR + 30 ? (tall == null ? 14 : tall) : 6); m4.compose(new T.Vector3(x, gnd(x, z) + hh / 2 - 0.3, z), q.setFromAxisAngle(new T.Vector3(0, 1, 0), Math.random()), s.set(w, hh, w * (0.7 + Math.random() * 0.6))); im.setColorAt(k, WK[k % WK.length]); im.setMatrixAt(k++, m4);
   }
-  im.count = k; im.castShadow = true; im.receiveShadow = true; g.add(im);
+  im.count = k; if (im.instanceColor) im.instanceColor.needsUpdate = true; im.castShadow = true; im.receiveShadow = true; g.add(im);
 }
 
 /* ---------- rupa bumi ---------- */
 function terrain(g, R) {
   const step = R.nx > 300 ? 2 : 1, nx = Math.floor((R.nx - 1) / step) + 1, nz = Math.floor((R.nz - 1) / step) + 1, pos = new Float32Array(nx * nz * 3), col = new Float32Array(nx * nz * 3), idx = [];
-  const sand = new T.Color("#dcc89c"), rock = new T.Color("#8f7a62"), dark = new T.Color("#5f5248"), city = new T.Color("#e3dccb"), c = new T.Color();
+  const sand = new T.Color("#d4bb8c"), rock = new T.Color("#8a7058"), dark = new T.Color("#5a4c42"), city = new T.Color("#e3dccb"), c = new T.Color(), uv = new Float32Array(nx * nz * 2);
   for (let j = 0; j < nz; j++) for (let i = 0; i < nx; i++) {
     const lat = R.la1 - j * step * R.st, lon = R.lo0 + i * step * R.st, h = TS.dem[R.o + j * step * R.nx + i * step], w = toW(R, lat, lon), k = j * nx + i;
     pos[k * 3] = w.x; pos[k * 3 + 1] = h <= 0 ? -1.2 : padY(TS.g.pads, w.x, w.z, h * VY); pos[k * 3 + 2] = w.z;
     const hx = TS.dem[R.o + j * step * R.nx + Math.min(R.nx - 1, i * step + 1)], hz = TS.dem[R.o + Math.min(R.nz - 1, j * step + 1) * R.nx + i * step], sl = Math.min(1, (Math.abs(hx - h) + Math.abs(hz - h)) / 45);
     c.copy(sand).lerp(rock, sl).lerp(dark, Math.max(0, Math.min(1, (h - 500) / 600)) * 0.6); if (h <= 3) c.set("#e8dcb6");
-    col[k * 3] = c.r; col[k * 3 + 1] = c.g; col[k * 3 + 2] = c.b;
+    col[k * 3] = c.r; col[k * 3 + 1] = c.g; col[k * 3 + 2] = c.b; uv[k * 2] = w.x / 7; uv[k * 2 + 1] = w.z / 7;
     if (i < nx - 1 && j < nz - 1) idx.push(k, k + nx, k + 1, k + 1, k + nx, k + nx + 1);
   }
-  const geo = new T.BufferGeometry(); geo.setAttribute("position", new T.BufferAttribute(pos, 3)); geo.setAttribute("color", new T.BufferAttribute(col, 3)); geo.setIndex(idx); geo.computeVertexNormals();
-  const m = new T.Mesh(geo, new T.MeshLambertMaterial({ vertexColors: true })); m.receiveShadow = true; g.add(m);
+  const geo = new T.BufferGeometry(); geo.setAttribute("position", new T.BufferAttribute(pos, 3)); geo.setAttribute("color", new T.BufferAttribute(col, 3)); geo.setAttribute("uv", new T.BufferAttribute(uv, 2)); geo.setIndex(idx); geo.computeVertexNormals();
+  const m = new T.Mesh(geo, new T.MeshLambertMaterial({ vertexColors: true, map: texPasir() })); m.receiveShadow = true; g.add(m);
   /* Laut Merah */
-  const sea = new T.Mesh(new T.PlaneGeometry(40000, 40000), new T.MeshLambertMaterial({ color: 0x2a7ea8 })); sea.rotation.x = -Math.PI / 2; sea.position.set(0, 0.1, 0); g.add(sea);
+  const sea = new T.Mesh(new T.PlaneGeometry(40000, 40000), new T.MeshPhongMaterial({ color: 0x1f6f99, specular: 0x88b8d0, shininess: 60 })); sea.rotation.x = -Math.PI / 2; sea.position.set(0, 0.1, 0); g.add(sea);
 }
 /* jalan raya mengikut rupa bumi (lebar 3 unit) */
 function road(g, R, pts) {
@@ -192,11 +278,12 @@ function road(g, R, pts) {
 function build(region) {
   const R = REG[region], cv = TS.ui.cv, renderer = new T.WebGLRenderer({ canvas: cv, antialias: true });
   renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1)); renderer.setSize(window.innerWidth, window.innerHeight, false); renderer.shadowMap.enabled = true; renderer.shadowMap.type = T.PCFSoftShadowMap;
-  const scene = new T.Scene(); scene.background = new T.Color("#9fd0f0"); scene.fog = new T.Fog(0xd9e6ee, 300, 1600);
+  renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05; /* v18.46: elak pasir silau, warna lebih semula jadi */
+  const scene = new T.Scene(); scene.background = new T.Color("#e9dcbf"); scene.fog = new T.Fog(0xe6d9bd, 260, 1500);
   const camera = new T.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.3, 4000);
-  const hemi = new T.HemisphereLight(0xffffff, 0xc8b48a, 0.75); scene.add(hemi);
-  const sun = new T.DirectionalLight(0xfff2d6, 0.95); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); const sc = sun.shadow.camera; sc.left = sc.bottom = -70; sc.right = sc.top = 70; sc.far = 400; scene.add(sun); scene.add(sun.target);
-  const g = TS.g = { R: R, region: region, scene: scene, camera: camera, renderer: renderer, sun: sun, hemi: hemi, items: [], p: { x: 0, z: 0, y: 0, yaw: 0 }, cam: { yaw: 0, pitch: 0.35, dist: 16 }, last: 0 };
+  const hemi = new T.HemisphereLight(0xcfe3ff, 0xb59a6c, 0.62); scene.add(hemi);
+  const sun = new T.DirectionalLight(0xffeccc, 1.15); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); const sc = sun.shadow.camera; sc.left = sc.bottom = -70; sc.right = sc.top = 70; sc.far = 400; sun.shadow.bias = -0.0006; scene.add(sun); scene.add(sun.target);
+  const g = TS.g = { sky: langit(scene), R: R, region: region, scene: scene, camera: camera, renderer: renderer, sun: sun, hemi: hemi, items: [], p: { x: 0, z: 0, y: 0, yaw: 0 }, cam: { yaw: 0, pitch: 0.35, dist: 16 }, last: 0 };
   const PADR = { haram: 34, masa: 14, nabawi: 32, mina: 24, airport: 34, stesen: 16, hotel: 10, muzdalifah: 9, arafah: 8, kubur: 10, bangunan: 8, masjid: 9 };
   g.pads = SITES.filter((q) => q[1] === region && PADR[q[5]]).map(([, , , la, lo, kind]) => { const w = toW(R, la, lo); return { x: w.x, z: w.z, r: PADR[kind], y: Math.max(0.3, hRaw(R, la, lo)) * VY }; });
   terrain(scene, R);
@@ -208,7 +295,7 @@ function build(region) {
     { const tr = new T.InstancedMesh(new T.SphereGeometry(0.9, 6, 4), mat("#5b8a3a"), 700), m4 = new T.Matrix4(); let k = 0; for (let i = 0; i < 3000 && k < 700; i++) { const lat = 21.33 + Math.random() * 0.05, lon = 39.95 + Math.random() * 0.07, h = hRaw(R, lat, lon); if (h > 360) continue; const w = toW(R, lat, lon); m4.makeTranslation(w.x, gnd(w.x, w.z) + 1.1, w.z); tr.setMatrixAt(k++, m4); } tr.count = k; scene.add(tr); } /* pokok semambu di Arafah */
   } else { mCity(scene, R, 24.4672, 39.6112, 2.6, 900, 52, 4); road(scene, R, [[24.5534, 39.7000], [24.5300, 39.6600], [24.4900, 39.6300], [24.4672, 39.6150]]); }
   SITES.filter((s) => s[1] === region).forEach(([id, , n, la, lo, kind]) => {
-    const w = toW(R, la, lo), y = gnd(w.x, w.z), md = siteModel(kind); md.position.set(w.x, y - 0.1, w.z); scene.add(md);
+    const w = toW(R, la, lo), y = gnd(w.x, w.z), md = siteModel(kind, id); md.position.set(w.x, y - 0.1, w.z); scene.add(md);
     const lb = label((kind === "haram" ? "🕋 " : kind === "airport" ? "✈ " : kind === "stesen" ? "🚄 " : "📍 ") + n.split(" (")[0]); lb.position.set(w.x, y + (kind === "haram" ? 48 : kind === "nabawi" ? 22 : 12), w.z); scene.add(lb);
     /* titik interaksi di sebelah utara (Menara Jam Abraj al-Bait di selatan Haram tidak menghalang kamera) */
     const off = kind === "haram" ? 7 : kind === "nabawi" ? 22 : kind === "airport" ? 26 : kind === "mina" ? 5 : 4;
@@ -380,9 +467,12 @@ function tick(ts) {
   if (moving) { const nx = p.x + mx / ml * sp * dt, nz = p.z + mz / ml * sp * dt; if (!isSea(nx, nz)) { p.x = nx; p.z = nz; } p.yaw = Math.atan2(mx, mz); }
   p.y += (gnd(p.x, p.z) - p.y) * Math.min(1, dt * 12);
   g.me.g.position.set(p.x, p.y, p.z); g.me.g.rotation.y = p.yaw; try { AV3.anim(g.me, moving, false, dt, run ? 1.6 : 1, g.scene); } catch (e) { /* abaikan */ }
-  const cam = g.camera, d = g.cam.dist, cx = p.x + Math.sin(g.cam.yaw) * d * Math.cos(g.cam.pitch), cz = p.z + Math.cos(g.cam.yaw) * d * Math.cos(g.cam.pitch), cyy = Math.max(gnd(cx, cz) + 1.5, p.y + 1.6 + Math.sin(g.cam.pitch) * d);
-  cam.position.lerp(new T.Vector3(cx, cyy, cz), Math.min(1, dt * 8)); cam.lookAt(p.x, p.y + 1.6, p.z);
-  g.sun.position.set(p.x + 60, p.y + 120, p.z + 40); g.sun.target.position.set(p.x, p.y, p.z);
+  /* v18.46: jika rupa bumi (bukit) menghalang garis pandangan ke avatar, kamera dinaikkan (bukan ditarik ke dalam bukit) */
+  const d = g.cam.dist, ux = Math.sin(g.cam.yaw) * Math.cos(g.cam.pitch), uz = Math.cos(g.cam.yaw) * Math.cos(g.cam.pitch), ty = p.y + 1.6; let uy = Math.sin(g.cam.pitch);
+  for (let k = 1; k <= 12; k++) { const t = k / 12 * d, need = (gnd(p.x + ux * t, p.z + uz * t) + 1 - ty) / t; if (need > uy) uy = need; } uy = Math.min(uy, 2.5);
+  const cam = g.camera, cx = p.x + ux * d, cz = p.z + uz * d, cyy = Math.max(gnd(cx, cz) + 1.5, ty + uy * d);
+  cam.position.lerp(new T.Vector3(cx, cyy, cz), Math.min(1, dt * 8)); cam.lookAt(p.x, p.y + 1.6, p.z); if (g.sky) g.sky.position.copy(cam.position);
+  g.sun.position.set(p.x + 75, p.y + 105, p.z + 55); g.sun.target.position.set(p.x, p.y, p.z);
   /* lokasi berhampiran */
   let near = null, bd = 1e9; g.items.forEach((it) => { const dd = Math.hypot(it.x - p.x, it.z - p.z); if (dd < it.r && dd < bd) { bd = dd; near = it; } }); g.near = near;
   const pr = TS.ui.pr; if (near && !g.ui) { const t = (window.matchMedia && matchMedia("(pointer:fine)").matches ? "E: " : "") + near.n; if (pr.textContent !== t) pr.textContent = t; pr.hidden = false; } else pr.hidden = true;

@@ -11,6 +11,50 @@ Status fasa ada dalam `ROADMAP.md`.
 
 ---
 
+## 2026-10-31 · v18.46 · Grafik Tanah Suci (Jeddah, Makkah, Madinah) dipertingkat
+Branch `claude/grafik-tanahsuci`.
+
+**Laporan pengguna:** grafik dunia Tanah Suci di Terminal Haji kurang baik:
+- khemah kon ringkas;
+- pasir silau tanpa tekstur;
+- pesawat kotak;
+- apron berjalur (z-fighting).
+
+**Siap** (`mod/tanahsuci.js`; semua tekstur dilukis dengan kod, tiada aset luar):
+- **Pencahayaan dan atmosfera:**
+  - tone mapping ACES;
+  - langit bergradien dengan jerebu gurun di ufuk dan cahaya matahari;
+  - kabus hangat;
+  - cahaya hemisfera dan matahari diseimbangkan, bayang lebih bersih.
+- **Rupa bumi:** tekstur pasir (bintik dan riak angin) didarab dengan warna ketinggian dan cerun. Laut Merah berkilat.
+- **Terminal Haji Jeddah:**
+  - 32 modul khemah fabrik melengkung (profil konkaf);
+  - tiang tinggi di setiap bucu grid dengan kabel ke gelang puncak;
+  - lantai plaza;
+  - blok terminal berkaca;
+  - barisan pokok kurma.
+- **Lapangan terbang Madinah:** terminal moden, bukan khemah haji. Sebelum ini kedua-dua lapangan terbang menggunakan model khemah Jeddah.
+- **Apron dan landasan:** bertekstur, dengan garis tepi dan tengah, garis teksi kuning dan garis tempat letak pesawat. Jalur z-fighting dihapuskan.
+- **Pesawat Didik Air** (2 buah):
+  - badan bertekstur dengan jalur hijau dan tingkap;
+  - hidung dan kokpit, ekor tirus;
+  - sayap dan penstabil bersudut, enjin, sirip hijau, roda.
+- **Bangunan bandar:** bertingkap dengan 6 warna batu.
+- **Pembetulan rupa bumi:**
+  - Ketinggian kaki avatar dan kamera kini dikira daripada jejaring yang sama seperti yang dilukis: bucu bersela 2 sampel, tapak rata pada bucu, pembahagian segi tiga yang sama.
+  - Sebelum ini, di lembah curam seperti Mina, avatar dan kamera berada di bawah permukaan dan pemain nampak laut "di bawah tanah". Masalah ini wujud sebelum v18.46.
+  - Kamera kini dinaikkan apabila bukit menghalang pandangan ke avatar.
+
+**Diuji** (Playwright, emulasi iPad Mini, SwiftShader):
+- tangkapan Jeddah (dekat dan jauh), Makkah dan Mina;
+- raycast mengesahkan kamera di atas jejaring rupa bumi;
+- ~155k segi tiga, 45–48 panggilan lukisan;
+- tiada ralat halaman;
+- Node 59/59.
+- **Belum diuji pada iPad sebenar.**
+
+---
+
 ## 2026-10-31 · v18.45 · Pembaikan iPad: simulasi haji 3D dan kawalan sentuh
 Branch `claude/haji-ipad`.
 
