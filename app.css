@@ -1004,3 +1004,23 @@ body:not(.gv) #v-map .mapstage,body:not(.gv) #v-map .legend,body:not(.gv) #v-map
 .lpick-bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:6px 0}
 .lpick-bar button{min-height:36px}
 .lpick-out{font-size:14px;color:#ffe9a8}
+/* v18.38: penaja */
+.pjbar{max-width:1100px;margin:0 auto 16px;display:grid;gap:10px;padding:14px 16px;border-radius:20px;background:linear-gradient(135deg,rgba(255,212,90,.08),rgba(90,209,255,.06));border:1px solid rgba(255,212,90,.3)}
+.pjbar-h{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pjbar-k{font:800 12px var(--font-body);letter-spacing:.2em;color:#ffd45a}
+.pjbar-r{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+.pjbar-kos{font-size:13px;opacity:.8;text-align:center;padding:6px}
+.pjlogo{display:grid;place-items:center;background:#fff;border:2px solid transparent;border-radius:14px;padding:8px;cursor:pointer;transition:transform .15s}
+.pjlogo:hover,.pjlogo:focus-visible{transform:translateY(-2px);border-color:#5ad1ff}
+.pjlogo img{display:block;max-width:100%;max-height:100%;object-fit:contain}
+.pjlogo.pj-platinum{width:200px;height:96px;border-color:#b9f3ff;box-shadow:0 0 18px rgba(90,209,255,.35)}
+.pjlogo.pj-emas{width:150px;height:72px;border-color:#ffd45a}
+.pjlogo.pj-rakan{width:110px;height:54px}
+.pjform{display:grid;gap:10px}
+.pjform .field{display:grid;gap:4px}
+.pjpk{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.pjpk label{display:grid;gap:4px;padding:12px;border-radius:14px;border:2px solid var(--line2);cursor:pointer}
+.pjpk label:has(input:checked){border-color:#ffd45a;background:rgba(255,212,90,.08)}
+.pjpk b{font-size:16px}.pjpk .rm{font:800 20px var(--font-body);color:#ffd45a}
+.pjprev{width:200px;height:96px;background:#fff;border-radius:12px;display:grid;place-items:center;overflow:hidden}
+.pjprev img{max-width:100%;max-height:100%}
