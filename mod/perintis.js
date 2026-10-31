@@ -221,12 +221,24 @@
     LP.kd = (e) => { const t = e.target; if (t && (t.nodeName === "INPUT" || t.nodeName === "TEXTAREA")) return; const k = String(e.key || "").toLowerCase(), dn = e.type === "keydown"; LP.keys[k] = dn; if (dn) { if (k === " ") { e.preventDefault(); lompat(); } if (k === "m") petaPenuh(); if (k === "f") LP.ui.camB.click(); if (k === "escape") { if (LP.ui.big) petaPenuh(); else lpTutup(); } if (["w", "a", "s", "d", "arrowup", "arrowdown", "arrowleft", "arrowright"].indexOf(k) >= 0) LP.auto = null; } };
     window.addEventListener("keydown", LP.kd); window.addEventListener("keyup", LP.kd);
     const ptr = {}; let pinch = 0;
-    cv.addEventListener("pointerdown", (e) => { cv.setPointerCapture(e.pointerId); const kiri = e.pointerType === "touch" && e.clientX < innerWidth * 0.42; ptr[e.pointerId] = { x: e.clientX, y: e.clientY, js: kiri }; if (kiri) { LP.js = { id: e.pointerId, cx: e.clientX, cy: e.clientY, x: 0, y: 0 }; LP.auto = null; const j = LP.ui.js; j.style.left = e.clientX - 55 + "px"; j.style.top = e.clientY - 55 + "px"; j.style.display = "block"; } });
-    cv.addEventListener("pointermove", (e) => { const p = ptr[e.pointerId]; if (!p) return; const ids = Object.keys(ptr); if (ids.length === 2 && !p.js && !ptr[ids[0]].js && !ptr[ids[1]].js) { const a = ptr[ids[0]], b2 = ptr[ids[1]], d0 = Math.hypot(a.x - b2.x, a.y - b2.y); p.x = e.clientX; p.y = e.clientY; const d1 = Math.hypot(ptr[ids[0]].x - ptr[ids[1]].x, ptr[ids[0]].y - ptr[ids[1]].y); if (pinch) LP.c.dist = Math.max(3, Math.min(40, LP.c.dist * pinch / (d1 || 1))); pinch = d1 || d0; return; }
-      if (p.js) { let dx = (e.clientX - LP.js.cx) / 45, dy = (LP.js.cy - e.clientY) / 45; const l = Math.hypot(dx, dy); if (l > 1) { dx /= l; dy /= l; } LP.js.x = dx; LP.js.y = dy; LP.ui.js.firstChild.style.transform = "translate(" + dx * 30 + "px," + -dy * 30 + "px)"; }
-      else { LP.c.yaw -= (e.clientX - p.x) * 0.006; LP.c.pitch = Math.max(-0.2, Math.min(1.25, LP.c.pitch + (e.clientY - p.y) * 0.004)); }
-      p.x = e.clientX; p.y = e.clientY; });
-    const up = (e) => { if (ptr[e.pointerId] && ptr[e.pointerId].js) { LP.js = { id: -1, x: 0, y: 0 }; LP.ui.js.style.display = "none"; } delete ptr[e.pointerId]; pinch = 0; };
+    /* v18.45: iPad/iPhone Safari guna Touch Events terus (Pointer Events tidak boleh dipercayai pada iOS); tetikus/pen guna Pointer Events */
+    const down = (id, x, y, touch) => { const kiri = touch && x < innerWidth * 0.42; ptr[id] = { x: x, y: y, js: kiri }; if (kiri) { LP.js = { id: id, cx: x, cy: y, x: 0, y: 0 }; LP.auto = null; const j = LP.ui.js; j.style.left = x - 55 + "px"; j.style.top = y - 55 + "px"; j.style.display = "block"; } };
+    const move = (id, x, y) => { const p = ptr[id]; if (!p) return; const ids = Object.keys(ptr); if (ids.length === 2 && !p.js && !ptr[ids[0]].js && !ptr[ids[1]].js) { const a = ptr[ids[0]], b2 = ptr[ids[1]], d0 = Math.hypot(a.x - b2.x, a.y - b2.y); p.x = x; p.y = y; const d1 = Math.hypot(ptr[ids[0]].x - ptr[ids[1]].x, ptr[ids[0]].y - ptr[ids[1]].y); if (pinch) LP.c.dist = Math.max(3, Math.min(40, LP.c.dist * pinch / (d1 || 1))); pinch = d1 || d0; return; }
+      if (p.js) { let dx = (x - LP.js.cx) / 45, dy = (LP.js.cy - y) / 45; const l = Math.hypot(dx, dy); if (l > 1) { dx /= l; dy /= l; } LP.js.x = dx; LP.js.y = dy; LP.ui.js.firstChild.style.transform = "translate(" + dx * 30 + "px," + -dy * 30 + "px)"; }
+      else { LP.c.yaw -= (x - p.x) * 0.006; LP.c.pitch = Math.max(-0.2, Math.min(1.25, LP.c.pitch + (y - p.y) * 0.004)); }
+      p.x = x; p.y = y; };
+    const end = (id) => { if (ptr[id] && ptr[id].js) { LP.js = { id: -1, x: 0, y: 0 }; LP.ui.js.style.display = "none"; } delete ptr[id]; pinch = 0; };
+    const TE = "ontouchstart" in window;
+    if (TE) {
+      const each = (e, fn) => { for (let i = 0; i < e.changedTouches.length; i++) { const t = e.changedTouches[i]; fn(100000 + t.identifier, t.clientX, t.clientY); } };
+      cv.addEventListener("touchstart", (e) => { if (e.cancelable) e.preventDefault(); each(e, (id, x, y) => down(id, x, y, true)); }, { passive: false });
+      cv.addEventListener("touchmove", (e) => { if (e.cancelable) e.preventDefault(); each(e, move); }, { passive: false });
+      cv.addEventListener("touchend", (e) => { if (e.cancelable) e.preventDefault(); each(e, end); }, { passive: false });
+      cv.addEventListener("touchcancel", (e) => each(e, end), { passive: false });
+    }
+    cv.addEventListener("pointerdown", (e) => { if (TE && e.pointerType === "touch") return; try { cv.setPointerCapture(e.pointerId); } catch (x) { /* abaikan */ } down(e.pointerId, e.clientX, e.clientY, e.pointerType === "touch"); });
+    cv.addEventListener("pointermove", (e) => { if (!(TE && e.pointerType === "touch")) move(e.pointerId, e.clientX, e.clientY); });
+    const up = (e) => { if (!(TE && e.pointerType === "touch")) end(e.pointerId); };
     cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
     cv.addEventListener("wheel", (e) => { e.preventDefault(); LP.c.dist = Math.max(3, Math.min(40, LP.c.dist * (e.deltaY > 0 ? 1.1 : 0.9))); }, { passive: false });
     cv.addEventListener("contextmenu", (e) => e.preventDefault());

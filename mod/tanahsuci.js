@@ -232,7 +232,7 @@ const CSS = "#tsOv{position:fixed;inset:0;z-index:300;background:#0b1a24;color:#
   + "#tsOv .ts-pr{position:absolute;left:50%;bottom:84px;transform:translateX(-50%);background:linear-gradient(180deg,#ffd96a,#f0a43a);color:#2a1a02;border:0;border-radius:999px;padding:12px 22px;font:800 15px Nunito,sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.35);cursor:pointer;max-width:92vw}"
   + "#tsOv .ts-btns{position:absolute;right:10px;top:200px;display:grid;gap:6px}#tsOv .ts-btns button,#tsOv .ts-card button{background:#16324a;color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:8px 12px;font:800 13px Nunito,sans-serif;cursor:pointer}"
   + "#tsOv .ts-card{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.45);padding:16px}#tsOv .ts-box{width:min(560px,100%);max-height:88vh;overflow:auto;background:#0f2a3d;border:2px solid #ffd45a;border-radius:16px;padding:16px 18px}#tsOv .ts-box h2{margin:4px 0 8px;font-size:21px}#tsOv .ts-box p{margin:6px 0;line-height:1.5;font-size:14px}#tsOv .ts-k{color:#ffd45a;font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase}#tsOv .ts-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}#tsOv .ts-card button.pri{background:linear-gradient(180deg,#ffd96a,#f0a43a);color:#2a1a02;border:0}"
-  + "#tsOv .ts-map{position:absolute;top:10px;right:10px;width:180px;height:180px;border-radius:12px;border:2px solid rgba(255,255,255,.35);background:#2a7ea8}#tsOv .ts-js{position:absolute;left:24px;bottom:24px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3)}"
+  + "#tsOv .ts-map{position:absolute;top:10px;right:10px;width:180px;height:180px;border-radius:12px;border:2px solid rgba(255,255,255,.35);background:#2a7ea8}#tsOv .ts-js{position:absolute;left:24px;bottom:24px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);pointer-events:none}"
   + "#tsOv .ts-fade{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity .4s}#tsOv .ts-fl{position:absolute;inset:0;background:linear-gradient(180deg,#0a2540,#13446e)}#tsOv .ts-fl canvas{width:100%;height:100%}#tsOv .ts-fl .ts-cap{position:absolute;left:50%;bottom:7%;transform:translateX(-50%);width:min(620px,92vw);background:rgba(8,20,32,.85);border:2px solid #ffd45a;border-radius:14px;padding:12px 16px;text-align:center;font-size:15px;line-height:1.5}"
   + "@media (pointer:fine){#tsOv .ts-js{display:none}}";
 function ui() {
@@ -398,17 +398,21 @@ function onKey(e) {
   if (dn && k === "escape") { e.preventDefault(); e.stopPropagation(); if (TS.ui.card) cardClose(); }
 }
 function pointers(cv) {
-  cv.addEventListener("pointerdown", (e) => {
-    try { cv.setPointerCapture(e.pointerId); } catch (x) { /* abaikan */ }
-    if (e.pointerType !== "mouse" && e.clientX < window.innerWidth * 0.4 && e.clientY > window.innerHeight * 0.45 && TS.js.id < 0) { TS.js.id = e.pointerId; TS.js.cx = e.clientX; TS.js.cy = e.clientY; }
-    else if (TS.drag.id < 0) { TS.drag.id = e.pointerId; TS.drag.x = e.clientX; TS.drag.y = e.clientY; }
-  });
-  cv.addEventListener("pointermove", (e) => {
-    const g = TS.g; if (!g) return;
-    if (e.pointerId === TS.js.id) { let dx = (e.clientX - TS.js.cx) / 50, dy = (TS.js.cy - e.clientY) / 50; const l = Math.hypot(dx, dy); if (l > 1) { dx /= l; dy /= l; } TS.js.x = dx; TS.js.y = dy; }
-    else if (e.pointerId === TS.drag.id) { g.cam.yaw -= (e.clientX - TS.drag.x) * 0.006; g.cam.pitch = clampN(g.cam.pitch + (e.clientY - TS.drag.y) * 0.004, 0.05, 1.35); TS.drag.x = e.clientX; TS.drag.y = e.clientY; }
-  });
-  const up = (e) => { if (e.pointerId === TS.js.id) { TS.js.id = -1; TS.js.x = TS.js.y = 0; } if (e.pointerId === TS.drag.id) TS.drag.id = -1; };
+  /* v18.45: iPad/iPhone Safari guna Touch Events terus (Pointer Events tidak boleh dipercayai pada iOS); tetikus/pen guna Pointer Events */
+  const down = (id, x, y, touch) => { if (touch && x < window.innerWidth * 0.4 && y > window.innerHeight * 0.45 && TS.js.id < 0) { TS.js.id = id; TS.js.cx = x; TS.js.cy = y; } else if (TS.drag.id < 0) { TS.drag.id = id; TS.drag.x = x; TS.drag.y = y; } };
+  const move = (id, x, y) => { const g = TS.g; if (!g) return; if (id === TS.js.id) { let dx = (x - TS.js.cx) / 50, dy = (TS.js.cy - y) / 50; const l = Math.hypot(dx, dy); if (l > 1) { dx /= l; dy /= l; } TS.js.x = dx; TS.js.y = dy; } else if (id === TS.drag.id) { g.cam.yaw -= (x - TS.drag.x) * 0.006; g.cam.pitch = clampN(g.cam.pitch + (y - TS.drag.y) * 0.004, 0.05, 1.35); TS.drag.x = x; TS.drag.y = y; } };
+  const end = (id) => { if (id === TS.js.id) { TS.js.id = -1; TS.js.x = TS.js.y = 0; } if (id === TS.drag.id) TS.drag.id = -1; };
+  const TE = "ontouchstart" in window;
+  if (TE) {
+    const each = (e, fn) => { for (let i = 0; i < e.changedTouches.length; i++) { const t = e.changedTouches[i]; fn(100000 + t.identifier, t.clientX, t.clientY); } };
+    cv.addEventListener("touchstart", (e) => { if (e.cancelable) e.preventDefault(); each(e, (id, x, y) => down(id, x, y, true)); }, { passive: false });
+    cv.addEventListener("touchmove", (e) => { if (e.cancelable) e.preventDefault(); each(e, move); }, { passive: false });
+    cv.addEventListener("touchend", (e) => { if (e.cancelable) e.preventDefault(); each(e, end); }, { passive: false });
+    cv.addEventListener("touchcancel", (e) => each(e, end), { passive: false });
+  }
+  cv.addEventListener("pointerdown", (e) => { if (TE && e.pointerType === "touch") return; try { cv.setPointerCapture(e.pointerId); } catch (x) { /* abaikan */ } down(e.pointerId, e.clientX, e.clientY, e.pointerType !== "mouse"); });
+  cv.addEventListener("pointermove", (e) => { if (!(TE && e.pointerType === "touch")) move(e.pointerId, e.clientX, e.clientY); });
+  const up = (e) => { if (!(TE && e.pointerType === "touch")) end(e.pointerId); };
   cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
   cv.addEventListener("wheel", (e) => { if (TS.g) { TS.g.cam.dist = clampN(TS.g.cam.dist + Math.sign(e.deltaY) * 2, 6, 120); e.preventDefault(); } }, { passive: false });
 }
