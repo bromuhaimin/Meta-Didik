@@ -83,6 +83,7 @@ const PLACES = [
   ["wp-klcc", "wp", "Menara Berkembar Petronas", "berkembar", 3.1579, 101.7116, "Menara Berkembar Petronas setinggi 452 m pernah menjadi bangunan tertinggi di dunia (1998-2004)."],
   ["wp-negara", "wp", "Masjid Negara", "masjid", 3.1418, 101.6918, "Masjid Negara dibuka pada tahun 1965 dengan bumbung berbentuk payung bintang 16 bucu."],
   ["wp-menarakl", "wp", "Menara Kuala Lumpur", "menara", 3.1528, 101.7038, "Menara Kuala Lumpur setinggi 421 m digunakan untuk telekomunikasi dan cerapan anak bulan."],
+  ["wp-trx", "wp", "Menara Exchange 106 (TRX)", "menara", 3.1424, 101.7186, "Menara Exchange 106 di Tun Razak Exchange (TRX) ialah antara bangunan tertinggi di Malaysia dan mercu tanda pusat kewangan antarabangsa Kuala Lumpur."],
   ["ns-pd", "nsembilan", "Pantai Port Dickson", "pantai", 2.473, 101.855, "Port Dickson terkenal dengan pantainya yang panjang dan menjadi destinasi percutian keluarga."],
   ["ns-serimenanti", "nsembilan", "Istana Lama Seri Menanti", "istana", 2.71, 102.15, "Istana Lama Seri Menanti dibina tanpa paku dengan 99 tiang kayu yang melambangkan pahlawan suku."],
   ["mk-afamosa", "melaka", "Kota A Famosa", "kota", 2.1916, 102.2503, "A Famosa dibina oleh Portugis selepas menawan Melaka pada tahun 1511; hanya pintu Porta de Santiago yang tinggal."],
@@ -867,6 +868,99 @@ function lmMosque(id) {
     default: lmMasjid(g, {}); r = 11;
   }
   return { g: g, r: r };
+}
+/* ---------- v18.41: mercu tanda Kuala Lumpur dibina semula mengikut gambar rujukan (dilukis dengan kod, tiada aset luar) ---------- */
+const LMK = {};
+function lmKacaTex(bg, ln, n, v) { /* tekstur jalur tingkap: n jalur mendatar (atau menegak jika v) */
+  const k = bg + ln + n + (v ? "v" : ""); if (LMK[k]) return LMK[k];
+  const t = lmTex(64, 256, (x, w, h) => { x.fillStyle = bg; x.fillRect(0, 0, w, h); x.fillStyle = ln; for (let i = 0; i < n; i++) { if (v) x.fillRect(i * w / n, 0, Math.max(1, w / n * 0.18), h); else x.fillRect(0, i * h / n, w, Math.max(1, h / n * 0.22)); } });
+  t.wrapS = t.wrapT = T.RepeatWrapping; return (LMK[k] = t);
+}
+/* silinder dengan keratan bintang bersegi lapan (corak Rub el Hizb pada Menara Petronas) */
+function lmBintangCyl(rT, rB, h, mat) {
+  const geo = new T.CylinderGeometry(rT, rB, h, 32, 1), pa = geo.attributes.position;
+  for (let i = 0; i < pa.count; i++) { const x = pa.getX(i), z = pa.getZ(i), a = Math.atan2(z, x), r = Math.hypot(x, z); if (r < 1e-4) continue; const f = 0.86 + 0.14 * Math.pow(Math.abs(Math.cos(a * 4)), 0.6); pa.setXYZ(i, x * f, pa.getY(i), z * f); }
+  geo.computeVertexNormals(); return new T.Mesh(geo, mat);
+}
+function lmPetronas() {
+  const g = new T.Group(), q = lmQ();
+  const tex = lmKacaTex("#e4e9ee", "#8a97a3", 26); const m = lmPbr("petronas", { color: 0xf2f5f7, map: tex, roughness: 0.35, metalness: 0.35 }); /* keluli tahan karat berkilat, cerah */
+  const steel = lmPbr("keluli", { color: 0xe8ecef, roughness: 0.25, metalness: 0.9 });
+  const add = (o) => { o.castShadow = q >= 1; o.receiveShadow = true; g.add(o); return o; };
+  for (const sx of [-7.5, 7.5]) {
+    const tiers = [[0, 44, 3.6, 3.7], [44, 6, 3.15, 3.5], [50, 5, 2.65, 3.0], [55, 4, 2.15, 2.5], [59, 3, 1.65, 2.0]];
+    tiers.forEach(([y0, h, rt, rb]) => { const t = add(lmBintangCyl(rt, rb, h, m)); t.position.set(sx, y0 + h / 2, 0);  });
+    for (const y of [44, 50, 55, 59]) { const ring = new T.Mesh(new T.TorusGeometry(y === 44 ? 3.55 : y === 50 ? 3.05 : y === 55 ? 2.55 : 2.05, 0.12, 6, 32), steel); ring.rotation.x = Math.PI / 2; ring.position.set(sx, y, 0); g.add(ring); }
+    const cone = add(new T.Mesh(new T.ConeGeometry(1.6, 6, 16), steel)); cone.position.set(sx, 65, 0);
+    const ball = new T.Mesh(new T.SphereGeometry(0.55, 12, 8), steel); ball.position.set(sx, 68.3, 0); g.add(ball);
+    const spire = new T.Mesh(new T.CylinderGeometry(0.05, 0.22, 9, 6), steel); spire.position.set(sx, 73, 0); g.add(spire);
+  }
+  /* jambatan langit dua tingkat dengan kaki V */
+  add(new T.Mesh(lmBox(8.6, 1.4, 1.6), steel)).position.set(0, 27, 0);
+  for (const sx of [-1, 1]) { const leg = new T.Mesh(lmBox(0.25, 9, 0.25), steel); leg.position.set(sx * 2.4, 22.5, 0); leg.rotation.z = sx * 0.5; g.add(leg); }
+  /* podium Suria KLCC */
+  const pod = add(new T.Mesh(lmBox(30, 4, 12), lmPbr("podium", { color: 0xd9d6cf, map: lmKacaTex("#d9d6cf", "#6d7a86", 3), roughness: 0.6 }))); pod.position.set(0, 2, 4);
+  const blok = add(new T.Mesh(lmBox(5, 18, 5), lmPbr("blokklcc", { color: 0x9aa4ad, map: lmKacaTex("#9aa4ad", "#3c4650", 12), roughness: 0.4, metalness: 0.4 }))); blok.position.set(-15, 9, -6); /* menara pejabat bersebelahan */
+  return { g: g, r: 16 };
+}
+function lmMenaraKL() {
+  const g = new T.Group(), q = lmQ(), putih = lmPbr("putihKL", { color: 0xf1f2f0, map: lmKacaTex("#f1f2f0", "#d0d4d6", 10, true), roughness: 0.55 });
+  const add = (o) => { o.castShadow = q >= 1; o.receiveShadow = true; g.add(o); return o; };
+  add(new T.Mesh(new T.CylinderGeometry(2.8, 3.6, 2.4, 24), putih)).position.y = 1.2;                       /* kaki */
+  add(new T.Mesh(new T.CylinderGeometry(1.25, 1.65, 44, 24), putih)).position.y = 24;                      /* batang */
+  const pts = [[1.25, 0], [2.2, 1.2], [3.6, 2.6], [4.7, 3.8], [5.0, 4.6], [4.8, 6.4], [4.2, 7.4], [3.4, 8.0]].map(([r, y]) => new T.Vector2(r, 46 + y));
+  add(new T.Mesh(new T.LatheGeometry(pts.slice(0, 4), 32), lmPbr("kepalaKL", { color: 0xc9846a, roughness: 0.6 })));  /* dasar kepala berwarna tanah liat */
+  const kaca = lmPbr("kacaKL", { color: 0x1d2630, roughness: 0.15, metalness: 0.6 }), cincin = lmPbr("cincinKL", { color: 0xf4f4f2, roughness: 0.5 });
+  for (let i = 0; i < 5; i++) { const y0 = 49.8 + i * 0.75, r0 = 4.95 - Math.max(0, i - 2) * 0.3; const b = add(new T.Mesh(new T.CylinderGeometry(r0, r0, 0.42, 32), i % 2 ? kaca : cincin)); b.position.y = y0; }
+  add(new T.Mesh(new T.CylinderGeometry(3.4, 4.2, 1.2, 32), cincin)).position.y = 54.2;                   /* dek atas */
+  add(new T.Mesh(new T.CylinderGeometry(1.4, 2.2, 2.4, 16), cincin)).position.y = 56;
+  const tiang = add(new T.Mesh(new T.CylinderGeometry(0.18, 0.55, 18, 8), lmPbr("antena", { color: 0xbfc5ca, roughness: 0.4, metalness: 0.7 }))); tiang.position.y = 66;
+  for (const y of [60, 63, 66]) add(new T.Mesh(new T.CylinderGeometry(0.6, 0.6, 0.3, 10), cincin)).position.y = y;
+  return { g: g, r: 6 };
+}
+function lmExchange106() {
+  const g = new T.Group(), q = lmQ(), H = 60;
+  const add = (o) => { o.castShadow = q >= 1; o.receiveShadow = true; g.add(o); return o; };
+  const kaca = lmPbr("kaca106", { color: 0x2a4a8a, map: lmKacaTex("#2f4f8f", "#16264a", 30), roughness: 0.12, metalness: 0.65 });
+  const body = add(new T.Mesh(new T.CylinderGeometry(4.6, 6.2, H, 4, 1), kaca)); body.rotation.y = Math.PI / 4; body.position.y = H / 2; /* segi empat menirus */
+  /* sirip putih di bucu */
+  const putih = lmPbr("sirip106", { color: 0xf0f2f4, roughness: 0.4 });
+  for (let i = 0; i < 4; i++) { const a = i * Math.PI / 2, s = new T.Mesh(lmBox(0.35, H * 0.55, 0.35), putih); s.position.set(Math.cos(a) * 4.9, H * 0.72, Math.sin(a) * 4.9); g.add(s); }
+  /* mahkota kekisi berlian putih */
+  const lat = lmTex(256, 128, (x, w, h) => { x.clearRect(0, 0, w, h); x.strokeStyle = "#f4f4f2"; x.lineWidth = 7; for (let i = -4; i < 12; i++) { x.beginPath(); x.moveTo(i * 32, 0); x.lineTo(i * 32 + 64, h); x.stroke(); x.beginPath(); x.moveTo(i * 32 + 64, 0); x.lineTo(i * 32, h); x.stroke(); } x.fillStyle = "#f4f4f2"; x.fillRect(0, 0, w, 6); x.fillRect(0, h - 6, w, 6); });
+  lat.wrapS = T.RepeatWrapping; lat.repeat.x = 2;
+  const crown = new T.Mesh(new T.CylinderGeometry(4.4, 4.8, 9, 4, 1, true), new T.MeshLambertMaterial({ map: lat, transparent: true, alphaTest: 0.4, side: T.DoubleSide })); crown.rotation.y = Math.PI / 4; crown.position.y = H + 4.5; g.add(crown);
+  add(new T.Mesh(new T.CylinderGeometry(4.0, 4.4, 1, 4), lmPbr("bumbung106", { color: 0x8a96a2, roughness: 0.5 }))).position.y = H + 0.5;
+  /* menara rendah bersebelahan (pejabat bank) dan dataran */
+  const kaca2 = lmPbr("kacaTRX2", { color: 0x5b6e84, map: lmKacaTex("#5b6e84", "#2b3646", 18), roughness: 0.15, metalness: 0.45 });
+  add(new T.Mesh(lmBox(9, 30, 8), kaca2)).position.set(-11, 15, 3);
+  add(new T.Mesh(lmBox(8, 36, 8), kaca2)).position.set(10.5, 18, 1);
+  add(new T.Mesh(lmBox(9.4, 2.2, 8.4), lmPbr("bingkaiTRX", { color: 0x1b2026, roughness: 0.5 }))).position.set(10.5, 37, 1);
+  add(new T.Mesh(lmBox(34, 1, 18), lmPbr("dataranTRX", { color: 0xcfd3d6, roughness: 0.8 }))).position.set(0, 0.5, 2);
+  return { g: g, r: 16 };
+}
+function lmLandmarkKhas(id) { return id === "wp-klcc" ? lmPetronas() : id === "wp-menarakl" ? lmMenaraKL() : id === "wp-trx" ? lmExchange106() : null; }
+/* Bangunan Parlimen Malaysia: menara 17 tingkat berfasad "kulit nenas", blok utama rendah dan bumbung lipat segi tiga Dewan Rakyat */
+function lmParlimen() {
+  const g = new T.Group(), q = lmQ();
+  const add = (o) => { o.castShadow = q >= 1; o.receiveShadow = true; g.add(o); return o; };
+  const nenas = lmTex(128, 256, (x, w, h) => { x.fillStyle = "#3a4656"; x.fillRect(0, 0, w, h); x.fillStyle = "#eef0ee"; const nx = 6, ny = 14; for (let i = 0; i <= nx; i++) x.fillRect(i * w / nx - 3, 0, 6, h); for (let j = 0; j <= ny; j++) x.fillRect(0, j * h / ny - 2, w, 4); });
+  nenas.wrapS = nenas.wrapT = T.RepeatWrapping; nenas.repeat.set(2, 3);
+  const fasad = lmPbr("parlimenFasad", { color: 0xffffff, map: nenas, roughness: 0.55 }), putih = lmPbr("parlimenPutih", { color: 0xeeeeea, roughness: 0.5 });
+  add(new T.Mesh(lmBox(7, 24, 6.4), fasad)).position.set(-9, 12.5, -2);                  /* menara */
+  add(new T.Mesh(lmBox(7.8, 0.6, 7.2), putih)).position.set(-9, 24.8, -2);
+  const fin = lmTex(128, 64, (x, w, h) => { x.fillStyle = "#e9ebe8"; x.fillRect(0, 0, w, h); x.fillStyle = "#9aa3ab"; for (let i = 0; i < 10; i++) x.fillRect(i * w / 10 + 2, 4, 4, h - 8); });
+  add(new T.Mesh(lmBox(6, 3.6, 5.4), lmPbr("parlimenMahkota", { color: 0xffffff, map: fin, roughness: 0.5 }))).position.set(-9, 26.9, -2);  /* blok mahkota bersirip */
+  const blok = add(new T.Mesh(lmBox(26, 5, 18), lmPbr("parlimenBlok", { color: 0xffffff, map: lmKacaTex("#eeeeea", "#3a4656", 4), roughness: 0.6 }))); blok.position.set(4, 2.6, 2);
+  add(new T.Mesh(lmBox(27, 0.5, 19), lmPbr("parlimenBumbung", { color: 0x9a96a6, roughness: 0.7 }))).position.set(4, 5.3, 2);
+  /* bumbung lipat segi tiga (Dewan Rakyat) */
+  const tri = new T.Shape(); tri.moveTo(-3.6, 0); tri.lineTo(0, 9); tri.lineTo(3.6, 0); tri.lineTo(-3.6, 0);
+  const tg = new T.ExtrudeGeometry(tri, { depth: 0.9, bevelEnabled: false });
+  for (let i = 0; i < 9; i++) { const m = add(new T.Mesh(tg, putih)); const k = 1 - Math.abs(i - 4) * 0.09; m.scale.set(k, k, 1); m.position.set(6, 5.5, -2.5 + i * 0.9); m.rotation.y = (i % 2 ? 0.08 : -0.08); }
+  /* anjung masuk */
+  add(new T.Mesh(lmBox(8, 0.4, 5), putih)).position.set(4, 3.2, 13.5);
+  for (const x of [1, 7]) add(new T.Mesh(lmBox(0.4, 3.2, 0.4), putih)).position.set(x, 1.6, 15.5);
+  return g;
 }
 function lmModel(type, rnd) {
   const g = new T.Group(); let r = 9;
@@ -2880,21 +2974,22 @@ function lmTabungHaji() {
 function lmIlmuBuild(g, used, placed, avoid, gnd) {
   SILMU.forEach(([id, k, nama, la, lo, col]) => {
     if (!DATA.negeri[k]) return;
-    const okK = (q) => q === k || (k === "wp" && q === "selangor") || (k === "selangor" && q === "wp"), rr = 11;
+    const okK = (q) => q === k || (k === "wp" && q === "selangor") || (k === "selangor" && q === "wp"), rr = id === "si-parlimen" ? 20 : 11;
     const free = (x, z) => okK(lmAt(x, z)) && lmLandW(x + rr, z) && lmLandW(x - rr, z) && lmLandW(x, z + rr) && lmLandW(x, z - rr)
       && !used.some((u) => Math.hypot(u.x - x, u.z - z) < rr + 8) && !placed.some((u) => Math.hypot(u.x - x, u.z - z) < rr + u.r + 8) && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + rr)
       && !g.items.some((it) => Math.hypot(it.x - x, it.z - z) < 16);
     let w = ll(la, lo);
     if (!free(w.x, w.z)) { let best = null; for (let d = 6; d <= 120 && !best; d += 6) for (let i = 0; i < 16; i++) { const a = i * 0.3927 + d * 0.13, x = w.x + Math.cos(a) * d, z = w.z + Math.sin(a) * d; if (free(x, z)) { best = { x: x, z: z }; break; } } if (best) w = best; }
-    const th = id === "si-th", md = th ? lmTabungHaji() : lmIlmuModel(col), rot = (Math.abs(hashStr(id)) % 628) / 100;
+    const th = id === "si-th" || id === "si-parlimen", md = id === "si-th" ? lmTabungHaji() : id === "si-parlimen" ? lmParlimen() : lmIlmuModel(col), rot = (Math.abs(hashStr(id)) % 628) / 100;
     md.position.set(w.x, 0, w.z); md.rotation.y = rot; g.scene.add(md); gnd.push([md, 0]); lmPad(g, w.x, w.z, 10);
-    const ly = th ? 46 : 13, lb = lmLabel("📖 Stesen Ilmu · " + nama, { fs: 28, k: 0.03, bg: "rgba(11,74,74,.88)", bd: "#ffd45a" }); lb.position.set(w.x, ly, w.z); g.scene.add(lb); gnd.push([lb, ly]);
-    const fx = Math.sin(rot) * (th ? 2 : 1), fz = Math.cos(rot) * (th ? 2 : 1);
+    const ly = id === "si-th" ? 46 : th ? 33 : 13, lb = lmLabel("📖 Stesen Ilmu · " + nama, { fs: 28, k: 0.03, bg: "rgba(11,74,74,.88)", bd: "#ffd45a" }); lb.position.set(w.x, ly, w.z); g.scene.add(lb); gnd.push([lb, ly]);
+    const km = id === "si-parlimen" ? 4.2 : th ? 2 : 1, fx = Math.sin(rot) * km, fz = Math.cos(rot) * km;
     const beam = lmBeam("#46ff8c", 260, 0.32); beam.position.set(w.x, 130, w.z); g.scene.add(beam); gnd.push([beam, 130]);
     g.items.push({ kind: "si", id: id, k: k, sn: nama, n: nama, col: col, x: w.x + fx * 5, z: w.z + fz * 5, cx: w.x, cz: w.z, r: 0, ir: 10, m: md, lb: lb, tids: [], beam: beam });
     placed.push({ x: w.x, z: w.z, r: rr }); avoid.push({ x: w.x, z: w.z, r: rr + 2 });
     const cr = Math.cos(rot), sr = Math.sin(rot);
-    if (th) g.cols.push({ x: w.x, z: w.z, r: 6.4, h: 40 }); /* menara Tabung Haji */
+    if (id === "si-th") g.cols.push({ x: w.x, z: w.z, r: 6.4, h: 40 }); /* menara Tabung Haji */
+    else if (th) { for (const [lx, lz, r] of [[-9, -2, 4.6], [4, 2, 10], [12, 2, 6]]) g.cols.push({ x: w.x + lx * cr + lz * sr, z: w.z - lx * sr + lz * cr, r: r, h: 28 }); } /* Parlimen */
     else for (const [lx, lz] of [[-4.6, -3.6], [4.6, -3.6], [-4.6, 3.6], [4.6, 3.6]]) g.cols.push({ x: w.x + lx * cr + lz * sr, z: w.z - lx * sr + lz * cr, r: 0.7, h: 6 });
   });
 }
@@ -4171,7 +4266,7 @@ async function lmBuildWorld(g) {
     const [id, k, nama, type, la, lo, fakta] = p; if (!DATA.negeri[k]) return;
     let w = ll(la, lo);
     if (id === "pg-jambatan" && RAST.bridge) { const b = RAST.bridge; w = { x: (b[0] + b[2]) / 2, z: (b[1] + b[3]) / 2 }; }
-    const R = lmRand(id), md = type === "masjid" ? lmMosque(id) : lmModel(type, R), rot = R() * 6.28;
+    const R = lmRand(id), md = type === "masjid" ? lmMosque(id) : (lmLandmarkKhas(id) || lmModel(type, R)), rot = R() * 6.28;
     /* cari ruang lapang: jauh daripada Menara Ilmu (kedudukan ikut subjek) dan mercu tanda lain.
        W.P. terletak di tengah Selangor, jadi mercu tanda KL boleh melimpah ke Selangor. */
     if (id !== "pg-jambatan") {

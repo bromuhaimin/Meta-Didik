@@ -53,6 +53,17 @@ Stesen Ilmu "Lembaga Tabung Haji" kini dibina sebagai **Menara Tabung Haji**. Ci
 
 Model dilukis dengan kod; tiada aset luar digunakan.
 
+## 4b. Mercu tanda Kuala Lumpur (dibina semula mengikut gambar rujukan)
+
+| Mercu tanda | Ciri utama dalam Meta Didik |
+|---|---|
+| **Menara Berkembar Petronas** | Dua menara keluli berkeratan bintang bersegi lapan (corak Rub el Hizb), lima peringkat menirus dengan gelang, kon puncak, bebola dan menara tirus; jambatan langit dua tingkat berkaki V; podium Suria KLCC |
+| **Menara Kuala Lumpur** | Batang putih beralur, kepala "kuntum" berwarna tanah liat dengan jalur kaca gelap dan putih berselang, dek atas dan antena panjang bergelang |
+| **Menara Exchange 106 (TRX)** | Tempat baharu dalam peta. Menara kaca biru segi empat menirus, sirip putih di bucu, mahkota kekisi berlian putih, dua menara pejabat jiran dan dataran |
+| **Bangunan Parlimen** (Stesen Ilmu) | Menara berfasad grid "kulit nenas" dengan blok mahkota bersirip, blok utama putih rendah, bumbung lipat segi tiga Dewan Rakyat dan anjung masuk |
+
+Semua model dilukis dengan kod (tiada aset atau imej luar).
+
 ## 5. Pendaftaran: 3 jenis
 
 | Jenis | Keperluan |

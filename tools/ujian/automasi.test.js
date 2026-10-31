@@ -27,7 +27,7 @@ test("Stesen Ilmu: sinar hijau, gelap/bercahaya pada peta, navigasi ke stesen se
   assert.match(D, /case "si": \{ const gl = lmSiGelap\(it\)/);
 });
 test("Menara Tabung Haji: model khas untuk stesen si-th", () => {
-  assert.match(D, /function lmTabungHaji\(\)/); assert.match(D, /id === "si-th", md = th \? lmTabungHaji\(\) : lmIlmuModel\(col\)/);
+  assert.match(D, /function lmTabungHaji\(\)/); assert.match(D, /md = id === "si-th" \? lmTabungHaji\(\)/);
 });
 test("pendaftaran 3 jenis: Murid, Pelawat, Guru; pelawat tiada sekolah", () => {
   for (const v of ["murid", "pelawat", "guru"]) assert.match(H, new RegExp('name="inRole" value="' + v + '"'));
@@ -41,4 +41,10 @@ test("situasi sivik baharu dengan lencana dan MD tetap", () => {
 test("azan ikut negeri profil; makluman menyebut kawasan; tapak kaki diperlahankan", () => {
   assert.match(D, /const SOLAT_NEGERI = \{ JHR:/); assert.match(D, /"🕌 Telah masuk waktu " \+ nama \+ " bagi kawasan " \+ ref\.n/);
   assert.match(D, /hard \? 0\.13 : 0\.17, 0\.004/);
+});
+test("mercu tanda KL dibina semula: Petronas, Menara KL, Exchange 106 (TRX), Parlimen", () => {
+  for (const f of ["lmPetronas", "lmMenaraKL", "lmExchange106", "lmParlimen"]) assert.match(D, new RegExp("function " + f + "\\(\\)"));
+  assert.match(D, /\["wp-trx", "wp", "Menara Exchange 106 \(TRX\)", "menara", 3\.1424, 101\.7186/);
+  assert.match(D, /lmLandmarkKhas\(id\) \|\| lmModel\(type, R\)/);
+  assert.match(D, /id === "si-parlimen" \? lmParlimen\(\)/);
 });
