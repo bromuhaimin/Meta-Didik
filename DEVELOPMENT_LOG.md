@@ -11,6 +11,42 @@ Status fasa ada dalam `ROADMAP.md`.
 
 ---
 
+## 2026-10-31 · v18.45 · Pembaikan iPad: simulasi haji 3D dan kawalan sentuh
+Branch `claude/haji-ipad`.
+
+**Laporan pengguna**
+- Simulasi haji 3D di iPad: avatar pemain berada di tepi kanan dan sebahagian dunia kosong.
+- iPad mini: tidak boleh berjalan.
+
+**Punca (disahkan)**
+- **Paparan senget** (`mod/prak.js`):
+  - Kanvas WebGL hanya ada `inset:0` tanpa lebar dan tinggi CSS, jadi ia dipapar mengikut saiz penimbal (lebar × dpr).
+  - Pada iPad (dpr 2), kanvas 1024×768 dipapar 2048×1536. Hanya suku atas-kiri kelihatan dan pemain (di tengah) terhumban ke kanan bawah.
+  - Disahkan dengan kod lama dalam Playwright (emulasi iPad Mini): saiz CSS kanvas 2048×1536.
+- **Tidak boleh berjalan di Tanah Suci** (`mod/tanahsuci.js`):
+  - Gelang kayu bedik `.ts-js` ialah `div` di atas kanvas tanpa `pointer-events:none`.
+  - Sentuhan pada gelang itu tidak sampai ke kanvas: 0 peristiwa `touchstart` atau `pointerdown` pada kanvas.
+- **Sentuhan iOS** (`prak`, `tanahsuci`, `perintis`):
+  - Ketiga-tiganya bergantung pada Pointer Events untuk sentuhan.
+  - Dunia Meta Didik utama sudah lama menggunakan Touch Events di Safari iOS kerana Pointer Events tidak boleh dipercayai di sana.
+
+**Pembaikan**
+- `.hj-cv`: `width:100%; height:100%`. `hj3Fit` juga menetapkan saiz gaya kanvas.
+- `.ts-js`: `pointer-events:none`.
+- Logik sentuhan dalam simulasi haji, Tanah Suci dan kawasan perintis dikongsi melalui fungsi `down`, `move` dan `end`:
+  - peranti sentuh menggunakan Touch Events (`preventDefault`, `passive:false`);
+  - tetikus dan pen menggunakan Pointer Events.
+
+**Diuji** (Playwright, emulasi "iPad Mini landscape", dpr 2, sentuhan melalui CDP):
+- **Simulasi haji:** saiz CSS kanvas 1024×768, sama dengan skrin. Kayu bedik menggerakkan pemain dan seretan kamera dilepaskan dengan betul.
+- **Desktop:** tiada perubahan.
+- **Tanah Suci:** kayu bedik menggerakkan pemain 5.4 unit. Sebelum pembaikan: 0.
+- **Kawasan perintis:** regresi desktop dan telefon lulus (pergerakan, jejambat, A*, auto-jalan).
+- **Ujian unit:** Node 59/59.
+- **Belum disahkan pada iPad sebenar:** Chromium tidak meniru semua tingkah laku Safari iOS.
+
+---
+
 ## 2026-10-31 · v18.44 · Topografi sebenar (Copernicus DEM) dan rupa bumi berpetak
 Branch `claude/rupa-bumi-dem`.
 

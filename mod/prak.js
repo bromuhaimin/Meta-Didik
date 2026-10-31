@@ -321,9 +321,22 @@ function hjStart() {
 function hjFit() { const cv = HJ.cv; if (!cv) return; const d = Math.min(2, window.devicePixelRatio || 1), W = Math.max(320, window.innerWidth), H = Math.max(280, window.innerHeight); HJ.dpr = d; HJ.W = W; HJ.H = H; cv.width = Math.round(W * d); cv.height = Math.round(H * d); cv.style.width = W + "px"; cv.style.height = H + "px"; hj3Fit(W, H); }
 function hjPtr(cv) {
   HJ.js = { on: false, id: -1, cx: 0, cy: 0, x: 0, y: 0 }; HJ.cd = { id: -1, x: 0, y: 0 };
-  cv.addEventListener("pointerdown", (e) => { const g = HJ.g; if (!g || g.modal) return; try { cv.setPointerCapture(e.pointerId); } catch (x) { /* abaikan */ } if (e.pointerType !== "mouse" && e.clientX < HJ.W * 0.42 && e.clientY > HJ.H * 0.3 && !HJ.js.on) { HJ.js.on = true; HJ.js.id = e.pointerId; HJ.js.cx = e.clientX; HJ.js.cy = e.clientY; HJ.js.x = HJ.js.y = 0; } else if (HJ.cd.id < 0) { HJ.cd.id = e.pointerId; HJ.cd.x = e.clientX; HJ.cd.y = e.clientY; } });
-  cv.addEventListener("pointermove", (e) => { if (e.pointerId === HJ.js.id) { let dx = (e.clientX - HJ.js.cx) / 56, dy = (HJ.js.cy - e.clientY) / 56; const l = Math.hypot(dx, dy); if (l > 1) { dx /= l; dy /= l; } HJ.js.x = dx; HJ.js.y = dy; } else if (e.pointerId === HJ.cd.id) { const dx = e.clientX - HJ.cd.x, dy = e.clientY - HJ.cd.y; HJ.cd.x = e.clientX; HJ.cd.y = e.clientY; HJ.camIn = [(HJ.camIn ? HJ.camIn[0] : 0) + dx * 0.0065, (HJ.camIn ? HJ.camIn[1] : 0) + dy * 0.0055]; } });
-  const up = (e) => { if (e.pointerId === HJ.js.id) { HJ.js.on = false; HJ.js.id = -1; HJ.js.x = HJ.js.y = 0; } if (e.pointerId === HJ.cd.id) HJ.cd.id = -1; }; cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up); cv.addEventListener("contextmenu", (e) => e.preventDefault());
+  /* v18.45: logik sentuhan dikongsi; iPad/iPhone Safari guna Touch Events terus (Pointer Events tidak boleh dipercayai pada iOS,
+     sama seperti dunia Meta Didik), Pointer Events untuk tetikus/pen */
+  const down = (id, x, y, touch) => { const g = HJ.g; if (!g || g.modal) return; if (touch && x < HJ.W * 0.42 && y > HJ.H * 0.3 && !HJ.js.on) { HJ.js.on = true; HJ.js.id = id; HJ.js.cx = x; HJ.js.cy = y; HJ.js.x = HJ.js.y = 0; } else if (HJ.cd.id < 0) { HJ.cd.id = id; HJ.cd.x = x; HJ.cd.y = y; } };
+  const move = (id, x, y) => { if (id === HJ.js.id) { let dx = (x - HJ.js.cx) / 56, dy = (HJ.js.cy - y) / 56; const l = Math.hypot(dx, dy); if (l > 1) { dx /= l; dy /= l; } HJ.js.x = dx; HJ.js.y = dy; } else if (id === HJ.cd.id) { const dx = x - HJ.cd.x, dy = y - HJ.cd.y; HJ.cd.x = x; HJ.cd.y = y; HJ.camIn = [(HJ.camIn ? HJ.camIn[0] : 0) + dx * 0.0065, (HJ.camIn ? HJ.camIn[1] : 0) + dy * 0.0055]; } };
+  const end = (id) => { if (id === HJ.js.id) { HJ.js.on = false; HJ.js.id = -1; HJ.js.x = HJ.js.y = 0; } if (id === HJ.cd.id) HJ.cd.id = -1; };
+  const TE = "ontouchstart" in window;
+  if (TE) {
+    const each = (e, fn) => { for (let i = 0; i < e.changedTouches.length; i++) { const t = e.changedTouches[i]; fn(100000 + t.identifier, t.clientX, t.clientY); } };
+    cv.addEventListener("touchstart", (e) => { if (e.cancelable) e.preventDefault(); each(e, (id, x, y) => down(id, x, y, true)); }, { passive: false });
+    cv.addEventListener("touchmove", (e) => { if (e.cancelable) e.preventDefault(); each(e, move); }, { passive: false });
+    cv.addEventListener("touchend", (e) => { if (e.cancelable) e.preventDefault(); each(e, end); }, { passive: false });
+    cv.addEventListener("touchcancel", (e) => each(e, end), { passive: false });
+  }
+  cv.addEventListener("pointerdown", (e) => { if (TE && e.pointerType === "touch") return; try { cv.setPointerCapture(e.pointerId); } catch (x) { /* abaikan */ } down(e.pointerId, e.clientX, e.clientY, e.pointerType !== "mouse"); });
+  cv.addEventListener("pointermove", (e) => { if (!(TE && e.pointerType === "touch")) move(e.pointerId, e.clientX, e.clientY); });
+  const up = (e) => { if (!(TE && e.pointerType === "touch")) end(e.pointerId); }; cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up); cv.addEventListener("contextmenu", (e) => e.preventDefault());
   cv.addEventListener("wheel", (e) => { if (HJ.g) { HJ.g.cam.dist = clamp(HJ.g.cam.dist + Math.sign(e.deltaY) * 0.8, 4, 14); e.preventDefault(); } }, { passive: false });
 }
 function hjLoadStage(i) {
@@ -568,7 +581,7 @@ function hj3Draw(g) {
   HJ3.meLb.position.set(-p.x, 2.6, p.z);
   R.render(HJ3.scene, HJ3.cam);
 }
-function hj3Fit(W, H) { if (!HJ3.r) return; HJ3.r.setSize(W, H, false); HJ3.cam.aspect = W / H; HJ3.cam.updateProjectionMatrix(); }
+function hj3Fit(W, H) { if (!HJ3.r) return; HJ3.r.setSize(W, H, false); const st = HJ3.r.domElement.style; st.width = W + "px"; st.height = H + "px"; /* iPad/telefon retina: saiz CSS mesti sama dengan skrin, bukan saiz penimbal (W x dpr) */ HJ3.cam.aspect = W / H; HJ3.cam.updateProjectionMatrix(); }
 
 function hjOverlay() {
   const c = HJ.cx, W = HJ.W, H = HJ.H, d = HJ.dpr; c.setTransform(d, 0, 0, d, 0, 0); c.clearRect(0, 0, W, H);
