@@ -179,3 +179,20 @@ Imej di bawah menggunakan `tools/geo/ujian/fixture-sintetik.json`, iaitu "BANDAR
 | ![](perintis/sintetik-lp-desktop-malam.png) | Desktop: mod malam dengan tingkap bercahaya |
 | ![](perintis/sintetik-lp-peta.png) | Peta penuh |
 | ![](perintis/sintetik-lp-telefon-laluan.png) | Telefon: laluan A* dan auto-jalan |
+
+## Tambahan v18.44: topografi sebenar (Copernicus DEM GLO-30)
+
+`copernicus-dem-30m.s3.amazonaws.com` dibenarkan oleh rangkaian, jadi topografi Setapak kini **data sebenar**.
+- **Pipeline:** `python3 tools/geo/dem.py setapak` menghasilkan `data/perintis/setapak-dem.json`.
+- **Grid:** 153 × 152 pada ~30 m.
+- **Rekod:** sumber, lesen, atribusi dan rujukan EGM2008 direkod dalam fail.
+- **Ketinggian tanah:** Copernicus ialah **DSM**. Tinggi tanah dalam permainan ialah **anggaran** (pembukaan morfologi) dan dilabel begitu dalam fail serta paparan.
+- **Paparan dalam aplikasi:** tanpa data OSM, kawasan Setapak dibuka dalam **mod topografi sahaja** dengan mesej jelas.
+- **Butiran lanjut:** `ROADMAP.md` dan `DEVELOPMENT_LOG.md`.
+
+| Imej | Kandungan |
+|---|---|
+| ![](perintis/setapak-topografi-dem.png) | Setapak: rupa bumi sebenar (DEM), menghadap bukit di timur. Tiada jalan dan bangunan kerana OSM belum dimuat. |
+| ![](perintis/setapak-peta-lorekan-dem.png) | Peta penuh: lorekan bukit daripada DEM sebenar |
+| ![](perintis/setapak-topografi-telefon.png) | Telefon: mod topografi |
+| ![](perintis/ujian-sintetik-atas-dem.png) | **UJIAN ENJIN SAHAJA:** bandar sintetik diletak di atas DEM sebenar untuk menguji jalan, jejambat dan bangunan di atas rupa bumi. Ia bukan geografi sebenar. |
