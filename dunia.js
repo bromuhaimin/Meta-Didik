@@ -2055,6 +2055,7 @@ function lmRailsPath(g, avoid) {
       else if ((it.kind === "st" && it.line !== R) || it.kind === "ip" || it.kind === "si" || it.kind === "km" || it.kind === "ny" || it.kind === "vn" || it.kind === "sk" || it.kind === "fd" || it.kind === "sn") obs.push({ x: it.x, z: it.z, c: 26 });
       else if (it.kind === "ap" && it.rw) { const w = it.rw, ux = Math.cos(w.a), uz = Math.sin(w.a); for (let t = -w.L - 10; t <= w.L + 10; t += 12) obs.push({ x: w.x + ux * t, z: w.z + uz * t, c: 16 }); obs.push({ x: it.x, z: it.z, c: 30 }); }
     }
+    for (const it of g.items) if (it.kind === "si" && it.id === "si-istbudaya") obs.push({ x: it.cx, z: it.cz, c: 38 }); /* Istana Budaya: bangunan dan dataran hadapan */
     const fixed = raw.map((q) => S.some((st) => Math.hypot(st.x - q.x, st.z - q.z) < (met ? 8 : 20)));
     const push = () => { raw.forEach((q, i) => { if (fixed[i]) return; for (const o of obs) { const dx = q.x - o.x, dz = q.z - o.z, d = Math.hypot(dx, dz); if (d < o.c) { if (d < 0.01) { q.x += o.c; continue; } const k = (o.c - d) / d; q.x += dx * k; q.z += dz * k; } } }); };
     for (let it = 0; it < 8; it++) { push(); for (let i = 1; i < raw.length - 1; i++) if (!fixed[i]) { raw[i].x = (raw[i - 1].x + raw[i].x * 2 + raw[i + 1].x) / 4; raw[i].z = (raw[i - 1].z + raw[i].z * 2 + raw[i + 1].z) / 4; } }
@@ -3051,24 +3052,76 @@ function lmTabungHaji() {
   const sign = lmLabel("TABUNG HAJI", { fs: 26, k: 0.03, bg: "rgba(11,90,50,.9)", bd: "#ffd45a", dt: true }); sign.position.set(0, 0.24 * H + 1.4, 0); g.add(sign);
   return g;
 }
+/* v18.43: Istana Budaya (Kuala Lumpur), panggung teater kebangsaan: bumbung berlapis biru firus yang tajam dan melentik
+   (ilham sirih junjung), dinding putih berkaca, dataran hadapan merah bata dengan kolam biru di kiri dan kanan.
+   Dilukis dengan kod (tiada aset luar), skala landmark dunia; hadapan menghala +z. */
+function lmIstanaBudaya() {
+  const g = new T.Group(), q = lmQ();
+  const add = (o) => { o.castShadow = q >= 1; o.receiveShadow = true; g.add(o); return o; };
+  const firus = lmPbr("ibFirus", { color: 0x3aa6b9, roughness: 0.45, metalness: 0.15, side: T.DoubleSide });
+  const putih = lmPbr("ibPutih", { color: 0xf1f1ec, roughness: 0.5 });
+  /* satu unit bumbung: piramid empat sisi dengan bucu hadapan melentik ke atas (seperti lipatan sirih) */
+  const bumbung = (x, y, z, w, d, h, lift, ry) => {
+    const A = [0, h, 0], FL = [-w, lift, d], FR = [w, lift, d], BR = [w * 0.8, lift * 0.35, -d], BL = [-w * 0.8, lift * 0.35, -d];
+    const v = [].concat(A, FL, FR, A, FR, BR, A, BR, BL, A, BL, FL);
+    const geo = new T.BufferGeometry(); geo.setAttribute("position", new T.Float32BufferAttribute(v, 3)); geo.computeVertexNormals();
+    const m = add(new T.Mesh(geo, firus)); m.position.set(x, y, z); m.rotation.y = ry || 0;
+    /* jalur putih di tepi hadapan bumbung (bingkai pemeleh) */
+    const tri = new T.Shape(); tri.moveTo(-w * 0.62, lift * 0.6); tri.lineTo(0, h * 0.8); tri.lineTo(w * 0.62, lift * 0.6); tri.lineTo(-w * 0.62, lift * 0.6);
+    const f = add(new T.Mesh(new T.ShapeGeometry(tri), putih)); f.position.set(x + Math.sin(ry || 0) * d * 0.55, y, z + Math.cos(ry || 0) * d * 0.55); f.rotation.y = ry || 0;
+    return m;
+  };
+  /* badan bangunan: putih dengan jalur kaca */
+  const kaca = lmPbr("ibKaca", { color: 0xffffff, map: lmKacaTex("#eef0ee", "#4f6f80", 5), roughness: 0.4 });
+  add(new T.Mesh(lmBox(18, 7, 22), kaca)).position.set(0, 3.5, -2);
+  add(new T.Mesh(lmBox(24, 1, 28), putih)).position.set(0, 0.5, -1);                     /* podium */
+  for (const sx of [-1, 1]) add(new T.Mesh(lmBox(5, 5, 12), kaca)).position.set(sx * 10.5, 2.5, 0); /* sayap sisi */
+  /* tulang belakang bumbung: makin tinggi ke belakang */
+  [[11, 5.5, 4, 2.6, 6, 2.2], [6, 6.8, 5.5, 3.4, 9, 3], [0.5, 7.6, 7, 4.2, 12, 3.6], [-5.5, 8.4, 8.4, 4.8, 15, 4], [-11, 7.2, 7, 4, 11, 3.2]]
+    .forEach(([z, y, w, d, h, l]) => bumbung(0, y, z, w, d, h, l, 0));
+  /* sayap bumbung kiri dan kanan, menghala keluar */
+  for (const sx of [-1, 1]) {
+    bumbung(sx * 9.5, 5.4, 2, 6.2, 4.2, 7.5, 3, sx * 0.75);
+    bumbung(sx * 9, 6.2, -7, 6.8, 4.6, 9, 3.4, sx * 1.1);
+    bumbung(sx * 6.5, 6.6, -13, 5, 3.6, 7, 2.6, sx * 2.2);
+  }
+  /* anjung masuk dan tiang */
+  add(new T.Mesh(lmBox(7, 0.5, 4), putih)).position.set(0, 5, 11);
+  for (const x of [-3, 3]) add(new T.Mesh(lmBox(0.5, 5, 0.5), putih)).position.set(x, 2.5, 12.6);
+  add(new T.Mesh(lmBox(4, 3.6, 0.4), lmPbr("ibPintu", { color: 0x2a3440, roughness: 0.3, metalness: 0.4 }))).position.set(0, 2.8, 9.2);
+  /* dataran hadapan merah bata bercorak */
+  const bata = lmTex(128, 256, (x, w, h) => { x.fillStyle = "#c8664a"; x.fillRect(0, 0, w, h); x.fillStyle = "#e9d6c4"; for (let j = 0; j < 8; j++) { const cy = (j + 0.5) * h / 8; x.beginPath(); x.moveTo(w / 2, cy - 12); x.lineTo(w / 2 + 14, cy); x.lineTo(w / 2, cy + 12); x.lineTo(w / 2 - 14, cy); x.closePath(); x.fill(); } x.fillRect(0, 0, 4, h); x.fillRect(w - 4, 0, 4, h); });
+  const dat = add(new T.Mesh(new T.PlaneGeometry(8, 10), lmPbr("ibDataran", { color: 0xffffff, map: bata, roughness: 0.8 }))); dat.rotation.x = -Math.PI / 2; dat.position.set(0, 0.06, 18);
+  /* kolam biru di kiri dan kanan dataran, dengan arca layar putih */
+  const air = lmPbr("ibKolam", { color: 0x3cb8dc, roughness: 0.15, metalness: 0.2 });
+  for (const sx of [-1, 1]) {
+    add(new T.Mesh(lmBox(7, 0.3, 10), putih)).position.set(sx * 8, 0.15, 18);
+    add(new T.Mesh(lmBox(6.4, 0.32, 9.4), air)).position.set(sx * 8, 0.18, 18);
+    const sl = new T.Shape(); sl.moveTo(0, 0); sl.lineTo(1.6, 2.4); sl.lineTo(-1.2, 0.2); sl.lineTo(0, 0);
+    const a = add(new T.Mesh(new T.ShapeGeometry(sl), lmPbr("ibArca", { color: 0xf6f6f2, roughness: 0.4, side: T.DoubleSide }))); a.position.set(sx * 8, 0.35, 19); a.rotation.y = sx * 0.6;
+    for (const z of [14, 18, 22]) lmPalm(g, sx * 4.6, z, 0.7);
+  }
+  return g;
+}
 function lmIlmuBuild(g, used, placed, avoid, gnd) {
   SILMU.forEach(([id, k, nama, la, lo, col]) => {
     if (!DATA.negeri[k]) return;
-    const okK = (q) => q === k || (k === "wp" && q === "selangor") || (k === "selangor" && q === "wp"), rr = id === "si-parlimen" ? 20 : 11;
+    const okK = (q) => q === k || (k === "wp" && q === "selangor") || (k === "selangor" && q === "wp"), rr = id === "si-parlimen" || id === "si-istbudaya" ? 20 : 11;
     const free = (x, z) => okK(lmAt(x, z)) && lmLandW(x + rr, z) && lmLandW(x - rr, z) && lmLandW(x, z + rr) && lmLandW(x, z - rr)
       && !used.some((u) => Math.hypot(u.x - x, u.z - z) < rr + 8) && !placed.some((u) => Math.hypot(u.x - x, u.z - z) < rr + u.r + 8) && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + rr)
       && !g.items.some((it) => Math.hypot(it.x - x, it.z - z) < 16);
     let w = ll(la, lo);
     if (!free(w.x, w.z)) { let best = null; for (let d = 6; d <= 120 && !best; d += 6) for (let i = 0; i < 16; i++) { const a = i * 0.3927 + d * 0.13, x = w.x + Math.cos(a) * d, z = w.z + Math.sin(a) * d; if (free(x, z)) { best = { x: x, z: z }; break; } } if (best) w = best; }
-    const th = id === "si-th" || id === "si-parlimen", md = id === "si-th" ? lmTabungHaji() : id === "si-parlimen" ? lmParlimen() : lmIlmuModel(col), rot = (Math.abs(hashStr(id)) % 628) / 100;
+    const ib = id === "si-istbudaya", th = id === "si-th" || id === "si-parlimen" || ib, md = id === "si-th" ? lmTabungHaji() : id === "si-parlimen" ? lmParlimen() : ib ? lmIstanaBudaya() : lmIlmuModel(col), rot = (Math.abs(hashStr(id)) % 628) / 100;
     md.position.set(w.x, 0, w.z); md.rotation.y = rot; g.scene.add(md); gnd.push([md, 0]); lmPad(g, w.x, w.z, 10);
     const ly = id === "si-th" ? 46 : th ? 33 : 13, lb = lmLabel("📖 Stesen Ilmu · " + nama, { fs: 28, k: 0.03, bg: "rgba(11,74,74,.88)", bd: "#ffd45a" }); lb.position.set(w.x, ly, w.z); g.scene.add(lb); gnd.push([lb, ly]);
-    const km = id === "si-parlimen" ? 4.2 : th ? 2 : 1, fx = Math.sin(rot) * km, fz = Math.cos(rot) * km;
+    const km = id === "si-parlimen" ? 4.2 : ib ? 5 : th ? 2 : 1, fx = Math.sin(rot) * km, fz = Math.cos(rot) * km;
     const beam = lmBeam("#46ff8c", 260, 0.32); beam.position.set(w.x, 130, w.z); g.scene.add(beam); gnd.push([beam, 130]);
     g.items.push({ kind: "si", id: id, k: k, sn: nama, n: nama, col: col, x: w.x + fx * 5, z: w.z + fz * 5, cx: w.x, cz: w.z, r: 0, ir: 10, m: md, lb: lb, tids: [], beam: beam });
     placed.push({ x: w.x, z: w.z, r: rr }); avoid.push({ x: w.x, z: w.z, r: rr + 2 });
     const cr = Math.cos(rot), sr = Math.sin(rot);
     if (id === "si-th") g.cols.push({ x: w.x, z: w.z, r: 6.4, h: 40 }); /* menara Tabung Haji */
+    else if (ib) { for (const [lx, lz, r] of [[0, -3, 10], [-10.5, 0, 3.4], [10.5, 0, 3.4], [-8, 18, 3.6], [8, 18, 3.6]]) g.cols.push({ x: w.x + lx * cr + lz * sr, z: w.z - lx * sr + lz * cr, r: r, h: 24 }); } /* Istana Budaya: badan, sayap, kolam */
     else if (th) { for (const [lx, lz, r] of [[-9, -2, 4.6], [4, 2, 10], [12, 2, 6]]) g.cols.push({ x: w.x + lx * cr + lz * sr, z: w.z - lx * sr + lz * cr, r: r, h: 28 }); } /* Parlimen */
     else for (const [lx, lz] of [[-4.6, -3.6], [4.6, -3.6], [-4.6, 3.6], [4.6, 3.6]]) g.cols.push({ x: w.x + lx * cr + lz * sr, z: w.z - lx * sr + lz * cr, r: 0.7, h: 6 });
   });
