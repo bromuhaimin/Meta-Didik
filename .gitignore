@@ -1,1 +1,3 @@
 tools/jaringan/_kerja/
+data/perintis/*.osm.json
+__pycache__/
