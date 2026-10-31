@@ -93,3 +93,59 @@ class UjianTukar(unittest.TestCase):
         self.assertEqual(b[14]["anggar"], 1, "tiada data tinggi -> dilabel anggaran")
         self.assertEqual(d["meta"]["lesen"], "Open Database License (ODbL) 1.0"); self.assertEqual(d["meta"]["tarikh_osm"], "2026-01-01T00:00:00Z")
         self.assertEqual(d["air"][0]["n"], "Sungai Ujian")
+
+
+class UjianDEM(unittest.TestCase):
+    """Pembaca COG Copernicus: TIFF berjubin SINTETIK dibina dalam memori (deflate + peramal titik apung)."""
+    @staticmethod
+    def _tiff(arr, tw):
+        import numpy as np, struct, zlib
+        H, W = arr.shape; nt = (W + tw - 1) // tw; ntr = (H + tw - 1) // tw
+        blobs = []
+        for tr in range(ntr):
+            for tc in range(nt):
+                t = np.zeros((tw, tw), np.float32); a = arr[tr * tw:(tr + 1) * tw, tc * tw:(tc + 1) * tw]; t[:a.shape[0], :a.shape[1]] = a
+                b = t.astype(">f4").view(np.uint8).reshape(tw, tw, 4).transpose(0, 2, 1).reshape(tw, tw * 4)
+                d = np.diff(b, axis=1, prepend=np.zeros((tw, 1), np.uint8)).astype(np.uint8)
+                blobs.append(zlib.compress(d.tobytes()))
+        n = len(blobs)
+        tags = [(256, 3, 1, (W,)), (257, 3, 1, (H,)), (258, 3, 1, (32,)), (259, 3, 1, (8,)), (317, 3, 1, (3,)), (322, 3, 1, (tw,)), (323, 3, 1, (tw,)),
+                (324, 4, n, None), (325, 4, n, tuple(len(b) for b in blobs)), (339, 3, 1, (3,)),
+                (33550, 12, 3, (1 / 3600, 1 / 3600, 0.0)), (33922, 12, 6, (0.0, 0.0, 0.0, 101.0, 4.0, 0.0)),
+                (34735, 3, 8, (1, 1, 0, 1, 1025, 0, 1, 2))]
+        fmt = {3: "H", 4: "I", 12: "d"}; sz = {3: 2, 4: 4, 12: 8}
+        ifd_off = 8; ext = ifd_off + 2 + 12 * len(tags) + 4
+        extra = b""; ent = []
+        data_off = ext + sum(sz[t] * c for _, t, c, _ in tags if sz[t] * c > 4)
+        offs = []; p = data_off
+        for b in blobs: offs.append(p); p += len(b)
+        for tag, t, c, v in tags:
+            if v is None: v = tuple(offs)
+            raw = struct.pack("<" + fmt[t] * c, *v)
+            if len(raw) <= 4: ent.append(struct.pack("<HHI", tag, t, c) + raw.ljust(4, b"\0"))
+            else: ent.append(struct.pack("<HHII", tag, t, c, ext + len(extra))); extra += raw
+        return b"II*\x00" + struct.pack("<I", ifd_off) + struct.pack("<H", len(tags)) + b"".join(ent) + b"\0\0\0\0" + extra + b"".join(blobs)
+
+    def test_baca_tetingkap_merentas_jubin(self):
+        import numpy as np, dem
+        arr = (np.arange(40 * 40, dtype=np.float32).reshape(40, 40) * 0.25 + 50).astype(np.float32)
+        fail = self._tiff(arr, 16)
+        asal = dem._julat
+        dem._julat = lambda url, a, b: fail[a:b + 1]
+        try:
+            C = dem.COG("mem://ujian")
+            self.assertTrue(C.titik, "RasterPixelIsPoint dibaca daripada GeoKey 1025")
+            w = C.tetingkap(10, 30, 5, 37)
+            self.assertTrue(np.array_equal(w, arr[10:30, 5:37]), "tetingkap merentas 4 jubin sama dengan asal")
+            self.assertAlmostEqual(C.lat_r(0), 4.0); self.assertAlmostEqual(C.lon_c(36), 101.01)
+        finally:
+            dem._julat = asal
+
+    def test_anggaran_tanah_buang_bangunan_kekal_bukit(self):
+        import numpy as np, dem
+        y, x = np.mgrid[0:41, 0:41]
+        bukit = (60 + 80 * np.exp(-((x - 20) ** 2 + (y - 20) ** 2) / 120.0)).astype(np.float32)
+        dsm = bukit.copy(); dsm[5, 5] += 40; dsm[30:32, 8:10] += 25  # "bangunan" sempit
+        t = dem.anggar_tanah(dsm)
+        self.assertLess(t[5, 5] - bukit[5, 5], 3); self.assertLess(t[31, 9] - bukit[31, 9], 3)
+        self.assertGreater(t[20, 20], 125, "puncak bukit lebar dikekalkan (anggaran)")
