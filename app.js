@@ -705,7 +705,7 @@ function sekolahSid(negeri, nama) {
   const slug = cleanSekolah(nama).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 48);
   return negeri && slug ? negeri.toLowerCase() + "_" + slug : "";
 }
-function mySid() { return sekolahSid(P.negeri, P.sekolah); }
+function mySid() { return P.pelawat ? "" : sekolahSid(P.negeri, P.sekolah); } /* v18.41: pelawat tiada sekolah */
 const SCHOOL_TOP = 10; // jumlah mata 10 pemain teratas sekolah
 
 /* ---------- Susutan mata dan kuota pangkat ---------- */
@@ -7237,7 +7237,7 @@ function lgRoot() {
    Dibuka daripada butang di peta utama; dunia.js dimuat hanya apabila diperlukan. */
 /* v17.91: avatar 3D dikongsi Gudang dan META DIDIK; dimuat apabila perlu */
 /* v18.4: versi aplikasi untuk memecah cache skrip (Safari/ikon skrin utama iPhone menyimpan salinan lama) */
-const APP_VER = "18.40";
+const APP_VER = "18.41";
 function av3Load(cb) {
   if (window.AV3) { cb(); return; }
   if (typeof THREE === "undefined") return;
@@ -14815,10 +14815,16 @@ function renderKomen() {
 
 /* ---------- Pendaftaran guru (v17.59): rekod berasingan di nod guru_daftar ----------
    v18.27: subjek yang diajar disimpan di gt-gsubj (dahulu gt-subj, bertembung dengan subjek aplikasi) */
-function gtRole() { try { return localStorage.getItem("gt-role") === "guru" ? "guru" : "murid"; } catch (e) { return "murid"; } }
+/* v18.41: tiga jenis pendaftaran: murid, pelawat (tanpa sekolah, tidak dikira dalam kedudukan sekolah) dan guru (wajib DELIMa untuk memacak inovasi) */
+function gtRole() { try { const r = localStorage.getItem("gt-role"); return r === "guru" || r === "pelawat" ? r : "murid"; } catch (e) { return "murid"; } }
+function gtRolePilih() { const v = (document.querySelector('input[name="inRole"]:checked') || {}).value; return v === "guru" || v === "pelawat" ? v : "murid"; }
 function gtRoleUi() {
-  const g = (document.querySelector('input[name="inRole"]:checked') || {}).value === "guru";
+  const r = gtRolePilih(), g = r === "guru", pl = r === "pelawat";
   const f = $("inSubjField"); if (f) f.hidden = !g;
+  ["sekText", "sekPick", "sekHint", "regHint"].forEach((id) => { const e = $(id); if (e) { if (pl) { e.dataset.plHide = e.hidden ? "1" : "0"; e.hidden = true; } else if (e.dataset.plHide != null) { e.hidden = e.dataset.plHide === "1"; delete e.dataset.plHide; } } });
+  { const k = $("inKelas"); if (k && k.parentElement) k.parentElement.hidden = pl; }
+  { const l = document.querySelector('label[for="inNegeri"]'); if (l) l.textContent = pl ? "Negeri anda (untuk waktu solat)" : "Negeri sekolah"; }
+  { const n = $("roleNote"); if (n) n.textContent = pl ? "Pelawat boleh menjelajah Meta Didik dan menjawab kuiz tanpa sekolah. Markah pelawat tidak dikira dalam kedudukan sekolah." : g ? "Guru wajib log masuk dengan akaun DELIMa (@moe-dl.edu.my) di Ruang Guru untuk memacak inovasi dalam Meta Didik." : "Murid: pilih sekolah anda supaya markah digabungkan dengan rakan sekolah."; }
   const l = document.querySelector('label[for="inKelas"]'); if (l) l.textContent = g ? "Kelas yang diajar (pilihan)" : "Kelas (pilihan)";
 }
 function gtRoleInit() {
@@ -14840,7 +14846,7 @@ async function gtGuruSync(force) {
   } catch (e) { /* cuba lagi pada sesi seterusnya */ }
 }
 function gtRoleSave() {
-  const r = (document.querySelector('input[name="inRole"]:checked') || {}).value === "guru" ? "guru" : "murid";
+  const r = gtRolePilih();
   const was = gtRole();
   try { localStorage.setItem("gt-role", r); localStorage.setItem("gt-gsubj", String($("inSubj").value || "").replace(/[\u0000-\u001f<>]/g, "").trim().slice(0, 40)); } catch (e) { /* abaikan */ }
   if (r === "guru") gtGuruSync(true);
@@ -17628,7 +17634,9 @@ async function stnCount(node, id) { try { const v = await FB.req("GET", node + "
 async function stnStats(id) { const r = await Promise.all(["stesen_lawat", "stesen_suka", "stesen_klik"].map((n) => stnCount(n, id))); return { lawat: r[0], suka: r[1], klik: r[2] }; }
 /* v18.27: mod percubaan (sebelum log masuk DELIMa diwajibkan di metadidik.com): tanpa Firebase Auth,
    identiti guru dan murid ialah ID peranti; e-mel DELIMa guru diisi sendiri dan disemak pentadbir. */
-function stnTrial() { return !AUTH.on(); }
+/* v18.41: guru WAJIB log masuk DELIMa (kod guru 1991 dimansuhkan). Tukar kepada false hanya untuk ujian dalaman. */
+const GURU_DELIMA_WAJIB = true;
+function stnTrial() { return !GURU_DELIMA_WAJIB && !AUTH.on(); }
 function stnGuru() {
   if (!stnTrial()) return AUTH.guru();
   let em = ""; try { em = localStorage.getItem("gt-stn-em") || ""; } catch (e) { em = ""; }
@@ -18291,7 +18299,7 @@ const GTAB = { t: (() => { try { const v = localStorage.getItem("gt-open-guru");
    kunci moderator Firebase pada peranti pentadbir, kerana kod di dalam aplikasi boleh dibaca sesiapa. */
 const KOD_GURU = "1991", KOD_ADM = "6171";
 function kodGet(k) { try { return localStorage.getItem(k) || ""; } catch (e) { return ""; } }
-function guruKod() { return !AUTH.on() && kodGet("gt-kod-guru") === KOD_GURU; }
+function guruKod() { return !GURU_DELIMA_WAJIB && !AUTH.on() && kodGet("gt-kod-guru") === KOD_GURU; }
 function admKod() { return kodGet("gt-kod-adm") === KOD_ADM; }
 function kodMasuk(kind, v) {
   v = String(v || "").trim();
@@ -18422,7 +18430,8 @@ function guruUi() {
 function guruGate(box) {
   const c = el("div", { class: "ggate" });
   c.append(el("h3", { style: "margin:0" }, "🔐 Log masuk DELIMa diperlukan"), el("p", { style: "margin:0" }, "Ruang Guru, Peta Operasi dan alat PdPc hanya untuk guru yang disahkan dengan akaun DELIMa (@moe-dl.edu.my)."));
-  if (!AUTH.on()) c.append(el("div", { class: "notice" }, "Sementara log masuk DELIMa belum diaktifkan, guru boleh masuk dengan kod guru daripada pentadbir Meta Didik."), kodBox("guru", "🎓 Kod guru", "Dapatkan kod daripada pentadbir Meta Didik. Selepas masuk, isi borang perjanjian ringkas dan hantar inovasi anda untuk kelulusan."));
+  if (!AUTH.on() && GURU_DELIMA_WAJIB) c.append(el("div", { class: "notice warn" }, "Log masuk DELIMa sedang disediakan oleh pentadbir Meta Didik. Guru perlu log masuk dengan akaun DELIMa (@moe-dl.edu.my) untuk memacak inovasi; kod guru tidak lagi digunakan."));
+  else if (!AUTH.on()) c.append(el("div", { class: "notice" }, "Sementara log masuk DELIMa belum diaktifkan, guru boleh masuk dengan kod guru daripada pentadbir Meta Didik."), kodBox("guru", "🎓 Kod guru", "Dapatkan kod daripada pentadbir Meta Didik. Selepas masuk, isi borang perjanjian ringkas dan hantar inovasi anda untuk kelulusan."));
   else { const host = el("div", { style: "min-height:44px" }); c.appendChild(host); AUTH.button(host, () => { toast("Akaun DELIMa disahkan. Selamat datang, Cikgu!", "ok"); STN.mine = undefined; MD.me = undefined; guruUi(); renderGuru(); }, (m) => toast(m, "bad")); }
   box.appendChild(c);
   const adm = el("details", { class: "card", style: "margin-top:14px;max-width:640px" }); adm.appendChild(el("summary", { style: "cursor:pointer;font-weight:700" }, "Pentadbir sistem")); box.appendChild(adm);
@@ -18705,9 +18714,9 @@ function openReg(first) {
   $("inName").focus();
 }
 function confirmReg() {
-  const n = cleanName($("inName").value), sk = cleanSekolah($("inSekolah").value), ng = $("inNegeri").value;
+  const pl = gtRolePilih() === "pelawat", n = cleanName($("inName").value), sk = pl ? "Pelawat" : cleanSekolah($("inSekolah").value), ng = $("inNegeri").value;
   let bad = null;
-  [["inName", n.length < 2], ["inNegeri", !ng], ["inSekolah", sk.length < 4]].forEach(([id, isBad]) => {
+  [["inName", n.length < 2], ["inNegeri", !ng], ["inSekolah", !pl && sk.length < 4]].forEach(([id, isBad]) => {
     $(id).removeAttribute("aria-invalid");
     if (isBad) { $(id).setAttribute("aria-invalid", "true"); if (!bad) bad = id; }
   });
@@ -18718,7 +18727,7 @@ function confirmReg() {
     if (near && confirm("Kelas " + kl + " hampir sama dengan " + near + " yang sudah didaftar di sekolah anda.\n\nTekan OK untuk memilih " + near + ". Tekan Batal jika " + kl + " memang kelas baharu.")) kl = near;
   }
   const changed = sekolahSid(ng, sk) !== mySid();
-  P.nama = n; P.negeri = ng; P.sekolah = sk;
+  P.nama = n; P.negeri = ng; P.sekolah = sk; if (pl) { P.pelawat = 1; kl = ""; } else delete P.pelawat;
   P.kelas = kl;
   if (changed) Net.lastSek = "";
   saveP(); gtRoleSave();
@@ -18797,6 +18806,7 @@ function rankDropNotice() {
   Net.init().then(() => {
     if (!P.nama && Net.user) { /* nama dipilih oleh pemain sendiri */ }
     try { pjMuat(); } catch (e) { /* abaikan */ }
+    setInterval(() => { if (!document.hidden && !(window.LMX && window.LMX.on)) { try { pjMuat(); } catch (e) { /* abaikan */ } } }, 120000); /* v18.41: logo penaja baru diluluskan muncul sendiri */
     computeStand();
     renderMe();
     rankDropNotice();

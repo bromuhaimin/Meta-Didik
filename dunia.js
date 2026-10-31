@@ -83,6 +83,11 @@ const PLACES = [
   ["wp-klcc", "wp", "Menara Berkembar Petronas", "berkembar", 3.1579, 101.7116, "Menara Berkembar Petronas setinggi 452 m pernah menjadi bangunan tertinggi di dunia (1998-2004)."],
   ["wp-negara", "wp", "Masjid Negara", "masjid", 3.1418, 101.6918, "Masjid Negara dibuka pada tahun 1965 dengan bumbung berbentuk payung bintang 16 bucu."],
   ["wp-menarakl", "wp", "Menara Kuala Lumpur", "menara", 3.1528, 101.7038, "Menara Kuala Lumpur setinggi 421 m digunakan untuk telekomunikasi dan cerapan anak bulan."],
+  ["wp-jamek", "wp", "Masjid Jamek Sultan Abdul Samad", "masjid", 3.1489, 101.6956, "Masjid Jamek dibina pada tahun 1909 di pertemuan Sungai Klang dan Sungai Gombak, tempat asal nama Kuala Lumpur."],
+  ["wp-sas", "wp", "Bangunan Sultan Abdul Samad", "menara", 3.1486, 101.6940, "Bangunan Sultan Abdul Samad (1897) bergaya Moor dengan menara jam setinggi 41 m menghadap Dataran Merdeka, tempat bendera Malaysia dinaikkan pada 31 Ogos 1957."],
+  ["wp-kgbaru", "wp", "Kampung Baru", "istana", 3.1640, 101.7000, "Kampung Baru ialah penempatan Melayu tradisional di tengah Kuala Lumpur sejak 1900, dengan rumah kayu bertiang dan juadah tempatan."],
+  ["wp-bbintang", "wp", "Bukit Bintang", "menara", 3.1466, 101.7108, "Bukit Bintang ialah pusat beli-belah dan hiburan utama Kuala Lumpur dengan deretan kedai, pusat beli-belah dan pejalan kaki."],
+  ["wp-trx", "wp", "Menara Exchange 106 (TRX)", "menara", 3.1424, 101.7186, "Menara Exchange 106 di Tun Razak Exchange (TRX) ialah antara bangunan tertinggi di Malaysia dan mercu tanda pusat kewangan antarabangsa Kuala Lumpur."],
   ["ns-pd", "nsembilan", "Pantai Port Dickson", "pantai", 2.473, 101.855, "Port Dickson terkenal dengan pantainya yang panjang dan menjadi destinasi percutian keluarga."],
   ["ns-serimenanti", "nsembilan", "Istana Lama Seri Menanti", "istana", 2.71, 102.15, "Istana Lama Seri Menanti dibina tanpa paku dengan 99 tiang kayu yang melambangkan pahlawan suku."],
   ["mk-afamosa", "melaka", "Kota A Famosa", "kota", 2.1916, 102.2503, "A Famosa dibina oleh Portugis selepas menawan Melaka pada tahun 1511; hanya pintu Porta de Santiago yang tinggal."],
@@ -319,7 +324,7 @@ function lmAudTone(f, f2, vol, dur, when, type, pan) {
 /* bunyi peristiwa */
 function lmAudFx(k, a) {
   if (LM.mute || !lmAudCtx()) return;
-  if (k === "step") { const hard = a === "keras"; lmAudHit("w", hard ? "bandpass" : "lowpass", hard ? 1900 : 950, hard ? 1.3 : 0.7, hard ? 0.45 : 0.6, 0.004, hard ? 0.07 : 0.11); /* julat frekuensi yang jelas pada pembesar suara telefon */ if (!hard) lmAudHit("p", "highpass", 2600, 0.5, 0.06, 0.01, 0.09, 0.02); }
+  if (k === "step") { const hard = a === "keras"; lmAudHit("w", hard ? "bandpass" : "lowpass", hard ? 1900 : 950, hard ? 1.3 : 0.7, hard ? 0.13 : 0.17, 0.004, hard ? 0.07 : 0.11); /* v18.41: tapak kaki diperlahankan (~70%) */ /* julat frekuensi yang jelas pada pembesar suara telefon */ if (!hard) lmAudHit("p", "highpass", 2600, 0.5, 0.018, 0.01, 0.09, 0.02); }
   else if (k === "swim") { lmAudHit("w", "bandpass", 700, 0.7, 0.35, 0.06, 0.35, 0, 1600); lmAudHit("p", "highpass", 3000, 0.6, 0.08, 0.05, 0.3, 0.08); }
   else if (k === "jump") lmAudHit("p", "bandpass", 380, 1.2, 0.22, 0.03, 0.22, 0, 1500);
   else if (k === "land") { lmAudHit("b", "lowpass", 160, 0.8, 0.9, 0.005, 0.18); lmAudHit("w", "lowpass", 900, 0.8, 0.25, 0.003, 0.06); }
@@ -854,6 +859,16 @@ function lmMosque(id) {
       g.add(lmMesh(lmBox(14, 5.5, 12), W, 0, 3.95, 0)); lmArches(g, 12, 3, 3.4, 6.05, 5, "#4f7f6a");
       lmDome(g, 3.8, "#f2f2ee", 0, 6.7, 0, true); { const t = lmMesh(new T.TorusGeometry(3.7, 0.18, 6, 28), "#e0b341", 0, 6.9, 0); t.rotation.x = Math.PI / 2; g.add(t); }
       lmMinaret(g, 10, 6, 20, 1, W, "#f2f2ee", { onion: true, bal: "#e0b341" }); r = 11; break;
+    case "wp-jamek": { /* Masjid Jamek: gaya Moor, bata merah jambu berjalur putih, tiga kubah bawang putih, dua menara berjalur, di pertemuan dua sungai */
+      const bata = "#c9765a", putih = "#f3efe6";
+      g.add(lmMesh(lmBox(30, 0.3, 4), "#3f8fc0", 0, 0.15, 11, { ns: 1 })); g.add(lmMesh(lmBox(4, 0.3, 24), "#3f8fc0", 13, 0.15, 0, { ns: 1 })); /* Sungai Klang & Sungai Gombak */
+      g.add(lmMesh(lmBox(16, 5, 11), bata, 0, 2.5, 0)); for (const y of [1.2, 2.6, 4.0]) g.add(lmMesh(lmBox(16.1, 0.25, 11.1), putih, 0, y, 0));
+      lmArches(g, 15, 2.6, 1.6, 5.56, 9, "#3a2a22");
+      g.add(lmMesh(lmCyl(2.6, 2.8, 1.2, 16), putih, 0, 5.6, 0)); lmDome(g, 2.8, putih, 0, 6.2, 0, true, true);
+      for (const x of [-5.5, 5.5]) { g.add(lmMesh(lmCyl(1.5, 1.6, 0.9, 12), putih, x, 5.45, -2)); lmDome(g, 1.6, putih, x, 5.9, -2, true, true); }
+      for (const [x, z] of [[-9, 5], [9, 5]]) { for (let i = 0; i < 6; i++) g.add(lmMesh(lmCyl(0.75, 0.8, 2.2, 10), i % 2 ? putih : bata, x, 1.1 + i * 2.2, z)); g.add(lmMesh(lmCyl(1.1, 1.1, 0.4, 10), putih, x, 13.4, z)); lmDome(g, 0.9, putih, x, 13.6, z, true, true); }
+      r = 15; break;
+    }
     case "wp-putra": /* Masjid Putra: granit merah jambu, menara 116 m, di tepi tasik */
       lmWater(g, 18);
       g.add(lmMesh(lmBox(18, 6, 16), "#e8c2c0", 0, 3.3, 0)); lmArches(g, 16, 3.2, 3, 8.05, 7, "#8a4a50");
@@ -867,6 +882,165 @@ function lmMosque(id) {
     default: lmMasjid(g, {}); r = 11;
   }
   return { g: g, r: r };
+}
+/* ---------- v18.41: mercu tanda Kuala Lumpur dibina semula mengikut gambar rujukan (dilukis dengan kod, tiada aset luar) ---------- */
+const LMK = {};
+function lmKacaTex(bg, ln, n, v) { /* tekstur jalur tingkap: n jalur mendatar (atau menegak jika v) */
+  const k = bg + ln + n + (v ? "v" : ""); if (LMK[k]) return LMK[k];
+  const t = lmTex(64, 256, (x, w, h) => { x.fillStyle = bg; x.fillRect(0, 0, w, h); x.fillStyle = ln; for (let i = 0; i < n; i++) { if (v) x.fillRect(i * w / n, 0, Math.max(1, w / n * 0.18), h); else x.fillRect(0, i * h / n, w, Math.max(1, h / n * 0.22)); } });
+  t.wrapS = t.wrapT = T.RepeatWrapping; return (LMK[k] = t);
+}
+/* silinder dengan keratan bintang bersegi lapan (corak Rub el Hizb pada Menara Petronas) */
+function lmBintangCyl(rT, rB, h, mat) {
+  const geo = new T.CylinderGeometry(rT, rB, h, 32, 1), pa = geo.attributes.position;
+  for (let i = 0; i < pa.count; i++) { const x = pa.getX(i), z = pa.getZ(i), a = Math.atan2(z, x), r = Math.hypot(x, z); if (r < 1e-4) continue; const f = 0.86 + 0.14 * Math.pow(Math.abs(Math.cos(a * 4)), 0.6); pa.setXYZ(i, x * f, pa.getY(i), z * f); }
+  geo.computeVertexNormals(); return new T.Mesh(geo, mat);
+}
+function lmPetronas() {
+  const g = new T.Group(), q = lmQ();
+  const tex = lmKacaTex("#e4e9ee", "#8a97a3", 26); const m = lmPbr("petronas", { color: 0xf2f5f7, map: tex, roughness: 0.35, metalness: 0.35 }); /* keluli tahan karat berkilat, cerah */
+  const steel = lmPbr("keluli", { color: 0xe8ecef, roughness: 0.25, metalness: 0.9 });
+  const add = (o) => { o.castShadow = q >= 1; o.receiveShadow = true; g.add(o); return o; };
+  for (const sx of [-7.5, 7.5]) {
+    const tiers = [[0, 44, 3.6, 3.7], [44, 6, 3.15, 3.5], [50, 5, 2.65, 3.0], [55, 4, 2.15, 2.5], [59, 3, 1.65, 2.0]];
+    tiers.forEach(([y0, h, rt, rb]) => { const t = add(lmBintangCyl(rt, rb, h, m)); t.position.set(sx, y0 + h / 2, 0);  });
+    for (const y of [44, 50, 55, 59]) { const ring = new T.Mesh(new T.TorusGeometry(y === 44 ? 3.55 : y === 50 ? 3.05 : y === 55 ? 2.55 : 2.05, 0.12, 6, 32), steel); ring.rotation.x = Math.PI / 2; ring.position.set(sx, y, 0); g.add(ring); }
+    const cone = add(new T.Mesh(new T.ConeGeometry(1.6, 6, 16), steel)); cone.position.set(sx, 65, 0);
+    const ball = new T.Mesh(new T.SphereGeometry(0.55, 12, 8), steel); ball.position.set(sx, 68.3, 0); g.add(ball);
+    const spire = new T.Mesh(new T.CylinderGeometry(0.05, 0.22, 9, 6), steel); spire.position.set(sx, 73, 0); g.add(spire);
+  }
+  /* jambatan langit dua tingkat dengan kaki V */
+  add(new T.Mesh(lmBox(8.6, 1.4, 1.6), steel)).position.set(0, 27, 0);
+  for (const sx of [-1, 1]) { const leg = new T.Mesh(lmBox(0.25, 9, 0.25), steel); leg.position.set(sx * 2.4, 22.5, 0); leg.rotation.z = sx * 0.5; g.add(leg); }
+  /* podium Suria KLCC */
+  const pod = add(new T.Mesh(lmBox(30, 4, 12), lmPbr("podium", { color: 0xd9d6cf, map: lmKacaTex("#d9d6cf", "#6d7a86", 3), roughness: 0.6 }))); pod.position.set(0, 2, 4);
+  const blok = add(new T.Mesh(lmBox(5, 18, 5), lmPbr("blokklcc", { color: 0x9aa4ad, map: lmKacaTex("#9aa4ad", "#3c4650", 12), roughness: 0.4, metalness: 0.4 }))); blok.position.set(-15, 9, -6); /* menara pejabat bersebelahan */
+  return { g: g, r: 16 };
+}
+function lmMenaraKL() {
+  const g = new T.Group(), q = lmQ(), putih = lmPbr("putihKL", { color: 0xf1f2f0, map: lmKacaTex("#f1f2f0", "#d0d4d6", 10, true), roughness: 0.55 });
+  const add = (o) => { o.castShadow = q >= 1; o.receiveShadow = true; g.add(o); return o; };
+  add(new T.Mesh(new T.CylinderGeometry(2.8, 3.6, 2.4, 24), putih)).position.y = 1.2;                       /* kaki */
+  add(new T.Mesh(new T.CylinderGeometry(1.25, 1.65, 44, 24), putih)).position.y = 24;                      /* batang */
+  const pts = [[1.25, 0], [2.2, 1.2], [3.6, 2.6], [4.7, 3.8], [5.0, 4.6], [4.8, 6.4], [4.2, 7.4], [3.4, 8.0]].map(([r, y]) => new T.Vector2(r, 46 + y));
+  add(new T.Mesh(new T.LatheGeometry(pts.slice(0, 4), 32), lmPbr("kepalaKL", { color: 0xc9846a, roughness: 0.6 })));  /* dasar kepala berwarna tanah liat */
+  const kaca = lmPbr("kacaKL", { color: 0x1d2630, roughness: 0.15, metalness: 0.6 }), cincin = lmPbr("cincinKL", { color: 0xf4f4f2, roughness: 0.5 });
+  for (let i = 0; i < 5; i++) { const y0 = 49.8 + i * 0.75, r0 = 4.95 - Math.max(0, i - 2) * 0.3; const b = add(new T.Mesh(new T.CylinderGeometry(r0, r0, 0.42, 32), i % 2 ? kaca : cincin)); b.position.y = y0; }
+  add(new T.Mesh(new T.CylinderGeometry(3.4, 4.2, 1.2, 32), cincin)).position.y = 54.2;                   /* dek atas */
+  add(new T.Mesh(new T.CylinderGeometry(1.4, 2.2, 2.4, 16), cincin)).position.y = 56;
+  const tiang = add(new T.Mesh(new T.CylinderGeometry(0.18, 0.55, 18, 8), lmPbr("antena", { color: 0xbfc5ca, roughness: 0.4, metalness: 0.7 }))); tiang.position.y = 66;
+  for (const y of [60, 63, 66]) add(new T.Mesh(new T.CylinderGeometry(0.6, 0.6, 0.3, 10), cincin)).position.y = y;
+  return { g: g, r: 6 };
+}
+function lmExchange106() {
+  const g = new T.Group(), q = lmQ(), H = 60;
+  const add = (o) => { o.castShadow = q >= 1; o.receiveShadow = true; g.add(o); return o; };
+  const kaca = lmPbr("kaca106", { color: 0x2a4a8a, map: lmKacaTex("#2f4f8f", "#16264a", 30), roughness: 0.12, metalness: 0.65 });
+  const body = add(new T.Mesh(new T.CylinderGeometry(4.6, 6.2, H, 4, 1), kaca)); body.rotation.y = Math.PI / 4; body.position.y = H / 2; /* segi empat menirus */
+  /* sirip putih di bucu */
+  const putih = lmPbr("sirip106", { color: 0xf0f2f4, roughness: 0.4 });
+  for (let i = 0; i < 4; i++) { const a = i * Math.PI / 2, s = new T.Mesh(lmBox(0.35, H * 0.55, 0.35), putih); s.position.set(Math.cos(a) * 4.9, H * 0.72, Math.sin(a) * 4.9); g.add(s); }
+  /* mahkota kekisi berlian putih */
+  const lat = lmTex(256, 128, (x, w, h) => { x.clearRect(0, 0, w, h); x.strokeStyle = "#f4f4f2"; x.lineWidth = 7; for (let i = -4; i < 12; i++) { x.beginPath(); x.moveTo(i * 32, 0); x.lineTo(i * 32 + 64, h); x.stroke(); x.beginPath(); x.moveTo(i * 32 + 64, 0); x.lineTo(i * 32, h); x.stroke(); } x.fillStyle = "#f4f4f2"; x.fillRect(0, 0, w, 6); x.fillRect(0, h - 6, w, 6); });
+  lat.wrapS = T.RepeatWrapping; lat.repeat.x = 2;
+  const crown = new T.Mesh(new T.CylinderGeometry(4.4, 4.8, 9, 4, 1, true), new T.MeshLambertMaterial({ map: lat, transparent: true, alphaTest: 0.4, side: T.DoubleSide })); crown.rotation.y = Math.PI / 4; crown.position.y = H + 4.5; g.add(crown);
+  add(new T.Mesh(new T.CylinderGeometry(4.0, 4.4, 1, 4), lmPbr("bumbung106", { color: 0x8a96a2, roughness: 0.5 }))).position.y = H + 0.5;
+  /* menara rendah bersebelahan (pejabat bank) dan dataran */
+  const kaca2 = lmPbr("kacaTRX2", { color: 0x5b6e84, map: lmKacaTex("#5b6e84", "#2b3646", 18), roughness: 0.15, metalness: 0.45 });
+  add(new T.Mesh(lmBox(9, 30, 8), kaca2)).position.set(-11, 15, 3);
+  add(new T.Mesh(lmBox(8, 36, 8), kaca2)).position.set(10.5, 18, 1);
+  add(new T.Mesh(lmBox(9.4, 2.2, 8.4), lmPbr("bingkaiTRX", { color: 0x1b2026, roughness: 0.5 }))).position.set(10.5, 37, 1);
+  add(new T.Mesh(lmBox(34, 1, 18), lmPbr("dataranTRX", { color: 0xcfd3d6, roughness: 0.8 }))).position.set(0, 0.5, 2);
+  return { g: g, r: 16 };
+}
+/* Bangunan Sultan Abdul Samad: bata merah berjalur putih, serambi gerbang, menara jam tengah berkubah tembaga, dua menara sisi */
+function lmSultanAbdulSamad() {
+  const g = new T.Group(), q = lmQ(), bata = "#b5553a", putih = "#f2ede2", tembaga = "#5f9f86";
+  const add = (o) => { o.castShadow = q >= 1; o.receiveShadow = true; g.add(o); return o; };
+  add(lmMesh(lmBox(34, 6, 8), bata, 0, 3, 0)); for (const y of [1.8, 3.6, 5.6]) g.add(lmMesh(lmBox(34.1, 0.25, 8.1), putih, 0, y, 0));
+  lmArches(g, 32, 3.4, 2.4, 4.06, 16, "#3a2a22"); add(lmMesh(lmBox(34.6, 0.4, 8.6), putih, 0, 6.2, 0));
+  add(lmMesh(lmBox(4.2, 16, 4.2), bata, 0, 8, 1)); for (const y of [6.5, 10.5, 14.5]) g.add(lmMesh(lmBox(4.3, 0.3, 4.3), putih, 0, y, 1));
+  for (const [x, z, ry] of [[0, 3.16, 0], [0, -1.16, Math.PI], [2.16, 1, Math.PI / 2], [-2.16, 1, -Math.PI / 2]]) { const c = new T.Mesh(new T.CircleGeometry(1.2, 20), lmMat("#fffdf4")); c.position.set(x, 12.6, z); c.rotation.y = ry; g.add(c); const h = new T.Mesh(lmBox(0.12, 0.9, 0.05), lmMat("#222")); h.position.set(x, 12.8, z); h.rotation.y = ry; g.add(h); } /* jam */
+  add(lmMesh(lmCyl(1.9, 2.1, 1.2, 16), putih, 0, 16.6, 1)); lmDome(g, 2.1, tembaga, 0, 17.2, 1, true, true);
+  for (const x of [-13, 13]) { add(lmMesh(lmBox(3, 9, 3), bata, x, 4.5, 0)); add(lmMesh(lmCyl(1.3, 1.4, 0.8, 12), putih, x, 9.4, 0)); lmDome(g, 1.4, tembaga, x, 9.8, 0, true, true); }
+  add(lmMesh(lmBox(36, 0.2, 18), "#6fa85a", 0, 0.1, 13)); /* Dataran Merdeka */
+  const tiang = add(lmMesh(lmCyl(0.12, 0.16, 16, 8), "#d8dde2", 0, 8, 18)); void tiang;
+  const bd = new T.Mesh(GEO.pflag || (GEO.pflag = new T.PlaneGeometry(2.8, 1.4)), new T.MeshBasicMaterial({ map: lmFlagTex(), side: T.DoubleSide })); bd.position.set(1.45, 15.2, 18); g.add(bd);
+  return { g: g, r: 18 };
+}
+/* Kampung Baru: rumah Melayu tradisional bertiang di tengah bandar */
+function lmKampungBaru() {
+  const g = new T.Group(), q = lmQ(), kayu = ["#8a5a34", "#9c6b3f", "#7a4e2c"], atap = ["#7a3a2a", "#5a2e22", "#8a4a32"];
+  const add = (o) => { o.castShadow = q >= 1; o.receiveShadow = true; g.add(o); return o; };
+  [[-9, -6, 0.2], [0, -8, -0.1], [9, -5, 0.3], [-8, 6, -0.2], [2, 7, 0.1], [10, 7, -0.3]].forEach(([x, z, ry], i) => {
+    const h = new T.Group(); h.position.set(x, 0, z); h.rotation.y = ry; g.add(h);
+    for (const [px, pz] of [[-2.2, -1.6], [2.2, -1.6], [-2.2, 1.6], [2.2, 1.6]]) h.add(lmMesh(lmBox(0.3, 1.8, 0.3), "#5a3a22", px, 0.9, pz));
+    h.add(lmMesh(lmBox(5, 2.6, 3.8), kayu[i % 3], 0, 3.1, 0)); h.add(lmMesh(lmBox(1.2, 1.4, 0.1), "#f2e6c8", -1, 3.2, 1.95)); h.add(lmMesh(lmBox(1.2, 1.4, 0.1), "#f2e6c8", 1.2, 3.2, 1.95));
+    const rf = lmMesh(new T.ConeGeometry(4.2, 2.8, 4), atap[i % 3], 0, 5.8, 0); rf.rotation.y = Math.PI / 4; rf.scale.z = 0.8; h.add(rf);
+    h.add(lmMesh(lmBox(1.6, 0.15, 1.8), "#6e4a2c", 0, 1.8, 2.8)); /* serambi / tangga */
+  });
+  for (const [x, z] of [[-4, 0], [5, 0], [-13, 1], [14, -1]]) { add(lmMesh(lmBox(0.4, 5, 0.4), "#6e4a2c", x, 2.5, z)); const d = new T.Mesh(new T.IcosahedronGeometry(1.6, 0), lmMat("#3f8a3a")); d.position.set(x, 5.6, z); g.add(d); } /* pokok kelapa ringkas */
+  return { g: g, r: 16 };
+}
+/* Bukit Bintang: deretan kedai berwarna, papan neon dan gerbang tanda nama */
+function lmBukitBintang() {
+  const g = new T.Group(), q = lmQ(), war = ["#e8c26a", "#e07a5f", "#81b29a", "#f2cc8f", "#9d8df1", "#5fa8d3"];
+  const add = (o) => { o.castShadow = q >= 1; o.receiveShadow = true; g.add(o); return o; };
+  add(lmMesh(lmBox(8, 0.15, 34), "#3b3d42", 0, 0.08, 0)); /* jalan pejalan kaki */
+  for (const sx of [-1, 1]) for (let i = 0; i < 6; i++) { const h = 6 + ((i * 7 + (sx > 0 ? 3 : 0)) % 5) * 2.5; add(lmMesh(lmBox(5, h, 5.2), war[(i + (sx > 0 ? 2 : 0)) % 6], sx * 7, h / 2, -14 + i * 5.6)); const n = new T.Mesh(lmBox(4.2, 0.9, 0.2), lmGlow(["#ff4fa3", "#4fd1ff", "#ffd45a"][i % 3], 0.8)); n.position.set(sx * 4.4, 3.6, -14 + i * 5.6); n.rotation.y = sx * Math.PI / 2; g.add(n); }
+  for (const x of [-4.3, 4.3]) add(lmMesh(lmBox(0.5, 7, 0.5), "#c9ced3", x, 3.5, -17));
+  add(lmMesh(lmBox(9.2, 1.2, 0.6), "#1b2026", 0, 7.4, -17));
+  const lb = lmLabel("★ BUKIT BINTANG ★", { fs: 30, k: 0.03, bg: "rgba(20,10,40,.9)", bd: "#ff4fa3", fg: "#ffd45a" }); lb.position.set(0, 9, -17); g.add(lb);
+  return { g: g, r: 14 };
+}
+function lmLandmarkKhas(id) { return id === "wp-klcc" ? lmPetronas() : id === "wp-menarakl" ? lmMenaraKL() : id === "wp-trx" ? lmExchange106() : id === "wp-sas" ? lmSultanAbdulSamad() : id === "wp-kgbaru" ? lmKampungBaru() : id === "wp-bbintang" ? lmBukitBintang() : null; }
+/* v18.41: Taman KLCC (tasik Simfoni, air pancut) dan Hutan Simpan Bukit Nanas di sekeliling Menara KL, ikut peta pusat bandar */
+function lmPusatKL(g, gnd) {
+  const find = (id) => g.items.find((i) => i.kind === "pl" && i.id === id);
+  const klcc = find("wp-klcc"), mkl = find("wp-menarakl"), pohon = lmPbr("daunKL", { color: 0x3f8a3a, roughness: 0.9 }), batang = lmPbr("batangKL", { color: 0x6e4a2c, roughness: 0.9 });
+  const lapang = (x, z, r) => lmAt(x, z) !== "" && !g.items.some((it) => it.kind !== "pl" && Math.hypot(it.x - x, it.z - z) < r) && !g.cols.some((c) => Math.hypot(c.x - x, c.z - z) < (c.r || 2) + r * 0.5);
+  if (klcc) { /* taman di hadapan podium, arah yang paling lapang */
+    const m = klcc.m, ry = m.rotation.y; let best = null, bs = -1;
+    for (let k = 0; k < 8; k++) { const a = ry + k * Math.PI / 4, x = m.position.x + Math.sin(a) * 30, z = m.position.z + Math.cos(a) * 30; let sc = 0; for (let t = 0; t < 12; t++) { const b = t * 0.5236; if (lapang(x + Math.cos(b) * 10, z + Math.sin(b) * 10, 5)) sc++; } if (lapang(x, z, 6)) sc += 4; if (sc > bs) { bs = sc; best = { x: x, z: z }; } }
+    const tm = new T.Group(); tm.position.set(best.x, lmGround(best.x, best.z), best.z); g.scene.add(tm); gnd.push([tm, 0]);
+    tm.add(lmMesh(lmCyl(15, 15, 0.12, 40), "#5fae4e", 0, 0.06, 0, { ns: 1 }));
+    const tasik = lmMesh(lmCyl(6.5, 6.5, 0.14, 32), "#3f9fd8", 2, 0.12, 1, { ns: 1 }); tasik.scale.z = 0.6; tm.add(tasik);
+    for (let i = 0; i < 7; i++) { const j = new T.Mesh(new T.CylinderGeometry(0.05, 0.14, 1.6 + (i % 3) * 0.8, 6), new T.MeshBasicMaterial({ color: 0xcfefff, transparent: true, opacity: 0.8 })); j.position.set(-1.5 + i * 0.9, 0.9 + (i % 3) * 0.4, 1); tm.add(j); } /* air pancut Simfoni */
+    const L = []; for (let i = 0; i < 26; i++) { const a = i / 26 * 6.283, rr = 9 + (i % 3) * 1.8; L.push([Math.cos(a) * rr, 0, Math.sin(a) * rr]); }
+    lmInst(tm, lmBox(0.35, 2.4, 0.35), batang, L.map(([x, , z]) => [x, 1.2, z])); lmInst(tm, new T.IcosahedronGeometry(1.6, 0), pohon, L.map(([x, , z]) => [x, 3.2, z]));
+    const lb = lmLabel("🌳 Taman KLCC · Tasik Simfoni", { fs: 24, k: 0.026, bg: "rgba(20,80,40,.85)" }); lb.position.set(0, 6, 0); tm.add(lb);
+  }
+  if (mkl) { /* hutan hujan tropika dalam bandar */
+    const c = mkl.m.position, L = [];
+    for (let i = 0; i < 90 && L.length < 60; i++) { const a = i * 2.39996, rr = 8 + (i % 9) * 1.6, x = c.x + Math.cos(a) * rr, z = c.z + Math.sin(a) * rr; if (lapang(x, z, 3)) L.push([x, z, 0.8 + (i % 4) * 0.25]); }
+    const hut = new T.Group(); g.scene.add(hut);
+    lmInst(hut, lmBox(0.4, 3, 0.4), batang, L.map(([x, z, k]) => [x, lmGround(x, z) + 1.5 * k, z, 0, k, k, k]));
+    lmInst(hut, new T.IcosahedronGeometry(2, 0), pohon, L.map(([x, z, k]) => [x, lmGround(x, z) + 4 * k, z, i2(x), k, k * 1.1, k]));
+    const lb = lmLabel("🌿 Hutan Simpan Bukit Nanas", { fs: 24, k: 0.026, bg: "rgba(20,80,40,.85)" }); lb.position.set(c.x + 9, lmGround(c.x, c.z) + 8, c.z + 9); g.scene.add(lb);
+  }
+  function i2(x) { return (Math.abs(x * 7.13) % 6.28); }
+}
+/* Bangunan Parlimen Malaysia: menara 17 tingkat berfasad "kulit nenas", blok utama rendah dan bumbung lipat segi tiga Dewan Rakyat */
+function lmParlimen() {
+  const g = new T.Group(), q = lmQ();
+  const add = (o) => { o.castShadow = q >= 1; o.receiveShadow = true; g.add(o); return o; };
+  const nenas = lmTex(128, 256, (x, w, h) => { x.fillStyle = "#3a4656"; x.fillRect(0, 0, w, h); x.fillStyle = "#eef0ee"; const nx = 6, ny = 14; for (let i = 0; i <= nx; i++) x.fillRect(i * w / nx - 3, 0, 6, h); for (let j = 0; j <= ny; j++) x.fillRect(0, j * h / ny - 2, w, 4); });
+  nenas.wrapS = nenas.wrapT = T.RepeatWrapping; nenas.repeat.set(2, 3);
+  const fasad = lmPbr("parlimenFasad", { color: 0xffffff, map: nenas, roughness: 0.55 }), putih = lmPbr("parlimenPutih", { color: 0xeeeeea, roughness: 0.5 });
+  add(new T.Mesh(lmBox(7, 24, 6.4), fasad)).position.set(-9, 12.5, -2);                  /* menara */
+  add(new T.Mesh(lmBox(7.8, 0.6, 7.2), putih)).position.set(-9, 24.8, -2);
+  const fin = lmTex(128, 64, (x, w, h) => { x.fillStyle = "#e9ebe8"; x.fillRect(0, 0, w, h); x.fillStyle = "#9aa3ab"; for (let i = 0; i < 10; i++) x.fillRect(i * w / 10 + 2, 4, 4, h - 8); });
+  add(new T.Mesh(lmBox(6, 3.6, 5.4), lmPbr("parlimenMahkota", { color: 0xffffff, map: fin, roughness: 0.5 }))).position.set(-9, 26.9, -2);  /* blok mahkota bersirip */
+  const blok = add(new T.Mesh(lmBox(26, 5, 18), lmPbr("parlimenBlok", { color: 0xffffff, map: lmKacaTex("#eeeeea", "#3a4656", 4), roughness: 0.6 }))); blok.position.set(4, 2.6, 2);
+  add(new T.Mesh(lmBox(27, 0.5, 19), lmPbr("parlimenBumbung", { color: 0x9a96a6, roughness: 0.7 }))).position.set(4, 5.3, 2);
+  /* bumbung lipat segi tiga (Dewan Rakyat) */
+  const tri = new T.Shape(); tri.moveTo(-3.6, 0); tri.lineTo(0, 9); tri.lineTo(3.6, 0); tri.lineTo(-3.6, 0);
+  const tg = new T.ExtrudeGeometry(tri, { depth: 0.9, bevelEnabled: false });
+  for (let i = 0; i < 9; i++) { const m = add(new T.Mesh(tg, putih)); const k = 1 - Math.abs(i - 4) * 0.09; m.scale.set(k, k, 1); m.position.set(6, 5.5, -2.5 + i * 0.9); m.rotation.y = (i % 2 ? 0.08 : -0.08); }
+  /* anjung masuk */
+  add(new T.Mesh(lmBox(8, 0.4, 5), putih)).position.set(4, 3.2, 13.5);
+  for (const x of [1, 7]) add(new T.Mesh(lmBox(0.4, 3.2, 0.4), putih)).position.set(x, 1.6, 15.5);
+  return g;
 }
 function lmModel(type, rnd) {
   const g = new T.Group(); let r = 9;
@@ -2557,10 +2731,18 @@ function lmBeduk(ac, out, t0) { /* pukulan beduk: nada rendah + desir, dalam cor
   const hits = [0, 0.9, 1.6, 2.1, 2.5, 2.8, 3.05, 3.25, 3.42, 3.56, 3.68, 3.78, 4.6, 5.6, 6.6];
   for (const t of hits) { const o = ac.createOscillator(), gn = ac.createGain(); o.type = "sine"; o.frequency.setValueAtTime(95, t0 + t); o.frequency.exponentialRampToValueAtTime(48, t0 + t + 0.35); gn.gain.setValueAtTime(0.0001, t0 + t); gn.gain.exponentialRampToValueAtTime(0.9, t0 + t + 0.01); gn.gain.exponentialRampToValueAtTime(0.0001, t0 + t + 0.6); o.connect(gn); gn.connect(out); o.start(t0 + t); o.stop(t0 + t + 0.65); }
 }
+/* v18.41: waktu solat ikut negeri murid sendiri (profil), bukan kedudukan avatar; makluman menyebut kawasan */
+const SOLAT_NEGERI = { JHR: ["Johor Bahru", "Johor", 1.4927, 103.7414], KDH: ["Alor Setar", "Kedah", 6.1248, 100.3678], KTN: ["Kota Bharu", "Kelantan", 6.1254, 102.2381], MLK: ["Bandar Melaka", "Melaka", 2.1896, 102.2501], NSN: ["Seremban", "Negeri Sembilan", 2.7258, 101.9424], PHG: ["Kuantan", "Pahang", 3.8077, 103.326], PRK: ["Ipoh", "Perak", 4.5975, 101.0901], PLS: ["Kangar", "Perlis", 6.4414, 100.1986], PNG: ["George Town", "Pulau Pinang", 5.4141, 100.3288], SBH: ["Kota Kinabalu", "Sabah", 5.9804, 116.0735], SWK: ["Kuching", "Sarawak", 1.5533, 110.3592], SGR: ["Shah Alam", "Selangor", 3.0733, 101.5185], TRG: ["Kuala Terengganu", "Terengganu", 5.3302, 103.1408], KUL: ["Kuala Lumpur", "W.P. Kuala Lumpur", 3.139, 101.6869], PJY: ["Putrajaya", "W.P. Putrajaya", 2.9264, 101.6964], LBN: ["Bandar Labuan", "W.P. Labuan", 5.2831, 115.2308] };
+function lmSolatRef(g) {
+  const r = SOLAT_NEGERI[(typeof P !== "undefined" && P.negeri) || ""];
+  if (r) return { lat: r[2], lon: r[3], n: r[0] + ", " + r[1], neg: true };
+  const p = lmLatLon(g.p.x, g.p.z), k = lmAt(g.p.x, g.p.z); return { lat: p.lat, lon: p.lon, n: DATA.negeri[k] ? DATA.negeri[k].nama : "lokasi anda", neg: false };
+}
 function lmAzan(nama) {
   const g = LM.g; if (!g) return;
-  const ac = lmAudCtx(), mq = lmMasjidNear(g), km = mq ? mq.d / GEOD.U : 99, vol = clamp(1 - km / 40, 0.22, 1);
-  lmPop("🕌 Masuk waktu " + nama + (mq ? " · azan dari " + mq.nm + " (" + (km < 1 ? Math.round(km * 1000) + " m" : Math.round(km) + " km") + ")" : ""));
+  const ac = lmAudCtx(), mq = lmMasjidNear(g), km = mq ? mq.d / GEOD.U : 99, vol = clamp(1 - km / 40, 0.5, 1), ref = lmSolatRef(g);
+  const msg = "🕌 Telah masuk waktu " + nama + " bagi kawasan " + ref.n;
+  lmPop(msg); try { toast(msg + (mq ? ". Azan dari " + mq.nm + "." : "."), "good"); } catch (e) { /* abaikan */ }
   if (!ac || LM.mute) return;
   lmAzanStop();
   const gn = ac.createGain(); gn.gain.value = vol; gn.connect(ac.destination);
@@ -2570,19 +2752,19 @@ function lmAzan(nama) {
 }
 function lmSolatTick(g, dt) {
   if ((AZ.chk -= dt) > 0) return; AZ.chk = 4;
-  const p = lmLatLon(g.p.x, g.p.z), now = Date.now(), mn = Math.floor(((now / 60000) + 480) % 1440), W = lmSolatTimes(p.lat, p.lon, now);
+  const p = lmSolatRef(g), now = Date.now(), mn = Math.floor(((now / 60000) + 480) % 1440), W = lmSolatTimes(p.lat, p.lon, now);
   if (AZ.last != null && mn !== AZ.last) for (const [nm, k] of SOLAT) { if (k === "r") continue; const t = W[k]; if ((AZ.last < t && mn >= t) || (AZ.last > mn && (t > AZ.last || t <= mn))) lmAzan(nm); }
   AZ.last = mn; AZ.w = W;
 }
 function lmSolatOpen() {
   const g = LM.g; if (!g) return;
-  const p = lmLatLon(g.p.x, g.p.z), W = lmSolatTimes(p.lat, p.lon), mn = Math.floor(((Date.now() / 60000) + 480) % 1440), mq = lmMasjidNear(g);
+  const p = lmSolatRef(g), W = lmSolatTimes(p.lat, p.lon), mn = Math.floor(((Date.now() / 60000) + 480) % 1440), mq = lmMasjidNear(g);
   const nx = SOLAT.find(([n, k]) => k !== "r" && W[k] > mn);
   lmCard((b) => {
-    b.append(el("div", { class: "lm-kick" }, "🕌 Waktu solat hari ini · lokasi anda dalam peta"), el("h2", null, nx ? "Seterusnya: " + nx[0] + " " + lmHhmm(W[nx[1]]) : "Isyak sudah masuk"));
+    b.append(el("div", { class: "lm-kick" }, "🕌 Waktu solat hari ini · " + p.n), el("h2", null, nx ? "Seterusnya: " + nx[0] + " " + lmHhmm(W[nx[1]]) : "Isyak sudah masuk"));
     const tb = el("div", { class: "lm-grid" });
     SOLAT.forEach(([n, k]) => tb.appendChild(el("div", { class: "lm-stamp" + (nx && nx[0] === n ? " on" : "") }, el("b", null, n), el("div", null, lmHhmm(W[k])))));
-    b.append(tb, el("p", { class: "lm-ex" }, "Waktu dikira mengikut kedudukan anda (kaedah JAKIM, anggaran 1-2 minit). Apabila masuk waktu, azan kedengaran dari masjid terdekat; semakin dekat, semakin kuat." + (AZ.buf.umum ? "" : " Rakaman azan belum dipasang, jadi bunyi beduk dimainkan.")));
+    b.append(tb, el("p", { class: "lm-ex" }, (p.neg ? "Waktu dikira bagi negeri anda (profil: " + p.n + "), kaedah JAKIM, anggaran 1-2 minit." : "Waktu dikira mengikut kedudukan anda dalam peta (kaedah JAKIM, anggaran 1-2 minit). Lengkapkan negeri dalam profil untuk waktu negeri anda.") + " Apabila masuk waktu, azan kedengaran dari masjid terdekat; semakin dekat, semakin kuat." + (AZ.buf.umum ? "" : " Rakaman azan belum dipasang, jadi bunyi beduk dimainkan.")));
     const row = el("div", { class: "lm-row" });
     if (mq) row.append(lmBtn("Tunjuk arah ke " + mq.nm, "pri", () => { g.wp = { x: mq.it.x, z: mq.it.z, n: mq.nm }; lmWpSet(); lmCardClose(); }));
     row.append(lmBtn("▶ Dengar", "", () => lmAzan(nx ? nx[0] : "Zohor")), lmBtn("■ Henti", "", lmAzanStop), lmBtn("Tutup", "", lmCardClose));
@@ -2832,23 +3014,63 @@ function lmIlmuModel(col) {
   for (const sx of [-1, 1]) { const pg = lmMesh(lmBox(0.75, 0.06, 1), "#fffbe8", sx * 0.4, 1.4, 1.2); pg.rotation.z = sx * 0.25; g.add(pg); }
   return g;
 }
+/* v18.41: Menara Tabung Haji (Kuala Lumpur) dibina semula: menara bulat berbentuk "jam pasir" yang mengembang di kaki,
+   kaca gelap dengan rusuk menegak putih, gelang putih di kaki dan mahkota putih berbumbung gerbang lancip di puncak.
+   Semua dilukis dengan kod (tiada aset luar). Ketinggian dalam unit dunia, skala landmark. */
+function lmTabungHaji() {
+  const g = new T.Group(), H = 36, q = lmQ();
+  const R = (t) => { /* jejari ikut ketinggian (0..1): kaki mengembang, pinggang ramping, puncak melebar */
+    if (t < 0.2) return 6.4 - 9 * t + 6 * t * t;                     /* kaki mengembang */
+    const u = (t - 0.2) / 0.8; return 4.45 - 1.1 * Math.sin(Math.PI * Math.min(1, u * 1.25)) * (1 - u * 0.35) + u * 0.7; /* pinggang lalu melebar */
+  };
+  const pts = []; for (let i = 0; i <= 40; i++) { const t = i / 40; pts.push(new T.Vector2(R(t), t * H)); }
+  const glass = lmPbr("kacaTH", { color: 0x16212c, roughness: 0.12, metalness: 0.65 });
+  const body = new T.Mesh(new T.LatheGeometry(pts, 48), glass); body.castShadow = q >= 1; body.receiveShadow = true; g.add(body);
+  /* rusuk putih menegak: lathe sedikit lebih besar dengan tekstur jalur (telus antara jalur) */
+  const rib = lmTex(512, 8, (x, w, h) => { x.clearRect(0, 0, w, h); x.fillStyle = "#f4f4f0"; const n = 28; for (let i = 0; i < n; i++) x.fillRect(i * w / n, 0, w / n * 0.32, h); });
+  rib.wrapS = T.RepeatWrapping;
+  const ptsR = pts.map((v) => new T.Vector2(v.x + 0.14, v.y));
+  const ribs = new T.Mesh(new T.LatheGeometry(ptsR, 112), new T.MeshLambertMaterial({ map: rib, transparent: true, alphaTest: 0.5, side: T.DoubleSide })); g.add(ribs);
+  const white = lmPbr("putihTH", { color: 0xf2f1ec, roughness: 0.5 });
+  /* gelang putih di kaki (podium) dan tapak */
+  const band = new T.Mesh(new T.CylinderGeometry(R(0.2) + 0.35, R(0.18) + 0.45, 1.6, 48, 1, true), white); band.position.y = 0.19 * H; g.add(band);
+  const base = new T.Mesh(new T.CylinderGeometry(7.4, 7.6, 0.8, 48), white); base.position.y = 0.4; base.receiveShadow = true; g.add(base);
+  /* mahkota: dinding putih dengan bukaan gerbang lancip (tekstur alfa) */
+  const arch = lmTex(512, 128, (x, w, h) => {
+    x.fillStyle = "#f4f4f0"; x.fillRect(0, 0, w, h); x.globalCompositeOperation = "destination-out";
+    const n = 8, cw = w / n; for (let i = 0; i < n; i++) { const cx = i * cw + cw / 2, hw = cw * 0.32; x.beginPath(); x.moveTo(cx - hw, h * 0.92); x.lineTo(cx - hw, h * 0.45); x.quadraticCurveTo(cx - hw, h * 0.18, cx, h * 0.1); x.quadraticCurveTo(cx + hw, h * 0.18, cx + hw, h * 0.45); x.lineTo(cx + hw, h * 0.92); x.closePath(); x.fill(); }
+    x.globalCompositeOperation = "source-over";
+  });
+  arch.wrapS = T.RepeatWrapping; arch.repeat.x = 2;
+  const rt = R(1) + 0.25, crown = new T.Mesh(new T.CylinderGeometry(rt + 0.1, rt, 4.2, 48, 1, true), new T.MeshLambertMaterial({ map: arch, transparent: true, alphaTest: 0.5, side: T.DoubleSide }));
+  crown.position.y = H + 1.6; g.add(crown);
+  const rim = new T.Mesh(new T.TorusGeometry(rt + 0.12, 0.28, 8, 48), white); rim.rotation.x = Math.PI / 2; rim.position.y = H + 3.7; g.add(rim);
+  for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2, f = new T.Mesh(lmBox(0.5, 1.6, 0.5), white); f.position.set(Math.cos(a) * (rt + 0.1), H + 4.4, Math.sin(a) * (rt + 0.1)); g.add(f); } /* puncak tiang mahkota */
+  /* pintu masuk dan papan nama */
+  g.add(lmMesh(lmBox(4, 2.6, 0.6), "#2a3440", 0, 1.9, R(0.03) + 0.2));
+  const sign = lmLabel("TABUNG HAJI", { fs: 26, k: 0.03, bg: "rgba(11,90,50,.9)", bd: "#ffd45a", dt: true }); sign.position.set(0, 0.24 * H + 1.4, 0); g.add(sign);
+  return g;
+}
 function lmIlmuBuild(g, used, placed, avoid, gnd) {
   SILMU.forEach(([id, k, nama, la, lo, col]) => {
     if (!DATA.negeri[k]) return;
-    const okK = (q) => q === k || (k === "wp" && q === "selangor") || (k === "selangor" && q === "wp"), rr = 11;
+    const okK = (q) => q === k || (k === "wp" && q === "selangor") || (k === "selangor" && q === "wp"), rr = id === "si-parlimen" ? 20 : 11;
     const free = (x, z) => okK(lmAt(x, z)) && lmLandW(x + rr, z) && lmLandW(x - rr, z) && lmLandW(x, z + rr) && lmLandW(x, z - rr)
       && !used.some((u) => Math.hypot(u.x - x, u.z - z) < rr + 8) && !placed.some((u) => Math.hypot(u.x - x, u.z - z) < rr + u.r + 8) && !avoid.some((a) => Math.hypot(a.x - x, a.z - z) < a.r + rr)
       && !g.items.some((it) => Math.hypot(it.x - x, it.z - z) < 16);
     let w = ll(la, lo);
     if (!free(w.x, w.z)) { let best = null; for (let d = 6; d <= 120 && !best; d += 6) for (let i = 0; i < 16; i++) { const a = i * 0.3927 + d * 0.13, x = w.x + Math.cos(a) * d, z = w.z + Math.sin(a) * d; if (free(x, z)) { best = { x: x, z: z }; break; } } if (best) w = best; }
-    const md = lmIlmuModel(col), rot = (Math.abs(hashStr(id)) % 628) / 100;
+    const th = id === "si-th" || id === "si-parlimen", md = id === "si-th" ? lmTabungHaji() : id === "si-parlimen" ? lmParlimen() : lmIlmuModel(col), rot = (Math.abs(hashStr(id)) % 628) / 100;
     md.position.set(w.x, 0, w.z); md.rotation.y = rot; g.scene.add(md); gnd.push([md, 0]); lmPad(g, w.x, w.z, 10);
-    const lb = lmLabel("📖 Stesen Ilmu · " + nama, { fs: 28, k: 0.03, bg: "rgba(11,74,74,.88)", bd: "#ffd45a" }); lb.position.set(w.x, 13, w.z); g.scene.add(lb); gnd.push([lb, 13]);
-    const fx = Math.sin(rot), fz = Math.cos(rot);
-    g.items.push({ kind: "si", id: id, k: k, sn: nama, n: nama, col: col, x: w.x + fx * 5, z: w.z + fz * 5, cx: w.x, cz: w.z, r: 0, ir: 10, m: md, lb: lb, tids: [] });
+    const ly = id === "si-th" ? 46 : th ? 33 : 13, lb = lmLabel("📖 Stesen Ilmu · " + nama, { fs: 28, k: 0.03, bg: "rgba(11,74,74,.88)", bd: "#ffd45a" }); lb.position.set(w.x, ly, w.z); g.scene.add(lb); gnd.push([lb, ly]);
+    const km = id === "si-parlimen" ? 4.2 : th ? 2 : 1, fx = Math.sin(rot) * km, fz = Math.cos(rot) * km;
+    const beam = lmBeam("#46ff8c", 260, 0.32); beam.position.set(w.x, 130, w.z); g.scene.add(beam); gnd.push([beam, 130]);
+    g.items.push({ kind: "si", id: id, k: k, sn: nama, n: nama, col: col, x: w.x + fx * 5, z: w.z + fz * 5, cx: w.x, cz: w.z, r: 0, ir: 10, m: md, lb: lb, tids: [], beam: beam });
     placed.push({ x: w.x, z: w.z, r: rr }); avoid.push({ x: w.x, z: w.z, r: rr + 2 });
     const cr = Math.cos(rot), sr = Math.sin(rot);
-    for (const [lx, lz] of [[-4.6, -3.6], [4.6, -3.6], [-4.6, 3.6], [4.6, 3.6]]) g.cols.push({ x: w.x + lx * cr + lz * sr, z: w.z - lx * sr + lz * cr, r: 0.7, h: 6 });
+    if (id === "si-th") g.cols.push({ x: w.x, z: w.z, r: 6.4, h: 40 }); /* menara Tabung Haji */
+    else if (th) { for (const [lx, lz, r] of [[-9, -2, 4.6], [4, 2, 10], [12, 2, 6]]) g.cols.push({ x: w.x + lx * cr + lz * sr, z: w.z - lx * sr + lz * cr, r: r, h: 28 }); } /* Parlimen */
+    else for (const [lx, lz] of [[-4.6, -3.6], [4.6, -3.6], [-4.6, 3.6], [4.6, 3.6]]) g.cols.push({ x: w.x + lx * cr + lz * sr, z: w.z - lx * sr + lz * cr, r: 0.7, h: 6 });
   });
 }
 function lmIlmuAssign(g) {
@@ -2863,7 +3085,14 @@ function lmIlmuAssign(g) {
   g.ilmu = sts;
 }
 const lmTopicDone = (tid) => (LM.st.tw[tid] | 0) >= 3;
-function lmIlmuState(it) { it.done = !!it.tids && it.tids.length > 0 && it.tids.every(lmTopicDone); if (it.lb) it.lb.material.opacity = 1; }
+function lmIlmuState(it) { it.done = !!it.tids && it.tids.length > 0 && it.tids.every(lmTopicDone); if (it.lb) it.lb.material.opacity = 1; if (it.beam) { const gl = lmSiGelap(it); it.beam.visible = !gl; } }
+/* v18.41: sinar cahaya ke langit (hijau = Stesen Ilmu boleh dijawab, emas = Stesen Inovasi) */
+const BEAM_M = {};
+function lmBeam(col, h, op) {
+  const k = col + "|" + op, m = BEAM_M[k] || (BEAM_M[k] = new T.MeshBasicMaterial({ color: col, transparent: true, opacity: op, blending: T.AdditiveBlending, depthWrite: false, side: T.DoubleSide, fog: false }));
+  const g = BEAM_M["g" + h] || (BEAM_M["g" + h] = new T.CylinderGeometry(1.1, 2.6, h, 12, 1, true));
+  const b = new T.Mesh(g, m); b.renderOrder = 3; b.frustumCulled = true; return b;
+}
 function lmIlmuFor(tid) { const g = LM.g; return g && g.ilmu ? g.ilmu.find((it) => it.tids.indexOf(tid) >= 0) : null; }
 function lmJourney() { const g = LM.g, its = (g && g.ilmu) || [], act = its.filter((it) => it.tids.length); return { d: act.filter((it) => it.done).length, t: act.length, next: act.find((it) => !it.done) || null }; }
 function lmIlmuOpen(it) {
@@ -2871,22 +3100,22 @@ function lmIlmuOpen(it) {
   if (it.tids.length === 1) { lmIlmuTopic(it, it.t); return; }
   lmCard((b) => {
     b.append(el("div", { class: "lm-kick" }, "📖 Stesen Ilmu ke-" + it.no + " · " + DATA.negeri[it.k].pendek), el("h2", null, it.n));
-    b.append(el("p", null, "Stesen ini memegang " + it.tids.length + " tajuk. Pilih satu untuk dijawab."), lmKuizInfo());
+    b.append(el("p", null, "Stesen ini memegang " + it.tids.length + " tajuk. Pilih satu untuk dijawab."), lmKuizInfo(it.id));
     it.tids.forEach((tid) => { const t = TOPIK[tid]; b.append(el("div", { class: "lm-row" }, lmBtn((lmTopicDone(tid) ? "✔ " : "") + (t.kod || t.id) + " " + t.nama, lmTopicDone(tid) ? "" : "pri", () => lmIlmuTopic(it, t)))); });
     b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "", lmCardClose)));
   });
 }
 function lmIlmuTopic(it, t) {
-  const best = LM.st.tw[t.id] | 0, tm = TEMA[t.tema] || { nama: "" }, n = Math.min(5, lmKuizBaki());
-  if (n <= 0) { lmKuizHad(); return; }
+  const best = LM.st.tw[t.id] | 0, tm = TEMA[t.tema] || { nama: "" }, n = Math.min(5, lmKuizBaki(it.id));
+  if (n <= 0) { lmKuizHad(it); return; }
   lmQuiz({
-    kick: "📖 " + it.sn + " · " + tm.nama, title: (t.kod || t.id) + " " + t.nama, pass: Math.min(3, n), qs: lmPickQs([t.id], n), md: KZ_MD, harian: true,
+    kick: "📖 " + it.sn + " · " + tm.nama, title: (t.kod || t.id) + " " + t.nama, pass: Math.min(3, n), qs: lmPickQs([t.id], n), md: KZ_MD, harian: it.id,
     intro: (b) => {
       b.append(el("div", { class: "lm-kick" }, "📖 Stesen Ilmu ke-" + it.no + " · " + DATA.negeri[it.k].pendek), el("h2", null, it.n));
       b.append(el("p", null, "Tema: " + tm.nama + " · Tajuk: " + (t.kod || t.id) + " " + t.nama));
       if (t.dskp) b.append(el("p", { class: "lm-ex" }, t.dskp));
       (t.nota || []).slice(0, 3).forEach((n) => b.appendChild(qSet(el("div", { class: "lm-ex" }), n)));
-      b.append(el("p", null, "Jawab " + n + " soalan. Betul sekurang-kurangnya " + Math.min(3, n) + " untuk lulus tajuk ini dan mendapat cop " + it.sn + " dalam pasport." + (best ? " Markah terbaik anda: " + best + "/5." : "")), lmKuizInfo());
+      b.append(el("p", null, "Jawab " + n + " soalan. Betul sekurang-kurangnya " + Math.min(3, n) + " untuk lulus tajuk ini dan mendapat cop " + it.sn + " dalam pasport." + (best ? " Markah terbaik anda: " + best + "/5." : "")), lmKuizInfo(it.id));
     },
     onDone: (pass, ok, tot) => {
       const first = pass && best < 3;
@@ -2913,11 +3142,11 @@ function lmIlmuTopic(it, t) {
 }
 /* stesen tanpa tajuk (subjek dengan tajuk kurang daripada bilangan stesen): pusat ulangkaji pilihan */
 function lmIlmuReview(it) {
-  const n = Math.min(5, lmKuizBaki()); if (n <= 0) { lmKuizHad(); return; }
+  const n = Math.min(5, lmKuizBaki(it.id)); if (n <= 0) { lmKuizHad(it); return; }
   lmQuiz({
-    kick: "📖 " + it.sn + " · Pusat Ulangkaji", title: it.n, pass: Math.min(3, n), qs: lmPickQs(DATA.topik.map((t) => t.id), n), md: KZ_MD, harian: true,
+    kick: "📖 " + it.sn + " · Pusat Ulangkaji", title: it.n, pass: Math.min(3, n), qs: lmPickQs(DATA.topik.map((t) => t.id), n), md: KZ_MD, harian: it.id,
     intro: (b) => { b.append(el("div", { class: "lm-kick" }, "📖 " + it.sn + " · Pusat Ulangkaji"), el("h2", null, it.n), el("p", null, "Stesen ini tidak memegang tajuk bagi subjek ini. Jawab 5 soalan campuran sebagai ulangkaji (tidak dikira dalam pasport).")); },
-    onDone: (pass, ok, tot) => { const xp = lmXp(ok * 2); lmCard((b) => { b.append(el("div", { class: "lm-kick" }, "Ulangkaji · " + it.sn), el("h2", null, ok + "/" + tot + " betul"), el("p", { class: "lm-ex" }, "XP +" + xp), el("div", { class: "lm-row" }, lmBtn("Teruskan jelajah", "pri", lmCardClose))); }); }
+    onDone: (pass, ok, tot) => { lmIlmuState(it); const xp = lmXp(ok * 2); lmCard((b) => { b.append(el("div", { class: "lm-kick" }, "Ulangkaji · " + it.sn), el("h2", null, ok + "/" + tot + " betul"), el("p", { class: "lm-ex" }, "XP +" + xp), el("div", { class: "lm-row" }, lmBtn("Teruskan jelajah", "pri", lmCardClose))); }); }
   });
 }
 /* tab pasport: perjalanan menuntut ilmu */
@@ -3531,27 +3760,34 @@ async function lmStnFetch(g) {
   g.stn.forEach((it) => {
     const d = by[it.sl] || null; if ((it.d && it.d.id + it.d.tu) === (d && d.id + d.tu)) return;
     it.d = d; it.n = d ? d.tj : "Tapak kosong";
+    if (d && !it.beam) { const p = it.m.getWorldPosition(new T.Vector3()); it.beam = lmBeam("#ffcf3a", 260, 0.38); it.beam.position.set(p.x, p.y + 130, p.z); g.scene.add(it.beam); } else if (!d && it.beam) { g.scene.remove(it.beam); it.beam = null; }
     const scr = it.m.userData.scr; if (scr) { const old = scr.material.map; scr.material.map = lmStnScreen(d ? d.tj : "Tapak kosong", d ? String(d.kat || "STESEN INOVASI").toUpperCase() : "STESEN INOVASI"); scr.material.needsUpdate = true; if (old) old.dispose(); }
   });
 }
 /* stesen di lokasi pilihan guru (la, lo): gerai dibina semasa dunia berjalan, berhampiran titik itu */
 function lmStnGeo(g, v, mine) {
   g.stnG = g.stnG || {};
-  const want = {}; Object.keys(v).forEach((id) => { const d = v[id]; if (mine(d) && d.la != null && d.lo != null) want[id] = Object.assign({}, d, { id: id }); });
-  for (const id in g.stnG) if (!want[id] || want[id].tu !== g.stnG[id].d.tu) { const it = g.stnG[id]; g.scene.remove(it.m); if (it.lb) g.scene.remove(it.lb); g.items.splice(g.items.indexOf(it), 1); const ci = g.cols.indexOf(it.col); if (ci >= 0) g.cols.splice(ci, 1); delete g.stnG[id]; }
+  /* v18.41: inovasi yang baru dipacak ("tunggu") terus kelihatan sebagai booth "akan datang"; selepas pentadbir lulus, booth dibina semula dan boleh digunakan */
+  const ikut = (d) => d && d.tj && (d.sj || "tw") === SUBJ && (d.st === "lulus" || d.st === "tunggu");
+  const want = {}; Object.keys(v).forEach((id) => { const d = v[id]; if (ikut(d) && d.la != null && d.lo != null) want[id] = Object.assign({}, d, { id: id }); });
+  void mine;
+  for (const id in g.stnG) if (!want[id] || want[id].tu !== g.stnG[id].d.tu || want[id].st !== g.stnG[id].d.st) { const it = g.stnG[id]; g.scene.remove(it.m); if (it.lb) g.scene.remove(it.lb); if (it.beam) g.scene.remove(it.beam); g.items.splice(g.items.indexOf(it), 1); const ci = g.cols.indexOf(it.col); if (ci >= 0) g.cols.splice(ci, 1); delete g.stnG[id]; }
   for (const id in want) {
     if (g.stnG[id]) continue;
     const d = want[id], c0 = ll(d.la, d.lo); let w = null;
     const ok = (x, z) => lmAt(x, z) !== "" && !g.items.some((it) => Math.hypot(it.x - x, it.z - z) < 12);
     for (let r = 0; r <= 90 && !w; r += 6) for (let i = 0; i < (r ? 12 : 1); i++) { const a = i * 0.5236, x = c0.x + Math.cos(a) * r, z = c0.z + Math.sin(a) * r; if (ok(x, z)) { w = { x: x, z: z }; break; } }
     if (!w) continue;
-    const md = lmStnBooth(), rot = (Math.abs(hashStr(id)) % 628) / 100, gy = lmGround(w.x, w.z); md.position.set(w.x, gy, w.z); md.rotation.y = rot; g.scene.add(md);
-    md.userData.scr.material.map = lmStnScreen(d.tj, String(d.kat || "STESEN INOVASI").toUpperCase()); md.userData.scr.material.needsUpdate = true;
-    const rt = g.stnNilai && g.stnNilai[id], lb = lmLabel("🏛 " + d.tj + (rt ? " · ⭐ " + rt.avg.toFixed(1) + " (" + rt.n + ")" : "") + " · Stesen Inovasi", { fs: 26, k: 0.028, bg: "rgba(11,74,74,.9)", bd: "#ffd45a" }); lb.position.set(w.x, gy + 9, w.z); g.scene.add(lb);
+    const tg = d.st !== "lulus", md = lmStnBooth(), rot = (Math.abs(hashStr(id)) % 628) / 100, gy = lmGround(w.x, w.z); md.position.set(w.x, gy, w.z); md.rotation.y = rot; g.scene.add(md);
+    md.userData.scr.material.map = lmStnScreen(tg ? "Inovasi akan datang" : d.tj, tg ? "⏳ MENUNGGU KELULUSAN" : String(d.kat || "STESEN INOVASI").toUpperCase()); md.userData.scr.material.needsUpdate = true;
+    const rt = g.stnNilai && g.stnNilai[id], lb = lmLabel(tg ? "⏳ Akan datang: " + d.tj : "🏛 " + d.tj + (rt ? " · ⭐ " + rt.avg.toFixed(1) + " (" + rt.n + ")" : "") + " · Stesen Inovasi", { fs: 26, k: 0.028, bg: tg ? "rgba(60,60,70,.88)" : "rgba(11,74,74,.9)", bd: "#ffd45a" }); lb.position.set(w.x, gy + 9, w.z); g.scene.add(lb);
+    const beam = lmBeam("#ffcf3a", 260, tg ? 0.1 : 0.38); beam.position.set(w.x, gy + 130, w.z); g.scene.add(beam); /* sinar emas ke langit */
+    if (!tg && g.stnSeen && !g.stnSeen[id]) lmPop("✨ Inovasi baharu dibuka: " + d.tj);
     const fx = Math.sin(rot), fz = Math.cos(rot), k = lmAt(w.x, w.z), col = { x: w.x - fx * 1, z: w.z - fz * 1, r: 4.6, h: 6 }; g.cols.push(col);
-    const it = { kind: "sn", id: "sg-" + id, sl: "", k: DATA.negeri[k] ? k : (DATA.negeri[d.pn] ? d.pn : Object.keys(DATA.negeri)[0]), n: d.tj, x: w.x + fx * 6, z: w.z + fz * 6, r: 0, ir: 6, m: md, d: d, lb: lb, col: col, geo: 1 };
+    const it = { kind: "sn", id: "sg-" + id, sl: "", k: DATA.negeri[k] ? k : (DATA.negeri[d.pn] ? d.pn : Object.keys(DATA.negeri)[0]), n: d.tj, x: w.x + fx * 6, z: w.z + fz * 6, r: 0, ir: 6, m: md, d: d, lb: lb, col: col, geo: 1, beam: beam, tg: tg };
     g.items.push(it); g.stnG[id] = it;
   }
+  g.stnSeen = g.stnSeen || {}; for (const id in g.stnG) if (!g.stnG[id].tg) g.stnSeen[id] = 1;
 }
 /* ---------- v18.38: penaja dalam Meta Didik ----------
    Penaja aktif (penaja/<id>, diluluskan pentadbir) dibina selepas dunia siap di lokasi sebenar pilihan mereka (PJ_LOK):
@@ -3629,6 +3865,39 @@ async function lmPjFetch(g) {
     const it = { kind: "pj", id: "pj-" + id, n: d.n, x: w.x + fx * (b.r + 2), z: w.z + fz * (b.r + 2), r: 0, ir: 7, m: b.g, d: d, lb: lb, col: col };
     g.items.push(it); g.pj[id] = it;
   }
+  try { lmPjIklan(g); } catch (e) { /* abaikan */ } /* v18.41 */
+}
+/* v18.41: papan iklan digital di lapangan terbang dan terminal bas: logo semua penaja aktif berputar setiap 6 saat
+   (satu tekstur dikongsi, jadi kos lukisan rendah). Muncul sendiri sebaik pentadbir meluluskan penaja. */
+function lmPjIklan(g) {
+  const L = (typeof PJ !== "undefined" ? PJ.list : []).filter((d) => d && d.logo);
+  if (!g.pjAd) {
+    if (!L.length) return;
+    const tex = lmTex(512, 256, (x, w, h) => { x.fillStyle = "#fff"; x.fillRect(0, 0, w, h); }), mat = new T.MeshBasicMaterial({ map: tex });
+    const frame = lmGlow("#5ff2ff", 0.6), metal = lmPbr("logam", { color: 0xb9c3cc, roughness: 0.35, metalness: 0.85 });
+    const A = { tex: tex, list: [], imgs: {}, i: 0, boards: [] }; g.pjAd = A;
+    g.items.filter((it) => it.kind === "ap" || it.kind === "bt").slice(0, 40).forEach((it, j) => {
+      const a = (Math.abs(hashStr(it.id || it.n || String(j))) % 628) / 100, x = it.x + Math.cos(a) * 16, z = it.z + Math.sin(a) * 16; if (!lmAt(x, z)) return;
+      const b = new T.Group(), gy = lmGround(x, z); b.position.set(x, gy, z); b.rotation.y = Math.atan2(it.x - x, it.z - z);
+      const pole = new T.Mesh(lmBox(0.5, 6, 0.5), metal); pole.position.y = 3; b.add(pole);
+      const fr = new T.Mesh(lmBox(9.4, 4.9, 0.4), frame); fr.position.y = 8.4; b.add(fr);
+      for (const ry of [0, Math.PI]) { const pnl = new T.Mesh(new T.PlaneGeometry(9, 4.5), mat); pnl.position.set(0, 8.4, ry ? -0.22 : 0.22); pnl.rotation.y = ry; b.add(pnl); }
+      const tag = lmLabel("PENAJA META DIDIK", { fs: 22, k: 0.025, bg: "rgba(20,20,30,.8)" }); tag.position.y = 11.4; b.add(tag);
+      g.scene.add(b); A.boards.push(b);
+    });
+    const draw = () => {
+      const d = A.list[A.i % Math.max(1, A.list.length)], c = A.tex.userData.c, x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height);
+      const img = d && A.imgs[d.id]; if (img && img.complete && img.naturalWidth) { const k = Math.min((c.width - 40) / img.naturalWidth, (c.height - 50) / img.naturalHeight); x.drawImage(img, (c.width - img.naturalWidth * k) / 2, (c.height - 30 - img.naturalHeight * k) / 2, img.naturalWidth * k, img.naturalHeight * k); }
+      if (d) { x.fillStyle = "#0b2a44"; x.font = "800 24px Nunito, sans-serif"; x.textAlign = "center"; x.fillText(d.n, c.width / 2, c.height - 14); }
+      A.tex.needsUpdate = true;
+    };
+    A.draw = draw;
+    const t = setInterval(() => { if (LM.g !== g) { clearInterval(t); return; } if (!LM.on || document.hidden || !A.list.length) return; A.i++; draw(); }, 6000);
+  }
+  const A = g.pjAd; A.list = L;
+  L.forEach((d) => { if (!A.imgs[d.id]) { const im = new Image(); im.onload = () => A.draw(); im.src = d.logo; A.imgs[d.id] = im; } });
+  A.boards.forEach((b) => { b.visible = L.length > 0; });
+  A.draw();
 }
 function lmPjOpen(it) {
   const d = it.d, pk = PJ_PAKEJ[d.pk] || { n: "Penaja", ic: "" };
@@ -3640,6 +3909,10 @@ function lmPjOpen(it) {
   });
 }
 function lmStnOpen(it) {
+  if (it.tg && it.d) { /* v18.41: inovasi baru dipacak, menunggu kelulusan pentadbir */
+    lmCard((b) => { b.append(el("div", { class: "lm-kick" }, "⏳ Inovasi akan datang · " + (SUBJS[it.d.sj] ? SUBJS[it.d.sj].subjek : "")), el("h2", null, it.d.tj), el("p", null, "Inovasi oleh " + (it.d.n || "guru") + " sedang disemak oleh pentadbir Meta Didik. Sebaik diluluskan, booth ini terus dibuka dan boleh digunakan di sini."), el("div", { class: "lm-row" }, lmBtn("Tutup", "pri", lmCardClose))); });
+    return;
+  }
   const d = it.d, gid = FB.getUid();
   lmCard((b) => {
     b.append(el("div", { class: "lm-kick" }, (it.geo ? "🏛 Stesen Inovasi · " : "🏛 Dataran Inovasi ") + DATA.negeri[it.k].pendek + (d ? " · " + d.kat : "")), el("h2", null, d ? d.tj : "Tapak kosong"));
@@ -3776,7 +4049,30 @@ const AKH = [
     { t: "do", at: [0, 1.2], act: "Hulurkan makanan kepada musafir", fx: "drop:mangkuk", say: "Pakcik, makanlah ini." }], ok: "Musafir itu dapat makan dan meneruskan perjalanan. Sedekah tidak mengurangkan harta.", dl: "Sabda Nabi SAW: Tangan yang di atas lebih baik daripada tangan yang di bawah (riwayat al-Bukhari dan Muslim)." },
   { id: "burung", n: "Anak burung jatuh dari sarang", props: ["sarang", "pokok"], sc: "Seekor anak burung jatuh bersama sarangnya. Ibunya berlegar di atas pokok.", steps: [
     { t: "do", at: [0.6, 1.4], act: "Ambil sarang dengan berhati-hati", fx: "carry:sarang" },
-    { t: "do", at: [6, 2.6], act: "Letakkan sarang semula di dahan", fx: "drop:pokok" }], ok: "Ibu burung kembali ke sarangnya.", dl: "Nabi SAW menyuruh anak burung yang diambil daripada ibunya dikembalikan (riwayat Abu Daud)." }
+    { t: "do", at: [6, 2.6], act: "Letakkan sarang semula di dahan", fx: "drop:pokok" }], ok: "Ibu burung kembali ke sarangnya.", dl: "Nabi SAW menyuruh anak burung yang diambil daripada ibunya dikembalikan (riwayat Abu Daud)." },
+  /* v18.41: situasi sivik dan sahsiah (jati diri murid Malaysia) */
+  { id: "beratur", sv: 1, n: "Barisan di kaunter", npc: [["pakcik", 0, 3.4], ["makcik", 0, 5]], props: ["kaunter"], sc: "Ramai orang sedang beratur di kaunter. Ada yang cuba memotong barisan.", steps: [
+    { t: "do", at: [0, 1.4], act: "Beratur di belakang barisan dengan sabar", say: "Saya tunggu giliran." },
+    { t: "go", at: [1.8, 7.2], act: "Tunggu giliran dan maju ke kaunter" }], ok: "Anda menunggu giliran dengan tertib. Barisan bergerak lancar.", dl: "Rukun Negara: Kesopanan dan Kesusilaan. Beratur ialah tanda menghormati hak orang lain." },
+  { id: "paip", sv: 1, n: "Paip air terbiar", props: ["paip", "air"], sc: "Paip air di taman dibiarkan terbuka dan air mengalir membazir.", steps: [
+    { t: "do", at: [0, 1], act: "Tutup paip air yang terbiar", fx: "hide:air", say: "Air ialah amanah, jangan membazir." }], ok: "Air berhenti mengalir. Anda menjimatkan air untuk semua.", dl: "Rasulullah SAW melarang membazir air walaupun ketika berwuduk di sungai yang mengalir (riwayat Ibn Majah)." },
+  { id: "conteng", sv: 1, n: "Dinding awam diconteng", npc: [["pengawal", 10, 7]], props: ["dinding", "pondok2"], sc: "Dinding perhentian bas diconteng. Ada yang mengajak anda menambah contengan.", steps: [
+    { t: "do", at: [0, 1.6], act: "Tolak ajakan menconteng", say: "Tidak, ini harta awam milik kita semua." },
+    { t: "do", at: [10, 5.2], act: "Laporkan vandalisme kepada pengawal", say: "Encik, dinding perhentian bas diconteng." }], ok: "Pengawal akan membersihkan dinding itu. Anda menjaga harta awam.", dl: "Rukun Negara: Kedaulatan Undang-undang. Menjaga harta awam ialah tanggungjawab setiap warganegara." },
+  { id: "duduk", sv: 1, n: "Warga emas tiada tempat duduk", npc: [["makcik", 1.6, 1.4]], props: ["bangku"], sc: "Anda sedang duduk di bangku menunggu bas. Seorang makcik berdiri kepenatan.", steps: [
+    { t: "do", at: [0, 0.9], act: "Bangun dan pelawa makcik duduk", fx: "follow:0", say: "Silakan duduk, makcik." },
+    { t: "go", at: [0, 1.6], act: "Bawa makcik ke bangku" }], ok: "Makcik duduk dengan selesa dan mendoakan anda.", dl: "Sabda Nabi SAW: Bukan daripada golongan kami orang yang tidak menghormati yang tua (riwayat at-Tirmizi)." },
+  { id: "bendera", sv: 1, n: "Jalur Gemilang terjatuh", props: ["benderaJatuh", "tiang"], sc: "Jalur Gemilang di hadapan dewan terjatuh ke tanah ditiup angin.", steps: [
+    { t: "do", at: [0, 0.8], act: "Kutip Jalur Gemilang dengan hormat", fx: "carry:benderaJatuh", say: "Bendera negara mesti dihormati." },
+    { t: "do", at: [6, 3.8], act: "Kibarkan semula di tiang bendera", fx: "drop:tiang" }], ok: "Jalur Gemilang berkibar semula. Anda menunjukkan semangat patriotik.", dl: "Rukun Negara: Kesetiaan kepada Raja dan Negara. Jalur Gemilang lambang kedaulatan Malaysia." },
+  { id: "lintas", sv: 1, n: "Melintas jalan dengan selamat", npc: [["budak", 1.4, -0.4, 0.7]], props: ["zebra", "lampu"], sc: "Seorang adik hendak berlari melintas jalan walaupun lampu isyarat merah.", steps: [
+    { t: "do", at: [0, -0.6], act: "Tahan adik dan tunggu lampu hijau", fx: "follow:0", say: "Tunggu dulu, dik. Lampu masih merah." },
+    { t: "go", at: [0, 9], act: "Lintas bersama adik di garisan zebra" }], ok: "Anda dan adik melintas dengan selamat apabila lampu hijau.", dl: "Rukun Negara: Kedaulatan Undang-undang. Patuhi peraturan jalan raya untuk keselamatan semua." },
+  { id: "sedekah", sv: 1, n: "Tabung bantuan banjir", npc: [["pakcik", 2.2, 1]], props: ["tabung"], sc: "Sukarelawan sedang mengutip derma untuk mangsa banjir.", steps: [
+    { t: "do", at: [0, 1], act: "Masukkan sedekah ke dalam tabung", say: "Semoga meringankan beban mereka." }], ok: "Sumbangan anda akan membantu keluarga mangsa banjir.", dl: "Firman Allah SWT: Perumpamaan orang yang membelanjakan hartanya di jalan Allah seperti sebiji benih yang menumbuhkan tujuh tangkai (al-Baqarah: 261)." },
+  { id: "tanam", sv: 1, n: "Gotong-royong menanam pokok", npc: [["kawan", -2, 2, 0.85]], props: ["anakpokok", "lubang"], sc: "Kawan-kawan sedang bergotong-royong menghijaukan kawasan sekolah.", steps: [
+    { t: "do", at: [0, 0.8], act: "Ambil anak pokok", fx: "carry:anakpokok" },
+    { t: "do", at: [5, 3.2], act: "Tanam anak pokok di lubang", fx: "drop:lubang", say: "Semoga pokok ini membesar dengan subur." }], ok: "Anak pokok ditanam. Sekolah anda lebih hijau.", dl: "Sabda Nabi SAW: Tidaklah seorang Muslim menanam pokok, lalu dimakan oleh burung, manusia atau binatang melainkan menjadi sedekah baginya (riwayat al-Bukhari dan Muslim)." }
 ];
 function lmAkProp(kind, P) {
   const g = new T.Group(); P[kind] = g;
@@ -3798,6 +4094,18 @@ function lmAkProp(kind, P) {
   else if (kind === "sarang") { const n = new T.Mesh(new T.CylinderGeometry(0.6, 0.4, 0.35, 10), lmMat("#7a5a32")); g.add(n); g.add(lmMesh(lmBox(0.3, 0.25, 0.4), "#a0907a", 0, 0.3, 0)); g.position.set(0.6, 0.18, 0.6); }
   else if (kind === "pokok") { g.add(lmMesh(lmBox(0.7, 6, 0.7), "#6e4a2c", 6, 3, 4)); const c = new T.Mesh(new T.IcosahedronGeometry(3, 0), lmMat("#3f8a3a")); c.position.set(6, 7, 4); g.add(c); g.add(lmMesh(lmBox(2.4, 0.25, 0.3), "#6e4a2c", 6, 4.6, 3.2)); }
   else if (kind === "nasi") { g.add(lmMesh(lmBox(0.7, 0.35, 0.5), "#3a8a4a", 0, 0, 0)); }
+  else if (kind === "kaunter") { g.add(lmMesh(lmBox(4, 1.2, 1), "#8a5a34", 1.8, 0.6, 8.4)); g.add(lmMesh(lmBox(4.2, 0.12, 1.2), "#d9b27c", 1.8, 1.26, 8.4)); const lb = lmLabel("Kaunter", { fs: 24, k: 0.026 }); lb.position.set(1.8, 3, 8.4); g.add(lb); }
+  else if (kind === "paip") { g.add(lmMesh(lmBox(0.25, 1.2, 0.25), "#9aa3ab", 0, 0.6, 0)); g.add(lmMesh(lmBox(0.5, 0.18, 0.18), "#9aa3ab", 0.2, 1.2, 0)); g.add(lmMesh(lmBox(0.8, 0.1, 0.8), "#5a6a74", 0.45, 0.05, 0)); }
+  else if (kind === "air") { const w = new T.Mesh(new T.CylinderGeometry(0.06, 0.08, 1.1, 6), new T.MeshBasicMaterial({ color: 0x8fd6ff, transparent: true, opacity: 0.75 })); w.position.set(0.45, 0.6, 0); g.add(w); g.add(lmMesh(lmBox(1.6, 0.03, 1.2), "#4a90c0", 0.6, 0.03, 0.4)); }
+  else if (kind === "dinding") { g.add(lmMesh(lmBox(6, 2.6, 0.3), "#d8d2c4", 0, 1.3, -0.6)); for (let i = 0; i < 5; i++) g.add(lmMesh(lmBox(0.6 + (i % 3) * 0.4, 0.12, 0.05), ["#e74c3c", "#8e44ad", "#2c3e50"][i % 3], -2 + i * 1, 0.9 + (i % 2) * 0.8, -0.43)); }
+  else if (kind === "pondok2") { g.add(lmMesh(lmBox(3, 2.8, 2.6), "#e8e2d2", 10, 1.4, 8.6)); g.add(lmMesh(lmBox(3.4, 0.3, 3), "#2e5a8a", 10, 2.9, 8.6)); }
+  else if (kind === "bangku") { g.add(lmMesh(lmBox(2.4, 0.15, 0.7), "#8a5a34", 0, 0.75, 1.9)); for (const x of [-1, 1]) g.add(lmMesh(lmBox(0.15, 0.75, 0.6), "#555", x, 0.37, 1.9)); g.add(lmMesh(lmBox(2.4, 0.6, 0.12), "#8a5a34", 0, 1.1, 2.25)); }
+  else if (kind === "tiang") { g.add(lmMesh(lmBox(0.2, 7, 0.2), "#c9ced3", 6, 3.5, 5)); g.add(lmMesh(lmBox(1.2, 0.3, 1.2), "#9aa3ab", 6, 0.15, 5)); }
+  else if (kind === "benderaJatuh") { const f = lmTex(96, 48, (x, w, h) => { for (let i = 0; i < 14; i++) { x.fillStyle = i % 2 ? "#fff" : "#cc0001"; x.fillRect(0, i * h / 14, w, h / 14 + 1); } x.fillStyle = "#010066"; x.fillRect(0, 0, w * 0.5, h * 0.57); x.fillStyle = "#fc0"; x.beginPath(); x.arc(w * 0.2, h * 0.28, h * 0.2, 0, 6.283); x.fill(); x.fillStyle = "#010066"; x.beginPath(); x.arc(w * 0.24, h * 0.28, h * 0.17, 0, 6.283); x.fill(); x.fillStyle = "#fc0"; x.fillRect(w * 0.33, h * 0.22, h * 0.12, h * 0.12); }); const fl = new T.Mesh(new T.PlaneGeometry(1.8, 0.9), new T.MeshBasicMaterial({ map: f, side: T.DoubleSide })); fl.rotation.x = -Math.PI / 2; fl.position.y = 0.05; g.add(fl); }
+  else if (kind === "lampu") { g.add(lmMesh(lmBox(0.18, 3.4, 0.18), "#333", 3.6, 1.7, 0)); g.add(lmMesh(lmBox(0.5, 1.2, 0.4), "#222", 3.6, 3.6, 0)); const r = new T.Mesh(new T.SphereGeometry(0.16, 8, 6), new T.MeshBasicMaterial({ color: 0xff3030 })); r.position.set(3.6, 3.95, 0.22); g.add(r); const gg = new T.Mesh(new T.SphereGeometry(0.16, 8, 6), new T.MeshBasicMaterial({ color: 0x1b5e20 })); gg.position.set(3.6, 3.3, 0.22); g.add(gg); }
+  else if (kind === "tabung") { g.add(lmMesh(lmBox(1.2, 1.4, 0.8), "#1f6feb", 0, 0.7, 2)); g.add(lmMesh(lmBox(0.5, 0.05, 0.1), "#111", 0, 1.41, 2)); const lb = lmLabel("Tabung Bantuan Banjir", { fs: 22, k: 0.024 }); lb.position.set(0, 2.4, 2); g.add(lb); }
+  else if (kind === "anakpokok") { g.add(lmMesh(lmBox(0.5, 0.4, 0.5), "#7a4a2a", 0, 0.2, 0)); const c = new T.Mesh(new T.IcosahedronGeometry(0.45, 0), lmMat("#4caf50")); c.position.y = 0.85; g.add(c); g.position.set(0.6, 0, 0.6); }
+  else if (kind === "lubang") { const h = new T.Mesh(new T.CylinderGeometry(0.6, 0.5, 0.1, 12), lmMat("#4a3020")); h.position.set(5, 0.05, 4.4); g.add(h); }
   return g;
 }
 function lmAkW(it, o) { const v = new T.Vector3(o[0], 0, o[1]); it.m.updateMatrixWorld(true); it.m.localToWorld(v); return v; }
@@ -3844,7 +4152,7 @@ function lmAkFx(it, fx) {
       else { c = it.P[v] || lmAkProp(v, it.P); if (c.parent) c.parent.remove(c); }
       c.position.set(0, 3.2, 1.3); c.rotation.set(0, 0, 0); g.me.g.add(c); it.held = c;
     }
-    else if (k === "drop") { if (it.held) { g.me.g.remove(it.held); if (v !== "tong" && v !== "mangkuk") { const w = lmAkW(it, it.S.steps[it.st].at); it.held.position.set(0, 0, 0); g.scene.add(it.held); const at = { kereta: [10, 1.8, 6], kotak: [6, 0.9, 6], pondok: [12, 1.6, 7.7], pokok: [6, 4.85, 3.2] }[v]; if (at) { const ww = lmAkW(it, [at[0], at[2]]); it.held.position.set(ww.x, lmGround(ww.x, ww.z) + at[1], ww.z); } else it.held.position.set(w.x, lmGround(w.x, w.z) + 0.3, w.z); } it.held = null; } }
+    else if (k === "drop") { if (it.held) { g.me.g.remove(it.held); if (v !== "tong" && v !== "mangkuk") { const w = lmAkW(it, it.S.steps[it.st].at); it.held.position.set(0, 0, 0); g.scene.add(it.held); const at = { kereta: [10, 1.8, 6], kotak: [6, 0.9, 6], pondok: [12, 1.6, 7.7], pokok: [6, 4.85, 3.2], tiang: [6.5, 6.4, 5], lubang: [5, 0.1, 4.4] }[v]; if (v === "tiang" && it.held) it.held.rotation.set(0, 0, 0); /* bendera berkibar menegak */ if (at) { const ww = lmAkW(it, [at[0], at[2]]); it.held.position.set(ww.x, lmGround(ww.x, ww.z) + at[1], ww.z); } else it.held.position.set(w.x, lmGround(w.x, w.z) + 0.3, w.z); } it.held = null; } }
     else if (k === "stand") { const av = it.npcs[+v]; if (av) { av.g.rotation.x = 0; av.g.position.y = 0; av.down = false; } }
     else if (k === "bike") { const bk = it.P.basikal; if (bk) { bk.rotation.x = Math.PI / 2; bk.position.y = 0.7; } } /* roda tegak semula */
     else if (k === "away") v.split(",").forEach((i) => { const av = it.npcs[+i]; if (av) { const ry = it.m.rotation.y + Math.PI; g.scene.attach(av.g); av.g.rotation.set(0, ry, 0); av.away = 3; it.gone = (it.gone || []).concat([av]); } });
@@ -3854,7 +4162,8 @@ function lmAkFx(it, fx) {
 }
 function lmAkDone(g, it) {
   it.done = true; it.ring.visible = false; LM.st.ak = (LM.st.ak | 0) + 1; (LM.st.akT || (LM.st.akT = {}))[it.S.id] = 1; lmSave(); lmSnd("win");
-  let coin = 0; try { coin = gdCoin(2); } catch (e) { coin = 0; } const xp = lmXp(5);
+  const coin = it.S.sv ? 5 : 3; P.coin = (P.coin | 0) + coin; try { saveP(); } catch (e) { /* abaikan */ } const xp = lmXp(5); /* v18.41: MD sebagai token tetap (sivik +5, akhlak +3) */
+  if (it.S.sv) LM.st.sv = (LM.st.sv | 0) + 1;
   (it.npcs || []).forEach((av) => { try { lmBubble({ g: av.g, bub: null }, "Terima kasih!"); } catch (e) { /* abaikan */ } });
   lmPop("Akhlak terpuji! +" + coin + " MD · XP +" + xp);
   const ex = el("div", { class: "lm-akdone" }, el("b", null, "MasyaAllah! " + it.S.ok), el("span", null, it.S.dl), el("small", null, "Akhlak terpuji anda: " + LM.st.ak));
@@ -4037,7 +4346,7 @@ async function lmBuildWorld(g) {
     const [id, k, nama, type, la, lo, fakta] = p; if (!DATA.negeri[k]) return;
     let w = ll(la, lo);
     if (id === "pg-jambatan" && RAST.bridge) { const b = RAST.bridge; w = { x: (b[0] + b[2]) / 2, z: (b[1] + b[3]) / 2 }; }
-    const R = lmRand(id), md = type === "masjid" ? lmMosque(id) : lmModel(type, R), rot = R() * 6.28;
+    const R = lmRand(id), md = type === "masjid" ? lmMosque(id) : (lmLandmarkKhas(id) || lmModel(type, R)), rot = R() * 6.28;
     /* cari ruang lapang: jauh daripada Menara Ilmu (kedudukan ikut subjek) dan mercu tanda lain.
        W.P. terletak di tengah Selangor, jadi mercu tanda KL boleh melimpah ke Selangor. */
     if (id !== "pg-jambatan") {
@@ -4088,6 +4397,7 @@ async function lmBuildWorld(g) {
     for (let t = -fit.L; t <= fit.L; t += 14) avoid.push({ x: fit.x + ux * t, z: fit.z + uz * t, r: 12 });
     for (const t of [-18, 0, 18]) avoid.push({ x: fit.x + px * 32 + ux * t, z: fit.z + pz * 32 + uz * t, r: 16 });
   });
+  try { lmPusatKL(g, gnd); } catch (e) { /* abaikan */ } /* v18.41: Taman KLCC, Hutan Bukit Nanas */
   /* IPTA: galeri kampus (Kembara Kampus) */
   await lmProg(26, "Universiti, kem dan Stesen Ilmu");
   lmIptaBuild(g, used, placed, avoid, gnd); (g.after || (g.after = [])).push(() => lmKampusFetch(g));
@@ -4100,6 +4410,8 @@ async function lmBuildWorld(g) {
   await lmProg(36, "Dataran Inovasi");
   lmStnBuild(g, used, placed, avoid, gnd); (g.after || (g.after = [])).push(() => lmStnFetch(g));
   g.after.push(() => lmPjFetch(g)); /* v18.38: bangunan/papan iklan penaja */
+  /* v18.41: automasi: inovasi dan penaja yang baru diluluskan muncul sendiri tanpa keluar dari Meta Didik */
+  g.after.push(() => { const t = setInterval(() => { if (LM.g !== g || !LM.on) { if (LM.g !== g) clearInterval(t); return; } if (document.hidden) return; try { lmStnFetch(g); } catch (e) { /* abaikan */ } try { if (typeof pjMuat === "function") pjMuat().then(() => lmPjFetch(g)); } catch (e) { /* abaikan */ } }, 60000); });
   /* jeti nelayan: permainan Nelayan */
   lmNelayanBuild(g, used, placed, avoid, gnd);
   /* butik Busana, perpustakaan Dunia Ilmu, pusat Amali */
@@ -4809,11 +5121,11 @@ function lmPacak() {
   lmCard((b) => {
     b.append(el("div", { class: "lm-kick" }, "🏛 Pacak inovasi · " + DATA.negeri[k].nama), el("h2", null, "Stesen Inovasi di sini"));
     const host = el("div", { class: "lm-stnform" }); b.appendChild(host);
-    try { stnGuruBox(host, { loc: loc, rr: () => { if (LM.ui.card) lmPacakLukis(host, loc); } }); } catch (e) { host.textContent = "Borang tidak dapat dibuka."; }
+    try { stnGuruBox(host, { loc: loc, rr: () => { if (LM.ui.card) lmPacakLukis(host, loc); lmStnFetch(LM.g); } }); } catch (e) { host.textContent = "Borang tidak dapat dibuka."; }
     b.append(el("div", { class: "lm-row" }, lmBtn("Tutup", "", lmCardClose)));
   });
 }
-function lmPacakLukis(host, loc) { host.textContent = ""; stnGuruBox(host, { loc: loc, rr: () => lmPacakLukis(host, loc) }); }
+function lmPacakLukis(host, loc) { host.textContent = ""; stnGuruBox(host, { loc: loc, rr: () => { lmPacakLukis(host, loc); lmStnFetch(LM.g); } }); }
 /* menara seterusnya: tajuk pertama (ikut susunan peta operasi) yang belum ditawan */
 function lmNextTopic() {
   const ts = DATA.topik.filter((t) => DATA.negeri[t.negeri]);
@@ -4870,6 +5182,9 @@ const LCN = [
   ["ak1", "🤝", "Ringan Tangan", "Bantu orang dalam satu situasi akhlak", () => [LM.st.ak | 0, 1]],
   ["ak5", "💚", "Pemurah Budi", "Selesaikan 5 situasi akhlak", () => [LM.st.ak | 0, 5]],
   ["akAll", "🌟", "Insan Berakhlak Mulia", "Selesaikan setiap jenis situasi akhlak", () => [Object.keys(LM.st.akT || {}).filter((k) => AKH.some((a) => a.id === k)).length, AKH.length]],
+  ["ak15", "🏅", "Duta Sahsiah", "Selesaikan 15 situasi akhlak dan sivik", () => [LM.st.ak | 0, 15]],
+  ["sv3", "🇲🇾", "Warganegara Prihatin", "Selesaikan 3 situasi sivik (Rukun Negara)", () => [LM.st.sv | 0, 3]],
+  ["svAll", "🛡", "Jati Diri Malaysia", "Selesaikan setiap jenis situasi sivik", () => [Object.keys(LM.st.akT || {}).filter((k) => AKH.some((a) => a.sv && a.id === k)).length, AKH.filter((a) => a.sv).length]],
   ["fd1", "🍽", "Selera Tempatan", "Rasa satu masakan tradisi negeri", () => [Object.keys(LM.st.food || {}).length, 1]],
   ["fdAll", "🍛", "Duta Juadah Malaysia", "Rasa masakan tradisi setiap negeri", () => [FOOD.filter((f) => (LM.st.food || {})[f[0]]).length, FOOD.length]],
   ["rail", "🚆", "Penumpang Kereta Api", "Naik ETS, ECRL, KTM Komuter atau kereta api lain", () => [LM.st.rt | 0, 1]],
@@ -5034,13 +5349,25 @@ function lmTiket(o) {
     }
   });
 }
-const KZ_HAD = 30, KZ_MD = 2, KZ_KEY = "gt-kuiz-hari"; /* had soalan Stesen Ilmu sehari (semua subjek) dan MD bagi setiap jawapan betul */
-function lmKuizHari() { const d = new Date(Date.now() + 8 * 3600000).toISOString().slice(0, 10); let r = null; try { r = JSON.parse(localStorage.getItem(KZ_KEY) || "null"); } catch (e) { r = null; } return r && r.d === d ? r : { d: d, n: 0 }; }
-function lmKuizBaki() { return Math.max(0, KZ_HAD - (lmKuizHari().n | 0)); }
-function lmKuizKira(k) { const r = lmKuizHari(); r.n = Math.min(KZ_HAD, (r.n | 0) + k); try { localStorage.setItem(KZ_KEY, JSON.stringify(r)); } catch (e) { /* abaikan */ } }
-function lmKuizInfo() { const b = lmKuizBaki(); return el("p", { class: "lm-ex", style: "color:#ffd45a" }, "🪙 Setiap jawapan betul: +" + KZ_MD + " MD. Baki soalan hari ini: " + b + "/" + KZ_HAD + "."); }
-function lmKuizHad() { lmCard((b) => { b.append(el("div", { class: "lm-kick" }, "📖 Stesen Ilmu"), el("h2", null, "Had " + KZ_HAD + " soalan hari ini dicapai"), el("p", null, "Hebat! Anda sudah menjawab " + KZ_HAD + " soalan hari ini. Rehat dahulu dan kembali esok untuk mengumpul MD lagi."), el("div", { class: "lm-row" }, lmBtn("Teruskan jelajah", "pri", lmCardClose))); }); }
-function lmMdChip() { const c = el("div", { class: "lm-mdchip" }, "🪙 ", el("b", null, String(P.coin | 0)), " MD · soalan hari ini " + (KZ_HAD - lmKuizBaki()) + "/" + KZ_HAD); LM.mdChip = c; return c; }
+const KZ_HAD = 30, KZ_MD = 2, KZ_KEY = "gt-kuiz-hari"; /* v18.41: had 30 soalan sehari bagi SETIAP Stesen Ilmu; MD bagi setiap jawapan betul */
+function lmKuizHari() { const d = new Date(Date.now() + 8 * 3600000).toISOString().slice(0, 10); let r = null; try { r = JSON.parse(localStorage.getItem(KZ_KEY) || "null"); } catch (e) { r = null; } return r && r.d === d && r.s ? r : { d: d, s: {} }; }
+function lmKuizBaki(sid) { return Math.max(0, KZ_HAD - (lmKuizHari().s[sid] | 0)); }
+function lmKuizKira(sid, k) { const r = lmKuizHari(); r.s[sid] = Math.min(KZ_HAD, (r.s[sid] | 0) + k); try { localStorage.setItem(KZ_KEY, JSON.stringify(r)); } catch (e) { /* abaikan */ } }
+function lmKuizInfo(sid) { const b = lmKuizBaki(sid); return el("p", { class: "lm-ex", style: "color:#ffd45a" }, "🪙 Setiap jawapan betul: +" + KZ_MD + " MD. Baki soalan di stesen ini hari ini: " + b + "/" + KZ_HAD + "."); }
+/* stesen "gelap": semua tajuk lulus atau had hari ini dicapai; lain-lain "bercahaya" */
+function lmSiGelap(it) { return !!(it && (it.done || lmKuizBaki(it.id) <= 0)); }
+function lmSiSeterusnya(dari) { const g = LM.g; if (!g || !g.ilmu) return null; let best = null, bd = 1e12; g.ilmu.forEach((x) => { if (x === dari || lmSiGelap(x)) return; const d = Math.hypot(x.x - g.p.x, x.z - g.p.z); if (d < bd) { bd = d; best = x; } }); return best; }
+function lmSiPergi(x) { const g = LM.g; if (!g || !x) return; g.wp = { x: x.x, z: x.z, n: "Stesen Ilmu " + x.sn }; lmWpSet(); LM.auto = { d: 1e9, t: 0, n: 0 }; lmCardClose(); lmPop("🧭 Navigasi ke Stesen Ilmu " + x.sn + " · sentuh kayu bedik untuk berhenti"); }
+function lmKuizHad(it) {
+  const nx = lmSiSeterusnya(it);
+  lmCard((b) => {
+    b.append(el("div", { class: "lm-kick" }, "📖 Stesen Ilmu · " + (it ? it.sn : "")), el("h2", null, "Had " + KZ_HAD + " soalan di stesen ini hari ini dicapai"), el("p", null, "Hebat! Teruskan ke stesen lain untuk menjawab lebih banyak soalan dan mengumpul MD. Stesen yang sudah dijawab kelihatan gelap pada peta; yang bercahaya hijau masih boleh dijawab."));
+    const row = el("div", { class: "lm-row" });
+    if (nx) row.append(lmBtn("🧭 Navigasi ke " + nx.sn, "pri", () => lmSiPergi(nx)));
+    row.append(lmBtn("🗺 Buka peta", nx ? "" : "pri", () => { lmCardClose(); lmBigMap(); }), lmBtn("Tutup", "", lmCardClose)); b.append(row);
+  });
+}
+function lmMdChip(sid) { const c = el("div", { class: "lm-mdchip" }, "🪙 ", el("b", null, String(P.coin | 0)), " MD · soalan stesen hari ini " + (KZ_HAD - lmKuizBaki(sid)) + "/" + KZ_HAD); LM.mdChip = c; return c; }
 /* kesan: "+2 🪙" terbang dari butang jawapan ke kaunter MD, hujan syiling dan bunyi denting */
 function lmMdFx(n, from) {
   P.coin = (P.coin | 0) + n; try { saveP(); } catch (e) { /* abaikan */ }
@@ -5058,7 +5385,7 @@ function lmQuiz(opt) {
   const show = () => lmCard((b) => {
     const it = z.qs[z.i];
     b.append(el("div", { class: "lm-kick" }, opt.kick + " · Soalan " + (z.i + 1) + "/" + z.qs.length), el("h2", null, opt.title));
-    if (opt.md) b.appendChild(lmMdChip());
+    if (opt.md) b.appendChild(lmMdChip(opt.harian));
     const bar = el("div", { class: "lm-bar" }), bi = el("i"); bi.style.width = Math.round(100 * z.i / z.qs.length) + "%"; bar.appendChild(bi); b.appendChild(bar);
     b.appendChild(qSet(el("div", { class: "lm-q" }), it.q.q));
     const os = el("div", { class: "lm-opts" }), btns = [];
@@ -5067,7 +5394,7 @@ function lmQuiz(opt) {
       bt.addEventListener("click", () => {
         if (z.lock) return; z.lock = true;
         const good = k === it.ans; if (good) z.ok++;
-        if (opt.harian) lmKuizKira(1);
+        if (opt.harian) lmKuizKira(opt.harian, 1);
         if (good && opt.md) lmMdFx(opt.md, bt);
         try { lrnRec(it.q, good, opt.md ? "lmmd" : "lm"); } catch (e) { /* abaikan */ }
         btns.forEach((x, j) => { x.disabled = true; if (j === it.ans) x.classList.add("ok"); else if (j === k) x.classList.add("no"); });
@@ -5442,7 +5769,7 @@ function lmMapDraw(cv, m, big) {
     else if (it.kind === "km") { x.font = (big ? 16 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("🎖", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
     else if (it.kind === "vn") { x.font = (big ? 16 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText(VN_INFO[it.sub].ic, px, py + (big ? 6 : 3)); x.textAlign = "left"; }
     else if (it.kind === "ny") { x.font = (big ? 16 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("🎣", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
-    else if (it.kind === "si") { x.font = (big ? 17 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("📖", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
+    else if (it.kind === "si") { const gl = lmSiGelap(it), rr = big ? 13 : 6; if (!gl) { const gr = x.createRadialGradient(px, py, 1, px, py, rr); gr.addColorStop(0, "rgba(90,255,150,.95)"); gr.addColorStop(1, "rgba(90,255,150,0)"); x.fillStyle = gr; x.beginPath(); x.arc(px, py, rr, 0, 6.2832); x.fill(); } x.globalAlpha = gl ? 0.35 : 1; x.font = (big ? 17 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("📖", px, py + (big ? 6 : 3)); x.textAlign = "left"; x.globalAlpha = 1; }
     else if (it.kind === "ip") { x.font = (big ? 18 : 9) + "px sans-serif"; x.textAlign = "center"; x.fillText("🎓", px, py + (big ? 6 : 3)); x.textAlign = "left"; }
     else if (it.kind === "kh") { x.font = (big ? 20 : 10) + "px sans-serif"; x.fillStyle = it.done ? "#ffd45a" : "#ff7a9a"; x.textAlign = "center"; x.fillText("★", px, py + (big ? 7 : 4)); x.textAlign = "left"; }
     else if (big && it.kind === "jt" && it.k !== it.isl.id) { x.font = "14px sans-serif"; x.fillStyle = "#7fe3ff"; x.fillText("⛴", px - 7, py + 5); }
@@ -5498,7 +5825,7 @@ function lmBigMap() {
   /* klik pada peta (2D atau 3D) */
   const pick = (peer, it, wx, wz) => {
     if (peer) lmGoPeer(peer);
-    else if (it) g.wp = { x: it.x, z: it.z, n: it.kind === "tw" ? "Menara " + (it.t.kod || it.t.id) : it.n };
+    else if (it) g.wp = { x: it.x, z: it.z, n: it.kind === "tw" ? "Menara " + (it.t.kod || it.t.id) : it.kind === "si" ? "Stesen Ilmu " + it.sn : it.n };
     else g.wp = { x: wx, z: wz, n: "Titik pilihan" };
     if (!peer) lmWpSet(); redraw();
     if (!peer && g.wp) { LM.auto = { d: 1e9, t: 0, n: 0 }; lmPop("🚶 Berjalan ke " + g.wp.n + " · sentuh kayu bedik untuk berhenti"); if (TOUCH) setTimeout(() => { if (LM.ui.big) lmBigMap(); }, 450); } /* v18.35 */
@@ -5522,7 +5849,7 @@ function lmBigMap() {
         const rc = cv2.getBoundingClientRect(), mx = (e.clientX - rc.left) * cv2.width / rc.width, my = (e.clientY - rc.top) * cv2.height / rc.height;
         for (const id in LM.peers) { const q = LM.peers[id], [px, py] = lmMapPt(m2, q.x, q.z); if (Math.hypot(px - mx, py - my) < 16) { pick(id); return; } }
         let best = null, bd = 26;
-        for (const it of g.items) { const [px, py] = lmMapPt(m2, it.x, it.z), d = Math.hypot(px - mx, py - my); if (d < bd) { bd = d; best = it; } }
+        for (const it of g.items) { const [px, py] = lmMapPt(m2, it.x, it.z), d = Math.hypot(px - mx, py - my) - (it.kind === "si" ? 10 : 0); if (d < bd) { bd = d; best = it; } } /* v18.41: Stesen Ilmu lebih mudah diketik */
         pick(null, best, (mx - m2.ox) / m2.s, (my - m2.oy) / m2.s);
       });
     }
@@ -5603,7 +5930,7 @@ function lmMap3(area, onPick) {
       case "km": return [emo("🎖"), 22];
       case "ny": return [emo("🎣"), 22];
       case "vn": return [emo(VN_INFO[it.sub].ic), 22];
-      case "si": return [emo("📖"), 22];
+      case "si": { const gl = lmSiGelap(it); return [ico("si" + (gl ? "g" : "b"), (x) => { if (!gl) { const gr = x.createRadialGradient(32, 32, 4, 32, 32, 31); gr.addColorStop(0, "rgba(90,255,150,.95)"); gr.addColorStop(1, "rgba(90,255,150,0)"); x.fillStyle = gr; x.fillRect(0, 0, 64, 64); } x.globalAlpha = gl ? 0.35 : 1; x.font = "38px sans-serif"; x.textAlign = "center"; x.textBaseline = "middle"; x.fillText("📖", 32, 35); }), gl ? 20 : 26]; }
       case "ip": return [emo("🎓"), 24];
       case "kh": return [emo("★", it.done ? "#ffd45a" : "#ff7a9a"), 26];
       case "jt": return it.k !== it.isl.id ? [emo("⛴", "#7fe3ff"), 20] : null;
@@ -6213,5 +6540,5 @@ function lmClose() {
 }
 /* untuk ujian automatik */
 LM._g = (x, z) => lmGround(x, z); LM._fly = (a, d) => lmFlyStart(a, d); LM._ride = (a, b) => lmRide(a, b); LM._rai = () => lmRai(); LM._swim = (x, z) => lmSwimOk(x, z);
-LM._t = { lmSolatTimes: lmSolatTimes, lmAzan: lmAzan, lmSolatOpen: lmSolatOpen, lmTunOpen: lmTunOpen, AZ: AZ, lmJalanNear: lmJalanNear, lmJalanPath: lmJalanPath, lmJalanRide: lmJalanRide, lmTaksiOpen: lmTaksiOpen, lmTerminalOpen: lmTerminalOpen, lmBigMap: typeof lmBigMap === "function" ? lmBigMap : null, LAUD: LAUD, lmVenueOpen: lmVenueOpen, lmCoast: lmCoast, TER: TER, lmNelayanOpen: lmNelayanOpen, lmTanahGo: lmTanahGo, lmAirportOpen: lmAirportOpen, lmKemOpen: lmKemOpen, lmKampusOpen: lmKampusOpen, lmIlmuOpen: lmIlmuOpen, lmKampusFetch: lmKampusFetch, lmRailOpen: lmRailOpen, lmRide: lmRide, lmStnFetch: lmStnFetch, lmStnOpen: lmStnOpen, lmCertCanvas: lmCertCanvas, lmLcCheck: lmLcCheck, LCN: LCN, lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs, lmIlmuTopic: lmIlmuTopic, lmFerryOpen: lmFerryOpen, lmKuizBaki: lmKuizBaki };
+LM._t = { lmSolatTimes: lmSolatTimes, lmAzan: lmAzan, lmSolatOpen: lmSolatOpen, lmTunOpen: lmTunOpen, AZ: AZ, lmJalanNear: lmJalanNear, lmJalanPath: lmJalanPath, lmJalanRide: lmJalanRide, lmTaksiOpen: lmTaksiOpen, lmTerminalOpen: lmTerminalOpen, lmBigMap: typeof lmBigMap === "function" ? lmBigMap : null, LAUD: LAUD, lmVenueOpen: lmVenueOpen, lmCoast: lmCoast, TER: TER, lmNelayanOpen: lmNelayanOpen, lmTanahGo: lmTanahGo, lmAirportOpen: lmAirportOpen, lmKemOpen: lmKemOpen, lmKampusOpen: lmKampusOpen, lmIlmuOpen: lmIlmuOpen, lmKampusFetch: lmKampusFetch, lmRailOpen: lmRailOpen, lmRide: lmRide, lmStnFetch: lmStnFetch, lmStnOpen: lmStnOpen, lmCertCanvas: lmCertCanvas, lmLcCheck: lmLcCheck, LCN: LCN, lmAt: lmAt, lmRailPick: (s) => lmRailPick(s), lmAkSpawn: (g) => lmAkSpawn(g), AKH: AKH, toW: toW, ll: (a, b) => ll(a, b), PLACES: PLACES, AIRPORTS: AIRPORTS, lmInteract: lmInteract, lmPickQs: lmPickQs, lmIlmuTopic: lmIlmuTopic, lmFerryOpen: lmFerryOpen, lmKuizBaki: lmKuizBaki, lmSolatOpen2: lmSolatOpen, lmPjIklan: lmPjIklan, lmSiGelap: lmSiGelap };
 })();
